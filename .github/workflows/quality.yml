@@ -62,15 +62,12 @@ jobs:
             --virtual-time-budget=5000 \
             --dump-dom \
             http://127.0.0.1:4173/ > /tmp/french-tranquille-dom.html
-          if grep -q "n’a pas démarré" /tmp/french-tranquille-dom.html; then
+          if grep -E -q 'id="app"[^>]*><div class="boot-status' /tmp/french-tranquille-dom.html; then
             cat /tmp/french-tranquille-dom.html
+            echo 'Startup screen or fatal screen is still rendered inside #app.'
             exit 1
           fi
-          if grep -q 'id="boot-status"' /tmp/french-tranquille-dom.html; then
-            cat /tmp/french-tranquille-dom.html
-            echo 'Startup screen was not replaced by the app.'
-            exit 1
-          fi
-          grep -q 'French Trân’quille' /tmp/french-tranquille-dom.html
+          grep -E -q 'id="app"[^>]*><div class="app-shell screen-home"' /tmp/french-tranquille-dom.html
           grep -q 'home-dashboard' /tmp/french-tranquille-dom.html
+          grep -q 'A0 • 7 bài' /tmp/french-tranquille-dom.html
           echo 'Real Chrome home render OK'
