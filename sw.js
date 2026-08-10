@@ -1,4 +1,4 @@
-const CACHE = 'tran-french-teacher-v1.2.0-b7';
+const CACHE = 'tran-french-teacher-v1.3.0-b8';
 const CORE = ['./', './index.html', './styles.css', './app.js', './debug-fr.js', './voice-ios.js', './free-voice.js', './manifest.webmanifest', './icon.svg'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(CORE)));
