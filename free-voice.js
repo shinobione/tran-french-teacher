@@ -6,6 +6,7 @@
   const DEBUG_KEY = 'tran-french-teacher:debug-fr:v1';
   const LEARNER_KEY = 'francais-avec-luc:learner:v1';
   const ROUND_KEY = 'tran-french-teacher:free-voice-round:v1';
+  const COMPLETE_KEY = 'tran-french-teacher:free-voice-complete:v1';
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   const isDebug = () => localStorage.getItem(DEBUG_KEY) === '1';
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
@@ -13,21 +14,25 @@
   const rounds = [
     {
       vi: 'Buổi sáng, bạn gặp Luc. Bạn nói gì?',
+      debug: 'Le matin, tu rencontres Luc. Que dis-tu ?',
       fr: 'Bonjour',
       test: t => /(^|\s)bonjour(\s|$)/.test(t)
     },
     {
       vi: 'Luc đưa bạn một ly nước. Bạn nói gì?',
+      debug: "Luc te donne un verre d'eau. Que dis-tu ?",
       fr: 'Merci',
       test: t => /(^|\s)merci(\s|$)/.test(t)
     },
     {
       vi: 'Bạn muốn giới thiệu tên của mình.',
+      debug: 'Tu veux te présenter et dire ton prénom.',
       fr: "Je m'appelle Trân.",
       test: t => /je\s+m\s*appelle/.test(t)
     },
     {
       vi: 'Cuộc gặp kết thúc. Bạn nói gì?',
+      debug: 'La rencontre se termine. Que dis-tu ?',
       fr: 'Au revoir',
       test: t => /au\s+revoir/.test(t)
     }
@@ -53,7 +58,7 @@
       .toLocaleLowerCase('fr-FR')
       .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
       .replace(/[’']/g, ' ')
-      .replace(/[^a-zà-ÿ\s-]/gi, ' ')
+      .replace(/[^a-z\s-]/g, ' ')
       .replace(/\s+/g, ' ')
       .trim();
   }
@@ -62,28 +67,28 @@
     if (isDebug()) return {
       badge: 'PWA-2 • 0 €',
       title: 'Pratique vocale gratuite',
-      intro: 'La reconnaissance vocale utilise les fonctions Web Speech de Safari/iPhone. Aucun backend, aucune API payante, aucune clé.',
+      intro: 'Reconnaissance vocale Safari/iPhone + validation locale. Aucun backend payant, aucune API payante et aucune clé.',
       listen: 'Luc écoute…',
-      ready: 'Appuie sur le micro puis réponds en français.',
       mic: '🎙️ Répondre au micro',
       model: '🔊 Écouter le modèle',
+      text: 'Utiliser le mode texte',
       next: 'Continuer ›',
       heard: "J'ai entendu",
       ok: 'Oui — réponse reconnue. On continue.',
       retry: 'Pas encore. Réessaie, ou écoute le modèle.',
-      unavailable: "La reconnaissance vocale n'est pas disponible ici. Sur iPhone, ouvre l'app avec Safari et vérifie que Siri est activé. Le mode texte reste disponible.",
+      unavailable: "La reconnaissance vocale n'est pas disponible ici. Sur iPhone, ouvre avec Safari et vérifie que Siri est activé. Le mode texte reste disponible.",
       done: 'Les 4 mini-situations sont terminées. Tu peux recommencer quand tu veux.',
       restart: '↺ Recommencer',
-      local: 'Tout reste sur cet appareil.'
+      noPaidApi: "Aucune API payante n'est appelée par cette fonction.",
     };
     return {
       badge: 'PWA-2 • MIỄN PHÍ',
       title: 'Luyện nói miễn phí',
-      intro: 'Ứng dụng dùng chức năng nhận dạng giọng nói của Safari/iPhone. Không có máy chủ trả phí, không có API trả phí.',
+      intro: 'Ứng dụng dùng nhận dạng giọng nói của Safari/iPhone và kiểm tra câu trả lời trong ứng dụng. Không có máy chủ trả phí, API trả phí hay khóa API.',
       listen: 'Luc đang nghe…',
-      ready: 'Nhấn micro rồi trả lời bằng tiếng Pháp.',
       mic: '🎙️ Trả lời bằng giọng nói',
       model: '🔊 Nghe câu mẫu',
+      text: 'Dùng bài tập chữ',
       next: 'Tiếp tục ›',
       heard: 'Mình nghe được',
       ok: 'Đúng rồi — câu trả lời đã được nhận ra. Mình tiếp tục nhé.',
@@ -91,7 +96,7 @@
       unavailable: 'Nhận dạng giọng nói chưa khả dụng ở đây. Trên iPhone, hãy mở bằng Safari và kiểm tra Siri đã được bật. Bạn vẫn có thể dùng bài tập chữ.',
       done: 'Bạn đã hoàn thành 4 tình huống nói ngắn. Bạn có thể luyện lại bất cứ lúc nào.',
       restart: '↺ Luyện lại',
-      local: 'Mọi thứ của bài tập này được xử lý trên thiết bị.'
+      noPaidApi: 'Chức năng này không gọi bất kỳ API trả phí nào.',
     };
   }
 
@@ -134,7 +139,8 @@
     };
     recognition.onresult = event => {
       const candidates = [];
-      for (let i = 0; i < event.results[0].length; i++) candidates.push(event.results[0][i].transcript || '');
+      const result = event.results[0];
+      for (let i = 0; i < result.length; i++) candidates.push(result[i].transcript || '');
       transcript = candidates[0] || '';
       const round = rounds[roundIndex()];
       success = candidates.some(c => round.test(norm(c)));
@@ -142,7 +148,7 @@
       if (success) updateLearnerWin();
     };
     recognition.onerror = event => {
-      feedback = event.error === 'not-allowed' || event.error === 'service-not-allowed' ? l.unavailable : l.retry;
+      feedback = ['not-allowed','service-not-allowed'].includes(event.error) ? l.unavailable : l.retry;
     };
     recognition.onend = () => {
       listening = false;
@@ -158,7 +164,7 @@
     success = false;
     if (i === rounds.length - 1) {
       setRound(0);
-      localStorage.setItem('tran-french-teacher:free-voice-complete:v1', '1');
+      localStorage.setItem(COMPLETE_KEY, '1');
     } else setRound(i + 1);
     renderCard();
   }
@@ -193,23 +199,24 @@
     const i = roundIndex();
     const r = rounds[i];
     const available = Boolean(SpeechRecognition);
-    const completed = localStorage.getItem('tran-french-teacher:free-voice-complete:v1') === '1' && i === 0 && !transcript && !feedback;
+    const completed = localStorage.getItem(COMPLETE_KEY) === '1' && i === 0 && !transcript && !feedback;
+    const prompt = isDebug() ? r.debug : r.vi;
 
     card.innerHTML = `
       <div class="free-voice-head"><div><span class="free-voice-badge">${l.badge}</span><h2>${l.title}</h2></div><span>🎙️</span></div>
       <p>${l.intro}</p>
       ${completed ? `<div class="free-voice-prompt">${l.done}</div><button class="free-next" id="free-voice-restart">${l.restart}</button>` : `
-        <div class="free-voice-prompt"><strong>${i + 1}/${rounds.length}</strong><br>${r.vi}</div>
+        <div class="free-voice-prompt"><strong>${i + 1}/${rounds.length}</strong><br>${prompt}</div>
         <div class="free-voice-actions">
           <button class="free-mic ${listening ? 'listening' : ''}" id="free-voice-mic" ${!available || listening ? 'disabled' : ''}>${listening ? l.listen : l.mic}</button>
           <button id="free-voice-model">${l.model}</button>
-          <button id="free-voice-text" type="button">${isDebug() ? 'Utiliser le mode texte' : 'Dùng bài tập chữ'}</button>
+          <button id="free-voice-text" type="button">${l.text}</button>
         </div>
         ${!available ? `<div class="free-voice-feedback">${l.unavailable}</div>` : ''}
         ${transcript ? `<div class="free-voice-result"><small>${l.heard}</small><strong>${escapeHtml(transcript)}</strong></div>` : ''}
         ${feedback ? `<div class="free-voice-feedback ${success ? 'ok' : ''}">${feedback}</div>` : ''}
         ${success ? `<button class="free-next" id="free-voice-next">${l.next}</button>` : ''}
-        <p class="free-voice-note">${l.local} ${isIOS ? 'iPhone / iOS' : ''}</p>
+        <p class="free-voice-note">${l.noPaidApi} ${isIOS ? 'iPhone / iOS' : ''}</p>
       `}
     `;
 
@@ -217,7 +224,7 @@
     card.querySelector('#free-voice-model')?.addEventListener('click', () => speakFrench(r.fr));
     card.querySelector('#free-voice-next')?.addEventListener('click', nextRound);
     card.querySelector('#free-voice-restart')?.addEventListener('click', () => {
-      localStorage.removeItem('tran-french-teacher:free-voice-complete:v1');
+      localStorage.removeItem(COMPLETE_KEY);
       setRound(0); transcript=''; feedback=''; success=false; renderCard();
     });
     card.querySelector('#free-voice-text')?.addEventListener('click', () => card.nextElementSibling?.scrollIntoView({behavior:'smooth',block:'start'}));
