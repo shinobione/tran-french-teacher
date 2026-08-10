@@ -4,9 +4,27 @@ PWA mobile-first de professeur particulier de français pour **Trân**, vietnami
 
 ## Version
 
-- **v1.0.3**
-- **Build 4**
-- Phase **PWA-1 — Foundation**
+- **v1.1.0**
+- **Build 5**
+- Phase **PWA-2 — Voice / Realtime foundation**
+
+## v1.1.0 / Build 5 — PWA-2 Realtime Voice
+
+- ajout de `realtime-voice.js` : client WebRTC pensé en priorité pour **iPhone / iOS** ;
+- ajout de `api/realtime.js` : proxy serveur vers OpenAI Realtime ;
+- conversation audio bidirectionnelle : micro de Trân → Luc → audio retour ;
+- la clé `OPENAI_API_KEY` reste strictement côté serveur ;
+- profil vocal de Luc configuré avec la voix Realtime `cedar` par défaut ;
+- débit audio légèrement ralenti pour une débutante A0 ;
+- instructions pédagogiques serveur : environ **95 % vietnamien / 5 % français**, une notion à la fois ;
+- transcription de Trân et transcription de Luc affichables pendant la session ;
+- contexte local transmis au serveur : niveau, éléments connus, état de la première leçon ;
+- bouton de démarrage/arrêt de session vocale dans l'écran Conversation dès qu'un backend est configuré ;
+- carte `PWA-2 BACKEND` dans le mode DEBUG FR pour renseigner/tester l'endpoint ;
+- l'ancienne synthèse vocale iOS reste disponible en fallback pour les petits boutons d'écoute ;
+- documentation de déploiement dans [`PWA2_BACKEND.md`](./PWA2_BACKEND.md).
+
+> GitHub Pages continue d'héberger la PWA statique. Une vraie session Realtime nécessite un endpoint serveur séparé, car GitHub Pages n'exécute pas de backend.
 
 ## v1.0.3 / Build 4 — iPhone-first Voice
 
@@ -17,8 +35,7 @@ PWA mobile-first de professeur particulier de français pour **Trân**, vietnami
 - choix de voix mémorisé localement par appareil ;
 - vitesse et hauteur de voix ajustables ;
 - sélecteur et bouton d'audition disponibles en **DEBUG FR** dans les réglages ;
-- fallback automatique vers la voix système si aucune voix française exploitable n'est exposée ;
-- ce système reste transitoire avant **PWA-2 Voice** et une vraie voix serveur / Realtime cohérente entre appareils.
+- fallback automatique vers la voix système si aucune voix française exploitable n'est exposée.
 
 ## v1.0.2 / Build 3 — Debug FR
 
@@ -38,24 +55,25 @@ PWA mobile-first de professeur particulier de français pour **Trân**, vietnami
 - nom visible de la PWA : **Tiếng Pháp cùng Luc** ;
 - seuls les mots et phrases étudiés restent en français.
 
-## V1 fonctionnelle
+## Fonctionnalités actuelles
 
 - interface mobile-first en vietnamien (~95 %) avec français introduit par petites touches (~5 %) ;
 - **Bài 1 — Bonjour** complète et interactive ;
 - `Bonjour`, `Merci`, `Au revoir`, `Je m'appelle Trân.` ;
-- lecture audio française via `speechSynthesis` du navigateur ;
-- conversation guidée déterministe ;
+- lecture audio française locale via `speechSynthesis` pour les exemples courts ;
+- couche Realtime WebRTC prête pour conversation vocale naturelle ;
+- conversation guidée déterministe de secours ;
 - révisions `Khó / Được / Dễ` ;
 - progression non gamifiée ;
 - persistance `localStorage` ;
-- diagnostics discrets ;
+- diagnostics discrets + DEBUG FR ;
 - manifest PWA + service worker ;
-- fonctionnement hors-ligne après première visite ;
+- fonctionnement hors-ligne pour la partie statique après première visite ;
 - aucune clé API dans le navigateur.
 
 ## Exécution locale
 
-Aucune dépendance ni compilation n'est nécessaire.
+La partie statique n'a aucune dépendance ni compilation.
 
 ```bash
 python -m http.server 8080
@@ -67,22 +85,29 @@ Puis ouvrir `http://localhost:8080`.
 
 Le workflow `.github/workflows/pages.yml` déploie automatiquement le contenu statique de `main` vers GitHub Pages.
 
-Dans **Settings → Pages**, utiliser **GitHub Actions** comme source si GitHub ne l'active pas automatiquement.
+## Backend Realtime
 
-## Future IA
+Voir [`PWA2_BACKEND.md`](./PWA2_BACKEND.md).
 
-`api/tutor.mjs` documente le futur adaptateur **serveur** OpenAI. Il n'est volontairement pas appelé par la PWA V1, car GitHub Pages n'exécute pas de backend.
+Variables principales :
 
-La clé `OPENAI_API_KEY` doit rester côté serveur. L'exemple utilise la Responses API et `store: false`.
+```text
+OPENAI_API_KEY=...
+OPENAI_REALTIME_MODEL=gpt-realtime
+OPENAI_REALTIME_VOICE=cedar
+```
 
 ## Roadmap
 
 ### PWA-2 — Voice
-- micro ;
-- conversation vocale ;
-- vraie entrée audio ;
-- voix serveur / Realtime cohérente entre appareils ;
-- feedback de prononciation uniquement quand l'audio le permet.
+- ✅ couche iPhone-first ;
+- ✅ client WebRTC ;
+- ✅ proxy OpenAI Realtime ;
+- ✅ transcription UI ;
+- ⏳ déploiement du backend ;
+- ⏳ test réel iPhone de Trân ;
+- ⏳ réglage final de la voix / latence / VAD ;
+- ⏳ feedback de prononciation réellement fondé sur l'audio.
 
 ### PWA-3 — Learning Memory
 - backend persistant multi-appareils ;
