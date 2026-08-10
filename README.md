@@ -1,159 +1,157 @@
-# Français avec Luc
+# Trân French Teacher — Tiếng Pháp cùng Luc
 
-PWA mobile-first de professeur particulier de français pour **Trân**, vietnamienne débutante absolue (**A0**).
+PWA mobile-first de professeur de français pour **Trân**, vietnamienne débutante absolue (**A0**).
 
 ## Version
 
-- **v1.1.1**
-- **Build 6**
-- Phase **PWA-2 — Voice / Vercel deployment**
+- **v1.2.0**
+- **Build 7**
+- Phase **PWA-2 — Free Voice**
+- cible principale : **iPhone / Safari / PWA iOS**
+- coût d'exploitation visé : **0 €**
 
-## v1.1.1 / Build 6 — Vercel-ready + protection Realtime
+## v1.2.0 / Build 7 — Zero-cost Voice
 
-- ajout de `vercel.json` pour déployer directement le repo sur Vercel ;
-- modernisation de `api/realtime.js` au format Vercel Functions actuel ;
-- ajout de `api/health.js` pour vérifier le backend sans exposer de secret ;
-- ajout de `TUTOR_ACCESS_TOKEN` : le proxy Realtime n'est plus utilisable sans jeton privé ;
-- ajout de `vercel-bootstrap.js` : le jeton est stocké uniquement dans le navigateur/iPhone ;
-- écran d'activation du mode vocal si l'iPhone n'a pas encore son jeton ;
-- carte `VERCEL SECURITY` dans DEBUG FR avec test de santé du backend ;
-- `semantic_vad` configuré avec une faible eagerness afin de laisser davantage de temps à une débutante A0 pour répondre ;
-- cache PWA incrémenté ;
-- guide complet : [`VERCEL_SETUP.md`](./VERCEL_SETUP.md).
+Décision d'architecture : le projet ne dépend plus d'OpenAI API, Vercel ou d'un backend payant.
 
-La PWA peut désormais être servie entièrement par Vercel. Dans ce cas, le frontend et `/api/realtime` partagent le même domaine et aucune URL de backend n'est à saisir.
+La branche active utilise uniquement :
 
-## v1.1.0 / Build 5 — PWA-2 Realtime Voice
+- **GitHub Pages** pour l'hébergement statique ;
+- `SpeechRecognition` / `webkitSpeechRecognition` lorsque Safari l'expose ;
+- la reconnaissance vocale iOS/Safari pour les réponses françaises ;
+- `speechSynthesis` iOS pour écouter les exemples français ;
+- JavaScript local pour valider les réponses ;
+- `localStorage` pour la progression.
 
-- ajout de `realtime-voice.js` : client WebRTC pensé en priorité pour **iPhone / iOS** ;
-- ajout de `api/realtime.js` : proxy serveur vers OpenAI Realtime ;
-- conversation audio bidirectionnelle : micro de Trân → Luc → audio retour ;
-- la clé `OPENAI_API_KEY` reste strictement côté serveur ;
-- profil vocal de Luc configuré avec la voix Realtime `cedar` par défaut ;
-- débit audio légèrement ralenti pour une débutante A0 ;
-- instructions pédagogiques serveur : environ **95 % vietnamien / 5 % français**, une notion à la fois ;
-- transcription de Trân et transcription de Luc affichables pendant la session ;
-- contexte local transmis au serveur : niveau, éléments connus, état de la première leçon ;
-- bouton de démarrage/arrêt de session vocale dans l'écran Conversation dès qu'un backend est configuré ;
-- carte `PWA-2 BACKEND` dans le mode DEBUG FR pour renseigner/tester l'endpoint ;
-- l'ancienne synthèse vocale iOS reste disponible en fallback pour les petits boutons d'écoute ;
-- documentation technique initiale dans [`PWA2_BACKEND.md`](./PWA2_BACKEND.md).
+### Pratique vocale actuelle
 
-## v1.0.3 / Build 4 — iPhone-first Voice
+Dans `Hội thoại / Conversation` :
 
-- priorité donnée à l'utilisation sur **iPhone / iOS** ;
-- ajout de `voice-ios.js`, couche audio indépendante du moteur pédagogique ;
-- sélection automatique de la meilleure voix française disponible sur l'appareil ;
-- préférence pour `fr-FR`, service local et voix de meilleure qualité lorsqu'elles sont exposées par le navigateur ;
-- choix de voix mémorisé localement par appareil ;
-- vitesse et hauteur de voix ajustables ;
-- sélecteur et bouton d'audition disponibles en **DEBUG FR** dans les réglages ;
-- fallback automatique vers la voix système si aucune voix française exploitable n'est exposée.
+1. une situation est donnée principalement en vietnamien ;
+2. Trân touche le micro ;
+3. elle répond en français ;
+4. Safari transcrit la réponse ;
+5. la PWA valide localement la réponse attendue ;
+6. elle peut écouter le modèle français ;
+7. la progression est enregistrée localement.
 
-## v1.0.2 / Build 3 — Debug FR
+Premières situations :
 
-- ajout d'un mode **🇫🇷 DEBUG FR** accessible depuis les réglages ;
-- traduction à la volée du vietnamien vers le français pour Jerry ;
-- traduction locale au navigateur via `localStorage` : l'activation sur le PC de Jerry n'affecte pas l'iPhone de Trân ;
-- bandeau visible lorsque le mode debug est actif ;
-- traduction des écrans, boutons, consignes, feedbacks et placeholders ;
-- les mots et phrases de français étudiés restent inchangés ;
-- raccourci de secours possible avec `?debug=fr` ;
-- couche isolée dans `debug-fr.js` afin de ne pas toucher au moteur pédagogique.
+- `Bonjour`
+- `Merci`
+- `Je m'appelle Trân.`
+- `Au revoir`
 
-## Correctif v1.0.1 / Build 2
+Si la reconnaissance vocale n'est pas disponible, le mode texte reste utilisable.
 
-- blocage explicite de la traduction automatique du navigateur (`notranslate` + `translate="no"`) ;
-- interface apprenante conservée en vietnamien ;
-- nom visible de la PWA : **Tiếng Pháp cùng Luc** ;
-- seuls les mots et phrases étudiés restent en français.
+## Pourquoi ce choix
+
+Le but est qu'une utilisation normale par Trân ne génère **aucune facture d'API ni d'hébergement**.
+
+Les fonctions OpenAI Realtime et le déploiement Vercel expérimentés dans les builds précédents ont été retirés de `main`. Ils restent récupérables dans l'historique Git si nous changeons d'avis un jour.
+
+## Limite assumée
+
+Cette version n'est pas une conversation IA ouverte : elle fonctionne avec des scénarios pédagogiques, des réponses attendues et des règles locales.
+
+C'est volontaire pour garder le projet gratuit. Nous pouvons néanmoins enrichir progressivement le moteur avec :
+
+- davantage de leçons ;
+- variantes de réponses acceptées ;
+- logique adaptative ;
+- révisions espacées ;
+- reconnaissance vocale par exercice ;
+- arbres de conversation ;
+- prononciation ciblée ;
+- situations réelles.
+
+## Versions précédentes
+
+### v1.0.3 / Build 4 — iPhone-first Voice
+
+- couche `voice-ios.js` ;
+- sélection de la meilleure voix française exposée par le navigateur ;
+- réglages vitesse / hauteur en DEBUG FR ;
+- fallback vocal système.
+
+### v1.0.2 / Build 3 — Debug FR
+
+- mode **🇫🇷 DEBUG FR** local au navigateur de Jerry ;
+- traduction de l'interface vietnamienne vers le français ;
+- aucun impact sur l'iPhone de Trân.
+
+### v1.0.1 / Build 2
+
+- verrouillage de l'interface vietnamienne ;
+- blocage de la traduction automatique du navigateur.
+
+### v1.0.0 / Build 1
+
+- PWA initiale ;
+- Bài 1 ;
+- révisions ;
+- progression ;
+- conversation guidée texte.
 
 ## Fonctionnalités actuelles
 
-- interface mobile-first en vietnamien (~95 %) avec français introduit par petites touches (~5 %) ;
-- **Bài 1 — Bonjour** complète et interactive ;
-- `Bonjour`, `Merci`, `Au revoir`, `Je m'appelle Trân.` ;
-- lecture audio française locale via `speechSynthesis` pour les exemples courts ;
-- couche Realtime WebRTC prête pour conversation vocale naturelle ;
-- protection du proxy Realtime par jeton privé ;
-- conversation guidée déterministe de secours ;
+- interface vietnamienne ~95 % au niveau A0 ;
+- français introduit par petites touches ;
+- **Bài 1 — Bonjour** interactive ;
+- écoute de mots et phrases françaises ;
+- pratique vocale gratuite ;
+- conversation guidée texte de secours ;
 - révisions `Khó / Được / Dễ` ;
 - progression non gamifiée ;
-- persistance `localStorage` ;
-- diagnostics discrets + DEBUG FR ;
-- manifest PWA + service worker ;
-- fonctionnement hors-ligne pour la partie statique après première visite ;
-- aucune clé API dans le navigateur.
+- persistance locale ;
+- DEBUG FR pour Jerry ;
+- PWA installable ;
+- service worker et cache offline pour les fichiers statiques ;
+- aucune clé API ;
+- aucun secret ;
+- aucun backend.
 
-## Déploiements
+## Test iPhone
 
-### GitHub Pages
+1. ouvrir la PWA dans Safari ;
+2. vérifier que Siri est activé sur l'iPhone ;
+3. ouvrir `Hội thoại` ;
+4. toucher `Trả lời bằng giọng nói` ;
+5. autoriser le microphone / reconnaissance vocale si iOS le demande ;
+6. répondre en français ;
+7. si la reconnaissance n'est pas exposée dans le mode PWA installé, refaire le même test directement dans Safari.
 
-Le workflow `.github/workflows/pages.yml` déploie automatiquement la partie statique de `main` vers GitHub Pages.
+## Hébergement
 
-### Vercel — recommandé pour PWA-2
+La PWA reste publiée par GitHub Pages depuis `main`.
 
-Vercel peut servir **la PWA et les Vercel Functions du dossier `api/` depuis le même repo**.
+GitHub Pages est adapté ici car le projet est un site statique personnel/non commercial et le dépôt est public.
 
-Voir [`VERCEL_SETUP.md`](./VERCEL_SETUP.md).
+## Roadmap gratuite
 
-Variables obligatoires :
+### PWA-2 — Free Voice
 
-```text
-OPENAI_API_KEY=...
-TUTOR_ACCESS_TOKEN=...
-```
+- ✅ iPhone-first ;
+- ✅ synthèse vocale française locale ;
+- ✅ reconnaissance vocale Safari ;
+- ✅ validation locale ;
+- ✅ fallback texte ;
+- ⏳ tests réels sur l'iPhone de Trân ;
+- ⏳ tolérance phonétique améliorée ;
+- ⏳ davantage de situations vocales.
 
-Variables facultatives :
+### PWA-3 — Local Learning Memory
 
-```text
-OPENAI_REALTIME_MODEL=gpt-realtime
-OPENAI_REALTIME_VOICE=cedar
-ALLOWED_ORIGINS=
-```
-
-## Vérification du backend Vercel
-
-Après déploiement :
-
-```text
-https://<projet>.vercel.app/api/health
-```
-
-Doit notamment indiquer :
-
-```json
-{
-  "ok": true,
-  "openaiConfigured": true,
-  "accessProtected": true
-}
-```
-
-## Roadmap
-
-### PWA-2 — Voice
-- ✅ couche iPhone-first ;
-- ✅ client WebRTC ;
-- ✅ proxy OpenAI Realtime ;
-- ✅ transcription UI ;
-- ✅ configuration Vercel ;
-- ✅ protection du proxy par jeton privé ;
-- ⏳ import du repo dans le compte Vercel ;
-- ⏳ ajout des variables d'environnement ;
-- ⏳ premier Production Deployment ;
-- ⏳ test réel iPhone de Trân ;
-- ⏳ réglage final de la voix / latence / VAD ;
-- ⏳ feedback de prononciation réellement fondé sur l'audio.
-
-### PWA-3 — Learning Memory
-- backend persistant multi-appareils ;
-- erreurs récurrentes ;
-- répétition espacée intelligente ;
-- historique.
+- erreurs récurrentes dans `localStorage` ;
+- répétition espacée ;
+- difficulté adaptative ;
+- historique local ;
+- export/import manuel de progression si nécessaire.
 
 ### PWA-4 — Curriculum A0 → A1
+
 - programme complet ;
 - ratios vietnamien/français adaptatifs ;
-- situations de vie réelle ;
+- vocabulaire de vie réelle ;
+- scénarios France / voyage / restaurant / famille / transport / médecin ;
 - progression structurée jusqu'à A1.
