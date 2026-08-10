@@ -1,89 +1,120 @@
 # French Trân’quille
 
-PWA mobile-first de professeur de français pour **Trân**, vietnamienne débutante absolue (**A0**).
+PWA de français pensée pour **Trân**, vietnamienne débutante absolue (**A0**), avec pédagogie très majoritairement vietnamienne au départ et français introduit progressivement.
 
-## Version
+## Version actuelle
 
-- **v1.4.0**
-- **Build 9**
-- Phase **PWA-2 — Guided Free Voice + Branding**
-- cible principale : **iPhone / Safari / PWA iOS**
-- coût d'exploitation visé : **0 €**
+- **v1.5.0**
+- **Build 10**
+- Phase : **Curriculum A0 + Responsive multi-device**
+- coût d'exploitation : **0 €**
 
-## v1.4.0 / Build 9 — French Trân’quille
+## Plateformes cibles
 
-Rebranding complet de l'application sans toucher à la progression existante.
+### Cible principale
 
-### Branding
+- **iPhone / Safari / PWA iOS**
 
-- nouveau nom produit : **French Trân’quille** ;
-- grand logo transparent intégré sur la page d'accueil ;
-- nouveau favicon cohérent avec le logo ;
-- icônes PWA et `apple-touch-icon` dédiées ;
-- nouvelle couche `brand.js` pour appliquer le branding sans casser le moteur pédagogique existant ;
-- nouveau thème visuel complémentaire `brand.css` ;
-- cache PWA incrémenté pour livrer immédiatement les nouveaux assets.
+### Cibles secondaires — officiellement supportées par le layout
 
-### Professeure
+- **Android** : Chrome / navigateurs Chromium, installation PWA lorsque disponible ;
+- **Navigateur PC** : Chrome, Edge et navigateurs modernes sur Windows/macOS/Linux.
 
-La meilleure voix disponible pendant les tests étant nettement plus naturelle en voix féminine, le professeur **Luc** devient **Lucie**.
+L'interface, les leçons, les révisions et la progression locale sont conçues pour fonctionner sur les trois familles de plateformes. La disponibilité de la **reconnaissance vocale** dépend en revanche du navigateur et du système ; le fallback texte reste toujours disponible.
 
-La couche de branding :
-- remplace les références visibles à Luc par **Lucie** ;
-- adapte le DEBUG FR (`Lucie • ta professeure`) ;
-- remplace la phrase de test vocal par `Bonjour Trân. Je m'appelle Lucie...` ;
-- privilégie, en mode Auto, les voix françaises de meilleure qualité détectées (Google / Premium / Enhanced / Natural lorsque disponibles) sans écraser un choix manuel ;
-- conserve volontairement les anciennes clés `localStorage` internes pour **ne pas perdre la progression ni les préférences vocales**.
+## Build 10 — ce qui change
 
-## v1.3.0 / Build 8 — Guided Free Voice Engine
+### Layout / branding
 
-Le mode vocal gratuit est un moteur d'entraînement guidé, sans backend ni API payante.
+- correction du layout desktop trop étroit ;
+- dashboard responsive : 2 colonnes sur écran large, 1 colonne sur mobile/tablette ;
+- largeur adaptée aux navigateurs PC sans transformer la PWA en bande verticale ;
+- maintien des safe areas et gros touch targets sur iPhone/Android ;
+- logo homepage chargé directement depuis **`assets/LOGO.png`** ;
+- suppression du chargement expérimental du logo découpé en base64 ;
+- branding natif dans le moteur : **French Trân’quille** + **Lucie** ;
+- favicon et Apple Touch icon depuis **`assets/Favicon.png`**, avec une icône PWA 192 dédiée pour Android.
 
-- **8 situations A0** ;
-- réutilisation de `Bonjour`, `Merci`, `Je m'appelle Trân.` et `Au revoir` ;
-- reconnaissance via `SpeechRecognition` / `webkitSpeechRecognition` lorsque Safari l'expose ;
-- plusieurs alternatives de transcription évaluées ;
-- comparaison tolérante aux accents, apostrophes, espaces et petites erreurs ;
-- indices progressifs ;
-- répétition automatique des points fragiles ;
-- fallback texte ;
-- mémoire locale de maîtrise ;
-- aucune note de prononciation inventée ;
-- **0 € : aucune API payante et aucun backend**.
+### Curriculum A0
 
-## Fonctionnalités actuelles
+La PWA passe de 4 expressions isolées à **7 vraies leçons / 40 éléments** :
 
-- interface apprenante en vietnamien, environ **95 % VI / 5 % FR** au niveau A0 ;
-- **Bài 1 — Bonjour** complète et interactive ;
-- écoute des exemples français via synthèse vocale iOS / navigateur ;
-- entraînement vocal guidé adaptatif et gratuit ;
-- conversation guidée déterministe de secours ;
-- révisions `Khó / Được / Dễ` ;
-- progression non gamifiée ;
-- persistance locale ;
-- **DEBUG FR** local au navigateur de Jerry ;
-- PWA installable + service worker ;
-- aucune clé API dans le navigateur ou le repo.
+1. **Chào hỏi & giới thiệu — Saluer & se présenter**
+   - Bonjour
+   - Merci
+   - Au revoir
+   - Je m'appelle Trân.
 
-## Important sur la voix
+2. **Lịch sự & hiểu người khác — Politesse & compréhension**
+   - S'il vous plaît.
+   - Excusez-moi.
+   - Je comprends.
+   - Je ne comprends pas.
+   - Pouvez-vous répéter ?
+   - Plus lentement, s'il vous plaît.
 
-Le moteur de reconnaissance peut dépendre des services proposés par Safari/iOS. L'application n'appelle aucune API commerciale payante.
+3. **Nói thêm về bản thân — Parler un peu de soi**
+   - Je suis vietnamienne.
+   - Je viens du Vietnam.
+   - J'habite à Hô Chi Minh-Ville.
+   - Et vous ?
+   - Oui.
+   - Non.
 
-La reconnaissance vocale n'est **pas** considérée comme un analyseur phonétique : elle valide la transcription reconnue, pas précisément le `R`, les nasales, `U/OU`, etc.
+4. **Gọi đồ ở quán cà phê — Commander au café**
+   - Je voudrais…
+   - De l'eau.
+   - Un café.
+   - Un thé.
+   - L'addition, s'il vous plaît.
+   - Combien ça coûte ?
 
-## Exécution locale
+5. **Nói điều mình thích — Dire ce qu'on aime**
+   - J'aime…
+   - Je n'aime pas…
+   - Beaucoup.
+   - Un peu.
+   - C'est bon.
+   - Je préfère…
 
-```bash
-python -m http.server 8080
-```
+6. **Số từ 0 đến 5 — Les nombres de 0 à 5**
 
-Puis ouvrir `http://localhost:8080`.
+7. **Số 6 đến 10 & hỏi giá — Les nombres 6 à 10 & le prix**
 
-## GitHub Pages
+Chaque leçon comprend introduction, écoute, éléments nouveaux en petits groupes, checks de reconnaissance, mini-situation finale et réintégration automatique dans les révisions/conversations.
 
-Le workflow `.github/workflows/pages.yml` déploie automatiquement `main`.
+## Progression
 
-Production :
+- déverrouillage séquentiel des leçons ;
+- progression mémorisée par leçon ;
+- migration automatique de l'ancien schéma Build 1–9 ;
+- les acquis existants de Trân ne sont pas supprimés ;
+- vocabulaire connu partagé entre leçons, révisions et conversation ;
+- statistiques : leçons terminées, éléments acquis, éléments à revoir, série de jours.
+
+## Voix — 0 €
+
+- synthèse vocale via `speechSynthesis` ;
+- choix de voix local au navigateur ;
+- DEBUG FR avec sélecteur et test de **Lucie** ;
+- préférence automatique pour les voix françaises plus naturelles exposées par l'appareil ;
+- reconnaissance via `SpeechRecognition` / `webkitSpeechRecognition` lorsqu'elle existe ;
+- validation locale de la transcription ;
+- aucune prétention à noter précisément la phonétique ;
+- fallback texte systématique ;
+- aucune API payante, aucun backend payant.
+
+## DEBUG FR
+
+Dans `⚙ Réglages` :
+
+- `🇫🇷 DEBUG FR` affiche l'interface en français sur **ce navigateur uniquement** ;
+- l'iPhone de Trân continue à afficher le vietnamien ;
+- raccourci : `?debug=fr`.
+
+## Hébergement
+
+GitHub Pages déploie automatiquement `main` :
 
 ```text
 https://shinobione.github.io/tran-french-teacher/
@@ -93,39 +124,33 @@ https://shinobione.github.io/tran-french-teacher/
 
 ### PWA-2 — Voice
 - ✅ iPhone-first ;
-- ✅ écoute française ;
-- ✅ reconnaissance vocale gratuite ;
-- ✅ validation tolérante ;
-- ✅ indices progressifs ;
-- ✅ répétition automatique des erreurs ;
+- ✅ Android / PC en cibles secondaires ;
+- ✅ synthèse vocale gratuite ;
+- ✅ reconnaissance gratuite quand le navigateur l'expose ;
 - ✅ fallback texte ;
-- ✅ mémoire locale de maîtrise ;
-- ✅ branding French Trân’quille + Lucie ;
-- ⏳ tests réels sur l'iPhone de Trân ;
-- ⏳ réglage des seuils selon les transcriptions réelles de Safari ;
-- ⏳ scénarios multi-tours plus longs.
+- ⏳ tests réels iPhone de Trân ;
+- ⏳ ajustement des seuils selon ses transcriptions réelles.
 
 ### PWA-3 — Learning Memory
-- unifier mémoire leçon / révision / entraînement vocal ;
-- erreurs récurrentes ;
+- unifier encore davantage leçon / révision / vocal ;
 - répétition espacée plus intelligente ;
-- historique local robuste ;
-- sauvegarde/export manuel sans serveur si nécessaire.
+- erreurs récurrentes ;
+- export/import manuel local.
 
 ### PWA-4 — Curriculum A0 → A1
-- programme structuré complet ;
-- ratio vietnamien/français progressif ;
-- situations de vie réelle ;
-- nouveaux mots uniquement après introduction pédagogique ;
-- progression jusqu'à A1 sans transformer l'app en jeu.
+- enrichir les 7 premières leçons ;
+- ajouter famille, transport, restaurant, courses, médecin/pharmacie, voyage ;
+- introduire progressivement `être`, `avoir`, `vouloir`, `aimer`, articles et présent ;
+- faire évoluer le ratio vietnamien/français selon les acquis réels.
 
 ## Historique court
 
 - **v1.0.0 / Build 1** — Fondation PWA ;
-- **v1.0.1 / Build 2** — blocage traduction automatique ;
+- **v1.0.1 / Build 2** — verrouillage vietnamien ;
 - **v1.0.2 / Build 3** — DEBUG FR ;
 - **v1.0.3 / Build 4** — voix iPhone-first ;
-- **v1.1.x / Builds 5–6** — expérimentation Realtime/Vercel abandonnée pour l'objectif 0 € ;
+- **v1.1.x / Builds 5–6** — expérimentation Realtime/Vercel, abandonnée pour rester à 0 € ;
 - **v1.2.0 / Build 7** — Free Voice ;
-- **v1.3.0 / Build 8** — Guided Free Voice Engine ;
-- **v1.4.0 / Build 9** — **French Trân’quille**, logo/favicon, Luc → Lucie.
+- **v1.3.0 / Build 8** — Guided Free Voice ;
+- **v1.4.0 / Build 9** — French Trân’quille + Lucie ;
+- **v1.5.0 / Build 10** — Responsive multi-device + 7 leçons / 40 éléments.
