@@ -1,5 +1,23 @@
-const CACHE = 'tran-french-teacher-v1.3.0-b8';
-const CORE = ['./', './index.html', './styles.css', './app.js', './debug-fr.js', './voice-ios.js', './free-voice.js', './manifest.webmanifest', './icon.svg'];
+const CACHE = 'tran-french-teacher-v1.4.0-b9';
+const CORE = [
+  './',
+  './index.html',
+  './styles.css',
+  './brand.css',
+  './app.js',
+  './debug-fr.js',
+  './voice-ios.js',
+  './free-voice.js',
+  './brand.js',
+  './manifest.webmanifest',
+  './assets/favicon-32.png',
+  './assets/apple-touch-icon.png',
+  './assets/icon-192.webp',
+  './assets/brand/logo.1.b64',
+  './assets/brand/logo.2.b64',
+  './assets/brand/logo.3.b64',
+  './assets/brand/logo.4.b64'
+];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(CORE)));
   self.skipWaiting();
