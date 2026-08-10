@@ -11,18 +11,46 @@
   <meta name="apple-mobile-web-app-title" content="French Trân’quille" />
   <meta name="application-name" content="French Trân’quille" />
   <meta name="description" content="French Trân’quille — gia sư tiếng Pháp cá nhân cho Trân, bắt đầu từ con số 0." />
-  <link rel="manifest" href="./manifest.webmanifest" />
-  <link rel="icon" type="image/png" href="./assets/Favicon.png" />
-  <link rel="apple-touch-icon" href="./assets/Favicon.png" />
-  <link rel="stylesheet" href="./styles.css" />
-  <link rel="stylesheet" href="./brand.css" />
+  <link rel="manifest" href="./manifest.webmanifest?v=1.5.0-b10.1" />
+  <link rel="icon" type="image/png" href="./assets/Favicon.png?v=1.5.0-b10.1" />
+  <link rel="apple-touch-icon" href="./assets/Favicon.png?v=1.5.0-b10.1" />
+  <link rel="stylesheet" href="./styles.css?v=1.5.0-b10.1" />
+  <link rel="stylesheet" href="./brand.css?v=1.5.0-b10.1" />
   <title>French Trân’quille</title>
+  <style>
+    .boot-status{width:min(560px,calc(100% - 32px));margin:18vh auto 0;padding:22px;border:1px solid rgba(180,199,224,.16);border-radius:20px;background:rgba(14,26,42,.86);color:#f7f3eb;text-align:center;font-family:Inter,system-ui,sans-serif;box-shadow:0 18px 50px rgba(0,0,0,.22)}
+    .boot-status strong{display:block;font-size:1.05rem;margin-bottom:8px}.boot-status small{display:block;color:#91a4bc;line-height:1.5}.boot-status.error{border-color:rgba(240,90,105,.38)}.boot-status code{display:block;margin-top:12px;padding:10px;border-radius:10px;background:#08111d;color:#ffc0c7;text-align:left;white-space:pre-wrap;word-break:break-word;font-size:.72rem}
+  </style>
 </head>
 <body translate="no" class="notranslate">
-  <div id="app" translate="no" class="notranslate"></div>
-  <script src="./app.js"></script>
-  <script src="./debug-fr.js"></script>
-  <script src="./voice-ios.js"></script>
-  <script src="./free-voice.js"></script>
+  <div id="app" translate="no" class="notranslate">
+    <div class="boot-status" id="boot-status"><strong>French Trân’quille</strong><small>Đang khởi động… • Démarrage…</small></div>
+  </div>
+  <script>
+    (() => {
+      const HOTFIX = '1.5.0-b10.1';
+      const root = () => document.getElementById('app');
+      const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      const fatal = (message, detail='') => {
+        const app = root(); if (!app) return;
+        app.innerHTML = `<div class="boot-status error"><strong>⚠️ French Trân’quille n’a pas démarré</strong><small>Ứng dụng gặp lỗi khi khởi động.<br>Build 10.1 affiche maintenant le diagnostic au lieu d’un écran vide.</small>${detail ? `<code>${escapeHtml(message)}\n${escapeHtml(detail)}</code>` : `<code>${escapeHtml(message)}</code>`}</div>`;
+      };
+      window.addEventListener('error', event => fatal(event.message || 'JavaScript error', `${event.filename || ''}:${event.lineno || ''}:${event.colno || ''}`));
+      window.addEventListener('unhandledrejection', event => fatal('Unhandled promise rejection', event.reason?.stack || event.reason || ''));
+      try {
+        if ('caches' in window) caches.keys().then(keys => Promise.all(keys.filter(k => k.startsWith('tran-french-teacher-') && k !== `tran-french-teacher-v${HOTFIX}`).map(k => caches.delete(k)))).catch(()=>{});
+        if ('serviceWorker' in navigator) navigator.serviceWorker.getRegistrations().then(regs => Promise.all(regs.map(r => r.update().catch(()=>{})))).catch(()=>{});
+      } catch {}
+      window.addEventListener('load', () => setTimeout(() => {
+        const app = root();
+        const boot = document.getElementById('boot-status');
+        if (app && boot && app.contains(boot)) fatal('Startup watchdog: app.js did not replace the boot screen within 3 seconds.');
+      }, 3000));
+    })();
+  </script>
+  <script defer src="./app.js?v=1.5.0-b10.1"></script>
+  <script defer src="./debug-fr.js?v=1.5.0-b10.1"></script>
+  <script defer src="./voice-ios.js?v=1.5.0-b10.1"></script>
+  <script defer src="./free-voice.js?v=1.5.0-b10.1"></script>
 </body>
 </html>
