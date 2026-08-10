@@ -4,9 +4,16 @@ PWA mobile-first de professeur particulier de français pour **Trân**, vietnami
 
 ## Version
 
-- **v1.0.0**
-- **Build 1**
+- **v1.0.1**
+- **Build 2**
 - Phase **PWA-1 — Foundation**
+
+## Correctif v1.0.1 / Build 2
+
+- blocage explicite de la traduction automatique du navigateur (`notranslate` + `translate="no"`) ;
+- interface apprenante conservée en vietnamien ;
+- nom visible de la PWA : **Tiếng Pháp cùng Luc** ;
+- seuls les mots et phrases étudiés restent en français.
 
 ## V1 fonctionnelle
 
