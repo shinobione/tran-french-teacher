@@ -23,7 +23,7 @@ jobs:
           node --check debug-fr.js
           node --check voice-ios.js
           node --check free-voice.js
-      - name: Render smoke test
+      - name: Node render smoke test
         run: |
           node <<'NODE'
           const store = new Map();
@@ -33,7 +33,6 @@ jobs:
             removeItem: k => store.delete(k)
           };
           const app = { innerHTML: '' };
-          const noopNode = () => ({ addEventListener(){}, disabled:false, dataset:{} });
           global.document = {
             querySelector(sel){ return sel === '#app' ? app : null; },
             querySelectorAll(){ return []; }
@@ -47,5 +46,31 @@ jobs:
           if (!app.innerHTML || app.innerHTML.length < 500) {
             throw new Error('Home render produced no meaningful HTML');
           }
-          console.log('Home render OK:', app.innerHTML.length, 'chars');
+          console.log('Node home render OK:', app.innerHTML.length, 'chars');
           NODE
+      - name: Real Chrome browser smoke test
+        run: |
+          google-chrome --version
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/french-tranquille-http.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill $SERVER_PID || true' EXIT
+          sleep 1
+          google-chrome \
+            --headless=new \
+            --no-sandbox \
+            --disable-gpu \
+            --virtual-time-budget=5000 \
+            --dump-dom \
+            http://127.0.0.1:4173/ > /tmp/french-tranquille-dom.html
+          if grep -q "n’a pas démarré" /tmp/french-tranquille-dom.html; then
+            cat /tmp/french-tranquille-dom.html
+            exit 1
+          fi
+          if grep -q 'id="boot-status"' /tmp/french-tranquille-dom.html; then
+            cat /tmp/french-tranquille-dom.html
+            echo 'Startup screen was not replaced by the app.'
+            exit 1
+          fi
+          grep -q 'French Trân’quille' /tmp/french-tranquille-dom.html
+          grep -q 'home-dashboard' /tmp/french-tranquille-dom.html
+          echo 'Real Chrome home render OK'
