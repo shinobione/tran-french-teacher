@@ -4,9 +4,20 @@ PWA mobile-first de professeur particulier de français pour **Trân**, vietnami
 
 ## Version
 
-- **v1.0.1**
-- **Build 2**
+- **v1.0.2**
+- **Build 3**
 - Phase **PWA-1 — Foundation**
+
+## v1.0.2 / Build 3 — Debug FR
+
+- ajout d'un mode **🇫🇷 DEBUG FR** accessible depuis les réglages ;
+- traduction à la volée du vietnamien vers le français pour Jerry ;
+- traduction locale au navigateur via `localStorage` : l'activation sur le PC de Jerry n'affecte pas l'iPhone de Trân ;
+- bandeau visible lorsque le mode debug est actif ;
+- traduction des écrans, boutons, consignes, feedbacks et placeholders ;
+- les mots et phrases de français étudiés restent inchangés ;
+- raccourci de secours possible avec `?debug=fr` ;
+- couche isolée dans `debug-fr.js` afin de ne pas toucher au moteur pédagogique.
 
 ## Correctif v1.0.1 / Build 2
 
