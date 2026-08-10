@@ -1,25 +1,15 @@
 {
   "name": "French Trân’quille",
   "short_name": "Trân’quille",
-  "description": "PWA de français pour Trân — vietnamien d’abord, français pas à pas.",
+  "description": "Professeure de français personnelle pour Trân — début A0, interface vietnamienne.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#07101d",
+  "background_color": "#08111d",
   "theme_color": "#171026",
   "lang": "vi",
   "icons": [
-    {
-      "src": "./assets/icon-192.webp",
-      "sizes": "192x192",
-      "type": "image/webp",
-      "purpose": "any"
-    },
-    {
-      "src": "./assets/apple-touch-icon.png",
-      "sizes": "180x180",
-      "type": "image/png",
-      "purpose": "any"
-    }
+    { "src": "./assets/icon-192.webp", "sizes": "192x192", "type": "image/webp", "purpose": "any maskable" },
+    { "src": "./assets/Favicon.png", "sizes": "any", "type": "image/png", "purpose": "any maskable" }
   ]
 }
