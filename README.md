@@ -4,9 +4,21 @@ PWA mobile-first de professeur particulier de français pour **Trân**, vietnami
 
 ## Version
 
-- **v1.0.2**
-- **Build 3**
+- **v1.0.3**
+- **Build 4**
 - Phase **PWA-1 — Foundation**
+
+## v1.0.3 / Build 4 — iPhone-first Voice
+
+- priorité donnée à l'utilisation sur **iPhone / iOS** ;
+- ajout de `voice-ios.js`, couche audio indépendante du moteur pédagogique ;
+- sélection automatique de la meilleure voix française disponible sur l'appareil ;
+- préférence pour `fr-FR`, service local et voix de meilleure qualité lorsqu'elles sont exposées par le navigateur ;
+- choix de voix mémorisé localement par appareil ;
+- vitesse et hauteur de voix ajustables ;
+- sélecteur et bouton d'audition disponibles en **DEBUG FR** dans les réglages ;
+- fallback automatique vers la voix système si aucune voix française exploitable n'est exposée ;
+- ce système reste transitoire avant **PWA-2 Voice** et une vraie voix serveur / Realtime cohérente entre appareils.
 
 ## v1.0.2 / Build 3 — Debug FR
 
@@ -69,6 +81,7 @@ La clé `OPENAI_API_KEY` doit rester côté serveur. L'exemple utilise la Respon
 - micro ;
 - conversation vocale ;
 - vraie entrée audio ;
+- voix serveur / Realtime cohérente entre appareils ;
 - feedback de prononciation uniquement quand l'audio le permet.
 
 ### PWA-3 — Learning Memory
