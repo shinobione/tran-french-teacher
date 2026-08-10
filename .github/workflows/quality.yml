@@ -1,0 +1,51 @@
+name: JavaScript quality check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  javascript:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax check
+        run: |
+          node --check app.js
+          node --check debug-fr.js
+          node --check voice-ios.js
+          node --check free-voice.js
+      - name: Render smoke test
+        run: |
+          node <<'NODE'
+          const store = new Map();
+          global.localStorage = {
+            getItem: k => store.has(k) ? store.get(k) : null,
+            setItem: (k,v) => store.set(k,String(v)),
+            removeItem: k => store.delete(k)
+          };
+          const app = { innerHTML: '' };
+          const noopNode = () => ({ addEventListener(){}, disabled:false, dataset:{} });
+          global.document = {
+            querySelector(sel){ return sel === '#app' ? app : null; },
+            querySelectorAll(){ return []; }
+          };
+          global.window = global;
+          global.window.scrollTo = () => {};
+          global.window.addEventListener = () => {};
+          global.navigator = {};
+          global.confirm = () => false;
+          require('./app.js');
+          if (!app.innerHTML || app.innerHTML.length < 500) {
+            throw new Error('Home render produced no meaningful HTML');
+          }
+          console.log('Home render OK:', app.innerHTML.length, 'chars');
+          NODE
