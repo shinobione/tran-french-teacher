@@ -4,9 +4,24 @@ PWA mobile-first de professeur particulier de français pour **Trân**, vietnami
 
 ## Version
 
-- **v1.1.0**
-- **Build 5**
-- Phase **PWA-2 — Voice / Realtime foundation**
+- **v1.1.1**
+- **Build 6**
+- Phase **PWA-2 — Voice / Vercel deployment**
+
+## v1.1.1 / Build 6 — Vercel-ready + protection Realtime
+
+- ajout de `vercel.json` pour déployer directement le repo sur Vercel ;
+- modernisation de `api/realtime.js` au format Vercel Functions actuel ;
+- ajout de `api/health.js` pour vérifier le backend sans exposer de secret ;
+- ajout de `TUTOR_ACCESS_TOKEN` : le proxy Realtime n'est plus utilisable sans jeton privé ;
+- ajout de `vercel-bootstrap.js` : le jeton est stocké uniquement dans le navigateur/iPhone ;
+- écran d'activation du mode vocal si l'iPhone n'a pas encore son jeton ;
+- carte `VERCEL SECURITY` dans DEBUG FR avec test de santé du backend ;
+- `semantic_vad` configuré avec une faible eagerness afin de laisser davantage de temps à une débutante A0 pour répondre ;
+- cache PWA incrémenté ;
+- guide complet : [`VERCEL_SETUP.md`](./VERCEL_SETUP.md).
+
+La PWA peut désormais être servie entièrement par Vercel. Dans ce cas, le frontend et `/api/realtime` partagent le même domaine et aucune URL de backend n'est à saisir.
 
 ## v1.1.0 / Build 5 — PWA-2 Realtime Voice
 
@@ -22,9 +37,7 @@ PWA mobile-first de professeur particulier de français pour **Trân**, vietnami
 - bouton de démarrage/arrêt de session vocale dans l'écran Conversation dès qu'un backend est configuré ;
 - carte `PWA-2 BACKEND` dans le mode DEBUG FR pour renseigner/tester l'endpoint ;
 - l'ancienne synthèse vocale iOS reste disponible en fallback pour les petits boutons d'écoute ;
-- documentation de déploiement dans [`PWA2_BACKEND.md`](./PWA2_BACKEND.md).
-
-> GitHub Pages continue d'héberger la PWA statique. Une vraie session Realtime nécessite un endpoint serveur séparé, car GitHub Pages n'exécute pas de backend.
+- documentation technique initiale dans [`PWA2_BACKEND.md`](./PWA2_BACKEND.md).
 
 ## v1.0.3 / Build 4 — iPhone-first Voice
 
@@ -62,6 +75,7 @@ PWA mobile-first de professeur particulier de français pour **Trân**, vietnami
 - `Bonjour`, `Merci`, `Au revoir`, `Je m'appelle Trân.` ;
 - lecture audio française locale via `speechSynthesis` pour les exemples courts ;
 - couche Realtime WebRTC prête pour conversation vocale naturelle ;
+- protection du proxy Realtime par jeton privé ;
 - conversation guidée déterministe de secours ;
 - révisions `Khó / Được / Dễ` ;
 - progression non gamifiée ;
@@ -71,30 +85,49 @@ PWA mobile-first de professeur particulier de français pour **Trân**, vietnami
 - fonctionnement hors-ligne pour la partie statique après première visite ;
 - aucune clé API dans le navigateur.
 
-## Exécution locale
+## Déploiements
 
-La partie statique n'a aucune dépendance ni compilation.
+### GitHub Pages
 
-```bash
-python -m http.server 8080
-```
+Le workflow `.github/workflows/pages.yml` déploie automatiquement la partie statique de `main` vers GitHub Pages.
 
-Puis ouvrir `http://localhost:8080`.
+### Vercel — recommandé pour PWA-2
 
-## GitHub Pages
+Vercel peut servir **la PWA et les Vercel Functions du dossier `api/` depuis le même repo**.
 
-Le workflow `.github/workflows/pages.yml` déploie automatiquement le contenu statique de `main` vers GitHub Pages.
+Voir [`VERCEL_SETUP.md`](./VERCEL_SETUP.md).
 
-## Backend Realtime
-
-Voir [`PWA2_BACKEND.md`](./PWA2_BACKEND.md).
-
-Variables principales :
+Variables obligatoires :
 
 ```text
 OPENAI_API_KEY=...
+TUTOR_ACCESS_TOKEN=...
+```
+
+Variables facultatives :
+
+```text
 OPENAI_REALTIME_MODEL=gpt-realtime
 OPENAI_REALTIME_VOICE=cedar
+ALLOWED_ORIGINS=
+```
+
+## Vérification du backend Vercel
+
+Après déploiement :
+
+```text
+https://<projet>.vercel.app/api/health
+```
+
+Doit notamment indiquer :
+
+```json
+{
+  "ok": true,
+  "openaiConfigured": true,
+  "accessProtected": true
+}
 ```
 
 ## Roadmap
@@ -104,7 +137,11 @@ OPENAI_REALTIME_VOICE=cedar
 - ✅ client WebRTC ;
 - ✅ proxy OpenAI Realtime ;
 - ✅ transcription UI ;
-- ⏳ déploiement du backend ;
+- ✅ configuration Vercel ;
+- ✅ protection du proxy par jeton privé ;
+- ⏳ import du repo dans le compte Vercel ;
+- ⏳ ajout des variables d'environnement ;
+- ⏳ premier Production Deployment ;
 - ⏳ test réel iPhone de Trân ;
 - ⏳ réglage final de la voix / latence / VAD ;
 - ⏳ feedback de prononciation réellement fondé sur l'audio.
