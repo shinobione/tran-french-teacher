@@ -12,6 +12,7 @@ export function GET() {
   }, {
     status: 200,
     headers: {
+      'Access-Control-Allow-Origin': '*',
       'Cache-Control': 'no-store',
       'X-Content-Type-Options': 'nosniff'
     }
