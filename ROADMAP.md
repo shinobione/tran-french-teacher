@@ -25,91 +25,133 @@
 
 ---
 
-# Baseline production — v1.18.0 / Build 25
+# Baseline production — v1.18.1 / Build 25.1
 
-**Progression UX / Progressive Disclosure — ✅ PROD / CLOS**
-
-- 40 leçons / 241 éléments ;
-- Scenario 28 / 84 ;
-- Parcours compact ;
-- 5 leçons visibles par défaut / 40 accessibles ;
-- détails Memory/Mastery/A1 repliables ;
-- aucune migration ;
-- voix et branding sanctuarisés.
-
-Preuves : PR #31 puis `main` `4f354221f923004b0cefdaf6b3281e51ba30dbf9`, quality #94 / Options #25 / nav #44 / Progression #2 / Pages #90 — SUCCESS.
-
----
-
-# v1.18.1 — Build 25.1 — Listening Slow Calibration — EN COURS
-
-## Retour terrain
-
-```text
-normal = 0.88
-lent   = 0.68
-```
-
-Le mode lent est distinct mais reste un peu rapide.
-
-## Candidat implémenté
+**Listening Slow Calibration — ✅ PROD / CLOS**
 
 ```text
 normal effectif = 0.88
 lent effectif   = 0.64
 ```
 
-Le moteur Listening continue à demander son ancien slow `0.68`. Le bridge `build-meta.js` transforme uniquement cette demande en **0.64** juste avant `voice-ios.js`. Cela évite de modifier la voix validée, le pitch ou la vitesse Lucie sauvegardée.
+- `voice-ios.js` inchangé ;
+- même voix / même pitch ;
+- vitesse Lucie sauvegardée restaurée après chaque appel ;
+- Build 25 Progression UX conservé ;
+- 40 leçons / 241 éléments ;
+- Scenario 28 / 84 ;
+- coût 0 €.
 
-## Observabilité / CI
+Preuves `main` `178c8b71d47887d8f9efd3389aa358d2f3e1a8eb` : quality #100, Options #31, nav #50, Progression #8, Listening-rate #3, Pages #92 — SUCCESS.
 
-`build-meta.js` expose :
-
-```text
-normal: 0.88
-engineSlow: 0.68
-slow: 0.64
-```
-
-et les mêmes valeurs en `data-listening-*-rate` sur `<html>`.
-
-Nouveau workflow : **Build 25.1 Listening rate smoke**.
-
-## Critères de clôture
-
-- v1.18.1 / Build 25.1 cohérent ;
-- cache `tran-french-teacher-v1.18.1-b25.1-listening-slow` ;
-- normal reste 0.88 ;
-- slow effectif = 0.64 ;
-- `voice-ios.js` byte-identique ;
-- `free-voice.js`, logo, favicon inchangés ;
-- quality / Options / nav-mobile / Progression UX / Listening-rate verts sur PR et `main` ;
-- Pages verte ;
-- aucune donnée apprenante modifiée ;
-- 0.62 seulement après nouveau retour terrain si nécessaire.
+`0.62` reste une éventuelle calibration future uniquement sur retour terrain.
 
 ---
 
-# v1.18.2 — Build 25.2 — Session Goals / Milestones / App Delight
+# v1.18.2 — Build 25.2 — Session Goals / Milestones / App Delight — PROCHAIN
 
-Chaque activité doit suivre :
+## Problème produit
+
+Plusieurs écrans permettent de pratiquer mais ne répondent pas assez clairement à :
+
+> Combien je dois faire ? Où j’en suis ? Quand est-ce terminé ? Où est-ce que je vais ensuite ?
+
+## Contrat commun
+
+Chaque activité principale doit suivre :
 
 ```text
-objectif court → progression visible → fin explicite → sortie logique
+AVANT   → objectif court
+PENDANT → progression visible
+FIN     → réussite explicite
+APRÈS   → sortie logique en 1 tap
 ```
 
-Cibles indicatives : Listening 5 questions, Révision 5 éléments, Scenario 1 situation, vocal guidé 5 réponses, fin de leçon renforcée.
+Aucune activité standard ne doit sembler infinie.
 
-Animations premium sobres : barre 100 %, coche, glow mint/lilas, pulse court Lucie/logo, 400–800 ms, reduced motion respecté. Pas d’XP, monnaie, classement ou confettis permanents.
+## Cibles de session candidates
 
-Milestones : première leçon, premier vocal reconnu, première session Listening, première situation, premier rappel réussi, 10/25/50 acquis consolidés, fin A0/A1.
+```text
+Listening          5 questions
+Révision mémoire   jusqu’à 5 éléments prioritaires
+Scenario            1 situation complète
+Vocal guidé         5 réponses
+Leçon               étapes existantes + fin renforcée
+```
 
-À traiter aussi :
+Continuer après réussite reste volontaire et secondaire.
 
-- `Parler français` → recommandation principale puis alternatives, pas quatre moteurs empilés ;
-- `Séance du jour` → priorité + prochaine leçon + pratique courte, reste replié ;
+## App Delight
+
+Succès premium et court :
+
+- barre qui atteint 100 % ;
+- coche ;
+- glow mint/lilas ;
+- pulse discret Lucie/logo ;
+- transition 400–800 ms ;
+- `prefers-reduced-motion` respecté.
+
+Pas de son forcé, XP, monnaie, classement ou confettis permanents.
+
+## Milestones significatifs
+
+- première leçon terminée ;
+- première réponse vocale reconnue ;
+- première session Listening ;
+- première situation réelle ;
+- premier rappel réussi ;
+- 10 / 25 / 50 acquis consolidés ;
+- fin d’un bloc A0 / A1 ;
+- première session sans aide si la preuve est réellement observable.
+
+## Simplification transversale
+
+### Pratiquer → Parler français
+
+Ne plus empiler en permanence Scenario + Vocal guidé + Lucie pratique + rappel vocal.
+
+Cible :
+
+```text
+Recommandé maintenant
+[ Situation réelle — 3 min ]
+
+Autres façons
+[ Répéter une phrase ]
+[ Pratique guidée ]
+```
+
+Quand un mode est choisi, un seul moteur domine l’écran.
+
+### Aujourd’hui / Séance du jour
+
+Montrer priorité + prochaine leçon + éventuellement une pratique courte. Les autres activités derrière un dépliage.
+
+### Cohérence générale
+
 - une action principale par écran ;
-- sortie claire sans perte de travail.
+- sorties placées de façon cohérente ;
+- informations techniques cachées ;
+- état vide / en cours / réussi / à revoir immédiatement compréhensible ;
+- aucun écran où il faut deviner si sortir perd le travail.
+
+## Critères de clôture Build 25.2
+
+- objectif visible avant une session ;
+- compteur `x / cible` compréhensible ;
+- fin explicitement atteignable ;
+- sortie en 1 tap après réussite ;
+- option de continuer secondaire ;
+- données enregistrées avant l’animation/écran de fin ;
+- animations < 1 s ;
+- reduced-motion testé ;
+- aucune nouvelle gamification artificielle ;
+- old-profile l8 intact ;
+- voix/branding sanctuarisés ;
+- quality / Options / nav / Progression / Listening-rate restent verts ;
+- nouveau smoke Session UX sur PR et `main` ;
+- Pages verte.
 
 ---
 

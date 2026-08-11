@@ -1,41 +1,26 @@
 # French Trân’quille — NEXT UX PASS
 
-Statut : **BUILD 25 CLOS / SUITE PLANIFIÉE**  
+Statut : **BUILD 25 + 25.1 CLOS / BUILD 25.2 PROCHAIN**  
 Date terrain : **2026-08-11**
 
-## Build 25 — Progression UX — ✅ LIVRÉ
+## ✅ Build 25 — Progression UX
 
-`Parcours` utilise désormais une logique de progressive disclosure : résumé simple, détails à la demande, seulement 5 leçons visibles par défaut et les 40 disponibles volontairement.
+`Parcours` est désormais compact par défaut : résumé simple, détails à la demande, 5 leçons visibles autour de la position actuelle et 40 disponibles volontairement.
 
-Le contrat l8 et les moteurs Memory/Mastery restent intacts. Voir `docs/BUILD-25-PROGRESSION-UX.md`.
+## ✅ Build 25.1 — Listening Slow Calibration
 
----
-
-# Build 25.1 — Listening Slow Calibration — PROCHAIN
-
-État courant :
-
-```text
-normal = 0.88
-lent   = 0.68
-```
-
-Retour terrain : lent reste un peu rapide.
-
-Candidat suivant :
+Production :
 
 ```text
 normal = 0.88
 lent   = 0.64
 ```
 
-`0.62` seulement si le prochain test iPhone montre que 0.64 reste trop rapide.
-
-Contraintes : même voix, même pitch, normal inchangé, `voice-ios.js` sanctuarisé, aucune donnée apprenante touchée.
+`voice-ios.js`, pitch et voix Lucie inchangés. `0.62` reste uniquement un candidat futur si un nouveau test iPhone le justifie.
 
 ---
 
-# Build 25.2 — Session Goals / Milestones / App Delight
+# Build 25.2 — Session Goals / Milestones / App Delight — PROCHAIN
 
 ## Problème transversal
 
@@ -50,21 +35,21 @@ FIN     → réussite explicite
 APRÈS   → sortie logique
 ```
 
-Cibles indicatives :
+Cibles candidates :
 
 ```text
-Listening         5 questions
-Révision mémoire  5 éléments
-Scenario           1 situation
-Vocal guidé        5 réponses
-Leçon              fin renforcée
+Listening          5 questions
+Révision mémoire   jusqu’à 5 éléments prioritaires
+Scenario            1 situation complète
+Vocal guidé         5 réponses
+Leçon               fin renforcée
 ```
 
-Continuer après réussite reste un choix secondaire.
+Continuer après réussite est un choix secondaire.
 
 ## Succès premium
 
-Barre à 100 %, coche, glow mint/lilas, petit pulse Lucie/logo, transition courte 400–800 ms. `prefers-reduced-motion` respecté. Pas de son forcé, XP, monnaie, classement ou confettis permanents.
+Barre 100 %, coche, glow mint/lilas, petit pulse Lucie/logo, 400–800 ms, `prefers-reduced-motion` respecté. Pas de son forcé, XP, monnaie, classement ou confettis permanents.
 
 ## Milestones utiles
 
@@ -75,7 +60,7 @@ Barre à 100 %, coche, glow mint/lilas, petit pulse Lucie/logo, transition court
 - premier rappel réussi ;
 - 10 / 25 / 50 acquis consolidés ;
 - fin de bloc A0 / A1 ;
-- première session sans aide si cette preuve existe réellement.
+- première session sans aide si réellement observable.
 
 ## Conversation / Pratiquer
 
@@ -92,11 +77,15 @@ Autres façons
 [ Pratique guidée ]
 ```
 
-Une fois le mode choisi, un seul moteur occupe l’écran.
+Une fois le mode choisi, un seul moteur domine l’écran.
 
 ## Home / Séance du jour
 
 Afficher priorité + prochaine leçon + éventuellement une pratique courte. Les autres activités derrière un dépliage.
+
+## Règle d’implémentation
+
+Préférer une **Session UX layer** indépendante qui observe/orchestre les moteurs actuels plutôt que de réécrire voix, Memory, Scenario ou Listening.
 
 ---
 
@@ -106,7 +95,7 @@ Repoussé derrière les passes UX. Plus de français réel, moins de roulettes, 
 
 ---
 
-# Règle générale
+# Règles générales
 
 Avant toute nouvelle UI :
 
