@@ -4,9 +4,9 @@ PWA de français pensée pour **Trân**, vietnamienne débutante absolue (**A0**
 
 ## Version actuelle
 
-- **v1.6.1**
-- **Build 12**
-- Phase : **Curriculum A0 étendu + Curriculum UX + Voice-ready**
+- **v1.7.0**
+- **Build 13**
+- Phase : **PWA-3 Learning Memory + Curriculum A0 + Voice-ready**
 - coût d'exploitation : **0 €**
 
 ## Plateformes cibles
@@ -22,19 +22,73 @@ PWA de français pensée pour **Trân**, vietnamienne débutante absolue (**A0**
 
 L'interface, les leçons, les révisions et la progression locale sont conçues pour fonctionner sur les trois familles de plateformes. La disponibilité de la **reconnaissance vocale** dépend du navigateur et du système ; le fallback texte reste toujours disponible.
 
-## Build 12 — Curriculum UX
+## Build 13 — PWA-3 Learning Memory
 
-Le passage à 15 leçons ne doit pas transformer la homepage en liste verticale interminable.
+Lucie ne se contente plus de savoir si une leçon est terminée. Une mémoire d'apprentissage locale suit désormais chaque élément réellement appris.
 
-Le Build 12 garde les **15 leçons / 88 éléments A0**, mais réintègre le parcours dans le layout :
+### États suivis
 
-- sur **desktop**, la colonne parcours reste stable et la liste des leçons défile dans sa propre zone ;
-- sur **iPhone / Android / tablette**, la hauteur de cette zone s'adapte au viewport pour éviter que la homepage ne déborde sur plusieurs écrans ;
-- les lignes sont légèrement compactées sur la home tout en gardant les touch targets ;
-- les descriptions longues sont limitées visuellement à deux lignes dans l'aperçu ;
-- le scroll interne utilise une barre discrète sur PC et conserve le comportement tactile natif sur mobile ;
-- la page **Progression** reste l'endroit naturel pour consulter le parcours complet dans son contexte ;
-- la colonne latérale de la homepage devient sticky sur grand écran afin que le parcours reste visible sans casser le reste du dashboard.
+Chaque mot ou expression peut être classé automatiquement comme :
+
+- **Nouveau** ;
+- **Fragile** ;
+- **En cours** ;
+- **Solide**.
+
+La mémoire conserve notamment :
+
+- première rencontre de l'élément ;
+- dernière révision ;
+- nombre de tentatives ;
+- réussites / difficultés ;
+- série de bonnes réponses ;
+- force estimée ;
+- intervalle de révision ;
+- prochaine date de révision.
+
+### Révision espacée locale
+
+Les boutons **Difficile / Correct / Facile** pilotent maintenant un petit scheduler local :
+
+- **Difficile** → retour rapide de l'élément ;
+- **Correct** → nouvel essai après un délai modéré ;
+- **Facile** → intervalle plus long ;
+- les éléments fragiles et arrivés à échéance passent en priorité.
+
+Aucune API n'est nécessaire : tout est calculé dans le navigateur.
+
+### UI Learning Memory
+
+- la homepage affiche un résumé **À revoir / Fragiles / En cours / Solides** ;
+- le bouton **Réviser intelligemment** ouvre la révision priorisée ;
+- la page **Progression** affiche la mémoire d'apprentissage et les prochaines priorités ;
+- les éléments déjà appris reçoivent un badge d'état ;
+- la mémoire existante est initialisée à partir des anciennes données de révision sans reset forcé.
+
+### Sauvegarde locale
+
+Dans `⚙ Réglages` :
+
+- **Exporter** crée un fichier JSON avec la progression + la mémoire d'apprentissage ;
+- **Importer** restaure ce fichier sur le même appareil ou un autre appareil ;
+- aucune donnée n'est envoyée vers un backend.
+
+Clé locale dédiée :
+
+```text
+french-tranquille:learning-memory:v1
+```
+
+La clé historique de progression reste conservée pour garantir la compatibilité avec les Builds précédents.
+
+## Curriculum UX
+
+Le parcours de **15 leçons / 88 éléments A0** reste intégré proprement au layout :
+
+- desktop : colonne parcours stable + liste scrollable ;
+- iPhone / Android / tablette : hauteur adaptée au viewport ;
+- descriptions limitées dans l'aperçu home ;
+- parcours complet disponible dans **Progression**.
 
 ## Curriculum A0 — 15 leçons / 88 éléments
 
@@ -54,7 +108,7 @@ Le Build 12 garde les **15 leçons / 88 éléments A0**, mais réintègre le par
 14. **Gia đình & người thân — Famille & proches**
 15. **Ngày đầu tiên ở Pháp — Premier jour en France**
 
-Chaque leçon conserve la même logique A0 :
+Chaque leçon conserve la logique A0 :
 
 - explication principalement en vietnamien ;
 - petit groupe de 4 à 6 éléments ;
@@ -62,27 +116,6 @@ Chaque leçon conserve la même logique A0 :
 - checks de reconnaissance ;
 - mini-situation finale ;
 - réintégration automatique dans Révision, Conversation et entraînement vocal.
-
-### Thèmes réels déjà couverts
-
-- demander où se trouvent les toilettes, la gare ou la pharmacie ;
-- gauche / droite ;
-- acheter un billet de train, aller simple / aller-retour, quai et horaires ;
-- aujourd'hui / demain / maintenant / demander l'heure ;
-- chercher et acheter quelque chose, payer par carte ;
-- demander une table, la carte et commander au restaurant ;
-- dire qu'on a mal, qu'on est malade ou qu'on a besoin d'un médecin ;
-- présenter ses proches et saluer quelqu'un pour la première fois ;
-- premiers besoins à l'arrivée en France : faim, soif, fatigue, être perdue, demander de l'aide.
-
-## Progression
-
-- déverrouillage séquentiel des leçons ;
-- progression mémorisée par leçon ;
-- migration automatique des données Build 1–11 ;
-- aucun reset forcé des acquis existants ;
-- vocabulaire connu partagé entre leçons, révisions et conversation ;
-- statistiques : leçons terminées, éléments acquis, éléments à revoir, série de jours.
 
 ## Voix — 0 €
 
@@ -98,12 +131,12 @@ Chaque leçon conserve la même logique A0 :
 
 ### Curriculum voice-ready
 
-Le moteur vocal n'est plus limité à une liste fermée d'expressions. **Tout élément réellement appris peut maintenant revenir dans la pratique vocale** :
+Tout élément réellement appris peut revenir dans la pratique vocale :
 
-- les phrases importantes disposent d'un scénario contextuel dédié ;
-- les autres éléments utilisent automatiquement un prompt simple en vietnamien ;
-- une séance vocale sélectionne jusqu'à 10 acquis ;
-- le moteur accepte plusieurs variantes de transcription lorsque le navigateur les fournit.
+- scénarios dédiés pour les phrases importantes ;
+- prompt vietnamien générique pour les autres éléments ;
+- jusqu'à 10 acquis par séance vocale ;
+- plusieurs variantes de transcription acceptées lorsque le navigateur les fournit.
 
 Le prochain jalon voix reste le **test réel sur l'iPhone de Trân avec Safari/Siri**, puis l'ajustement des tolérances à partir des transcriptions observées.
 
@@ -120,10 +153,12 @@ Dans `⚙ Réglages` :
 Chaque modification importante passe :
 
 - `node --check` des scripts JavaScript ;
+- garde Curriculum UX ;
+- garde Learning Memory ;
 - smoke test de rendu Node ;
-- **vrai smoke test dans Google Chrome headless** vérifiant que la homepage remplace correctement l'écran de boot et contient le parcours attendu.
+- **vrai smoke test dans Google Chrome headless** vérifiant que la homepage démarre, contient les 15 leçons et charge la couche Learning Memory.
 
-Depuis Build 12, `build-meta.js` centralise également l'affichage runtime de la version/build afin d'éviter les diagnostics désynchronisés lors de petits patches d'interface.
+`build-meta.js` centralise l'affichage runtime de la version/build afin d'éviter les diagnostics désynchronisés.
 
 ## Hébergement
 
@@ -143,19 +178,27 @@ https://shinobione.github.io/tran-french-teacher/
 - ✅ fallback texte ;
 - ✅ curriculum voice-ready ;
 - ⏳ test réel Safari/Siri sur l'iPhone de Trân ;
+- ⏳ intégration des résultats vocaux dans Learning Memory ;
 - ⏳ ajustement des tolérances selon ses transcriptions réelles.
 
 ### PWA-3 — Learning Memory
-- répétition espacée plus intelligente ;
-- erreurs récurrentes ;
-- sélection automatique des éléments fragiles ;
-- export/import manuel local.
+- ✅ mémoire locale par élément ;
+- ✅ Nouveau / Fragile / En cours / Solide ;
+- ✅ révision espacée ;
+- ✅ priorité automatique aux éléments fragiles ;
+- ✅ export/import manuel local ;
+- ⏳ historique plus détaillé des erreurs ;
+- ⏳ suggestions automatiques de mini-séance quotidienne.
 
 ### PWA-4 — Curriculum A0 → A1
 - enrichir les 15 leçons A0 actuelles ;
 - ajouter téléphone, logement, météo, vêtements, courses alimentaires et petites conversations sociales ;
 - introduire progressivement `être`, `avoir`, `vouloir`, `aimer`, articles et présent ;
 - faire évoluer le ratio vietnamien/français selon les acquis réels.
+
+### Easter egg pédagogique futur
+
+- **Leçon 69 réservée** 😇🍌🍑 — vocabulaire adulte/intime, consentement, registres de langue et expressions de couple, uniquement quand le niveau de Trân permettra de l'aborder proprement.
 
 ## Historique court
 
@@ -168,6 +211,7 @@ https://shinobione.github.io/tran-french-teacher/
 - **v1.3.0 / Build 8** — Guided Free Voice ;
 - **v1.4.0 / Build 9** — French Trân’quille + Lucie ;
 - **v1.5.0 / Build 10** — Responsive multi-device + 7 leçons / 40 éléments ;
-- **Build 10.1–10.2** — watchdog de démarrage, isolation ES modules et vrai smoke test Chrome ;
-- **v1.6.0 / Build 11** — 15 leçons / 88 éléments + curriculum entièrement voice-ready ;
-- **v1.6.1 / Build 12** — curriculum intégré au layout : zone scrollable/sticky responsive, sans homepage interminable.
+- **Build 10.1–10.2** — watchdog, isolation ES modules et vrai smoke test Chrome ;
+- **v1.6.0 / Build 11** — 15 leçons / 88 éléments + curriculum voice-ready ;
+- **v1.6.1 / Build 12** — Curriculum UX responsive ;
+- **v1.7.0 / Build 13** — Learning Memory locale, révision espacée et sauvegarde JSON.

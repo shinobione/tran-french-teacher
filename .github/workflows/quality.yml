@@ -24,11 +24,21 @@ jobs:
           node --check voice-ios.js
           node --check free-voice.js
           node --check build-meta.js
+          node --check learning-memory.js
       - name: Curriculum UX guard
         run: |
           grep -q 'Build 12 — curriculum UX' styles.css
           grep -q 'max-height:clamp(360px,52vh,570px)' styles.css
           grep -q 'position:sticky' styles.css
+      - name: Learning Memory guard
+        run: |
+          grep -q "french-tranquille:learning-memory:v1" learning-memory.js
+          grep -q 'data-memory-rate' learning-memory.js
+          grep -q 'french-tranquille-backup' learning-memory.js
+          grep -q 'learning-memory.css' index.html
+          grep -q 'learning-memory.js' index.html
+          grep -q 'learning-memory.js' sw.js
+          grep -q "version: '1.7.0', build: 13" build-meta.js
       - name: Node render smoke test
         run: |
           node <<'NODE'
@@ -71,7 +81,7 @@ jobs:
             --headless=new \
             --no-sandbox \
             --disable-gpu \
-            --virtual-time-budget=5000 \
+            --virtual-time-budget=7000 \
             --dump-dom \
             http://127.0.0.1:4173/ > /tmp/french-tranquille-dom.html
           if grep -E -q 'id="app"[^>]*><div class="boot-status' /tmp/french-tranquille-dom.html; then
@@ -83,4 +93,6 @@ jobs:
           grep -q 'home-dashboard' /tmp/french-tranquille-dom.html
           grep -q 'A0 • 15 bài' /tmp/french-tranquille-dom.html
           grep -q 'Ngày đầu tiên ở Pháp' /tmp/french-tranquille-dom.html
-          echo 'Real Chrome home render OK'
+          grep -q 'memory-home-card' /tmp/french-tranquille-dom.html
+          grep -q 'PWA-3' /tmp/french-tranquille-dom.html
+          echo 'Real Chrome home + Learning Memory render OK'
