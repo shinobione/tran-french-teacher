@@ -4,6 +4,23 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ## [Unreleased]
 
+### v1.19.4 — Build 26.4 — Single-scroll Progress + Tyffany — CANDIDATE
+
+- conserve le layout Progress 2 colonnes de Build 26.3 mais supprime le deuxième contexte de scroll vertical dans `Détails d’apprentissage` ;
+- ajoute `build26-4-ux.css` qui remplace sur desktop `sticky + max-height viewport + overflow:auto` par un panneau dans le flux avec `max-height:none` et `overflow:visible` ;
+- la page redevient l’unique propriétaire du scroll vertical ;
+- mobile reste résumé → curriculum compact → Details replié ;
+- ajoute `build26-4-ux.js` comme couche de branding compatible ;
+- le nom apprenant **Lucie** devient **Tyffany** dans le DOM rendu et les attributs textuels sûrs ;
+- `FrenchTranquilleCurriculum.tutor` est normalisé à `Tyffany` ;
+- les phrases envoyées à `speechSynthesis` contenant l’ancien nom sont normalisées en `Tyffany` avant lecture ;
+- les identifiants techniques historiques `LucieVoice`, `luc-*`, `lucie-*` et la clé `francais-avec-luc:learner:v1` sont volontairement conservés pour éviter toute migration inutile ;
+- `voice-ios.js`, `free-voice.js`, logo et favicon restent byte-identiques ;
+- aucune migration learner/Memory/Scenario/Listening ;
+- ajoute un smoke Chrome Build 26.4 : Tyffany visible, aucun Lucie visible, tutor export Tyffany, Mastery ouvert, Details sans nested scroll, page scrollable, profil l8 intact ;
+- rend le smoke Build 26.3 durable : il protège toujours la structure 2 colonnes et les vrais clics Today sans imposer à vie l’ancienne politique `sticky` ;
+- cache candidat `tran-french-teacher-v1.19.4-b26.4-single-scroll-tyffany`.
+
 ---
 
 ## [1.19.3] — Build 26.3 — Interaction Stability + Progress Layout — 2026-08-11
@@ -19,7 +36,7 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 - route explicitement Review / Lesson / Conversation / Listening sans écrire de donnée apprenante ;
 - ajoute un smoke Chrome qui ouvre réellement les autres activités, vérifie la stabilité du même nœud, clique Listening, Review puis la leçon et exige les destinations réelles ;
 - optimise `Progrès` desktop selon le layout validé terrain : résumé + curriculum à gauche, `Détails d’apprentissage` à droite ;
-- la colonne Details est ouverte par défaut sur desktop, sticky et scrollable indépendamment ;
+- la colonne Details était initialement ouverte par défaut sur desktop, sticky et scrollable indépendamment ; Build 26.4 remplace ensuite uniquement cette politique de scroll ;
 - conserve sur mobile l’ordre résumé → curriculum compact → Details replié ;
 - utilise `display: contents` + CSS Grid : aucun clone ou remplacement des cartes Memory/Mastery/Listening/Scenario ;
 - conserve le dashboard Build 26.1 et son progressive disclosure ;
@@ -153,7 +170,7 @@ Le dashboard est livré et validé. La fonction d’auto-écoute est déployée,
 - 25 leçons / 148 éléments ; Early A1 ; Daily Coach.
 
 ## [1.7.1] — Build 14 / 14.1 — 2026-08-11
-- UX Conversation/Révision/Memory ; avatar Lucie.
+- UX Conversation/Révision/Memory ; avatar Lucie (nom produit renommé Tyffany en Build 26.4).
 
 ## [1.7.0] — Build 13 — 2026-08-11
 - Learning Memory ; révision espacée ; export/import JSON.
@@ -168,7 +185,7 @@ Le dashboard est livré et validé. La fonction d’auto-écoute est déployée,
 - responsive ; watchdog ; ES modules ; Chrome headless.
 
 ## [1.4.0] — Build 9
-- French Trân’quille ; Lucie ; logo/favicon/PWA.
+- French Trân’quille ; Lucie comme nom initial ; logo/favicon/PWA. Le nom visible devient Tyffany en Build 26.4.
 
 ## [1.3.0] — Build 8
 - Guided Free Voice.
