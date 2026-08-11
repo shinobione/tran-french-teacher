@@ -1,19 +1,20 @@
 # Build 23 — Real Life French I
 
-## Cible
+## Statut
 
-- version : **v1.16.0** ;
-- build : **23** ;
-- phase : **Real Life French I** ;
-- socle : **Build 22 UX Foundation** ;
-- curriculum inchangé : **40 leçons / 241 éléments** ;
+**v1.16.0 — Build 23 — PROD / CLOS — 2026-08-11**
+
+- PR : **#18 — SUCCESS** ;
+- commit production : `7f5dd657e5f46a2847c443ffb8f5d0154a89924a` ;
+- CI `main` : **run #63 — SUCCESS** ;
+- GitHub Pages : **run #77 — SUCCESS** ;
+- curriculum : **40 leçons / 241 éléments** ;
+- Scenario : **18 situations / 54 tours** ;
 - coût : **0 €**.
 
-## Principe
+## Principe livré
 
-La nouvelle capacité ne devient pas un nouveau menu.
-
-Trân continue à utiliser :
+La nouvelle capacité n’est pas devenue un nouveau menu. Trân continue à utiliser :
 
 ```text
 Aujourd’hui
@@ -36,80 +37,60 @@ Build 23 enrichit **Pratiquer → Parler français**.
 
 Total ajouté : **6 situations / 18 tours**.
 
-Le Scenario Engine passe de **12 / 36** à **18 / 54**.
+Le Scenario Engine est passé de **12 / 36** à **18 / 54**.
 
-## Règle de contenu
+## Pédagogie
 
 Aucune réponse obligatoire ne demande une structure non apprise dans le prérequis déclaré.
 
-Exemples réellement réutilisés :
+Le moteur historique gère toujours :
 
-```text
-Je ne comprends pas.
-Pouvez-vous répéter ?
-Plus lentement, s'il vous plaît.
-Je m'appelle Trân.
-Je viens du Vietnam.
-Je voudrais un thé, s'il vous plaît.
-Combien ça coûte ?
-J'aime… / Je n'aime pas… / Je préfère…
-Dix euros.
-Où est la gare ?
-À gauche.
-Merci.
-```
+- premier raté → indice ;
+- deuxième raté → modèle ;
+- reconnaissance vocale ou clavier ;
+- `scenario-success / scenario-miss / scenario-assisted` dans Learning Memory ;
+- statistiques locales ;
+- aucune prétention de score phonétique.
 
-## UX Scenario
+## UX livrée
 
-`real-life-ux.js` garde le moteur historique mais simplifie la liste :
+`real-life-ux.js` :
 
-- scènes personnelles ouvertes en premier ;
+- scènes personnelles disponibles en premier ;
 - badge `Ta vraie vie` ;
-- titre `Parler en situation` ;
-- futures scènes : seulement 2 visibles par défaut ;
-- bouton pour dévoiler le reste ;
-- aucune nouvelle destination du shell.
+- titre apprenant `Parler en situation` ;
+- deux futures scènes verrouillées visibles par défaut ;
+- dévoilement du reste sur demande ;
+- aucun nouveau bouton dans le shell principal.
 
-## Stockage
+## Stockage et progression
 
-Aucune nouvelle clé de progression.
+Aucune nouvelle clé apprenant.
 
-Le pack utilise :
+Le pack utilise la même clé Scenario :
 
 ```text
 french-tranquille:scenarios:v1
 ```
 
-Les anciens résultats Scenario restent compatibles.
+Le smoke « ancien utilisateur » est resté vert : le profil leçon 8 conserve ses 7 leçons terminées, sa progression partielle `l8`, ses 40 acquis et son snapshot de sécurité.
 
-## Voix
+## Smoke Real Life leçon 8
 
-Build 23 ne touche pas :
+Avec l1→l7 terminées et l8 en cours :
 
-```text
-voice-ios.js
-free-voice.js
-```
-
-Le retour iPhone réel reste notre baseline.
-
-## Smoke leçon 8
-
-Le profil synthétique de Build 22 est réutilisé : l1–l7 terminées, l8 en cours.
-
-Attendu :
-
-- pack = 6 scénarios ;
-- **5 scénarios personnels ouverts** ;
-- `jerry-trouver-lieu` encore verrouillé tant que l8 n’est pas terminée ;
-- ancienne progression inchangée ;
-- Conversation affichée avec les scènes personnelles avant les autres disponibles ;
+- **5** scènes personnelles ouvertes ;
+- `jerry-trouver-lieu` reste verrouillée ;
+- scènes personnelles ouvertes prioritaires ;
 - futures scènes condensées ;
+- badge personnel visible ;
 - titre technique Scenario Lab non exposé dans la carte apprenante.
+
+Résultat : **SUCCESS**.
 
 ## Sanctuaires
 
-Hashes inchangés requis :
+Hashes inchangés pendant Build 23 :
 
 ```text
 assets/LOGO.png
@@ -118,7 +99,7 @@ voice-ios.js
 free-voice.js
 ```
 
-## Critères de clôture
+## Tribunal final
 
 - [x] 6 scénarios / 18 tours ajoutés ;
 - [x] prérequis l2→l8 ;
@@ -126,12 +107,16 @@ free-voice.js
 - [x] UX personnalisée sans nouveau menu ;
 - [x] même stockage Scenario ;
 - [x] cache/runtime Build 23 ;
-- [ ] contrat data 18 scénarios / 54 tours ;
-- [ ] smoke leçon 8 zéro-perte ;
-- [ ] smoke Real Life 5 ouverts / 1 verrouillé ;
-- [ ] Scenario / Error / Listening / Adaptive non régressés ;
-- [ ] README / ROADMAP / CHANGELOG / ARCHITECTURE synchronisés ;
-- [ ] PR verte ;
-- [ ] main vert ;
-- [ ] Pages verte ;
-- [ ] release CLOS.
+- [x] contrat data 18 scénarios / 54 tours ;
+- [x] smoke leçon 8 zéro-perte ;
+- [x] smoke Real Life 5 ouverts / 1 verrouillé ;
+- [x] Error / Listening / Adaptive non régressés ;
+- [x] README / ROADMAP / CHANGELOG / ARCHITECTURE synchronisés ;
+- [x] PR #18 verte ;
+- [x] `main` run #63 vert ;
+- [x] Pages #77 verte ;
+- [x] release CLOS.
+
+## Suite
+
+**v1.17.0 — Build 24 — Real Life French II** : déplacements, gare, repas, proches, téléphone/logement selon prérequis, toujours derrière **Pratiquer**.
