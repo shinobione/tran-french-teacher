@@ -83,16 +83,20 @@ jobs:
           node <<'NODE'
           global.window=global;
           require('./scenario-data.js');
-          const s=global.FrenchTranquilleScenarioData?.scenarios||[];
-          if(s.length!==12) throw new Error(`Expected 12 scenarios, got ${s.length}`);
-          if(s.reduce((n,x)=>n+(x.turns?.length||0),0)!==36) throw new Error('Expected 36 scenario turns');
+          const scenarios=global.FrenchTranquilleScenarioData?.scenarios||[];
+          if(scenarios.length!==12) throw new Error(`Expected 12 scenarios, got ${scenarios.length}`);
+          for(const scenario of scenarios){
+            if(!Array.isArray(scenario.turns)||scenario.turns.length<3) throw new Error(`${scenario.id}: expected at least 3 turns`);
+          }
           require('./listening-data.js');
           if(!global.FrenchTranquilleListeningData) throw new Error('Listening data missing');
-          console.log('Scenario + Listening data contracts OK');
+          console.log('Scenario + Listening data contracts OK:',scenarios.length,'scenarios');
           NODE
           grep -q 'MAX_ITEM_EVENTS = 20' error-intelligence.js
           grep -q 'MAX_RECENT_EVENTS = 120' error-intelligence.js
-          grep -q 'listening-miss' error-intelligence.js
+          grep -q 'listening-meaning' listening-engine.js
+          grep -q 'listening-contrast' listening-engine.js
+          grep -q 'listening-dialogue' listening-engine.js
 
       - name: Build 22 wiring and UX contract
         run: |
@@ -201,6 +205,7 @@ jobs:
       - name: Documentation governance
         run: |
           grep -q 'v1.15.0' README.md
+          grep -q '40 leçons / 241 éléments' README.md
           grep -q 'Build 22 — UX Foundation' README.md ROADMAP.md CHANGELOG.md docs/BUILD-22-UX-FOUNDATION.md
           grep -q 'progress-safety.js' docs/ARCHITECTURE.md
           grep -q 'ancien utilisateur' docs/BUILD-POLICY.md
