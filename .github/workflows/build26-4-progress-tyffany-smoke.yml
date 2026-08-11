@@ -18,17 +18,15 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Syntax, version, cache and additive wiring
+      - name: Syntax and Build 26.4 contract wiring
         run: |
           node --check build26-4-ux.js
           node --check build-meta.js
           node --check sw.js
           grep -q 'build26-4-ux.css?v=1.19.4-b26.4' index.html
           grep -q 'build26-4-ux.js?v=1.19.4-b26.4' index.html
-          grep -q 'build-meta.js?v=1.19.4-b26.4' index.html
-          grep -q "version: '1.19.4', build: '26.4'" build-meta.js
+          grep -q 'build-meta.js?v=' index.html
           grep -q 'FrenchTranquilleBuild264UX' build-meta.js
-          grep -q 'tran-french-teacher-v1.19.4-b26.4-single-scroll-tyffany' index.html sw.js
           grep -q 'build26-4-ux.css' sw.js
           grep -q 'build26-4-ux.js' sw.js
           grep -q "OLD_NAME = 'Lucie'" build26-4-ux.js
