@@ -1,0 +1,86 @@
+name: Build 25.3 Voice replay + Details dashboard smoke
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build25-3-ux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax and wiring
+        run: |
+          node --check voice-replay.js
+          node --check progress-details-dashboard.js
+          node --check build-meta.js
+          node --check sw.js
+          grep -q 'voice-replay.css?v=1.18.3-b25.3' index.html
+          grep -q 'progress-details-dashboard.css?v=1.18.3-b25.3' index.html
+          grep -q 'voice-replay.js?v=1.18.3-b25.3' index.html
+          grep -q 'progress-details-dashboard.js?v=1.18.3-b25.3' index.html
+          grep -q "version: '1.18.3', build: '25.3'" build-meta.js
+          grep -q '1.18.3-b25.3-voice-replay-details-dashboard' index.html sw.js
+          grep -q 'voice-replay.js' sw.js
+          grep -q 'progress-details-dashboard.js' sw.js
+
+      - name: Voice replay is local-only and does not replace recognition
+        run: |
+          grep -q 'navigator.mediaDevices.getUserMedia' voice-replay.js
+          grep -q 'MediaRecorder' voice-replay.js
+          grep -q 'URL.createObjectURL' voice-replay.js
+          grep -q 'track.stop' voice-replay.js
+          ! grep -q 'localStorage.setItem' voice-replay.js
+          ! grep -Eq 'fetch\(|XMLHttpRequest|FormData|sendBeacon' voice-replay.js
+          ! grep -q 'SpeechRecognition' voice-replay.js
+
+      - name: Sanctuaries remain byte-identical
+        run: |
+          test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
+          test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-253-http.log 2>&1 &
+          echo $! >/tmp/ft-253-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — learning details are grouped, not stacked
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=30000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&progressionSmoke=details&detailsDashboardSmoke=memory' >/tmp/details-dashboard.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/details-dashboard.html; then cat /tmp/details-dashboard.html; exit 1; fi
+          grep -q 'data-progress-detail-dashboard="1"' /tmp/details-dashboard.html
+          grep -E -q 'data-progress-detail-groups="[3-9]"' /tmp/details-dashboard.html
+          grep -q 'data-progress-detail-active="memory"' /tmp/details-dashboard.html
+          grep -q 'progress-detail-grid' /tmp/details-dashboard.html
+          grep -q 'data-progress-detail-panel="memory"' /tmp/details-dashboard.html
+          grep -q 'memory-progress-card' /tmp/details-dashboard.html
+          grep -q 'mastery-progress-card' /tmp/details-dashboard.html
+          test "$(grep -o 'progress-detail-tile' /tmp/details-dashboard.html | wc -l)" -ge 3
+
+      - name: Chrome — voice replay layer appears after a spoken-result surface
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=30000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&voiceReplaySmoke=1' >/tmp/voice-replay.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/voice-replay.html; then cat /tmp/voice-replay.html; exit 1; fi
+          grep -q 'data-voice-replay-module="1"' /tmp/voice-replay.html
+          grep -q 'data-voice-replay-smoke-card="1"' /tmp/voice-replay.html
+          grep -q 'data-voice-replay-smoke-panel="1"' /tmp/voice-replay.html
+          grep -q 'data-voice-replay="1"' /tmp/voice-replay.html
+          grep -q 'free-voice-card' /tmp/voice-replay.html
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-253-server.pid ]; then kill "$(cat /tmp/ft-253-server.pid)" || true; fi
