@@ -26,7 +26,7 @@ jobs:
           (() => {
             const frame=document.createElement('iframe');
             frame.src='./index.html?debug=fr';
-            frame.style.cssText='width:1280px;height:900px;border:0';
+            frame.style.cssText='width:1650px;height:780px;border:0';
             document.body.appendChild(frame);
             let done=false;
             const root=document.documentElement;
@@ -45,8 +45,11 @@ jobs:
             }
             frame.addEventListener('load',()=>setTimeout(async()=>{
               try{
-                const d=frame.contentDocument;
+                const d=frame.contentDocument,w=frame.contentWindow;
                 if(!d.querySelector('.app-shell.screen-home'))throw new Error('home-missing');
+                w.scrollTo(0,d.documentElement.scrollHeight);
+                await wait(300);
+                root.dataset.navScrollY=String(Math.round(w.scrollY));
 
                 physicalClick(d,'[data-ux-nav="practice"]','Practice');
                 await wait(350);
@@ -55,18 +58,22 @@ jobs:
                 await wait(250);
                 if(d.querySelector('.ux-practice-overlay'))throw new Error('practice-did-not-close');
 
+                w.scrollTo(0,d.documentElement.scrollHeight);
+                await wait(250);
                 physicalClick(d,'[data-ux-nav="progress"]','Progress');
                 await wait(450);
                 if(!d.querySelector('.app-shell.screen-progress'))throw new Error('progress-did-not-open');
 
+                w.scrollTo(0,d.documentElement.scrollHeight);
+                await wait(250);
                 physicalClick(d,'[data-ux-nav="home"]','Home');
                 await wait(450);
                 if(!d.querySelector('.app-shell.screen-home'))throw new Error('home-did-not-return');
 
-                finish('ok','physical-hit-and-navigation-ok');
+                finish('ok','scrolled-desktop-physical-hit-and-navigation-ok');
               }catch(e){finish('fail',e?.message||String(e))}
             },1800));
-            setTimeout(()=>finish('fail','timeout'),8000);
+            setTimeout(()=>finish('fail','timeout'),9000);
           })();
           </script></body></html>
           HTML
@@ -78,11 +85,11 @@ jobs:
           sleep 1
           google-chrome --version
 
-      - name: Chrome — physical bottom-nav clicks
+      - name: Chrome — physical bottom-nav clicks after scroll
         run: |
-          timeout 30s google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=14000 --dump-dom 'http://127.0.0.1:4173/nav-click-smoke.html' >/tmp/nav.html
+          timeout 30s google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=15000 --dump-dom 'http://127.0.0.1:4173/nav-click-smoke.html' >/tmp/nav.html
           grep -q 'data-nav-smoke="ok"' /tmp/nav.html || { cat /tmp/nav.html; exit 1; }
-          grep -q 'data-nav-detail="physical-hit-and-navigation-ok"' /tmp/nav.html
+          grep -q 'data-nav-detail="scrolled-desktop-physical-hit-and-navigation-ok"' /tmp/nav.html
 
       - name: Stop static server
         if: always()
