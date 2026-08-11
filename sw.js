@@ -1,5 +1,5 @@
-const CACHE='tran-french-teacher-v1.10.0-b17';
-const V='1.10.0-b17';
+const CACHE='tran-french-teacher-v1.11.0-b18';
+const V='1.11.0-b18';
 const CORE=[
   './',
   './index.html',
@@ -12,6 +12,7 @@ const CORE=[
   `./daily-coach.css?v=${V}`,
   `./mastery-engine.css?v=${V}`,
   `./scenario-engine.css?v=${V}`,
+  `./error-intelligence.css?v=${V}`,
   `./app.js?v=${V}`,
   `./curriculum-stage2.js?v=${V}`,
   `./stage2-boot.js?v=${V}`,
@@ -25,6 +26,7 @@ const CORE=[
   `./scenario-data.js?v=${V}`,
   `./scenario-host.js?v=${V}`,
   `./scenario-engine.js?v=${V}`,
+  `./error-intelligence.js?v=${V}`,
   `./manifest.webmanifest?v=${V}`,
   `./assets/LOGO.png?v=${V}`,
   `./assets/Favicon.png?v=${V}`,

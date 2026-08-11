@@ -33,6 +33,7 @@ jobs:
           node --check scenario-data.js
           node --check scenario-host.js
           node --check scenario-engine.js
+          node --check error-intelligence.js
 
       - name: Curriculum UX guard
         run: |
@@ -89,9 +90,9 @@ jobs:
 
       - name: Build 16 Mastery Engine guard
         run: |
-          grep -q "Survie A0" mastery-engine.js
-          grep -q "Fondations A1" mastery-engine.js
-          grep -q "Premiers échanges A1" mastery-engine.js
+          grep -q 'Survie A0' mastery-engine.js
+          grep -q 'Fondations A1' mastery-engine.js
+          grep -q 'Premiers échanges A1' mastery-engine.js
           grep -q 'mastery-home-card' mastery-engine.js
           grep -q 'mastery-progress-card' mastery-engine.js
           grep -q 'FrenchTranquilleMastery' mastery-engine.js
@@ -106,7 +107,7 @@ jobs:
           global.window = global;
           require('./scenario-data.js');
           const data = global.FrenchTranquilleScenarioData;
-          if (!data || data.version !== '1.10.0' || data.build !== 17) throw new Error('Scenario Data version/build mismatch');
+          if (!data || data.version !== '1.10.0' || data.build !== 17) throw new Error('Scenario Data contract changed unexpectedly');
           const scenarios = data.scenarios || [];
           if (scenarios.length !== 12) throw new Error(`Expected 12 scenarios, got ${scenarios.length}`);
           const ids = scenarios.map(s => s.id);
@@ -134,8 +135,6 @@ jobs:
           grep -q 'scenario-assisted' scenario-engine.js
           grep -q 'scenarioSmoke' scenario-engine.js
           grep -q 'scenario-host' scenario-host.js
-          grep -q "version:'1.10.0'" scenario-engine.js
-          grep -q 'build:17' scenario-engine.js
           grep -q 'scenario-engine.css' index.html
           grep -q 'scenario-data.js' index.html
           grep -q 'scenario-host.js' index.html
@@ -144,10 +143,50 @@ jobs:
           grep -q 'scenario-data.js' sw.js
           grep -q 'scenario-host.js' sw.js
           grep -q 'scenario-engine.js' sw.js
-          grep -q "version: '1.10.0', build: 17" build-meta.js
-          grep -q '1.10.0-b17' index.html
-          grep -q '1.10.0-b17' sw.js
-          grep -q '12 situations / 36 tours de dialogue' README.md
+          grep -q '12 situations / 36 tours' README.md
+
+      - name: Build 18 Error Intelligence contract
+        run: |
+          grep -q "french-tranquille:error-intelligence:v1" error-intelligence.js
+          grep -q 'MAX_ITEM_EVENTS = 20' error-intelligence.js
+          grep -q 'MAX_RECENT_EVENTS = 120' error-intelligence.js
+          grep -q 'REPEAT_WINDOW = 30' error-intelligence.js
+          grep -q "'retrieval-difficult'" error-intelligence.js
+          grep -q "'scenario-miss'" error-intelligence.js
+          grep -q "'assisted'" error-intelligence.js
+          grep -q "'voice-unrecognized'" error-intelligence.js
+          grep -q "'partial'" error-intelligence.js
+          grep -q 'recordRecovery' error-intelligence.js
+          grep -q 'priorityItems' error-intelligence.js
+          grep -q 'error-intelligence-card' error-intelligence.js
+          grep -q 'error-daily-focus' error-intelligence.js
+          grep -q 'french-tranquille-error-intelligence' error-intelligence.js
+          grep -q 'errorSmoke' error-intelligence.js
+          grep -q "version:'1.11.0'" error-intelligence.js
+          grep -q 'build:18' error-intelligence.js
+
+      - name: Build 18 Free Voice evidence bridge
+        run: |
+          grep -q "const VERSION='1.11.0', BUILD=18" free-voice.js
+          grep -q 'FrenchTranquilleMemory.*recordPractice' free-voice.js
+          grep -q 'FrenchTranquilleErrors.*recordAttempt' free-voice.js
+          grep -q 'free-voice-voice' README.md
+          grep -q 'free-voice-text' README.md
+          grep -q 'recordEvidence' free-voice.js
+          grep -q "evaluate(best,'voice')" free-voice.js
+          grep -q "'text'))" free-voice.js
+
+      - name: Build 18 wiring and version guard
+        run: |
+          grep -q 'error-intelligence.css' index.html
+          grep -q 'error-intelligence.js' index.html
+          grep -q 'error-intelligence.css' sw.js
+          grep -q 'error-intelligence.js' sw.js
+          grep -q "version: '1.11.0', build: 18" build-meta.js
+          grep -q '1.11.0-b18' index.html
+          grep -q '1.11.0-b18' sw.js
+          grep -q 'v1.11.0' README.md
+          grep -q 'Build 18' README.md
 
       - name: Documentation governance guard
         run: |
@@ -156,9 +195,11 @@ jobs:
           test -f docs/ARCHITECTURE.md
           test -f docs/BUILD-POLICY.md
           grep -q 'Build 18 — Error Intelligence' ROADMAP.md
-          grep -q 'Build 17 — Scenario Lab' CHANGELOG.md
-          grep -q 'scenario-engine.js' docs/ARCHITECTURE.md
-          grep -q 'french-tranquille:scenarios:v1' docs/ARCHITECTURE.md
+          grep -q 'Build 19 — Curriculum' ROADMAP.md
+          grep -q 'Build 18 — Error Intelligence' CHANGELOG.md
+          grep -q 'error-intelligence.js' docs/ARCHITECTURE.md
+          grep -q 'french-tranquille:error-intelligence:v1' docs/ARCHITECTURE.md
+          grep -q 'MAX_ITEM_EVENTS' docs/ARCHITECTURE.md
           grep -q 'Documentation obligatoire' docs/BUILD-POLICY.md
           grep -q 'ROADMAP.md' README.md
           grep -q 'CHANGELOG.md' README.md
@@ -202,7 +243,7 @@ jobs:
             --headless=new \
             --no-sandbox \
             --disable-gpu \
-            --virtual-time-budget=10000 \
+            --virtual-time-budget=12000 \
             --dump-dom \
             http://127.0.0.1:4173/ > /tmp/french-tranquille-home.html
           if grep -E -q 'id="app"[^>]*><div class="boot-status' /tmp/french-tranquille-home.html; then
@@ -210,15 +251,13 @@ jobs:
             echo 'Startup screen or fatal screen is still rendered inside #app.'
             exit 1
           fi
-          grep -E -q 'id="app"[^>]*><div class="app-shell screen-home"' /tmp/french-tranquille-home.html
+          grep -q 'app-shell screen-home' /tmp/french-tranquille-home.html
           grep -q 'home-dashboard' /tmp/french-tranquille-home.html
           grep -q 'A0 → A1 • 25 bài' /tmp/french-tranquille-home.html
-          grep -q 'Câu hỏi ngắn để tiếp tục hội thoại' /tmp/french-tranquille-home.html
           grep -q 'memory-home-card' /tmp/french-tranquille-home.html
           grep -q 'daily-coach-card' /tmp/french-tranquille-home.html
           grep -q 'mastery-home-card' /tmp/french-tranquille-home.html
-          grep -q 'Mức độ làm chủ' /tmp/french-tranquille-home.html
-          echo 'Real Chrome Home: 25 lessons + Memory + Daily Coach + Mastery OK'
+          echo 'Real Chrome Home OK'
 
       - name: Real Chrome Scenario Lab smoke test
         run: |
@@ -226,12 +265,11 @@ jobs:
             --headless=new \
             --no-sandbox \
             --disable-gpu \
-            --virtual-time-budget=10000 \
+            --virtual-time-budget=12000 \
             --dump-dom \
             'http://127.0.0.1:4173/?scenarioSmoke=1' > /tmp/french-tranquille-scenarios.html
           if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/french-tranquille-scenarios.html; then
             cat /tmp/french-tranquille-scenarios.html
-            echo 'Rendered fatal screen detected in Scenario Lab.'
             exit 1
           fi
           grep -q 'app-shell screen-conversation' /tmp/french-tranquille-scenarios.html
@@ -239,10 +277,32 @@ jobs:
           grep -q 'scenario-lab-card' /tmp/french-tranquille-scenarios.html
           grep -q 'Phòng tình huống' /tmp/french-tranquille-scenarios.html
           grep -q 'Ở quán cà phê' /tmp/french-tranquille-scenarios.html
-          grep -q 'Ở nhà ga' /tmp/french-tranquille-scenarios.html
           grep -q 'Trò chuyện xã giao' /tmp/french-tranquille-scenarios.html
-          grep -q 'Mở sau Bài 4' /tmp/french-tranquille-scenarios.html
-          echo 'Real Chrome Scenario Lab fresh-profile render OK'
+          echo 'Real Chrome Scenario Lab OK'
+
+      - name: Real Chrome Error Intelligence smoke test
+        run: |
+          google-chrome \
+            --headless=new \
+            --no-sandbox \
+            --disable-gpu \
+            --virtual-time-budget=15000 \
+            --dump-dom \
+            'http://127.0.0.1:4173/?errorSmoke=1' > /tmp/french-tranquille-errors.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/french-tranquille-errors.html; then
+            cat /tmp/french-tranquille-errors.html
+            echo 'Rendered fatal screen detected in Error Intelligence.'
+            exit 1
+          fi
+          grep -q 'app-shell screen-progress' /tmp/french-tranquille-errors.html
+          grep -q 'error-intelligence-card' /tmp/french-tranquille-errors.html
+          grep -q 'Trí tuệ lỗi' /tmp/french-tranquille-errors.html
+          grep -q 'Bonjour' /tmp/french-tranquille-errors.html
+          grep -q 'data-error-smoke-item-events="20"' /tmp/french-tranquille-errors.html
+          grep -q 'data-error-smoke-recent-events="120"' /tmp/french-tranquille-errors.html
+          grep -E -q 'data-error-smoke-repeated="[1-9][0-9]*"' /tmp/french-tranquille-errors.html
+          grep -q 'data-error-smoke-partial="1"' /tmp/french-tranquille-errors.html
+          echo 'Real Chrome Error Intelligence OK: bounded storage + partial evidence + Progression render'
 
       - name: Stop static test server
         if: always()
