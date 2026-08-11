@@ -8,7 +8,7 @@ Aucun changement non livré pour le moment.
 
 ---
 
-## [1.9.0] — Build 16 — 2026-08-11
+## [1.9.0] — Build 16 — Mastery Engine — 2026-08-11
 
 ### Mastery Engine
 
