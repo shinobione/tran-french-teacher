@@ -4,130 +4,174 @@ PWA de français pensée pour **Trân**, vietnamienne débutante absolue au dép
 
 ## Version actuelle
 
-- **v1.8.0**
-- **Build 15**
-- Phase : **PWA-4 A0 → Early A1 + PWA-3 Daily Coach**
-- **25 leçons / 148 éléments**
+- **v1.9.0**
+- **Build 16**
+- Phase : **PWA-3B Adaptive Learning / Mastery Engine**
+- curriculum : **25 leçons / 148 éléments**
+- parcours : **A0 → premières fondations A1**
 - coût d'exploitation : **0 €**
 
-## Plateformes cibles
+## Liens projet
 
-### Cible principale
-
-- **iPhone / Safari / PWA iOS**
-
-### Cibles secondaires
-
-- **Android** : Chrome / navigateurs Chromium, installation PWA lorsque disponible ;
-- **Navigateur PC** : Chrome, Edge et navigateurs modernes sur Windows/macOS/Linux.
-
-L'interface, les leçons, la progression et la mémoire locale sont prévues pour les trois familles de plateformes. La **reconnaissance vocale** dépend du navigateur et du système ; le fallback texte reste toujours disponible.
+- Roadmap canonique : [`ROADMAP.md`](./ROADMAP.md)
+- Historique : [`CHANGELOG.md`](./CHANGELOG.md)
+- Architecture : [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md)
+- Politique de build : [`docs/BUILD-POLICY.md`](./docs/BUILD-POLICY.md)
+- PWA : `https://shinobione.github.io/tran-french-teacher/`
 
 ---
 
-## Build 15 — A0 → Early A1
+# Build 16 — Mastery Engine
 
-Le socle historique de 15 leçons reste intact. Build 15 ajoute un pack curriculum modulaire `curriculum-stage2.js` chargé juste après le moteur principal, avant les modules voix et mémoire.
+Jusqu’à Build 15, l’application savait déjà :
 
-### Nouveau total
+- si une leçon était terminée ;
+- quels éléments avaient été vus ;
+- quels éléments étaient nouveaux, fragiles, en cours ou solides dans Learning Memory ;
+- quoi proposer aujourd’hui via Daily Coach.
 
-- **25 leçons** ;
-- **148 éléments** ;
-- progression séquentielle conservée ;
-- migration transparente des anciennes données ;
-- aucune remise à zéro forcée.
+Build 16 ajoute une couche au-dessus : **est-ce qu’un grand bloc est réellement consolidé ?**
 
-### Leçons 16 à 25
-
-16. **Être dans des phrases utiles** — `je suis`, `tu es`, `il/elle est`, `c'est` ;
-17. **Avoir & ce qu'on a** — `j'ai`, `tu as`, `je n'ai pas` ;
-18. **Vouloir & pouvoir** — vouloir, pouvoir, impossibilité, demande ;
-19. **Le logement & il y a** — appartement, clé, pièces, problème d'eau chaude ;
-20. **Téléphone & messages** — allô, entendre, appeler, message, réseau ;
-21. **Météo & sensations** — `il fait chaud/froid`, `j'ai chaud/froid`, pluie ;
-22. **Courses alimentaires** — pain, lait, œufs, quantité, caisses, articles partitifs ;
-23. **Petite conversation sociale** — `ça va`, `et toi`, activité du moment ;
-24. **Une journée simple au présent** — se lever, travailler, manger, rentrer, regarder, dormir ;
-25. **Questions simples pour continuer** — où, quand, pourquoi, avec qui, quoi, parce que.
-
-Chaque nouvelle leçon conserve le format court : quelques éléments, écoute, reconnaissance, mini-situation et réutilisation ultérieure. Elle ajoute aussi une note **Structure utile** qui explique la petite règle nécessaire en vietnamien, sans transformer la séance en cours de grammaire scolaire.
-
-### Parcours en 4 étapes
-
-Le Curriculum UX est désormais regroupé visuellement :
+## Les 4 étapes suivies
 
 1. **Survie A0** — leçons 1–7 ;
-2. **Vie quotidienne** — leçons 8–15 ;
+2. **Vie quotidienne A0** — leçons 8–15 ;
 3. **Fondations A1** — leçons 16–20 ;
-4. **Premiers échanges** — leçons 21–25.
+4. **Premiers échanges A1** — leçons 21–25.
 
-La liste reste scrollable et bornée sur la home afin de ne pas refaire le débordement des premiers builds.
+Pour chaque étape, Lucie observe plusieurs signaux :
 
-### Conversation Stage 2
+- leçons terminées ;
+- éléments réellement connus ;
+- quantité d’éléments déjà révisés ;
+- qualité moyenne de la Learning Memory ;
+- éléments solides ;
+- fragilités restantes.
 
-Les nouveaux acquis peuvent être retravaillés :
+Le score ne monte donc pas simplement parce que Trân a cliqué jusqu’à la fin d’une leçon.
 
-- dans le **Free Voice Engine**, qui lit le curriculum global ;
-- dans la **Learning Memory** ;
-- dans une carte texte dédiée **A1 START** ajoutée à Conversation pour les structures des leçons 16–25.
+## États de maîtrise
 
-Le test réel Safari/Siri sur l'iPhone de Trân reste volontairement séparé : Build 15 n'invente aucun score phonétique avant d'avoir observé les transcriptions réelles.
+Chaque étape peut être :
+
+- **Non commencé** ;
+- **Découverte** ;
+- **Consolidation** ;
+- **Presque solide** ;
+- **Maîtrisé**.
+
+Une étape ne peut devenir **Maîtrisée** que si :
+
+- toutes ses leçons sont terminées ;
+- presque tous ses éléments ont été appris ;
+- la mémoire contient suffisamment de vraies preuves de révision ;
+- la qualité mémoire dépasse un seuil ;
+- les fragilités restantes restent limitées.
+
+## Estimation interne
+
+La home et Progression peuvent afficher une estimation du type :
+
+```text
+A0
+A0+
+A1-
+A1
+```
+
+avec des libellés comme :
+
+```text
+A0 initial
+A0 en progression
+A0 renforcé
+Pré-A1 / début A1
+A1 en construction
+```
+
+**Important : ce n’est pas une certification CECRL.** C’est un indicateur interne utilisé pour piloter les révisions et le rythme pédagogique.
+
+## Priorité suivante
+
+Le Mastery Engine propose aussi une priorité :
+
+- revoir les éléments fragiles ;
+- continuer une leçon incomplète ;
+- ou réutiliser une étape déjà parcourue en Révision / Conversation.
+
+## UI
+
+### Home
+
+Une carte compacte **Maîtrise réelle** affiche :
+
+- estimation interne ;
+- étape actuelle ;
+- état ;
+- score ;
+- accès au détail.
+
+### Progression
+
+Une carte **Carte de maîtrise** expose les quatre étapes avec :
+
+- progression ;
+- leçons terminées ;
+- acquis ;
+- éléments révisés ;
+- solides ;
+- fragiles ;
+- priorité suivante.
+
+### Réglages
+
+Le diagnostic affiche également le niveau interne estimé.
 
 ---
 
-## Build 15 — PWA-3 Daily Coach
+# Curriculum — 25 leçons / 148 éléments
 
-PWA-3 ne se limite plus à afficher des compteurs de mémoire. La home reçoit une vraie carte **Séance du jour** construite localement à partir de la progression et de la mémoire.
+## Survie A0 — 1 à 7
 
-Elle propose au maximum trois actions simples :
+- saluer et se présenter ;
+- politesse et phrases de secours ;
+- parler de soi ;
+- commander au café ;
+- goûts ;
+- nombres 0–10 ;
+- demander un prix.
 
-1. **Révision mémoire** — priorité aux éléments dus et fragiles ;
-2. **Continuer le parcours** — prochaine leçon réellement déverrouillée ;
-3. **Parler 3 minutes** — Conversation lorsque suffisamment d'éléments sont connus.
+## Vie quotidienne A0 — 8 à 15
 
-Le coach affiche aussi :
+- demander son chemin ;
+- train et billet ;
+- heure ;
+- shopping ;
+- restaurant ;
+- santé / pharmacie ;
+- famille et proches ;
+- premier jour en France.
 
-- nombre d'éléments dus ;
-- nombre d'acquis ;
-- éléments déjà retravaillés aujourd'hui ;
-- une cible souple de **10–15 minutes**, sans système de récompense artificiel.
+## Fondations A1 — 16 à 20
 
-Dans Progression, une carte **Rythme conseillé** rappelle l'objectif : une petite leçon, quelques révisions et quelques minutes de conversation. Si Trân est fatiguée, elle n'a pas besoin de faire les trois.
+- être ;
+- avoir ;
+- vouloir ;
+- pouvoir ;
+- logement et `il y a` ;
+- téléphone et messages.
 
-Aucune API, aucun compte, aucun serveur : tout est dérivé du `localStorage` et de la Learning Memory.
+## Premiers échanges A1 — 21 à 25
 
----
-
-## Build 14 / 14.1 — UX & identité
-
-### Conversation / Luyện hội thoại
-
-- layout desktop élargi ;
-- zone vocale gratuite mise au premier plan ;
-- pratique texte séparée visuellement ;
-- hiérarchie claire consigne / micro / modèle / transcription / feedback ;
-- retour en pile verticale sur iPhone / Android.
-
-### Révision / Ôn tập
-
-- vraie carte centrale de rappel ;
-- réponse mieux isolée ;
-- **Difficile / Correct / Facile** différenciés en corail doux / ambre / mint ;
-- intégration de la Learning Memory dans la hiérarchie visuelle.
-
-### PWA-3
-
-- dashboard mémoire moins technique ;
-- `À revoir / Fragiles / En cours / Solides` mieux différenciés ;
-- palette sombre + mint + lilas, complétée avec retenue par prune, corail et ambre.
-
-### Lucie
-
-Build 14.1 remplace l'ancien avatar `L` par le favicon French Trân’quille dans les emplacements de Lucie. Un avatar dédié pourra venir plus tard.
+- météo et sensations ;
+- courses alimentaires / articles partitifs ;
+- petite conversation sociale ;
+- journée simple au présent ;
+- questions courtes pour continuer une conversation.
 
 ---
 
-## PWA-3 — Learning Memory
+# PWA-3 — Learning Memory
 
 Clé locale :
 
@@ -135,196 +179,202 @@ Clé locale :
 french-tranquille:learning-memory:v1
 ```
 
-Chaque élément connu possède progressivement :
+Chaque élément peut mémoriser :
 
 - première rencontre ;
 - dernière utilisation ;
 - dernière révision ;
-- nombre de tentatives ;
-- réussites / difficultés ;
-- série de bonnes réponses ;
-- force estimée ;
-- intervalle de révision ;
-- prochaine date de révision.
+- tentatives ;
+- réussites ;
+- difficultés ;
+- streak ;
+- force ;
+- intervalle ;
+- prochaine révision ;
+- source du dernier événement.
 
-### États
-
-- **Nouveau** ;
-- **Fragile** ;
-- **En cours** ;
-- **Solide**.
-
-### Scheduler local
-
-- **Difficile** → retour rapide ;
-- **Correct** → délai modéré ;
-- **Facile** → intervalle plus long ;
-- éléments dus et fragiles prioritaires.
-
-### Sauvegarde
-
-Dans `⚙ Réglages` :
-
-- export JSON progression + mémoire ;
-- import JSON sur le même appareil ou un autre ;
-- aucune donnée envoyée vers un backend.
-
----
-
-## Curriculum complet — 25 leçons
-
-### A0 — Survie
-
-1. Chào hỏi & giới thiệu — Saluer & se présenter  
-2. Lịch sự & hiểu người khác — Politesse & compréhension  
-3. Nói thêm về bản thân — Parler un peu de soi  
-4. Gọi đồ ở quán cà phê — Commander au café  
-5. Nói điều mình thích — Dire ce qu'on aime  
-6. Số từ 0 đến 5 — Les nombres de 0 à 5  
-7. Số 6 đến 10 & hỏi giá — Les nombres 6 à 10 & le prix
-
-### A0 — Vie quotidienne
-
-8. Hỏi đường & tìm địa điểm — Demander son chemin  
-9. Đi tàu & mua vé — Prendre le train & acheter un billet  
-10. Thời gian & hẹn gặp — L'heure & les rendez-vous  
-11. Mua sắm đơn giản — Faire des achats simples  
-12. Ở nhà hàng — Au restaurant  
-13. Sức khỏe & hiệu thuốc — Santé & pharmacie  
-14. Gia đình & người thân — Famille & proches  
-15. Ngày đầu tiên ở Pháp — Premier jour en France
-
-### Fondations A1
-
-16. Être dans des phrases utiles  
-17. Avoir & ce qu'on a  
-18. Vouloir & pouvoir  
-19. Le logement & il y a  
-20. Téléphone & messages
-
-### Premiers échanges A1
-
-21. Météo & sensations  
-22. Courses alimentaires  
-23. Petite conversation sociale  
-24. Une journée simple au présent  
-25. Questions simples pour continuer
-
----
-
-## Voix — 0 €
-
-- synthèse vocale via `speechSynthesis` ;
-- sélection locale des voix françaises ;
-- DEBUG FR avec test de Lucie ;
-- reconnaissance `SpeechRecognition` / `webkitSpeechRecognition` lorsqu'elle existe ;
-- validation locale de la transcription ;
-- fallback texte systématique ;
-- **aucun score phonétique inventé** ;
-- aucune API payante, aucun backend payant.
-
-Tout élément exposé par le curriculum global peut être proposé au moteur vocal. Les leçons 16–25 sont donc **voice-ready** dès Build 15.
-
-Le prochain jalon voix reste : **test réel Safari/Siri sur l'iPhone de Trân**, puis calibration des tolérances à partir de ce que l'appareil transcrit réellement.
-
----
-
-## DEBUG FR
-
-Dans `⚙ Réglages` :
-
-- `🇫🇷 DEBUG FR` traduit l'interface de contrôle sur **ce navigateur uniquement** ;
-- l'iPhone de Trân reste en vietnamien ;
-- raccourci : `?debug=fr`.
-
----
-
-## Qualité / CI
-
-Chaque modification importante passe par PR avant merge sur `main`.
-
-Le workflow vérifie :
-
-- `node --check` des scripts JavaScript ;
-- garde Curriculum UX ;
-- garde Learning Memory ;
-- garde UX / Visual Pass ;
-- garde **Build 15 A0 → A1** ;
-- garde **Daily Coach** ;
-- smoke test Node du moteur de base ;
-- **vrai lancement Google Chrome headless** vérifiant le rendu final, le curriculum 25 leçons, la Learning Memory et le coach quotidien.
-
-`build-meta.js` centralise l'affichage runtime de la version/build.
-
----
-
-## Hébergement
-
-GitHub Pages déploie automatiquement `main` :
+États :
 
 ```text
-https://shinobione.github.io/tran-french-teacher/
+Nouveau
+Fragile
+En cours
+Solide
 ```
 
----
+Les éléments difficiles reviennent rapidement ; les éléments solides s’espacent.
 
-## Roadmap
+## Sauvegarde
 
-### PWA-2 — Voice
+Dans Réglages :
 
-- ✅ synthèse vocale gratuite ;
-- ✅ choix de voix ;
-- ✅ reconnaissance gratuite si le navigateur l'expose ;
-- ✅ fallback texte ;
-- ✅ curriculum voice-ready ;
-- ⏳ test réel Safari/Siri sur l'iPhone de Trân ;
-- ⏳ intégration des réussites/ratés vocaux dans Learning Memory ;
-- ⏳ calibration des variantes de transcription.
-
-### PWA-3 — Learning Memory
-
-- ✅ mémoire locale par élément ;
-- ✅ Nouveau / Fragile / En cours / Solide ;
-- ✅ révision espacée ;
-- ✅ priorité aux fragiles ;
-- ✅ export/import JSON ;
-- ✅ **Séance du jour / Daily Coach** ;
-- ⏳ historique détaillé des erreurs et types de confusion ;
-- ⏳ recommandations encore plus fines selon plusieurs jours d'activité.
-
-### PWA-4 — A0 → A1
-
-- ✅ 25 leçons / 148 éléments ;
-- ✅ être / avoir / vouloir / pouvoir ;
-- ✅ il y a ;
-- ✅ articles partitifs de survie ;
-- ✅ premiers verbes au présent ;
-- ✅ questions courtes ;
-- ⏳ enrichir les dialogues multi-tours ;
-- ⏳ compréhension orale plus progressive ;
-- ⏳ faire évoluer davantage le ratio vietnamien/français selon les acquis réels.
-
-### Easter egg pédagogique futur
-
-- **Leçon 69 réservée** 😇🍌🍑 — vocabulaire adulte/intime, consentement, registres de langue et expressions de couple, uniquement quand le niveau de Trân permettra de l'aborder proprement.
+- export JSON ;
+- import JSON ;
+- progression + mémoire ;
+- aucune donnée envoyée automatiquement sur Internet.
 
 ---
 
-## Historique court
+# Daily Coach
 
-- **v1.0.0 / Build 1** — Fondation PWA ;
-- **v1.0.1 / Build 2** — verrouillage vietnamien ;
-- **v1.0.2 / Build 3** — DEBUG FR ;
-- **v1.0.3 / Build 4** — voix iPhone-first ;
-- **v1.1.x / Builds 5–6** — expérimentation Realtime/Vercel, abandonnée pour rester à 0 € ;
-- **v1.2.0 / Build 7** — Free Voice ;
-- **v1.3.0 / Build 8** — Guided Free Voice ;
-- **v1.4.0 / Build 9** — French Trân’quille + Lucie ;
-- **v1.5.0 / Build 10** — Responsive multi-device + 7 leçons / 40 éléments ;
-- **Build 10.1–10.2** — watchdog, isolation ES modules et vrai smoke test Chrome ;
-- **v1.6.0 / Build 11** — 15 leçons / 88 éléments + curriculum voice-ready ;
-- **v1.6.1 / Build 12** — Curriculum UX responsive ;
-- **v1.7.0 / Build 13** — Learning Memory locale, révision espacée et sauvegarde JSON ;
-- **v1.7.1 / Build 14** — refonte UX/visuelle Conversation, Révision et PWA-3 ;
-- **Build 14.1** — avatar Lucie cohérent avec le branding ;
-- **v1.8.0 / Build 15** — 25 leçons / 148 éléments, fondations A1 et Daily Coach local.
+La home construit localement une **Séance du jour**.
+
+Priorité générale :
+
+```text
+mémoire due / fragile
+        ↓
+prochaine leçon
+        ↓
+conversation courte
+```
+
+Cible souple : **10–15 minutes**.
+
+L’objectif n’est pas d’accumuler des jours ou de l’XP, mais de créer une routine réaliste et durable.
+
+---
+
+# Voix — 0 €
+
+French Trân’quille utilise uniquement les possibilités du navigateur :
+
+- `speechSynthesis` pour Lucie ;
+- choix local des voix françaises disponibles ;
+- `SpeechRecognition` / `webkitSpeechRecognition` lorsqu’exposé ;
+- fallback texte systématique ;
+- validation locale de la transcription ;
+- indices progressifs ;
+- réintroduction des phrases ratées.
+
+## Limite assumée
+
+L’application peut savoir si le navigateur **reconnaît une phrase**.
+
+Elle ne peut pas prétendre mesurer scientifiquement :
+
+- le R ;
+- U / OU ;
+- nasalisation ;
+- articulation ;
+- accent ;
+- précision phonétique réelle
+
+si Safari ne lui fournit qu’une transcription.
+
+Le prochain jalon spécifique voix dépend donc toujours d’un **test réel Safari/Siri sur l’iPhone de Trân**.
+
+---
+
+# DEBUG FR
+
+Le mode DEBUG FR reste local au navigateur de Jerry.
+
+- interface de contrôle en français ;
+- appareil de Trân inchangé ;
+- activation dans Réglages ;
+- raccourci `?debug=fr`.
+
+---
+
+# Architecture
+
+Le socle historique reste volontairement protégé :
+
+```text
+app.js
+  ↓
+curriculum-stage2.js
+  ↓
+stage2-boot.js
+  ↓
+voice / debug
+  ↓
+learning-memory.js
+  ↓
+daily-coach.js
+  ↓
+mastery-engine.js
+```
+
+Les nouvelles couches sont modulaires afin d’éviter une réécriture risquée de `app.js` au milieu d’un build fonctionnel.
+
+Voir [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md).
+
+---
+
+# Données locales
+
+La clé historique apprenant reste volontairement :
+
+```text
+francais-avec-luc:learner:v1
+```
+
+Elle n’a pas été renommée lors du passage Luc → Lucie afin de préserver la progression déjà existante.
+
+Aucun Build 16 ne force de reset.
+
+---
+
+# Qualité / CI
+
+Chaque gros build passe maintenant par :
+
+```text
+branche dédiée
+→ PR
+→ syntax check
+→ guards fonctionnels
+→ smoke Node
+→ vrai Chrome headless
+→ merge
+→ CI main
+→ GitHub Pages
+```
+
+Build 16 ajoute des guards pour :
+
+- Mastery Engine ;
+- documentation canonique ;
+- cache/version ;
+- rendu réel de la carte Maîtrise sur Chrome.
+
+Les règles complètes vivent dans [`docs/BUILD-POLICY.md`](./docs/BUILD-POLICY.md).
+
+---
+
+# Roadmap
+
+La roadmap détaillée n’est plus maintenue en doublon dans le README.
+
+👉 [`ROADMAP.md`](./ROADMAP.md)
+
+Prochains gros jalons actuellement prévus :
+
+- **Build 17 — Scenario Lab** : vraies situations multi-tours locales ;
+- **Build 18 — Error Intelligence** : mémoire des types de confusion ;
+- **Safari/Siri Calibration Gate** : uniquement après test réel iPhone ;
+- **Build 19 — Curriculum 26→40 / A1 Core** ;
+- **Build 20 — Listening Comprehension** ;
+- **Build 21 — Adaptive Language Ratio** ;
+- puis Real Life French et durcissement V2.
+
+---
+
+# Historique
+
+Le détail complet vit dans [`CHANGELOG.md`](./CHANGELOG.md).
+
+Repères principaux :
+
+- Build 1 — première PWA ;
+- Build 3 — DEBUG FR ;
+- Build 7–8 — Free Voice ;
+- Build 9 — French Trân’quille + Lucie ;
+- Build 10.x — durcissement navigateur / Chrome smoke test ;
+- Build 11 — 15 leçons / 88 éléments ;
+- Build 13 — Learning Memory ;
+- Build 14 — refonte UX ;
+- Build 15 — 25 leçons / 148 éléments + Daily Coach ;
+- **Build 16 — Mastery Engine + gouvernance documentaire**.
