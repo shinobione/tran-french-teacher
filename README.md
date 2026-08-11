@@ -2,10 +2,11 @@
 
 PWA de français pensée pour **Trân**, vietnamienne débutante au départ (**A0**), avec vietnamien comme langue de soutien puis davantage de français à mesure que les acquis deviennent réellement utilisables.
 
-## Candidat actuel
+## Version en production
 
 - **v1.12.0**
 - **Build 19 — A1 Core**
+- statut : **PROD / GitHub Pages**
 - curriculum cible : **40 leçons / 238 éléments**
 - ajout Build 19 : **15 leçons / 90 éléments**
 - Scenario Lab : **12 situations / 36 tours**
@@ -13,7 +14,7 @@ PWA de français pensée pour **Trân**, vietnamienne débutante au départ (**A
 - coût d’exploitation : **0 €**
 - cible principale : **iPhone / Safari / PWA iOS**
 
-> Build 19 reste un candidat tant que PR, CI `main` et GitHub Pages ne sont pas tous verts. Le statut de production vit dans `CHANGELOG.md` et `ROADMAP.md`.
+> Build 19 a été validé sur PR, sur `main`, sur GitHub Pages et par un rendu Chrome direct de l’URL publique.
 
 ## Liens projet
 
