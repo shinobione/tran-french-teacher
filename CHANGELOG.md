@@ -4,7 +4,9 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ## [Unreleased]
 
-### v1.19.4 — Build 26.4 — Single-scroll Progress + Tyffany — CANDIDATE
+---
+
+## [1.19.4] — Build 26.4 — Single-scroll Progress + Tyffany — 2026-08-12
 
 - conserve le layout Progress 2 colonnes de Build 26.3 mais supprime le deuxième contexte de scroll vertical dans `Détails d’apprentissage` ;
 - ajoute `build26-4-ux.css` qui remplace sur desktop `sticky + max-height viewport + overflow:auto` par un panneau dans le flux avec `max-height:none` et `overflow:visible` ;
@@ -19,7 +21,11 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 - aucune migration learner/Memory/Scenario/Listening ;
 - ajoute un smoke Chrome Build 26.4 : Tyffany visible, aucun Lucie visible, tutor export Tyffany, Mastery ouvert, Details sans nested scroll, page scrollable, profil l8 intact ;
 - rend le smoke Build 26.3 durable : il protège toujours la structure 2 colonnes et les vrais clics Today sans imposer à vie l’ancienne politique `sticky` ;
-- cache candidat `tran-french-teacher-v1.19.4-b26.4-single-scroll-tyffany`.
+- cache `tran-french-teacher-v1.19.4-b26.4-single-scroll-tyffany` ;
+- PR runtime #46 ; commit runtime `7e74b3727dfefdddb41521a2be92ece8301a32e7` ; **10/10 workflows SUCCESS** sur PR ; Pages runtime **#103 SUCCESS** ;
+- le premier passage du smoke 26.4 sur `main` a confirmé tous les marqueurs single-scroll mais pouvait sélectionner Mastery trop tôt ;
+- PR #47 corrige uniquement ce harness CI en réutilisant `detailsDashboardSmoke=mastery`, sans modification runtime/PWA ;
+- commit CI-only `4852e95684ad79d0988e05de641b56a8ad0ede22` ; final `main` **10/10 workflows fonctionnels SUCCESS + Pages #104 SUCCESS**.
 
 ---
 
