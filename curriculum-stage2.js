@@ -6,6 +6,7 @@ if (CORE) {
   const isDebug = () => localStorage.getItem(DEBUG_KEY) === '1';
   const T = (vi, fr) => isDebug() ? fr : vi;
   const esc = (value = '') => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const setText = (el, value) => { const text = String(value); if (el && el.textContent !== text) el.textContent = text; };
 
   const STAGE2 = [
     {
@@ -204,33 +205,27 @@ if (CORE) {
     const l = learner();
     const known = new Set(l.knownItems || []);
     const totalKnown = CORE.items.filter(item => known.has(item.id)).length;
-    const currentScreen = document.querySelector('.app-shell');
-    if (!currentScreen) return;
+    if (!document.querySelector('.app-shell')) return;
 
     document.querySelectorAll('.screen-home .home-side .stats .stat').forEach(stat => {
       const label = stat.querySelector('small')?.textContent?.trim()?.toLocaleLowerCase();
-      if (['đã học','acquis'].includes(label)) {
-        const value = stat.querySelector('span');
-        if (value) value.textContent = String(totalKnown);
-      }
+      if (['đã học','acquis'].includes(label)) setText(stat.querySelector('span'), totalKnown);
     });
 
+    const completed = (l.completedLessons || []).filter(id => CORE.lessons.some(x => x.id === id)).length;
     document.querySelectorAll('.screen-settings .diagnostics > div').forEach(row => {
       const label = row.querySelector('span')?.textContent?.trim()?.toLocaleLowerCase();
       const value = row.querySelector('strong');
-      if (!value) return;
-      if (label === 'đã học' || label === 'acquis') value.textContent = `${totalKnown}/${CORE.items.length}`;
-      if (label === 'bài hoàn thành' || label === 'leçons terminées') value.textContent = `${(l.completedLessons || []).filter(id => CORE.lessons.some(x => x.id === id)).length}/${CORE.lessons.length}`;
+      if (label === 'đã học' || label === 'acquis') setText(value, `${totalKnown}/${CORE.items.length}`);
+      if (label === 'bài hoàn thành' || label === 'leçons terminées') setText(value, `${completed}/${CORE.lessons.length}`);
     });
   }
 
   function patchCurriculum() {
     const card = document.querySelector('.curriculum-card');
     if (!card) return;
-    const pill = card.querySelector('.section-head .pill');
-    const title = card.querySelector('.section-head h2');
-    if (pill) pill.textContent = T(`A0 → A1 • ${CORE.lessons.length} bài`,`A0 → A1 • ${CORE.lessons.length} leçons`);
-    if (title) title.textContent = T('Lộ trình A0 → A1 đầu tiên','Premier parcours A0 → A1');
+    setText(card.querySelector('.section-head .pill'), T(`A0 → A1 • ${CORE.lessons.length} bài`,`A0 → A1 • ${CORE.lessons.length} leçons`));
+    setText(card.querySelector('.section-head h2'), T('Lộ trình A0 → A1 đầu tiên','Premier parcours A0 → A1'));
     const list = card.querySelector('.lesson-list');
     if (!list || list.querySelector('.curriculum-chapter')) return;
     const rows = [...list.querySelectorAll('.lesson-row')];
@@ -254,8 +249,7 @@ if (CORE) {
   function activeStageLesson() {
     const title = document.querySelector('.screen-lesson .topbar h1')?.textContent || '';
     const m = title.match(/(?:Bài|Leçon)\s+(\d+)/i);
-    const number = Number(m?.[1]);
-    return STAGE2.find(l => l.number === number) || null;
+    return STAGE2.find(l => l.number === Number(m?.[1])) || null;
   }
 
   function injectGrammarNote() {
@@ -282,7 +276,7 @@ if (CORE) {
     if (!root) return;
     const known = stage2Known();
     let card = root.querySelector('.stage2-practice-card');
-    if (!known.length) { card?.remove(); return; }
+    if (!known.length) { if (card) card.remove(); return; }
     if (!card) {
       card = document.createElement('section');
       card.className = 'card stage2-practice-card';
@@ -290,6 +284,9 @@ if (CORE) {
       if (quiet) quiet.before(card); else root.appendChild(card);
     }
     const item = known[practiceIndex % known.length];
+    const signature = [item.id,practiceIndex % known.length,known.length,practiceFeedback,isDebug()?1:0].join(':');
+    if (card.dataset.stage2Signature === signature) return;
+    card.dataset.stage2Signature = signature;
     card.innerHTML = `<div class="row between"><div><span class="pill">A1 START</span><h2>💬 ${esc(T('Tái sử dụng câu mới','Réutiliser les nouvelles structures'))}</h2></div><span class="muted">${practiceIndex % known.length + 1}/${known.length}</span></div><p>${esc(T(`Hãy nói hoặc viết bằng tiếng Pháp: ${item.vi}`,`Dis ou écris en français : ${item.vi}`))}</p><input data-stage2-input autocomplete="off" placeholder="${esc(T('Câu tiếng Pháp…','Phrase en français…'))}"><button class="secondary full" data-stage2-check>${esc(T('Kiểm tra','Vérifier'))}</button>${practiceFeedback ? `<div class="feedback-box">${esc(practiceFeedback)}</div>` : ''}`;
   }
 
@@ -321,16 +318,17 @@ if (CORE) {
     const input = document.querySelector('[data-stage2-input]')?.value || '';
     const ok = accepted(item, input);
     practiceFeedback = ok ? T('✓ Đúng rồi. Chuyển sang câu tiếp theo.','✓ Correct. On passe à la suivante.') : T(`Thử lại với: ${item.fr}`,`Réessaie avec : ${item.fr}`);
-    if (ok) {
-      window.FrenchTranquilleMemory?.recordPractice?.(item.id, true, 'stage2-text');
-      practiceIndex = (practiceIndex + 1) % known.length;
-    } else {
-      window.FrenchTranquilleMemory?.recordPractice?.(item.id, false, 'stage2-text');
-    }
+    window.FrenchTranquilleMemory?.recordPractice?.(item.id, ok, 'stage2-text');
+    if (ok) practiceIndex = (practiceIndex + 1) % known.length;
     injectStagePractice();
   });
 
-  const observer = new MutationObserver(() => queueMicrotask(decorate));
+  let scheduled = false;
+  const observer = new MutationObserver(() => {
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => { scheduled = false; decorate(); });
+  });
   const app = document.getElementById('app');
   if (app) observer.observe(app,{childList:true,subtree:true});
   decorate();
