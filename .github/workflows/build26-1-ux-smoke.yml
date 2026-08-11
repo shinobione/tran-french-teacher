@@ -74,10 +74,12 @@ jobs:
 
       - name: Chrome — Real Life III remains loaded beside UX patch
         run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=30000 --dump-dom 'http://127.0.0.1:4173/?realLifeSmoke=lesson40&scenarioSmoke=1' >/tmp/real-life-40.html
+          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=30000 --dump-dom 'http://127.0.0.1:4173/?realLifeSmoke=lesson40&sessionSmoke=practice' >/tmp/real-life-40.html
           if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/real-life-40.html; then cat /tmp/real-life-40.html; exit 1; fi
           grep -q 'data-real-life-pack3-open="8"' /tmp/real-life-40.html
-          grep -q 'data-real-life-total="36"' /tmp/real-life-40.html || grep -q 'data-scenario-total="36"' /tmp/real-life-40.html || grep -q '36 situations' /tmp/real-life-40.html
+          grep -q 'data-real-life-scenario-total="36"' /tmp/real-life-40.html
+          grep -q 'data-real-life-turn-total="108"' /tmp/real-life-40.html
+          grep -q 'data-real-life-resolution-invalid="0"' /tmp/real-life-40.html
 
       - name: Chrome — voice replay layer appears after a spoken-result surface
         run: |
