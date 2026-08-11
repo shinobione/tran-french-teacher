@@ -7,6 +7,7 @@ PWA de français pensée pour **Trân**, avec priorité à l’oral, au françai
 - **v1.18.0**
 - **Build 25 — Progression UX / Progressive Disclosure**
 - statut : **PROD / CLOS**
+- baseline fonctionnelle historique : **v1.17.0 — Build 24 — Real Life French II**
 - curriculum : **40 leçons / 241 éléments**
 - Scenario : **28 situations / 84 tours**
 - coût : **0 €**
