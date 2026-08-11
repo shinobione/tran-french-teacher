@@ -31,7 +31,8 @@
       redo:'↻ Refaire',
       note:'Local uniquement • non sauvegardé',
       unavailable:'Réécoute locale indisponible sur ce navigateur.',
-      hint:'Répète la même réponse une fois : cette prise sert seulement à t’écouter.'
+      hint:'Répète la même réponse une fois : cette prise sert seulement à t’écouter.',
+      wait:'La reconnaissance termine son écoute… une seconde.'
     } : {
       record:'🎙️ Ghi âm để nghe lại giọng của mình',
       recording:'⏹ Dừng ghi âm',
@@ -40,13 +41,18 @@
       redo:'↻ Ghi lại',
       note:'Chỉ trên thiết bị này • không lưu',
       unavailable:'Trình duyệt này chưa hỗ trợ nghe lại giọng cục bộ.',
-      hint:'Hãy lặp lại cùng câu một lần. Bản ghi này chỉ để bạn tự nghe.'
+      hint:'Hãy lặp lại cùng câu một lần. Bản ghi này chỉ để bạn tự nghe.',
+      wait:'Nhận dạng giọng nói đang kết thúc… chờ một chút.'
     };
   }
 
   function promptSignature(card) {
     const prompt = card?.querySelector('.free-voice-prompt');
     return prompt ? prompt.textContent.replace(/\s+/g,' ').trim() : '';
+  }
+
+  function recognitionBusy(card) {
+    return Boolean(card?.querySelector('#free-voice-mic')?.disabled);
   }
 
   function clearAudio() {
@@ -87,7 +93,7 @@
   async function startRecording() {
     if (!supported || busy || recording) return;
     const card = document.getElementById('free-voice-card');
-    if (!card || !card.querySelector('.free-voice-result')) return;
+    if (!card || !card.querySelector('.free-voice-result') || recognitionBusy(card)) return;
 
     busy = true;
     clearAudio();
@@ -191,23 +197,28 @@
 
     const l = labels();
     const isPlaying = Boolean(audio && !audio.paused);
+    const waitingForRecognition = recognitionBusy(card) && !recording && !blobUrl;
+    const signature = [supported?1:0,recording?1:0,busy?1:0,blobUrl?1:0,isPlaying?1:0,waitingForRecognition?1:0,isDebug()?1:0].join(':');
+    if (panel.dataset.signature === signature) return;
+    panel.dataset.signature = signature;
 
     if (!supported) {
       panel.innerHTML = `<small>${esc(l.unavailable)}</small>`;
       return;
     }
 
+    const note = blobUrl ? l.note : waitingForRecognition ? l.wait : l.hint;
     panel.innerHTML = `
       <div class="voice-replay-copy">
         <strong>🎧 ${esc(T('Nghe lại chính mình','Écoute-toi'))}</strong>
-        <small>${esc(blobUrl ? l.note : l.hint)}</small>
+        <small>${esc(note)}</small>
       </div>
       <div class="voice-replay-actions">
         ${recording
           ? `<button class="voice-replay-stop" data-voice-replay-stop>${esc(l.recording)}</button>`
           : blobUrl
             ? `<button class="voice-replay-play primary" data-voice-replay-play ${isPlaying?'disabled':''}>${esc(isPlaying?l.replaying:l.play)}</button><button class="voice-replay-redo secondary" data-voice-replay-record>${esc(l.redo)}</button>`
-            : `<button class="voice-replay-record secondary" data-voice-replay-record ${busy?'disabled':''}>${esc(l.record)}</button>`}
+            : `<button class="voice-replay-record secondary" data-voice-replay-record ${busy||waitingForRecognition?'disabled':''}>${esc(l.record)}</button>`}
       </div>`;
 
     panel.querySelector('[data-voice-replay-record]')?.addEventListener('click',startRecording);
