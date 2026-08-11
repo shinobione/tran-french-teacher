@@ -19,17 +19,18 @@
 
 ---
 
-# Baseline production — v1.15.0 Build 22
+# Baseline production — v1.16.0 Build 23
 
 - **40 leçons / 241 éléments** ;
-- Learning Memory ; Daily Coach ; Mastery ; Scenario ; Error ; Listening ; Adaptive Language ;
+- Learning Memory ; Daily Coach ; Mastery ; Error ; Listening ; Adaptive Language ;
+- Scenario : **18 situations / 54 tours** ;
+- Real Life French I : **6 situations / 18 tours** ;
 - UX : **Aujourd’hui / Pratiquer / Parcours** ;
-- DEBUG FR local ;
 - progression protégée ;
 - voix iPhone et reconnaissance vocale baseline validée ;
 - coût 0 €.
 
-## Builds 16 → 22
+## Builds 16 → 23
 
 - Build 16 — Mastery Engine — ✅ CLOS
 - Build 17 — Scenario Lab — ✅ CLOS
@@ -38,66 +39,95 @@
 - Build 20 — Listening — ✅ INTÉGRÉ
 - Build 21 — Adaptive Language — ✅ INTÉGRÉ
 - Build 22 — UX Foundation & Runtime Integrity — ✅ CLOS
+- Build 23 — Real Life French I — ✅ CLOS
+
+### Preuves Build 23
+
+- PR #18 : SUCCESS ;
+- merge `main` : `7f5dd657e5f46a2847c443ffb8f5d0154a89924a` ;
+- CI `main` run #63 : SUCCESS ;
+- GitHub Pages run #77 : SUCCESS ;
+- profil leçon 8 : zéro perte ;
+- 5 situations personnelles déjà accessibles, 1 verrouillée par `l8` ;
+- Error / Listening / Adaptive non régressés ;
+- branding + voix inchangés.
 
 ---
 
-# v1.16.0 — Build 23 — Real Life French I — 🔥 EN COURS
+# v1.17.0 — Build 24 — Real Life French II — 🔜 PROCHAIN
 
 ## Intention
 
-Faire de **Pratiquer → Parler français** un entraînement qui ressemble à la vraie vie de Trân, sans ajouter un nouvel écran principal.
+Prolonger les situations personnelles à mesure que Trân avance vers les leçons 9–20, sans changer son modèle mental de l’application.
 
-## Pack I — codé
+Toujours :
 
-6 situations / 18 tours :
+```text
+Aujourd’hui
+Pratiquer
+Parcours
+```
 
-1. Jerry parle trop vite — requis `l2` ;
-2. Jerry présente Trân à quelqu’un — `l3` ;
-3. prendre un café avec Jerry — `l4` ;
-4. parler de ses goûts — `l5` ;
-5. faire un petit achat — `l7` ;
-6. trouver un lieu avec Jerry — `l8`.
+Build 24 enrichira encore **Pratiquer → Parler français**.
 
-## UX Scenario — codée
+## Axes
 
-- [x] situations personnelles disponibles remontées en premier ;
-- [x] badge `Ta vraie vie` ;
-- [x] titre apprenant `Parler en situation` au lieu de `Scenario Lab` ;
-- [x] seulement 2 futures situations verrouillées visibles par défaut ;
-- [x] bouton pour dévoiler le reste ;
-- [x] aucun nouveau bouton dans le menu Build 22.
+### Déplacements / gare
 
-## Pédagogie
+- acheter un billet ;
+- demander un aller simple / aller-retour ;
+- demander l’heure de départ ;
+- comprendre quai / gare / billet quand déjà appris.
 
-- [x] réponses obligatoires limitées aux acquis des leçons requises ;
-- [x] premier raté → indice historique ;
-- [x] blocage → modèle historique ;
-- [x] Memory `scenario-success / miss / assisted` conservée ;
-- [x] clavier + reconnaissance existants conservés ;
-- [x] aucune modification du moteur vocal ;
-- [x] même clé Scenario existante.
+### Rendez-vous / déplacement simple
 
-## Protection
+- dire où elle va ;
+- confirmer une heure ;
+- demander quand Jerry arrive ;
+- mini-échange avant de se retrouver.
 
-- [x] ancienne progression inchangée ;
-- [x] logo/favicon inchangés ;
-- [x] voice/free-voice inchangés ;
-- [ ] smoke leçon 8 zéro-perte sur head final ;
-- [ ] smoke Real Life : 6 scénarios présents ;
-- [ ] profil leçon 8 : 5 scénarios du pack déjà ouverts, le sixième (`l8`) encore verrouillé ;
-- [ ] vue Conversation : scénarios personnels en premier et futurs condensés ;
-- [ ] Scenario total = 18 situations / 54 tours ;
-- [ ] non-régression Error / Listening / Adaptive ;
-- [ ] PR verte ;
-- [ ] `main` vert ;
-- [ ] Pages verte ;
-- [ ] docs release / CLOS.
+### Shopping / restaurant
 
----
+- demander une taille / un prix selon acquis ;
+- commander un repas ;
+- demander l’addition ;
+- exprimer une préférence.
 
-# v1.17.0 — Build 24 — Real Life French II — PROCHAIN
+### Santé / pharmacie
 
-Déplacements, gare, téléphone, rencontres avec les proches, repas, logement et premières conversations plus longues. Les nouveaux scénarios devront continuer à se débloquer par acquis et rester derrière **Pratiquer**.
+- expliquer un besoin très simple ;
+- demander une pharmacie ;
+- comprendre une réponse courte.
+
+### Proches
+
+- rencontrer un proche de Jerry ;
+- dire qui elle est ;
+- parler très simplement de famille / provenance / goûts.
+
+### Téléphone / logement
+
+À introduire seulement quand les prérequis Stage 2 correspondants sont réellement terminés. Pas de réponse obligatoire basée sur un élément non appris.
+
+## Règles UX
+
+- aucun nouveau menu ;
+- le système de tri/condensation Build 23 reste la seule vue Scenario apprenante ;
+- les scènes ouvertes pertinentes remontent avant les scènes verrouillées ;
+- nouvelles scènes futures ne doivent pas saturer l’écran ;
+- nom technique du pack invisible côté Trân.
+
+## Tests obligatoires
+
+- smoke leçon 8 Build 22 reste vert ;
+- smoke Build 23 reste vert ;
+- profil l15 : nouvelles scènes du pack II correctement déverrouillées ;
+- profil l20 : scènes téléphone/logement si présentes ;
+- aucune clé de progression ajoutée sans justification ;
+- Scenario total et tours audités ;
+- voice / free-voice / logo / favicon hashes inchangés ;
+- Error / Listening / Adaptive non régressés ;
+- PR → `main` → Pages.
 
 ---
 
