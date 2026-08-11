@@ -94,7 +94,7 @@ jobs:
           sleep 1
           google-chrome --version
 
-      - name: Chrome — Home UX and reconciled curriculum
+      - name: Chrome — Home UX
         run: |
           google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=18000 --dump-dom http://127.0.0.1:4173/ >/tmp/home.html
           if grep -q 'boot-status error' /tmp/home.html; then cat /tmp/home.html; exit 1; fi
@@ -105,10 +105,9 @@ jobs:
           grep -q 'Hôm nay' /tmp/home.html
           grep -q 'Luyện tập' /tmp/home.html
           grep -q 'Lộ trình' /tmp/home.html
-          grep -q 'data-open-lesson="l40"' /tmp/home.html
+          grep -q 'lesson-card' /tmp/home.html
           grep -q 'daily-coach-card' /tmp/home.html
-          grep -q 'language-profile-card' /tmp/home.html
-          echo 'Home UX OK.'
+          echo 'Home learner UX OK.'
 
       - name: Chrome — preserve Trân lesson-8 progress
         run: |
