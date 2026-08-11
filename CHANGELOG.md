@@ -4,7 +4,23 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ## [Unreleased]
 
-- prochain jalon : **v1.17.0 — Build 24 — Real Life French II**.
+### v1.17.0 — Build 24 — Real Life French II — candidat
+
+- ajout de `real-life-data-2.js` : **10 situations / 30 tours** pour les acquis des leçons 9→20 ;
+- pack II centré sur des séquences croisées plutôt que des doublons des scénarios gare/resto/pharmacie historiques ;
+- rendez-vous/train, shopping, dîner, santé, présentation de Jerry, retour, réservation, logement et téléphone ;
+- total Scenario candidat : **28 situations / 84 tours** ;
+- Real Life I + II : **16 situations / 48 tours** ;
+- aucune nouvelle clé de progression ;
+- même stockage `french-tranquille:scenarios:v1` ;
+- `real-life-ux.js` fait évoluer le catalogue vers une vue de recommandation : **6 situations ouvertes max visibles par défaut** ;
+- tri des scènes personnelles selon les prérequis les plus récents ;
+- bouton pour afficher les autres scènes ouvertes ;
+- seulement deux scènes futures verrouillées visibles ;
+- cache candidat `1.17.0-b24` ;
+- logo/favicon/voice/free-voice restent sanctuarisés.
+
+Reste Unreleased jusqu’à PR → `main` → GitHub Pages.
 
 ---
 
@@ -33,81 +49,32 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ## [1.15.0] — Build 22 — UX Foundation & Runtime Integrity — 2026-08-11
 
-- nouvelle navigation apprenante limitée à **Aujourd’hui / Pratiquer / Parcours** ;
-- `Pratiquer` regroupe Révision / Conversation / Listening ;
-- Home simplifiée autour de la prochaine leçon et de la séance du jour ;
-- mode Leçon recentré, navigation fixe et grandes zones tactiles ;
-- Parcours simplifié côté Trân, intelligence détaillée conservée en DEBUG FR ;
-- Réglages techniques / reset masqués côté apprenante ;
-- ajout de `progress-safety.js` et snapshot pré-Build22 non destructif ;
-- smoke Chrome dédié à un profil synthétique arrivé à la leçon 8 : progression et acquis conservés ;
-- logo/favicon sanctuarisés et protégés par hash ;
-- `voice-ios.js` / `free-voice.js` sanctuarisés après retour iPhone positif ;
-- audit de loader : Stage 3 / Listening / Adaptive Language présents dans le repo mais pas tous activés par l’ancien loader/service worker ;
-- réconciliation du runtime complet et `build-meta.js` replacé en dernier ;
-- audit curriculum : **40 leçons / 241 éléments réels** ;
-- cache PWA `1.15.0-b22` ;
-- PR #16 SUCCESS ;
-- `main` CI run #59 SUCCESS ;
-- GitHub Pages run #75 SUCCESS.
-
----
+- navigation apprenante **Aujourd’hui / Pratiquer / Parcours** ;
+- Home simplifiée ; Leçon Focus ; Parcours simplifié ;
+- snapshot pré-Build22 non destructif ;
+- smoke ancien utilisateur leçon 8 ;
+- logo/favicon/voice/free-voice sanctuarisés ;
+- réconciliation Stage 3 / Listening / Adaptive Language ;
+- curriculum audité **40 leçons / 241 éléments** ;
+- PR #16, CI main #59 et Pages #75 SUCCESS.
 
 ## [1.14.0] — Build 21 — Adaptive Language Ratio — 2026-08-11
-
-- moteur pur de soutien VI/FR ;
-- profils VI-HEAVY / VI-SUPPORT / BALANCED / FR-GROWING ;
-- décision fondée sur Curriculum / Memory / Listening / pratique / fragilités ;
-- retour temporaire vers davantage de vietnamien après difficultés ;
-- contextes lesson/listening/scenario/admin/safety ;
-- DEBUG FR prioritaire.
-
-**Note d’intégrité Build 22 :** le runtime de production a été réconcilié en Build 22.
+- profils VI-HEAVY / VI-SUPPORT / BALANCED / FR-GROWING ; contextes et retour temporaire vers davantage de vietnamien.
 
 ## [1.13.0] — Build 20 — Listening Comprehension — 2026-08-11
-
-- moteur Listening local ;
-- Sens / Contrastes / Mini-dialogues ;
-- transcript caché avant réponse ;
-- vitesse normale / lente ;
-- réécoute ;
-- clé `french-tranquille:listening:v1` ;
-- Memory + Error alimentés par les sources `listening-*`.
-
-**Note d’intégrité Build 22 :** le câblage production complet a été repris explicitement en Build 22.
+- Sens / Contrastes / Mini-dialogues ; transcript caché avant réponse ; vitesse normale/lente ; Memory + Error.
 
 ## [1.12.0] — Build 19 — A1 Core — 2026-08-11
-
-- Stage 3, leçons 26–40 ;
-- nombres 11→100, jours, mois, dates, heure précise ;
-- possessifs ; présent avec `tu`, `il/elle`, `nous` ;
-- futur proche ; passé récent ; passé composé ;
-- administration / documents ; émotions, besoins et proches ;
-- Mastery A1 Core.
-
-**Correction d’audit Build 22 :** Stage 3 contient réellement **93 éléments**, total runtime **241**.
+- Stage 3, leçons 26–40 ; structures A1 ; Mastery A1 Core. Audit Build 22 : total réel 241 éléments.
 
 ## [1.11.0] — Build 18 — Error Intelligence — 2026-08-11
-
-- stockage `french-tranquille:error-intelligence:v1` ;
-- taxonomie fondée sur des preuves observables ;
-- historique borné à 20 événements par élément / 120 globaux récents ;
-- récence, répétition, récupération ;
-- Free Voice → Learning Memory + Error Intelligence.
+- historique borné 20/item et 120 globaux ; récence/répétition/récupération ; Free Voice relié à Memory/Error.
 
 ## [1.10.0] — Build 17 — Scenario Lab — 2026-08-11
-
-- 12 situations / 36 tours ;
-- déverrouillage selon les leçons ;
-- indices puis modèle ;
-- Learning Memory ; voix + texte ; stats locales.
+- 12 situations / 36 tours ; indices/modèles ; Memory ; voix/texte ; stats locales.
 
 ## [1.9.0] — Build 16 — Mastery Engine — 2026-08-11
-
-- maîtrise par grandes étapes ;
-- preuves Learning Memory ;
-- estimation interne non certifiante ;
-- docs canoniques et process PR/CI/Chrome/Pages.
+- maîtrise fondée sur preuves Learning Memory ; gouvernance documentaire/CI.
 
 ## [1.8.0] — Build 15 — 2026-08-11
 - 25 leçons / 148 éléments ; Early A1 ; Daily Coach ; Stage 2.
