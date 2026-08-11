@@ -22,7 +22,7 @@
 
 Les modules existants couvrent :
 
-- Curriculum A0 → A1 Core, cible **40 leçons / 238 éléments** ;
+- Curriculum A0 → A1 Core, **40 leçons / 241 éléments audités** ;
 - Learning Memory ;
 - Daily Coach ;
 - Mastery + A1 Core ;
@@ -33,6 +33,8 @@ Les modules existants couvrent :
 - Adaptive Language Ratio ;
 - DEBUG FR local ;
 - coût : **0 €**.
+
+> Audit Build 22 : Stage 3 contient réellement 93 éléments. Les anciens documents indiquaient 90, donc 238 au total. Build 22 corrige la référence à **241**, sans supprimer de contenu utile pour satisfaire un ancien compteur.
 
 Audit Build 22 : plusieurs modules récents existaient dans le repo alors que le loader/service worker de `main` n’avait pas été totalement réconcilié. Build 22 traite cette dette explicitement.
 
@@ -130,7 +132,7 @@ Lộ trình / Parcours
 - [x] Adaptive Language câblé ;
 - [x] Build Meta dernier ;
 - [x] service worker Build 22 complet ;
-- [ ] 40 leçons / 238 éléments vérifiés dans Chrome ;
+- [ ] 40 leçons / **241 éléments** vérifiés par contrat runtime ;
 - [ ] Listening smoke vert ;
 - [ ] Adaptive Language smoke vert ;
 - [ ] Scenario / Error non régressés.
@@ -147,10 +149,10 @@ Lộ trình / Parcours
 - [x] README candidat ;
 - [x] dossier Build 22 ;
 - [x] roadmap candidat ;
-- [ ] changelog candidat ;
-- [ ] architecture Build 22 ;
-- [ ] build policy data-safety ;
-- [ ] CI Build 22 ;
+- [x] changelog candidat ;
+- [x] architecture Build 22 ;
+- [x] build policy data-safety ;
+- [x] CI Build 22 ;
 - [ ] PR verte ;
 - [ ] merge ;
 - [ ] CI `main` verte ;
