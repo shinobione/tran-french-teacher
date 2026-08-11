@@ -22,7 +22,7 @@ La complexité appartient aux moteurs ; Trân voit d’abord l’information uti
 
 ---
 
-# Runtime production — v1.19.1 Build 26.1
+# Runtime production — v1.19.2 Build 26.2
 
 ```text
 progress-safety.js
@@ -67,7 +67,78 @@ voice-replay.css
 progress-details-dashboard.css
 ```
 
-Production commit : `8ad7e5eb9cb2f64c58c086847c3e035463ab3ba3` — PR #40 — Pages #98 SUCCESS.
+Production commit : `4d1d224aa4eb6612fe6b0dc997f3871bbb502317` — PR #42 — Pages #100 SUCCESS.
+
+---
+
+# Build 26.2 — Click + Listening Rate Hotfix
+
+## Toggle déterministe de `Détails d’apprentissage`
+
+Build 25 avait créé :
+
+```html
+<details class="progress-ux-details">
+  <summary>…</summary>
+  …
+</details>
+```
+
+Build 26.1 a installé son dashboard à l’intérieur. Le retour vidéo Build 26.2 a montré que le `summary` pouvait recevoir le clic sans provoquer une ouverture fiable dans le runtime composé de plusieurs couches DOM/MutationObserver.
+
+Le contrat devient explicite :
+
+```text
+click summary
+   ↓ capture document
+preventDefault()
+   ↓
+toggleDetails(details)
+   ↓
+details.open = !details.open
+   ↓
+progressDetailsOpen + progressDetailsManualToggle
+```
+
+Le dashboard n’est pas réimplémenté. `progression-ux.js` contrôle uniquement l’ouverture de sa frontière `<details>`.
+
+Le smoke Progression lance un vrai Chrome, ferme le panneau, clique réellement le `summary` puis exige l’état ouvert.
+
+## Listening : séparation entre rate demandé et rate réellement appliqué
+
+Chaîne historique :
+
+```text
+listening-engine.js
+slow button → utterance.rate = 0.68
+          ↓
+build-meta.js bridge
+0.68 → tentative 0.64
+          ↓
+voice-ios.js
+currentRate() accepte seulement >= 0.65
+          ↓
+0.64 rejeté → fallback ~0.84
+```
+
+Le bug terrain venait donc d’un **rate final différent du rate attendu**. Le moteur et le bridge portaient bien des valeurs différentes, mais la dernière couche annulait cette différence.
+
+Build 26.2 ne modifie pas `voice-ios.js`. Il utilise son plancher existant :
+
+```text
+normal request 0.88 → effectif 0.88
+slow request   0.68 → bridge 0.65 → effectif 0.65
+```
+
+Cela préserve la voix, le pitch, la reconnaissance et les hashes sanctuarisés tout en rendant le mode lent réellement audible.
+
+Contrat CI :
+
+- `data-listening-normal-rate="0.88"` ;
+- `data-listening-slow-rate="0.65"` ;
+- `data-listening-engine-slow-rate="0.68"` ;
+- `voice-ios.js` doit toujours exposer son plancher `n>=.65` et conserver son hash ;
+- Session UX 5/5 doit finir avec le même contrat `0.65`.
 
 ---
 
@@ -77,18 +148,20 @@ Production commit : `8ad7e5eb9cb2f64c58c086847c3e035463ab3ba3` — PR #40 — Pa
 
 `progression-ux.js` orchestre `Parcours` sans persister de données : résumé apprenant, détails repliables, 5 lignes curriculum visibles par défaut, 40 accessibles à la demande.
 
-## Listening — Build 25.1
+Build 26.2 ajoute uniquement un contrat de clic explicite à la frontière des détails.
+
+## Listening — Build 25.1 + correction Build 26.2
 
 ```text
 normal request 0.88 → effectif 0.88
-slow request   0.68 → effectif 0.64
+slow request   0.68 → effectif 0.65
 ```
 
 Le bridge vit dans `build-meta.js`. `voice-ios.js`, voix et pitch sont inchangés.
 
 ## Session UX — Build 25.2
 
-Chaque moteur conserve ses écritures ; `session-ux.js` observe et orchestre `objectif / progression / fin / sortie`. Scenario reste borné à **1 situation par session**.
+Chaque moteur conserve ses écritures ; `session-ux.js` observe et orchestre `objectif / progression / fin / sortie`. Scenario reste borné à **1 situation par session**. Listening reste une session de 5 questions.
 
 ---
 
@@ -114,7 +187,7 @@ Les réponses semi-libres restent déterministes : plusieurs variantes explicite
 
 Production : **36 situations / 108 tours**, **15 résolutions Memory avancées**, 0 ambiguïté.
 
-Build 26.1 ne modifie ni `real-life-data-3.js`, ni `real-life-coach.js`, ni le Scenario Engine.
+Build 26.2 ne modifie ni Real Life III ni le Scenario Engine.
 
 Baseline historique protégée : `real-life-data-2.js` / **v1.17.0 Build 24**, Scenario **28 / 84** avant Pack III.
 
@@ -142,9 +215,7 @@ Audio(blobUrl)
 
 Il ne patch pas `SpeechRecognition`, `free-voice.js` ou `voice-ios.js`.
 
-## Pourquoi une seconde prise
-
-Le Web Speech API fournit le résultat de reconnaissance, mais pas un flux audio brut réutilisable par l’application. Build 26.1 évite également de demander un second accès micro tant que Free Voice indique encore que la reconnaissance est active.
+Le Web Speech API fournit le résultat de reconnaissance, mais pas un flux audio brut réutilisable par l’application. Build 26.1 évite donc de demander un second accès micro tant que Free Voice indique encore que la reconnaissance est active.
 
 Une fois la reconnaissance terminée, Trân peut répéter la même phrase pour s’écouter.
 
@@ -152,51 +223,13 @@ Cette architecture est déployée, mais le parcours réel `reconnaissance → se
 
 La capture simultanée exacte du premier essai reste hors scope.
 
-## Capture / confidentialité
-
-```text
-navigator.mediaDevices.getUserMedia({audio:true})
-        ↓
-MediaRecorder
-        ↓
-Blob mémoire
-        ↓
-URL.createObjectURL(blob)
-```
-
-Garde-fous :
-
-- feature detection ;
-- aucun upload réseau ;
-- aucun `localStorage.setItem` ;
-- aucun événement Learning Memory / Error / Mastery / Session ;
-- arrêt automatique après 9 s ;
-- `MediaStreamTrack.stop()` à la fin ;
-- `URL.revokeObjectURL()` au changement d’exercice / fermeture ;
-- en cas d’échec de capture, la reconnaissance pédagogique reste intacte ;
-- rendu idempotent par signature pour éviter les boucles `MutationObserver`.
+Garde-fous : feature detection, aucun upload réseau, aucun `localStorage.setItem`, aucun événement Learning Memory / Error / Mastery / Session, arrêt automatique après 9 s, pistes stoppées, Blob URL révoquée et rendu idempotent.
 
 ---
 
 # Learning Details Dashboard — Build 26.1 — PROD
 
-Build 25 a créé `details.progress-ux-details`. Build 26.1 travaille **à l’intérieur** de cette frontière.
-
-Avant :
-
-```text
-Détails d’apprentissage
-├── Learning Memory
-├── Error Intelligence
-├── Mastery
-├── A1 Mastery
-├── Listening
-├── Scenario / Real Life
-├── Adaptive Language
-└── ...
-```
-
-Après :
+Build 25 a créé `details.progress-ux-details`. Build 26.1 travaille **à l’intérieur** de cette frontière ; Build 26.2 fiabilise le clic sur la frontière elle-même.
 
 ```text
 Détails d’apprentissage
@@ -210,7 +243,7 @@ Détails d’apprentissage
        1 panel visible
 ```
 
-## Classification
+Classification :
 
 ```text
 memory    → Memory + Error
@@ -221,23 +254,9 @@ path      → Stage2 / Stage3 / Adaptive / Daily / A1 path
 other     → futur contenu non classifié
 ```
 
-Aucune carte n’est clonée ou supprimée. Le dashboard déplace les **vrais nœuds DOM existants** dans `.progress-detail-panel-cards`, eux-mêmes toujours descendants de `.progress-layout`.
+Aucune carte n’est clonée ou supprimée. Le dashboard déplace les **vrais nœuds DOM existants** dans des panels toujours descendants de `.progress-layout`.
 
-Les anciens moteurs continuent donc à retrouver et mettre à jour leurs cartes via leurs sélecteurs descendants.
-
-## Anti-boucle
-
-- signature de rendu ;
-- panels réutilisés ;
-- observer `childList` seulement ;
-- orchestration au `requestAnimationFrame` ;
-- aucune persistance.
-
----
-
-# Practice Hub / Daily Coach / Milestones
-
-Build 25.2 reste inchangé : un seul moteur dominant dans Practice, deux actions principales sur Home, milestones non pédagogiques et succès avec reduced motion.
+Anti-boucle : signature de rendu, panels réutilisés, observer `childList`, orchestration au `requestAnimationFrame`, aucune persistance.
 
 ---
 
@@ -253,9 +272,9 @@ french-tranquille:learning-memory:v1
 french-tranquille:safety:pre-build22:v1
 ```
 
-Curriculum : **40 leçons / 241 éléments**. Scenario Build 26 : **36 / 108**.
+Curriculum : **40 leçons / 241 éléments**. Scenario : **36 / 108**.
 
-Build 26.1 ne crée aucune nouvelle clé de donnée apprenante.
+Build 26.2 ne crée aucune clé de donnée apprenante et ne migre aucun état.
 
 ---
 
@@ -270,29 +289,27 @@ assets/Favicon.png
 
 ---
 
-# CI Build 26.1 — production
+# CI Build 26.2 — production
 
-Contrats validés sur PR #40 puis `main` :
+Contrats validés sur PR #42 puis `main` :
 
 1. quality historique ✅ ;
 2. Options ✅ ;
 3. nav/mobile ✅ ;
-4. Progression UX ✅ ;
-5. Listening-rate 0.88 / 0.64 ✅ ;
+4. Progression UX + clic réel Détails ✅ ;
+5. Listening-rate 0.88 / 0.65 ✅ ;
 6. Session UX ✅ ;
 7. Real Life French III ✅ ;
 8. Voice replay + Details dashboard ✅ ;
 9. hashes branding/voice ✅ ;
 10. profil l8 ✅ ;
 11. aucune fatal card ✅ ;
-12. GitHub Pages #98 ✅.
+12. GitHub Pages #100 ✅.
 
-Le workflow Build 26 Real Life French III est désormais durable : il vérifie les fichiers/markers Build 26 et le comportement **36 / 108**, sans figer la version globale à `1.19.0`.
-
-Le smoke 26.1 teste le replay comme composant isolé ; navigation et Practice Hub restent testés par leurs propres contrats, ce qui évite une dépendance de timing artificielle entre plusieurs couches UI.
+Les workflows Build 26 et Build 26.1 sont durables : ils protègent leurs sous-systèmes sans figer la version globale et peuvent donc survivre aux hotfixes suivants.
 
 # Dette / gate terrain
 
-Le dashboard est une baseline production. L’auto-écoute reste **production déployée mais terrain iPhone non confirmée** jusqu’au test réel de Trân.
+Le dashboard et le clic de sa frontière sont des baselines production. L’auto-écoute reste **production déployée mais terrain iPhone non confirmée** jusqu’au test réel de Trân.
 
 `app.js` reste monolithique par choix de sécurité. Son extraction est réservée à Architecture Hardening.
