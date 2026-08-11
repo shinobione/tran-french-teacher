@@ -86,9 +86,11 @@
     const overflowY = style.overflowY;
     const maxHeight = style.maxHeight;
     const nested = ['auto','scroll'].includes(overflowY) && details.scrollHeight > details.clientHeight + 2;
+    const pageScrollable = document.documentElement.scrollHeight > innerHeight + 2;
     document.documentElement.dataset.b264ProgressOverflowY = overflowY;
     document.documentElement.dataset.b264ProgressMaxHeight = maxHeight;
     document.documentElement.dataset.b264ProgressNestedScroll = nested ? '1' : '0';
+    document.documentElement.dataset.b264ProgressPageScrollable = pageScrollable ? '1' : '0';
     document.documentElement.dataset.b264ProgressSingleScroll = !nested && innerWidth >= 861 ? '1' : '0';
   }
 
@@ -116,8 +118,8 @@
             const details = document.querySelector('.screen-progress .progress-ux-details');
             document.documentElement.dataset.b264SmokeProgress = details ? '1' : '0';
             document.documentElement.dataset.b264SmokeMastery = document.documentElement.dataset.detailsDashboardActive === 'mastery' ? '1' : '0';
-          }, 260);
-        }, 620);
+          }, 320);
+        }, 680);
       }, 220);
     }
   }
