@@ -1,0 +1,96 @@
+name: Build 25.2 Session UX smoke
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  session-ux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax and wiring
+        run: |
+          node --check session-ux.js
+          node --check session-ux-adapter.js
+          node --check build-meta.js
+          node --check sw.js
+          grep -q "version: '1.18.2', build: '25.2'" build-meta.js
+          grep -q 'session-ux.css?v=1.18.2-b25.2' index.html
+          grep -q 'session-ux.js?v=1.18.2-b25.2' index.html
+          grep -q 'session-ux-adapter.js?v=1.18.2-b25.2' index.html
+          grep -q '1.18.2-b25.2-session-ux' index.html sw.js
+          grep -q 'session-ux.js' sw.js
+          grep -q 'session-ux-adapter.js' sw.js
+          grep -q 'session-ux.css' sw.js
+          grep -q 'prefers-reduced-motion' session-ux.css
+          grep -q 'french-tranquille:milestones:v1' session-ux.js
+
+      - name: Sanctuaries remain byte-identical
+        run: |
+          test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
+          test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-session-http.log 2>&1 &
+          echo $! >/tmp/ft-session-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — Home daily plan is progressively disclosed
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=22000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8' >/tmp/session-home.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/session-home.html; then cat /tmp/session-home.html; exit 1; fi
+          grep -q 'app-shell screen-home' /tmp/session-home.html
+          grep -q 'data-session-daily-visible="2"' /tmp/session-home.html
+          grep -E -q 'data-session-daily-extra="[1-9][0-9]*"' /tmp/session-home.html
+          grep -q 'session-daily-more' /tmp/session-home.html
+          grep -q 'data-ux-smoke-next="l8"' /tmp/session-home.html
+          grep -q 'data-ux-smoke-known="40"' /tmp/session-home.html
+
+      - name: Chrome — Practice opens a single-choice hub
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=24000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&sessionSmoke=practice' >/tmp/session-practice.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/session-practice.html; then cat /tmp/session-practice.html; exit 1; fi
+          grep -q 'app-shell screen-conversation' /tmp/session-practice.html
+          grep -q 'data-session-smoke-practice="1"' /tmp/session-practice.html
+          grep -q 'data-session-practice-mode="hub"' /tmp/session-practice.html
+          grep -q 'practice-session-hub' /tmp/session-practice.html
+          grep -q 'session-mode-hidden' /tmp/session-practice.html
+
+      - name: Chrome — Listening reaches an explicit 5-question finish
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=30000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&sessionSmoke=listening' >/tmp/session-listening.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/session-listening.html; then cat /tmp/session-listening.html; exit 1; fi
+          grep -q 'data-session-listening-progress="5/5"' /tmp/session-listening.html
+          grep -q 'data-session-listening-done="1"' /tmp/session-listening.html
+          grep -q 'data-session-complete="listening"' /tmp/session-listening.html
+          grep -q 'session-complete-mode' /tmp/session-listening.html
+          grep -q 'data-listening-slow-rate="0.64"' /tmp/session-listening.html
+
+      - name: Chrome — Review reaches an explicit bounded finish
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=30000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&sessionSmoke=review' >/tmp/session-review.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/session-review.html; then cat /tmp/session-review.html; exit 1; fi
+          grep -q 'app-shell screen-review' /tmp/session-review.html
+          grep -q 'data-session-review-progress="5/5"' /tmp/session-review.html
+          grep -q 'data-session-review-done="1"' /tmp/session-review.html
+          grep -q 'data-session-complete="review"' /tmp/session-review.html
+          grep -q 'session-hidden' /tmp/session-review.html
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-session-server.pid ]; then kill "$(cat /tmp/ft-session-server.pid)" || true; fi
