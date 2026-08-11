@@ -1,4 +1,7 @@
-const CACHE='tran-french-teacher-v1.17.0-b24';
+const CACHE='tran-french-teacher-v1.17.1-b24.1-options-hotfix';
+// Keep the existing resource query version so the current index.html and offline
+// cache keys stay compatible. The new cache name forces a clean refill with the
+// corrected build-meta.js bytes.
 const V='1.17.0-b24';
 const CORE=[
   './','./index.html',
