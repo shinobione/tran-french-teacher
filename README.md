@@ -8,6 +8,7 @@ PWA de français pensée pour **Trân**, avec priorité à l’oral, au françai
 - **Build 24.5 — Navigation State Sync**
 - statut : **CANDIDAT / branche `hotfix24-4-nav-state-sync`**
 - socle UX : Build 24.4 — Mobile Polish / Interaction Timing
+- baseline fonctionnelle : **v1.17.0 — Build 24 — Real Life French II**
 - curriculum : **40 leçons / 241 éléments**
 - Scenario : **28 situations / 84 tours**
 - coût : **0 €**
