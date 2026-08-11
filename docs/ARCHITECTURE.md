@@ -22,7 +22,7 @@ La complexité appartient aux moteurs ; Trân voit d’abord l’information uti
 
 ---
 
-# Runtime candidat — v1.19.0 Build 26
+# Runtime production — v1.19.0 Build 26
 
 ```text
 progress-safety.js
@@ -81,7 +81,7 @@ Chaque moteur conserve ses écritures ; `session-ux.js` observe et orchestre `ob
 
 ---
 
-# Build 26 — Real Life French III
+# Build 26 — Real Life French III — PROD
 
 ## Insertion runtime
 
@@ -137,7 +137,7 @@ Règle :
 
 Les résolutions et erreurs sont exposées dans `FrenchTranquilleRealLife3.resolution` et `invalidResolution` pour le CI.
 
-Candidat : **15 résolutions avancées, 0 invalide**.
+Production : **15 résolutions avancées, 0 invalide**.
 
 ## Déblocage
 
@@ -149,7 +149,7 @@ Candidat : **15 résolutions avancées, 0 invalide**.
 - l39 : administratif ;
 - l40 : émotion/besoin + couple.
 
-Scenario candidat total : **36 situations / 108 tours**.
+Scenario production total : **36 situations / 108 tours**.
 
 ## Coach Pack III
 
@@ -192,7 +192,7 @@ assets/Favicon.png
 
 ---
 
-# CI candidat Build 26
+# CI Build 26 — production
 
 Contrats obligatoires :
 
@@ -202,12 +202,17 @@ Contrats obligatoires :
 4. Progression UX ;
 5. Listening-rate 0.88 / 0.64 ;
 6. Session UX ;
-7. nouveau **Real Life French III smoke** ;
+7. **Real Life French III smoke** ;
 8. hashes branding/voice ;
 9. profil l8 ;
-10. aucune fatal card.
+10. aucune fatal card ;
+11. GitHub Pages.
 
 Real Life III smoke vérifie l20 / l35 / l40, **36 / 108**, 15 résolutions, 0 ambiguïté et maximum 6 situations ouvertes visibles.
+
+Le contrat quality à l20 vérifie désormais les **18** scènes personnelles réellement ouvertes avec Pack III. Le smoke Session UX utilise des profils Chrome isolés/retry borné sur les hooks Listening/Révision afin d’éviter les faux rouges de timing ; les assertions fonctionnelles restent obligatoires.
+
+Preuve : PR #37, commit production `db8219e44d74f0af13421ec798a0c98d02f7a7b5`, 8/8 workflows SUCCESS, Pages #96 SUCCESS.
 
 # Dette technique
 
