@@ -4,7 +4,11 @@ Ce fichier conserve l’historique des versions livrées. Les intentions futures
 
 ## [Unreleased]
 
-### v1.12.0 — Build 19 — A1 Core
+Aucun changement non livré pour le moment.
+
+---
+
+## [1.12.0] — Build 19 — A1 Core — 2026-08-11
 
 - ajout prévu de **15 leçons / 90 éléments** ;
 - cible **40 leçons / 238 éléments** ;
@@ -27,8 +31,11 @@ Ce fichier conserve l’historique des versions livrées. Les intentions futures
 - dossier [`docs/BUILD-19-A1-CORE.md`](./docs/BUILD-19-A1-CORE.md) ;
 - normalisation de la CI autour de l’état courant ;
 - nouveaux smoke tests Chrome Home / Scenario / Error / A1 Core.
+- PR #11 validée puis squash-mergée ;
+- Chrome Home / Scenario / Error / A1 Core validés sur PR puis sur `main` ;
+- GitHub Pages validé ;
+- rendu Chrome direct de la GitHub Pages publique validé avec 40 leçons, leçon 40 et Mastery A1 Core.
 
-> Cette entrée reste dans **Unreleased** jusqu’à validation PR + `main` + GitHub Pages.
 
 ---
 

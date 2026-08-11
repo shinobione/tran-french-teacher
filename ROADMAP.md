@@ -1,6 +1,6 @@
 # French Trân’quille — ROADMAP
 
-> `README.md` = état du candidat/courant. `CHANGELOG.md` = historique. Ici : **ordre, dépendances et critères de clôture**.
+> `README.md` = état courant. `CHANGELOG.md` = historique livré. Ici : **ordre, dépendances et critères de clôture**.
 
 ## Principes non négociables
 
@@ -10,121 +10,197 @@
 4. Oral prioritaire, sans faux diagnostic phonétique.
 5. Communication réelle > théorie scolaire.
 6. Aucun reset silencieux.
-7. Un gros build = une intention principale.
-8. Aucun merge important sans Chrome headless vert.
+7. Un gros build = une intention principale ; hotfix = `.1`, `.2`, etc.
+8. Aucun merge important sans Chrome headless vert ; Safari réel reste requis pour iOS spécifique.
 9. README / CHANGELOG / ROADMAP / ARCHITECTURE synchronisés.
 10. PWA dédiée, pas clone de chatbot ni gamification agressive.
 
 ---
 
-# Référence production
+# État de référence livré
 
-## v1.11.0 — Build 18 — ✅ PROD
+## v1.12.0 — Build 19 — ✅ PROD
 
-- 25 leçons / 148 éléments ;
+- **40 leçons / 238 éléments** ;
+- A0 → A1 Core ;
 - Learning Memory ;
 - Daily Coach ;
-- Mastery Engine ;
-- Scenario Lab 12 / 36 ;
+- Mastery Engine + palier A1 Core ;
+- Scenario Lab : 12 situations / 36 tours ;
 - Error Intelligence ;
 - Free Voice ;
-- Chrome Home / Scenario / Error ;
-- Pages ;
-- 0 €.
+- runtime metadata centralisée ;
+- Chrome Home / Scenario / Error / A1 Core ;
+- validation directe de l’URL GitHub Pages publique ;
+- coût : **0 €**.
 
 ---
 
-# PHASE PWA-4B — A1 CORE
+# PHASES CLÔTURÉES RÉCENTES
 
-## v1.12.0 — Build 19 — 🔥 EN COURS
+## v1.9.0 — Build 16 — Mastery Engine — ✅ CLOS
 
-### But
+- [x] quatre étapes de maîtrise ;
+- [x] preuves Learning Memory avant `Maîtrisé` ;
+- [x] estimation interne non assimilée à une certification CECRL ;
+- [x] gouvernance documentaire.
 
-Passer de l’Early A1 à un **A1 Core réellement utilisable** sans chapitre de conjugaison hors-sol.
+## v1.10.0 — Build 17 — Scenario Lab — ✅ CLOS
 
-### Livrables candidat
+- [x] 12 scénarios / 36 tours ;
+- [x] déverrouillage par leçons ;
+- [x] indices / modèles / Memory ;
+- [x] profil vierge ;
+- [x] Chrome Home + Conversation.
 
-- [x] `curriculum-stage3.js` ;
-- [x] leçons 26→40 ;
+## v1.11.0 — Build 18 — Error Intelligence — ✅ CLOS
+
+- [x] preuves observables ;
+- [x] historique 20/élément / 120 globaux ;
+- [x] récence / répétition / récupération ;
+- [x] Free Voice → Memory + Error ;
+- [x] Chrome Home / Scenario / Error.
+
+## v1.12.0 — Build 19 — A1 Core — ✅ CLOS
+
+- [x] 15 nouvelles leçons 26→40 ;
+- [x] 90 nouveaux éléments ;
+- [x] 40 leçons / 238 éléments total ;
+- [x] six éléments par leçon ;
+- [x] IDs globaux uniques ;
 - [x] nombres 11→100 ;
 - [x] jours / mois / dates ;
-- [x] heure plus complète ;
+- [x] heure précise ;
 - [x] possessifs ;
-- [x] présent avec `tu` ;
-- [x] présent avec `il/elle` ;
-- [x] présent avec `nous` ;
+- [x] présent `tu`, `il/elle`, `nous` ;
 - [x] futur proche ;
 - [x] passé récent ;
 - [x] passé composé fréquent ;
 - [x] formes féminines avec être ;
 - [x] administration / documents ;
-- [x] émotions / besoins / Jerry ;
-- [x] `curriculum-stage3.css` ;
-- [x] `mastery-stage3.js` ;
-- [x] `mastery-stage3.css` ;
-- [x] dossier Build 19 ;
-- [x] build-meta central placé en dernier ;
-- [x] CI Build 19 normalisée.
-
-### Cible chiffrée
-
-```text
-15 nouvelles leçons
-90 nouveaux éléments
-40 leçons total
-238 éléments total
-```
-
-### À valider avant clôture
-
-- [ ] normalisation effective à 6 items par leçon ;
-- [ ] IDs globaux uniques ;
-- [ ] aucun reset des données ;
-- [ ] Learning Memory voit Stage 3 ;
-- [ ] Free Voice voit Stage 3 ;
-- [ ] Error Intelligence voit Stage 3 ;
-- [ ] Mastery A1 Core visible ;
-- [ ] Chrome Home = 40 leçons ;
-- [ ] Chrome Scenario non-régression ;
-- [ ] Chrome Error non-régression ;
-- [ ] Chrome A1 Core/Progression ;
-- [ ] PR verte ;
-- [ ] merge ;
-- [ ] CI `main` verte ;
-- [ ] GitHub Pages vert ;
-- [ ] CHANGELOG déplacé de Unreleased vers release ;
-- [ ] ROADMAP Build 19 = CLOS.
+- [x] émotions / besoins / proches ;
+- [x] Mastery A1 Core avec preuves de révision ;
+- [x] Learning Memory / Free Voice / Error compatibles ;
+- [x] build-meta chargé en dernier ;
+- [x] CI normalisée autour de l’état courant ;
+- [x] Chrome Home = 40 leçons ;
+- [x] Chrome Scenario non-régression ;
+- [x] Chrome Error non-régression ;
+- [x] Chrome A1 Core ;
+- [x] PR #11 verte et mergée ;
+- [x] CI `main` verte ;
+- [x] GitHub Pages vert ;
+- [x] URL publique réellement rendue et vérifiée.
 
 ---
 
-# VOICE CALIBRATION GATE
+# VOICE CALIBRATION GATE — BLOQUÉ SUR DONNÉES RÉELLES
 
-Bloqué jusqu’au vrai test iPhone/Safari de Trân.
+Le calibrage Safari/Siri spécifique à Trân reste séparé.
 
-À collecter : cible, transcription, alternatives, essais, faux refus, faux positifs. Aucun score phonétique inventé avant ces données.
+À collecter sur son vrai iPhone :
+
+- phrase cible ;
+- transcription Safari ;
+- alternatives éventuelles ;
+- nombre d’essais ;
+- faux refus ;
+- faux positifs.
+
+Seulement après : tolérances réelles et variantes observées. **Jamais de faux score phonétique.**
 
 ---
 
-# Build 20 — v1.13.0 — Listening Comprehension — PROCHAIN
+# v1.13.0 — Build 20 — Listening Comprehension — 🔥 PROCHAIN
 
-- phrase audio → sens ;
-- contrastes proches ;
+## But
+
+Faire travailler la compréhension orale **sans afficher immédiatement la phrase française**, afin que l’audio devienne une vraie source d’information et pas simplement un bouton “lire le texte”.
+
+## Périmètre prévu
+
+### Mode Écoute
+
+- Lucie lit une phrase déjà connue ou légèrement recombinée ;
+- Trân choisit le sens vietnamien ;
+- possibilité de réécouter ;
 - vitesse lente puis normale ;
-- mini-dialogues ;
-- Memory + Error Intelligence ;
-- difficulté adaptée au Mastery.
+- la réponse textuelle française n’est révélée qu’après tentative.
 
-# Build 21 — v1.14.0 — Adaptive Language Ratio
+### Contrastes auditifs utiles
 
-Le ratio VI/FR dépendra de : Mastery, compréhension, indices, Error Intelligence et difficulté des situations.
+Exemples :
+
+- `tu` / `tout` ;
+- nombres proches ;
+- `il est` / `elle est` ;
+- heure et prix ;
+- présent / futur proche selon contexte ;
+- phrases courtes de la vie quotidienne.
+
+Sans prétendre mesurer la production phonétique : ici on teste **la compréhension**.
+
+### Mini-dialogues
+
+- 2 à 4 répliques ;
+- question de compréhension ;
+- situations café / gare / téléphone / proches / rendez-vous ;
+- audio généré avec `speechSynthesis` local ;
+- transcript masqué avant réponse.
+
+### Mémoire
+
+Les réponses alimenteront :
+
+- Learning Memory ;
+- Error Intelligence avec source `listening-*` ;
+- Daily Coach ;
+- future adaptation VI/FR.
+
+## Critères de clôture Build 20
+
+- [ ] moteur Listening séparé et local ;
+- [ ] banque d’exercices construite à partir des acquis ;
+- [ ] phrase française masquée avant tentative ;
+- [ ] vitesse lente / normale ;
+- [ ] réécoute ;
+- [ ] au moins 3 familles d’exercices ;
+- [ ] mini-dialogues ;
+- [ ] Memory + Error Intelligence alimentées ;
+- [ ] aucune régression 40 leçons ;
+- [ ] aucune régression Scenario Lab ;
+- [ ] Chrome Home ;
+- [ ] Chrome Listening ;
+- [ ] Chrome Scenario ;
+- [ ] Chrome Error ;
+- [ ] README / ROADMAP / CHANGELOG / ARCHITECTURE synchronisés ;
+- [ ] PR + `main` + Pages verts.
+
+---
+
+# v1.14.0 — Build 21 — Adaptive Language Ratio
+
+Le ratio VI/FR dépendra de :
+
+- Mastery ;
+- compréhension Listening ;
+- indices nécessaires ;
+- Error Intelligence ;
+- difficulté de la situation.
+
+Le vietnamien recule uniquement quand les preuves le permettent.
+
+---
 
 # Builds 22–24 — Real Life French
 
-Français avec Jerry, proches, repas, téléphone, problèmes quotidiens, émotions, humour simple, oral courant vs forme correcte.
+Français avec Jerry, proches, repas, téléphone, déplacements, problèmes quotidiens, émotions, humour simple, oral courant vs forme correcte.
+
+---
 
 # V2.0.0 — Hardening
 
-A0→A1 cohérent, scénarios stables, mémoire versionnée, sauvegarde robuste, Safari réel, offline, docs complètes, 0 dépendance payante obligatoire.
+Objectif : A0→A1 cohérent, scénarios stables, mémoire versionnée, sauvegarde robuste, Safari réel, offline testé, docs complètes, zéro dépendance payante obligatoire.
 
 ---
 
@@ -137,12 +213,12 @@ A0→A1 cohérent, scénarios stables, mémoire versionnée, sauvegarde robuste,
 - admin local ;
 - mode 5 min ;
 - écoute/déplacement ;
-- stats hebdomadaires ;
+- statistiques hebdomadaires ;
 - multi-appareil gratuit si solution sûre.
 
-# Reporté
+# Reporté explicitement
 
-Backend/API payants, avatar vidéo, XP/classement, gamification agressive, score phonétique pseudo-scientifique, app native tant que PWA suffisante.
+Backend/API payants, avatar vidéo, XP/classement, gamification agressive, score phonétique pseudo-scientifique, app native tant que la PWA suffit.
 
 # Easter egg réservé
 

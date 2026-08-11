@@ -102,3 +102,26 @@ Les nouveaux IDs deviennent automatiquement disponibles pour :
 - Chrome Stage 3 : Progression + A1 Core mastery ;
 - cache / version synchronisés ;
 - docs synchronisées avant clôture.
+
+
+---
+
+## Clôture production
+
+Build 19 est **CLOS**.
+
+Validation effectuée :
+
+- contrat 15 leçons / 90 items ;
+- IDs globaux uniques ;
+- syntaxe de tous les modules ;
+- Chrome Home : 40 leçons + leçon 40 + chapitre A1 Core ;
+- Chrome Scenario Lab ;
+- Chrome Error Intelligence avec limites 20/120 ;
+- Chrome A1 Core / Mastery ;
+- PR #11 squash-mergée ;
+- CI `main` verte ;
+- GitHub Pages verte ;
+- validation Chrome directe de l’URL publique.
+
+État livré : **v1.12.0 • Build 19 • 40 leçons • 238 éléments**.
