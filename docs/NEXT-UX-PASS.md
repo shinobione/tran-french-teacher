@@ -1,6 +1,6 @@
 # French Trân’quille — NEXT UX PASS
 
-Statut : **BUILDS 25 / 25.1 / 25.2 / 26 CLOS — BUILD 26.1 EN COURS**  
+Statut : **BUILDS 25 / 25.1 / 25.2 / 26 / 26.1 CLOS**  
 Date terrain : **2026-08-11**
 
 ## ✅ Build 25 — Progression UX
@@ -19,15 +19,13 @@ Les activités ont un objectif, une progression, une fin et une sortie. Practice
 
 Production : **8 situations / 24 tours**, Scenario **36 / 108**, français oral naturel côté interlocuteur, variantes simples déterministes côté Trân.
 
----
+## ✅ Build 26.1 — Voice Self-Playback + Learning Details Dashboard
 
-# Build 26.1 — Voice Self-Playback + Learning Details Dashboard — EN COURS
+Deux retours terrain sont fermés :
 
-## Retour terrain 1 — entendre sa propre production
+### Entendre sa propre production
 
-Trân signale qu’elle aime la possibilité, dans d’autres apps de langue, de réécouter sa propre voix après avoir parlé.
-
-Le candidat conserve d’abord la reconnaissance existante, puis propose :
+Après une réponse vocale reconnue :
 
 ```text
 🎧 Écoute-toi
@@ -38,19 +36,9 @@ prise locale courte
 [ Réécouter ma voix ] [ Refaire ]
 ```
 
-Cette prise n’est pas une tentative pédagogique supplémentaire. Elle ne modifie ni Memory, ni Error, ni Mastery, ni Session UX.
+La prise est temporaire, locale, sans upload ni persistance et ne compte pas comme nouvelle tentative pédagogique. La capture simultanée exacte du premier essai reste reportée jusqu’à un vrai test iPhone.
 
-La capture simultanée exacte du premier essai reste reportée jusqu’à un vrai test iPhone : priorité à la reconnaissance déjà validée.
-
-## Retour terrain 2 — Détails d’apprentissage encore stackés
-
-L’entrée principale reste :
-
-```text
-Détails d’apprentissage
-```
-
-mais son contenu devient :
+### Détails d’apprentissage non stackés
 
 ```text
 🧠 Mémoire & révisions   🎯 Maîtrise
@@ -58,39 +46,24 @@ mais son contenu devient :
 🧩 A1 & rythme
 ```
 
-Une tuile = un résumé court. **Une seule famille détaillée est ouverte à la fois.**
+Une tuile = un résumé court. **Une seule famille détaillée est ouverte à la fois.** Les vraies cartes historiques restent gérées par leurs moteurs.
 
-Les vraies cartes historiques restent dans le DOM et continuent à être gérées par leurs moteurs.
+### Livraison
 
----
+PR #40 : les 8 workflows applicatifs ont terminé SUCCESS.
 
-# Tribunal Build 26.1
-
-```text
-quality
-Options
-nav-mobile
-Progression UX
-Listening-rate
-Session UX
-Real Life III
-Build 26.1 Voice replay + Details dashboard
-```
-
-Le nouveau smoke doit notamment prouver :
-
-- replay sans réseau ni persistance ;
-- voix/reconnaissance sanctuarisées ;
-- plusieurs familles de détails ;
-- Memory + Mastery toujours présentes ;
-- Real Life III toujours 36 / 108 ;
-- surface replay après résultat vocal.
+`main` `8ad7e5eb9cb2f64c58c086847c3e035463ab3ba3` : les 8 workflows applicatifs ont de nouveau terminé sans échec et Pages #98 a terminé SUCCESS.
 
 ---
 
-# Après Build 26.1
+# Prochaine passe
 
-- Build 27 — Data & Recovery ;
+## Build 27 — Data & Recovery Hardening
+
+Priorité désormais à la protection des données réelles : sauvegarde/restauration cohérente, migrations versionnées, snapshot avant migration, tolérance au localStorage corrompu et tests zéro-perte.
+
+Puis :
+
 - Build 28 — iPhone/PWA/Accessibility ;
 - Build 29 — Architecture Hardening ;
 - V2.0.0 — Freeze / Release.
@@ -131,4 +104,4 @@ assets/Favicon.png
 bottom navigation interaction baseline
 ```
 
-La suite clarifie l’expérience ; elle ne réinvente pas les moteurs.
+La suite clarifie et sécurise l’expérience ; elle ne réinvente pas les moteurs.
