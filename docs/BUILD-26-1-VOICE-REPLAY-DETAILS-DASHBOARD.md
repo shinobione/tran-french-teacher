@@ -1,17 +1,18 @@
 # Build 26.1 — Voice Self-Playback + Learning Details Dashboard
 
-Version candidate : **v1.19.1**  
-Statut : **CANDIDAT / EN COURS**  
-Date : **2026-08-11**
+Version : **v1.19.1**  
+Statut : **PROD / CLOS**  
+Date : **2026-08-11**  
+Commit production : `8ad7e5eb9cb2f64c58c086847c3e035463ab3ba3`
 
 ## Origine terrain
 
 Deux retours directs de Trân :
 
 1. pouvoir **réécouter sa propre voix** après avoir parlé, comme dans d’autres applications de langue ;
-2. `Parcours → Détails d’apprentissage` reste trop long une fois ouvert : les cartes des moteurs sont encore affichées en pile verticale.
+2. `Parcours → Détails d’apprentissage` restait trop long une fois ouvert : les cartes des moteurs étaient encore affichées en pile verticale.
 
-Build 26 Real Life French III est déjà PROD/CLOS et reste la baseline. Build 26.1 est un patch UX additif par-dessus.
+Build 26 Real Life French III reste la baseline contenu. Build 26.1 est un patch UX additif livré par-dessus.
 
 ---
 
@@ -24,11 +25,11 @@ voice-ios.js
 free-voice.js
 ```
 
-Ces fichiers ne sont pas modifiés.
+Ces fichiers sont restés byte-identiques.
 
 La reconnaissance pédagogique fonctionne d’abord exactement comme avant. `voice-replay.js` intervient seulement quand `.free-voice-result` existe déjà.
 
-## UX
+## UX livré
 
 ```text
 🎧 Écoute-toi
@@ -50,7 +51,7 @@ Local uniquement • non sauvegardé
 
 La reconnaissance Web Speech ne fournit pas à l’application son flux audio brut sous forme de `MediaStream`. Build 26.1 évite en plus de demander un second accès micro tant que Free Voice indique encore que la reconnaissance est active.
 
-Le choix est donc : **reconnaissance terminée → seconde prise volontaire courte → auto-écoute**.
+Le choix livré est donc : **reconnaissance terminée → seconde prise volontaire courte → auto-écoute**.
 
 La capture simultanée exacte du premier essai reste hors scope jusqu’à validation réelle sur l’iPhone de Trân.
 
@@ -95,7 +96,7 @@ Audio local
 
 ## Avant
 
-Build 25 a correctement caché les détails derrière une entrée volontaire, mais l’ouverture révélait encore :
+Build 25 avait correctement caché les détails derrière une entrée volontaire, mais l’ouverture révélait encore :
 
 ```text
 Memory
@@ -135,9 +136,7 @@ other     → future carte non classifiée
 
 Le dashboard ne crée pas de copies. Il déplace les vrais nœuds `.card` vers des panels toujours descendants de `.progress-layout`.
 
-Les moteurs historiques continuent donc à trouver leurs cartes et à mettre à jour leur `innerHTML` normalement.
-
-Une future carte inconnue reste visible via `Autres détails`.
+Les moteurs historiques continuent donc à trouver leurs cartes et à mettre à jour leur `innerHTML` normalement. Une future carte inconnue reste visible via `Autres détails`.
 
 ## Anti-boucle
 
@@ -165,7 +164,7 @@ voice-replay.js?v=1.19.1-b26.1
 progress-details-dashboard.js?v=1.19.1-b26.1
 ```
 
-Scenario doit rester :
+Production confirmée :
 
 ```text
 36 situations / 108 tours
@@ -174,7 +173,7 @@ Scenario doit rester :
 0 ambiguïté
 ```
 
-Le smoke Build 26 est rendu durable : il protège Pack III sans exiger que la version globale reste éternellement `1.19.0`.
+Le smoke Build 26 a été rendu durable : il protège Pack III sans exiger que la version globale reste éternellement `1.19.0`.
 
 ---
 
@@ -188,9 +187,9 @@ cache   = tran-french-teacher-v1.19.1-b26.1-voice-replay-details-dashboard
 
 ---
 
-# CI
+# CI / livraison
 
-Nouveau workflow :
+Workflow dédié :
 
 ```text
 .github/workflows/build26-1-ux-smoke.yml
@@ -206,17 +205,12 @@ Il vérifie :
 6. Chrome l40 : Real Life III toujours 36 / 108 ;
 7. Chrome : surface replay derrière un résultat vocal synthétique.
 
-Les anciens workflows restent obligatoires :
+Preuves :
 
-```text
-quality
-Options
-nav/mobile
-Progression UX
-Listening-rate
-Session UX
-Real Life French III
-```
+- PR #40 : quality, Options, nav/mobile, Progression UX, Listening-rate, Session UX, Real Life III et Build 26.1 smoke — **8/8 SUCCESS** ;
+- merge production : `8ad7e5eb9cb2f64c58c086847c3e035463ab3ba3` ;
+- `main` : mêmes **8 workflows applicatifs SUCCESS** ;
+- GitHub Pages **#98 SUCCESS**.
 
 ---
 
@@ -244,24 +238,16 @@ Real Life III Build 26
 - [x] branche créée depuis Build 26 PROD/CLOS ;
 - [x] voice replay additif ;
 - [x] dashboard de détails ;
-- [x] version/cache candidat ;
+- [x] version/cache ;
 - [x] Real Life III CI rendue durable ;
 - [x] workflow Build 26.1 ;
 - [x] README / ROADMAP / CHANGELOG / ARCHITECTURE candidat ;
-- [x] dossier Build 26.1 ;
-- [ ] PR ;
-- [ ] quality PR ;
-- [ ] Options PR ;
-- [ ] nav-mobile PR ;
-- [ ] Progression UX PR ;
-- [ ] Listening-rate PR ;
-- [ ] Session UX PR ;
-- [ ] Real Life III PR ;
-- [ ] Build 26.1 smoke PR ;
-- [ ] merge `main` ;
-- [ ] même tribunal `main` ;
-- [ ] Pages ;
-- [ ] docs PROD/CLOS.
+- [x] PR #40 ;
+- [x] 8 workflows PR SUCCESS ;
+- [x] merge `main` ;
+- [x] 8 workflows `main` SUCCESS ;
+- [x] Pages #98 SUCCESS ;
+- [x] docs PROD/CLOS.
 
 ## Hors scope
 
