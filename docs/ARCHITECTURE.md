@@ -132,6 +132,10 @@ Les cartes originales sont **déplacées dans le DOM, pas réimplémentées** : 
 
 # Baselines canoniques conservées
 
+## Build 24 — Real Life French II
+
+`real-life-data-2.js` reste le marqueur architectural du Pack II historique : **28 situations / 84 tours** avant Pack III.
+
 ## Build 26 — Real Life French III
 
 - 8 scènes / 24 tours Pack III ;
