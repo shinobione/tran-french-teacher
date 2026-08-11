@@ -4,7 +4,28 @@ Ce fichier conserve l’historique des versions livrées. Les intentions futures
 
 ## [Unreleased]
 
-Aucun changement non livré pour le moment.
+### v1.11.0 — Build 18 — Error Intelligence
+
+- ajout du stockage local `french-tranquille:error-intelligence:v1` ;
+- taxonomie fondée sur des preuves observables : rappel difficile, mismatch texte, erreur scénario, modèle nécessaire, phrase vocale non reconnue, réponse partielle, difficulté générique et répétition ;
+- historique borné à 20 événements détaillés par élément et 120 événements globaux récents ;
+- compteurs agrégés conservés au-delà de la fenêtre détaillée ;
+- prise en compte de la récence ;
+- détection des difficultés répétées dans une fenêtre de 30 minutes ;
+- suivi des récupérations après réussite ;
+- calcul de priorité local ;
+- focus Error Intelligence injecté dans Daily Coach quand une difficulté devient prioritaire ;
+- carte Error Intelligence dans Progression ;
+- mini-bilan de session ;
+- diagnostic dans Réglages ;
+- export JSON dédié `french-tranquille-error-intelligence` version 1 ;
+- Free Voice maintenant relié à Learning Memory ;
+- Free Voice envoie des preuves distinctes `free-voice-voice` et `free-voice-text` ;
+- une erreur technique micro/permission n’est pas enregistrée comme erreur d’apprentissage ;
+- Scenario Lab `scenario-miss` / `scenario-assisted` observés via Learning Memory ;
+- rating Révision difficile interprété comme `retrieval-difficult` ;
+- aucun diagnostic grammatical inventé sans preuve entrée/cible suffisante ;
+- ajout du smoke hook `?errorSmoke=1` pour la CI navigateur.
 
 ---
 
