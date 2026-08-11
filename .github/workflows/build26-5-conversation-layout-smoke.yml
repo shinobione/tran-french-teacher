@@ -103,7 +103,7 @@ jobs:
               google-chrome --headless=new --no-sandbox --disable-gpu \
               --user-data-dir="$profile" --window-size=1280,900 \
               --virtual-time-budget=32000 --dump-dom \
-              'http://127.0.0.1:4173/?uxSmoke=lesson8&b265Smoke=progress' >"$file"; then
+              'http://127.0.0.1:4173/?uxSmoke=lesson8&progressionSmoke=compact&b265Smoke=progress' >"$file"; then
               echo "Progress Chrome attempt $attempt timed out or exited non-zero"
               continue
             fi
@@ -141,7 +141,7 @@ jobs:
               google-chrome --headless=new --no-sandbox --disable-gpu \
               --user-data-dir="$profile" --window-size=390,844 \
               --virtual-time-budget=30000 --dump-dom \
-              'http://127.0.0.1:4173/?uxSmoke=lesson8&b265Smoke=progress-mobile' >"$file"; then
+              'http://127.0.0.1:4173/?uxSmoke=lesson8&progressionSmoke=compact&b265Smoke=progress-mobile' >"$file"; then
               echo "Mobile Chrome attempt $attempt timed out or exited non-zero"
               continue
             fi
