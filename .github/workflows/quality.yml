@@ -38,7 +38,17 @@ jobs:
           grep -q 'learning-memory.css' index.html
           grep -q 'learning-memory.js' index.html
           grep -q 'learning-memory.js' sw.js
-          grep -q "version: '1.7.0', build: 13" build-meta.js
+      - name: UX Visual Pass guard
+        run: |
+          grep -q 'v1.7.1 Build 14' visual-pass.css
+          grep -q '.screen-conversation .narrow' visual-pass.css
+          grep -q '.screen-review .flashcard' visual-pass.css
+          grep -q '.memory-progress-card' visual-pass.css
+          grep -q 'visual-pass.css' index.html
+          grep -q 'visual-pass.css' sw.js
+          grep -q "version: '1.7.1', build: 14" build-meta.js
+          grep -q "1.7.1-b14" index.html
+          grep -q "1.7.1-b14" sw.js
       - name: Node render smoke test
         run: |
           node <<'NODE'
