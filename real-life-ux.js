@@ -4,8 +4,18 @@
   const DEBUG_KEY = 'tran-french-teacher:debug-fr:v1';
   const isDebug = () => localStorage.getItem(DEBUG_KEY) === '1';
   const T = (vi, fr) => isDebug() ? fr : vi;
+  const smoke = new URLSearchParams(location.search).get('realLifeSmoke');
   let showAllLocked = false;
   let scheduled = false;
+
+  function publishSmoke(realLife, locked) {
+    if (smoke !== 'lesson8') return;
+    const html = document.documentElement;
+    html.dataset.realLifeUiTiles = String(realLife.length);
+    html.dataset.realLifeLockedVisible = String(locked.filter(tile => !tile.classList.contains('real-life-locked-hidden')).length);
+    html.dataset.realLifeReadyLabel = document.querySelector('.real-life-ready') ? '1' : '0';
+    html.dataset.realLifeTechnicalTitle = /Scenario Lab/i.test(document.querySelector('.scenario-head h2')?.textContent || '') ? '1' : '0';
+  }
 
   function decorateCard(card) {
     if (!card) return;
@@ -31,7 +41,7 @@
     for (const tile of tiles) {
       const id = tile.dataset.scenarioStart || '';
       const open = tile.classList.contains('unlocked');
-      const life = id.startsWith('jerry-');
+      const life = id.startsWith('jerry-') || /Jerry/i.test(tile.textContent || '');
       tile.classList.toggle('real-life-tile', life);
 
       if (life && !tile.querySelector('.real-life-badge')) {
@@ -72,13 +82,15 @@
     }
 
     const stats = card.querySelector('.scenario-stats');
-    if (stats && !stats.querySelector('.real-life-ready')) {
-      const ready = document.createElement('span');
+    let ready = stats?.querySelector('.real-life-ready');
+    if (stats && !ready) {
+      ready = document.createElement('span');
       ready.className = 'real-life-ready';
-      const count = realLife.length;
-      ready.textContent = `♡ ${count} ${T('tình huống gần gũi','situations personnelles')}`;
       stats.prepend(ready);
     }
+    if (ready) ready.textContent = `♡ ${realLife.length} ${T('tình huống gần gũi','situations personnelles')}`;
+
+    publishSmoke(realLife, locked);
   }
 
   function decorateRunner(card) {
