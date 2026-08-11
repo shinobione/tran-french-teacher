@@ -68,22 +68,26 @@
     if (!nav) {
       nav = document.createElement('nav');
       nav.className = 'ux-bottom-nav';
-      nav.setAttribute('aria-label', T('Điều hướng chính', 'Navigation principale'));
       document.body.appendChild(nav);
     }
+    nav.setAttribute('aria-label', T('Điều hướng chính', 'Navigation principale'));
 
-    const practiceActive = overlay || ['conversation','review'].includes(screen);
+    const practiceActive = Boolean(overlay) || ['conversation','review'].includes(screen);
     const items = [
       ['home','⌂',T('Hôm nay','Aujourd’hui'),screen === 'home'],
       ['practice','◎',T('Luyện tập','Pratiquer'),practiceActive],
       ['progress','◔',T('Lộ trình','Parcours'),screen === 'progress']
     ];
 
+    const signature = items.map(([id,,label,active]) => `${id}:${label}:${active ? 1 : 0}`).join('|');
+    if (nav.dataset.signature === signature) return;
+
     nav.innerHTML = items.map(([id,icon,label,active]) => `
       <button type="button" data-ux-nav="${id}" class="${active ? 'active' : ''}" aria-current="${active ? 'page' : 'false'}">
         <span aria-hidden="true">${icon}</span><strong>${esc(label)}</strong>
       </button>
     `).join('');
+    nav.dataset.signature = signature;
   }
 
   function openPractice() {
@@ -245,7 +249,7 @@
         window.FrenchTranquilleListening?.open?.();
       } else nativeGo(id);
     }
-  });
+  }, { capture: true });
 
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && overlay) closePractice();
@@ -258,8 +262,8 @@
   decorate();
 
   window.FrenchTranquilleUX = {
-    version: '1.15.0',
-    build: 22,
+    version: '1.17.2',
+    build: 24.2,
     openPractice,
     closePractice,
     refresh: decorate
