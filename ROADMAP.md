@@ -17,20 +17,17 @@
 11. Pas de gamification agressive ni clone de chatbot.
 12. Un nouveau moteur n’obtient pas automatiquement une nouvelle entrée de navigation.
 13. **Toute surface tappable doit produire un retour visuel immédiat sur mobile.**
-14. Les trois entrées principales `Aujourd’hui / Pratiquer / Parcours` doivent se comporter comme des écrans de même niveau.
+14. Le feedback d’un tap doit rester perceptible même si l’action déclenche un rerender ou un changement d’écran.
+15. Les trois entrées `Aujourd’hui / Pratiquer / Parcours` gardent des nœuds DOM persistants et un seul état actif.
 
 ---
 
 # Baseline production — v1.17.3 Build 24.3
 
-- socle : **Build 24 — Real Life French II** ;
-- **40 leçons / 241 éléments** ;
-- Learning Memory ; Daily Coach ; Mastery ; Error ; Listening ; Adaptive Language ;
-- Scenario : **28 situations / 84 tours** ;
-- Real Life I + II : **16 situations / 48 tours** ;
-- UX : **Aujourd’hui / Pratiquer / Parcours** ;
-- interaction mobile premium globalisée ;
-- `Pratiquer` = vrai troisième écran visuel ;
+- socle : Build 24 — Real Life French II ;
+- 40 leçons / 241 éléments ;
+- Scenario : 28 situations / 84 tours ;
+- UX : Aujourd’hui / Pratiquer / Parcours ;
 - progression protégée ;
 - voix iPhone et reconnaissance vocale baseline validée ;
 - coût 0 €.
@@ -46,30 +43,67 @@
 - Build 22 — UX Foundation & Runtime Integrity — ✅ CLOS
 - Build 23 — Real Life French I — ✅ CLOS
 - Build 24 — Real Life French II — ✅ INTÉGRÉ
-- Build 24.1 — Options Crash Hotfix — ✅ PROD
-- Build 24.2 — Navigation Interaction Hotfix — ✅ PROD
+- Build 24.1 — Options Crash — ✅ PROD
+- Build 24.2 — Navigation Interaction — ✅ PROD
 - Build 24.3 — Premium Interaction UX — ✅ CLOS
+
+---
+
+# v1.17.4 — Build 24.4 — Mobile Polish / Interaction Timing — 🔥 EN COURS
+
+## Intention
+
+Corriger le défaut observé sur vrai mobile : le feedback d’un nouvel onglet était détruit par le rerender de la bottom bar avant d’être perceptible, alors qu’un retap sur l’onglet déjà actif fonctionnait.
+
+## Navigation persistante
+
+- [x] suppression du `innerHTML` de reconstruction lors du changement actif ;
+- [x] nœuds Home / Pratiquer / Parcours persistants ;
+- [x] mise à jour in-place de `active / aria-current` ;
+- [x] exactement un onglet actif ;
+- [x] suppression du flash intermédiaire Home en quittant Pratiquer.
+
+## Retour premium durable
+
+- [x] `pointerdown` conservé ;
+- [x] ajout d’un `tap echo` indépendant du nœud ;
+- [x] le feedback peut survivre à un rerender ;
+- [x] `prefers-reduced-motion` respecté.
+
+## Header de leçon
+
+- [x] suppression du gros fond violet ;
+- [x] suppression du sticky ;
+- [x] titre intégré au fond ;
+- [x] retour compact ;
+- [x] séparation gradient fine.
+
+## Sanctuaires
+
+- [x] aucune clé de progression modifiée ;
+- [x] logo/favicon inchangés ;
+- [x] voice-ios/free-voice inchangés ;
+- [x] aucun curriculum/scénario modifié.
+
+## Contrat navigateur
+
+- [x] viewport mobile 390×844 ;
+- [x] feedback + tap echo sur les 3 onglets ;
+- [x] identité DOM inchangée après vraie navigation ;
+- [x] active unique ;
+- [x] header de leçon non sticky / transparent ;
+- [ ] quality générale ;
+- [ ] Options smoke ;
+- [ ] PR verte ;
+- [ ] main vert ;
+- [ ] Pages verte ;
+- [ ] docs release CLOS.
 
 ---
 
 # v1.18.0 — Build 25 — Real Life French III — PROCHAIN
 
-## Intention
-
-Problèmes quotidiens, émotions, explications, français oral courant vs forme écrite, humour simple et conversation moins guidée.
-
-La priorité reste de rendre Lucie plus capable **sans rendre l’interface plus complexe**.
-
-## Direction
-
-- réponses plus libres mais toujours déterministes ;
-- plusieurs formulations simples acceptables ;
-- français oral naturel côté Lucie/Jerry ;
-- forme standard toujours acceptée côté Trân ;
-- aucune nouvelle entrée de navigation ;
-- Scenario reste derrière `Pratiquer → Parler français` ;
-- Memory/Error alimentées par les vrais acquis ;
-- résolution des références contre le curriculum réel.
+Problèmes quotidiens, émotions, explications, français oral courant vs forme écrite et conversation moins guidée, **sans rendre l’interface plus complexe**.
 
 ---
 
@@ -78,18 +112,12 @@ La priorité reste de rendre Lucie plus capable **sans rendre l’interface plus
 - sauvegarde/restauration unifiée ;
 - migrations sûres et versionnées ;
 - snapshot automatique pré-migration ;
-- tolérance au `localStorage` corrompu ;
+- tolérance au localStorage corrompu ;
 - tests zéro-perte sur profils existants.
 
 # v1.20.0 — Build 27 — iPhone / PWA / Accessibility Hardening
 
-- safe areas ;
-- tactile ;
-- contraste ;
-- tailles ;
-- offline/install ;
-- tests iPhone réels ;
-- ergonomie faible aisance numérique.
+- safe areas ; tactile ; contraste ; tailles ; offline/install ; tests iPhone réels ; ergonomie faible aisance numérique.
 
 # v1.21.0 — Build 28 — Architecture Hardening
 
@@ -97,7 +125,7 @@ Découpage du vieux noyau uniquement avec snapshots comparatifs avant/après.
 
 # V2.0.0 — Freeze / Release
 
-Pas une nouvelle feature : release cohérente, sauvegardable, testée, documentée et utilisable sans connaître l’architecture interne.
+Release cohérente, sauvegardable, testée, documentée et utilisable sans connaître l’architecture interne.
 
 ---
 
