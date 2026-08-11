@@ -32,7 +32,7 @@ Un moteur peut être important sans être visible en permanence. La complexité 
 
 ---
 
-# Runtime canonique — v1.18.0 Build 25
+# Runtime candidat — v1.18.1 Build 25.1
 
 ```text
 progress-safety.js
@@ -64,24 +64,20 @@ progression-ux.js
 build-meta.js
 ```
 
-CSS Build 25 : `progression-ux.css`.
-
-`progression-ux.js` se charge après les moteurs qui injectent leurs cartes. Il ne remplace ni Memory, ni Mastery, ni le curriculum : il orchestre leur DOM une fois rendu.
+Build 25.1 ne modifie aucun moteur pédagogique. Il modifie uniquement la calibration du bridge audio final dans `build-meta.js` et l’identité cache/version correspondante.
 
 ---
 
-# Progression UX
+# Progression UX — Build 25
 
 Dans `.screen-progress .progress-layout` :
 
 1. `.progress-ux-overview` fournit le résumé apprenant ;
-2. le vieux `.progress-hero` et `.stats` sont masqués mais non supprimés ;
-3. les cartes secondaires sont rangées dans `details.progress-ux-details` ;
+2. le vieux hero/stats est masqué mais non supprimé ;
+3. les cartes secondaires vivent dans `details.progress-ux-details` ;
 4. le curriculum complet reste intact ;
 5. 5 lignes autour de la position actuelle sont visibles par défaut ;
-6. `Voir les 40 leçons` révèle tout sans recréer le curriculum.
-
-Les moteurs continuent à retrouver leurs cartes car elles restent descendantes de `.progress-layout`. Si un injecteur recrée une carte au premier niveau, l’orchestrateur la remet dans le bloc détails au frame suivant.
+6. `Voir les 40 leçons` révèle tout.
 
 Build 25 ne persiste aucune donnée.
 
@@ -89,7 +85,7 @@ Build 25 ne persiste aucune donnée.
 
 # État et sécurité
 
-Clés historiques à préserver :
+Clés historiques :
 
 ```text
 francais-avec-luc:learner:v1
@@ -98,68 +94,65 @@ french-tranquille:listening:v1
 french-tranquille:safety:pre-build22:v1
 ```
 
-Aucun changement UX ne doit les renommer pour des raisons esthétiques.
+Aucun changement UX ne doit les renommer.
 
 ---
 
-# Curriculum
+# Curriculum / Scenario
 
-- l1–l15 : `app.js` ;
-- l16–l25 : `curriculum-stage2.js` ;
-- l26–l40 : `curriculum-stage3.js`.
+Curriculum : **40 leçons / 241 éléments**.
 
-Contrat : **40 leçons / 241 éléments**.
-
----
-
-# Scenario Engine
+Scenario :
 
 ```text
-scenario-data.js      12 situations / 36 tours
-real-life-data.js      6 situations / 18 tours
-real-life-data-2.js   10 situations / 30 tours
+scenario-data.js      12 / 36
+real-life-data.js      6 / 18
+real-life-data-2.js   10 / 30
+TOTAL                 28 / 84
 ```
-
-Total : **28 situations / 84 tours**.
-
-`real-life-ux.js` limite déjà les scènes ouvertes visibles à `MAX_OPEN = 6`.
 
 ---
 
 # Learning Memory / Error / Adaptive / Mastery
 
-- Memory suit solidité et échéances ;
-- Error conserve uniquement des erreurs observables ;
-- Adaptive Language ajuste le soutien VI/FR ;
-- Mastery synthétise des preuves ;
-- Daily Coach choisit les priorités.
-
-Build 25 ne change aucune règle de ces moteurs. Il retire seulement leurs grands panneaux du flux principal de Parcours.
+Ces moteurs restent inchangés. Ils travaillent derrière l’interface et alimentent Daily Coach, Parcours et les exercices.
 
 ---
 
-# Listening
+# Listening — Build 25.1
 
-Audio via `speechSynthesis`.
-
-État production après PR #29 :
+Le moteur historique produit encore :
 
 ```text
-normal = 0.88
-lent   = 0.68
+normal request = 0.88
+slow request   = 0.68
 ```
 
-Le pont est porté par `build-meta.js` sans toucher à `voice-ios.js`.
+La couche `voice-ios.js` reste propriétaire de la voix choisie et de la vitesse globale Lucie. Comme elle normalise les utterances, `build-meta.js` installe un bridge ciblé.
 
-Build 25.1 testera **0.64**, puis éventuellement **0.62**.
+Calibration candidate :
+
+```text
+0.88 request → 0.88 effectif
+0.68 request → 0.64 effectif
+```
+
+Le bridge place temporairement l’effective rate dans `tran-french-teacher:luc-rate:v1` uniquement pendant l’appel hérité, puis restaure exactement la valeur précédente.
+
+Aucune modification persistante du réglage utilisateur.
+
+Observabilité :
+
+```text
+window.FrenchTranquilleListeningRates
+html[data-listening-normal-rate="0.88"]
+html[data-listening-engine-slow-rate="0.68"]
+html[data-listening-slow-rate="0.64"]
+```
 
 ---
 
 # Voice / branding — sanctuaires
-
-Retours terrain iPhone : voix Lucie naturelle et reconnaissance française satisfaisante.
-
-CI protège :
 
 ```text
 voice-ios.js
@@ -168,13 +161,15 @@ assets/LOGO.png
 assets/Favicon.png
 ```
 
+La voix Lucie, le pitch et la reconnaissance ne sont pas modifiés par Build 25.1.
+
 ---
 
 # UX Shell
 
 Navigation : `Aujourd’hui / Pratiquer / Parcours`.
 
-Builds 24.3–24.5 garantissent feedback pointerdown, tap echo, nœuds persistants, état actif unique, Pratiquer comme écran et header de leçon allégé. Build 25 n’intervient pas dans cette couche.
+Builds 24.3–24.5 garantissent feedback pointerdown, tap echo, nœuds persistants, état actif unique et header léger. Build 25/25.1 préservent cette baseline.
 
 ---
 
@@ -186,14 +181,13 @@ Contrats obligatoires :
 2. Options ;
 3. nav/mobile ;
 4. Progression UX compact / expanded / details ;
-5. branding + voice hashes ;
-6. curriculum 40/241 ;
-7. Scenario 28/84 ;
-8. Error / Listening / Adaptive ;
-9. ancien profil l8 ;
-10. aucune fatal card.
-
-Build 25 a passé ces contrats sur PR puis sur `main`.
+5. **Listening rate smoke 25.1** ;
+6. branding + voice hashes ;
+7. curriculum 40/241 ;
+8. Scenario 28/84 ;
+9. Error / Listening / Adaptive ;
+10. ancien profil l8 ;
+11. aucune fatal card.
 
 ---
 
@@ -205,4 +199,4 @@ Quand Trân utilise activement la PWA : aucun nouveau runtime/cache sauf inciden
 
 # Dette technique
 
-`app.js` reste monolithique par choix de sécurité. Son extraction est réservée à Architecture Hardening avec comparaison d’état avant/après.
+`app.js` reste monolithique par choix de sécurité. Son extraction est réservée à Architecture Hardening.
