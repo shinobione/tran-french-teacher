@@ -24,7 +24,7 @@
 - **40 leçons / 241 éléments** ;
 - Learning Memory ; Daily Coach ; Mastery ; Error ; Listening ; Adaptive Language ;
 - Scenario : **18 situations / 54 tours** ;
-- Real Life French I : **6 situations / 18 tours** ;
+- Real Life I : **6 situations / 18 tours** ;
 - UX : **Aujourd’hui / Pratiquer / Parcours** ;
 - progression protégée ;
 - voix iPhone et reconnaissance vocale baseline validée ;
@@ -41,99 +41,93 @@
 - Build 22 — UX Foundation & Runtime Integrity — ✅ CLOS
 - Build 23 — Real Life French I — ✅ CLOS
 
-### Preuves Build 23
-
-- PR #18 : SUCCESS ;
-- merge `main` : `7f5dd657e5f46a2847c443ffb8f5d0154a89924a` ;
-- CI `main` run #63 : SUCCESS ;
-- GitHub Pages run #77 : SUCCESS ;
-- profil leçon 8 : zéro perte ;
-- 5 situations personnelles déjà accessibles, 1 verrouillée par `l8` ;
-- Error / Listening / Adaptive non régressés ;
-- branding + voix inchangés.
-
 ---
 
-# v1.17.0 — Build 24 — Real Life French II — 🔜 PROCHAIN
+# v1.17.0 — Build 24 — Real Life French II — 🔥 EN COURS
 
 ## Intention
 
-Prolonger les situations personnelles à mesure que Trân avance vers les leçons 9–20, sans changer son modèle mental de l’application.
+Prolonger **Pratiquer → Parler français** vers les acquis des leçons 9–20, en créant des séquences personnelles qui relient plusieurs compétences au lieu de dupliquer les scénarios génériques existants.
 
-Toujours :
+## Pack II — codé
+
+10 situations / 30 tours :
+
+1. `jerry-rdv-train` — l9+l10 ;
+2. `jerry-shopping-budget` — l11 ;
+3. `jerry-diner-choix` — l5+l12 ;
+4. `jerry-mal-dehors` — l8+l13 ;
+5. `jerry-presente-fiance` — l14 ;
+6. `jerry-prete-rentrer` — l16+l18 ;
+7. `jerry-reservation-aide` — l17 ;
+8. `jerry-cle-appartement` — l18+l19 ;
+9. `jerry-probleme-eau` — l17+l19 ;
+10. `jerry-reseau-message` — l20.
+
+Total candidat :
 
 ```text
-Aujourd’hui
-Pratiquer
-Parcours
+Scenario = 28 situations / 84 tours
+Real Life I + II = 16 situations / 48 tours
 ```
 
-Build 24 enrichira encore **Pratiquer → Parler français**.
+## UX catalogue — codée
 
-## Axes
+- [x] aucun nouveau menu ;
+- [x] scènes personnelles ouvertes prioritaires ;
+- [x] tri vers les prérequis les plus récents ;
+- [x] **6 situations ouvertes max visibles** par défaut ;
+- [x] bouton pour voir les autres situations ouvertes ;
+- [x] 2 futures scènes verrouillées max visibles ;
+- [x] badge `Ta vraie vie` conservé.
 
-### Déplacements / gare
+## Profils de contrôle
 
-- acheter un billet ;
-- demander un aller simple / aller-retour ;
-- demander l’heure de départ ;
-- comprendre quai / gare / billet quand déjà appris.
+### l8
 
-### Rendez-vous / déplacement simple
+- [ ] smoke Build 23 reste vert ;
+- [ ] progression l8 zéro-perte.
 
-- dire où elle va ;
-- confirmer une heure ;
-- demander quand Jerry arrive ;
-- mini-échange avant de se retrouver.
+### l15
 
-### Shopping / restaurant
+- [ ] pack II : **5** scènes ouvertes ;
+- [ ] catalogue visible limité à 6 ;
+- [ ] scènes ouvertes supplémentaires cachées mais accessibles.
 
-- demander une taille / un prix selon acquis ;
-- commander un repas ;
-- demander l’addition ;
-- exprimer une préférence.
+### l20
 
-### Santé / pharmacie
+- [ ] pack II : **10** scènes ouvertes ;
+- [ ] catalogue visible toujours limité à 6 ;
+- [ ] téléphone/logement accessibles.
 
-- expliquer un besoin très simple ;
-- demander une pharmacie ;
-- comprendre une réponse courte.
+## Protection
 
-### Proches
+- [x] aucune nouvelle clé apprenant ;
+- [x] même clé Scenario ;
+- [x] logo/favicon non modifiés ;
+- [x] voice/free-voice non modifiés ;
+- [ ] hashes vérifiés par CI ;
+- [ ] Error / Listening / Adaptive non régressés.
 
-- rencontrer un proche de Jerry ;
-- dire qui elle est ;
-- parler très simplement de famille / provenance / goûts.
+## Clôture
 
-### Téléphone / logement
-
-À introduire seulement quand les prérequis Stage 2 correspondants sont réellement terminés. Pas de réponse obligatoire basée sur un élément non appris.
-
-## Règles UX
-
-- aucun nouveau menu ;
-- le système de tri/condensation Build 23 reste la seule vue Scenario apprenante ;
-- les scènes ouvertes pertinentes remontent avant les scènes verrouillées ;
-- nouvelles scènes futures ne doivent pas saturer l’écran ;
-- nom technique du pack invisible côté Trân.
-
-## Tests obligatoires
-
-- smoke leçon 8 Build 22 reste vert ;
-- smoke Build 23 reste vert ;
-- profil l15 : nouvelles scènes du pack II correctement déverrouillées ;
-- profil l20 : scènes téléphone/logement si présentes ;
-- aucune clé de progression ajoutée sans justification ;
-- Scenario total et tours audités ;
-- voice / free-voice / logo / favicon hashes inchangés ;
-- Error / Listening / Adaptive non régressés ;
-- PR → `main` → Pages.
+- [x] data pack II ;
+- [x] UX catalogue scalable ;
+- [x] runtime/cache Build 24 ;
+- [ ] README / CHANGELOG / ARCHITECTURE / dossier Build 24 ;
+- [ ] CI Build 24 ;
+- [ ] PR verte ;
+- [ ] main vert ;
+- [ ] Pages verte ;
+- [ ] docs release CLOS.
 
 ---
 
-# v1.18.0 — Build 25 — Real Life French III
+# v1.18.0 — Build 25 — Real Life French III — PROCHAIN
 
 Problèmes quotidiens, émotions, explications, français oral courant vs forme écrite, humour simple et conversation moins guidée.
+
+La priorité sera de passer de réponses isolées vers des mini-conversations plus libres **sans rendre l’interface plus complexe**.
 
 ---
 
