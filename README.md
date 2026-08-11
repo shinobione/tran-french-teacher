@@ -104,6 +104,10 @@ La capture exacte du premier essai reste hors scope tant qu’un test réel sur 
 - ancien profil l8 / progression protégée ;
 - logo, favicon, `voice-ios.js`, `free-voice.js` sanctuarisés.
 
+### Baseline historique protégée
+
+Le contrat **v1.17.0 — Build 24 — Real Life French II** reste explicitement documenté : avant Real Life III, Scenario comptait **28 situations / 84 tours**. Les fichiers et tests historiques associés restent des gardes de non-régression.
+
 Aucune migration learner/Memory/Scenario/Listening n’a été faite dans Build 26.2.
 
 ## CI / production
@@ -143,4 +147,4 @@ Voice Replay + Details Dashboard Build 26.1
 4. Build 29 — Architecture Hardening.
 5. V2.0.0 — Freeze / Release.
 
-Voir `ROADMAP.md`, `CHANGELOG.md`, `docs/ARCHITECTURE.md`, `docs/BUILD-26-1-VOICE-REPLAY-DETAILS-DASHBOARD.md`.
+Voir `ROADMAP.md`, `CHANGELOG.md`, `docs/ARCHITECTURE.md`, `docs/BUILD-26-1-VOICE-REPLAY-DETAILS-DASHBOARD.md`, `docs/BUILD-26-2-CLICK-LISTENING-HOTFIX.md`.
