@@ -28,8 +28,6 @@ jobs:
           grep -q 'progress-details-dashboard.css?v=1.19.1-b26.1' index.html
           grep -q 'voice-replay.js?v=1.19.1-b26.1' index.html
           grep -q 'progress-details-dashboard.js?v=1.19.1-b26.1' index.html
-          grep -q "version: '1.19.1', build: '26.1'" build-meta.js
-          grep -q '1.19.1-b26.1-voice-replay-details-dashboard' index.html sw.js
           grep -q 'real-life-data-3.js?v=1.19.0-b26' index.html
           grep -q 'real-life-coach.js?v=1.19.0-b26' index.html
           grep -q 'voice-replay.js' sw.js

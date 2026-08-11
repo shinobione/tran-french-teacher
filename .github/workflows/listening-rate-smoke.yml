@@ -23,10 +23,11 @@ jobs:
           node --check sw.js
           grep -q 'normal: 0.88' build-meta.js
           grep -q 'engineSlow: 0.68' build-meta.js
-          grep -q 'slow: 0.64' build-meta.js
+          grep -q 'slow: 0.65' build-meta.js
           grep -q 'LISTENING_RATES.slow' build-meta.js
           grep -q 'FrenchTranquilleListeningRates' build-meta.js
-          grep -q 'build-meta.js?v=' index.html sw.js
+          grep -q 'build-meta.js?v=1.19.2-b26.2' index.html
+          grep -q "n>=.65" voice-ios.js
       - name: Voice and branding remain sanctuarized
         run: |
           test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
@@ -43,7 +44,7 @@ jobs:
           google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=18000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8' >/tmp/listening-rate.html
           if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/listening-rate.html; then cat /tmp/listening-rate.html; exit 1; fi
           grep -q 'data-listening-normal-rate="0.88"' /tmp/listening-rate.html
-          grep -q 'data-listening-slow-rate="0.64"' /tmp/listening-rate.html
+          grep -q 'data-listening-slow-rate="0.65"' /tmp/listening-rate.html
           grep -q 'data-listening-engine-slow-rate="0.68"' /tmp/listening-rate.html
           grep -q 'app-shell screen-home' /tmp/listening-rate.html
       - name: Stop static server

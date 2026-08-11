@@ -1,6 +1,6 @@
 // Production baseline kept explicit for historical CI contracts.
 const PRODUCTION_BASELINE = { version: '1.17.0', build: 24 };
-const META = { version: '1.19.1', build: '26.1', baseline: PRODUCTION_BASELINE };
+const META = { version: '1.19.2', build: '26.2', baseline: PRODUCTION_BASELINE };
 
 window.FrenchTranquilleBuildMeta = META;
 
@@ -22,7 +22,9 @@ window.FrenchTranquilleBuildMeta = META;
   }
 });
 
-const LISTENING_RATES = Object.freeze({ normal: 0.88, engineSlow: 0.68, slow: 0.64 });
+// voice-ios.js accepts >= 0.65. Keep slow exactly on that safe floor so the
+// Listening bridge cannot fall back to Lucie's default ~0.84 rate.
+const LISTENING_RATES = Object.freeze({ normal: 0.88, engineSlow: 0.68, slow: 0.65 });
 window.FrenchTranquilleListeningRates = LISTENING_RATES;
 document.documentElement.dataset.listeningNormalRate = String(LISTENING_RATES.normal);
 document.documentElement.dataset.listeningSlowRate = String(LISTENING_RATES.slow);
