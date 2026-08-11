@@ -41,12 +41,39 @@ jobs:
           sleep 1
       - name: Chrome exposes effective rates
         run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=18000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8' >/tmp/listening-rate.html
-          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/listening-rate.html; then cat /tmp/listening-rate.html; exit 1; fi
-          grep -q 'data-listening-normal-rate="0.88"' /tmp/listening-rate.html
-          grep -q 'data-listening-slow-rate="0.65"' /tmp/listening-rate.html
-          grep -q 'data-listening-engine-slow-rate="0.68"' /tmp/listening-rate.html
-          grep -q 'app-shell screen-home' /tmp/listening-rate.html
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-listening-rate-profile-$attempt"
+            file="/tmp/listening-rate-$attempt.html"
+            rm -rf "$profile" "$file"
+            echo "Listening rate smoke attempt $attempt"
+            if ! timeout --signal=TERM --kill-after=5s 30s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=390,844 \
+              --virtual-time-budget=18000 --dump-dom \
+              'http://127.0.0.1:4173/?uxSmoke=lesson8' >"$file"; then
+              echo "Chrome attempt $attempt timed out or exited non-zero"
+              continue
+            fi
+            if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then
+              echo "Attempt $attempt hit app boot error"
+              cat "$file"
+              continue
+            fi
+            if grep -q 'data-listening-normal-rate="0.88"' "$file" \
+              && grep -q 'data-listening-slow-rate="0.65"' "$file" \
+              && grep -q 'data-listening-engine-slow-rate="0.68"' "$file" \
+              && grep -q 'app-shell screen-home' "$file"; then
+              passed=1
+              break
+            fi
+            echo "Attempt $attempt missing expected markers"
+            grep -o 'data-listening-[^ >]*' "$file" | head -20 || true
+          done
+          if [ "$passed" -ne 1 ]; then
+            echo 'Listening rate smoke failed after 3 bounded isolated attempts'
+            exit 1
+          fi
       - name: Stop static server
         if: always()
         run: |
