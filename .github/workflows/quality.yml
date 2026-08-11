@@ -20,11 +20,14 @@ jobs:
       - name: Syntax check
         run: |
           node --check app.js
+          node --check curriculum-stage2.js
+          node --check stage2-boot.js
           node --check debug-fr.js
           node --check voice-ios.js
           node --check free-voice.js
           node --check build-meta.js
           node --check learning-memory.js
+          node --check daily-coach.js
       - name: Curriculum UX guard
         run: |
           grep -q 'Build 12 — curriculum UX' styles.css
@@ -46,10 +49,37 @@ jobs:
           grep -q '.memory-progress-card' visual-pass.css
           grep -q 'visual-pass.css' index.html
           grep -q 'visual-pass.css' sw.js
-          grep -q "version: '1.7.1', build: 14" build-meta.js
-          grep -q "1.7.1-b14" index.html
-          grep -q "1.7.1-b14" sw.js
-      - name: Node render smoke test
+          grep -q 'lucie-avatar.css' index.html
+          grep -q 'lucie-avatar.css' sw.js
+      - name: Build 15 A0 to A1 guard
+        run: |
+          grep -q "id:'l16'" curriculum-stage2.js
+          grep -q "id:'l25'" curriculum-stage2.js
+          grep -q "Je suis prête" curriculum-stage2.js
+          grep -q "J'ai une réservation" curriculum-stage2.js
+          grep -q "Il n'y a pas d'eau chaude" curriculum-stage2.js
+          grep -q "Qu'est-ce que tu fais" curriculum-stage2.js
+          grep -q 'CORE.lessons.push' curriculum-stage2.js
+          grep -q 'CORE.items = ' curriculum-stage2.js
+          grep -q 'curriculum-stage2.css' index.html
+          grep -q 'curriculum-stage2.js' index.html
+          grep -q 'stage2-boot.js' index.html
+          grep -q 'curriculum-stage2.js' sw.js
+          grep -q 'stage2-boot.js' sw.js
+          grep -q "version: '1.8.0', build: 15" build-meta.js
+          grep -q '1.8.0-b15' index.html
+          grep -q '1.8.0-b15' sw.js
+          grep -q '25 leçons / 148 éléments' README.md
+      - name: Daily Coach guard
+        run: |
+          grep -q 'daily-coach-card' daily-coach.js
+          grep -q 'Séance du jour' daily-coach.js
+          grep -q 'Rythme conseillé' daily-coach.js
+          grep -q 'daily-coach.css' index.html
+          grep -q 'daily-coach.js' index.html
+          grep -q 'daily-coach.css' sw.js
+          grep -q 'daily-coach.js' sw.js
+      - name: Node base-engine render smoke test
         run: |
           node <<'NODE'
           const store = new Map();
@@ -70,15 +100,15 @@ jobs:
           global.confirm = () => false;
           require('./app.js');
           if (!app.innerHTML || app.innerHTML.length < 500) {
-            throw new Error('Home render produced no meaningful HTML');
+            throw new Error('Base home render produced no meaningful HTML');
           }
           if (!app.innerHTML.includes('A0 • 15 bài')) {
-            throw new Error('Expected 15-lesson curriculum badge was not rendered');
+            throw new Error('Base engine should still render its 15 native lessons before Stage 2 boot');
           }
           if (!app.innerHTML.includes('Ngày đầu tiên ở Pháp')) {
-            throw new Error('Lesson 15 was not rendered');
+            throw new Error('Base lesson 15 was not rendered');
           }
-          console.log('Node home render OK:', app.innerHTML.length, 'chars');
+          console.log('Node base-engine home render OK:', app.innerHTML.length, 'chars');
           NODE
       - name: Real Chrome browser smoke test
         run: |
@@ -91,7 +121,7 @@ jobs:
             --headless=new \
             --no-sandbox \
             --disable-gpu \
-            --virtual-time-budget=7000 \
+            --virtual-time-budget=9000 \
             --dump-dom \
             http://127.0.0.1:4173/ > /tmp/french-tranquille-dom.html
           if grep -E -q 'id="app"[^>]*><div class="boot-status' /tmp/french-tranquille-dom.html; then
@@ -101,8 +131,11 @@ jobs:
           fi
           grep -E -q 'id="app"[^>]*><div class="app-shell screen-home"' /tmp/french-tranquille-dom.html
           grep -q 'home-dashboard' /tmp/french-tranquille-dom.html
-          grep -q 'A0 • 15 bài' /tmp/french-tranquille-dom.html
-          grep -q 'Ngày đầu tiên ở Pháp' /tmp/french-tranquille-dom.html
+          grep -q 'A0 → A1 • 25 bài' /tmp/french-tranquille-dom.html
+          grep -q 'Câu hỏi ngắn để tiếp tục hội thoại' /tmp/french-tranquille-dom.html
+          grep -q 'curriculum-chapter' /tmp/french-tranquille-dom.html
           grep -q 'memory-home-card' /tmp/french-tranquille-dom.html
+          grep -q 'daily-coach-card' /tmp/french-tranquille-dom.html
+          grep -q 'Buổi học hôm nay' /tmp/french-tranquille-dom.html
           grep -q 'PWA-3' /tmp/french-tranquille-dom.html
-          echo 'Real Chrome home + Learning Memory render OK'
+          echo 'Real Chrome Build 15: 25 lessons + Learning Memory + Daily Coach OK'

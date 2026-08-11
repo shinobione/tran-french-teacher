@@ -1,0 +1,123 @@
+/* French Trân'quille — v1.8.0 Build 15
+   Stage 2 curriculum: A0 -> early A1. */
+
+.curriculum-chapter{
+  position:sticky;
+  top:0;
+  z-index:2;
+  margin:10px 0 7px;
+  padding:7px 9px;
+  border-radius:9px;
+  background:rgba(8,14,25,.92);
+  border:1px solid rgba(189,165,245,.12);
+  color:#899ab2;
+  font-size:.62rem;
+  font-weight:850;
+  letter-spacing:.09em;
+  backdrop-filter:blur(10px);
+}
+.curriculum-chapter[data-chapter="16"],.curriculum-chapter[data-chapter="21"]{
+  color:#cfc0f0;
+  border-color:rgba(189,165,245,.2);
+  background:linear-gradient(90deg,rgba(143,115,216,.12),rgba(8,14,25,.94));
+}
+.lesson-row:nth-of-type(n+16) .lesson-row-icon{
+  background:linear-gradient(145deg,rgba(143,115,216,.13),rgba(147,238,201,.07));
+  border-color:rgba(189,165,245,.18);
+}
+
+.stage2-grammar-note{
+  margin-top:24px;
+  padding:15px 16px;
+  border-radius:15px;
+  border:1px solid rgba(189,165,245,.16);
+  border-left:3px solid rgba(189,165,245,.7);
+  background:linear-gradient(135deg,rgba(143,115,216,.075),rgba(147,238,201,.035));
+}
+.stage2-grammar-note span{
+  display:block;
+  margin-bottom:7px;
+  color:#d8cbf3;
+  font-size:.72rem;
+  font-weight:850;
+  letter-spacing:.03em;
+}
+.stage2-grammar-note p{
+  margin:0;
+  color:#b4c0d2;
+  font-size:.84rem;
+  line-height:1.55;
+}
+
+.stage2-practice-card{
+  grid-column:2;
+  position:relative;
+  overflow:hidden;
+  border-color:rgba(189,165,245,.19)!important;
+  background:
+    radial-gradient(circle at 100% 0,rgba(147,238,201,.065),transparent 30%),
+    linear-gradient(155deg,rgba(27,29,48,.96),rgba(13,23,37,.96))!important;
+}
+.stage2-practice-card::before{
+  content:"";
+  position:absolute;
+  left:0;right:0;top:0;
+  height:2px;
+  background:linear-gradient(90deg,var(--lilac-2,#bda5f5),var(--mint-2,#93eec9),transparent 86%);
+}
+.stage2-practice-card h2{margin:7px 0 0;font-size:1rem}
+.stage2-practice-card>p{color:#c7d1de;line-height:1.55}
+.stage2-practice-card input{
+  width:100%;
+  min-height:50px;
+  margin:4px 0 9px;
+  padding:0 13px;
+  border-radius:13px;
+  border:1px solid rgba(189,165,245,.2);
+  background:#0b1422;
+  color:#eef3f8;
+  font-size:16px;
+}
+.stage2-practice-card input:focus{
+  outline:none;
+  border-color:rgba(189,165,245,.52);
+  box-shadow:0 0 0 3px rgba(143,115,216,.07);
+}
+
+.stage2-progress-card{
+  border-color:rgba(189,165,245,.18)!important;
+  background:
+    radial-gradient(circle at 95% 4%,rgba(143,115,216,.09),transparent 28%),
+    linear-gradient(155deg,rgba(24,29,47,.97),rgba(13,23,37,.97))!important;
+}
+.stage2-progress-card>p{color:#aebdd0;line-height:1.55}
+.stage2-foundations{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:14px;
+}
+.stage2-foundations span{
+  padding:6px 9px;
+  border-radius:999px;
+  border:1px solid rgba(189,165,245,.17);
+  background:rgba(143,115,216,.07);
+  color:#cfc3ec;
+  font-size:.7rem;
+  font-weight:750;
+}
+.stage2-foundations span:nth-child(5),.stage2-foundations span:nth-child(6){
+  border-color:rgba(147,238,201,.16);
+  background:rgba(147,238,201,.055);
+  color:#b9e8d4;
+}
+
+@media(max-width:860px){
+  .stage2-practice-card{grid-column:1}
+}
+
+@media(max-width:520px){
+  .curriculum-chapter{position:static;font-size:.59rem}
+  .stage2-grammar-note{margin-top:18px;padding:13px 14px}
+  .stage2-foundations{gap:6px}
+}
