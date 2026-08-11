@@ -1,5 +1,5 @@
-const CACHE='tran-french-teacher-v1.7.1-b14';
-const V='1.7.1-b14';
+const CACHE='tran-french-teacher-v1.8.0-b15';
+const V='1.8.0-b15';
 const CORE=[
   './',
   './index.html',
@@ -7,13 +7,17 @@ const CORE=[
   `./brand.css?v=${V}`,
   `./learning-memory.css?v=${V}`,
   `./visual-pass.css?v=${V}`,
-  './lucie-avatar.css?v=1.7.1-b14-avatar1',
+  `./lucie-avatar.css?v=${V}`,
+  `./curriculum-stage2.css?v=${V}`,
+  `./daily-coach.css?v=${V}`,
   `./app.js?v=${V}`,
+  `./curriculum-stage2.js?v=${V}`,
   `./debug-fr.js?v=${V}`,
   `./voice-ios.js?v=${V}`,
   `./free-voice.js?v=${V}`,
   `./build-meta.js?v=${V}`,
   `./learning-memory.js?v=${V}`,
+  `./daily-coach.js?v=${V}`,
   `./manifest.webmanifest?v=${V}`,
   `./assets/LOGO.png?v=${V}`,
   `./assets/Favicon.png?v=${V}`,
