@@ -61,7 +61,7 @@ Chaque dialogue exige que ses acquis de base soient déjà connus.
 
 API navigateur : `speechSynthesis`.
 
-Deux vitesses :
+Deux vitesses demandées par le moteur :
 
 ```text
 normal ≈ 0.88
@@ -180,7 +180,6 @@ Le smoke :
 - docs synchronisées ;
 - PR + main + Pages verts.
 
-
 ---
 
 ## Clôture production
@@ -203,3 +202,32 @@ Validation :
 - Chrome direct sur l’URL publique pour Home et Listening.
 
 État livré : **v1.13.0 • Build 20 • 40 leçons • 238 éléments • Listening actif**.
+
+---
+
+## Addendum terrain — 2026-08-11
+
+Un conflit ultérieur a été identifié : `listening-engine.js` demandait correctement `0.88` / `0.68`, mais la couche globale Lucie réappliquait sa vitesse générale aux deux lectures. PR #29 a corrigé ce conflit **sans modifier `voice-ios.js`**.
+
+État réellement observé après correction :
+
+```text
+Vitesse normale = 0.88
+Lent            = 0.68
+```
+
+Retour utilisateur après écoute : la différence est maintenant nette, mais le mode `Lent` pourrait encore être légèrement ralenti.
+
+### Calibration reportée
+
+Aucun changement immédiat : Trân utilise l’application en conditions réelles.
+
+Prochaine calibration, après sa session :
+
+- comparer **0.68 / 0.64 / 0.62** sur la même phrase ;
+- même iPhone ;
+- même voix Lucie ;
+- même pitch ;
+- retenir la valeur qui reste naturelle sans devenir artificiellement syllabée.
+
+Le choix final doit venir du test terrain, pas d’une valeur théorique.
