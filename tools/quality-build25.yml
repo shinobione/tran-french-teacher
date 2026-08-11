@@ -1,0 +1,174 @@
+name: French Trân'quille quality
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax — full active runtime
+        run: |
+          for f in app.js progress-safety.js curriculum-stage2.js curriculum-stage3.js stage2-boot.js debug-fr.js voice-ios.js free-voice.js learning-memory.js error-intelligence.js language-ratio-core.js language-ratio.js daily-coach.js mastery-engine.js mastery-stage3.js scenario-data.js real-life-data.js real-life-data-2.js real-life-data-3.js scenario-host.js scenario-engine.js real-life-ux.js real-life-coach.js listening-data.js listening-engine.js ux-shell.js build-meta.js sw.js; do
+            node --check "$f"
+          done
+
+      - name: Sanctuaries — branding and validated iPhone voice baseline
+        run: |
+          test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
+          test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+
+      - name: Curriculum + Scenario + Real Life III data contract
+        run: |
+          node <<'NODE'
+          const store=new Map();
+          global.localStorage={getItem:k=>store.has(k)?store.get(k):null,setItem:(k,v)=>store.set(k,String(v)),removeItem:k=>store.delete(k)};
+          const app={innerHTML:''};
+          global.window=global;
+          global.document={querySelector:s=>s==='#app'?app:null,querySelectorAll:()=>[],getElementById:id=>id==='app'?app:null,addEventListener:()=>{},createElement:()=>({className:'',dataset:{},innerHTML:'',appendChild(){},prepend(){},remove(){},querySelector(){return null},querySelectorAll(){return[]}})};
+          global.navigator={};global.confirm=()=>false;global.requestAnimationFrame=fn=>fn();global.queueMicrotask=fn=>fn();global.MutationObserver=class{observe(){}};global.window.addEventListener=()=>{};global.window.scrollTo=()=>{};
+          require('./app.js');require('./curriculum-stage2.js');require('./curriculum-stage3.js');
+          const c=global.FrenchTranquilleCurriculum;
+          if(!c||c.lessons.length!==40||c.items.length!==241)throw new Error(`Curriculum mismatch ${c?.lessons?.length}/${c?.items?.length}`);
+          const itemIds=new Set(c.items.map(x=>x.id));
+          const lessonIds=new Set(c.lessons.map(x=>x.id));
+          if(itemIds.size!==241||lessonIds.size!==40)throw new Error('Duplicate curriculum IDs');
+
+          require('./scenario-data.js');require('./real-life-data.js');require('./real-life-data-2.js');require('./real-life-data-3.js');
+          const all=global.FrenchTranquilleScenarioData.scenarios;
+          const p1=global.FrenchTranquilleRealLife1,p2=global.FrenchTranquilleRealLife2,p3=global.FrenchTranquilleRealLife3;
+          if(all.length!==36)throw new Error(`Expected 36 scenarios, got ${all.length}`);
+          if(all.reduce((n,s)=>n+s.turns.length,0)!==108)throw new Error('Expected 108 total turns');
+          if(p1.scenarios.length!==6||p2.scenarios.length!==10||p3.scenarios.length!==8)throw new Error('Real Life pack counts mismatch');
+          if(p3.scenarios.reduce((n,s)=>n+s.turns.length,0)!==24)throw new Error('Pack III expected 24 turns');
+          if(new Set(all.map(s=>s.id)).size!==all.length)throw new Error('Duplicate scenario IDs');
+
+          let openResponses=0;
+          for(const s of p3.scenarios){
+            if(!s.requiredLessons?.length||s.turns.length!==3)throw new Error(`${s.id}: bad shape`);
+            for(const req of s.requiredLessons)if(!lessonIds.has(req))throw new Error(`${s.id}: unknown lesson ${req}`);
+            for(const t of s.turns){
+              if(!t.answers?.length||!t.model||!t.items?.length)throw new Error(`${s.id}: incomplete turn`);
+              if(t.openResponse){openResponses++; if(t.answers.length<2)throw new Error(`${s.id}: open response needs variants`);}
+              for(const id of t.items)if(!itemIds.has(id))throw new Error(`${s.id}: unknown item ${id}`);
+            }
+          }
+          if(openResponses<14)throw new Error(`Expected many less-guided turns, got ${openResponses}`);
+          if(!p3.resolution.length)throw new Error('No dynamic memory resolution exposed');
+          for(const r of p3.resolution){
+            if(r.matches.length!==1)throw new Error(`${r.scenario}: memory query '${r.query}' resolved ${r.matches.length} items: ${r.matches.join(',')}`);
+            if(!itemIds.has(r.id))throw new Error(`${r.scenario}: resolved invalid item ${r.id}`);
+          }
+
+          const completed=n=>new Set(Array.from({length:n},(_,i)=>`l${i+1}`));
+          const open=(pack,n)=>pack.scenarios.filter(s=>s.requiredLessons.every(id=>completed(n).has(id));
+          if(open(p3,20).length!==1)throw new Error(`l20 expected 1 Pack III scene, got ${open(p3,20).length}`);
+          if(open(p3,40).length!==8)throw new Error(`l40 expected all Pack III scenes, got ${open(p3,40).length}`);
+          const oral=p3.scenarios.find(s=>s.id==='jerry-francais-oral');
+          if(!oral||!oral.turns.some(t=>/T'es prête|J'sais pas|Y a pas/.test(t.npcFr)))throw new Error('Oral French scenario missing natural forms');
+          console.log('Build25 data OK: 36/108, PackIII 8/24, open turns',openResponses,'memory resolutions',p3.resolution.length);
+          NODE
+
+      - name: Error / Listening static contracts
+        run: |
+          grep -q 'MAX_ITEM_EVENTS = 20' error-intelligence.js
+          grep -q 'MAX_RECENT_EVENTS = 120' error-intelligence.js
+          grep -Fq 'const source=`listening-${currentExercise.family}`;' listening-engine.js
+
+      - name: Build 25 wiring and docs
+        run: |
+          grep -q '1.18.0-b25' index.html sw.js
+          grep -q "version: '1.18.0', build: 25" build-meta.js
+          grep -q 'real-life-data-3.js' index.html sw.js docs/ARCHITECTURE.md
+          grep -q 'real-life-coach.js' index.html sw.js docs/ARCHITECTURE.md
+          grep -q 'real-life-coach.css' index.html sw.js
+          grep -q 'real-life-jerry-3' real-life-data-3.js
+          grep -q 'v1.18.0' README.md
+          grep -q 'Build 25 — Real Life French III' README.md ROADMAP.md CHANGELOG.md docs/BUILD-25-REAL-LIFE-FRENCH-III.md
+          grep -q '36 situations / 108 tours' README.md docs/BUILD-25-REAL-LIFE-FRENCH-III.md
+
+      - name: Start static test server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-http.log 2>&1 &
+          echo $! >/tmp/ft-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — Home stays simple
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=18000 --dump-dom http://127.0.0.1:4173/ >/tmp/home.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/home.html; then cat /tmp/home.html; exit 1; fi
+          test "$(grep -o 'data-ux-nav=' /tmp/home.html | wc -l)" -eq 3
+          grep -q 'brand-home-logo' /tmp/home.html
+
+      - name: Chrome — preserve real learner lesson-8 baseline
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=20000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8' >/tmp/l8.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/l8.html; then cat /tmp/l8.html; exit 1; fi
+          for attr in 'completed="7"' 'next="l8"' 'l8="4"' 'known="40"' 'snapshot="1"' 'snapshot-l8="4"' 'nav-items="3"' 'logo="1"'; do grep -q "data-ux-smoke-$attr" /tmp/l8.html; done
+
+      - name: Chrome — lesson20 adds one Pack III scene but stays compact
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=24000 --dump-dom 'http://127.0.0.1:4173/?realLifeSmoke=lesson20&scenarioSmoke=1' >/tmp/l20.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/l20.html; then cat /tmp/l20.html; exit 1; fi
+          grep -q 'data-real-life-pack2-open="10"' /tmp/l20.html
+          grep -q 'data-real-life-pack3-open="1"' /tmp/l20.html
+          grep -q 'data-real-life-open-visible="6"' /tmp/l20.html
+          grep -q 'real-life-open-hidden' /tmp/l20.html
+
+      - name: Chrome — lesson40 unlocks all Pack III but still shows six suggestions
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=26000 --dump-dom 'http://127.0.0.1:4173/?realLifeSmoke=lesson40&scenarioSmoke=1' >/tmp/l40.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/l40.html; then cat /tmp/l40.html; exit 1; fi
+          grep -q 'data-real-life-pack3-open="8"' /tmp/l40.html
+          grep -q 'data-real-life-pack3-total="8"' /tmp/l40.html
+          grep -q 'data-real-life-open-visible="6"' /tmp/l40.html
+          grep -q 'data-real-life-visible-tiles="6"' /tmp/l40.html
+          grep -q 'real-life-open-hidden' /tmp/l40.html
+          grep -q 'Bạn lo lắng và muốn nói chuyện' /tmp/l40.html
+          grep -q 'Jerry nói tiếng Pháp tự nhiên' /tmp/l40.html
+
+      - name: Chrome — Error Intelligence 20/120
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=22000 --dump-dom 'http://127.0.0.1:4173/?errorSmoke=1' >/tmp/error.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/error.html; then cat /tmp/error.html; exit 1; fi
+          grep -q 'data-error-smoke-item-events="20"' /tmp/error.html
+          grep -q 'data-error-smoke-recent-events="120"' /tmp/error.html
+
+      - name: Chrome — Listening hidden then reveal
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=22000 --dump-dom 'http://127.0.0.1:4173/?listeningSmoke=1' >/tmp/listening.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/listening.html; then cat /tmp/listening.html; exit 1; fi
+          grep -q 'data-listening-smoke-hidden="1"' /tmp/listening.html
+          grep -q 'data-listening-smoke-revealed="1"' /tmp/listening.html
+          grep -q 'data-listening-smoke-attempts="1"' /tmp/listening.html
+
+      - name: Chrome — Adaptive Language profiles
+        run: |
+          for mode in beginner strong fragile; do
+            google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=18000 --dump-dom "http://127.0.0.1:4173/?languageSmoke=$mode" >"/tmp/language-$mode.html"
+            if grep -E -q 'id="app"[^>]*><div class="boot-status error' "/tmp/language-$mode.html"; then cat "/tmp/language-$mode.html"; exit 1; fi
+          done
+          grep -q 'data-language-smoke-profile="vi-heavy"' /tmp/language-beginner.html
+          grep -q 'data-language-smoke-profile="fr-growing"' /tmp/language-strong.html
+          grep -q 'data-language-smoke-profile="vi-support"' /tmp/language-fragile.html
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-server.pid ]; then kill "$(cat /tmp/ft-server.pid)" || true; fi
