@@ -6,8 +6,10 @@
 - build : **22** ;
 - phase : **UX Foundation & Runtime Integrity** ;
 - cible principale : **Trân sur iPhone / Safari / PWA** ;
-- curriculum attendu après câblage : **40 leçons / 238 éléments** ;
+- curriculum audité après câblage : **40 leçons / 241 éléments** ;
 - coût d’exploitation : **0 €**.
+
+> Audit Build 22 : Stage 3 contient réellement **93 éléments**. Les documents Build 19 annonçaient 90 ; avec le socle 148, le total réel est donc **241**. Build 22 corrige le contrat au lieu de supprimer trois acquis utiles pour retrouver artificiellement 238.
 
 ## Contexte réel
 
@@ -250,23 +252,23 @@ Motif : logo/favicon validés, voix + reconnaissance vocales validées par l’u
 
 # Critères de clôture
 
-- [ ] nouvelle navigation = 3 destinations ;
-- [ ] Home simplifiée ;
-- [ ] Practice Sheet ;
-- [ ] Parcours simplifié ;
-- [ ] Leçon Focus ;
-- [ ] Réglages simplifiés côté Trân ;
-- [ ] DEBUG FR conserve les outils techniques ;
-- [ ] logo/favicon inchangés ;
-- [ ] voice/free-voice inchangés ;
-- [ ] aucune clé principale renommée ;
-- [ ] snapshot non destructif ;
+- [x] nouvelle navigation = 3 destinations ;
+- [x] Home simplifiée ;
+- [x] Practice Sheet ;
+- [x] Parcours simplifié ;
+- [x] Leçon Focus ;
+- [x] Réglages simplifiés côté Trân ;
+- [x] DEBUG FR conserve les outils techniques ;
+- [ ] logo/favicon hashes vérifiés ;
+- [ ] voice/free-voice hashes vérifiés ;
+- [x] aucune clé principale renommée ;
+- [x] snapshot non destructif ;
 - [ ] smoke Trân leçon 8 vert ;
-- [ ] 40 leçons / 238 éléments actifs ;
+- [ ] **40 leçons / 241 éléments** actifs ;
 - [ ] Listening actif ;
 - [ ] Adaptive Language actif ;
 - [ ] Scenario / Error / Mastery non régressés ;
-- [ ] README / ROADMAP / CHANGELOG / ARCHITECTURE / BUILD-POLICY synchronisés ;
+- [x] README / ROADMAP / CHANGELOG / ARCHITECTURE / BUILD-POLICY synchronisés ;
 - [ ] PR verte ;
 - [ ] `main` vert ;
 - [ ] GitHub Pages vert ;
