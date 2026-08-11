@@ -451,9 +451,16 @@ if (ERROR_CURRICULUM) {
 
   if (new URLSearchParams(location.search).get('errorSmoke') === '1') {
     setTimeout(() => {
-      recordError('bonjour','scenario-miss','ci-smoke');
-      recordError('bonjour','scenario-miss','ci-smoke');
+      // Deliberately exceed both detailed-history limits. CI validates the
+      // persisted lengths exposed below instead of merely grepping constants.
+      for (let i = 0; i < 125; i += 1) recordError('bonjour','scenario-miss','ci-smoke');
       recordError('merci','assisted','ci-smoke');
+      recordAttempt({ itemId:'eau', ok:false, source:'free-voice-text', input:'de eau', target:"De l'eau." });
+      const smoke = JSON.parse(localStorage.getItem(KEY) || '{}');
+      document.documentElement.dataset.errorSmokeItemEvents = String(smoke.items?.bonjour?.events?.length || 0);
+      document.documentElement.dataset.errorSmokeRecentEvents = String(smoke.recent?.length || 0);
+      document.documentElement.dataset.errorSmokeRepeated = String(smoke.items?.bonjour?.counts?.['repeated-miss'] || 0);
+      document.documentElement.dataset.errorSmokePartial = String(smoke.items?.eau?.counts?.partial || 0);
       document.querySelector('.bottom-nav [data-go="progress"]')?.click();
     },120);
   }
