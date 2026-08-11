@@ -50,8 +50,6 @@
   }
 
   function nativeGo(id) {
-    // Avoid an intermediate nav render (Practice -> Home -> target) that can
-    // create a visual flicker. The native screen render will refresh the bar.
     if (overlay) dismissPractice(false);
     const target = document.querySelector(`.bottom-nav [data-go="${id}"]`);
     if (target) target.click();
@@ -107,14 +105,14 @@
 
     const practiceActive = Boolean(overlay) || ['conversation','review'].includes(screen);
     const items = [
-      ['home','⌂',T('Hôm nay','Aujourd’hui'),screen === 'home'],
+      ['home','⌂',T('Hôm nay','Aujourd’hui'),!practiceActive && screen === 'home'],
       ['practice','◎',T('Luyện tập','Pratiquer'),practiceActive],
-      ['progress','◔',T('Lộ trình','Parcours'),screen === 'progress']
+      ['progress','◔',T('Lộ trình','Parcours'),!practiceActive && screen === 'progress']
     ];
 
-    // IMPORTANT: never rebuild the nav with innerHTML when active state changes.
+    // Never rebuild the nav with innerHTML when active state changes.
     // A real touch is pointerdown -> pointerup -> click. Replacing the button
-    // during that sequence destroys the visible feedback before the user sees it.
+    // during that sequence destroys the visible feedback before it is perceived.
     const wanted = new Set(items.map(([id]) => id));
     nav.querySelectorAll('[data-ux-nav]').forEach(button => {
       if (!wanted.has(button.dataset.uxNav)) button.remove();
