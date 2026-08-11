@@ -4,7 +4,13 @@ Ce fichier conserve l’historique des versions livrées. Les intentions futures
 
 ## [Unreleased]
 
-### v1.9.0 — Build 16 — Mastery Engine
+Aucun changement non livré pour le moment.
+
+---
+
+## [1.9.0] — Build 16 — 2026-08-11
+
+### Mastery Engine
 
 - ajout d’un moteur local de maîtrise par grandes étapes ;
 - distinction entre leçon terminée, élément connu et compétence consolidée ;
@@ -15,7 +21,23 @@ Ce fichier conserve l’historique des versions livrées. Les intentions futures
 - dashboard de maîtrise dans Progression ;
 - résumé de maîtrise sur la home ;
 - diagnostic enrichi ;
-- création de `ROADMAP.md`, `CHANGELOG.md`, `docs/ARCHITECTURE.md` et `docs/BUILD-POLICY.md`.
+- aucun statut « Maîtrisé » sans suffisamment de preuves mémoire.
+
+### Gouvernance du projet
+
+- création de `ROADMAP.md` ;
+- création de `CHANGELOG.md` ;
+- création de `docs/ARCHITECTURE.md` ;
+- création de `docs/BUILD-POLICY.md` ;
+- README recentré sur l’état réellement en production ;
+- politique explicite branche → PR → CI → Chrome → merge → Pages.
+
+### Qualité
+
+- cache PWA `1.9.0-b16` ;
+- guards CI Mastery + documentation ;
+- vrai Chrome headless vérifiant 25 leçons + Learning Memory + Daily Coach + Mastery Engine ;
+- `app.js` historique laissé intact.
 
 > L’indicateur de maîtrise est un outil pédagogique interne et ne constitue pas une certification CECRL.
 
