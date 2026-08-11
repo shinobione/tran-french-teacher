@@ -12,6 +12,13 @@ permissions:
 jobs:
   conversation-layout:
     runs-on: ubuntu-latest
+    env:
+      CHROME_STABLE_FLAGS: >-
+        --headless=new --no-sandbox --disable-gpu
+        --disable-background-networking --disable-component-update
+        --disable-default-apps --disable-extensions --disable-sync
+        --metrics-recording-only --no-first-run
+        --disable-features=OptimizationGuideModelDownloading,OptimizationHints,AutofillServerCommunication,MediaRouter,Translate
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -63,9 +70,9 @@ jobs:
             file="/tmp/b265-conversation-$attempt.html"
             rm -rf "$profile" "$file"
             if ! timeout --signal=TERM --kill-after=5s 40s \
-              google-chrome --headless=new --no-sandbox --disable-gpu \
+              google-chrome $CHROME_STABLE_FLAGS \
               --user-data-dir="$profile" --window-size=1280,900 \
-              --virtual-time-budget=32000 --dump-dom \
+              --virtual-time-budget=24000 --dump-dom \
               'http://127.0.0.1:4173/?uxSmoke=lesson8&debug=fr&b265Smoke=conversation' >"$file"; then
               echo "Conversation Chrome attempt $attempt timed out or exited non-zero"
               continue
@@ -100,9 +107,9 @@ jobs:
             file="/tmp/b265-progress-$attempt.html"
             rm -rf "$profile" "$file"
             if ! timeout --signal=TERM --kill-after=5s 40s \
-              google-chrome --headless=new --no-sandbox --disable-gpu \
+              google-chrome $CHROME_STABLE_FLAGS \
               --user-data-dir="$profile" --window-size=1280,900 \
-              --virtual-time-budget=32000 --dump-dom \
+              --virtual-time-budget=24000 --dump-dom \
               'http://127.0.0.1:4173/?uxSmoke=lesson8&b265Smoke=progress' >"$file"; then
               echo "Progress Chrome attempt $attempt timed out or exited non-zero"
               continue
@@ -138,9 +145,9 @@ jobs:
             file="/tmp/b265-mobile-$attempt.html"
             rm -rf "$profile" "$file"
             if ! timeout --signal=TERM --kill-after=5s 40s \
-              google-chrome --headless=new --no-sandbox --disable-gpu \
+              google-chrome $CHROME_STABLE_FLAGS \
               --user-data-dir="$profile" --window-size=390,844 \
-              --virtual-time-budget=30000 --dump-dom \
+              --virtual-time-budget=22000 --dump-dom \
               'http://127.0.0.1:4173/?uxSmoke=lesson8&b265Smoke=progress-mobile' >"$file"; then
               echo "Mobile Chrome attempt $attempt timed out or exited non-zero"
               continue
