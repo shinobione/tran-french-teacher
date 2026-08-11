@@ -4,29 +4,35 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ## [Unreleased]
 
-Prochains jalons :
+### v1.18.1 — Build 25.1 — Listening Slow Calibration — CANDIDAT
 
-- v1.18.1 — Build 25.1 — Listening Slow Calibration ;
-- v1.18.2 — Build 25.2 — Session Goals / Milestones / App Delight ;
-- v1.19.0 — Build 26 — Real Life French III.
+- vitesse normale effective conservée à **0.88** ;
+- slow historique demandé par Listening = **0.68** ;
+- calibration effective candidate = **0.64** ;
+- calibration portée uniquement par le bridge `build-meta.js` ;
+- `voice-ios.js`, pitch, voix choisie et vitesse Lucie persistée inchangés ;
+- expose `FrenchTranquilleListeningRates` + `data-listening-*-rate` ;
+- cache candidat `tran-french-teacher-v1.18.1-b25.1-listening-slow` ;
+- nouveau workflow `Build 25.1 Listening rate smoke` ;
+- `0.62` reste reporté au prochain retour terrain si 0.64 est encore trop rapide.
+
+Ce bloc reste Unreleased jusqu’à PR → CI → `main` → Pages.
+
+Prochain gros jalon : **Build 25.2 — Session Goals / Milestones / App Delight**.
 
 ---
 
 ## [1.18.0] — Build 25 — Progression UX / Progressive Disclosure — 2026-08-11
 
 - ajoute `progression-ux.js` et `progression-ux.css` ;
-- remplace la première vue de `Parcours` par un résumé : leçon actuelle, progression globale, leçons finies, acquis, à revoir et prochaine étape ;
-- conserve le vieux hero/stats dans le DOM mais hors flux principal ;
-- regroupe Memory / Mastery / A1 et les autres cartes techniques derrière `Détails d’apprentissage` ;
-- limite le curriculum visible à 5 lignes autour de la leçon actuelle ;
-- conserve les 40 leçons via `Voir les 40 leçons` ;
-- aucune migration de données ;
-- cache `tran-french-teacher-v1.18.0-b25-progression-ux` ;
-- PR #31 : quality #93 / Options #24 / nav-mobile #43 / Progression UX #1 — SUCCESS ;
-- `main` `4f354221f923004b0cefdaf6b3281e51ba30dbf9` : quality #94 / Options #25 / nav-mobile #44 / Progression UX #2 — SUCCESS ;
-- GitHub Pages #90 — SUCCESS ;
-- contrat leçon 8 préservé : l8 / 7 terminées / 40 acquis / 5 lignes visibles / 40 disponibles ;
-- logo, favicon, `voice-ios.js`, `free-voice.js` sanctuarisés.
+- résumé simple de `Parcours` ;
+- Memory / Mastery / A1 derrière `Détails d’apprentissage` ;
+- 5 lignes de curriculum visibles par défaut, 40 accessibles à la demande ;
+- aucune migration ;
+- PR #31 : quality #93 / Options #24 / nav #43 / Progression #1 SUCCESS ;
+- `main` `4f354221f923004b0cefdaf6b3281e51ba30dbf9` : quality #94 / Options #25 / nav #44 / Progression #2 SUCCESS ;
+- Pages #90 SUCCESS ;
+- contrat l8 : 7 terminées / 40 acquis préservé.
 
 ---
 
@@ -34,76 +40,57 @@ Prochains jalons :
 
 PR #29 / commit `58f64a46bf8b2943a791a1098402e36285e91814` :
 
-- corrige l’écrasement des vitesses explicites du module Listening par la vitesse globale Lucie ;
-- conserve `normal = 0.88` et `lent = 0.68` ;
-- même voix, même timbre ;
+- corrige l’écrasement des vitesses explicites Listening ;
+- `normal = 0.88`, `lent = 0.68` ;
 - `voice-ios.js` non modifié ;
-- quality #88 : SUCCESS ;
-- Options : SUCCESS ;
-- nav/mobile : SUCCESS ;
-- GitHub Pages #88 : SUCCESS.
+- quality / Options / nav / Pages SUCCESS.
 
 ---
 
 ## [1.17.5] — Build 24.5 — Navigation State Sync — 2026-08-11
-
-- clôt la stabilisation mobile initiée par Build 24.4 ;
-- supprime la dépendance au seul timing du `MutationObserver` pour l’état actif de la bottom bar ;
-- synchronise l’onglet demandé immédiatement, après navigation native, au prochain frame et à +80 ms ;
-- conserve les nœuds DOM persistants et le `tap echo` ;
-- force les assets UX sous `1.17.5-b24.5` ;
-- cache PWA `tran-french-teacher-v1.17.5-b24.5-nav-state-sync` ;
-- PR #27 : quality #83 / Options #14 / nav-mobile #33 SUCCESS ;
-- `main` : quality #84 / Options #15 / nav-mobile #34 SUCCESS ;
-- GitHub Pages #86 SUCCESS.
-
-### Build 24.4 — Mobile Polish / Interaction Timing
-
-Build 24.4 a apporté les nœuds persistants, le `tap echo` et le header de leçon allégé. Sa PR était verte, mais le smoke `main` a révélé une course `active-wrong:progress:home`. La clôture fonctionnelle est portée par Build 24.5.
-
----
+- stabilisation définitive de la bottom bar après Build 24.4 ; nœuds persistants, tap echo, état actif déterministe ; quality / Options / nav / Pages SUCCESS.
 
 ## [1.17.3] — Build 24.3 — Premium Interaction UX — 2026-08-11
-- couche globale d’interaction premium ; Pratiquer = vrai troisième écran ; PR #24 + quality #76 + Options #7 + nav #20 + Pages #83 SUCCESS.
+- feedback interaction premium et Pratiquer comme vrai troisième écran.
 
 ## [1.17.2] — Build 24.2 — Navigation Interaction Hotfix — 2026-08-11
-- navigation visible mais inerte corrigée ; cache réaligné ; smoke de clic physique ajouté.
+- navigation visible mais inerte corrigée ; cache réaligné ; smoke clic physique.
 
 ## [1.17.1] — Build 24.1 — Options Crash Hotfix — 2026-08-11
-- boucle `MutationObserver` du diagnostic Options corrigée ; smoke dédié ajouté.
+- boucle MutationObserver du diagnostic Options corrigée ; smoke dédié.
 
 ## [1.17.0] — Build 24 — Real Life French II — 2026-08-11
-- 10 situations / 30 tours ; Scenario total 28 / 84 ; catalogue limité à 6 propositions ouvertes visibles.
+- 10 situations / 30 tours ; Scenario 28 / 84 ; catalogue ouvert plafonné visuellement.
 
 ## [1.16.0] — Build 23 — Real Life French I — 2026-08-11
-- 6 situations / 18 tours liées à la vraie vie de Trân avec Jerry ; profil leçon 8 protégé.
+- 6 situations / 18 tours liées à la vraie vie avec Jerry.
 
 ## [1.15.0] — Build 22 — UX Foundation & Runtime Integrity — 2026-08-11
-- navigation Aujourd’hui / Pratiquer / Parcours ; snapshot ancien utilisateur ; curriculum audité 40 / 241.
+- Aujourd’hui / Pratiquer / Parcours ; snapshot ancien utilisateur ; curriculum audité 40 / 241.
 
 ## [1.14.0] — Build 21 — Adaptive Language Ratio — 2026-08-11
-- profils VI-HEAVY / VI-SUPPORT / BALANCED / FR-GROWING.
+- VI-HEAVY / VI-SUPPORT / BALANCED / FR-GROWING.
 
 ## [1.13.0] — Build 20 — Listening Comprehension — 2026-08-11
-- Sens / Contrastes / Mini-dialogues ; transcript caché avant réponse ; Memory + Error.
+- Sens / Contrastes / Mini-dialogues ; transcript caché ; Memory + Error.
 
 ## [1.12.0] — Build 19 — A1 Core — 2026-08-11
-- Stage 3, leçons 26–40 ; Mastery A1 Core. Total réel audité ensuite : 241 éléments.
+- leçons 26–40 ; A1 Core ; total ensuite audité à 241 éléments.
 
 ## [1.11.0] — Build 18 — Error Intelligence — 2026-08-11
-- historique borné ; récence/répétition/récupération ; Free Voice relié à Memory/Error.
+- historique borné ; récence/répétition/récupération.
 
 ## [1.10.0] — Build 17 — Scenario Lab — 2026-08-11
-- 12 situations / 36 tours ; indices/modèles ; Memory ; voix/texte.
+- 12 situations / 36 tours.
 
 ## [1.9.0] — Build 16 — Mastery Engine — 2026-08-11
-- maîtrise fondée sur preuves Learning Memory ; gouvernance documentaire/CI.
+- maîtrise fondée sur preuves ; gouvernance docs/CI.
 
 ## [1.8.0] — Build 15 — 2026-08-11
 - 25 leçons / 148 éléments ; Early A1 ; Daily Coach.
 
 ## [1.7.1] — Build 14 / 14.1 — 2026-08-11
-- refonte UX Conversation/Révision/Memory ; avatar Lucie.
+- UX Conversation/Révision/Memory ; avatar Lucie.
 
 ## [1.7.0] — Build 13 — 2026-08-11
 - Learning Memory ; révision espacée ; export/import JSON.
