@@ -28,11 +28,11 @@ INTERFACE APPRENANTE
 Aujourd’hui / Pratiquer / Parcours
 ```
 
-Un moteur n’obtient pas automatiquement une destination de navigation.
+Un nouveau pack de contenu n’obtient pas une nouvelle destination de navigation.
 
 ---
 
-# Runtime canonique — v1.16.0 Build 23
+# Runtime canonique — v1.17.0 Build 24
 
 ```text
 progress-safety.js
@@ -51,145 +51,155 @@ daily-coach.js
 mastery-engine.js
 mastery-stage3.js
 scenario-data.js
-real-life-data.js          ← Build 23
+real-life-data.js            # Pack I
+real-life-data-2.js          # Pack II — Build 24
 scenario-host.js
 scenario-engine.js
-real-life-ux.js            ← Build 23
+real-life-ux.js              # façade commune des packs
 listening-data.js
 listening-engine.js
 ux-shell.js
-build-meta.js              ← dernier
+build-meta.js                # dernier
 ```
 
-CSS Build 23 : `real-life-ux.css` est chargé avec `scenario-engine.css`.
+CSS Scenario personnel : `real-life-ux.css`.
 
 ---
 
-# État apprenant
+# État et sécurité
 
-Clé historique canonique :
+Clé apprenant historique :
 
 ```text
 francais-avec-luc:learner:v1
 ```
 
-Schema 2. Build 23 ne la modifie pas.
-
-Snapshot de sécurité créé depuis Build 22 :
-
-```text
-french-tranquille:safety:pre-build22:v1
-```
-
----
-
-# Curriculum
-
-- `app.js` : l1–l15 ;
-- `curriculum-stage2.js` : l16–l25 ;
-- `curriculum-stage3.js` : l26–l40.
-
-Contrat audité : **40 leçons / 241 éléments**.
-
----
-
-# Scenario Engine
-
-Clé persistante :
+Clé Scenario :
 
 ```text
 french-tranquille:scenarios:v1
 ```
 
-`scenario-data.js` fournit le pack historique : **12 situations / 36 tours**.
-
-## Extension Build 23
-
-`real-life-data.js` s’exécute après `scenario-data.js` et **étend le même tableau** avant l’initialisation de `scenario-engine.js`.
-
-Il ajoute :
+Snapshot de sécurité depuis Build 22 :
 
 ```text
-6 situations / 18 tours
+french-tranquille:safety:pre-build22:v1
 ```
 
-Total Build 23 attendu :
+Build 24 ne crée aucune nouvelle clé de progression.
+
+---
+
+# Curriculum
+
+- l1–l15 : `app.js` ;
+- l16–l25 : `curriculum-stage2.js` ;
+- l26–l40 : `curriculum-stage3.js`.
+
+Contrat : **40 leçons / 241 éléments**.
+
+---
+
+# Scenario Engine
+
+Le moteur historique reste responsable de :
+
+- verrouillage par `requiredLessons` ;
+- validation des réponses ;
+- indice ;
+- modèle après blocage ;
+- voix/clavier ;
+- Learning Memory ;
+- stats persistantes.
+
+## Packs data
 
 ```text
-18 situations / 54 tours
+scenario-data.js      12 situations / 36 tours
+real-life-data.js      6 situations / 18 tours
+real-life-data-2.js   10 situations / 30 tours
 ```
 
-Aucune migration du state Scenario : les statistiques existantes restent valides par ID.
+Total candidat Build 24 :
+
+```text
+28 situations / 84 tours
+```
+
+Real Life I + II :
+
+```text
+16 situations / 48 tours
+```
+
+Chaque pack étend le même tableau `FrenchTranquilleScenarioData.scenarios` **avant** l’initialisation du moteur.
+
+Aucune migration du state Scenario n’est nécessaire : les stats existantes sont indexées par ID et les nouveaux IDs sont additifs.
+
+---
+
+# Real Life French II
 
 Pack :
 
 ```text
-real-life-jerry-1
+real-life-jerry-2
 ```
 
-Prérequis l2 → l8, donc valeur immédiate pour une apprenante au début du parcours.
+Prérequis entre l9 et l20. Les scénarios relient plusieurs acquis :
 
-## `real-life-ux.js`
+- train + horaire ;
+- shopping + budget + carte ;
+- préférence + commande ;
+- douleur + localisation + urgence ;
+- présentation de Jerry ;
+- être prête + vouloir + pouvoir ;
+- réservation + question + aide ;
+- clé + porte + aide ;
+- logement + eau chaude + aide ;
+- téléphone + réseau + message.
 
-Cette couche ne remplace pas le Scenario Engine.
-
-Elle adapte seulement sa présentation :
-
-- titre apprenant `Parler en situation` ;
-- scènes Jerry disponibles en premier ;
-- badge personnel ;
-- seulement deux prochaines scènes verrouillées visibles ;
-- dévoilement facultatif du reste.
-
-Le moteur historique continue à gérer validation, indice, modèle, voix/clavier, Memory et persistance.
+Le contenu évite de recopier les scénarios historiques génériques ; il ajoute des **enchaînements personnels**.
 
 ---
 
-# Learning Memory
+# `real-life-ux.js` — catalogue scalable
 
-Clé : `french-tranquille:learning-memory:v1`.
+La façade Scenario doit rester simple même lorsque le moteur contient beaucoup de scènes.
 
-Scenario continue d’enregistrer :
+Build 24 introduit :
 
 ```text
-scenario-success
-scenario-miss
-scenario-assisted
+MAX_OPEN = 6
 ```
 
-Les nouveaux scénarios Build 23 utilisent les mêmes sources.
+Comportement par défaut :
+
+1. scènes personnelles ouvertes ;
+2. triées selon le prérequis le plus récent ;
+3. autres scènes ouvertes ;
+4. seulement les 6 premières sont visibles ;
+5. bouton pour afficher les autres scènes ouvertes ;
+6. seulement 2 futures scènes verrouillées visibles ;
+7. second bouton pour afficher les futures scènes si souhaité.
+
+Le badge `Ta vraie vie` et le titre apprenant `Parler en situation` restent communs aux packs I et II.
 
 ---
 
-# Error Intelligence
+# Learning Memory / Error / Adaptive
 
-Clé : `french-tranquille:error-intelligence:v1`.
+Build 24 n’introduit aucun nouveau chemin parallèle : les scénarios continuent d’utiliser les mêmes hooks Scenario → Learning Memory.
 
-Contrat : 20 événements détaillés par item / 120 récents globaux.
-
-Build 23 ne change pas sa taxonomie.
-
----
-
-# Listening
-
-Clé : `french-tranquille:listening:v1`.
-
-Build 23 n’intervient pas dans Listening ; les smokes Build 22 restent des non-régressions obligatoires.
-
----
-
-# Adaptive Language
-
-`language-ratio-core.js` + `language-ratio.js` restent actifs. Scenario continue de consommer le soutien contextuel existant ; le pack Build 23 n’introduit pas un mode linguistique parallèle.
+Error Intelligence, Listening et Adaptive Language restent inchangés et sont testés comme non-régressions.
 
 ---
 
 # Voice — sanctuaire réel
 
-Retour iPhone : reconnaissance des réponses françaises satisfaisante et voix Lucie naturelle.
+Retour iPhone validé : voix Lucie naturelle et reconnaissance des réponses satisfaisante.
 
-Build 23 conserve byte-identiques :
+Build 24 conserve byte-identiques :
 
 ```text
 voice-ios.js
@@ -209,13 +219,13 @@ assets/LOGO.png
 assets/Favicon.png
 ```
 
-Les nouveaux visuels de scénarios utilisent uniquement CSS/emoji ; le branding principal ne change pas.
+Build 24 ne remplace ni le logo, ni le favicon.
 
 ---
 
 # UX Shell
 
-Navigation apprenante Build 22 conservée :
+Toujours :
 
 ```text
 Aujourd’hui
@@ -223,50 +233,47 @@ Pratiquer
 Parcours
 ```
 
-`Pratiquer → Parler français` continue à ouvrir l’écran Conversation historique, désormais enrichi par Build 23.
-
-L’ancien `.bottom-nav` reste le bus de compatibilité invisible.
+Le catalogue agrandi reste derrière `Pratiquer → Parler français`.
 
 ---
 
-# Service Worker — Build 23
+# Service Worker — Build 24
 
 Cache :
 
 ```text
-tran-french-teacher-v1.16.0-b23
+tran-french-teacher-v1.17.0-b24
 ```
 
-Le précache ajoute :
+Nouveau fichier précaché :
 
 ```text
-real-life-data.js
-real-life-ux.js
-real-life-ux.css
+real-life-data-2.js
 ```
 
 ---
 
-# CI Build 23
+# CI Build 24
 
 Contrats :
 
 1. syntaxe runtime complet ;
 2. hashes branding + voice ;
 3. curriculum 40/241 ;
-4. Scenario total 18/54 ;
-5. pack Real Life = 6/18 ;
-6. tous les IDs/réponses/item refs valides ;
-7. profil leçon 8 : 5 scènes du pack ouvertes, 1 verrouillée ;
-8. progression leçon 8 conservée ;
-9. UX Conversation : scènes personnelles visibles/prioritaires, futur condensé ;
-10. Error 20/120 ;
-11. Listening ;
-12. Adaptive Language ;
-13. aucune fatal card.
+4. Scenario 28/84 ;
+5. Pack I 6/18 ;
+6. Pack II 10/30 ;
+7. références `turn.items` valides dans le curriculum ;
+8. profil l8 : non-régression Build 23 ;
+9. profil l15 : 5 scènes Pack II ouvertes ;
+10. profil l20 : 10 scènes Pack II ouvertes ;
+11. catalogue visuel limité à 6 situations ouvertes par défaut ;
+12. 2 futures scènes verrouillées max ;
+13. Error 20/120 ; Listening ; Adaptive Language ;
+14. aucune fatal card.
 
 ---
 
 # Dette technique
 
-`app.js` reste monolithique par choix de sécurité. Sa future extraction doit être un build dédié avec migration comparative, pas une conséquence cachée d’un build pédagogique.
+`app.js` reste monolithique par choix de sécurité. Sa future extraction reste réservée à un build de Hardening avec comparaison/migration d’état.
