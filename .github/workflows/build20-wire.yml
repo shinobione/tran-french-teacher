@@ -1,0 +1,39 @@
+name: Build20 one-shot wiring
+
+on:
+  push:
+    branches: [build20-listening]
+
+permissions:
+  contents: write
+
+jobs:
+  wire:
+    if: "!contains(github.event.head_commit.message, '[build20-wired]')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: build20-listening
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Wire Build 20
+        run: python tools/build20-wire.py
+      - name: Remove one-shot helpers
+        run: |
+          rm -f .github/workflows/build20-wire.yml
+          rm -f tools/build20-wire.py
+          rm -f tools/quality-build20.yml
+      - name: Commit wired Build 20
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          if git diff --cached --quiet; then
+            echo 'Nothing to wire.'
+            exit 0
+          fi
+          git commit -m 'Build 20 wire Listening runtime, docs and CI [build20-wired]'
+          git push origin HEAD:build20-listening
