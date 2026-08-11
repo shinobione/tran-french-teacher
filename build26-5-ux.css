@@ -1,0 +1,119 @@
+/* French Trân'quille — v1.19.5 Build 26.5
+   Conversation exit + layout repair.
+
+   Build 14 used a two-column Conversation surface because Free Voice and Guided
+   Practice were visible together. Build 25.2 later made those modes exclusive,
+   so keeping the old fixed grid columns created an empty desktop canyon.
+
+   Build 26.3/26.4 also left Progress as a two-row grid with Details spanning
+   both rows. Once Build 26.4 correctly removed the nested scrollbar, a tall
+   Details panel could stretch those rows and push the curriculum far down.
+ */
+
+/* Conversation: one active practice mode = one centered working column. */
+.screen-conversation .narrow.session-practice-hub-mode,
+.screen-conversation .narrow.session-practice-active-mode{
+  width:min(820px,100%)!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-auto-rows:auto!important;
+  gap:12px!important;
+  align-items:start!important;
+  justify-items:stretch!important;
+}
+
+.screen-conversation .narrow.session-practice-hub-mode > .practice-session-hub,
+.screen-conversation .narrow.session-practice-active-mode > .practice-mode-head,
+.screen-conversation .narrow.session-practice-active-mode > #free-voice-card,
+.screen-conversation .narrow.session-practice-active-mode > .conversation-card,
+.screen-conversation .narrow.session-practice-active-mode > .scenario-lab-card,
+.screen-conversation .narrow.session-practice-active-mode > .quiet{
+  grid-column:1!important;
+  grid-row:auto!important;
+  width:100%!important;
+  min-width:0!important;
+  margin-left:0!important;
+  margin-right:0!important;
+}
+
+.screen-conversation .narrow.session-practice-active-mode > .practice-mode-head{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  margin:0 0 2px!important;
+}
+
+.screen-conversation .narrow.session-practice-active-mode > .practice-mode-head .secondary{
+  width:auto;
+  max-width:100%;
+}
+
+/* Keep teacher identity and the mode label visually separated after Tyffany branding. */
+.screen-conversation .conversation-card .luc-row > div > strong,
+.screen-conversation .conversation-card .luc-row > div > span{
+  display:block;
+}
+.screen-conversation .conversation-card .luc-row > div > span{margin-top:2px}
+
+/* Progress: two genuinely independent columns, never one tall item spanning rows. */
+@media(min-width:861px){
+  .screen-progress .progress-layout.progress-ux-ready{
+    grid-template-columns:minmax(0,.94fr) minmax(440px,1.06fr)!important;
+    grid-template-areas:"left details"!important;
+    gap:18px!important;
+    align-items:start!important;
+  }
+
+  .screen-progress .progress-layout.progress-ux-ready > div:first-child{
+    display:grid!important;
+    grid-area:left!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-auto-rows:auto!important;
+    gap:16px!important;
+    align-content:start!important;
+    min-width:0!important;
+  }
+
+  .screen-progress .progress-layout.progress-ux-ready .progress-ux-overview,
+  .screen-progress .progress-layout.progress-ux-ready .progress-ux-curriculum{
+    grid-area:auto!important;
+    margin:0!important;
+    min-width:0!important;
+  }
+
+  .screen-progress .progress-layout.progress-ux-ready > .progress-ux-details{
+    grid-area:details!important;
+    margin:0!important;
+    min-width:0!important;
+  }
+}
+
+@media(max-width:860px){
+  .screen-progress .progress-layout.progress-ux-ready{
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:"left" "details"!important;
+    gap:12px!important;
+  }
+
+  .screen-progress .progress-layout.progress-ux-ready > div:first-child{
+    display:grid!important;
+    grid-area:left!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    gap:12px!important;
+    min-width:0!important;
+  }
+
+  .screen-progress .progress-layout.progress-ux-ready > .progress-ux-details{
+    grid-area:details!important;
+    min-width:0!important;
+  }
+}
+
+@media(max-width:520px){
+  .screen-conversation .narrow.session-practice-hub-mode,
+  .screen-conversation .narrow.session-practice-active-mode{gap:9px!important}
+  .screen-conversation .narrow.session-practice-active-mode > .practice-mode-head .secondary{
+    min-height:46px;
+    padding-inline:12px;
+  }
+}
