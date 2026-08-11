@@ -95,7 +95,7 @@
         const state = window.FrenchTranquilleListening?.state?.();
         const attempts = Number(state?.totals?.attempts || 0);
         const correct = Number(state?.totals?.correct || 0);
-        return attempts ? `${Math.round(correct/attempts*100)}% • ${attempts}` : T('À commencer','À commencer');
+        return attempts ? `${Math.round(correct/attempts*100)}% • ${attempts}` : T('Chưa bắt đầu','À commencer');
       }
       if (key === 'real-life') return T('Tình huống','Situations');
       if (key === 'path') {
