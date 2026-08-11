@@ -137,7 +137,9 @@ jobs:
           google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=24000 --dump-dom 'http://127.0.0.1:4173/?realLifeSmoke=lesson20&scenarioSmoke=1' >/tmp/real-life-20.html
           if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/real-life-20.html; then cat /tmp/real-life-20.html; exit 1; fi
           grep -q 'data-real-life-pack2-open="10"' /tmp/real-life-20.html
-          grep -q 'data-real-life-open-total="16"' /tmp/real-life-20.html
+          # Pack I+II adds 16 scenes, and the historical `appel-jerry` scene also
+          # joins the personal catalogue at lesson 20. Total personal open = 17.
+          grep -q 'data-real-life-open-total="17"' /tmp/real-life-20.html
           grep -q 'data-real-life-open-visible="6"' /tmp/real-life-20.html
           grep -q 'real-life-open-hidden' /tmp/real-life-20.html
           grep -q 'Jerry' /tmp/real-life-20.html

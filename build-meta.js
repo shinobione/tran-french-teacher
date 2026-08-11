@@ -1,4 +1,7 @@
-const META = { version: '1.17.0', build: 24 };
+// Production baseline this hotfix is applied on. Kept explicit so Build 24
+// compatibility contracts can still prove which release is being patched.
+const PRODUCTION_BASELINE = { version: '1.17.0', build: 24 };
+const META = { version: '1.17.1', build: 24.1, baseline: PRODUCTION_BASELINE };
 
 window.FrenchTranquilleBuildMeta = META;
 
@@ -22,7 +25,13 @@ function patchDiagnostics() {
     const label = row.querySelector('span')?.textContent?.trim()?.toLocaleLowerCase();
     const value = row.querySelector('strong');
     if (!value) return;
-    if (label === 'version' || label === 'phiên bản') value.textContent = `v${META.version} • Build ${META.build}`;
+    if (label === 'version' || label === 'phiên bản') {
+      const next = `v${META.version} • Build ${META.build}`;
+      // IMPORTANT: this observer watches #app. Replacing textContent with the
+      // same value creates another childList mutation and can loop forever on
+      // the Settings screen. Only touch the DOM when the value really changes.
+      if (value.textContent !== next) value.textContent = next;
+    }
   });
 }
 
