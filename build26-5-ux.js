@@ -24,6 +24,23 @@
     tick();
   };
 
+  function bindPracticeBackButtons() {
+    document.querySelectorAll('[data-session-practice-back]:not([data-b265-back-bound])').forEach(button => {
+      button.dataset.b265BackBound = '1';
+      const exit = event => {
+        event.preventDefault();
+        event.stopPropagation();
+        window.FrenchTranquilleSessionUX?.returnToPracticeHub?.();
+      };
+      button.addEventListener('pointerup', exit, true);
+      button.addEventListener('click', exit, true);
+    });
+  }
+
+  const app = document.getElementById('app');
+  bindPracticeBackButtons();
+  if (app) new MutationObserver(bindPracticeBackButtons).observe(app, { childList: true, subtree: true });
+
   function measureConversation() {
     const root = document.querySelector('.screen-conversation .narrow.session-practice-active-mode');
     const head = root?.querySelector(':scope > .practice-mode-head');
@@ -47,6 +64,7 @@
           document.documentElement.dataset.b265ConversationGuidedVisible = measured.guided ? '1' : '0';
           const back = measured.head.querySelector('[data-session-practice-back]');
           document.documentElement.dataset.b265ConversationBackPresent = back ? '1' : '0';
+          document.documentElement.dataset.b265ConversationBackBound = back?.dataset.b265BackBound === '1' ? '1' : '0';
           if (!back) return;
           const PointerCtor = window.PointerEvent || window.MouseEvent;
           back.dispatchEvent(new PointerCtor('pointerdown', { bubbles: true, cancelable: true, button: 0 }));
@@ -57,13 +75,19 @@
               document.documentElement.dataset.b265ConversationPointerBack = '1';
               document.documentElement.dataset.b265ConversationHub = hub ? '1' : '0';
               window.FrenchTranquilleSessionUX.setPracticeMode('guided');
-              waitFor(() => document.querySelector('[data-session-practice-back]'), clickBack => {
-                clickBack.click();
-                waitFor(
-                  () => window.FrenchTranquilleSessionUX.state().practiceMode === null && document.querySelector('.practice-session-hub'),
-                  () => { document.documentElement.dataset.b265ConversationClickBack = '1'; }
-                );
-              });
+              waitFor(
+                () => {
+                  const candidate = document.querySelector('[data-session-practice-back]');
+                  return candidate?.dataset.b265BackBound === '1' ? candidate : null;
+                },
+                clickBack => {
+                  clickBack.click();
+                  waitFor(
+                    () => window.FrenchTranquilleSessionUX.state().practiceMode === null && document.querySelector('.practice-session-hub'),
+                    () => { document.documentElement.dataset.b265ConversationClickBack = '1'; }
+                  );
+                }
+              );
             }
           );
         });
@@ -134,6 +158,7 @@
     version: '1.19.5',
     build: '26.5',
     refresh() {
+      bindPracticeBackButtons();
       window.FrenchTranquilleSessionUX?.schedule?.();
       window.FrenchTranquilleProgressionUX?.decorate?.();
     }
