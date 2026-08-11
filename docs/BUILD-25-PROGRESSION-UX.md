@@ -1,20 +1,14 @@
 # Build 25 — Progression UX / Progressive Disclosure
 
-Version candidate : **v1.18.0**  
-Statut : **CANDIDAT / EN COURS**  
+Version : **v1.18.0**  
+Statut : **PROD / CLOS**  
 Date : **2026-08-11**
 
 ## Intention
 
-Réduire drastiquement la charge cognitive de `Parcours` sans supprimer une seule capacité pédagogique ni modifier les données de Trân.
+Réduire drastiquement la charge cognitive de `Parcours` sans supprimer une capacité pédagogique ni modifier les données de Trân.
 
-## Problème terrain
-
-Les captures montrent un écran Progression très long : Memory, Mastery, A1, situations, éléments acquis et liste des 40 leçons s’empilent dans un seul flux.
-
-La donnée est utile. Son exposition permanente ne l’est pas.
-
-## Solution
+## Solution livrée
 
 Nouveaux fichiers :
 
@@ -37,31 +31,23 @@ Le module se charge après les moteurs existants et transforme uniquement leur p
 
 ### Détails
 
-Toutes les anciennes cartes techniques restent présentes derrière un seul `<details>` :
+Les anciennes cartes techniques restent présentes derrière :
 
 ```text
 Détails d’apprentissage
 ```
 
-Aucune carte Memory/Mastery n’est supprimée.
+Memory/Mastery/A1 ne sont pas supprimés.
 
 ### Curriculum
 
-Par défaut : 5 lignes autour de la position actuelle.
+Par défaut : **5 lignes** autour de la position actuelle.
 
-Bouton :
-
-```text
-Voir les 40 leçons
-```
-
-pour afficher le parcours complet.
+`Voir les 40 leçons` affiche le parcours complet inchangé.
 
 ## Sécurité des données
 
-Aucune migration.
-
-Aucune écriture spécifique Build 25 dans :
+Aucune migration et aucune écriture Build 25 dans :
 
 ```text
 francais-avec-luc:learner:v1
@@ -70,20 +56,7 @@ french-tranquille:scenarios:v1
 french-tranquille:listening:v1
 ```
 
-Le module Progression UX est une façade de rendu.
-
-## Sanctuaires
-
-Hashes historiques inchangés attendus :
-
-```text
-assets/LOGO.png
-assets/Favicon.png
-voice-ios.js
-free-voice.js
-```
-
-Bottom navigation 24.5 hors périmètre.
+Le module est une façade de rendu.
 
 ## Version / cache
 
@@ -93,11 +66,7 @@ build   = 25
 cache   = tran-french-teacher-v1.18.0-b25-progression-ux
 ```
 
-## Contrats navigateur
-
-### Smoke compact — profil leçon 8
-
-Attendu :
+## Contrat leçon 8 validé
 
 ```text
 current lesson = l8
@@ -109,58 +78,57 @@ expanded = 0
 details open = 0
 ```
 
-### Smoke expanded
+Les modes `expanded` et `details` prouvent respectivement que les **40 leçons** et les cartes **Memory / Mastery** restent accessibles.
 
-Attendu :
+## Preuves
+
+### PR #31 — head `e170c8f893adedaa5bf0907177ea7fdad3835e5d`
+
+- quality #93 — SUCCESS ;
+- Options #24 — SUCCESS ;
+- nav/mobile #43 — SUCCESS ;
+- Progression UX #1 — SUCCESS ;
+- compact / expanded / details — SUCCESS.
+
+### Production — `main` `4f354221f923004b0cefdaf6b3281e51ba30dbf9`
+
+- quality #94 — SUCCESS ;
+- Options #25 — SUCCESS ;
+- nav/mobile #44 — SUCCESS ;
+- Progression UX #2 — SUCCESS ;
+- GitHub Pages #90 — SUCCESS.
+
+## Sanctuaires
+
+Les garde-fous ont confirmé l’intégrité de :
 
 ```text
-visible curriculum rows = 40
-expanded = 1
-current lesson = l8
+assets/LOGO.png
+assets/Favicon.png
+voice-ios.js
+free-voice.js
 ```
 
-### Smoke details
-
-Attendu :
-
-```text
-details open = 1
-memory-progress-card visible dans le DOM
-mastery-progress-card visible dans le DOM
-```
-
-## Garde-fous globaux à conserver
-
-- quality historique ;
-- Options smoke ;
-- nav/mobile smoke ;
-- aucune fatal card ;
-- curriculum 40/241 ;
-- Scenario 28/84 ;
-- Error 20/120 ;
-- Listening ;
-- Adaptive Language ;
-- ancien profil l8.
+La bottom navigation 24.5 et les données pédagogiques restent hors périmètre.
 
 ## Checklist de clôture
 
 - [x] branche Build 25 créée ;
 - [x] module Progression UX créé ;
 - [x] CSS créé ;
-- [x] cache/version candidat câblé ;
+- [x] cache/version câblés ;
 - [x] docs candidat synchronisées ;
 - [x] workflow Progression UX ajouté ;
-- [ ] PR ouverte ;
-- [ ] quality PR verte ;
-- [ ] Options PR verte ;
-- [ ] nav/mobile PR verte ;
-- [ ] Progression UX smoke compact vert ;
-- [ ] Progression UX smoke expanded vert ;
-- [ ] Progression UX smoke details vert ;
-- [ ] merge `main` ;
-- [ ] mêmes tests verts sur `main` ;
-- [ ] GitHub Pages SUCCESS ;
-- [ ] contrôle URL publique ;
-- [ ] README/ROADMAP/CHANGELOG passés en PROD/CLOS.
+- [x] PR #31 ouverte ;
+- [x] quality PR verte ;
+- [x] Options PR verte ;
+- [x] nav/mobile PR verte ;
+- [x] compact vert ;
+- [x] expanded vert ;
+- [x] details vert ;
+- [x] merge `main` ;
+- [x] mêmes tests verts sur `main` ;
+- [x] GitHub Pages SUCCESS ;
+- [x] README/ROADMAP/CHANGELOG clôturés.
 
-Le build ne sera marqué livré qu’après la dernière case.
+**Build 25 est livré.**
