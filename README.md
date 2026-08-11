@@ -39,7 +39,9 @@ Voir `docs/BUILD-26.1-FIELD-FEEDBACK-UX.md`.
 
 `Pratiquer → Parler français` contient le Pack Real Life III : 8 situations / 24 tours, français oral naturel côté interlocuteur, réponses standard ou variantes simples explicitement acceptées, sans IA sémantique floue.
 
-Le contrat historique Build 24 reste conservé : avant Pack III, Scenario comptait 28 situations / 84 tours.
+### Baseline historique conservée
+
+**v1.17.0 — Build 24 — Real Life French II** = **28 situations / 84 tours** avant Pack III. Ce contrat reste un marqueur de non-régression ; Build 26 l’enrichit sans l’effacer.
 
 ## Session UX conservée
 
