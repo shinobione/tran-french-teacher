@@ -2,24 +2,27 @@
 
 PWA de français pensée pour **Trân**, avec priorité à l’oral, au français utile dans la vraie vie et à une interface simple sur iPhone.
 
-## Version candidate
+## Version production
 
 - **v1.19.0**
 - **Build 26 — Real Life French III**
-- statut : **CANDIDAT / EN COURS**
-- baseline production : **v1.18.2 — Build 25.2 — Session Goals / Milestones / App Delight**
+- statut : **✅ PROD / CLOS**
+- commit production : `db8219e44d74f0af13421ec798a0c98d02f7a7b5`
+- PR : **#37**
+- GitHub Pages : **#96 SUCCESS**
+- tribunal production : **8 workflows / 8 SUCCESS**
 - calibration Listening : **0.88 normal / 0.64 lent**
 - curriculum : **40 leçons / 241 éléments**
-- Scenario candidat : **36 situations / 108 tours**
+- Scenario : **36 situations / 108 tours**
 - coût : **0 €**
 
 ## Baseline fonctionnelle historique conservée
 
 Le contrat **v1.17.0 — Build 24 — Real Life French II** reste une baseline de non-régression explicite : avant Pack III, Scenario comptait **28 situations / 84 tours**. Build 26 enrichit cette baseline ; il ne remplace ni les Packs I/II ni leurs tests.
 
-## Build 26 — objectif
+## Build 26 — résultat
 
-Enrichir `Pratiquer → Parler français` sans ajouter de nouveau bouton : davantage de français oral naturel côté interlocuteur, des réponses un peu moins récitées et plusieurs formulations simples explicitement acceptées.
+`Pratiquer → Parler français` gagne davantage de français oral naturel côté interlocuteur, des réponses un peu moins récitées et plusieurs formulations simples explicitement acceptées, sans ajouter de nouveau bouton principal.
 
 Le moteur reste **déterministe et local**. Il ne prétend pas comprendre librement n’importe quelle phrase.
 
@@ -74,9 +77,9 @@ lent   = 0.64
 
 `voice-ios.js` et `free-voice.js` restent byte-identiques.
 
-## CI candidate
+## CI / production
 
-Nouveau workflow **Build 26 Real Life French III smoke** :
+Le workflow **Build 26 Real Life French III smoke** vérifie :
 
 - l20 : 1 scène Pack III ouverte ;
 - l35 : 2 scènes ouvertes ;
@@ -87,7 +90,9 @@ Nouveau workflow **Build 26 Real Life French III smoke** :
 - maximum 6 situations ouvertes visibles dans le catalogue ;
 - branding / voix sanctuarisés.
 
-Les contrats quality / Options / nav-mobile / Progression UX / Listening-rate / Session UX restent obligatoires.
+Le vieux contrat quality l20 a été remis à jour : Pack I+II + `appel-jerry` = 17 scènes personnelles, puis Build 26 ouvre la première scène Pack III à l20, soit **18 ouvertes**. Le smoke Session UX multi-Chrome a également été isolé pour éviter les faux rouges de timing sans modifier les moteurs pédagogiques.
+
+Les contrats quality / Options / nav-mobile / Progression UX / Listening-rate / Session UX / Real Life III et GitHub Pages sont tous verts sur le commit de production.
 
 ## Sanctuaires
 
@@ -104,7 +109,7 @@ Session UX Build 25.2
 
 ## Suite
 
-1. **Build 26 — Real Life French III** — EN COURS.
+1. **Build 26 — Real Life French III — ✅ PROD / CLOS.**
 2. Build 27 — Data & Recovery Hardening.
 3. Build 28 — iPhone / PWA / Accessibility Hardening.
 4. Build 29 — Architecture Hardening.
