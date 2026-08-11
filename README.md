@@ -2,12 +2,12 @@
 
 PWA de français pensée pour **Trân**, avec priorité à l’oral, au français utile dans la vraie vie et à une interface simple sur iPhone.
 
-## Candidat actuel
+## Version en production
 
 - **v1.17.3**
 - **Build 24.3 — Premium Interaction UX**
-- statut : **CANDIDAT / branche `build24-3-premium-interaction-ux`**
-- baseline production : **v1.17.2 Build 24.2 — Navigation Interaction Hotfix**
+- statut : **PROD / CLOS**
+- commit production : `eef4bb7113dcc3f37bab76928f112b8032034ec5`
 - socle fonctionnel : **v1.17.0 Build 24 — Real Life French II**
 - curriculum : **40 leçons / 241 éléments**
 - Scenario : **28 situations / 84 tours**
@@ -18,21 +18,29 @@ PWA de français pensée pour **Trân**, avec priorité à l’oral, au françai
 
 Objectif : faire ressentir French Trân’quille comme une **application mobile**, pas comme un site web responsive.
 
-Règle UX ajoutée :
+Règle UX désormais canonique :
 
 > Toute action tappable doit produire un retour visuel immédiat.
 
-Build 24.3 ajoute :
+Build 24.3 apporte :
 
 - feedback `pointerdown` global sur boutons, navigation, choix, cartes interactives, révision, conversation et listening ;
 - légère compression, contraste/glow court et flash de confirmation au clic ;
 - état actif plus lisible dans la bottom bar ;
 - transition courte d’entrée des écrans ;
 - support `prefers-reduced-motion` ;
-- **Pratiquer devient visuellement un vrai troisième écran/tab**, sans backdrop flouté ni croix de modale ;
+- **Pratiquer est visuellement un vrai troisième écran/tab**, sans backdrop flouté ni croix de modale ;
 - la bottom bar reste visible et `Pratiquer` reste actif pendant cet écran ;
 - zones tactiles renforcées sur mobile ;
-- nouveau smoke Chrome mobile `390×844` qui vérifie `pointerdown`, feedback visuel et géométrie de l’écran Pratiquer.
+- smoke Chrome mobile `390×844` qui vérifie `pointerdown`, feedback visuel et géométrie de l’écran Pratiquer.
+
+Validation production :
+
+- PR #24 : SUCCESS ;
+- quality `main` #76 : SUCCESS ;
+- Options smoke `main` #7 : SUCCESS ;
+- nav/mobile interaction smoke `main` #20 : SUCCESS ;
+- GitHub Pages #83 : SUCCESS.
 
 Aucun reset et aucune modification du curriculum, de la voix, de Learning Memory, des scénarios ou du branding.
 
@@ -119,4 +127,4 @@ ux-shell
 - [`docs/HOTFIX-24.2-NAV-INTERACTION.md`](./docs/HOTFIX-24.2-NAV-INTERACTION.md)
 - [`docs/HOTFIX-24.3-PREMIUM-INTERACTION.md`](./docs/HOTFIX-24.3-PREMIUM-INTERACTION.md)
 
-Build 24.3 ne sera déclaré `PROD / CLOS` qu’après PR, CI complète, merge `main` et GitHub Pages verts.
+Prochain jalon fonctionnel : **v1.18.0 — Build 25 — Real Life French III**.

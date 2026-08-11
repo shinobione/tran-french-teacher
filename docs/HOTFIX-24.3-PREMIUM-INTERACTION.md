@@ -1,5 +1,15 @@
 # v1.17.3 — Build 24.3 — Premium Interaction UX
 
+## Statut
+
+**PROD / CLOS — 2026-08-11**
+
+Commit production :
+
+```text
+eef4bb7113dcc3f37bab76928f112b8032034ec5
+```
+
 ## Problème observé
 
 French Trân’quille fonctionnait à nouveau après Build 24.2, mais l’expérience restait trop proche d’un site web :
@@ -34,7 +44,7 @@ Les surfaces concernées incluent :
 - Daily Coach ;
 - cartes Scenario ;
 - options Listening ;
-- actions Révision/Conversation quand elles utilisent les composants existants.
+- actions Révision/Conversation utilisant les composants existants.
 
 ### Feedback visuel
 
@@ -49,7 +59,7 @@ Les surfaces concernées incluent :
 
 ### Pratiquer
 
-Le moteur historique garde son overlay interne pour la compatibilité, mais sa représentation devient un vrai écran :
+Le moteur historique garde son overlay interne pour la compatibilité, mais sa représentation est désormais un vrai écran :
 
 - fond plein écran cohérent avec l’app ;
 - aucune couche floutée sur la Home ;
@@ -76,7 +86,7 @@ Aucune modification de :
 
 ## PWA
 
-Cache candidat :
+Cache production :
 
 ```text
 tran-french-teacher-v1.17.3-b24.3-premium-interaction
@@ -94,7 +104,7 @@ build-meta.js?v=1.17.3-b24.3
 
 ## Contrat CI
 
-Le smoke navigation utilise un viewport **390×844** et exige :
+Le smoke navigation utilise un viewport **390×844**.
 
 - [x] runtime `FrenchTranquilleInteraction` chargé ;
 - [x] CSS Interaction chargé ;
@@ -107,12 +117,15 @@ Le smoke navigation utilise un viewport **390×844** et exige :
 - [x] aucune croix modale visible ;
 - [x] onglet Pratiquer actif ;
 - [x] navigation complète ;
-- [ ] quality générale ;
-- [ ] Options smoke ;
-- [ ] PR ;
-- [ ] main ;
-- [ ] Pages.
+- [x] quality PR #75 ;
+- [x] Options PR #6 ;
+- [x] nav interaction PR #19 ;
+- [x] PR #24 mergée ;
+- [x] quality main #76 ;
+- [x] Options main #7 ;
+- [x] nav interaction main #20 ;
+- [x] GitHub Pages #83.
 
 ## Clôture
 
-Build 24.3 reste **CANDIDAT** tant que PR, `main` et GitHub Pages ne sont pas tous verts.
+Build 24.3 est **PROD / CLOS**. Prochain jalon : **v1.18.0 — Build 25 — Real Life French III**.
