@@ -1,4 +1,4 @@
-const META = { version: '1.6.1', build: 12 };
+const META = { version: '1.7.0', build: 13 };
 
 window.FrenchTranquilleBuildMeta = META;
 
