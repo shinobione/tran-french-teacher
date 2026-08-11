@@ -17,7 +17,7 @@
 11. Un nouveau moteur n’obtient pas automatiquement une nouvelle entrée de navigation.
 12. Toute surface tappable donne un retour visuel immédiat sur mobile.
 13. `Aujourd’hui / Pratiquer / Parcours` gardent des nœuds persistants et exactement un état actif.
-14. **Progressive disclosure** : l’apprenante ne voit pas par défaut tous les moteurs et compteurs internes.
+14. Progressive disclosure : tous les moteurs et compteurs ne sont pas visibles par défaut.
 15. **Contrat de session** : chaque activité possède un objectif, une progression, une fin et une sortie évidente.
 16. Pas de tunnel pédagogique infini par défaut.
 17. Succès visible et agréable, sans gamification agressive.
@@ -29,36 +29,39 @@
 
 **Listening Slow Calibration — ✅ PROD / CLOS**
 
-```text
-normal effectif = 0.88
-lent effectif   = 0.64
-```
-
-- `voice-ios.js` inchangé ;
-- même voix / même pitch ;
-- vitesse Lucie sauvegardée restaurée après chaque appel ;
+- Listening effectif : **0.88 normal / 0.64 lent** ;
 - Build 25 Progression UX conservé ;
 - 40 leçons / 241 éléments ;
 - Scenario 28 / 84 ;
+- voix/branding sanctuarisés ;
 - coût 0 €.
 
 Preuves `main` `178c8b71d47887d8f9efd3389aa358d2f3e1a8eb` : quality #100, Options #31, nav #50, Progression #8, Listening-rate #3, Pages #92 — SUCCESS.
 
-`0.62` reste une éventuelle calibration future uniquement sur retour terrain.
-
 ---
 
-# v1.18.2 — Build 25.2 — Session Goals / Milestones / App Delight — PROCHAIN
+# v1.18.2 — Build 25.2 — Session Goals / Milestones / App Delight — EN COURS
 
-## Problème produit
+## Problème terrain
 
-Plusieurs écrans permettent de pratiquer mais ne répondent pas assez clairement à :
+Plusieurs modes fonctionnent mais ne disent pas assez clairement :
 
-> Combien je dois faire ? Où j’en suis ? Quand est-ce terminé ? Où est-ce que je vais ensuite ?
+> Combien je dois faire ? Où j’en suis ? Quand est-ce fini ? Puis-je partir maintenant ?
+
+## Architecture candidate
+
+Nouveaux modules :
+
+```text
+session-ux.js
+session-ux-adapter.js
+session-ux.css
+.github/workflows/session-ux-smoke.yml
+```
+
+La couche Session UX **orchestre les moteurs existants**. Elle ne réécrit ni Voice, ni Memory, ni Scenario, ni Listening.
 
 ## Contrat commun
-
-Chaque activité principale doit suivre :
 
 ```text
 AVANT   → objectif court
@@ -67,91 +70,78 @@ FIN     → réussite explicite
 APRÈS   → sortie logique en 1 tap
 ```
 
-Aucune activité standard ne doit sembler infinie.
+## Sessions candidates
 
-## Cibles de session candidates
+- **Listening** : 5 questions ; après 5/5, écran `Session terminée`, résultat bref, `Retour à Aujourd’hui` principal, `Encore 3 minutes` secondaire.
+- **Révision mémoire** : jusqu’à 5 éléments prioritaires ; fin explicite puis sortie.
+- **Scenario** : une situation complète ; le nombre de tours existant devient l’indicateur de progression ; l’état de fin natif est conservé.
+- **Entraînement vocal guidé** : 5 réponses reconnues, sans modifier `free-voice.js`.
+- **Pratique guidée historique** : 1 réponse correcte par mini-session.
+- **Leçon** : étapes existantes conservées ; dernière étape annoncée, puis confirmation sur Home après enregistrement.
+
+## Pratiquer → Parler français
+
+Le grand empilement de moteurs disparaît du flux principal.
+
+Candidat :
 
 ```text
-Listening          5 questions
-Révision mémoire   jusqu’à 5 éléments prioritaires
-Scenario            1 situation complète
-Vocal guidé         5 réponses
-Leçon               étapes existantes + fin renforcée
+Recommandé maintenant
+[ Situation réelle • ≈ 3 min ]
+
+Autres façons
+[ Répondre à l’oral ]
+[ Pratique guidée ]
 ```
 
-Continuer après réussite reste volontaire et secondaire.
+Une fois un mode sélectionné, les autres moteurs sont masqués sans être supprimés.
+
+## Aujourd’hui / Séance du jour
+
+Maximum **2 actions principales** dans le flux. Les autres restent accessibles dans `Voir les autres activités`.
 
 ## App Delight
 
-Succès premium et court :
+Succès sobre et premium :
 
-- barre qui atteint 100 % ;
+- barre à 100 % ;
 - coche ;
 - glow mint/lilas ;
-- pulse discret Lucie/logo ;
+- petit pulse ;
 - transition 400–800 ms ;
 - `prefers-reduced-motion` respecté.
 
 Pas de son forcé, XP, monnaie, classement ou confettis permanents.
 
-## Milestones significatifs
+## Milestones
 
-- première leçon terminée ;
-- première réponse vocale reconnue ;
-- première session Listening ;
-- première situation réelle ;
-- premier rappel réussi ;
-- 10 / 25 / 50 acquis consolidés ;
-- fin d’un bloc A0 / A1 ;
-- première session sans aide si la preuve est réellement observable.
-
-## Simplification transversale
-
-### Pratiquer → Parler français
-
-Ne plus empiler en permanence Scenario + Vocal guidé + Lucie pratique + rappel vocal.
-
-Cible :
+Nouvelle clé séparée :
 
 ```text
-Recommandé maintenant
-[ Situation réelle — 3 min ]
-
-Autres façons
-[ Répéter une phrase ]
-[ Pratique guidée ]
+french-tranquille:milestones:v1
 ```
 
-Quand un mode est choisi, un seul moteur domine l’écran.
+Elle ne change aucune donnée pédagogique. Les jalons déjà atteints lors de l’installation sont marqués `baseline` pour éviter une avalanche rétroactive.
 
-### Aujourd’hui / Séance du jour
+Jalons candidats : première leçon, premier vocal reconnu, première session Listening, première situation réelle, premier rappel réussi, 10/25/50 acquis consolidés, fin A0/A1.
 
-Montrer priorité + prochaine leçon + éventuellement une pratique courte. Les autres activités derrière un dépliage.
+## Critères de clôture
 
-### Cohérence générale
-
-- une action principale par écran ;
-- sorties placées de façon cohérente ;
-- informations techniques cachées ;
-- état vide / en cours / réussi / à revoir immédiatement compréhensible ;
-- aucun écran où il faut deviner si sortir perd le travail.
-
-## Critères de clôture Build 25.2
-
-- objectif visible avant une session ;
-- compteur `x / cible` compréhensible ;
-- fin explicitement atteignable ;
-- sortie en 1 tap après réussite ;
-- option de continuer secondaire ;
-- données enregistrées avant l’animation/écran de fin ;
-- animations < 1 s ;
-- reduced-motion testé ;
-- aucune nouvelle gamification artificielle ;
-- old-profile l8 intact ;
-- voix/branding sanctuarisés ;
-- quality / Options / nav / Progression / Listening-rate restent verts ;
-- nouveau smoke Session UX sur PR et `main` ;
-- Pages verte.
+- v1.18.2 / Build 25.2 / cache cohérents ;
+- Home : 2 actions visibles + extras repliés ;
+- Practice : hub simple et un seul moteur dominant ;
+- Listening : 5/5 puis fin explicite ;
+- Révision : cible bornée puis fin explicite ;
+- Scenario / Vocal / Guided : objectifs visibles et sortie claire ;
+- fin de leçon confirmée après sauvegarde ;
+- reduced motion testé ;
+- aucune donnée pédagogique migrée ou écrasée ;
+- profil l8 intact ;
+- voix/logo/favicon byte-identiques ;
+- quality / Options / nav / Progression / Listening-rate verts ;
+- nouveau **Session UX smoke** vert sur PR puis `main` ;
+- GitHub Pages verte ;
+- docs CLOS uniquement après preuve production.
 
 ---
 

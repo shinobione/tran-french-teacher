@@ -4,72 +4,74 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ## [Unreleased]
 
-Prochain jalon : **v1.18.2 — Build 25.2 — Session Goals / Milestones / App Delight**.
+### v1.18.2 — Build 25.2 — Session Goals / Milestones / App Delight — CANDIDAT
+
+- ajoute `session-ux.js`, `session-ux-adapter.js`, `session-ux.css` ;
+- ajoute un contrat commun `objectif → progression → fin → sortie` ;
+- Listening devient une session standard de **5 questions** avec état de fin explicite ;
+- Révision mémoire devient un lot borné jusqu’à **5 éléments prioritaires** ;
+- Scenario conserve sa fin native mais reçoit un objectif explicite `1 situation` et une sortie vers Aujourd’hui ;
+- Vocal guidé reçoit une cible de **5 réponses** sans modification de `free-voice.js` ;
+- pratique guidée historique devient une mini-session d’**1 réponse correcte** ;
+- la fin de leçon est annoncée et confirmée après enregistrement ;
+- `Pratiquer → Parler français` utilise un hub : une recommandation principale, alternatives secondaires, un seul moteur dominant ;
+- `Séance du jour` garde 2 actions principales, les autres derrière un détail ;
+- nouvelle clé non pédagogique `french-tranquille:milestones:v1` ; les jalons déjà atteints sont marqués comme baseline à la première installation ;
+- animations de succès sobres + `prefers-reduced-motion` ;
+- conserve Listening **0.88 / 0.64** ;
+- cache candidat `tran-french-teacher-v1.18.2-b25.2-session-ux` ;
+- ajoute `Build 25.2 Session UX smoke` : Home / Practice / Listening 5/5 / Review bornée ;
+- aucune migration learner/Memory/Scenario/Listening ;
+- voix et branding sanctuarisés.
+
+Ce bloc reste Unreleased jusqu’à PR → six workflows → `main` → six workflows → Pages.
 
 ---
 
 ## [1.18.1] — Build 25.1 — Listening Slow Calibration — 2026-08-11
 
-- vitesse normale effective conservée à **0.88** ;
-- slow historique demandé par Listening = **0.68** ;
-- calibration effective livrée = **0.64** ;
-- calibration portée uniquement par le bridge `build-meta.js` ;
-- `voice-ios.js`, pitch, voix choisie et vitesse Lucie persistée inchangés ;
-- expose `FrenchTranquilleListeningRates` + `data-listening-*-rate` ;
-- cache `tran-french-teacher-v1.18.1-b25.1-listening-slow` ;
-- workflow `Build 25.1 Listening rate smoke` ;
-- PR #33 : quality #99 / Options #30 / nav #49 / Progression #7 / Listening-rate #2 — SUCCESS ;
-- `main` `178c8b71d47887d8f9efd3389aa358d2f3e1a8eb` : quality #100 / Options #31 / nav #50 / Progression #8 / Listening-rate #3 — SUCCESS ;
-- GitHub Pages #92 — SUCCESS ;
-- `0.62` reporté : décision uniquement après nouveau retour terrain si `0.64` reste trop rapide.
+- normal effectif **0.88** ; lent effectif **0.64** ;
+- bridge `build-meta.js`, `voice-ios.js` inchangé ;
+- PR #33 : quality #99 / Options #30 / nav #49 / Progression #7 / Listening-rate #2 SUCCESS ;
+- `main` `178c8b71d47887d8f9efd3389aa358d2f3e1a8eb` : quality #100 / Options #31 / nav #50 / Progression #8 / Listening-rate #3 SUCCESS ;
+- Pages #92 SUCCESS.
 
 ---
 
 ## [1.18.0] — Build 25 — Progression UX / Progressive Disclosure — 2026-08-11
 
-- ajoute `progression-ux.js` et `progression-ux.css` ;
 - résumé simple de `Parcours` ;
 - Memory / Mastery / A1 derrière `Détails d’apprentissage` ;
-- 5 lignes de curriculum visibles par défaut, 40 accessibles à la demande ;
+- 5 lignes curriculum visibles par défaut, 40 accessibles ;
 - aucune migration ;
-- PR #31 : quality #93 / Options #24 / nav #43 / Progression #1 SUCCESS ;
-- `main` `4f354221f923004b0cefdaf6b3281e51ba30dbf9` : quality #94 / Options #25 / nav #44 / Progression #2 SUCCESS ;
-- Pages #90 SUCCESS ;
-- contrat l8 : 7 terminées / 40 acquis préservé.
+- PR #31 puis `main` : quality / Options / nav / Progression UX / Pages SUCCESS ;
+- contrat l8 préservé.
 
 ---
 
 ## Post-release microfix — Listening speed separation — 2026-08-11
-
-PR #29 / commit `58f64a46bf8b2943a791a1098402e36285e91814` :
-
-- corrige l’écrasement des vitesses explicites Listening ;
-- `normal = 0.88`, `lent = 0.68` ;
-- `voice-ios.js` non modifié ;
-- quality / Options / nav / Pages SUCCESS.
-
----
+- PR #29 : corrige l’écrasement Normal/Lent ; `0.88 / 0.68`, `voice-ios.js` inchangé.
 
 ## [1.17.5] — Build 24.5 — Navigation State Sync — 2026-08-11
-- stabilisation définitive de la bottom bar après Build 24.4 ; nœuds persistants, tap echo, état actif déterministe ; quality / Options / nav / Pages SUCCESS.
+- bottom bar persistante, tap echo, état actif déterministe.
 
 ## [1.17.3] — Build 24.3 — Premium Interaction UX — 2026-08-11
-- feedback interaction premium et Pratiquer comme vrai troisième écran.
+- feedback premium et Pratiquer comme troisième écran.
 
 ## [1.17.2] — Build 24.2 — Navigation Interaction Hotfix — 2026-08-11
-- navigation visible mais inerte corrigée ; cache réaligné ; smoke clic physique.
+- navigation/caches stabilisés.
 
 ## [1.17.1] — Build 24.1 — Options Crash Hotfix — 2026-08-11
-- boucle MutationObserver du diagnostic Options corrigée ; smoke dédié.
+- boucle MutationObserver Options corrigée.
 
 ## [1.17.0] — Build 24 — Real Life French II — 2026-08-11
-- 10 situations / 30 tours ; Scenario 28 / 84 ; catalogue ouvert plafonné visuellement.
+- 10 situations / 30 tours ; Scenario 28 / 84.
 
 ## [1.16.0] — Build 23 — Real Life French I — 2026-08-11
 - 6 situations / 18 tours liées à la vraie vie avec Jerry.
 
 ## [1.15.0] — Build 22 — UX Foundation & Runtime Integrity — 2026-08-11
-- Aujourd’hui / Pratiquer / Parcours ; snapshot ancien utilisateur ; curriculum audité 40 / 241.
+- Aujourd’hui / Pratiquer / Parcours ; snapshot ancien utilisateur ; curriculum 40 / 241.
 
 ## [1.14.0] — Build 21 — Adaptive Language Ratio — 2026-08-11
 - VI-HEAVY / VI-SUPPORT / BALANCED / FR-GROWING.
@@ -78,7 +80,7 @@ PR #29 / commit `58f64a46bf8b2943a791a1098402e36285e91814` :
 - Sens / Contrastes / Mini-dialogues ; transcript caché ; Memory + Error.
 
 ## [1.12.0] — Build 19 — A1 Core — 2026-08-11
-- leçons 26–40 ; A1 Core ; total ensuite audité à 241 éléments.
+- leçons 26–40 ; total audité 241 éléments.
 
 ## [1.11.0] — Build 18 — Error Intelligence — 2026-08-11
 - historique borné ; récence/répétition/récupération.

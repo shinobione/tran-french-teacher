@@ -1,32 +1,21 @@
 # French Trân’quille — NEXT UX PASS
 
-Statut : **BUILD 25 + 25.1 CLOS / BUILD 25.2 PROCHAIN**  
+Statut : **BUILD 25 + 25.1 CLOS / BUILD 25.2 EN COURS**  
 Date terrain : **2026-08-11**
 
 ## ✅ Build 25 — Progression UX
 
-`Parcours` est désormais compact par défaut : résumé simple, détails à la demande, 5 leçons visibles autour de la position actuelle et 40 disponibles volontairement.
+`Parcours` est compact par défaut : résumé, détails volontaires, 5 leçons visibles autour de la position actuelle, 40 disponibles à la demande.
 
 ## ✅ Build 25.1 — Listening Slow Calibration
 
-Production :
-
-```text
-normal = 0.88
-lent   = 0.64
-```
-
-`voice-ios.js`, pitch et voix Lucie inchangés. `0.62` reste uniquement un candidat futur si un nouveau test iPhone le justifie.
+Production : **0.88 normal / 0.64 lent**. Voix Lucie et `voice-ios.js` inchangés.
 
 ---
 
-# Build 25.2 — Session Goals / Milestones / App Delight — PROCHAIN
+# Build 25.2 — Session Goals / Milestones / App Delight — EN COURS
 
-## Problème transversal
-
-Les écrans d’entraînement peuvent encore ressembler à des tunnels : on sait quoi faire, mais pas toujours combien, quand c’est fini et où aller ensuite.
-
-## Contrat commun
+## Contrat désormais implémenté dans le candidat
 
 ```text
 AVANT   → objectif court
@@ -35,63 +24,99 @@ FIN     → réussite explicite
 APRÈS   → sortie logique
 ```
 
-Cibles candidates :
+### Listening
 
-```text
-Listening          5 questions
-Révision mémoire   jusqu’à 5 éléments prioritaires
-Scenario            1 situation complète
-Vocal guidé         5 réponses
-Leçon               fin renforcée
-```
+Session standard = **5 questions**. À 5/5, l’exercice cède la place à une vraie fin de session. `Retour à Aujourd’hui` est principal ; `Encore 3 minutes` relance volontairement un lot de 3.
 
-Continuer après réussite est un choix secondaire.
+### Révision
 
-## Succès premium
+Lot borné = jusqu’à **5 éléments prioritaires**. La progression est calculée depuis les écritures réelles de Learning Memory ; l’écran de fin arrive donc après enregistrement.
 
-Barre 100 %, coche, glow mint/lilas, petit pulse Lucie/logo, 400–800 ms, `prefers-reduced-motion` respecté. Pas de son forcé, XP, monnaie, classement ou confettis permanents.
+### Scenario
 
-## Milestones utiles
+Objectif = **1 situation complète**. Le compteur de tours existant reste la progression. La fin native est conservée, avec `Retour à Aujourd’hui` mis en avant.
 
-- première leçon terminée ;
-- première réponse vocale reconnue ;
-- première session Listening ;
-- première situation réelle ;
-- premier rappel réussi ;
-- 10 / 25 / 50 acquis consolidés ;
-- fin de bloc A0 / A1 ;
-- première session sans aide si réellement observable.
+### Vocal guidé
 
-## Conversation / Pratiquer
+Objectif = **5 réponses reconnues**. `free-voice.js` reste sanctuarisé ; Session UX observe uniquement les succès déjà émis par le moteur.
 
-Ne plus empiler en permanence Situation réelle + Vocal guidé + Lucie pratique + rappel vocal.
+### Pratique guidée historique
 
-Cible :
+Mini-session = **1 réponse correcte** grâce à un adaptateur basé sur le delta réel de `conversationWins`.
 
-```text
-Recommandé maintenant
-[ Situation réelle — 3 min ]
+### Leçon
 
-Autres façons
-[ Répéter une phrase ]
-[ Pratique guidée ]
-```
-
-Une fois le mode choisi, un seul moteur domine l’écran.
-
-## Home / Séance du jour
-
-Afficher priorité + prochaine leçon + éventuellement une pratique courte. Les autres activités derrière un dépliage.
-
-## Règle d’implémentation
-
-Préférer une **Session UX layer** indépendante qui observe/orchestre les moteurs actuels plutôt que de réécrire voix, Memory, Scenario ou Listening.
+La dernière étape est explicitement annoncée. `app.js` enregistre normalement la leçon, puis la Home affiche une confirmation seulement après retour : la réussite visuelle n’anticipe jamais la sauvegarde.
 
 ---
 
-# Build 26 — Real Life French III
+# Pratiquer → Parler français
 
-Repoussé derrière les passes UX. Plus de français réel, moins de roulettes, aucun nouveau bouton principal.
+Le candidat remplace l’empilement par :
+
+```text
+Recommandé maintenant
+[ Situation réelle • ≈ 3 min ]
+
+Autres façons
+[ Répondre à l’oral ]
+[ Pratique guidée ]
+```
+
+Les moteurs restent dans le DOM mais un seul devient dominant après sélection.
+
+---
+
+# Home / Séance du jour
+
+Le flux principal conserve **2 actions**. Les activités restantes vivent derrière `Voir les autres activités`.
+
+---
+
+# App Delight
+
+- barre de session ;
+- coche / glow mint-lilas ;
+- pulse court ;
+- transitions 400–800 ms ;
+- reduced motion ;
+- aucun son forcé, XP, monnaie, classement ou casino-confetti.
+
+## Milestones
+
+Clé séparée `french-tranquille:milestones:v1`.
+
+Les acquis déjà atteints au premier démarrage sont enregistrés comme **baseline**, sans notification rétroactive. Les nouveaux franchissements peuvent déclencher une petite carte temporaire.
+
+---
+
+# Tribunal candidat
+
+Nouveau workflow `Build 25.2 Session UX smoke` :
+
+```text
+Home       → 2 principales + extras repliés
+Practice   → hub unique
+Listening  → 5/5 → Session terminée
+Review     → lot borné → Révision terminée
+```
+
+Tous les anciens tribunaux restent obligatoires : quality, Options, nav-mobile, Progression UX, Listening-rate.
+
+---
+
+# Après Build 25.2
+
+## Build 26 — Real Life French III
+
+Retour au contenu uniquement après clôture de cette passe UX : plus de français réel, moins de roulettes, aucun nouveau bouton principal.
+
+## Puis
+
+- Build 27 — Data & Recovery ;
+- Build 28 — iPhone/PWA/Accessibility ;
+- Build 29 — Architecture Hardening ;
+- V2.0.0 — Freeze / Release.
 
 ---
 
@@ -100,7 +125,7 @@ Repoussé derrière les passes UX. Plus de français réel, moins de roulettes, 
 Avant toute nouvelle UI :
 
 1. Trân a-t-elle besoin de voir cette information maintenant ?
-2. L’aide-t-elle à décider de la prochaine action ?
+2. L’aide-t-elle à choisir la prochaine action ?
 3. Peut-elle rester derrière `Voir détails` ?
 
 Avant tout exercice :
