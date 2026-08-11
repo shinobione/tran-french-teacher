@@ -1,20 +1,125 @@
 # French Trân’quille
 
-PWA de français pensée pour **Trân**, vietnamienne débutante au départ (**A0**), avec vietnamien comme langue de soutien puis davantage de français à mesure que les acquis deviennent réellement utilisables.
+PWA de français pensée pour **Trân**, avec une priorité forte donnée à l’oral, au français réellement utile et à une interface suffisamment simple pour être utilisée sans connaissances techniques.
 
-## Version en production
+## Candidat actuel
 
-- **v1.12.0**
-- **Build 19 — A1 Core**
-- statut : **PROD / GitHub Pages**
-- curriculum cible : **40 leçons / 238 éléments**
-- ajout Build 19 : **15 leçons / 90 éléments**
-- Scenario Lab : **12 situations / 36 tours**
-- Learning Memory + Daily Coach + Mastery + Error Intelligence
-- coût d’exploitation : **0 €**
+- **v1.15.0**
+- **Build 22 — UX Foundation & Runtime Integrity**
+- statut : **CANDIDAT / branche `build22-ux-foundation`**
 - cible principale : **iPhone / Safari / PWA iOS**
+- curriculum attendu : **40 leçons / 238 éléments**
+- coût d’exploitation : **0 €**
 
-> Build 19 a été validé sur PR, sur `main`, sur GitHub Pages et par un rendu Chrome direct de l’URL publique.
+## Pourquoi Build 22
+
+L’application a accumulé de bons moteurs pédagogiques : Learning Memory, Daily Coach, Mastery, Scenario Lab, Error Intelligence, Listening et Adaptive Language.
+
+Build 22 change le principe d’interface :
+
+> **la complexité reste dans les moteurs ; Trân ne voit que les actions utiles.**
+
+La navigation apprenante devient :
+
+```text
+Hôm nay / Aujourd’hui
+Luyện tập / Pratiquer
+Lộ trình / Parcours
+```
+
+`Pratiquer` ouvre trois choix simples : Réviser, Parler, Écouter.
+
+## Expérience apprenante
+
+### Aujourd’hui
+
+La Home conserve le logo French Trân’quille et met en avant :
+
+- Lucie ;
+- la prochaine leçon ;
+- la position dans le parcours ;
+- un unique bouton principal ;
+- la séance du jour ;
+- quelques métriques compactes.
+
+Les cartes techniques des moteurs sont masquées côté Trân et restent disponibles en **DEBUG FR**.
+
+### Leçon
+
+La leçon devient un mode Focus : gros texte, grosses zones tactiles, pas de menu du bas, navigation Précédent/Continuer fixe et une seule tâche cognitive visible à la fois.
+
+### Parcours
+
+L’écran commence par une synthèse humaine : où Trân en est, prochaine leçon, progression globale et curriculum. Les diagnostics Memory/Mastery/Error/Language restent derrière DEBUG FR.
+
+## Progression : aucune remise à zéro
+
+La clé historique reste volontairement :
+
+```text
+francais-avec-luc:learner:v1
+```
+
+Build 22 ne la renomme pas et ne réinitialise aucun schéma.
+
+Une sauvegarde locale de sécurité non destructive est créée une seule fois dans :
+
+```text
+french-tranquille:safety:pre-build22:v1
+```
+
+La CI utilise un profil synthétique représentatif d’une apprenante arrivée à la **leçon 8** et exige après chargement complet :
+
+- 7 leçons terminées ;
+- prochaine leçon `l8` ;
+- progression `l8 = 4` conservée ;
+- 40 acquis conservés ;
+- snapshot intact ;
+- nouvelle navigation = exactement 3 entrées.
+
+## Voix : baseline validé, donc sanctuarisé
+
+Le retour réel iPhone avant Build 22 est positif : reconnaissance des réponses françaises bonne et voix de Lucie naturelle.
+
+Conséquence : cette refonte **ne modifie pas** `voice-ios.js` ni `free-voice.js`. La CI protège leurs hashes pendant Build 22.
+
+French Trân’quille continue à ne jamais transformer une transcription en faux score phonétique.
+
+## Branding sanctuarisé
+
+Ces visuels sont conservés :
+
+```text
+assets/LOGO.png
+assets/Favicon.png
+```
+
+Leur intégrité est également contrôlée par la CI Build 22.
+
+## Runtime réconcilié
+
+L’audit Build 22 a trouvé une dette : plusieurs modules récents étaient bien présents dans le repo mais le loader/service worker de production était encore resté sur une composition plus ancienne.
+
+Build 22 recâble explicitement :
+
+```text
+Safety snapshot
+→ app historique
+→ Stage 2
+→ Stage 3
+→ Voice / Free Voice
+→ Learning Memory
+→ Error Intelligence
+→ Adaptive Language
+→ Daily Coach
+→ Mastery
+→ Scenario Lab
+→ Listening
+→ UX Shell
+→ Build Meta en dernier
+```
+
+Le build est donc à la fois une **refonte UX** et un **build d’intégrité runtime**.
 
 ## Liens projet
 
@@ -22,212 +127,14 @@ PWA de français pensée pour **Trân**, vietnamienne débutante au départ (**A
 - [`CHANGELOG.md`](./CHANGELOG.md)
 - [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md)
 - [`docs/BUILD-POLICY.md`](./docs/BUILD-POLICY.md)
-- [`docs/BUILD-19-A1-CORE.md`](./docs/BUILD-19-A1-CORE.md)
+- [`docs/BUILD-22-UX-FOUNDATION.md`](./docs/BUILD-22-UX-FOUNDATION.md)
 - PWA : `https://shinobione.github.io/tran-french-teacher/`
 
----
+## Prochaine étape après clôture
 
-# Build 19 — A1 Core
+- **Build 23 — Real Life French I : quotidien avec Jerry** ;
+- Build 24 — déplacements / proches / téléphone ;
+- Build 25 — problèmes, émotions et français oral ;
+- puis V2 Hardening.
 
-Build 19 étend le parcours sans réécrire le moteur historique.
-
-```text
-25 leçons / 148 éléments
-        ↓
-+ 15 leçons / 90 éléments
-        ↓
-40 leçons / 238 éléments
-```
-
-Les nouvelles leçons sont chargées par `curriculum-stage3.js` avant le rerender curriculum existant. Les 25 anciennes leçons restent inchangées.
-
-## Leçons 26 → 40
-
-26. **Nombres 11 → 20** ;
-27. **Nombres 20 → 100 & prix** ;
-28. **Jours de la semaine** ;
-29. **Mois & dates** ;
-30. **Heure plus précise** — et quart, et demie, moins le quart, midi, minuit ;
-31. **Possessifs** — mon/ma/mes, ton/ta/tes ;
-32. **Présent avec tu** ;
-33. **Présent avec il / elle** ;
-34. **Présent avec nous** ;
-35. **Futur proche** — aller + infinitif ;
-36. **Passé récent** — venir de + infinitif ;
-37. **Passé composé fréquent avec avoir** ;
-38. **Passé composé avec être** et formes féminines utiles à Trân ;
-39. **Administration & documents** ;
-40. **Émotions, besoins & proches** — dont `Tu me manques`.
-
-Chaque leçon Build 19 contient exactement **6 éléments**, une intro VI/FR, une mini-structure utile et une situation finale.
-
-## Philosophie grammaticale
-
-On ne crée pas de chapitre « conjugaison du présent » isolé.
-
-La progression est volontairement :
-
-```text
-je déjà connu
-→ tu
-→ il / elle
-→ nous
-→ futur proche
-→ passé récent
-→ passé composé fréquent
-```
-
-Les formes arrivent parce qu’elles permettent de parler, pas parce qu’un programme scolaire exige un tableau.
-
----
-
-# A1 Core Mastery
-
-`mastery-stage3.js` ajoute un **cinquième palier** indépendant des quatre étapes historiques.
-
-Il suit les leçons 26–40 avec :
-
-- leçons terminées ;
-- éléments connus ;
-- éléments réellement révisés ;
-- éléments solides ;
-- fragilités.
-
-Le statut `Maîtrisé` exige notamment :
-
-- 15/15 leçons terminées ;
-- ≥ 95 % des items connus ;
-- ≥ 70 % avec preuve de révision ;
-- ≥ 55 % solides ;
-- ≤ 20 % fragiles.
-
-Ce score reste **un indicateur pédagogique interne**, jamais une certification CECRL.
-
----
-
-# Mémoire et adaptation
-
-Les nouveaux IDs Stage 3 rejoignent le curriculum global ; ils deviennent donc automatiquement visibles par :
-
-- **Learning Memory** ;
-- **Free Voice** ;
-- **Error Intelligence** ;
-- **Daily Coach** ;
-- **Mastery Stage 3**.
-
-Aucune nouvelle clé apprenant n’est nécessaire et aucun reset n’est prévu.
-
-## Learning Memory
-
-Clé : `french-tranquille:learning-memory:v1`
-
-États : Nouveau / Fragile / En cours / Solide.
-
-## Error Intelligence
-
-Clé : `french-tranquille:error-intelligence:v1`
-
-Build 18 reste intact : historique borné **20 événements / élément**, **120 récents globaux**, récence, répétition, récupération et classification fondée sur des preuves observables.
-
-## Scenario Lab
-
-Clé : `french-tranquille:scenarios:v1`
-
-Les 12 scénarios Build 17 restent présents. Build 19 n’ajoute volontairement pas de nouveaux scénarios : son intention principale est le curriculum A1 Core.
-
----
-
-# Voix
-
-Toujours 0 € :
-
-- `speechSynthesis` ;
-- `SpeechRecognition` / `webkitSpeechRecognition` quand disponible ;
-- fallback texte permanent ;
-- Free Voice → Learning Memory + Error Intelligence.
-
-La calibration Safari/Siri reste un **gate séparé** jusqu’au test réel sur l’iPhone de Trân.
-
-French Trân’quille ne transforme jamais « la transcription ne correspond pas » en faux verdict phonétique.
-
----
-
-# Runtime Build 19
-
-```text
-app.js
-↓
-curriculum-stage2.js       # leçons 16–25
-↓
-curriculum-stage3.js       # leçons 26–40
-↓
-stage2-boot.js             # un seul rerender pour Stage 2 + 3
-↓
-debug / voice
-↓
-learning-memory.js
-↓
-daily-coach.js
-↓
-mastery-engine.js
-↓
-mastery-stage3.js
-↓
-scenario-data.js
-↓
-scenario-host.js
-↓
-scenario-engine.js
-↓
-error-intelligence.js
-↓
-build-meta.js              # source finale de version runtime
-```
-
-`app.js` historique reste sanctuarisé.
-
----
-
-# Qualité Build 19
-
-Le workflow est normalisé autour de l’état courant plutôt que d’empiler un `grep` différent pour chaque build depuis la V1.
-
-Contrats :
-
-- syntaxe de tous les modules ;
-- 15 leçons Stage 3 ;
-- 6 items par leçon ;
-- 90 items Stage 3 ;
-- IDs curriculum uniques ;
-- non-régression Scenario Lab ;
-- non-régression Error Intelligence ;
-- câblage PWA/cache/version ;
-- Mastery A1 Core ;
-- Chrome Home : 40 leçons + leçon 40 ;
-- Chrome Scenario ;
-- Chrome Error Intelligence ;
-- Chrome A1 Core / Progression.
-
-Voir [`docs/BUILD-19-A1-CORE.md`](./docs/BUILD-19-A1-CORE.md).
-
----
-
-# DEBUG FR
-
-Le DEBUG FR reste local au navigateur de Jerry. L’appareil de Trân reste en vietnamien.
-
-Raccourci : `?debug=fr`.
-
----
-
-# Roadmap
-
-Après Build 19 :
-
-- **Build 20 — Listening Comprehension**
-- statut : **PROD / GitHub Pages** ;
-- **Build 21 — Adaptive Language Ratio** ;
-- Safari/Siri Calibration Gate dès que le test réel iPhone est disponible ;
-- puis Real Life French et durcissement V2.
-
-Le détail et les critères de clôture sont dans [`ROADMAP.md`](./ROADMAP.md).
+Build 22 ne sera déclaré `PROD / CLOS` qu’après PR verte, CI `main` verte et GitHub Pages verte.
