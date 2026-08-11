@@ -22,6 +22,8 @@
 16. Pas de tunnel pédagogique infini par défaut.
 17. Succès visible et agréable, sans gamification agressive.
 18. Pendant une vraie session de Trân : pas de polish runtime/cache sauf incident critique.
+19. Une fonction d’auto-écoute ne doit jamais dégrader la reconnaissance vocale validée ; sur iPhone la capture secondaire locale est prioritaire tant que la capture simultanée n’est pas prouvée sûre.
+20. Les détails pédagogiques peuvent être riches, mais ils doivent être **groupés par intention** et jamais affichés comme un dump vertical de l’architecture interne.
 
 ---
 
@@ -44,11 +46,85 @@ Preuve production Build 25.2 : commit `49d866bed59bb0cb3268e1675225a4811f6c595f`
 
 ---
 
-# v1.19.0 — Build 26 — Real Life French III — PROCHAIN
+# v1.18.3 — Build 25.3 — Voice Self-Playback + Learning Details Dashboard — EN COURS
+
+## Retours terrain
+
+1. Trân veut pouvoir écouter sa propre voix après un exercice oral afin de comparer ce qu’elle produit au modèle de Lucie.
+2. `Parcours → Détails d’apprentissage` est encore trop long : les moteurs sont repliés derrière un seul menu mais restent ensuite empilés verticalement.
+
+## Voice Self-Playback
+
+La reconnaissance existante est un sanctuaire. Build 25.3 **ne modifie ni `free-voice.js` ni `voice-ios.js`**.
+
+Après une réponse vocale reconnue :
+
+```text
+🎧 Écoute-toi
+[ 🎙️ M’enregistrer pour me réécouter ]
+```
+
+Trân répète une fois la même réponse pendant une capture locale indépendante. Après arrêt :
+
+```text
+[ ▶ Réécouter ma voix ]   [ ↻ Refaire ]
+```
+
+Contrat :
+
+- `MediaRecorder` / `getUserMedia` seulement si disponibles ;
+- aucun upload réseau ;
+- aucune persistance ;
+- Blob URL temporaire révoquée ;
+- piste micro arrêtée ;
+- arrêt automatique de sécurité après 9 s ;
+- si la capture locale n’est pas disponible, l’exercice vocal continue sans elle ;
+- capture simultanée exacte du premier essai reportée après test iPhone réel.
+
+## Learning Details Dashboard
+
+`Détails d’apprentissage` reste une seule entrée repliable, puis affiche des catégories compactes :
+
+```text
+🧠 Mémoire & révisions
+🎯 Maîtrise
+🎧 Compréhension orale
+🎭 Français réel
+🧩 A1 & rythme
+```
+
+Règles :
+
+- seules les catégories réellement présentes sont affichées ;
+- **une seule catégorie détaillée à la fois** ;
+- les cartes Memory/Error/Mastery/A1/Listening/Scenario/Adaptive restent dans le DOM ;
+- les moteurs continuent à mettre à jour leurs cartes sans connaître le dashboard ;
+- toute future carte non reconnue est conservée dans `Autres détails` ;
+- aucune donnée apprenante n’est créée ou migrée par le dashboard.
+
+## Critères de clôture Build 25.3
+
+- version `v1.18.3 / Build 25.3` et cache cohérents ;
+- `voice-replay.js/css` et `progress-details-dashboard.js/css` câblés et précachés ;
+- replay local sans `fetch`, `sendBeacon`, `FormData`, `XMLHttpRequest` ni `localStorage.setItem` ;
+- `free-voice.js`, `voice-ios.js`, logo et favicon byte-identiques ;
+- vrai Chrome : au moins 3 catégories de détails sur profil l8 ;
+- vrai Chrome : Memory et Mastery restent présents ;
+- vrai Chrome : une seule catégorie est active dans le smoke ;
+- vrai Chrome : surface de replay apparaît après une réponse vocale synthétique ;
+- anciens quality / Options / nav / Progression / Listening-rate / Session UX restent verts ;
+- nouveau smoke Build 25.3 vert sur PR puis `main` ;
+- Pages SUCCESS ;
+- test iPhone réel recommandé avant d’envisager l’enregistrement simultané du premier essai ;
+- docs CLOS après production.
+
+---
+
+# v1.19.0 — Build 26 — Real Life French III — APRÈS 25.3
 
 ## Intention
 
-Maintenant que l’interface est plus respirable et que les sessions ont une vraie fin, enrichir `Pratiquer → Parler français` sans ajouter de nouveau bouton principal.
+Une fois les deux retours UX fermés, enrichir `Pratiquer → Parler français` sans ajouter de nouveau bouton principal.
 
 Objectif : **moins de roulettes, plus de compréhension du français oral réel, réponses légèrement plus libres mais toujours déterministes/locales**.
 
@@ -76,7 +152,7 @@ Objectif : **moins de roulettes, plus de compréhension du français oral réel,
 7. émotion / besoin : `Je suis inquiète.` / `J’ai besoin de parler.` ;
 8. couple : `Tu me manques.`.
 
-Le pack préparatoire historique `real-life-data-3.js` / `real-life-coach.js` doit être **porté sur la baseline 25.2**, pas mergé tel quel depuis son ancienne branche.
+Le pack préparatoire historique `real-life-data-3.js` / `real-life-coach.js` doit être **porté sur la baseline 25.3**, pas mergé tel quel depuis son ancienne branche.
 
 ## UX
 
@@ -99,7 +175,7 @@ Pas de nouveau réglage, mode ou bouton.
 - Session UX 25.2 reste fonctionnelle : objectif `1 situation`, fin et sortie ;
 - profil ancien utilisateur / l8 intact ;
 - voix, reconnaissance, logo, favicon byte-identiques ;
-- quality / Options / nav / Progression / Listening-rate / Session UX verts ;
+- quality / Options / nav / Progression / Listening-rate / Session UX / Build25.3 verts ;
 - nouveau smoke Real Life III vert sur PR puis `main` ;
 - Pages SUCCESS ;
 - docs CLOS après production.
