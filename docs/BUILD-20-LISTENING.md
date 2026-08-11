@@ -179,3 +179,27 @@ Le smoke :
 - 40 leçons / 238 éléments inchangés ;
 - docs synchronisées ;
 - PR + main + Pages verts.
+
+
+---
+
+## Clôture production
+
+Build 20 est **CLOS**.
+
+Validation :
+
+- trois familles Listening ;
+- transcript caché avant tentative puis révélé ;
+- source `listening-meaning` ;
+- type `listening-miss` ;
+- Home 40 leçons ;
+- Scenario Lab ;
+- Error Intelligence 20/120 ;
+- A1 Core Mastery ;
+- PR #13 ;
+- CI `main` ;
+- GitHub Pages ;
+- Chrome direct sur l’URL publique pour Home et Listening.
+
+État livré : **v1.13.0 • Build 20 • 40 leçons • 238 éléments • Listening actif**.
