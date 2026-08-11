@@ -166,6 +166,44 @@ Aucun changement pendant la session actuelle.
 
 ---
 
+## 5. Sessions sans but clair — priorité P0
+
+Le screenshot Listening révèle un autre problème transversal : l’écran montre l’exercice, les catégories et les tentatives, mais l’utilisatrice ne sait pas immédiatement :
+
+- combien d’exercices constituent une session ;
+- combien il en reste ;
+- quand elle peut considérer le travail terminé ;
+- ce qui se passe à la fin ;
+- comment sortir proprement sans avoir l’impression d’abandonner.
+
+Un entraînement ne doit pas être un flux potentiellement infini.
+
+### Cible
+
+Chaque mode doit afficher un **objectif court et fini** :
+
+```text
+Session d’écoute
+Objectif : 5 questions
+2 / 5 terminées
+Encore 3
+```
+
+À `5 / 5`, l’app doit produire un véritable état de fin :
+
+```text
+✓ Session terminée
+4 réussites
+1 élément à revoir
+
+[ Retour à Aujourd’hui ]
+[ Encore 3 minutes ]
+```
+
+Le deuxième bouton est volontairement secondaire.
+
+---
+
 # Build 25 — Progression UX / Progressive Disclosure
 
 ## Écran Parcours cible
@@ -252,11 +290,113 @@ Candidat probable : **0.64** d’abord, puis **0.62** seulement si 0.64 reste tr
 
 ---
 
+# Build 25.2 — Session Goals / Milestones / App Delight
+
+## But
+
+Faire en sorte que French Trân’quille soit non seulement simple à comprendre, mais aussi **agréable à terminer**.
+
+Une activité pédagogique doit donner quatre repères :
+
+```text
+1. Je sais ce que je vais faire.
+2. Je sais où j’en suis.
+3. Je sais quand j’ai terminé.
+4. Je sais quoi faire ensuite.
+```
+
+## Contrat de session commun
+
+Chaque activité principale reçoit :
+
+- un objectif court ;
+- une progression visible ;
+- une estimation simple si pertinente (`≈ 3 min`) ;
+- une sortie claire ;
+- un état de fin explicite.
+
+Pas besoin de demander à Trân de choisir elle-même une taille de session. Lucie propose une petite dose adaptée.
+
+### Cibles indicatives
+
+À valider lors de l’implémentation :
+
+```text
+Listening         5 questions
+Révision mémoire  5 éléments prioritaires
+Scenario           1 situation complète
+Vocal guidé        5 réponses
+Leçon              étapes finies déjà existantes
+```
+
+Une fois la cible atteinte, continuer devient un **choix**, jamais la condition pour que la session soit comptée.
+
+## État de succès
+
+Le succès doit être visible mais calme :
+
+- barre qui atteint 100 % ;
+- petite coche ;
+- glow mint/lilas court ;
+- avatar/logo qui pulse légèrement ;
+- résumé de session qui remplace proprement l’exercice.
+
+Durée cible de l’animation : **400 à 800 ms**.
+
+Aucun son forcé, aucune pluie de confettis, aucune attente artificielle avant de pouvoir sortir.
+
+`prefers-reduced-motion` coupe ou simplifie l’animation.
+
+## Milestones
+
+Utiliser des étapes qui racontent une progression réelle :
+
+- première leçon terminée ;
+- première réponse vocale reconnue ;
+- première session Listening ;
+- première situation réelle ;
+- premier acquis rappelé correctement en révision ;
+- 10 / 25 / 50 acquis consolidés ;
+- fin d’un bloc A0 / A1 ;
+- première session réalisée sans aide lorsque cette information est réellement observable.
+
+Les milestones apparaissent ponctuellement puis disparaissent. Ils ne doivent pas créer un deuxième dashboard de badges.
+
+## Interface plus attractive sans bazar
+
+Quelques règles :
+
+- une action principale par écran ;
+- un seul message pédagogique prioritaire ;
+- titres courts et cohérents ;
+- retours et sorties placés toujours de la même manière ;
+- espaces plus généreux lorsque l’écran devient dense ;
+- couleurs utilisées pour guider, pas décorer chaque carte ;
+- animation seulement lorsqu’elle explique une transition, un appui ou une réussite ;
+- statistiques techniques cachées derrière les détails ;
+- aucun compteur sans signification claire pour Trân.
+
+L’objectif est une application qui **donne envie de continuer parce qu’on comprend toujours ce qui se passe**.
+
+## Critères de test
+
+- aucun exercice principal n’affiche une session sans cible ;
+- démarrage → progression → réussite → sortie testés en mobile ;
+- le bouton principal après succès mène à une destination logique ;
+- `Continuer` reste secondaire après une session terminée ;
+- aucun état apprenant perdu lors d’une sortie immédiate après succès ;
+- animation de succès < 1 s ;
+- reduced motion validé ;
+- aucun XP, monnaie ou classement introduit ;
+- ancienne progression préservée.
+
+---
+
 # Build 26 — Real Life French III
 
 Le contenu prévu n’est pas abandonné.
 
-Il est **repoussé** derrière la simplification UX.
+Il est **repoussé** derrière la simplification UX et la mise en place de sessions clairement bornées.
 
 Raison : ajouter encore des scénarios avant de réduire la densité des écrans amplifierait le problème observé.
 
@@ -276,6 +416,15 @@ Avant toute nouvelle UI, poser trois questions :
 
 Si la réponse à 3 est oui, elle reste derrière `Voir détails`.
 
+Et avant tout nouvel exercice, poser quatre autres questions :
+
+1. Quel est le but de cette session ?
+2. Comment Trân voit-elle qu’elle avance ?
+3. Quel événement signifie clairement `terminé` ?
+4. Où l’application l’emmène-t-elle ensuite ?
+
+Si une de ces réponses manque, l’expérience n’est pas terminée.
+
 ---
 
 # Sanctuaires pendant la future refonte
@@ -293,4 +442,4 @@ assets/Favicon.png
 bottom navigation interaction baseline 24.5
 ```
 
-La prochaine refonte doit **réorganiser l’affichage, pas réinventer les moteurs**.
+La prochaine refonte doit **réorganiser l’affichage et clarifier les sessions, pas réinventer les moteurs**.
