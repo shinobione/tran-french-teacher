@@ -4,117 +4,152 @@ PWA de français pensée pour **Trân**, avec priorité à l’oral, au françai
 
 ## Version production
 
-- **v1.19.4**
-- **Build 26.4 — Single-scroll Progress + Tyffany**
+- **v1.19.5**
+- **Build 26.5 — Conversation Exit + Layout Repair**
 - statut : **✅ PROD / réécoute iPhone à valider terrain**
-- commit runtime production : `7e74b3727dfefdddb41521a2be92ece8301a32e7`
-- PR runtime : **#46**
-- stabilisation CI-only : **PR #47 / `4852e95684ad79d0988e05de641b56a8ad0ede22`**
-- GitHub Pages runtime : **#103 SUCCESS**
-- GitHub Pages latest main : **#104 SUCCESS**
-- tribunal final : **10 workflows fonctionnels / 10 SUCCESS + Pages SUCCESS**
+- commit runtime production : `2cd29f20faa8db850f92c343074809cc91b42c76`
+- PR runtime : **#49**
+- GitHub Pages runtime : **#106 SUCCESS**
+- tribunal runtime : **11 workflows fonctionnels / 11 SUCCESS + Pages SUCCESS**
 - calibration Listening : **0.88 normal / 0.65 lent**
 - curriculum : **40 leçons / 241 éléments**
 - Scenario : **36 situations / 108 tours**
 - coût : **0 €**
 
-## 🧹 Build 26.4 — un seul scroll dans Progrès
+## 🧯 Build 26.5 — sortie Conversation + réparation du layout
 
-Les captures desktop de Build 26.3 ont révélé un détail UX franchement chelou : `Détails d’apprentissage` possédait son **propre scrollbar**, à l’intérieur d’une page qui possède déjà le sien.
+Les captures terrain ont montré deux vrais problèmes :
 
-Build 26.4 conserve le layout 2 colonnes validé :
+1. `Changer de pratique` pouvait recevoir le feedback visuel mais rester **mort**, enfermant Conversation dans la pratique guidée ;
+2. plusieurs règles de layout héritées se contredisaient : Conversation gardait une vieille grille 2 colonnes alors qu’un seul mode est visible, et un groupe `Détails d’apprentissage` très haut pouvait pousser le curriculum gauche très loin vers le bas.
+
+Build 26.5 corrige les deux **structurellement**, sans migration de données.
+
+### Conversation : plus de cul-de-sac
+
+La transition de mode est maintenant explicite et synchrone :
+
+```text
+Pratique guidée / Vocal / Situation
+        ↓
+setPracticeMode(mode)
+        ↓
+mode visible
+
+Changer de pratique
+        ↓ pointerup OU click
+setPracticeMode(null)
+        ↓
+hub de pratique
+```
+
+Le contrôle visible reçoit aussi un binding direct `pointerup + click`. On ne dépend donc plus uniquement d’un gros listener global pendant que les couches de Conversation peuvent recomposer le DOM.
+
+Le smoke Chrome 26.5 reproduit réellement le problème et exige :
+
+```text
+pointer/tactile → hub ✅
+click/clavier   → hub ✅
+```
+
+### Conversation desktop : une seule colonne de travail
+
+L’ancien Build 14 avait prévu :
+
+```text
+Free Voice | Pratique guidée
+```
+
+Mais depuis Build 25.2, un seul mode est actif à la fois. Garder la vieille grille créait le grand désert observé sur les captures : bouton retour à gauche, carte guidée à droite, rien au milieu.
+
+Build 26.5 impose désormais pour le mode actif :
+
+```text
+┌────────────────────────────────────┐
+│ ‹ Changer de pratique              │
+│                                    │
+│ Tyffany                            │
+│ Pratique guidée                    │
+│ ...                                │
+└────────────────────────────────────┘
+```
+
+Le nom **Tyffany** et le label `Pratique guidée` sont également séparés visuellement : fini `TyffanyPratique guidée` collé.
+
+## 🧭 Progrès : deux colonnes réellement indépendantes
+
+Build 26.3 avait construit visuellement :
+
+```text
+Résumé      | Détails
+Curriculum  | Détails
+```
+
+Build 26.4 avait ensuite supprimé le scroll interne de `Détails` — correctement — mais le panneau droit restait un item de grille couvrant deux lignes. Avec un groupe long comme `Maîtrise`, sa hauteur pouvait étirer les lignes et pousser le curriculum gauche plusieurs centaines de pixels plus bas.
+
+Build 26.5 change la composition DOM :
+
+```text
+.progress-layout
+├── colonne gauche
+│   ├── Résumé / prochaine étape
+│   └── Parcours A0 → A1
+└── Détails d’apprentissage
+```
+
+Sur desktop :
 
 ```text
 ┌──────────────────────────┬─────────────────────────────┐
-│ Où j’en suis             │ Détails d’apprentissage     │
-│ prochaine étape          │ dashboard + groupe actif    │
+│ Où j’en suis             │ Détails d’apprentissage    │
+│ prochaine étape          │ dashboard + groupe actif   │
 ├──────────────────────────┤                             │
-│ Parcours A0 → A1         │ contenu détaillé            │
+│ Parcours A0 → A1         │                             │
+│ leçon précédente         │                             │
+│ leçon actuelle           │                             │
+│ prochaines leçons        │                             │
 └──────────────────────────┴─────────────────────────────┘
 ```
 
-Mais sur desktop/tablette large, la colonne droite ne crée plus de contexte de scroll indépendant :
+La colonne gauche garde son propre flux compact. Une carte `Maîtrise` très longue à droite **ne peut plus créer un trou géant entre Résumé et Parcours**.
+
+Le Chrome 26.5 mesure la géométrie réelle :
 
 ```text
-Build 26.3 : sticky + max-height viewport + overflow:auto
-Build 26.4 : flux normal + max-height:none + overflow:visible
+Overview → Curriculum gap = 0 à 48 px
+Details direct à droite     = oui
+nested scroll               = 0
+page scrollable             = 1
 ```
 
-**Le seul ascenseur vertical est donc celui de la page.** La carte Details grandit avec le groupe sélectionné.
+Et Build 26.4 reste respecté : **un seul scroll vertical, celui de la page**.
 
-Le Chrome de production a validé avec un groupe Maîtrise réellement actif :
-
-```text
-overflow-y = visible
-max-height = none
-nested scroll = 0
-page scrollable = 1
-single scroll = 1
-```
-
-Sur mobile, le contrat reste inchangé :
+### Mobile conservé
 
 ```text
 Résumé
 ↓
-Parcours compact
+Parcours compact — 5 / 40
 ↓
 Détails d’apprentissage repliés
 ```
 
-Les cartes Memory/Mastery/Listening/Scenario/A1 restent les **mêmes nœuds DOM historiques** : aucun clone, aucune migration de donnée.
+Aucune carte pédagogique n’est clonée. Memory, Mastery, Listening, Scenario et A1 restent les vrais nœuds historiques pilotés par leurs moteurs.
 
-## 👩‍🏫 Tyffany est maintenant la professeure
+## 👩‍🏫 Tyffany reste le nom produit
 
-Le nom visible de la professeure est désormais **Tyffany** dans l’interface et dans les phrases vocales contenant l’ancien nom.
-
-Le changement est volontairement traité comme du **branding compatible** :
+Build 26.4 a remplacé le nom visible `Lucie` par **Tyffany** sans migration risquée :
 
 - affichage apprenant : `Tyffany` ;
 - export public tutor : `Tyffany` ;
-- parole synthétique contenant `Lucie` → normalisée en `Tyffany` avant lecture ;
-- `voice-ios.js` et `free-voice.js` restent byte-identiques ;
-- les anciens IDs techniques `LucieVoice`, `luc-*`, `lucie-*` restent inchangés ;
-- la clé historique `francais-avec-luc:learner:v1` reste inchangée pour protéger la progression.
+- parole synthétique contenant `Lucie` → normalisée en `Tyffany` ;
+- `voice-ios.js` et `free-voice.js` byte-identiques ;
+- identifiants internes historiques `LucieVoice`, `luc-*`, `lucie-*` inchangés ;
+- clé learner `francais-avec-luc:learner:v1` inchangée.
 
-Autrement dit : **on a renommé la prof, pas le sous-sol technique de l’immeuble.** 😄
+On renomme toujours la prof, **pas le sous-sol technique de l’immeuble**. 😄
 
-## 🖱️ Build 26.3 — interactions terrain stabilisées
-
-La vidéo terrain avait montré une différence nette entre les contrôles de `Séance du jour` :
-
-- `Continuer le parcours` restait fiable ;
-- `Révision mémoire` pouvait recevoir le feedback visuel sans naviguer ;
-- `Écouter 3 minutes` et `Voir les autres activités` pouvaient être inertes ou visuellement incohérents.
-
-L’audit a trouvé une **guerre de composition DOM** : Daily Coach créait les actions, Listening injectait son bouton et Session UX déplaçait/recréait les mêmes nœuds sous plusieurs `MutationObserver`.
-
-Build 26.3 a ajouté une couche d’orchestration additive :
-
-- 2 actions principales Today avec nœuds stables ;
-- activités secondaires hors de la zone legacy qui les déplaçait ;
-- `Voir les autres activités` = vrai `<button>` stable avec `aria-expanded` ;
-- routage explicite Review / Lesson / Conversation / Listening ;
-- rendu idempotent ;
-- aucune écriture learner, Memory, Scenario ou Listening.
-
-Le smoke terrain clique réellement :
-
-```text
-Voir les autres activités
-→ Écouter 3 minutes
-→ Révision mémoire
-→ retour Aujourd’hui
-→ Continuer le parcours
-```
-
-Build 26.4 conserve intégralement ce contrat.
-
-## 🧭 Progrès — structure conservée
-
-Build 26.3 a introduit le placement desktop : résumé + parcours à gauche, Details à droite via CSS Grid + `display: contents`.
-
-Build 26.4 **ne change pas cette architecture** ; il retire seulement la propriété de scroll interne de la colonne droite.
+## 🧠 Détails d’apprentissage
 
 Le dashboard Build 26.1 reste groupé par intention :
 
@@ -127,21 +162,7 @@ Le dashboard Build 26.1 reste groupé par intention :
 ⋯ Autres détails
 ```
 
-## 🩹 Build 26.2 — baseline conservée
-
-Build 26.2 avait corrigé :
-
-1. le clic `Parcours → Détails d’apprentissage` avec un toggle explicite/déterministe ;
-2. le mode Listening lent, dont la valeur `0.64` tombait sous le minimum `0.65` déjà accepté par `voice-ios.js` et provoquait un fallback proche de `0.84`.
-
-Contrat actuel :
-
-```text
-Normal → 0.88
-Lent   → 0.65
-```
-
-`voice-ios.js` et `free-voice.js` restent byte-identiques.
+Une seule famille détaillée s’ouvre à la fois.
 
 ## 🎙️ Réécouter sa propre voix
 
@@ -159,7 +180,7 @@ Contrat :
 - aucune capture simultanée du premier essai ;
 - `voice-ios.js` / `free-voice.js` inchangés ;
 - aucun upload ni stockage audio ;
-- aucun événement Learning Memory / Error / Mastery / Session créé par l’auto-écoute ;
+- aucun événement Memory / Error / Mastery / Session créé par l’auto-écoute ;
 - Blob URL temporaire ;
 - piste micro stoppée ;
 - arrêt automatique après 9 secondes ;
@@ -178,7 +199,7 @@ réponse reconnue
 
 La capture exacte du premier essai reste hors scope tant que cette coexistence n’est pas prouvée.
 
-## Baselines conservées
+## 🛡️ Baselines conservées
 
 - Progression UX Build 25 ;
 - Listening **0.88 / 0.65** ;
@@ -186,22 +207,37 @@ La capture exacte du premier essai reste hors scope tant que cette coexistence n
 - Real Life French III Build 26 : **36 situations / 108 tours** ;
 - Voice Replay + Details Dashboard Build 26.1 ;
 - Click + Listening Rate Hotfix Build 26.2 ;
-- Interaction Stability + two-column Progress Build 26.3 ;
-- learner historique et profil l8 protégés ;
+- Interaction Stability Build 26.3 ;
+- Single-scroll + Tyffany Build 26.4 ;
+- learner historique et profil synthétique l8 protégés ;
 - logo, favicon, `voice-ios.js`, `free-voice.js` sanctuarisés ;
-- aucune migration learner/Memory/Scenario/Listening dans Build 26.4.
+- aucune migration learner/Memory/Scenario/Listening dans Build 26.5.
 
 ### Baseline historique protégée
 
 Le contrat **v1.17.0 — Build 24 — Real Life French II** reste explicitement protégé : avant Real Life III, Scenario comptait **28 situations / 84 tours**. Le marqueur historique `real-life-data-2.js` reste conservé dans l’architecture.
 
-## CI / production Build 26.4
+## CI / production Build 26.5
 
-PR #46 : **10/10 workflows SUCCESS**.
+PR #49 : **11/11 workflows fonctionnels SUCCESS**.
 
-Sur le premier passage `main`, tous les marqueurs produit du single-scroll étaient corrects mais le hook test Maîtrise pouvait se déclencher avant la création de sa tuile. PR #47 a corrigé **uniquement le harness CI**, en réutilisant l’état de smoke déterministe du dashboard Build 26.1. Aucun fichier runtime/PWA n’a été modifié par #47.
+Le nouveau workflow Build 26.5 vérifie en vrai Chrome :
 
-État final `main` :
+- sortie Conversation par pointer/tactile ;
+- sortie Conversation par click/clavier ;
+- mode actif sur une seule colonne ;
+- Tyffany / label non collés ;
+- Progress desktop avec `Maîtrise` long ;
+- gap Résumé → Curriculum borné à 48 px ;
+- deux colonnes indépendantes ;
+- aucun nested scroll réintroduit ;
+- page propriétaire du scroll ;
+- mobile Résumé → Curriculum → Détails repliés ;
+- profil l8 : 7 leçons terminées / 40 acquis intact.
+
+Plusieurs anciens workflows ont également été rendus plus durables : ils protègent désormais **le comportement historique** plutôt que de figer à vie l’URL exacte d’un fichier propriétaire. Le smoke Build 26.1 possède maintenant des Chrome isolés et bornés par timeout.
+
+État runtime final `main` sur `2cd29f20faa8db850f92c343074809cc91b42c76` :
 
 - quality ✅ ;
 - Options ✅ ;
@@ -211,9 +247,10 @@ Sur le premier passage `main`, tous les marqueurs produit du single-scroll étai
 - Session UX ✅ ;
 - Real Life French III ✅ ;
 - Voice Replay + Details Dashboard ✅ ;
-- Build 26.3 interactions + two-column baseline ✅ ;
+- Build 26.3 interactions ✅ ;
 - Build 26.4 single-scroll + Tyffany ✅ ;
-- GitHub Pages **#104 ✅**.
+- Build 26.5 Conversation + Layout ✅ ;
+- GitHub Pages **#106 ✅**.
 
 ## Sanctuaires
 
@@ -231,8 +268,6 @@ Real Life III Build 26
 Voice Replay + Details Dashboard Build 26.1
 ```
 
-Les noms techniques `LucieVoice`, `luc-*` et `lucie-*` sont volontairement conservés comme compatibilité interne ; **Tyffany est le nom produit visible**.
-
 ## Suite
 
 1. **Gate terrain iPhone Build 26.1** : auto-écoute puis reconnaissance suivante.
@@ -241,4 +276,4 @@ Les noms techniques `LucieVoice`, `luc-*` et `lucie-*` sont volontairement conse
 4. **Build 29 — Architecture Hardening**.
 5. **V2.0.0 — Freeze / Release**.
 
-Voir `ROADMAP.md`, `CHANGELOG.md`, `docs/ARCHITECTURE.md`, `docs/BUILD-26-1-VOICE-REPLAY-DETAILS-DASHBOARD.md`, `docs/BUILD-26-2-CLICK-LISTENING-HOTFIX.md`, `docs/BUILD-26-3-INTERACTION-PROGRESS-LAYOUT.md` et `docs/BUILD-26-4-SINGLE-SCROLL-TYFFANY.md`.
+Voir `ROADMAP.md`, `CHANGELOG.md`, `docs/ARCHITECTURE.md`, `docs/BUILD-26-1-VOICE-REPLAY-DETAILS-DASHBOARD.md`, `docs/BUILD-26-2-CLICK-LISTENING-HOTFIX.md`, `docs/BUILD-26-3-INTERACTION-PROGRESS-LAYOUT.md`, `docs/BUILD-26-4-SINGLE-SCROLL-TYFFANY.md` et `docs/BUILD-26-5-CONVERSATION-LAYOUT-REPAIR.md`.
