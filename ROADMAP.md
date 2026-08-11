@@ -24,21 +24,25 @@
 18. Pendant une vraie session de Trân : pas de polish runtime/cache sauf incident critique.
 19. Une fonction d’auto-écoute ne doit jamais dégrader la reconnaissance vocale validée.
 20. Les détails pédagogiques peuvent être riches, mais ils doivent être groupés par intention et jamais affichés comme un dump vertical des moteurs.
+21. Un mode `Lent` doit être **effectivement plus lent dans la couche voix finale**, pas seulement porter une valeur différente dans le moteur appelant.
+22. Les surfaces repliables critiques doivent avoir un contrat de clic navigateur réel, pas seulement exister dans le DOM.
 
 ---
 
-# Baseline production — v1.19.1 / Build 26.1
+# Baseline production — v1.19.2 / Build 26.2
 
-**Voice Self-Playback + Learning Details Dashboard — ✅ PROD / gate iPhone replay encore ouvert**
+**Click + Listening Rate Hotfix — ✅ PROD**
 
-- commit production : `8ad7e5eb9cb2f64c58c086847c3e035463ab3ba3` ;
-- PR #40 ;
+- commit production : `4d1d224aa4eb6612fe6b0dc997f3871bbb502317` ;
+- PR #42 ;
 - **8 workflows / 8 SUCCESS** sur PR puis `main` ;
-- GitHub Pages **#98 SUCCESS** ;
+- GitHub Pages **#100 SUCCESS** ;
 - Progression UX Build 25 intact ;
-- Listening **0.88 normal / 0.64 lent** ;
+- `Détails d’apprentissage` : clic explicite/déterministe validé dans Chrome ;
+- Listening : **0.88 normal / 0.65 lent effectif** ;
 - Session UX Build 25.2 intact ;
 - Real Life French III Build 26 intact : **36 situations / 108 tours** ;
+- Voice Replay + Details Dashboard Build 26.1 intact ;
 - curriculum : **40 leçons / 241 éléments** ;
 - voix/branding sanctuarisés ;
 - aucune migration de données apprenantes ;
@@ -48,7 +52,69 @@ Baseline historique protégée : **v1.17.0 — Build 24 — Real Life French II*
 
 ---
 
-# Build 26.1 — état réel
+# Build 26.2 — critères clôturés
+
+## Retour terrain : clic Détails
+
+La vidéo terrain montre un clic sur `Parcours → Détails d’apprentissage` sans ouverture alors qu’un clic de leçon juste après fonctionne.
+
+Correction :
+
+- `<details>` conservé ;
+- interception explicite du clic `summary` ;
+- `preventDefault()` puis toggle contrôlé par `progression-ux.js` ;
+- dataset de diagnostic d’ouverture ;
+- vrai Chrome clique le résumé et doit constater l’état `open`.
+
+Critères :
+
+- [x] clic réel `Détails` ouvre le panneau ;
+- [x] deuxième logique de toggle disponible sans réimplémenter le dashboard ;
+- [x] dashboard Build 26.1 toujours groupé ;
+- [x] Memory + Mastery toujours présents ;
+- [x] curriculum 40 leçons toujours accessible.
+
+## Retour terrain : Listening lent
+
+Cause auditée :
+
+```text
+Listening slow request = 0.68
+bridge ancien         = 0.64
+voice-ios minimum     = 0.65
+0.64 rejeté           → fallback ~0.84
+```
+
+Donc le comportement réellement entendu était proche de :
+
+```text
+Normal = 0.88
+Lent   = ~0.84
+```
+
+Build 26.2 utilise le plancher déjà autorisé par la couche voix :
+
+```text
+Normal = 0.88
+Lent   = 0.65
+```
+
+Critères :
+
+- [x] `voice-ios.js` byte-identique ;
+- [x] `free-voice.js` byte-identique ;
+- [x] normal effectif 0.88 ;
+- [x] lent effectif 0.65 ;
+- [x] Session UX 5/5 reste valide ;
+- [x] Listening-rate smoke protège le rate final ;
+- [x] cache/version `v1.19.2 / Build 26.2` cohérents ;
+- [x] quality / Options / nav / Progression / Listening / Session UX / Real Life III / Build 26.1 verts ;
+- [x] même tribunal `main` vert ;
+- [x] Pages #100 SUCCESS.
+
+---
+
+# Build 26.1 — état conservé
 
 ## Voice Self-Playback
 
@@ -61,25 +127,13 @@ Après une réponse reconnue, Free Voice peut proposer :
 [ ▶ Réécouter ma voix ] [ ↻ Refaire ]
 ```
 
-Le choix est volontairement conservateur : la reconnaissance se termine **avant** l’ouverture de cette seconde prise locale.
+Le choix reste volontairement conservateur : la reconnaissance se termine **avant** l’ouverture de cette seconde prise locale.
 
-Contrat livré :
-
-- `voice-ios.js` et `free-voice.js` byte-identiques ;
-- `MediaRecorder` / `getUserMedia` avec feature detection ;
-- local uniquement ;
-- aucune persistance ;
-- aucun upload ;
-- aucun effet sur Memory/Error/Mastery/Session ;
-- Blob URL révoquée ;
-- piste micro stoppée ;
-- capture max 9 secondes ;
-- capture locale impossible = reconnaissance pédagogique toujours utilisable ;
-- capture simultanée exacte du premier essai reportée jusqu’à preuve réelle sur iPhone.
+Contrat : local uniquement, aucune persistance, aucun upload, aucun effet sur Memory/Error/Mastery/Session, capture max 9 secondes, pistes micro stoppées, Blob URL révoquée, et reconnaissance pédagogique toujours utilisable si la capture échoue.
 
 ## Learning Details Dashboard
 
-`Parcours → Détails d’apprentissage` est maintenant regroupé par intention :
+`Parcours → Détails d’apprentissage` reste regroupé par intention :
 
 ```text
 🧠 Mémoire & révisions
@@ -89,33 +143,13 @@ Contrat livré :
 🧩 A1 & rythme
 ```
 
-Règles livrées :
+Une seule famille détaillée est ouverte à la fois ; les cartes historiques restent les vrais nœuds DOM et toute future carte non classifiée tombe dans `Autres détails`.
 
-- seules les catégories présentes sont affichées ;
-- une seule famille détaillée ouverte à la fois ;
-- les cartes historiques restent les vrais nœuds DOM ;
-- les moteurs continuent de les mettre à jour ;
-- toute carte future non classifiée tombe dans `Autres détails` ;
-- aucune donnée apprenante n’est créée ou migrée.
+### Gate terrain restant
 
-## Critères de clôture Build 26.1
+- [ ] **test réel sur l’iPhone de Trân :** réponse reconnue → seconde prise locale → lecture correcte → réponse vocale suivante toujours reconnue normalement.
 
-- [x] version `v1.19.1 / Build 26.1` et cache cohérents ;
-- [x] 4 nouveaux fichiers UX câblés/précachés ;
-- [x] replay sans réseau ni persistance ;
-- [x] `free-voice.js`, `voice-ios.js`, logo, favicon byte-identiques ;
-- [x] dashboard groupé dans vrai Chrome ;
-- [x] Memory + Mastery toujours présents ;
-- [x] une seule famille active dans le smoke ;
-- [x] surface replay injectée après résultat vocal synthétique ;
-- [x] Real Life III reste **36 / 108** ;
-- [x] quality / Options / nav / Progression / Listening-rate / Session UX / Real Life III / Build26.1 verts sur PR ;
-- [x] même tribunal `main` vert ;
-- [x] Pages #98 SUCCESS ;
-- [x] docs passées en état production ;
-- [ ] **test terrain sur l’iPhone de Trân :** réponse reconnue → seconde prise locale → lecture correcte → réponse vocale suivante toujours reconnue normalement.
-
-Le build est donc **déployé**, mais la sous-fonction d’auto-écoute n’est pas marquée “terrain validée” avant ce test réel.
+La capture simultanée exacte du premier essai reste hors scope tant que cette coexistence n’est pas prouvée.
 
 ---
 
@@ -152,6 +186,7 @@ bottom navigation interaction baseline
 Progression UX Build 25
 Session UX Build 25.2
 Real Life III Build 26
+Voice Replay + Details Dashboard Build 26.1
 ```
 
 # Easter egg réservé
