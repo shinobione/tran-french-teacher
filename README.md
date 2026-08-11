@@ -4,34 +4,53 @@ PWA de français pensée pour **Trân**, avec priorité à l’oral, au françai
 
 ## Candidat actuel
 
-- **v1.17.2**
-- **Build 24.2 — Navigation Interaction Hotfix**
-- statut : **CANDIDAT / branche `hotfix-nav-clicks`**
+- **v1.17.3**
+- **Build 24.3 — Premium Interaction UX**
+- statut : **CANDIDAT / branche `build24-3-premium-interaction-ux`**
+- baseline production : **v1.17.2 Build 24.2 — Navigation Interaction Hotfix**
 - socle fonctionnel : **v1.17.0 Build 24 — Real Life French II**
 - curriculum : **40 leçons / 241 éléments**
 - Scenario : **28 situations / 84 tours**
 - Real Life I + II : **16 situations / 48 tours**
 - coût : **0 €**
 
-## Hotfix 24.2
+## Build 24.3 — Premium Interaction UX
 
-Le correctif vise la barre apprenante :
+Objectif : faire ressentir French Trân’quille comme une **application mobile**, pas comme un site web responsive.
+
+Règle UX ajoutée :
+
+> Toute action tappable doit produire un retour visuel immédiat.
+
+Build 24.3 ajoute :
+
+- feedback `pointerdown` global sur boutons, navigation, choix, cartes interactives, révision, conversation et listening ;
+- légère compression, contraste/glow court et flash de confirmation au clic ;
+- état actif plus lisible dans la bottom bar ;
+- transition courte d’entrée des écrans ;
+- support `prefers-reduced-motion` ;
+- **Pratiquer devient visuellement un vrai troisième écran/tab**, sans backdrop flouté ni croix de modale ;
+- la bottom bar reste visible et `Pratiquer` reste actif pendant cet écran ;
+- zones tactiles renforcées sur mobile ;
+- nouveau smoke Chrome mobile `390×844` qui vérifie `pointerdown`, feedback visuel et géométrie de l’écran Pratiquer.
+
+Aucun reset et aucune modification du curriculum, de la voix, de Learning Memory, des scénarios ou du branding.
+
+## Navigation apprenante
 
 ```text
 Aujourd’hui / Pratiquer / Parcours
 ```
 
-Sur un vrai Chrome desktop, elle pouvait être visible mais ne plus réagir aux clics alors que les smokes propres restaient verts.
+Les trois entrées ont désormais le même statut visuel : ce sont trois destinations principales de l’application.
 
-Build 24.2 :
+`Pratiquer` contient :
 
-- stabilise les nœuds DOM du menu pour éviter les remplacements inutiles ;
-- traite les clics de navigation en phase de capture ;
-- force un nouvel asset `ux-shell.js?v=1.17.2-b24.2` ;
-- aligne l’identité du cache service worker et celle nettoyée par `index.html` ;
-- ajoute un smoke Chrome dédié aux clics physiques, y compris page scrollée.
+- Réviser mes acquis ;
+- Parler français ;
+- Écouter.
 
-Aucun reset et aucune modification du curriculum, de la voix, de Learning Memory, des scénarios ou du branding.
+Les moteurs internes restent invisibles pour l’utilisatrice.
 
 ## Real Life French II
 
@@ -49,8 +68,6 @@ Le pack II ajoute 10 situations :
 - problème de clé à l’appartement ;
 - problème d’eau chaude ;
 - réseau faible pendant un appel avec Jerry.
-
-Les prérequis couvrent `l9` → `l20` et réutilisent aussi certains acquis plus anciens.
 
 ## UX à grande échelle
 
@@ -79,18 +96,17 @@ voice-ios.js
 free-voice.js
 ```
 
-## Runtime Build 24
+## Runtime interaction
 
-Ordre Scenario :
+Ordre UX final :
 
 ```text
-scenario-data
-→ real-life-data
-→ real-life-data-2
-→ scenario-host
-→ scenario-engine
-→ real-life-ux
+ux-shell
+→ interaction-ux
+→ build-meta
 ```
+
+`interaction-ux` est uniquement une couche de feedback et de transition. Elle ne possède aucune donnée d’apprentissage.
 
 ## Documentation
 
@@ -101,5 +117,6 @@ scenario-data
 - [`docs/BUILD-24-REAL-LIFE-FRENCH-II.md`](./docs/BUILD-24-REAL-LIFE-FRENCH-II.md)
 - [`docs/HOTFIX-24.1-OPTIONS-CRASH.md`](./docs/HOTFIX-24.1-OPTIONS-CRASH.md)
 - [`docs/HOTFIX-24.2-NAV-INTERACTION.md`](./docs/HOTFIX-24.2-NAV-INTERACTION.md)
+- [`docs/HOTFIX-24.3-PREMIUM-INTERACTION.md`](./docs/HOTFIX-24.3-PREMIUM-INTERACTION.md)
 
-Build 24.2 ne sera déclaré `PROD / CLOS` qu’après PR, CI complète, merge `main` et GitHub Pages verts.
+Build 24.3 ne sera déclaré `PROD / CLOS` qu’après PR, CI complète, merge `main` et GitHub Pages verts.
