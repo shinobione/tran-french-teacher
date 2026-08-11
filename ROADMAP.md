@@ -19,176 +19,120 @@
 
 # État de référence livré
 
-## v1.12.0 — Build 19 — ✅ PROD
+## v1.13.0 — Build 20 — ✅ PROD
 
 - **40 leçons / 238 éléments** ;
 - A0 → A1 Core ;
 - Learning Memory ;
 - Daily Coach ;
-- Mastery Engine + palier A1 Core ;
+- Mastery Engine + A1 Core ;
 - Scenario Lab : 12 situations / 36 tours ;
 - Error Intelligence ;
 - Free Voice ;
-- runtime metadata centralisée ;
-- Chrome Home / Scenario / Error / A1 Core ;
-- validation directe de l’URL GitHub Pages publique ;
+- Listening Comprehension : Sens / Contrastes / Mini-dialogues ;
+- transcript caché avant tentative ;
+- vitesse normale/lente ;
+- Memory + Error `listening-miss` ;
+- Chrome Home / Listening / Scenario / Error / A1 Core ;
+- validation directe de GitHub Pages publique ;
 - coût : **0 €**.
 
 ---
 
-# PHASES CLÔTURÉES RÉCENTES
+# PHASES RÉCENTES CLÔTURÉES
 
-## v1.9.0 — Build 16 — Mastery Engine — ✅ CLOS
+## Build 16 — Mastery Engine — ✅ CLOS
+## Build 17 — Scenario Lab — ✅ CLOS
+## Build 18 — Error Intelligence — ✅ CLOS
+## Build 19 — A1 Core — ✅ CLOS
 
-- [x] quatre étapes de maîtrise ;
-- [x] preuves Learning Memory avant `Maîtrisé` ;
-- [x] estimation interne non assimilée à une certification CECRL ;
-- [x] gouvernance documentaire.
+## v1.13.0 — Build 20 — Listening Comprehension — ✅ CLOS
 
-## v1.10.0 — Build 17 — Scenario Lab — ✅ CLOS
-
-- [x] 12 scénarios / 36 tours ;
-- [x] déverrouillage par leçons ;
-- [x] indices / modèles / Memory ;
-- [x] profil vierge ;
-- [x] Chrome Home + Conversation.
-
-## v1.11.0 — Build 18 — Error Intelligence — ✅ CLOS
-
-- [x] preuves observables ;
-- [x] historique 20/élément / 120 globaux ;
-- [x] récence / répétition / récupération ;
-- [x] Free Voice → Memory + Error ;
-- [x] Chrome Home / Scenario / Error.
-
-## v1.12.0 — Build 19 — A1 Core — ✅ CLOS
-
-- [x] 15 nouvelles leçons 26→40 ;
-- [x] 90 nouveaux éléments ;
-- [x] 40 leçons / 238 éléments total ;
-- [x] six éléments par leçon ;
-- [x] IDs globaux uniques ;
-- [x] nombres 11→100 ;
-- [x] jours / mois / dates ;
-- [x] heure précise ;
-- [x] possessifs ;
-- [x] présent `tu`, `il/elle`, `nous` ;
-- [x] futur proche ;
-- [x] passé récent ;
-- [x] passé composé fréquent ;
-- [x] formes féminines avec être ;
-- [x] administration / documents ;
-- [x] émotions / besoins / proches ;
-- [x] Mastery A1 Core avec preuves de révision ;
-- [x] Learning Memory / Free Voice / Error compatibles ;
-- [x] build-meta chargé en dernier ;
-- [x] CI normalisée autour de l’état courant ;
-- [x] Chrome Home = 40 leçons ;
-- [x] Chrome Scenario non-régression ;
-- [x] Chrome Error non-régression ;
+- [x] moteur Listening local ;
+- [x] stockage `french-tranquille:listening:v1` ;
+- [x] historique borné à 100 ;
+- [x] Sens ;
+- [x] Contrastes ;
+- [x] Mini-dialogues ;
+- [x] transcript caché avant tentative ;
+- [x] transcript révélé après réponse ;
+- [x] vitesse normale / lente ;
+- [x] réécoute ;
+- [x] Home ;
+- [x] Daily Coach ;
+- [x] Progression ;
+- [x] Réglages ;
+- [x] Learning Memory `listening-*` ;
+- [x] Error Intelligence `listening-miss` ;
+- [x] double comptage évité ;
+- [x] Chrome Home ;
+- [x] Chrome Listening ;
+- [x] Chrome Scenario ;
+- [x] Chrome Error ;
 - [x] Chrome A1 Core ;
-- [x] PR #11 verte et mergée ;
+- [x] PR #13 verte et mergée ;
 - [x] CI `main` verte ;
 - [x] GitHub Pages vert ;
-- [x] URL publique réellement rendue et vérifiée.
+- [x] URL publique Home + Listening vérifiée.
 
 ---
 
 # VOICE CALIBRATION GATE — BLOQUÉ SUR DONNÉES RÉELLES
 
-Le calibrage Safari/Siri spécifique à Trân reste séparé.
-
-À collecter sur son vrai iPhone :
-
-- phrase cible ;
-- transcription Safari ;
-- alternatives éventuelles ;
-- nombre d’essais ;
-- faux refus ;
-- faux positifs.
-
-Seulement après : tolérances réelles et variantes observées. **Jamais de faux score phonétique.**
+Toujours séparé : cible, transcription Safari réelle, alternatives, essais, faux refus et faux positifs avant toute calibration spécifique à Trân.
 
 ---
 
-# v1.13.0 — Build 20 — Listening Comprehension — 🔥 PROCHAIN
+# v1.14.0 — Build 21 — Adaptive Language Ratio — 🔥 PROCHAIN
 
 ## But
 
-Faire travailler la compréhension orale **sans afficher immédiatement la phrase française**, afin que l’audio devienne une vraie source d’information et pas simplement un bouton “lire le texte”.
+Faire évoluer le ratio vietnamien/français **selon les preuves d’apprentissage**, et non selon un numéro de leçon arbitraire.
 
-## Périmètre prévu
+## Signaux prévus
 
-### Mode Écoute
+- Mastery global ;
+- Mastery A1 Core ;
+- réussite Listening ;
+- fragilités Learning Memory ;
+- Error Intelligence récente ;
+- assistance nécessaire dans Scenario Lab ;
+- difficulté de l’écran ou de l’exercice.
 
-- Lucie lit une phrase déjà connue ou légèrement recombinée ;
-- Trân choisit le sens vietnamien ;
-- possibilité de réécouter ;
-- vitesse lente puis normale ;
-- la réponse textuelle française n’est révélée qu’après tentative.
+## Profils de langue envisagés
 
-### Contrastes auditifs utiles
+```text
+VI-HEAVY   ≈ 90% VI / 10% FR
+VI-SUPPORT ≈ 70% VI / 30% FR
+BALANCED   ≈ 50% VI / 50% FR
+FR-GROWING ≈ 30% VI / 70% FR
+```
 
-Exemples :
+Ce sont des **cibles de rendu**, pas des quotas mot-à-mot rigides.
 
-- `tu` / `tout` ;
-- nombres proches ;
-- `il est` / `elle est` ;
-- heure et prix ;
-- présent / futur proche selon contexte ;
-- phrases courtes de la vie quotidienne.
+## Garde-fous
 
-Sans prétendre mesurer la production phonétique : ici on teste **la compréhension**.
+- une fragilité récente peut faire revenir temporairement plus de vietnamien ;
+- un excellent score global ne supprime pas l’aide VI sur une nouvelle structure ;
+- les consignes de sécurité / administration peuvent garder davantage de soutien ;
+- DEBUG FR de Jerry reste indépendant ;
+- aucune langue n’est changée silencieusement dans les données stockées.
 
-### Mini-dialogues
+## Critères de clôture Build 21
 
-- 2 à 4 répliques ;
-- question de compréhension ;
-- situations café / gare / téléphone / proches / rendez-vous ;
-- audio généré avec `speechSynthesis` local ;
-- transcript masqué avant réponse.
-
-### Mémoire
-
-Les réponses alimenteront :
-
-- Learning Memory ;
-- Error Intelligence avec source `listening-*` ;
-- Daily Coach ;
-- future adaptation VI/FR.
-
-## Critères de clôture Build 20
-
-- [ ] moteur Listening séparé et local ;
-- [ ] banque d’exercices construite à partir des acquis ;
-- [ ] phrase française masquée avant tentative ;
-- [ ] vitesse lente / normale ;
-- [ ] réécoute ;
-- [ ] au moins 3 familles d’exercices ;
-- [ ] mini-dialogues ;
-- [ ] Memory + Error Intelligence alimentées ;
-- [ ] aucune régression 40 leçons ;
-- [ ] aucune régression Scenario Lab ;
-- [ ] Chrome Home ;
-- [ ] Chrome Listening ;
-- [ ] Chrome Scenario ;
-- [ ] Chrome Error ;
-- [ ] README / ROADMAP / CHANGELOG / ARCHITECTURE synchronisés ;
-- [ ] PR + `main` + Pages verts.
-
----
-
-# v1.14.0 — Build 21 — Adaptive Language Ratio
-
-Le ratio VI/FR dépendra de :
-
-- Mastery ;
-- compréhension Listening ;
-- indices nécessaires ;
-- Error Intelligence ;
-- difficulté de la situation.
-
-Le vietnamien recule uniquement quand les preuves le permettent.
+- [ ] moteur ratio séparé ;
+- [ ] score explicable ;
+- [ ] profils de langue définis ;
+- [ ] Home / leçons / Listening / Scenarios peuvent consommer le profil ;
+- [ ] baisse du VI uniquement avec preuves ;
+- [ ] remontée du VI après difficultés ;
+- [ ] DEBUG FR préservé ;
+- [ ] smoke de profils débutant / intermédiaire / fragilisé ;
+- [ ] 40 leçons intactes ;
+- [ ] Listening intact ;
+- [ ] Scenario / Error / Mastery intacts ;
+- [ ] docs ;
+- [ ] PR + main + Pages verts.
 
 ---
 
@@ -200,23 +144,15 @@ Français avec Jerry, proches, repas, téléphone, déplacements, problèmes quo
 
 # V2.0.0 — Hardening
 
-Objectif : A0→A1 cohérent, scénarios stables, mémoire versionnée, sauvegarde robuste, Safari réel, offline testé, docs complètes, zéro dépendance payante obligatoire.
+A0→A1 cohérent, adaptation stable, scénarios, mémoire versionnée, sauvegarde robuste, Safari réel, offline, docs, zéro dépendance payante obligatoire.
 
 ---
 
 # Backlog
 
-- vrai avatar Lucie ;
-- sons discrets ;
-- fiches imprimables ;
-- bilan exportable ;
-- admin local ;
-- mode 5 min ;
-- écoute/déplacement ;
-- statistiques hebdomadaires ;
-- multi-appareil gratuit si solution sûre.
+Vrai avatar Lucie, sons discrets, fiches imprimables, bilan exportable, admin local, mode 5 min, écoute/déplacement, stats hebdo, multi-appareil gratuit si solution sûre.
 
-# Reporté explicitement
+# Reporté
 
 Backend/API payants, avatar vidéo, XP/classement, gamification agressive, score phonétique pseudo-scientifique, app native tant que la PWA suffit.
 

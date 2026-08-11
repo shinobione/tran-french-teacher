@@ -224,7 +224,8 @@ Raccourci : `?debug=fr`.
 
 Après Build 19 :
 
-- **Build 20 — Listening Comprehension** ;
+- **Build 20 — Listening Comprehension**
+- statut : **PROD / GitHub Pages** ;
 - **Build 21 — Adaptive Language Ratio** ;
 - Safari/Siri Calibration Gate dès que le test réel iPhone est disponible ;
 - puis Real Life French et durcissement V2.
