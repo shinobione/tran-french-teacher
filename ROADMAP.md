@@ -21,19 +21,21 @@
 
 # État de référence
 
-## v1.9.0 — Build 16 — LIVRÉ
+## v1.10.0 — Build 17 — LIVRÉ
 
 - 25 leçons / 148 éléments ;
 - Learning Memory + révision espacée ;
 - Daily Coach ;
 - Mastery Engine ;
-- distinction leçon terminée / acquis / maîtrise ;
-- estimation interne A0 → A1 en construction ;
-- Free Voice + fallback texte ;
-- CI Chrome headless ;
+- Scenario Lab : **12 situations / 36 tours** ;
+- scénarios déverrouillés selon les leçons réellement terminées ;
+- succès / échecs / aides reconnectés à Learning Memory ;
+- voix navigateur + fallback texte ;
+- profil vierge supporté : scénarios visibles mais verrouillés ;
+- CI avec **Chrome Home + Chrome Conversation** ;
 - GitHub Pages ;
 - documentation canonique ;
-- coût : 0 €.
+- coût : **0 €**.
 
 ---
 
@@ -50,13 +52,9 @@
 
 ---
 
-## v1.10.0 — Build 17 — Scenario Lab — 🔥 EN COURS
+## v1.10.0 — Build 17 — Scenario Lab — ✅ CLOS
 
-### But
-
-Transformer Conversation en **situations multi-tours réellement jouables**, sans IA payante.
-
-### Périmètre V1
+### Livré
 
 12 scénarios, 3 tours chacun :
 
@@ -75,40 +73,27 @@ Transformer Conversation en **situations multi-tours réellement jouables**, san
 
 Total : **36 tours de dialogue**.
 
-### Fonctionnement attendu
+### Clôture Build 17
 
-- scénarios déverrouillés selon les leçons terminées ;
-- plusieurs variantes de réponse acceptées ;
-- première erreur → indice ;
-- erreurs répétées → modèle ;
-- utilisation du modèle comptée comme aide ;
-- réussites / échecs / aides reliés à Learning Memory ;
-- progression locale par scénario ;
-- interlocuteur réécoutable ;
-- micro utilisé si le navigateur l’expose ;
-- fallback texte permanent ;
-- aucune notation phonétique inventée.
+- [x] 12 scénarios présents et IDs uniques ;
+- [x] au moins 3 tours par scénario ;
+- [x] déverrouillage basé sur `completedLessons` ;
+- [x] aucun modèle révélé avant plusieurs échecs ;
+- [x] Learning Memory reçoit succès / échec / aide ;
+- [x] statistiques locales persistées ;
+- [x] Progression affiche les situations ;
+- [x] diagnostic Scenario Lab présent ;
+- [x] profil vierge supporté via `scenario-host.js` ;
+- [x] Home Build 16 toujours saine ;
+- [x] Chrome Home vert ;
+- [x] Chrome Conversation `?scenarioSmoke=1` vert ;
+- [x] README / ROADMAP / CHANGELOG / ARCHITECTURE synchronisés ;
+- [x] cache/version Build 17 synchronisés ;
+- [x] CI PR verte ;
+- [x] CI main verte ;
+- [x] GitHub Pages vert.
 
-### Critères de clôture Build 17
-
-- [ ] 12 scénarios présents et IDs uniques ;
-- [ ] au moins 3 tours par scénario ;
-- [ ] déverrouillage basé sur `completedLessons` ;
-- [ ] aucun scénario ne révèle son modèle avant plusieurs échecs ;
-- [ ] Learning Memory reçoit succès / échec / aide ;
-- [ ] statistiques locales persistées ;
-- [ ] Progression affiche les situations ;
-- [ ] diagnostic Scenario Lab présent ;
-- [ ] Home Build16 toujours saine ;
-- [ ] Chrome Home vert ;
-- [ ] Chrome Conversation `?scenarioSmoke=1` vert ;
-- [ ] README / ROADMAP / CHANGELOG / ARCHITECTURE synchronisés ;
-- [ ] cache/version Build 17 synchronisés ;
-- [ ] CI PR verte ;
-- [ ] CI main verte ;
-- [ ] GitHub Pages vert.
-
-### Non inclus dans Build 17
+### Non inclus volontairement
 
 - compréhension sémantique libre par IA ;
 - conversation générative illimitée ;
@@ -118,34 +103,58 @@ Total : **36 tours de dialogue**.
 
 ---
 
-## v1.11.0 — Build 18 — Error Intelligence — PROCHAIN
+## v1.11.0 — Build 18 — Error Intelligence — 🔥 PROCHAIN
 
 ### But
 
-Passer de « difficile/correct/facile » à une mémoire des **types de confusion**.
+Passer de « difficile/correct/facile » à une mémoire des **raisons observables pour lesquelles un acquis revient mal**, sans inventer un diagnostic linguistique que l’application ne peut pas prouver.
 
-### Catégories prévues
+### Taxonomie V1 — preuves d’abord
 
-- mot oublié ;
-- mot confondu ;
-- ordre des mots ;
-- négation ;
-- article ;
-- verbe / structure ;
-- transcription vocale non reconnue ;
-- réponse partielle ;
-- hésitation répétée ;
-- aide/modèle nécessaire dans Scenario Lab.
+Les premières catégories seront volontairement observables :
 
-### Livrables
+- **retrieval-difficult** — l’élément est évalué difficile en révision ;
+- **text-mismatch** — réponse texte différente de la cible ;
+- **scenario-miss** — réponse refusée dans un scénario ;
+- **assisted** — modèle nécessaire dans Scenario Lab ;
+- **voice-unrecognized** — le navigateur n’a pas reconnu la phrase attendue ;
+- **repeated-miss** — plusieurs échecs rapprochés sur le même élément ;
+- **partial** — réponse contenant une partie démontrable de la cible, quand cette information est disponible.
 
-- historique compact par élément ;
-- confusion récurrente ;
-- source d’erreur (`review`, `voice`, `scenario`, etc.) ;
-- priorité quotidienne influencée par le type d’erreur ;
-- mini-bilan après séance ;
-- export JSON versionné ;
-- pont vers Mastery Engine.
+Les catégories grammaticales (`article`, `négation`, `ordre des mots`, etc.) ne seront ajoutées que lorsqu’une comparaison entrée/cible permet de les établir avec assez de certitude. **Pas de pseudo-diagnostic.**
+
+### Livrables Build 18
+
+- stockage local versionné `french-tranquille:error-intelligence:v1` ;
+- historique compact par élément, avec limite de taille ;
+- compteurs par type d’erreur et par source ;
+- erreur dominante uniquement si elle est suffisamment répétée ;
+- détection de répétition / récence ;
+- carte Error Intelligence dans Progression ;
+- mini-bilan des difficultés récentes ;
+- priorité Daily Coach influencée par récence + répétition ;
+- pont vers Mastery Engine sans modifier les critères de certification inexistants ;
+- export JSON dédié ou extension sûre de la sauvegarde existante ;
+- diagnostic dans Réglages ;
+- CI avec contrat de stockage + Chrome dédié.
+
+### Critères de clôture Build 18
+
+- [ ] aucun événement d’erreur ne casse Learning Memory existante ;
+- [ ] taille de l’historique bornée ;
+- [ ] catégories fondées sur des preuves observables ;
+- [ ] Scenario Lab produit `miss` / `assisted` exploitables ;
+- [ ] Free Voice produit au minimum `voice-unrecognized` lorsque c’est réellement observable ;
+- [ ] révision difficile produit `retrieval-difficult` ;
+- [ ] Daily Coach peut remonter un élément récidiviste ;
+- [ ] Progression montre les difficultés sans stigmatiser ;
+- [ ] export/import ou export dédié validé ;
+- [ ] aucune régression des 25 leçons / 12 scénarios ;
+- [ ] Chrome Home vert ;
+- [ ] Chrome Scenario Lab vert ;
+- [ ] Chrome Error Intelligence vert ;
+- [ ] README / ROADMAP / CHANGELOG / ARCHITECTURE synchronisés ;
+- [ ] CI PR + main + Pages verts.
 
 ---
 
