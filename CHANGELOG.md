@@ -4,32 +4,29 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ## [Unreleased]
 
-### v1.18.0 — Build 25 — Progression UX / Progressive Disclosure — CANDIDAT
+Prochains jalons :
 
-Le freeze terrain est levé. Le chantier runtime reprend sur branche dédiée.
+- v1.18.1 — Build 25.1 — Listening Slow Calibration ;
+- v1.18.2 — Build 25.2 — Session Goals / Milestones / App Delight ;
+- v1.19.0 — Build 26 — Real Life French III.
 
-Candidat actuel :
+---
 
-- nouveau `progression-ux.js` + `progression-ux.css` ;
-- Build meta candidat : **v1.18.0 / Build 25** ;
-- cache candidat : `tran-french-teacher-v1.18.0-b25-progression-ux` ;
-- vue Parcours réorganisée sans migration de données ;
-- ancien hero/stats conservé dans le DOM mais remplacé visuellement par un résumé simple ;
-- cartes Memory / Mastery / A1 et autres injecteurs déplacées derrière `Détails d’apprentissage` ;
-- seulement 5 lignes du curriculum visibles par défaut autour de la leçon actuelle ;
-- les 40 leçons restent accessibles via `Voir les 40 leçons` ;
-- CTA direct vers la leçon actuelle ;
-- nouveau workflow `Build 25 Progression UX smoke` : compact / expanded / details ;
-- profil synthétique l8 attendu inchangé : 7 leçons terminées, l8 actuelle, 40 acquis ;
-- hashes logo/favicon/voice/free-voice inchangés.
+## [1.18.0] — Build 25 — Progression UX / Progressive Disclosure — 2026-08-11
 
-Ce bloc reste **Unreleased** tant que PR → CI → `main` → Pages n’est pas complètement vert.
-
-### Notes terrain planifiées ensuite
-
-- Build 25.1 : Listening lent à tester vers 0.64 puis 0.62 si nécessaire ;
-- Build 25.2 : objectifs de session, milestones significatifs et animations de succès premium sobres ;
-- Real Life French III déplacé en Build 26.
+- ajoute `progression-ux.js` et `progression-ux.css` ;
+- remplace la première vue de `Parcours` par un résumé : leçon actuelle, progression globale, leçons finies, acquis, à revoir et prochaine étape ;
+- conserve le vieux hero/stats dans le DOM mais hors flux principal ;
+- regroupe Memory / Mastery / A1 et les autres cartes techniques derrière `Détails d’apprentissage` ;
+- limite le curriculum visible à 5 lignes autour de la leçon actuelle ;
+- conserve les 40 leçons via `Voir les 40 leçons` ;
+- aucune migration de données ;
+- cache `tran-french-teacher-v1.18.0-b25-progression-ux` ;
+- PR #31 : quality #93 / Options #24 / nav-mobile #43 / Progression UX #1 — SUCCESS ;
+- `main` `4f354221f923004b0cefdaf6b3281e51ba30dbf9` : quality #94 / Options #25 / nav-mobile #44 / Progression UX #2 — SUCCESS ;
+- GitHub Pages #90 — SUCCESS ;
+- contrat leçon 8 préservé : l8 / 7 terminées / 40 acquis / 5 lignes visibles / 40 disponibles ;
+- logo, favicon, `voice-ios.js`, `free-voice.js` sanctuarisés.
 
 ---
 
@@ -46,8 +43,6 @@ PR #29 / commit `58f64a46bf8b2943a791a1098402e36285e91814` :
 - nav/mobile : SUCCESS ;
 - GitHub Pages #88 : SUCCESS.
 
-Ce microfix n’a pas reçu de nouveau numéro de version produit ; la baseline reste **v1.17.5 / Build 24.5**.
-
 ---
 
 ## [1.17.5] — Build 24.5 — Navigation State Sync — 2026-08-11
@@ -60,12 +55,11 @@ Ce microfix n’a pas reçu de nouveau numéro de version produit ; la baseline 
 - cache PWA `tran-french-teacher-v1.17.5-b24.5-nav-state-sync` ;
 - PR #27 : quality #83 / Options #14 / nav-mobile #33 SUCCESS ;
 - `main` : quality #84 / Options #15 / nav-mobile #34 SUCCESS ;
-- GitHub Pages #86 SUCCESS ;
-- aucune modification de la progression, du curriculum, de la voix, de Learning Memory, Scenario, Listening ou du branding.
+- GitHub Pages #86 SUCCESS.
 
 ### Build 24.4 — Mobile Polish / Interaction Timing
 
-Build 24.4 a apporté les nœuds persistants, le `tap echo` et le header de leçon allégé. Sa PR était verte, mais le smoke `main` a révélé une course `active-wrong:progress:home`. La clôture fonctionnelle de ce chantier est donc portée par Build 24.5.
+Build 24.4 a apporté les nœuds persistants, le `tap echo` et le header de leçon allégé. Sa PR était verte, mais le smoke `main` a révélé une course `active-wrong:progress:home`. La clôture fonctionnelle est portée par Build 24.5.
 
 ---
 
