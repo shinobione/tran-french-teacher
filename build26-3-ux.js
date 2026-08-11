@@ -105,13 +105,17 @@
     const toggle = card?.querySelector('[data-b263-daily-toggle]');
     const extras = card?.querySelector('.b263-daily-extras');
     if (!toggle || !extras) return;
-    toggle.setAttribute('aria-expanded', dailyMoreOpen ? 'true' : 'false');
-    extras.hidden = !dailyMoreOpen;
+    const expanded = dailyMoreOpen ? 'true' : 'false';
+    const nextLabel = dailyMoreOpen ? T('Ẩn hoạt động khác', 'Masquer les autres activités') : T('Xem hoạt động khác', 'Voir les autres activités');
+    const nextArrow = dailyMoreOpen ? '⌃' : '⌄';
+    if (toggle.getAttribute('aria-expanded') !== expanded) toggle.setAttribute('aria-expanded', expanded);
+    if (extras.hidden === dailyMoreOpen) extras.hidden = !dailyMoreOpen;
     const label = toggle.querySelector('strong');
     const arrow = toggle.querySelector('span');
-    if (label) label.textContent = dailyMoreOpen ? T('Ẩn hoạt động khác', 'Masquer les autres activités') : T('Xem hoạt động khác', 'Voir les autres activités');
-    if (arrow) arrow.textContent = dailyMoreOpen ? '⌃' : '⌄';
-    card.dataset.b263DailyMoreOpen = dailyMoreOpen ? '1' : '0';
+    if (label && label.textContent !== nextLabel) label.textContent = nextLabel;
+    if (arrow && arrow.textContent !== nextArrow) arrow.textContent = nextArrow;
+    const nextState = dailyMoreOpen ? '1' : '0';
+    if (card.dataset.b263DailyMoreOpen !== nextState) card.dataset.b263DailyMoreOpen = nextState;
   }
 
   function decorateDaily() {
