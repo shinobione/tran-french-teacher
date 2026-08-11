@@ -2,38 +2,65 @@
 
 PWA de français pensée pour **Trân**, avec priorité à l’oral, au français utile dans la vraie vie et à une interface simple sur iPhone.
 
-## Version actuellement utilisée
+## Version candidate en cours
 
-- **v1.17.5**
-- **Build 24.5 — Navigation State Sync**
-- statut : **PROD / CLOS**
-- baseline fonctionnelle : **v1.17.0 — Build 24 — Real Life French II**
+- **v1.18.0**
+- **Build 25 — Progression UX / Progressive Disclosure**
+- statut : **CANDIDAT / EN COURS**
+- baseline fonctionnelle conservée : **v1.17.0 — Build 24 — Real Life French II**
+- dernière baseline mobile clôturée : **v1.17.5 — Build 24.5 — Navigation State Sync**
 - curriculum : **40 leçons / 241 éléments**
 - Scenario : **28 situations / 84 tours**
 - coût : **0 €**
 
-### Microfix post-release Listening — 2026-08-11
+## Build 25 — intention
+
+Les retours terrain ont montré que `Parcours` était devenu un écran interminable : les moteurs internes fonctionnent, mais trop de cartes et de compteurs sont exposés en permanence.
+
+Build 25 ne supprime **aucune donnée** et ne remplace **aucun moteur**. Il ajoute une couche `progression-ux` chargée après Memory / Mastery / Scenario / Listening afin de réorganiser leur rendu.
+
+Première vue cible :
+
+```text
+Où tu en es
+↓
+3 indicateurs simples
+↓
+prochaine étape
+↓
+quelques leçons autour de la leçon actuelle
+```
+
+Les cartes techniques existantes restent disponibles derrière **Détails d’apprentissage**. Le parcours complet reste disponible derrière **Voir les 40 leçons**.
+
+### Contrat candidat
+
+Sur le profil synthétique leçon 8 :
+
+- l8 reste la leçon actuelle ;
+- 7 leçons terminées restent 7 ;
+- 40 acquis restent 40 ;
+- seulement **5 lignes de parcours** sont visibles par défaut ;
+- les 40 restent accessibles à la demande ;
+- Memory / Mastery et les autres cartes restent dans le DOM et accessibles via un détail repliable ;
+- aucun reset / migration ;
+- voix, reconnaissance, logo et favicon inchangés.
+
+## Microfix Listening livré avant Build 25
 
 PR #29 / commit `58f64a46bf8b2943a791a1098402e36285e91814` :
 
 - `Vitesse normale` et `Lent` ne sont plus écrasés par la même vitesse globale Lucie ;
-- valeurs actuellement utilisées par Listening : **0.88 / 0.68** ;
-- `voice-ios.js` reste sanctuarisé ;
-- quality / Options / nav-mobile / Pages : **SUCCESS**.
+- valeurs actuelles : **0.88 / 0.68** ;
+- `voice-ios.js` reste sanctuarisé.
 
-Retour terrain : **0.68 est nettement mieux mais pourrait encore être un peu plus lent**. Aucun changement tant que Trân utilise activement l’application. La prochaine calibration sera faite à l’oreille sur iPhone, avec candidat autour de **0.62–0.64**, sans engagement avant test.
+Retour terrain : **0.68 pourrait encore être un peu plus lent**. La calibration est gardée pour **Build 25.1**, après A/B iPhone.
 
-## Freeze terrain — actif
+## Freeze terrain
 
-Trân utilise actuellement la PWA. Jusqu’à fin de sa session réelle :
+Le freeze terrain du 11/08 est **LEVÉ** : Trân a terminé sa session et Build 25 peut passer en développement/CI.
 
-- **aucun changement runtime** ;
-- **aucun cache/service-worker bump** ;
-- **aucun merge sur `main`** pour du polish ;
-- seules la documentation et la préparation sur branche sont autorisées ;
-- exception : crash, perte de données ou blocage critique reproductible.
-
-La progression existante reste prioritaire sur la vitesse de développement.
+La règle reste canonique : pendant une session réelle, aucun changement runtime sauf crash, perte de données ou blocage critique reproductible.
 
 ## Mobile interaction baseline
 
@@ -48,17 +75,7 @@ French Trân’quille doit se comporter comme une application mobile :
 - header de leçon transparent/non-sticky ;
 - `prefers-reduced-motion` respecté.
 
-## Dette UX prioritaire observée sur téléphone
-
-Les captures terrain du 11/08 montrent que **Parcours / Progression est devenu trop long et trop technique**. Le problème n’est plus la bottom bar : c’est la densité d’information derrière `Parcours`.
-
-L’écran expose actuellement trop de couches à la suite : niveau, Memory, Mastery, situations réelles, fondations A1, éléments acquis, moteurs de maîtrise et parcours complet. Tout est utile au moteur ou au debug, mais **tout ne doit pas être visible en permanence par l’apprenante**.
-
-Règle de la prochaine passe :
-
-> **La complexité appartient à Lucie. Trân voit d’abord où elle en est, ce qu’elle a réussi et ce qui vient ensuite. Les détails restent accessibles à la demande.**
-
-Voir `docs/NEXT-UX-PASS.md`.
+Build 25 doit préserver entièrement cette baseline.
 
 ## Sanctuaires
 
@@ -75,12 +92,13 @@ curriculum / Learning Memory / Scenario / Listening state
 
 ## Suite recalée
 
-1. **Build 25 — Progression UX / Progressive Disclosure** — priorité suivante après le freeze terrain.
-2. **Build 25.1 — Listening Slow Calibration** — seulement après A/B iPhone et hors session active.
-3. **Build 26 — Real Life French III** — ancien Build 25, volontairement repoussé derrière le nettoyage UX.
-4. Data & Recovery Hardening.
-5. iPhone / PWA / Accessibility Hardening.
-6. Architecture Hardening.
-7. V2.0.0 Freeze / Release.
+1. **Build 25 — Progression UX / Progressive Disclosure** — EN COURS.
+2. **Build 25.1 — Listening Slow Calibration** — A/B iPhone, candidat 0.64 puis 0.62 si nécessaire.
+3. **Build 25.2 — Session Goals / Milestones / App Delight** — objectif visible, progression, fin claire, succès premium sobre.
+4. **Build 26 — Real Life French III** — contenu repoussé derrière le chantier UX.
+5. **Build 27 — Data & Recovery Hardening**.
+6. **Build 28 — iPhone / PWA / Accessibility Hardening**.
+7. **Build 29 — Architecture Hardening**.
+8. **V2.0.0 — Freeze / Release**.
 
 Voir aussi : `ROADMAP.md`, `CHANGELOG.md`, `docs/ARCHITECTURE.md`, `docs/NEXT-UX-PASS.md` et les dossiers Build/Hotfix existants.
