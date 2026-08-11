@@ -21,7 +21,7 @@
 
 ---
 
-# Baseline production — v1.17.2 Build 24.2
+# Baseline production — v1.17.3 Build 24.3
 
 - socle : **Build 24 — Real Life French II** ;
 - **40 leçons / 241 éléments** ;
@@ -29,12 +29,13 @@
 - Scenario : **28 situations / 84 tours** ;
 - Real Life I + II : **16 situations / 48 tours** ;
 - UX : **Aujourd’hui / Pratiquer / Parcours** ;
-- navigation click hotfix 24.2 ;
+- interaction mobile premium globalisée ;
+- `Pratiquer` = vrai troisième écran visuel ;
 - progression protégée ;
 - voix iPhone et reconnaissance vocale baseline validée ;
 - coût 0 €.
 
-## Builds 16 → 24.2
+## Builds 16 → 24.3
 
 - Build 16 — Mastery Engine — ✅ CLOS
 - Build 17 — Scenario Lab — ✅ CLOS
@@ -47,64 +48,28 @@
 - Build 24 — Real Life French II — ✅ INTÉGRÉ
 - Build 24.1 — Options Crash Hotfix — ✅ PROD
 - Build 24.2 — Navigation Interaction Hotfix — ✅ PROD
-
----
-
-# v1.17.3 — Build 24.3 — Premium Interaction UX — 🔥 EN COURS
-
-## Intention
-
-Faire ressentir French Trân’quille comme une **application mobile premium**, sans modifier la pédagogie ni les données.
-
-## Interaction globale
-
-- [x] `pointerdown` global sur les surfaces tappables ;
-- [x] compression courte et réponse visuelle immédiate ;
-- [x] glow/contraste court et confirmation de clic ;
-- [x] état actif renforcé dans la bottom bar ;
-- [x] transition courte d’entrée des écrans ;
-- [x] `prefers-reduced-motion` ;
-- [x] zones tactiles mobiles >= 48 px.
-
-## Pratiquer = vrai troisième écran
-
-- [x] suppression visuelle du backdrop modal ;
-- [x] suppression de la croix ;
-- [x] bottom bar conservée ;
-- [x] onglet `Pratiquer` actif pendant l’écran ;
-- [x] contenu plein écran sous la navigation ;
-- [x] mêmes règles d’interaction que Aujourd’hui et Parcours.
-
-## Sanctuaires
-
-- [x] aucune clé de progression modifiée ;
-- [x] logo/favicon inchangés ;
-- [x] `voice-ios.js` inchangé ;
-- [x] `free-voice.js` inchangé ;
-- [x] aucun curriculum/scénario modifié.
-
-## Contrat navigateur
-
-- [x] viewport mobile 390×844 ;
-- [x] `pointerdown` doit créer `.ux-pressing` ;
-- [x] Pratiquer doit toucher géométriquement la bottom bar ;
-- [x] aucune croix de modale visible ;
-- [x] Pratiquer actif ;
-- [x] navigation physique Pratiquer → Parcours → Aujourd’hui ;
-- [ ] quality générale verte ;
-- [ ] Options smoke vert ;
-- [ ] PR verte ;
-- [ ] `main` vert ;
-- [ ] Pages verte ;
-- [ ] docs release CLOS.
+- Build 24.3 — Premium Interaction UX — ✅ CLOS
 
 ---
 
 # v1.18.0 — Build 25 — Real Life French III — PROCHAIN
 
+## Intention
+
 Problèmes quotidiens, émotions, explications, français oral courant vs forme écrite, humour simple et conversation moins guidée.
 
 La priorité reste de rendre Lucie plus capable **sans rendre l’interface plus complexe**.
+
+## Direction
+
+- réponses plus libres mais toujours déterministes ;
+- plusieurs formulations simples acceptables ;
+- français oral naturel côté Lucie/Jerry ;
+- forme standard toujours acceptée côté Trân ;
+- aucune nouvelle entrée de navigation ;
+- Scenario reste derrière `Pratiquer → Parler français` ;
+- Memory/Error alimentées par les vrais acquis ;
+- résolution des références contre le curriculum réel.
 
 ---
 
