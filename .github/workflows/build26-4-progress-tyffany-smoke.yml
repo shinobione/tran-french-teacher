@@ -95,7 +95,7 @@ jobs:
               google-chrome --headless=new --no-sandbox --disable-gpu \
               --user-data-dir="$profile" --window-size=1280,900 \
               --virtual-time-budget=32000 --dump-dom \
-              'http://127.0.0.1:4173/?uxSmoke=lesson8&b264Smoke=progress' >"$file"; then
+              'http://127.0.0.1:4173/?uxSmoke=lesson8&detailsDashboardSmoke=mastery&b264Smoke=progress' >"$file"; then
               echo "Progress Chrome attempt $attempt timed out or exited non-zero"
               continue
             fi
@@ -103,6 +103,7 @@ jobs:
             if grep -q 'app-shell screen-progress' "$file" \
               && grep -q 'data-b264-smoke-progress="1"' "$file" \
               && grep -q 'data-b264-smoke-mastery="1"' "$file" \
+              && grep -q 'data-details-dashboard-active="mastery"' "$file" \
               && grep -q 'data-b264-progress-nested-scroll="0"' "$file" \
               && grep -q 'data-b264-progress-single-scroll="1"' "$file" \
               && grep -q 'data-b264-progress-overflow-y="visible"' "$file" \
@@ -116,6 +117,7 @@ jobs:
             fi
             echo "Single-scroll attempt $attempt missing markers"
             grep -o 'data-b264-[^ >]*' "$file" | head -30 || true
+            grep -o 'data-details-dashboard-active="[^"]*"' "$file" | head -5 || true
           done
           if [ "$passed" -ne 1 ]; then
             echo 'Build 26.4 single-scroll Progress smoke failed after 3 bounded isolated attempts'
