@@ -27,56 +27,43 @@
 
 ---
 
-# Baseline production — v1.19.0 / Build 26
+# Baseline production — v1.19.1 / Build 26.1
 
-**Real Life French III — ✅ PROD / CLOS**
+**Voice Self-Playback + Learning Details Dashboard — ✅ PROD / CLOS**
 
 - `Parcours` compact via Build 25 ;
 - Listening effectif : **0.88 normal / 0.64 lent** via Build 25.1 ;
 - sessions bornées et sorties explicites via Build 25.2 ;
-- Pack Real Life III : **8 situations / 24 tours** ;
-- Scenario total : **36 situations / 108 tours** ;
-- français oral naturel côté interlocuteur, réponses standard côté Trân ;
-- réponses simples alternatives explicitement listées ;
-- 15 résolutions Memory avancées, 0 ambiguïté ;
+- Real Life French III via Build 26 : **36 situations / 108 tours** ;
+- auto-écoute locale secondaire après réponse vocale reconnue ;
+- aucune capture audio persistée ou uploadée ;
+- `Détails d’apprentissage` groupé par intentions ;
+- une seule famille détaillée ouverte à la fois ;
 - 40 leçons / 241 éléments ;
 - voix/branding sanctuarisés ;
 - coût 0 €.
 
-Preuve production Build 26 : PR #37, commit `db8219e44d74f0af13421ec798a0c98d02f7a7b5`, **8 workflows / 8 SUCCESS**, Pages **#96 SUCCESS**.
+Preuve production Build 26.1 : PR #40, merge `8ad7e5eb9cb2f64c58c086847c3e035463ab3ba3`, **8 workflows applicatifs SUCCESS** sur PR puis sur `main`, GitHub Pages **#98 SUCCESS**.
 
 Baseline historique protégée : **v1.17.0 — Build 24 — Real Life French II**, Scenario **28 situations / 84 tours** avant Pack III.
 
 ---
 
-# Build 26 — critères clôturés
+# Build 26 — Real Life French III — ✅ CLOS
 
-- [x] version `v1.19.0 / Build 26` et cache `1.19.0-b26-real-life-3` cohérents ;
 - [x] 8 nouvelles situations / 24 tours ;
 - [x] Scenario total **36 / 108** ;
-- [x] aucun ID de scénario dupliqué ;
-- [x] 15 résolutions Memory avancées et **0 ambiguïté** ;
-- [x] réponses semi-libres déterministes et testables ;
-- [x] déblocage l20 → l35…l40 conforme ;
-- [x] catalogue visible limité à 6 scènes ouvertes ;
-- [x] Session UX 25.2 intacte ;
-- [x] profil ancien utilisateur / l8 intact ;
+- [x] 15 résolutions Memory avancées et 0 ambiguïté ;
+- [x] variantes semi-libres déterministes ;
+- [x] Session UX = 1 situation ;
 - [x] voix, reconnaissance, logo, favicon byte-identiques ;
-- [x] 8 workflows / 8 SUCCESS + Pages #96 SUCCESS ;
-- [x] docs CLOS.
+- [x] PR #37 + 8/8 workflows + Pages #96 SUCCESS.
 
 ---
 
-# v1.19.1 — Build 26.1 — Voice Self-Playback + Learning Details Dashboard — EN COURS
-
-## Retours terrain
-
-1. Trân souhaite pouvoir réécouter sa propre voix après un exercice oral afin de se comparer au modèle.
-2. `Parcours → Détails d’apprentissage` reste trop long une fois ouvert : les cartes techniques sont encore stackées verticalement.
+# Build 26.1 — critères clôturés
 
 ## Voice Self-Playback
-
-Le moteur vocal validé reste un sanctuaire : **`free-voice.js` et `voice-ios.js` ne sont pas modifiés**.
 
 Après une réponse reconnue :
 
@@ -87,23 +74,21 @@ Après une réponse reconnue :
 [ ▶ Réécouter ma voix ] [ ↻ Refaire ]
 ```
 
-Contrat :
+- [x] reconnaissance terminée avant la seconde capture ;
+- [x] `MediaRecorder` / `getUserMedia` avec feature detection ;
+- [x] local uniquement ;
+- [x] aucune persistance ;
+- [x] aucun upload ;
+- [x] aucun effet sur Memory/Error/Mastery/Session ;
+- [x] Blob URL révoquée ;
+- [x] piste micro stoppée ;
+- [x] capture max 9 secondes ;
+- [x] échec de capture sans casser l’exercice vocal ;
+- [x] `free-voice.js` / `voice-ios.js` byte-identiques.
 
-- la reconnaissance finit avant l’ouverture de la seconde capture ;
-- `MediaRecorder` / `getUserMedia` avec feature detection ;
-- local uniquement ;
-- aucune persistance ;
-- aucun upload ;
-- aucun effet sur Memory/Error/Mastery/Session ;
-- Blob URL révoquée ;
-- piste micro stoppée ;
-- capture max 9 secondes ;
-- si la capture échoue, la reconnaissance reste utilisable ;
-- capture simultanée exacte du premier essai reportée après validation iPhone réelle.
+La capture simultanée exacte du premier essai reste volontairement reportée à un futur test iPhone réel.
 
 ## Learning Details Dashboard
-
-`Détails d’apprentissage` devient un dashboard compact :
 
 ```text
 🧠 Mémoire & révisions
@@ -113,41 +98,33 @@ Contrat :
 🧩 A1 & rythme
 ```
 
-Règles :
+- [x] seules les familles réellement présentes apparaissent ;
+- [x] une seule famille détaillée ouverte à la fois ;
+- [x] les vraies cartes historiques restent dans le DOM ;
+- [x] les moteurs continuent à mettre à jour leurs cartes ;
+- [x] fallback `Autres détails` ;
+- [x] aucune migration ni donnée apprenante créée ;
+- [x] Real Life III reste **36 / 108**.
 
-- seules les catégories présentes sont affichées ;
-- une seule famille détaillée est ouverte à la fois ;
-- les cartes historiques restent les vrais nœuds DOM ;
-- les moteurs continuent à les mettre à jour ;
-- toute carte non reconnue tombe dans `Autres détails` ;
-- aucune donnée apprenante n’est créée ou migrée.
+## CI / livraison
 
-## CI / compatibilité
-
-Le workflow Build 26 Real Life III est rendu durable : il protège `real-life-data-3.js` / `real-life-coach.js` et leurs contrats **36 / 108** sans obliger la version globale à rester `1.19.0`.
-
-Nouveau tribunal : **Build 26.1 Voice replay + Details dashboard smoke**.
-
-## Critères de clôture Build 26.1
-
-- version `v1.19.1 / Build 26.1` et cache cohérents ;
-- 4 nouveaux fichiers UX câblés/précachés ;
-- replay sans réseau ni persistance ;
-- `free-voice.js`, `voice-ios.js`, logo, favicon byte-identiques ;
-- vrai Chrome : au moins 3 groupes de détails sur profil l8 ;
-- Memory + Mastery toujours présents ;
-- une seule famille active dans le smoke ;
-- vrai Chrome : surface replay injectée après résultat vocal synthétique ;
-- Real Life III reste **36 situations / 108 tours** ;
-- quality / Options / nav / Progression / Listening-rate / Session UX / Real Life III / Build26.1 verts sur PR puis `main` ;
-- Pages SUCCESS ;
-- docs post-prod CLOS.
+- [x] version `v1.19.1 / Build 26.1` et cache cohérents ;
+- [x] 4 nouveaux fichiers UX câblés/précachés ;
+- [x] smoke Real Life III rendu durable ;
+- [x] nouveau workflow Build 26.1 ;
+- [x] 8 workflows applicatifs verts sur PR #40 ;
+- [x] merge `main` `8ad7e5eb9cb2f64c58c086847c3e035463ab3ba3` ;
+- [x] 8 workflows applicatifs verts sur `main` ;
+- [x] Pages #98 SUCCESS ;
+- [x] docs post-prod CLOS.
 
 ---
 
-# v1.20.0 — Build 27 — Data & Recovery Hardening
+# v1.20.0 — Build 27 — Data & Recovery Hardening — PROCHAIN
 
 Sauvegarde/restauration, migrations versionnées, snapshot pré-migration, localStorage corrompu toléré, tests zéro-perte.
+
+Priorité : protéger la vraie progression avant toute restructuration technique plus profonde.
 
 # v1.21.0 — Build 28 — iPhone / PWA / Accessibility Hardening
 
@@ -178,6 +155,7 @@ bottom navigation interaction baseline
 Progression UX Build 25
 Session UX Build 25.2
 Real Life III Build 26
+Voice Replay / Details Dashboard Build 26.1
 ```
 
 # Easter egg réservé
