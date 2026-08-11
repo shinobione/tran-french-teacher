@@ -42,10 +42,18 @@
     };
   }
 
+  function dismissPractice(render = true) {
+    overlay?.remove();
+    overlay = null;
+    document.documentElement.classList.remove('ux-practice-open');
+    if (render) renderBottomNav();
+  }
+
   function nativeGo(id) {
-    closePractice();
+    if (overlay) dismissPractice(false);
     const target = document.querySelector(`.bottom-nav [data-go="${id}"]`);
     if (target) target.click();
+    else renderBottomNav();
   }
 
   function listeningAvailable() {
@@ -56,6 +64,29 @@
   function memoryDue() {
     try { return Number(window.FrenchTranquilleMemory?.summary?.().due?.length || 0); }
     catch { return 0; }
+  }
+
+  function ensureNavButton(nav, id, icon, label, active) {
+    let button = nav.querySelector(`[data-ux-nav="${id}"]`);
+    if (!button) {
+      button = document.createElement('button');
+      button.type = 'button';
+      button.dataset.uxNav = id;
+      const iconNode = document.createElement('span');
+      iconNode.setAttribute('aria-hidden', 'true');
+      const labelNode = document.createElement('strong');
+      button.append(iconNode, labelNode);
+      nav.appendChild(button);
+    }
+
+    const iconNode = button.querySelector('span');
+    const labelNode = button.querySelector('strong');
+    if (iconNode && iconNode.textContent !== icon) iconNode.textContent = icon;
+    if (labelNode && labelNode.textContent !== label) labelNode.textContent = label;
+
+    button.classList.toggle('active', active);
+    button.setAttribute('aria-current', active ? 'page' : 'false');
+    return button;
   }
 
   function renderBottomNav() {
@@ -74,20 +105,21 @@
 
     const practiceActive = Boolean(overlay) || ['conversation','review'].includes(screen);
     const items = [
-      ['home','⌂',T('Hôm nay','Aujourd’hui'),screen === 'home'],
+      ['home','⌂',T('Hôm nay','Aujourd’hui'),!practiceActive && screen === 'home'],
       ['practice','◎',T('Luyện tập','Pratiquer'),practiceActive],
-      ['progress','◔',T('Lộ trình','Parcours'),screen === 'progress']
+      ['progress','◔',T('Lộ trình','Parcours'),!practiceActive && screen === 'progress']
     ];
 
-    const signature = items.map(([id,,label,active]) => `${id}:${label}:${active ? 1 : 0}`).join('|');
-    if (nav.dataset.signature === signature) return;
+    // Never rebuild the nav with innerHTML when active state changes.
+    // A real touch is pointerdown -> pointerup -> click. Replacing the button
+    // during that sequence destroys the visible feedback before it is perceived.
+    const wanted = new Set(items.map(([id]) => id));
+    nav.querySelectorAll('[data-ux-nav]').forEach(button => {
+      if (!wanted.has(button.dataset.uxNav)) button.remove();
+    });
 
-    nav.innerHTML = items.map(([id,icon,label,active]) => `
-      <button type="button" data-ux-nav="${id}" class="${active ? 'active' : ''}" aria-current="${active ? 'page' : 'false'}">
-        <span aria-hidden="true">${icon}</span><strong>${esc(label)}</strong>
-      </button>
-    `).join('');
-    nav.dataset.signature = signature;
+    items.forEach(([id,icon,label,active]) => ensureNavButton(nav,id,icon,label,active));
+    nav.dataset.signature = items.map(([id,,label]) => `${id}:${label}`).join('|');
   }
 
   function openPractice() {
@@ -97,7 +129,7 @@
     overlay = document.createElement('div');
     overlay.className = 'ux-practice-overlay';
     overlay.innerHTML = `
-      <section class="ux-practice-sheet" role="dialog" aria-modal="true" aria-label="${esc(T('Luyện tập','Pratiquer'))}">
+      <section class="ux-practice-sheet" role="region" aria-label="${esc(T('Luyện tập','Pratiquer'))}">
         <header>
           <div class="ux-practice-title">
             <img src="./assets/Favicon.png" alt="" aria-hidden="true">
@@ -131,10 +163,7 @@
   }
 
   function closePractice() {
-    overlay?.remove();
-    overlay = null;
-    document.documentElement.classList.remove('ux-practice-open');
-    renderBottomNav();
+    dismissPractice(true);
   }
 
   function decorateHome() {
@@ -245,7 +274,7 @@
     if (practice && !practice.disabled) {
       const id = practice.dataset.uxPractice;
       if (id === 'listening') {
-        closePractice();
+        dismissPractice(false);
         window.FrenchTranquilleListening?.open?.();
       } else nativeGo(id);
     }
@@ -262,8 +291,8 @@
   decorate();
 
   window.FrenchTranquilleUX = {
-    version: '1.17.2',
-    build: 24.2,
+    version: '1.17.4',
+    build: 24.4,
     openPractice,
     closePractice,
     refresh: decorate

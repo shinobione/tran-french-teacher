@@ -4,7 +4,21 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ## [Unreleased]
 
-Aucun build fonctionnel en cours de validation. Prochain jalon : **v1.18.0 — Build 25 — Real Life French III**.
+### v1.17.4 — Build 24.4 — Mobile Polish / Interaction Timing — candidat
+
+- corrige le feedback mobile qui disparaissait lors d’un vrai changement d’onglet ;
+- remplace la reconstruction `innerHTML` de la bottom bar par des nœuds DOM persistants ;
+- met à jour uniquement `active / aria-current` ;
+- ajoute un `tap echo` indépendant du composant pour survivre aux rerenders ;
+- évite le flash intermédiaire vers Home en quittant Pratiquer ;
+- impose exactement un onglet actif ;
+- ajoute `mobile-polish.css` ;
+- nettoie le header de leçon : plus de gros bandeau violet/sticky, titre intégré et séparation légère ;
+- cache PWA `1.17.4-b24.4-mobile-polish` ;
+- smoke Chrome mobile renforcé : identité DOM avant/après navigation, tap echo, active unique et header de leçon ;
+- aucune modification de la progression, du curriculum, de la voix, de Learning Memory, Scenario, Listening ou du branding.
+
+Reste Unreleased jusqu’à PR → `main` → GitHub Pages.
 
 ---
 
@@ -19,94 +33,45 @@ Aucun build fonctionnel en cours de validation. Prochain jalon : **v1.18.0 — B
 - maintient `Pratiquer` actif pendant l’écran ;
 - renforce les zones tactiles mobiles ;
 - cache PWA `1.17.3-b24.3-premium-interaction` ;
-- smoke Chrome mobile 390×844 : `pointerdown` réel, feedback `.ux-pressing`, géométrie Pratiquer ↔ bottom bar et navigation complète ;
+- smoke Chrome mobile 390×844 ;
 - aucune modification de la progression, du curriculum, de Learning Memory, de Scenario, de la voix ou du branding ;
 - PR #24, quality main #76, Options main #7, nav interaction main #20 et Pages #83 : SUCCESS.
 
 ## [1.17.2] — Build 24.2 — Navigation Interaction Hotfix — 2026-08-11
-
-- corrige un état réel où `Aujourd’hui / Pratiquer / Parcours` pouvait rester visible mais ne plus répondre aux clics ;
-- stabilise les nœuds DOM de la barre UX ;
-- traite les clics de navigation en phase de capture ;
-- aligne l’identité du cache PWA ;
-- ajoute un smoke Chrome permanent avec hit-testing réel et navigation physique.
+- corrige un état où la navigation pouvait rester visible mais inerte ; stabilise le cache et ajoute un smoke de clic physique.
 
 ## [1.17.1] — Build 24.1 — Options Crash Hotfix — 2026-08-11
-
-- corrige la boucle de `MutationObserver` sur le diagnostic de l’écran Options ;
-- rend le patch de version idempotent ;
-- ajoute un smoke Chrome dédié à Options en mode apprenante et DEBUG FR.
+- corrige la boucle `MutationObserver` du diagnostic Options et ajoute un smoke dédié.
 
 ## [1.17.0] — Build 24 — Real Life French II — 2026-08-11
-
-- ajout de `real-life-data-2.js` : **10 situations / 30 tours** pour les acquis des leçons 9→20 ;
-- pack II centré sur des séquences croisées plutôt que des doublons des scénarios gare/resto/pharmacie historiques ;
-- rendez-vous/train, shopping, dîner, santé, présentation de Jerry, retour, réservation, logement et téléphone ;
-- Scenario total : **28 situations / 84 tours** ;
-- Real Life I + II : **16 situations / 48 tours** ;
-- aucune nouvelle clé de progression ;
-- même stockage `french-tranquille:scenarios:v1` ;
-- `real-life-ux.js` limite la vue à **6 situations ouvertes max** par défaut ;
-- tri des scènes personnelles selon les prérequis les plus récents ;
-- seulement deux scènes futures verrouillées visibles ;
-- logo/favicon/voice/free-voice restent sanctuarisés.
-
----
+- 10 situations / 30 tours ; Scenario total 28 / 84 ; catalogue limité à 6 propositions ouvertes visibles.
 
 ## [1.16.0] — Build 23 — Real Life French I — 2026-08-11
-
-- ajout de `real-life-data.js` : **6 situations / 18 tours** liées à la vraie vie de Trân avec Jerry ;
-- prérequis progressifs `l2` → `l8` ;
-- réponses obligatoires limitées aux acquis déjà enseignés ;
-- Scenario total : **18 situations / 54 tours** ;
-- aucune nouvelle clé de progression ;
-- même stockage `french-tranquille:scenarios:v1` ;
-- ajout de `real-life-ux.js` / `real-life-ux.css` ;
-- situations personnelles disponibles remontées en premier ;
-- titre apprenant `Parler en situation` ;
-- futures scènes verrouillées condensées à deux par défaut ;
-- shell Build 22 inchangé ;
-- voix / reconnaissance / logo / favicon sanctuarisés ;
-- cache `1.16.0-b23` ;
-- smoke ancien utilisateur leçon 8 : SUCCESS ;
-- smoke Real Life leçon 8 : **5 scènes personnelles ouvertes / 1 verrouillée** ;
-- PR #18 : SUCCESS ;
-- `main` CI run #63 : SUCCESS ;
-- GitHub Pages run #77 : SUCCESS.
-
----
+- 6 situations / 18 tours liées à la vraie vie de Trân avec Jerry ; profil leçon 8 protégé.
 
 ## [1.15.0] — Build 22 — UX Foundation & Runtime Integrity — 2026-08-11
-
-- navigation apprenante **Aujourd’hui / Pratiquer / Parcours** ;
-- Home simplifiée ; Leçon Focus ; Parcours simplifié ;
-- snapshot pré-Build22 non destructif ;
-- smoke ancien utilisateur leçon 8 ;
-- logo/favicon/voice/free-voice sanctuarisés ;
-- réconciliation Stage 3 / Listening / Adaptive Language ;
-- curriculum audité **40 leçons / 241 éléments** ;
-- PR #16, CI main #59 et Pages #75 SUCCESS.
+- navigation Aujourd’hui / Pratiquer / Parcours ; snapshot ancien utilisateur ; curriculum audité 40 / 241.
 
 ## [1.14.0] — Build 21 — Adaptive Language Ratio — 2026-08-11
-- profils VI-HEAVY / VI-SUPPORT / BALANCED / FR-GROWING ; contextes et retour temporaire vers davantage de vietnamien.
+- profils VI-HEAVY / VI-SUPPORT / BALANCED / FR-GROWING.
 
 ## [1.13.0] — Build 20 — Listening Comprehension — 2026-08-11
-- Sens / Contrastes / Mini-dialogues ; transcript caché avant réponse ; vitesse normale/lente ; Memory + Error.
+- Sens / Contrastes / Mini-dialogues ; transcript caché avant réponse ; Memory + Error.
 
 ## [1.12.0] — Build 19 — A1 Core — 2026-08-11
-- Stage 3, leçons 26–40 ; structures A1 ; Mastery A1 Core. Audit Build 22 : total réel 241 éléments.
+- Stage 3, leçons 26–40 ; Mastery A1 Core. Total réel audité ensuite : 241 éléments.
 
 ## [1.11.0] — Build 18 — Error Intelligence — 2026-08-11
-- historique borné 20/item et 120 globaux ; récence/répétition/récupération ; Free Voice relié à Memory/Error.
+- historique borné ; récence/répétition/récupération ; Free Voice relié à Memory/Error.
 
 ## [1.10.0] — Build 17 — Scenario Lab — 2026-08-11
-- 12 situations / 36 tours ; indices/modèles ; Memory ; voix/texte ; stats locales.
+- 12 situations / 36 tours ; indices/modèles ; Memory ; voix/texte.
 
 ## [1.9.0] — Build 16 — Mastery Engine — 2026-08-11
 - maîtrise fondée sur preuves Learning Memory ; gouvernance documentaire/CI.
 
 ## [1.8.0] — Build 15 — 2026-08-11
-- 25 leçons / 148 éléments ; Early A1 ; Daily Coach ; Stage 2.
+- 25 leçons / 148 éléments ; Early A1 ; Daily Coach.
 
 ## [1.7.1] — Build 14 / 14.1 — 2026-08-11
 - refonte UX Conversation/Révision/Memory ; avatar Lucie.

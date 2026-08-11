@@ -2,119 +2,58 @@
 
 PWA de français pensée pour **Trân**, avec priorité à l’oral, au français utile dans la vraie vie et à une interface simple sur iPhone.
 
-## Version en production
+## Candidat actuel
 
-- **v1.17.3**
-- **Build 24.3 — Premium Interaction UX**
-- statut : **PROD / CLOS**
-- commit production : `eef4bb7113dcc3f37bab76928f112b8032034ec5`
+- **v1.17.4**
+- **Build 24.4 — Mobile Polish / Interaction Timing**
+- statut : **CANDIDAT / branche `build24-4-mobile-polish`**
+- baseline production : **v1.17.3 Build 24.3 — Premium Interaction UX**
 - socle fonctionnel : **v1.17.0 Build 24 — Real Life French II**
 - curriculum : **40 leçons / 241 éléments**
 - Scenario : **28 situations / 84 tours**
-- Real Life I + II : **16 situations / 48 tours**
 - coût : **0 €**
 
-## Build 24.3 — Premium Interaction UX
+## Pourquoi Build 24.4
 
-Objectif : faire ressentir French Trân’quille comme une **application mobile**, pas comme un site web responsive.
+Le feedback tactile de Build 24.3 fonctionnait, mais un vrai test mobile a montré un défaut important : lors d’un changement réel d’onglet, `ux-shell.js` reconstruisait les boutons de la bottom bar pour changer leur état actif. Le nœud pressé pouvait donc disparaître avant que l’animation soit perceptible. Un retap sur l’onglet déjà actif, lui, conservait le nœud et affichait correctement le feedback.
 
-Règle UX désormais canonique :
+Build 24.4 corrige la cause :
 
-> Toute action tappable doit produire un retour visuel immédiat.
+- les 3 boutons `Aujourd’hui / Pratiquer / Parcours` deviennent des **nœuds DOM persistants** ;
+- seul leur état `active / aria-current` change ;
+- un `tap echo` indépendant du composant reste visible même si l’écran cible rerend son contenu ;
+- exactement un onglet principal doit rester actif ;
+- le passage `Pratiquer → Parcours` évite le flash intermédiaire vers Home ;
+- le header de leçon n’utilise plus le gros bandeau violet/sticky : titre transparent, retour intégré et séparation légère ;
+- cache PWA : `1.17.4-b24.4-mobile-polish`.
 
-Build 24.3 apporte :
+## Règle UX canonique
 
-- feedback `pointerdown` global sur boutons, navigation, choix, cartes interactives, révision, conversation et listening ;
-- légère compression, contraste/glow court et flash de confirmation au clic ;
-- état actif plus lisible dans la bottom bar ;
-- transition courte d’entrée des écrans ;
-- support `prefers-reduced-motion` ;
-- **Pratiquer est visuellement un vrai troisième écran/tab**, sans backdrop flouté ni croix de modale ;
-- la bottom bar reste visible et `Pratiquer` reste actif pendant cet écran ;
-- zones tactiles renforcées sur mobile ;
-- smoke Chrome mobile `390×844` qui vérifie `pointerdown`, feedback visuel et géométrie de l’écran Pratiquer.
+> Toute action tappable doit produire un retour visuel immédiat **et ce retour doit survivre assez longtemps pour être perçu, même si l’action provoque un rerender**.
 
-Validation production :
+## Validation navigateur renforcée
 
-- PR #24 : SUCCESS ;
-- quality `main` #76 : SUCCESS ;
-- Options smoke `main` #7 : SUCCESS ;
-- nav/mobile interaction smoke `main` #20 : SUCCESS ;
-- GitHub Pages #83 : SUCCESS.
+Le smoke mobile 390×844 doit maintenant prouver :
 
-Aucun reset et aucune modification du curriculum, de la voix, de Learning Memory, des scénarios ou du branding.
+- feedback `pointerdown` sur Pratiquer / Parcours / Aujourd’hui ;
+- `tap echo` présent sur les trois ;
+- identité DOM des 3 boutons inchangée avant/après les vraies navigations ;
+- exactement un onglet actif après chaque navigation ;
+- `Pratiquer` reste un vrai écran ;
+- le header de leçon n’est plus sticky et n’a plus de fond opaque.
 
-## Navigation apprenante
+## Sanctuaires
 
-```text
-Aujourd’hui / Pratiquer / Parcours
-```
-
-Les trois entrées ont désormais le même statut visuel : ce sont trois destinations principales de l’application.
-
-`Pratiquer` contient :
-
-- Réviser mes acquis ;
-- Parler français ;
-- Écouter.
-
-Les moteurs internes restent invisibles pour l’utilisatrice.
-
-## Real Life French II
-
-Le socle Build 24 prolonge **Pratiquer → Parler français** avec des scènes qui relient plusieurs acquis déjà appris, sans ajouter de nouveau bouton principal.
-
-Le pack II ajoute 10 situations :
-
-- prendre le train pour retrouver Jerry ;
-- shopping avec budget ;
-- dîner et exprimer une préférence ;
-- se sentir mal dehors ;
-- présenter Jerry comme fiancé ;
-- être prête puis vouloir rentrer ;
-- avoir une réservation et demander de l’aide ;
-- problème de clé à l’appartement ;
-- problème d’eau chaude ;
-- réseau faible pendant un appel avec Jerry.
-
-## UX à grande échelle
-
-Le catalogue Scenario peut grandir sans devenir un mur de cartes :
-
-- situations personnelles ouvertes triées vers les prérequis les plus récents ;
-- **6 situations ouvertes maximum visibles par défaut** ;
-- bouton `Voir d’autres situations` pour le reste ;
-- seulement 2 situations futures verrouillées visibles par défaut ;
-- même façade `Aujourd’hui / Pratiquer / Parcours`.
-
-## Progression, voix et branding
-
-Aucun reset. Même clé Scenario :
+Aucun reset et aucune modification de :
 
 ```text
-french-tranquille:scenarios:v1
-```
-
-Sanctuaires inchangés :
-
-```text
+francais-avec-luc:learner:v1
 assets/LOGO.png
 assets/Favicon.png
 voice-ios.js
 free-voice.js
+curriculum / Learning Memory / Scenario / Listening
 ```
-
-## Runtime interaction
-
-Ordre UX final :
-
-```text
-ux-shell
-→ interaction-ux
-→ build-meta
-```
-
-`interaction-ux` est uniquement une couche de feedback et de transition. Elle ne possède aucune donnée d’apprentissage.
 
 ## Documentation
 
@@ -122,9 +61,9 @@ ux-shell
 - [`CHANGELOG.md`](./CHANGELOG.md)
 - [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md)
 - [`docs/BUILD-POLICY.md`](./docs/BUILD-POLICY.md)
-- [`docs/BUILD-24-REAL-LIFE-FRENCH-II.md`](./docs/BUILD-24-REAL-LIFE-FRENCH-II.md)
-- [`docs/HOTFIX-24.1-OPTIONS-CRASH.md`](./docs/HOTFIX-24.1-OPTIONS-CRASH.md)
-- [`docs/HOTFIX-24.2-NAV-INTERACTION.md`](./docs/HOTFIX-24.2-NAV-INTERACTION.md)
 - [`docs/HOTFIX-24.3-PREMIUM-INTERACTION.md`](./docs/HOTFIX-24.3-PREMIUM-INTERACTION.md)
+- [`docs/HOTFIX-24.4-MOBILE-POLISH.md`](./docs/HOTFIX-24.4-MOBILE-POLISH.md)
 
-Prochain jalon fonctionnel : **v1.18.0 — Build 25 — Real Life French III**.
+Build 24.4 ne sera déclaré `PROD / CLOS` qu’après PR, quality, Options, nav/mobile smoke, merge `main` et GitHub Pages verts.
+
+Prochain jalon fonctionnel après stabilisation UX : **v1.18.0 — Build 25 — Real Life French III**.

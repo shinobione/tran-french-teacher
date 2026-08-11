@@ -2,7 +2,7 @@ name: French Trân'quille nav click smoke
 
 on:
   push:
-    branches: [main, hotfix-nav-clicks, build24-3-premium-interaction-ux]
+    branches: [main, build24-4-mobile-polish]
   pull_request:
     branches: [main]
 
@@ -47,56 +47,77 @@ jobs:
               const p=point(d,selector,label);
               p.hit.dispatchEvent(new frame.contentWindow.PointerEvent('pointerdown',{bubbles:true,cancelable:true,pointerId:1,pointerType:'touch',clientX:p.x,clientY:p.y}));
               root.dataset[`nav${label}Pressed`]=String(p.button.classList.contains('ux-pressing'));
+              root.dataset[`nav${label}Echo`]=String(Boolean(d.querySelector('.ux-tap-echo')));
               p.hit.dispatchEvent(new frame.contentWindow.PointerEvent('pointerup',{bubbles:true,cancelable:true,pointerId:1,pointerType:'touch',clientX:p.x,clientY:p.y}));
               p.hit.dispatchEvent(new frame.contentWindow.MouseEvent('click',{bubbles:true,cancelable:true,view:frame.contentWindow,clientX:p.x,clientY:p.y}));
+            }
+            function oneActive(d,id){
+              const active=[...d.querySelectorAll('.ux-bottom-nav [data-ux-nav].active')];
+              if(active.length!==1)throw new Error(`active-count:${active.length}`);
+              if(active[0].dataset.uxNav!==id)throw new Error(`active-wrong:${active[0].dataset.uxNav}:${id}`);
             }
             frame.addEventListener('load',()=>setTimeout(async()=>{
               try{
                 const d=frame.contentDocument,w=frame.contentWindow;
                 if(!d.querySelector('.app-shell.screen-home'))throw new Error('home-missing');
                 if(!d.querySelector('link[href*="interaction-ux.css"]'))throw new Error('interaction-css-missing');
+                if(!d.querySelector('link[href*="mobile-polish.css"]'))throw new Error('mobile-polish-css-missing');
                 if(!w.FrenchTranquilleInteraction)throw new Error('interaction-runtime-missing');
 
-                w.scrollTo(0,d.documentElement.scrollHeight);
-                await wait(250);
+                const homeRef=d.querySelector('[data-ux-nav="home"]');
+                const practiceRef=d.querySelector('[data-ux-nav="practice"]');
+                const progressRef=d.querySelector('[data-ux-nav="progress"]');
+                if(!homeRef||!practiceRef||!progressRef)throw new Error('nav-ref-missing');
 
-                const before=d.querySelector('[data-ux-nav="practice"]');
-                const probe=d.createElement('i'); probe.hidden=true; probe.textContent='probe';
-                d.querySelector('#app')?.appendChild(probe);
-                await wait(160);
-                const after=d.querySelector('[data-ux-nav="practice"]');
-                root.dataset.navNodeStable=String(before===after);
-                probe.remove();
-                if(before!==after)throw new Error('nav-node-replaced-on-app-mutation');
+                w.scrollTo(0,d.documentElement.scrollHeight);
+                await wait(220);
 
                 physicalPress(d,'[data-ux-nav="practice"]','Practice');
                 if(root.dataset.navPracticePressed!=='true')throw new Error('practice-no-pointer-feedback');
-                await wait(320);
+                if(root.dataset.navPracticeEcho!=='true')throw new Error('practice-no-persistent-echo');
+                await wait(300);
                 const practice=d.querySelector('.ux-practice-overlay');
                 if(!practice)throw new Error('practice-did-not-open');
+                if(d.querySelector('[data-ux-nav="home"]')!==homeRef||d.querySelector('[data-ux-nav="practice"]')!==practiceRef||d.querySelector('[data-ux-nav="progress"]')!==progressRef)throw new Error('nav-replaced-opening-practice');
+                oneActive(d,'practice');
                 const nav=d.querySelector('.ux-bottom-nav');
                 const pr=practice.getBoundingClientRect(),nr=nav.getBoundingClientRect();
-                root.dataset.practiceBottom=String(Math.round(pr.bottom));
-                root.dataset.navTop=String(Math.round(nr.top));
-                root.dataset.practiceCloseVisible=String(getComputedStyle(d.querySelector('.ux-close')).display!=='none');
                 if(Math.abs(pr.bottom-nr.top)>6)throw new Error(`practice-not-full-tab:${Math.round(pr.bottom)}:${Math.round(nr.top)}`);
                 if(getComputedStyle(d.querySelector('.ux-close')).display!=='none')throw new Error('practice-still-modal-close');
-                if(!d.querySelector('[data-ux-nav="practice"].active'))throw new Error('practice-tab-not-active');
 
                 physicalPress(d,'[data-ux-nav="progress"]','Progress');
-                if(root.dataset.navProgressPressed!=='true')throw new Error('progress-no-pointer-feedback');
-                await wait(400);
+                if(root.dataset.navProgressPressed!=='true'||root.dataset.navProgressEcho!=='true')throw new Error('progress-no-feedback');
+                await wait(380);
                 if(!d.querySelector('.app-shell.screen-progress'))throw new Error('progress-did-not-open');
+                if(d.querySelector('[data-ux-nav="home"]')!==homeRef||d.querySelector('[data-ux-nav="practice"]')!==practiceRef||d.querySelector('[data-ux-nav="progress"]')!==progressRef)throw new Error('nav-replaced-on-progress');
+                oneActive(d,'progress');
 
                 physicalPress(d,'[data-ux-nav="home"]','Home');
-                if(root.dataset.navHomePressed!=='true')throw new Error('home-no-pointer-feedback');
-                await wait(400);
+                if(root.dataset.navHomePressed!=='true'||root.dataset.navHomeEcho!=='true')throw new Error('home-no-feedback');
+                await wait(380);
                 if(!d.querySelector('.app-shell.screen-home'))throw new Error('home-did-not-return');
+                if(d.querySelector('[data-ux-nav="home"]')!==homeRef||d.querySelector('[data-ux-nav="practice"]')!==practiceRef||d.querySelector('[data-ux-nav="progress"]')!==progressRef)throw new Error('nav-replaced-on-home');
+                oneActive(d,'home');
+                root.dataset.navNodesPersist='true';
 
-                finish('ok','premium-pointer-feedback-and-three-tab-navigation-ok');
+                const lessonButton=d.querySelector('.screen-home .lesson-card .primary');
+                if(!lessonButton)throw new Error('lesson-button-missing');
+                lessonButton.click();
+                await wait(420);
+                const topbar=d.querySelector('.screen-lesson .topbar');
+                if(!topbar)throw new Error('lesson-topbar-missing');
+                const cs=getComputedStyle(topbar);
+                root.dataset.lessonTopbarPosition=cs.position;
+                root.dataset.lessonTopbarBackdrop=cs.backdropFilter||cs.webkitBackdropFilter||'none';
+                if(cs.position==='sticky')throw new Error('lesson-topbar-still-sticky');
+                const bg=cs.backgroundColor;
+                if(bg && bg!=='rgba(0, 0, 0, 0)' && bg!=='transparent')throw new Error(`lesson-topbar-background:${bg}`);
+                root.dataset.lessonHeaderClean='true';
+
+                finish('ok','persistent-nav-feedback-and-clean-lesson-header-ok');
               }catch(e){finish('fail',e?.message||String(e))}
             },1900));
-            setTimeout(()=>finish('fail','timeout'),10000);
+            setTimeout(()=>finish('fail','timeout'),11000);
           })();
           </script></body></html>
           HTML
@@ -108,16 +129,19 @@ jobs:
           sleep 1
           google-chrome --version
 
-      - name: Chrome — mobile physical feedback and three-tab UX
+      - name: Chrome — persistent mobile feedback and clean lesson header
         run: |
-          timeout 35s google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=17000 --dump-dom 'http://127.0.0.1:4173/nav-click-smoke.html' >/tmp/nav.html
+          timeout 38s google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=19000 --dump-dom 'http://127.0.0.1:4173/nav-click-smoke.html' >/tmp/nav.html
           grep -q 'data-nav-smoke="ok"' /tmp/nav.html || { cat /tmp/nav.html; exit 1; }
-          grep -q 'data-nav-node-stable="true"' /tmp/nav.html
           grep -q 'data-nav-practice-pressed="true"' /tmp/nav.html
+          grep -q 'data-nav-practice-echo="true"' /tmp/nav.html
           grep -q 'data-nav-progress-pressed="true"' /tmp/nav.html
+          grep -q 'data-nav-progress-echo="true"' /tmp/nav.html
           grep -q 'data-nav-home-pressed="true"' /tmp/nav.html
-          grep -q 'data-practice-close-visible="false"' /tmp/nav.html
-          grep -q 'data-nav-detail="premium-pointer-feedback-and-three-tab-navigation-ok"' /tmp/nav.html
+          grep -q 'data-nav-home-echo="true"' /tmp/nav.html
+          grep -q 'data-nav-nodes-persist="true"' /tmp/nav.html
+          grep -q 'data-lesson-header-clean="true"' /tmp/nav.html
+          grep -q 'data-nav-detail="persistent-nav-feedback-and-clean-lesson-header-ok"' /tmp/nav.html
 
       - name: Stop static server
         if: always()

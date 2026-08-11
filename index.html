@@ -29,8 +29,9 @@
   <link rel="stylesheet" href="./error-intelligence.css?v=1.17.0-b24" />
   <link rel="stylesheet" href="./listening-engine.css?v=1.17.0-b24" />
   <link rel="stylesheet" href="./language-ratio.css?v=1.17.0-b24" />
-  <link rel="stylesheet" href="./ux-shell.css?v=1.17.3-b24.3" />
-  <link rel="stylesheet" href="./interaction-ux.css?v=1.17.3-b24.3" />
+  <link rel="stylesheet" href="./ux-shell.css?v=1.17.4-b24.4" />
+  <link rel="stylesheet" href="./interaction-ux.css?v=1.17.4-b24.4" />
+  <link rel="stylesheet" href="./mobile-polish.css?v=1.17.4-b24.4" />
   <title>French Trân’quille</title>
   <style>
     .boot-status{width:min(560px,calc(100% - 32px));margin:18vh auto 0;padding:22px;border:1px solid rgba(180,199,224,.16);border-radius:20px;background:rgba(14,26,42,.86);color:#f7f3eb;text-align:center;font-family:Inter,system-ui,sans-serif;box-shadow:0 18px 50px rgba(0,0,0,.22)}
@@ -43,7 +44,7 @@
   </div>
   <script>
     (() => {
-      const HOTFIX = '1.17.3-b24.3-premium-interaction';
+      const HOTFIX = '1.17.4-b24.4-mobile-polish';
       const learnerKey = 'francais-avec-luc:learner:v1';
       const params = new URLSearchParams(location.search);
       const realLifeSmoke = params.get('realLifeSmoke');
@@ -80,7 +81,7 @@
       const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
       const fatal = (message, detail='') => {
         const app = root(); if (!app) return;
-        app.innerHTML = `<div class="boot-status error"><strong>⚠️ French Trân’quille n’a pas démarré</strong><small>Ứng dụng gặp lỗi khi khởi động.<br>Build 24.3 affiche le diagnostic au lieu d’un écran vide.</small>${detail ? `<code>${escapeHtml(message)}\n${escapeHtml(detail)}</code>` : `<code>${escapeHtml(message)}</code>`}</div>`;
+        app.innerHTML = `<div class="boot-status error"><strong>⚠️ French Trân’quille n’a pas démarré</strong><small>Ứng dụng gặp lỗi khi khởi động.<br>Build 24.4 affiche le diagnostic au lieu d’un écran vide.</small>${detail ? `<code>${escapeHtml(message)}\n${escapeHtml(detail)}</code>` : `<code>${escapeHtml(message)}</code>`}</div>`;
       };
       window.addEventListener('error', event => fatal(event.message || 'JavaScript error', `${event.filename || ''}:${event.lineno || ''}:${event.colno || ''}`));
       window.addEventListener('unhandledrejection', event => fatal('Unhandled promise rejection', event.reason?.stack || event.reason || ''));
@@ -119,8 +120,8 @@
   <script type="module" src="./real-life-ux.js?v=1.17.0-b24"></script>
   <script type="module" src="./listening-data.js?v=1.17.0-b24"></script>
   <script type="module" src="./listening-engine.js?v=1.17.0-b24"></script>
-  <script type="module" src="./ux-shell.js?v=1.17.3-b24.3"></script>
-  <script type="module" src="./interaction-ux.js?v=1.17.3-b24.3"></script>
-  <script type="module" src="./build-meta.js?v=1.17.3-b24.3"></script>
+  <script type="module" src="./ux-shell.js?v=1.17.4-b24.4"></script>
+  <script type="module" src="./interaction-ux.js?v=1.17.4-b24.4"></script>
+  <script type="module" src="./build-meta.js?v=1.17.4-b24.4"></script>
 </body>
 </html>
