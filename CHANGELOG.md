@@ -4,7 +4,11 @@ Ce fichier conserve l’historique des versions livrées. Les intentions futures
 
 ## [Unreleased]
 
-### v1.10.0 — Build 17 — Scenario Lab
+Aucun changement non livré pour le moment.
+
+---
+
+## [1.10.0] — Build 17 — Scenario Lab — 2026-08-11
 
 - ajout de 12 situations multi-tours déterministes ;
 - 3 tours par situation, soit 36 tours de dialogue ;
@@ -22,7 +26,9 @@ Ce fichier conserve l’historique des versions livrées. Les intentions futures
 - statistiques par scénario ;
 - carte Situations réelles dans Progression ;
 - diagnostic Scenario Lab ;
-- second smoke test Chrome dédié à Conversation via `?scenarioSmoke=1`.
+- adaptateur `scenario-host.js` pour rendre le lab visible même sur profil vierge ;
+- double smoke test Chrome : Home + Conversation via `?scenarioSmoke=1` ;
+- CI PR, CI `main` et GitHub Pages validés.
 
 ---
 
