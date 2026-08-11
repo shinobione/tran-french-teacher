@@ -26,7 +26,7 @@ jobs:
           grep -q 'slow: 0.65' build-meta.js
           grep -q 'LISTENING_RATES.slow' build-meta.js
           grep -q 'FrenchTranquilleListeningRates' build-meta.js
-          grep -q 'build-meta.js?v=1.19.2-b26.2' index.html
+          grep -q 'build-meta.js?v=' index.html
           grep -q "n>=.65" voice-ios.js
       - name: Voice and branding remain sanctuarized
         run: |

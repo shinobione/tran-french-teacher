@@ -36,6 +36,7 @@
   <link rel="stylesheet" href="./session-ux.css?v=1.18.2-b25.2" />
   <link rel="stylesheet" href="./voice-replay.css?v=1.19.1-b26.1" />
   <link rel="stylesheet" href="./progress-details-dashboard.css?v=1.19.1-b26.1" />
+  <link rel="stylesheet" href="./build26-3-ux.css?v=1.19.3-b26.3" />
   <title>French Trân’quille</title>
   <style>
     .boot-status{width:min(560px,calc(100% - 32px));margin:18vh auto 0;padding:22px;border:1px solid rgba(180,199,224,.16);border-radius:20px;background:rgba(14,26,42,.86);color:#f7f3eb;text-align:center;font-family:Inter,system-ui,sans-serif;box-shadow:0 18px 50px rgba(0,0,0,.22)}
@@ -46,13 +47,13 @@
   <div id="app" translate="no" class="notranslate"><div class="boot-status" id="boot-status"><strong>French Trân’quille</strong><small>Đang khởi động… • Démarrage…</small></div></div>
   <script>
     (()=>{
-      const HOTFIX='1.19.2-b26.2-clicks-listening-rate';
+      const HOTFIX='1.19.3-b26.3-interactions-progress-layout';
       const learnerKey='francais-avec-luc:learner:v1';
       const params=new URLSearchParams(location.search);const realLifeSmoke=params.get('realLifeSmoke');const legacySmoke=params.get('uxSmoke');
       const seedProfile=mode=>{const knownItems=['bonjour','merci','au-revoir','je-mappelle','svp','excusez-moi','je-comprends','je-ne-comprends-pas','repetez','plus-lentement','je-suis-vietnamienne','je-viens-vietnam','jhabite-hcm','et-vous','oui','non','je-voudrais','eau','cafe','the','addition','combien-ca-coute','jaime','je-naime-pas','beaucoup','un-peu','cest-bon','je-prefere','zero','un','deux','trois','quatre','cinq','six','sept','huit','neuf','dix','euros'];let completedThrough=7,partialLesson='l8',partialStep=4;if(mode==='lesson15'){completedThrough=15;partialLesson='l16';partialStep=0}else if(mode==='lesson20'){completedThrough=20;partialLesson='l21';partialStep=0}else if(/^lesson(3[5-9]|40)$/.test(mode)){completedThrough=Number(mode.replace('lesson',''));partialLesson=completedThrough<40?`l${completedThrough+1}`:'l40';partialStep=0}const completedLessons=Array.from({length:completedThrough},(_,i)=>`l${i+1}`);const lessonProgress=Object.fromEntries(completedLessons.map(id=>[id,999]));if(partialStep)lessonProgress[partialLesson]=partialStep;localStorage.setItem(learnerKey,JSON.stringify({schemaVersion:2,learnerName:'Trân',level:'A0',lessonProgress,completedLessons,knownItems,reviewState:{bonjour:2,'je-voudrais':1},conversationWins:5,lastActivity:'2026-08-11T10:00:00.000Z',streak:{current:6,lastDate:'2026-08-11'}}))};
       if(legacySmoke==='lesson8')seedProfile('lesson8');if(['lesson8','lesson15','lesson20','lesson35','lesson36','lesson37','lesson38','lesson39','lesson40'].includes(realLifeSmoke))seedProfile(realLifeSmoke);
       const root=()=>document.getElementById('app');const escapeHtml=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]));
-      const fatal=(message,detail='')=>{const app=root();if(!app)return;app.innerHTML=`<div class="boot-status error"><strong>⚠️ French Trân’quille n’a pas démarré</strong><small>Ứng dụng gặp lỗi khi khởi động.<br>Build 26.2 affiche le diagnostic au lieu d’un écran vide.</small><code>${escapeHtml(message)}${detail?`\n${escapeHtml(detail)}`:''}</code></div>`};
+      const fatal=(message,detail='')=>{const app=root();if(!app)return;app.innerHTML=`<div class="boot-status error"><strong>⚠️ French Trân’quille n’a pas démarré</strong><small>Ứng dụng gặp lỗi khi khởi động.<br>Build 26.3 affiche le diagnostic au lieu d’un écran vide.</small><code>${escapeHtml(message)}${detail?`\n${escapeHtml(detail)}`:''}</code></div>`};
       window.addEventListener('error',event=>fatal(event.message||'JavaScript error',`${event.filename||''}:${event.lineno||''}:${event.colno||''}`));window.addEventListener('unhandledrejection',event=>fatal('Unhandled promise rejection',event.reason?.stack||event.reason||''));
       try{if('caches'in window)caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('tran-french-teacher-')&&k!==`tran-french-teacher-v${HOTFIX}`).map(k=>caches.delete(k)))).catch(()=>{});if('serviceWorker'in navigator)navigator.serviceWorker.getRegistrations().then(regs=>Promise.all(regs.map(r=>r.update().catch(()=>{})))).catch(()=>{})}catch{}
       window.addEventListener('load',()=>setTimeout(()=>{const app=root(),boot=document.getElementById('boot-status');if(app&&boot&&app.contains(boot))fatal('Startup watchdog: app.js did not replace the boot screen within 3 seconds.')},3000));
@@ -90,6 +91,7 @@
   <script type="module" src="./session-ux-adapter.js?v=1.18.2-b25.2"></script>
   <script type="module" src="./voice-replay.js?v=1.19.1-b26.1"></script>
   <script type="module" src="./progress-details-dashboard.js?v=1.19.1-b26.1"></script>
-  <script type="module" src="./build-meta.js?v=1.19.2-b26.2"></script>
+  <script type="module" src="./build26-3-ux.js?v=1.19.3-b26.3"></script>
+  <script type="module" src="./build-meta.js?v=1.19.3-b26.3"></script>
 </body>
 </html>

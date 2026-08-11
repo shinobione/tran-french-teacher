@@ -57,7 +57,8 @@ jobs:
           grep -q 'app-shell screen-home' /tmp/session-home.html
           grep -q 'data-session-daily-visible="2"' /tmp/session-home.html
           grep -E -q 'data-session-daily-extra="[1-9][0-9]*"' /tmp/session-home.html
-          grep -q 'session-daily-more' /tmp/session-home.html
+          grep -q 'data-b263-daily-toggle' /tmp/session-home.html
+          grep -q 'b263-daily-extras' /tmp/session-home.html
           grep -q 'data-ux-smoke-next="l8"' /tmp/session-home.html
           grep -q 'data-ux-smoke-known="40"' /tmp/session-home.html
 

@@ -6,6 +6,26 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ---
 
+## [1.19.2] — Build 26.2 — Click + Listening Rate Hotfix — 2026-08-11
+
+- corrige le clic inerte observé en vidéo sur `Parcours → Détails d’apprentissage` ;
+- remplace la dépendance au toggle natif implicite de `<details>` par un toggle explicite et déterministe dans `progression-ux.js` ;
+- ajoute un smoke Chrome qui clique réellement le `summary` et exige l’ouverture du panneau ;
+- corrige la cause réelle du mode Listening `Lent` quasi identique au normal : le bridge demandait `0.64`, mais `voice-ios.js` refuse les rates `< 0.65` et retombait donc sur ~`0.84` ;
+- fixe le rate lent effectif à **0.65**, soit le plancher déjà accepté par la couche voix ;
+- résultat effectif : **0.88 normal / 0.65 lent** ;
+- `voice-ios.js`, `free-voice.js`, logo et favicon restent byte-identiques ;
+- aucun changement de voix, pitch ou reconnaissance ;
+- aucune migration learner/Memory/Scenario/Listening ;
+- rend le smoke Build 26.1 durable vis-à-vis des hotfixes de version globale ;
+- aligne Session UX et Listening-rate CI sur le contrat **0.88 / 0.65** ;
+- cache `tran-french-teacher-v1.19.2-b26.2-clicks-listening-rate` ;
+- PR #42 ; commit production `4d1d224aa4eb6612fe6b0dc997f3871bbb502317` ;
+- **8 workflows / 8 SUCCESS** sur PR puis `main` ;
+- GitHub Pages **#100 SUCCESS**.
+
+---
+
 ## [1.19.1] — Build 26.1 — Voice Self-Playback + Learning Details Dashboard — 2026-08-11
 
 - ajoute `voice-replay.js` / `voice-replay.css` sans modifier `free-voice.js` ni `voice-ios.js` ;
@@ -48,7 +68,7 @@ La capture simultanée exacte du premier essai reste volontairement hors scope t
 - chaque référence Memory avancée est résolue depuis le curriculum ; une résolution n’est valide que si elle correspond à exactement un acquis ;
 - conserve la limite de 6 situations ouvertes visibles ;
 - conserve le contrat Session UX 25.2 : **1 situation = 1 session** ;
-- conserve Listening **0.88 / 0.64** ;
+- conserve Listening historique Build 25.1 ;
 - cache `tran-french-teacher-v1.19.0-b26-real-life-3` ;
 - ajoute `Build 26 Real Life French III smoke` avec profils l20 / l35 / l40 et garde des résolutions ;
 - corrige le contrat quality l20 pour compter la première scène Pack III : **18 scènes personnelles ouvertes** ;
@@ -69,19 +89,19 @@ La capture simultanée exacte du premier essai reste volontairement hors scope t
 - Vocal guidé : cible **5 réponses** sans modifier `free-voice.js` ;
 - Practice Hub et Daily Coach compact ;
 - milestones séparés ; animations sobres + reduced motion ;
-- Listening **0.88 / 0.64** ;
+- Listening calibré par les builds suivants ;
 - PR #35 ; commit prod `49d866bed59bb0cb3268e1675225a4811f6c595f` ; 7 workflows sans échec ; Pages #94 SUCCESS.
 
 ---
 
 ## [1.18.1] — Build 25.1 — Listening Slow Calibration — 2026-08-11
-- normal effectif **0.88** ; lent effectif **0.64** ; `voice-ios.js` inchangé ; PR #33 ; Pages #92 SUCCESS.
+- bridge de séparation normal/lent introduit ; calibration finale corrigée en Build 26.2 à **0.88 / 0.65** sans modifier `voice-ios.js`.
 
 ## [1.18.0] — Build 25 — Progression UX / Progressive Disclosure — 2026-08-11
 - résumé simple de `Parcours` ; détails repliables ; 5 lignes curriculum visibles par défaut, 40 accessibles ; aucune migration.
 
 ## Post-release microfix — Listening speed separation — 2026-08-11
-- PR #29 : séparation `0.88 / 0.68`, `voice-ios.js` inchangé.
+- PR #29 : séparation des demandes Listening, `voice-ios.js` inchangé.
 
 ## [1.17.5] — Build 24.5 — Navigation State Sync — 2026-08-11
 - bottom bar persistante, tap echo, état actif déterministe.
