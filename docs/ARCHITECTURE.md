@@ -28,11 +28,17 @@ INTERFACE APPRENANTE
 Aujourd’hui / Pratiquer / Parcours
 ```
 
-Un nouveau pack de contenu n’obtient pas une nouvelle destination de navigation.
+Un nouveau moteur n’obtient pas une nouvelle destination de navigation.
+
+Règle ajoutée après observation terrain :
+
+> **un moteur peut être important sans être visible en permanence.**
+
+L’interface doit utiliser une logique de **progressive disclosure** : résumé utile d’abord, détails ensuite, diagnostics seulement si demandé ou en DEBUG FR.
 
 ---
 
-# Runtime canonique — v1.17.0 Build 24
+# Runtime canonique — baseline v1.17.5 Build 24.5
 
 ```text
 progress-safety.js
@@ -52,17 +58,20 @@ mastery-engine.js
 mastery-stage3.js
 scenario-data.js
 real-life-data.js            # Pack I
-real-life-data-2.js          # Pack II — Build 24
+real-life-data-2.js          # Pack II
 scenario-host.js
 scenario-engine.js
-real-life-ux.js              # façade commune des packs
+real-life-ux.js
 listening-data.js
 listening-engine.js
 ux-shell.js
-build-meta.js                # dernier
+interaction-ux.js            # feedback tactile premium
+build-meta.js                # dernier : metadata + ponts runtime ciblés
 ```
 
 CSS Scenario personnel : `real-life-ux.css`.
+
+Le microfix Listening du 11/08/2026 est porté par `build-meta.js` sans modification de `voice-ios.js`. Son rôle est uniquement de laisser passer les vitesses pédagogiques explicites du module Listening au lieu de les laisser être écrasées par la vitesse globale Lucie.
 
 ---
 
@@ -80,13 +89,19 @@ Clé Scenario :
 french-tranquille:scenarios:v1
 ```
 
+Clé Listening :
+
+```text
+french-tranquille:listening:v1
+```
+
 Snapshot de sécurité depuis Build 22 :
 
 ```text
 french-tranquille:safety:pre-build22:v1
 ```
 
-Build 24 ne crée aucune nouvelle clé de progression.
+Aucun changement UX futur ne doit renommer ces clés pour des raisons esthétiques.
 
 ---
 
@@ -96,7 +111,7 @@ Build 24 ne crée aucune nouvelle clé de progression.
 - l16–l25 : `curriculum-stage2.js` ;
 - l26–l40 : `curriculum-stage3.js`.
 
-Contrat : **40 leçons / 241 éléments**.
+Contrat actuel : **40 leçons / 241 éléments**.
 
 ---
 
@@ -120,78 +135,54 @@ real-life-data.js      6 situations / 18 tours
 real-life-data-2.js   10 situations / 30 tours
 ```
 
-Total candidat Build 24 :
+Total : **28 situations / 84 tours**.
 
-```text
-28 situations / 84 tours
-```
-
-Real Life I + II :
-
-```text
-16 situations / 48 tours
-```
-
-Chaque pack étend le même tableau `FrenchTranquilleScenarioData.scenarios` **avant** l’initialisation du moteur.
+Chaque pack étend le même tableau `FrenchTranquilleScenarioData.scenarios` avant l’initialisation du moteur.
 
 Aucune migration du state Scenario n’est nécessaire : les stats existantes sont indexées par ID et les nouveaux IDs sont additifs.
 
 ---
 
-# Real Life French II
-
-Pack :
-
-```text
-real-life-jerry-2
-```
-
-Prérequis entre l9 et l20. Les scénarios relient plusieurs acquis :
-
-- train + horaire ;
-- shopping + budget + carte ;
-- préférence + commande ;
-- douleur + localisation + urgence ;
-- présentation de Jerry ;
-- être prête + vouloir + pouvoir ;
-- réservation + question + aide ;
-- clé + porte + aide ;
-- logement + eau chaude + aide ;
-- téléphone + réseau + message.
-
-Le contenu évite de recopier les scénarios historiques génériques ; il ajoute des **enchaînements personnels**.
-
----
-
 # `real-life-ux.js` — catalogue scalable
 
-La façade Scenario doit rester simple même lorsque le moteur contient beaucoup de scènes.
-
-Build 24 introduit :
+La façade Scenario reste limitée par défaut :
 
 ```text
 MAX_OPEN = 6
 ```
 
-Comportement par défaut :
-
-1. scènes personnelles ouvertes ;
-2. triées selon le prérequis le plus récent ;
-3. autres scènes ouvertes ;
-4. seulement les 6 premières sont visibles ;
-5. bouton pour afficher les autres scènes ouvertes ;
-6. seulement 2 futures scènes verrouillées visibles ;
-7. second bouton pour afficher les futures scènes si souhaité.
-
-Le badge `Ta vraie vie` et le titre apprenant `Parler en situation` restent communs aux packs I et II.
+Principe : quelques scènes pertinentes visibles, puis expansion volontaire. Cette même philosophie doit maintenant être appliquée à **Parcours / Progression**.
 
 ---
 
 # Learning Memory / Error / Adaptive
 
-Build 24 n’introduit aucun nouveau chemin parallèle : les scénarios continuent d’utiliser les mêmes hooks Scenario → Learning Memory.
+Les moteurs travaillent derrière l’interface apprenante :
 
-Error Intelligence, Listening et Adaptive Language restent inchangés et sont testés comme non-régressions.
+- Learning Memory mémorise la solidité et les besoins de révision ;
+- Error Intelligence mémorise uniquement des erreurs observables ;
+- Adaptive Language ajuste le soutien VI/FR ;
+- Mastery synthétise les preuves ;
+- Daily Coach choisit quoi remettre devant Trân.
+
+Ces moteurs **ne doivent pas imposer chacun leur propre grande carte permanente** dans l’écran Parcours.
+
+---
+
+# Listening
+
+Audio local via `speechSynthesis`.
+
+État production après PR #29 :
+
+```text
+normal = 0.88
+lent   = 0.68
+```
+
+Le retour terrain indique que `lent` pourrait être légèrement plus lent. La calibration est reportée à un mini-jalon après test iPhone ; candidat envisagé : **0.62–0.64**.
+
+Aucune modification pendant une session réelle de Trân.
 
 ---
 
@@ -199,14 +190,16 @@ Error Intelligence, Listening et Adaptive Language restent inchangés et sont te
 
 Retour iPhone validé : voix Lucie naturelle et reconnaissance des réponses satisfaisante.
 
-Build 24 conserve byte-identiques :
+Sanctuaires :
 
 ```text
 voice-ios.js
 free-voice.js
 ```
 
-Aucune recalibration sans problème réel reproductible.
+Le microfix Listening n’a pas modifié `voice-ios.js`.
+
+Aucune recalibration générale sans problème réel reproductible.
 
 ---
 
@@ -218,8 +211,6 @@ Sanctuaires :
 assets/LOGO.png
 assets/Favicon.png
 ```
-
-Build 24 ne remplace ni le logo, ni le favicon.
 
 ---
 
@@ -233,47 +224,83 @@ Pratiquer
 Parcours
 ```
 
-Le catalogue agrandi reste derrière `Pratiquer → Parler français`.
+Builds 24.3–24.5 garantissent :
+
+- feedback `pointerdown` ;
+- `tap echo` ;
+- boutons persistants ;
+- un seul onglet actif ;
+- synchronisation déterministe de l’état actif ;
+- `Pratiquer` comme vrai écran ;
+- header de leçon allégé.
 
 ---
 
-# Service Worker — Build 24
+# Dette UX prioritaire : Parcours
 
-Cache :
+Observation terrain du 11/08/2026 : l’écran `Parcours` est trop long et expose trop d’implémentation interne.
+
+Éléments actuellement susceptibles de s’empiler :
+
+- position dans le parcours ;
+- stats globales ;
+- Learning Memory ;
+- plusieurs cartes Mastery ;
+- situations réelles ;
+- fondations A1 ;
+- éléments acquis ;
+- liste complète des 40 leçons ;
+- métriques détaillées.
+
+Cible Build 25 :
 
 ```text
-tran-french-teacher-v1.17.0-b24
+NIVEAU 1 — Résumé
+  position + progrès + prochaine étape
+
+NIVEAU 2 — Détails repliables
+  Memory / Mastery / Listening / Real Life / A1
+
+NIVEAU 3 — Vue complète
+  tous les acquis / toutes les leçons / diagnostics
 ```
 
-Nouveau fichier précaché :
+Aucune donnée ne sera supprimée : la refonte porte sur **l’architecture d’information**, pas sur les moteurs.
 
-```text
-real-life-data-2.js
-```
+Voir `docs/NEXT-UX-PASS.md`.
 
 ---
 
-# CI Build 24
+# Freeze terrain
 
-Contrats :
+Tant que Trân utilise activement la PWA :
+
+- pas de merge runtime ;
+- pas de service-worker bump ;
+- pas de modification de cache ;
+- documentation sur branche uniquement ;
+- exception : incident critique reproductible.
+
+---
+
+# CI à conserver
+
+Contrats minimum :
 
 1. syntaxe runtime complet ;
 2. hashes branding + voice ;
 3. curriculum 40/241 ;
 4. Scenario 28/84 ;
-5. Pack I 6/18 ;
-6. Pack II 10/30 ;
-7. références `turn.items` valides dans le curriculum ;
-8. profil l8 : non-régression Build 23 ;
-9. profil l15 : 5 scènes Pack II ouvertes ;
-10. profil l20 : 10 scènes Pack II ouvertes ;
-11. catalogue visuel limité à 6 situations ouvertes par défaut ;
-12. 2 futures scènes verrouillées max ;
-13. Error 20/120 ; Listening ; Adaptive Language ;
-14. aucune fatal card.
+5. ancien utilisateur/progression ;
+6. Error / Listening / Adaptive ;
+7. Options ;
+8. navigation mobile réelle ;
+9. aucune fatal card.
+
+Build 25 devra ajouter un contrat de **densité / progressive disclosure** sans supprimer les tests 24.5.
 
 ---
 
 # Dette technique
 
-`app.js` reste monolithique par choix de sécurité. Sa future extraction reste réservée à un build de Hardening avec comparaison/migration d’état.
+`app.js` reste monolithique par choix de sécurité. Son extraction reste réservée à Architecture Hardening avec comparaison d’état avant/après.
