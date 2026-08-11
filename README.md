@@ -4,9 +4,9 @@ PWA de français pensée pour **Trân**, vietnamienne débutante absolue (**A0**
 
 ## Version actuelle
 
-- **v1.7.0**
-- **Build 13**
-- Phase : **PWA-3 Learning Memory + Curriculum A0 + Voice-ready**
+- **v1.7.1**
+- **Build 14**
+- Phase : **UX / Visual Pass + PWA-3 Learning Memory + Curriculum A0**
 - coût d'exploitation : **0 €**
 
 ## Plateformes cibles
@@ -21,6 +21,46 @@ PWA de français pensée pour **Trân**, vietnamienne débutante absolue (**A0**
 - **Navigateur PC** : Chrome, Edge et navigateurs modernes sur Windows/macOS/Linux.
 
 L'interface, les leçons, les révisions et la progression locale sont conçues pour fonctionner sur les trois familles de plateformes. La disponibilité de la **reconnaissance vocale** dépend du navigateur et du système ; le fallback texte reste toujours disponible.
+
+## Build 14 — UX / Visual Pass
+
+Avant d'ajouter de nouvelles fonctions, l'interface de pratique a été retravaillée pour mieux différencier les usages et sortir du rendu trop uniforme « cartes bleues propres ».
+
+### Conversation / Luyện hội thoại
+
+- layout élargi sur desktop ;
+- zone vocale gratuite mise au premier plan ;
+- pratique texte séparée visuellement sans devenir secondaire sur mobile ;
+- hiérarchie plus claire entre consigne, micro, modèle audio, transcription et feedback ;
+- panneau vocal et conversation texte affichés en deux colonnes sur grand écran, puis en pile naturelle sur iPhone / Android ;
+- accents mint / lilas conservés, avec une petite touche d'ambre pour les indications et feedbacks.
+
+### Révision / Ôn tập
+
+- la carte de rappel devient le vrai centre visuel de la page ;
+- mot / expression à retrouver beaucoup plus lisible ;
+- réponse révélée mieux isolée ;
+- boutons **Difficile / Correct / Facile** différenciés par des accents corail doux / ambre / mint ;
+- intégration directe des statuts Learning Memory dans cette nouvelle hiérarchie ;
+- comportement responsive conservé, avec boutons empilés sur très petit écran.
+
+### PWA-3 Learning Memory
+
+- cartes mémoire moins « greffon technique » et plus proches d'un petit dashboard pédagogique ;
+- métriques **À revoir / Fragiles / En cours / Solides** visuellement distinctes sans couleurs agressives ;
+- éléments fragiles et sauvegarde locale mieux séparés ;
+- badges Nouveau / Fragile / En cours / Solide harmonisés avec la nouvelle palette.
+
+### Charte visuelle
+
+Le Build 14 conserve le socle sombre, mint et lilas de French Trân’quille, mais ajoute avec parcimonie :
+
+- **prune** pour la profondeur et les zones conversationnelles ;
+- **corail doux** pour les difficultés / alertes pédagogiques ;
+- **ambre** pour les indices et états intermédiaires ;
+- toujours du **mint** pour les réussites et éléments solides.
+
+Objectif : davantage de personnalité et de hiérarchie sans partir vers une interface arcade ou néon.
 
 ## Build 13 — PWA-3 Learning Memory
 
@@ -155,8 +195,9 @@ Chaque modification importante passe :
 - `node --check` des scripts JavaScript ;
 - garde Curriculum UX ;
 - garde Learning Memory ;
+- garde UX / Visual Pass ;
 - smoke test de rendu Node ;
-- **vrai smoke test dans Google Chrome headless** vérifiant que la homepage démarre, contient les 15 leçons et charge la couche Learning Memory.
+- **vrai smoke test dans Google Chrome headless** vérifiant que la homepage démarre, contient les 15 leçons et charge les couches attendues.
 
 `build-meta.js` centralise l'affichage runtime de la version/build afin d'éviter les diagnostics désynchronisés.
 
@@ -187,6 +228,7 @@ https://shinobione.github.io/tran-french-teacher/
 - ✅ révision espacée ;
 - ✅ priorité automatique aux éléments fragiles ;
 - ✅ export/import manuel local ;
+- ✅ intégration visuelle revue dans Build 14 ;
 - ⏳ historique plus détaillé des erreurs ;
 - ⏳ suggestions automatiques de mini-séance quotidienne.
 
@@ -214,4 +256,5 @@ https://shinobione.github.io/tran-french-teacher/
 - **Build 10.1–10.2** — watchdog, isolation ES modules et vrai smoke test Chrome ;
 - **v1.6.0 / Build 11** — 15 leçons / 88 éléments + curriculum voice-ready ;
 - **v1.6.1 / Build 12** — Curriculum UX responsive ;
-- **v1.7.0 / Build 13** — Learning Memory locale, révision espacée et sauvegarde JSON.
+- **v1.7.0 / Build 13** — Learning Memory locale, révision espacée et sauvegarde JSON ;
+- **v1.7.1 / Build 14** — refonte UX/visuelle de Conversation, Révision et PWA-3 + palette enrichie avec retenue.
