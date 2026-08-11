@@ -1,4 +1,4 @@
-const META = { version: '1.10.0', build: 17 };
+const META = { version: '1.11.0', build: 18 };
 
 window.FrenchTranquilleBuildMeta = META;
 
@@ -40,6 +40,11 @@ if (window.FrenchTranquilleScenarioData) {
 if (window.FrenchTranquilleScenarios) {
   window.FrenchTranquilleScenarios.version = META.version;
   window.FrenchTranquilleScenarios.build = META.build;
+}
+
+if (window.FrenchTranquilleErrors) {
+  window.FrenchTranquilleErrors.version = META.version;
+  window.FrenchTranquilleErrors.build = META.build;
 }
 
 function patchDiagnostics() {
