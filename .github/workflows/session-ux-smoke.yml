@@ -74,10 +74,16 @@ jobs:
         run: |
           google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=30000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&sessionSmoke=listening' >/tmp/session-listening.html
           if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/session-listening.html; then cat /tmp/session-listening.html; exit 1; fi
-          grep -q 'data-session-listening-progress="5/5"' /tmp/session-listening.html
-          grep -q 'data-session-listening-done="1"' /tmp/session-listening.html
-          grep -q 'data-session-complete="listening"' /tmp/session-listening.html
-          grep -q 'session-complete-mode' /tmp/session-listening.html
+          echo '--- Listening session diagnostics ---'
+          grep -o 'data-session-listening-[^ >]*' /tmp/session-listening.html | head -20 || true
+          grep -o 'data-listening-[^ >]*' /tmp/session-listening.html | head -30 || true
+          grep -o 'data-session-complete="[^"]*"' /tmp/session-listening.html | head -10 || true
+          grep -o 'session-complete-mode' /tmp/session-listening.html | head -10 || true
+          echo '--- End diagnostics ---'
+          if ! grep -q 'data-session-listening-progress="5/5"' /tmp/session-listening.html; then echo 'Missing session progress 5/5'; exit 1; fi
+          if ! grep -q 'data-session-listening-done="1"' /tmp/session-listening.html; then echo 'Missing session done=1'; exit 1; fi
+          if ! grep -q 'data-session-complete="listening"' /tmp/session-listening.html; then echo 'Missing listening completion card'; exit 1; fi
+          if ! grep -q 'session-complete-mode' /tmp/session-listening.html; then echo 'Missing complete mode'; exit 1; fi
           grep -q 'data-listening-slow-rate="0.64"' /tmp/session-listening.html
 
       - name: Chrome — Review reaches an explicit bounded finish
