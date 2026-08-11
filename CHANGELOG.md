@@ -4,12 +4,16 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ## [Unreleased]
 
-### v1.16.0 — Build 23 — Real Life French I — candidat
+- prochain jalon : **v1.17.0 — Build 24 — Real Life French II**.
+
+---
+
+## [1.16.0] — Build 23 — Real Life French I — 2026-08-11
 
 - ajout de `real-life-data.js` : **6 situations / 18 tours** liées à la vraie vie de Trân avec Jerry ;
 - prérequis progressifs `l2` → `l8` ;
 - réponses obligatoires limitées aux acquis déjà enseignés ;
-- Scenario total candidat : **18 situations / 54 tours** ;
+- Scenario total : **18 situations / 54 tours** ;
 - aucune nouvelle clé de progression ;
 - même stockage `french-tranquille:scenarios:v1` ;
 - ajout de `real-life-ux.js` / `real-life-ux.css` ;
@@ -18,9 +22,12 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 - futures scènes verrouillées condensées à deux par défaut ;
 - shell Build 22 inchangé ;
 - voix / reconnaissance / logo / favicon sanctuarisés ;
-- cache candidat `1.16.0-b23`.
-
-Reste Unreleased jusqu’à PR → `main` → GitHub Pages.
+- cache `1.16.0-b23` ;
+- smoke ancien utilisateur leçon 8 : SUCCESS ;
+- smoke Real Life leçon 8 : **5 scènes personnelles ouvertes / 1 verrouillée** ;
+- PR #18 : SUCCESS ;
+- `main` CI run #63 : SUCCESS ;
+- GitHub Pages run #77 : SUCCESS.
 
 ---
 
@@ -38,7 +45,7 @@ Reste Unreleased jusqu’à PR → `main` → GitHub Pages.
 - `voice-ios.js` / `free-voice.js` sanctuarisés après retour iPhone positif ;
 - audit de loader : Stage 3 / Listening / Adaptive Language présents dans le repo mais pas tous activés par l’ancien loader/service worker ;
 - réconciliation du runtime complet et `build-meta.js` replacé en dernier ;
-- audit curriculum : **40 leçons / 241 éléments réels**, correction de l’ancienne référence 238 sans suppression de contenu ;
+- audit curriculum : **40 leçons / 241 éléments réels** ;
 - cache PWA `1.15.0-b22` ;
 - PR #16 SUCCESS ;
 - `main` CI run #59 SUCCESS ;
@@ -53,10 +60,9 @@ Reste Unreleased jusqu’à PR → `main` → GitHub Pages.
 - décision fondée sur Curriculum / Memory / Listening / pratique / fragilités ;
 - retour temporaire vers davantage de vietnamien après difficultés ;
 - contextes lesson/listening/scenario/admin/safety ;
-- DEBUG FR prioritaire ;
-- fichiers et tests de décision livrés dans le repo.
+- DEBUG FR prioritaire.
 
-**Note d’intégrité Build 22 :** l’audit ultérieur a établi que le loader/service worker de `main` n’activait pas encore toute cette couche. Build 22 a réconcilié le runtime.
+**Note d’intégrité Build 22 :** le runtime de production a été réconcilié en Build 22.
 
 ## [1.13.0] — Build 20 — Listening Comprehension — 2026-08-11
 
@@ -66,27 +72,20 @@ Reste Unreleased jusqu’à PR → `main` → GitHub Pages.
 - vitesse normale / lente ;
 - réécoute ;
 - clé `french-tranquille:listening:v1` ;
-- Memory + Error alimentés par les sources `listening-*` ;
-- fichiers et contrats Listening livrés dans le repo.
+- Memory + Error alimentés par les sources `listening-*`.
 
-**Note d’intégrité Build 22 :** l’audit ultérieur a montré que le loader/service worker historique n’avait pas encore activé cette couche dans toutes les compositions de `main`. Build 22 a repris explicitement le câblage.
+**Note d’intégrité Build 22 :** le câblage production complet a été repris explicitement en Build 22.
 
 ## [1.12.0] — Build 19 — A1 Core — 2026-08-11
 
-- ajout du Stage 3, leçons 26–40 ;
+- Stage 3, leçons 26–40 ;
 - nombres 11→100, jours, mois, dates, heure précise ;
-- possessifs de base ;
-- présent avec `tu`, `il/elle`, `nous` ;
-- futur proche ;
-- passé récent ;
-- passé composé fréquent avec `avoir` ;
-- passé composé avec `être` et formes féminines utiles à Trân ;
-- administration / documents ;
-- émotions, besoins et proches ;
-- Mastery A1 Core ;
-- dossier `docs/BUILD-19-A1-CORE.md`.
+- possessifs ; présent avec `tu`, `il/elle`, `nous` ;
+- futur proche ; passé récent ; passé composé ;
+- administration / documents ; émotions, besoins et proches ;
+- Mastery A1 Core.
 
-**Correction d’audit Build 22 :** Stage 3 contient réellement **93 éléments**, pas 90 ; le total runtime est **241**, pas 238. Les trois éléments supplémentaires sont conservés.
+**Correction d’audit Build 22 :** Stage 3 contient réellement **93 éléments**, total runtime **241**.
 
 ## [1.11.0] — Build 18 — Error Intelligence — 2026-08-11
 
@@ -94,86 +93,60 @@ Reste Unreleased jusqu’à PR → `main` → GitHub Pages.
 - taxonomie fondée sur des preuves observables ;
 - historique borné à 20 événements par élément / 120 globaux récents ;
 - récence, répétition, récupération ;
-- priorité Daily Coach ;
-- Free Voice → Learning Memory + Error Intelligence ;
-- correction de classification `free-voice-text` / `voice`.
+- Free Voice → Learning Memory + Error Intelligence.
 
 ## [1.10.0] — Build 17 — Scenario Lab — 2026-08-11
 
 - 12 situations / 36 tours ;
 - déverrouillage selon les leçons ;
 - indices puis modèle ;
-- Learning Memory ;
-- voix + texte ;
-- stats locales ;
-- profil vierge supporté.
+- Learning Memory ; voix + texte ; stats locales.
 
 ## [1.9.0] — Build 16 — Mastery Engine — 2026-08-11
 
 - maîtrise par grandes étapes ;
 - preuves Learning Memory ;
 - estimation interne non certifiante ;
-- docs canoniques ROADMAP / CHANGELOG / ARCHITECTURE / BUILD-POLICY ;
-- process branche → PR → CI → Chrome → merge → Pages.
+- docs canoniques et process PR/CI/Chrome/Pages.
 
 ## [1.8.0] — Build 15 — 2026-08-11
-
-- 25 leçons / 148 éléments ;
-- Early A1 ;
-- Daily Coach ;
-- Stage 2 modulaire.
+- 25 leçons / 148 éléments ; Early A1 ; Daily Coach ; Stage 2.
 
 ## [1.7.1] — Build 14 / 14.1 — 2026-08-11
-
-- refonte UX Conversation/Révision/Memory ;
-- avatar Lucie via icône French Trân’quille.
+- refonte UX Conversation/Révision/Memory ; avatar Lucie.
 
 ## [1.7.0] — Build 13 — 2026-08-11
-
-- Learning Memory ;
-- révision espacée ;
-- export/import JSON.
+- Learning Memory ; révision espacée ; export/import JSON.
 
 ## [1.6.1] — Build 12 — 2026-08-11
-
 - Curriculum UX responsive.
 
 ## [1.6.0] — Build 11 — 2026-08-11
-
 - 15 leçons / 88 éléments.
 
 ## [1.5.0] — Build 10 / 10.1 / 10.2
-
 - responsive ; watchdog ; ES modules ; Chrome headless.
 
 ## [1.4.0] — Build 9
-
 - French Trân’quille ; Lucie ; logo/favicon/PWA.
 
 ## [1.3.0] — Build 8
-
 - Guided Free Voice.
 
 ## [1.2.0] — Build 7
-
 - Free Voice gratuit.
 
 ## [1.1.x] — Builds 5–6
-
 - expérimentation payante abandonnée ; retour architecture 0 €.
 
 ## [1.0.3] — Build 4
-
 - voix iPhone-first.
 
 ## [1.0.2] — Build 3
-
 - DEBUG FR.
 
 ## [1.0.1] — Build 2
-
 - anti-traduction automatique.
 
 ## [1.0.0] — Build 1
-
 - première PWA / leçon / progression / offline / GitHub Pages.

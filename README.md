@@ -2,33 +2,20 @@
 
 PWA de français pensée pour **Trân**, avec priorité à l’oral, au français utile dans la vraie vie et à une interface simple sur iPhone.
 
-## Candidat actuel
+## Version en production
 
 - **v1.16.0**
 - **Build 23 — Real Life French I**
-- statut : **CANDIDAT / branche `build23-real-life-french-1`**
-- socle production : **v1.15.0 Build 22**
+- statut : **PROD / GitHub Pages**
 - curriculum : **40 leçons / 241 éléments**
+- situations Conversation : **18 situations / 54 tours**
 - coût : **0 €**
 
-## Intention
+> Build 23 a été validé sur PR, sur le commit mergé de `main`, puis déployé par GitHub Pages. Le smoke « leçon 8 » est resté vert et le nouveau smoke Real Life a confirmé que 5 situations personnelles sont déjà disponibles à ce stade sans modifier la progression.
 
-Build 23 ne crée aucun nouveau bouton principal. Il enrichit **Pratiquer → Parler français** avec des situations qui ressemblent à la vraie vie de Trân.
+## Expérience apprenante
 
-Pack I : **6 situations / 18 tours** ajoutés au moteur Scenario existant :
-
-- Jerry parle trop vite ;
-- Jerry présente Trân à quelqu’un ;
-- prendre un café avec Jerry ;
-- parler de ses goûts avec Jerry ;
-- faire un petit achat ;
-- trouver un lieu avec Jerry.
-
-Les prérequis vont uniquement des leçons **2 à 8**. Un profil autour de la leçon 8 peut donc déjà utiliser la majorité du pack.
-
-## UX
-
-Le shell Build 22 reste inchangé :
+Le shell simple de Build 22 reste la façade :
 
 ```text
 Aujourd’hui
@@ -36,32 +23,47 @@ Pratiquer
 Parcours
 ```
 
-Dans Conversation :
+Build 23 enrichit **Pratiquer → Parler français** sans créer un nouveau menu.
 
-- situations personnelles disponibles remontées en premier ;
-- badge discret `♡ Cuộc sống của bạn / Ta vraie vie` ;
-- seulement deux situations futures verrouillées affichées par défaut ;
-- les autres restent derrière `Voir les situations futures` ;
-- le titre technique `Scenario Lab` est remplacé côté apprenante par **Parler en situation**.
+### Real Life French I
+
+Six situations personnelles ont été ajoutées :
+
+- Jerry parle trop vite ;
+- Jerry présente Trân à quelqu’un ;
+- prendre un café avec Jerry ;
+- parler de ses goûts ;
+- faire un petit achat ;
+- trouver un lieu avec Jerry.
+
+Les prérequis vont de `l2` à `l8`. Une apprenante arrivée autour de la leçon 8 peut donc déjà utiliser cinq scènes du pack ; la sixième se débloque après la leçon 8.
+
+Dans Conversation, les situations personnelles disponibles remontent en premier, portent un badge discret `Ta vraie vie`, et les situations futures verrouillées sont condensées pour ne pas transformer l’écran en catalogue interminable.
 
 ## Pédagogie
 
-Chaque réponse obligatoire correspond à des acquis déjà présents : `Je ne comprends pas`, `Pouvez-vous répéter ?`, `Je voudrais…`, goûts, nombres/prix, `Où est… ?`, gauche/droite, etc.
+Chaque réponse obligatoire repose sur un acquis réellement enseigné avant le scénario : demander de répéter, demander de parler plus lentement, se présenter, commander, parler de ses goûts, demander un prix, demander où se trouve un lieu, etc.
 
 Le moteur historique conserve :
 
 - premier raté → indice ;
-- deuxième raté → modèle ;
+- blocage persistant → modèle ;
 - voix ou clavier ;
-- Memory `scenario-success / miss / assisted` ;
-- statistiques locales ;
+- Learning Memory ;
+- statistiques Scenario locales ;
 - aucun score phonétique fictif.
 
-## Progression, voix et branding
+## Progression, voix et branding protégés
 
-Aucune nouvelle clé apprenant. Aucun reset.
+Aucune nouvelle clé apprenant et aucun reset.
 
-Build 23 ne modifie pas :
+Le pack utilise toujours :
+
+```text
+french-tranquille:scenarios:v1
+```
+
+Ces fichiers sont restés byte-identiques :
 
 ```text
 assets/LOGO.png
@@ -70,11 +72,9 @@ voice-ios.js
 free-voice.js
 ```
 
-Le smoke « leçon 8 » de Build 22 reste obligatoire en CI.
-
 ## Runtime Build 23
 
-Nouveaux fichiers :
+Ajouts :
 
 ```text
 real-life-data.js
@@ -82,7 +82,7 @@ real-life-ux.js
 real-life-ux.css
 ```
 
-Chargement :
+Ordre Scenario :
 
 ```text
 scenario-data
@@ -92,13 +92,17 @@ scenario-data
 → real-life-ux
 ```
 
-Le pack étend la même clé Scenario existante :
+Le pack étend le moteur existant au lieu d’en créer un deuxième.
 
-```text
-french-tranquille:scenarios:v1
-```
+## Preuves de production
 
-Les statistiques déjà enregistrées restent compatibles.
+- PR #18 : **SUCCESS** ;
+- commit `main` : `7f5dd657e5f46a2847c443ffb8f5d0154a89924a` ;
+- CI `main` run #63 : **SUCCESS** ;
+- GitHub Pages run #77 : **SUCCESS** ;
+- smoke leçon 8 zéro-perte : **SUCCESS** ;
+- smoke Real Life leçon 8 : **SUCCESS** ;
+- Error / Listening / Adaptive Language : **non régressés**.
 
 ## Documentation
 
@@ -109,4 +113,6 @@ Les statistiques déjà enregistrées restent compatibles.
 - [`docs/BUILD-22-UX-FOUNDATION.md`](./docs/BUILD-22-UX-FOUNDATION.md)
 - [`docs/BUILD-23-REAL-LIFE-FRENCH-I.md`](./docs/BUILD-23-REAL-LIFE-FRENCH-I.md)
 
-Build 23 ne sera déclaré `PROD / CLOS` qu’après PR, CI `main` et GitHub Pages vertes.
+## Prochain build
+
+**v1.17.0 — Build 24 — Real Life French II** : déplacements, téléphone, repas, proches, logement et conversations un peu plus longues, toujours derrière **Pratiquer**.
