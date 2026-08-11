@@ -2,7 +2,7 @@ name: French Trân'quille nav click smoke
 
 on:
   push:
-    branches: [hotfix-nav-clicks]
+    branches: [main, hotfix-nav-clicks]
   pull_request:
     branches: [main]
 
