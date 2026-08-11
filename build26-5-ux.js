@@ -6,11 +6,7 @@
   const params = new URLSearchParams(location.search);
   const smoke = params.get('b265Smoke');
 
-  const legacyGo = id => {
-    const target = document.querySelector(`.bottom-nav [data-go="${CSS.escape(id)}"]`);
-    target?.click();
-    return Boolean(target);
-  };
+  const navTarget = id => document.querySelector(`[data-ux-nav="${CSS.escape(id)}"]`) || document.querySelector(`.bottom-nav [data-go="${CSS.escape(id)}"]`);
 
   const waitFor = (test, done, attempts = 80) => {
     let count = 0;
@@ -23,6 +19,17 @@
     };
     tick();
   };
+
+  function navigateWhenReady(id, done) {
+    waitFor(
+      () => navTarget(id),
+      target => {
+        target.click();
+        done?.();
+      },
+      120
+    );
+  }
 
   function bindPracticeBackButtons() {
     document.querySelectorAll('[data-session-practice-back]:not([data-b265-back-bound])').forEach(button => {
@@ -54,45 +61,46 @@
   }
 
   function smokeConversation() {
-    legacyGo('conversation');
-    waitFor(
-      () => window.FrenchTranquilleSessionUX?.setPracticeMode && document.querySelector('.screen-conversation .narrow'),
-      () => {
-        window.FrenchTranquilleSessionUX.setPracticeMode('guided');
-        waitFor(measureConversation, measured => {
-          document.documentElement.dataset.b265ConversationSingleColumn = measured.aligned ? '1' : '0';
-          document.documentElement.dataset.b265ConversationGuidedVisible = measured.guided ? '1' : '0';
-          const back = measured.head.querySelector('[data-session-practice-back]');
-          document.documentElement.dataset.b265ConversationBackPresent = back ? '1' : '0';
-          document.documentElement.dataset.b265ConversationBackBound = back?.dataset.b265BackBound === '1' ? '1' : '0';
-          if (!back) return;
-          const PointerCtor = window.PointerEvent || window.MouseEvent;
-          back.dispatchEvent(new PointerCtor('pointerdown', { bubbles: true, cancelable: true, button: 0 }));
-          back.dispatchEvent(new PointerCtor('pointerup', { bubbles: true, cancelable: true, button: 0 }));
-          waitFor(
-            () => window.FrenchTranquilleSessionUX.state().practiceMode === null && document.querySelector('.practice-session-hub'),
-            hub => {
-              document.documentElement.dataset.b265ConversationPointerBack = '1';
-              document.documentElement.dataset.b265ConversationHub = hub ? '1' : '0';
-              window.FrenchTranquilleSessionUX.setPracticeMode('guided');
-              waitFor(
-                () => {
-                  const candidate = document.querySelector('[data-session-practice-back]');
-                  return candidate?.dataset.b265BackBound === '1' ? candidate : null;
-                },
-                clickBack => {
-                  clickBack.click();
-                  waitFor(
-                    () => window.FrenchTranquilleSessionUX.state().practiceMode === null && document.querySelector('.practice-session-hub'),
-                    () => { document.documentElement.dataset.b265ConversationClickBack = '1'; }
-                  );
-                }
-              );
-            }
-          );
-        });
-      }
-    );
+    navigateWhenReady('conversation', () => {
+      waitFor(
+        () => window.FrenchTranquilleSessionUX?.setPracticeMode && document.querySelector('.screen-conversation .narrow'),
+        () => {
+          window.FrenchTranquilleSessionUX.setPracticeMode('guided');
+          waitFor(measureConversation, measured => {
+            document.documentElement.dataset.b265ConversationSingleColumn = measured.aligned ? '1' : '0';
+            document.documentElement.dataset.b265ConversationGuidedVisible = measured.guided ? '1' : '0';
+            const back = measured.head.querySelector('[data-session-practice-back]');
+            document.documentElement.dataset.b265ConversationBackPresent = back ? '1' : '0';
+            document.documentElement.dataset.b265ConversationBackBound = back?.dataset.b265BackBound === '1' ? '1' : '0';
+            if (!back) return;
+            const PointerCtor = window.PointerEvent || window.MouseEvent;
+            back.dispatchEvent(new PointerCtor('pointerdown', { bubbles: true, cancelable: true, button: 0 }));
+            back.dispatchEvent(new PointerCtor('pointerup', { bubbles: true, cancelable: true, button: 0 }));
+            waitFor(
+              () => window.FrenchTranquilleSessionUX.state().practiceMode === null && document.querySelector('.practice-session-hub'),
+              hub => {
+                document.documentElement.dataset.b265ConversationPointerBack = '1';
+                document.documentElement.dataset.b265ConversationHub = hub ? '1' : '0';
+                window.FrenchTranquilleSessionUX.setPracticeMode('guided');
+                waitFor(
+                  () => {
+                    const candidate = document.querySelector('[data-session-practice-back]');
+                    return candidate?.dataset.b265BackBound === '1' ? candidate : null;
+                  },
+                  clickBack => {
+                    clickBack.click();
+                    waitFor(
+                      () => window.FrenchTranquilleSessionUX.state().practiceMode === null && document.querySelector('.practice-session-hub'),
+                      () => { document.documentElement.dataset.b265ConversationClickBack = '1'; }
+                    );
+                  }
+                );
+              }
+            );
+          });
+        }
+      );
+    });
   }
 
   function progressNodes() {
@@ -130,23 +138,37 @@
   }
 
   function smokeProgress(mobile = false) {
-    legacyGo('progress');
-    waitFor(progressNodes, nodes => {
-      if (!mobile) {
-        nodes.details.open = true;
-        window.FrenchTranquilleProgressDetailsDashboard?.open?.('mastery');
-        waitFor(
-          () => {
-            const current = progressNodes();
-            const mastery = current?.details.querySelector('[data-progress-detail-panel="mastery"]:not([hidden])');
-            return current && mastery ? current : null;
-          },
-          current => recordProgress(current, false)
-        );
-      } else {
-        nodes.details.open = false;
-        requestAnimationFrame(() => recordProgress(nodes, true));
-      }
+    navigateWhenReady('progress', () => {
+      waitFor(
+        () => {
+          window.FrenchTranquilleProgressionUX?.decorate?.();
+          return progressNodes();
+        },
+        nodes => {
+          if (!mobile) {
+            nodes.details.open = true;
+            window.FrenchTranquilleProgressDetailsDashboard?.open?.('mastery');
+            waitFor(
+              () => {
+                window.FrenchTranquilleProgressionUX?.decorate?.();
+                const current = progressNodes();
+                const mastery = current?.details.querySelector('[data-progress-detail-panel="mastery"]:not([hidden])');
+                return current && mastery ? current : null;
+              },
+              current => recordProgress(current, false)
+            );
+          } else {
+            nodes.details.open = false;
+            requestAnimationFrame(() => {
+              window.FrenchTranquilleProgressionUX?.decorate?.();
+              const current = progressNodes() || nodes;
+              current.details.open = false;
+              recordProgress(current, true);
+            });
+          }
+        },
+        120
+      );
     });
   }
 
