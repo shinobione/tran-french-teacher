@@ -21,59 +21,58 @@
 
 # État de référence
 
-## v1.8.0 — Build 15 — LIVRÉ
+## v1.9.0 — Build 16 — LIVRÉ
 
 - 25 leçons / 148 éléments ;
 - A0 → premières fondations A1 ;
-- Learning Memory locale ;
-- révision espacée ;
+- Learning Memory locale + révision espacée ;
 - Daily Coach ;
+- **Mastery Engine** par grandes étapes ;
+- distinction leçon terminée / acquis / maîtrise ;
+- estimation interne A0 / A0+ / Pré-A1 / A1 en construction ;
 - Free Voice gratuit + fallback texte ;
 - UX desktop/mobile responsive ;
 - branding French Trân’quille + Lucie ;
 - CI avec vrai Chrome headless ;
 - GitHub Pages ;
+- gouvernance documentaire canonique ;
 - coût d’exploitation : 0 €.
 
 ---
 
 # PHASE PWA-3B — ADAPTATION RÉELLE
 
-## v1.9.0 — Build 16 — Mastery Engine — EN COURS
+## v1.9.0 — Build 16 — Mastery Engine — ✅ CLOS
 
 ### But
 
 Ne plus confondre **« leçon terminée »** avec **« compétence réellement utilisable »**.
 
-### Livrables
+### Livré
 
 - carte de maîtrise par grandes étapes ;
-- score interne basé sur :
-  - progression des leçons ;
-  - éléments connus ;
-  - preuves de révision ;
-  - état Learning Memory ;
-  - fragilités restantes ;
-- états : Non commencé / Découverte / Consolidation / Presque solide / Maîtrisé ;
+- score interne basé sur progression, acquis, preuves de révision, Learning Memory et fragilités ;
+- états Non commencé / Découverte / Consolidation / Presque solide / Maîtrisé ;
 - estimation interne A0 / A0+ / Pré-A1 / A1 en construction ;
 - priorité suivante proposée par Lucie ;
-- **aucune assimilation à une certification CECRL officielle** ;
+- aucune assimilation à une certification CECRL officielle ;
 - diagnostic enrichi ;
 - documentation canonique créée.
 
 ### Clôture Build 16
 
-- [ ] 4 étapes visibles dans Progression ;
-- [ ] aucun score de maîtrise sans preuves mémoire ;
-- [ ] aucune régression des 25 leçons ;
-- [ ] aucune boucle MutationObserver ;
-- [ ] Chrome headless vert ;
-- [ ] README / CHANGELOG / ROADMAP / BUILD-POLICY synchronisés ;
-- [ ] GitHub Pages vert.
+- [x] 4 étapes visibles dans Progression ;
+- [x] aucun statut « Maîtrisé » sans preuves mémoire suffisantes ;
+- [x] aucune régression des 25 leçons ;
+- [x] décorateurs idempotents / aucune boucle MutationObserver observée ;
+- [x] Chrome headless vert ;
+- [x] README / CHANGELOG / ROADMAP / ARCHITECTURE / BUILD-POLICY synchronisés ;
+- [x] cache/version Build 16 synchronisés ;
+- [x] PR validée avant merge.
 
 ---
 
-## v1.10.0 — Build 17 — Scenario Lab
+## v1.10.0 — Build 17 — Scenario Lab — PROCHAIN
 
 ### But
 
