@@ -4,6 +4,22 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ## [Unreleased]
 
+### v1.17.3 — Build 24.3 — Premium Interaction UX — candidat
+
+- ajoute une couche globale `interaction-ux.js` / `interaction-ux.css` ;
+- impose un retour visuel immédiat sur les surfaces tappables : `pointerdown`, compression courte, glow/contraste et confirmation au clic ;
+- renforce l’état actif de la bottom bar ;
+- ajoute une transition courte d’entrée des écrans ;
+- respecte `prefers-reduced-motion` ;
+- transforme visuellement `Pratiquer` en vrai troisième écran/tab : plus de backdrop flouté, plus de croix, bottom bar toujours visible ;
+- maintient `Pratiquer` actif pendant l’écran ;
+- renforce les zones tactiles mobiles ;
+- cache PWA `1.17.3-b24.3-premium-interaction` ;
+- nouveau smoke Chrome mobile 390×844 : `pointerdown` réel, feedback `.ux-pressing`, géométrie Pratiquer ↔ bottom bar et navigation complète ;
+- aucune modification de la progression, du curriculum, de Learning Memory, de Scenario, de la voix ou du branding.
+
+Reste Unreleased jusqu’à PR → `main` → GitHub Pages.
+
 ### v1.17.2 — Build 24.2 — Navigation Interaction Hotfix — candidat
 
 - corrige un état réel où `Aujourd’hui / Pratiquer / Parcours` pouvait rester visible mais ne plus répondre aux clics ;
@@ -13,8 +29,6 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 - identité de cache PWA alignée entre `index.html` et `sw.js` : `1.17.2-b24.2-nav-hotfix` ;
 - ajout d’un smoke Chrome permanent avec hit-testing réel, scroll desktop et navigation `Pratiquer → Parcours → Aujourd’hui` ;
 - aucune modification de la progression, du curriculum, de Learning Memory, des scénarios, de la voix ou du branding.
-
-Reste Unreleased jusqu’à PR → `main` → GitHub Pages.
 
 ### v1.17.0 — Build 24 — Real Life French II — candidat
 
@@ -31,8 +45,6 @@ Reste Unreleased jusqu’à PR → `main` → GitHub Pages.
 - seulement deux scènes futures verrouillées visibles ;
 - cache candidat `1.17.0-b24` ;
 - logo/favicon/voice/free-voice restent sanctuarisés.
-
-Reste Unreleased jusqu’à PR → `main` → GitHub Pages.
 
 ---
 
