@@ -18,86 +18,58 @@
 12. Un nouveau moteur n’obtient pas automatiquement une nouvelle entrée de navigation.
 13. **Toute surface tappable doit produire un retour visuel immédiat sur mobile.**
 14. Le feedback d’un tap doit rester perceptible même si l’action déclenche un rerender ou un changement d’écran.
-15. Les trois entrées `Aujourd’hui / Pratiquer / Parcours` gardent des nœuds DOM persistants et un seul état actif.
+15. Les trois entrées `Aujourd’hui / Pratiquer / Parcours` gardent des nœuds DOM persistants et **exactement un** état actif.
+16. L’état actif de navigation doit être synchronisé explicitement ; il ne dépend pas uniquement d’un `MutationObserver`.
 
 ---
 
-# Baseline production — v1.17.3 Build 24.3
+# Baseline stable — v1.17.3 Build 24.3
 
-- socle : Build 24 — Real Life French II ;
 - 40 leçons / 241 éléments ;
-- Scenario : 28 situations / 84 tours ;
-- UX : Aujourd’hui / Pratiquer / Parcours ;
+- Scenario 28 / 84 ;
+- navigation Aujourd’hui / Pratiquer / Parcours ;
 - progression protégée ;
-- voix iPhone et reconnaissance vocale baseline validée ;
+- voix/reconnaissance iPhone baseline validée ;
 - coût 0 €.
 
-## Builds 16 → 24.3
+## État Builds 24.x
 
-- Build 16 — Mastery Engine — ✅ CLOS
-- Build 17 — Scenario Lab — ✅ CLOS
-- Build 18 — Error Intelligence — ✅ CLOS
-- Build 19 — A1 Core — ✅ CLOS
-- Build 20 — Listening — ✅ INTÉGRÉ
-- Build 21 — Adaptive Language — ✅ INTÉGRÉ
-- Build 22 — UX Foundation & Runtime Integrity — ✅ CLOS
-- Build 23 — Real Life French I — ✅ CLOS
 - Build 24 — Real Life French II — ✅ INTÉGRÉ
 - Build 24.1 — Options Crash — ✅ PROD
 - Build 24.2 — Navigation Interaction — ✅ PROD
 - Build 24.3 — Premium Interaction UX — ✅ CLOS
+- Build 24.4 — Mobile Polish — ⚠️ INTÉGRÉ / NON CLOS : PR verte, smoke `main` a révélé une course d’état actif
+- Build 24.5 — Navigation State Sync — 🔥 EN COURS
 
 ---
 
-# v1.17.4 — Build 24.4 — Mobile Polish / Interaction Timing — 🔥 EN COURS
+# v1.17.5 — Build 24.5 — Navigation State Sync — 🔥 EN COURS
 
 ## Intention
 
-Corriger le défaut observé sur vrai mobile : le feedback d’un nouvel onglet était détruit par le rerender de la bottom bar avant d’être perceptible, alors qu’un retap sur l’onglet déjà actif fonctionnait.
+Terminer la stabilisation mobile de 24.4 en rendant l’état actif de la bottom bar déterministe sur tous les chemins de rendu/navigateurs.
 
-## Navigation persistante
+## Contrat
 
-- [x] suppression du `innerHTML` de reconstruction lors du changement actif ;
-- [x] nœuds Home / Pratiquer / Parcours persistants ;
-- [x] mise à jour in-place de `active / aria-current` ;
+- [x] nœuds DOM persistants ;
+- [x] tap echo durable ;
 - [x] exactement un onglet actif ;
-- [x] suppression du flash intermédiaire Home en quittant Pratiquer.
-
-## Retour premium durable
-
-- [x] `pointerdown` conservé ;
-- [x] ajout d’un `tap echo` indépendant du nœud ;
-- [x] le feedback peut survivre à un rerender ;
-- [x] `prefers-reduced-motion` respecté.
-
-## Header de leçon
-
-- [x] suppression du gros fond violet ;
-- [x] suppression du sticky ;
-- [x] titre intégré au fond ;
-- [x] retour compact ;
-- [x] séparation gradient fine.
-
-## Sanctuaires
-
-- [x] aucune clé de progression modifiée ;
-- [x] logo/favicon inchangés ;
-- [x] voice-ios/free-voice inchangés ;
-- [x] aucun curriculum/scénario modifié.
-
-## Contrat navigateur
-
-- [x] viewport mobile 390×844 ;
-- [x] feedback + tap echo sur les 3 onglets ;
-- [x] identité DOM inchangée après vraie navigation ;
-- [x] active unique ;
-- [x] header de leçon non sticky / transparent ;
-- [ ] quality générale ;
-- [ ] Options smoke ;
-- [ ] PR verte ;
-- [ ] main vert ;
+- [x] état demandé appliqué immédiatement ;
+- [x] confirmation après navigation native ;
+- [x] réconciliation au prochain frame ;
+- [x] réconciliation courte +80 ms ;
+- [x] nouveau token `1.17.5-b24.5` ;
+- [x] nouveau cache PWA ;
+- [x] header de leçon allégé conservé ;
+- [x] aucune donnée/voix/branding modifié ;
+- [ ] PR quality verte ;
+- [ ] PR Options verte ;
+- [ ] PR nav/mobile verte ;
+- [ ] `main` quality verte ;
+- [ ] `main` Options verte ;
+- [ ] `main` nav/mobile verte ;
 - [ ] Pages verte ;
-- [ ] docs release CLOS.
+- [ ] docs PROD/CLOS.
 
 ---
 
@@ -105,19 +77,13 @@ Corriger le défaut observé sur vrai mobile : le feedback d’un nouvel onglet 
 
 Problèmes quotidiens, émotions, explications, français oral courant vs forme écrite et conversation moins guidée, **sans rendre l’interface plus complexe**.
 
----
-
 # v1.19.0 — Build 26 — Data & Recovery Hardening
 
-- sauvegarde/restauration unifiée ;
-- migrations sûres et versionnées ;
-- snapshot automatique pré-migration ;
-- tolérance au localStorage corrompu ;
-- tests zéro-perte sur profils existants.
+Sauvegarde/restauration unifiée, migrations sûres/versionnées, snapshot pré-migration, tolérance au localStorage corrompu et tests zéro-perte.
 
 # v1.20.0 — Build 27 — iPhone / PWA / Accessibility Hardening
 
-- safe areas ; tactile ; contraste ; tailles ; offline/install ; tests iPhone réels ; ergonomie faible aisance numérique.
+Safe areas, tactile, contraste, tailles, offline/install, tests iPhone réels et ergonomie faible aisance numérique.
 
 # v1.21.0 — Build 28 — Architecture Hardening
 

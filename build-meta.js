@@ -1,6 +1,6 @@
-// Production baseline this interaction hotfix is applied on.
+// Production baseline this navigation-state hotfix is applied on.
 const PRODUCTION_BASELINE = { version: '1.17.0', build: 24 };
-const META = { version: '1.17.4', build: 24.4, baseline: PRODUCTION_BASELINE };
+const META = { version: '1.17.5', build: 24.5, baseline: PRODUCTION_BASELINE };
 
 window.FrenchTranquilleBuildMeta = META;
 

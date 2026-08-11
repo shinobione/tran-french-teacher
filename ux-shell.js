@@ -42,6 +42,14 @@
     };
   }
 
+  function setPrimaryActive(id) {
+    document.querySelectorAll('.ux-bottom-nav [data-ux-nav]').forEach(button => {
+      const active = button.dataset.uxNav === id;
+      button.classList.toggle('active', active);
+      button.setAttribute('aria-current', active ? 'page' : 'false');
+    });
+  }
+
   function dismissPractice(render = true) {
     overlay?.remove();
     overlay = null;
@@ -51,9 +59,18 @@
 
   function nativeGo(id) {
     if (overlay) dismissPractice(false);
+
+    // Give immediate deterministic state feedback. The hidden legacy nav then
+    // performs the actual screen change; renderBottomNav confirms from runtime.
+    setPrimaryActive(id);
     const target = document.querySelector(`.bottom-nav [data-go="${id}"]`);
     if (target) target.click();
-    else renderBottomNav();
+
+    // Different browsers/render paths may replace app content synchronously or
+    // on the next frame. Reconcile both without relying solely on MutationObserver.
+    renderBottomNav();
+    requestAnimationFrame(renderBottomNav);
+    setTimeout(renderBottomNav, 80);
   }
 
   function listeningAvailable() {
@@ -110,14 +127,10 @@
       ['progress','◔',T('Lộ trình','Parcours'),!practiceActive && screen === 'progress']
     ];
 
-    // Never rebuild the nav with innerHTML when active state changes.
-    // A real touch is pointerdown -> pointerup -> click. Replacing the button
-    // during that sequence destroys the visible feedback before it is perceived.
     const wanted = new Set(items.map(([id]) => id));
     nav.querySelectorAll('[data-ux-nav]').forEach(button => {
       if (!wanted.has(button.dataset.uxNav)) button.remove();
     });
-
     items.forEach(([id,icon,label,active]) => ensureNavButton(nav,id,icon,label,active));
     nav.dataset.signature = items.map(([id,,label]) => `${id}:${label}`).join('|');
   }
@@ -162,9 +175,7 @@
     renderBottomNav();
   }
 
-  function closePractice() {
-    dismissPractice(true);
-  }
+  function closePractice() { dismissPractice(true); }
 
   function decorateHome() {
     if (currentScreen() !== 'home') return;
@@ -264,12 +275,7 @@
       else nativeGo(id);
       return;
     }
-
-    if (event.target.closest('[data-ux-close]')) {
-      closePractice();
-      return;
-    }
-
+    if (event.target.closest('[data-ux-close]')) { closePractice(); return; }
     const practice = event.target.closest('[data-ux-practice]');
     if (practice && !practice.disabled) {
       const id = practice.dataset.uxPractice;
@@ -291,8 +297,8 @@
   decorate();
 
   window.FrenchTranquilleUX = {
-    version: '1.17.4',
-    build: 24.4,
+    version: '1.17.5',
+    build: 24.5,
     openPractice,
     closePractice,
     refresh: decorate
