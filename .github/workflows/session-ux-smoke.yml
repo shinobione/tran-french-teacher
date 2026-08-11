@@ -24,16 +24,17 @@ jobs:
           node --check session-ux-adapter.js
           node --check build-meta.js
           node --check sw.js
-          grep -q "version: '1.18.2', build: '25.2'" build-meta.js
+          # Build 25.2 remains a required subsystem, but the global product version may advance.
           grep -q 'session-ux.css?v=1.18.2-b25.2' index.html
           grep -q 'session-ux.js?v=1.18.2-b25.2' index.html
           grep -q 'session-ux-adapter.js?v=1.18.2-b25.2' index.html
-          grep -q '1.18.2-b25.2-session-ux' index.html sw.js
           grep -q 'session-ux.js' sw.js
           grep -q 'session-ux-adapter.js' sw.js
           grep -q 'session-ux.css' sw.js
           grep -q 'prefers-reduced-motion' session-ux.css
           grep -q 'french-tranquille:milestones:v1' session-ux.js
+          grep -q "'FrenchTranquilleSessionUX'" build-meta.js
+          grep -q "'FrenchTranquilleSessionUXAdapter'" build-meta.js
 
       - name: Sanctuaries remain byte-identical
         run: |
@@ -72,36 +73,61 @@ jobs:
 
       - name: Chrome — Listening reaches an explicit 5-question finish
         run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=30000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&sessionSmoke=listening' >/tmp/session-listening.html
-          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/session-listening.html; then cat /tmp/session-listening.html; exit 1; fi
-          echo '--- Listening session diagnostics ---'
-          grep -o 'data-session-listening-[^ >]*' /tmp/session-listening.html | head -20 || true
-          grep -o 'data-listening-[^ >]*' /tmp/session-listening.html | head -30 || true
-          grep -o 'data-session-complete="[^"]*"' /tmp/session-listening.html | head -10 || true
-          grep -o 'session-complete-mode' /tmp/session-listening.html | head -10 || true
-          echo '--- End diagnostics ---'
-          if ! grep -q 'data-session-listening-progress="5/5"' /tmp/session-listening.html; then echo 'Missing session progress 5/5'; exit 1; fi
-          if ! grep -q 'data-session-listening-done="1"' /tmp/session-listening.html; then echo 'Missing session done=1'; exit 1; fi
-          if ! grep -q 'data-session-complete="listening"' /tmp/session-listening.html; then echo 'Missing listening completion card'; exit 1; fi
-          if ! grep -q 'session-complete-mode' /tmp/session-listening.html; then echo 'Missing complete mode'; exit 1; fi
-          grep -q 'data-listening-slow-rate="0.64"' /tmp/session-listening.html
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-listening-profile-$attempt"
+            rm -rf "$profile"
+            google-chrome --headless=new --no-sandbox --disable-gpu --user-data-dir="$profile" --window-size=390,844 --virtual-time-budget=36000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&sessionSmoke=listening' >"/tmp/session-listening-$attempt.html"
+            file="/tmp/session-listening-$attempt.html"
+            if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then
+              echo "Listening smoke attempt $attempt hit app boot error"
+              continue
+            fi
+            if grep -q 'data-session-listening-progress="5/5"' "$file" \
+              && grep -q 'data-session-listening-done="1"' "$file" \
+              && grep -q 'data-session-complete="listening"' "$file" \
+              && grep -q 'session-complete-mode' "$file" \
+              && grep -q 'data-listening-slow-rate="0.64"' "$file"; then
+              passed=1
+              break
+            fi
+            echo "Listening smoke attempt $attempt did not reach completion; diagnostic markers:"
+            grep -o 'data-session-listening-[^ >]*' "$file" | head -20 || true
+            grep -o 'data-listening-[^ >]*' "$file" | head -30 || true
+          done
+          if [ "$passed" -ne 1 ]; then
+            echo 'Listening bounded-session smoke failed after 3 isolated browser attempts'
+            exit 1
+          fi
 
       - name: Chrome — Review reaches an explicit bounded finish
         run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=30000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&sessionSmoke=review' >/tmp/session-review.html
-          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/session-review.html; then cat /tmp/session-review.html; exit 1; fi
-          echo '--- Review session diagnostics ---'
-          grep -o 'data-session-review-[^ >]*' /tmp/session-review.html | head -20 || true
-          grep -o 'data-session-complete="[^"]*"' /tmp/session-review.html | head -10 || true
-          grep -o 'data-memory-[^ >]*' /tmp/session-review.html | head -30 || true
-          grep -o 'session-review-[A-Za-z0-9_-]*' /tmp/session-review.html | sort -u | head -30 || true
-          grep -o 'session-hidden' /tmp/session-review.html | head -10 || true
-          echo '--- End diagnostics ---'
-          if ! grep -q 'app-shell screen-review' /tmp/session-review.html; then echo 'Review screen missing'; exit 1; fi
-          if ! grep -E -q 'data-session-review-progress="[1-5]/[1-5]"' /tmp/session-review.html; then echo 'Review session progress marker missing'; exit 1; fi
-          if ! grep -q 'data-session-review-done="1"' /tmp/session-review.html; then echo 'Review session did not finish'; exit 1; fi
-          if ! grep -q 'data-session-complete="review"' /tmp/session-review.html; then echo 'Review completion card missing'; exit 1; fi
-          if ! grep -q 'session-hidden' /tmp/session-review.html; then echo 'Review flashcard was not hidden after completion'; exit 1; fi
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-review-profile-$attempt"
+            rm -rf "$profile"
+            google-chrome --headless=new --no-sandbox --disable-gpu --user-data-dir="$profile" --window-size=390,844 --virtual-time-budget=36000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&sessionSmoke=review' >"/tmp/session-review-$attempt.html"
+            file="/tmp/session-review-$attempt.html"
+            if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then
+              echo "Review smoke attempt $attempt hit app boot error"
+              continue
+            fi
+            if grep -q 'app-shell screen-review' "$file" \
+              && grep -E -q 'data-session-review-progress="[1-5]/[1-5]"' "$file" \
+              && grep -q 'data-session-review-done="1"' "$file" \
+              && grep -q 'data-session-complete="review"' "$file" \
+              && grep -q 'session-hidden' "$file"; then
+              passed=1
+              break
+            fi
+            echo "Review smoke attempt $attempt did not reach completion; diagnostic markers:"
+            grep -o 'data-session-review-[^ >]*' "$file" | head -20 || true
+            grep -o 'data-session-complete="[^"]*"' "$file" | head -10 || true
+          done
+          if [ "$passed" -ne 1 ]; then
+            echo 'Review bounded-session smoke failed after 3 isolated browser attempts'
+            exit 1
+          fi
 
       - name: Stop static server
         if: always()

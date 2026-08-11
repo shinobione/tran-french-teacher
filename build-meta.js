@@ -1,6 +1,6 @@
 // Production baseline kept explicit for historical CI contracts.
 const PRODUCTION_BASELINE = { version: '1.17.0', build: 24 };
-const META = { version: '1.18.2', build: '25.2', baseline: PRODUCTION_BASELINE };
+const META = { version: '1.19.0', build: 26, baseline: PRODUCTION_BASELINE };
 
 window.FrenchTranquilleBuildMeta = META;
 
@@ -8,7 +8,8 @@ window.FrenchTranquilleBuildMeta = META;
   'FrenchTranquilleCurriculum','LucieVoice','FrenchTranquilleFreeVoice','FrenchTranquilleStage2',
   'FrenchTranquilleStage3','FrenchTranquilleDailyCoach','FrenchTranquilleMastery',
   'FrenchTranquilleMasteryStage3','FrenchTranquilleScenarioData','FrenchTranquilleScenarios',
-  'FrenchTranquilleRealLife1','FrenchTranquilleRealLife2','FrenchTranquilleRealLifeUX',
+  'FrenchTranquilleRealLife1','FrenchTranquilleRealLife2','FrenchTranquilleRealLife3',
+  'FrenchTranquilleRealLifeUX','FrenchTranquilleRealLifeCoach',
   'FrenchTranquilleErrors','FrenchTranquilleListening','FrenchTranquilleLanguage','FrenchTranquilleUX',
   'FrenchTranquilleInteraction','FrenchTranquilleSafety','FrenchTranquilleProgressionUX',
   'FrenchTranquilleSessionUX','FrenchTranquilleSessionUXAdapter'

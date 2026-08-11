@@ -22,7 +22,7 @@ La complexité appartient aux moteurs ; Trân voit d’abord l’information uti
 
 ---
 
-# Runtime production — v1.18.2 Build 25.2
+# Runtime candidat — v1.19.0 Build 26
 
 ```text
 progress-safety.js
@@ -43,9 +43,11 @@ mastery-stage3.js
 scenario-data.js
 real-life-data.js
 real-life-data-2.js
+real-life-data-3.js
 scenario-host.js
 scenario-engine.js
 real-life-ux.js
+real-life-coach.js
 listening-data.js
 listening-engine.js
 ux-shell.js
@@ -56,19 +58,15 @@ session-ux-adapter.js
 build-meta.js
 ```
 
-CSS Session UX : `session-ux.css`.
-
 ---
 
-# Progression UX — Build 25 — CANONIQUE
+# Baselines canoniques conservées
+
+## Progression UX — Build 25
 
 `progression-ux.js` orchestre `Parcours` sans persister de données : résumé apprenant, détails repliables, 5 lignes curriculum visibles par défaut, 40 accessibles à la demande.
 
----
-
-# Listening — Build 25.1 — CANONIQUE
-
-Calibration :
+## Listening — Build 25.1
 
 ```text
 normal request 0.88 → effectif 0.88
@@ -77,92 +75,93 @@ slow request   0.68 → effectif 0.64
 
 Le bridge vit dans `build-meta.js`. `voice-ios.js`, voix et pitch sont inchangés.
 
+## Session UX — Build 25.2
+
+Chaque moteur conserve ses écritures ; `session-ux.js` observe et orchestre `objectif / progression / fin / sortie`. Scenario reste borné à **1 situation par session**.
+
 ---
 
-# Session UX — Build 25.2 — CANONIQUE
+# Build 26 — Real Life French III
 
-## Pourquoi une façade
-
-Les moteurs savent déjà enregistrer leurs propres données et certains possèdent une fin native. Les réécrire pour ajouter un simple contrat de session augmenterait inutilement le risque.
+## Insertion runtime
 
 ```text
-moteur existant
-   ↓ produit/stocke normalement
-session-ux.js
-   ↓ observe progression et orchestre l’affichage
-objectif / progression / fin / sortie
+scenario-data.js
+real-life-data.js
+real-life-data-2.js
+real-life-data-3.js   ← 8 scènes / 24 tours
+scenario-host.js
+scenario-engine.js
+real-life-ux.js       ← catalogue max 6 ouverts visibles
+real-life-coach.js    ← note semi-libre Pack III
+session-ux.js         ← contrat 1 situation
 ```
 
-`session-ux-adapter.js` couvre uniquement les vieilles zones qui n’exposent pas d’API de session propre.
+`real-life-data-3.js` enrichit le tableau `FrenchTranquilleScenarioData.scenarios` avant le démarrage du host/engine. Il ne crée aucune nouvelle clé localStorage.
 
-## Listening
+## Réponses semi-libres déterministes
 
-Session standard : **5 tentatives**. À 5/5, les données sont déjà persistées par Listening ; Session UX masque l’exercice et affiche l’état de fin. Continuer volontairement démarre un nouveau petit lot.
+`openResponse:true` signifie uniquement que plusieurs variantes explicitement listées sont acceptées. Le moteur ne fait aucune classification sémantique libre.
 
-## Révision mémoire
-
-Cible : `min(5, due || entries)`, minimum 1. Learning Memory persiste d’abord ; Session UX calcule ensuite le delta de reviews et affiche la réussite à la cible.
-
-## Scenario
-
-Scenario garde validation, tours, stats et fin native. Session UX ajoute objectif `1 situation`, progression à partir du tour natif, succès visuel et retour principal vers Aujourd’hui.
-
-## Vocal guidé
-
-`free-voice.js` reste sanctuarisé. Session UX observe les succès et borne la mini-session à **5 réponses reconnues**.
-
-## Pratique guidée historique
-
-`session-ux-adapter.js` utilise le delta de `conversationWins`. Une mini-session = **1 réponse correcte**.
-
-## Leçon
-
-La réussite visuelle intervient après l’écriture historique de la leçon et le retour Home, jamais avant sauvegarde.
-
----
-
-# Practice Hub
-
-Dans `screen-conversation`, les moteurs existants restent disponibles mais ne sont plus empilés comme quatre tâches concurrentes.
-
-Vue initiale :
+Exemple :
 
 ```text
-Recommandé maintenant
-Situation réelle
-
-Autres façons
-Vocal guidé
-Pratique guidée
+Je suis inquiète.
+Je suis un peu inquiète.
+Oui, je suis inquiète.
 ```
 
-Une seule capacité devient dominante après sélection.
+## Français oral naturel
 
----
-
-# Daily Coach compact
-
-Session UX garde **2 actions principales** et range les extras sous `details.session-daily-more`.
-
----
-
-# Milestones
-
-Clé indépendante :
+Le français relâché apparaît côté interlocuteur pour entraîner la compréhension :
 
 ```text
-french-tranquille:milestones:v1
+T'es prête ?
+J'sais pas… on rentre ?
+Y a pas de réseau.
 ```
 
-Elle ne modifie aucun score/moteur pédagogique. Les achievements déjà vrais au premier démarrage deviennent `baseline` ; seuls les nouveaux franchissements déclenchent une micro-carte.
+Trân n’est pas obligée de reproduire ces contractions ; elle peut répondre en français standard.
+
+## Résolution Memory
+
+Pour les acquis avancés, `real-life-data-3.js` résout une requête textuelle contre le curriculum réellement chargé.
+
+Règle :
+
+```text
+0 match  → invalide
+1 match  → accepté
+2+ match → ambigu / invalide
+```
+
+Les résolutions et erreurs sont exposées dans `FrenchTranquilleRealLife3.resolution` et `invalidResolution` pour le CI.
+
+Candidat : **15 résolutions avancées, 0 invalide**.
+
+## Déblocage
+
+- l20 : français oral naturel ;
+- l35 : futur proche ;
+- l36 : passé récent ;
+- l37 : passé composé ;
+- l38 : mouvement au passé ;
+- l39 : administratif ;
+- l40 : émotion/besoin + couple.
+
+Scenario candidat total : **36 situations / 108 tours**.
+
+## Coach Pack III
+
+`real-life-coach.js` n’altère pas le moteur. Il ajoute uniquement, dans une scène Pack III active, une note apprenante : répondre avec ses mots est possible si l’idée reste dans les variantes prévues.
+
+Il publie aussi des `data-*` uniquement lorsque `?realLifeSmoke=...` est présent afin de rendre les contrats Chrome mesurables.
 
 ---
 
-# Animations
+# Practice Hub / Daily Coach / Milestones
 
-`session-ux.css` utilise des transitions courtes de réussite. `@media(prefers-reduced-motion:reduce)` les supprime/simplifie.
-
-Pas de son forcé, XP, monnaie ou classement.
+Les couches Build 25.2 restent inchangées : un seul moteur dominant dans Practice, deux actions principales sur Home, milestones non pédagogiques et succès avec reduced motion.
 
 ---
 
@@ -178,27 +177,7 @@ french-tranquille:learning-memory:v1
 french-tranquille:safety:pre-build22:v1
 ```
 
-Curriculum : **40 leçons / 241 éléments**. Scenario : **28 / 84** avant Build 26.
-
----
-
-# Build 26 — extension prévue
-
-`Real Life French III` doit s’insérer entre `real-life-data-2.js` et le Scenario runtime, sans modifier les propriétaires de données :
-
-```text
-scenario-data.js
-real-life-data.js
-real-life-data-2.js
-real-life-data-3.js   ← Build 26
-scenario-host.js
-scenario-engine.js
-real-life-ux.js
-real-life-coach.js    ← aide UX Pack III uniquement
-session-ux.js         ← conserve objectif 1 situation
-```
-
-Les références vers les acquis avancés doivent être résolues contre le curriculum réellement chargé, avec unicité obligatoire.
+Curriculum : **40 leçons / 241 éléments**.
 
 ---
 
@@ -213,11 +192,22 @@ assets/Favicon.png
 
 ---
 
-# CI production Build 25.2
+# CI candidat Build 26
 
-Commit `49d866bed59bb0cb3268e1675225a4811f6c595f` : 7 workflows déclenchés, aucun échec, Pages SUCCESS.
+Contrats obligatoires :
 
-Contrats conservés pour Build 26 : quality, Options, nav/mobile, Progression UX, Listening-rate, Session UX, hashes branding/voice, profil ancien utilisateur et absence de fatal card.
+1. quality historique ;
+2. Options ;
+3. nav/mobile ;
+4. Progression UX ;
+5. Listening-rate 0.88 / 0.64 ;
+6. Session UX ;
+7. nouveau **Real Life French III smoke** ;
+8. hashes branding/voice ;
+9. profil l8 ;
+10. aucune fatal card.
+
+Real Life III smoke vérifie l20 / l35 / l40, **36 / 108**, 15 résolutions, 0 ambiguïté et maximum 6 situations ouvertes visibles.
 
 # Dette technique
 
