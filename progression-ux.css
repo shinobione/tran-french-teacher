@@ -11,8 +11,15 @@
 .progress-ux-next{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 14px;border-radius:16px;background:linear-gradient(135deg,rgba(159,247,209,.08),rgba(201,167,255,.06));border:1px solid rgba(159,247,209,.13)}.progress-ux-next>div{min-width:0}.progress-ux-next small,.progress-ux-next strong,.progress-ux-next span{display:block}.progress-ux-next small{text-transform:uppercase;letter-spacing:.08em;color:#8fcfb9;font-size:.61rem}.progress-ux-next strong{margin-top:4px}.progress-ux-next span{margin-top:2px;color:var(--muted);font-size:.72rem}.progress-ux-next .primary{min-height:44px;padding-inline:14px;flex:0 0 auto}
 
 .progress-ux-details{margin:0 0 16px;border:1px solid var(--line);border-radius:19px;background:rgba(14,26,42,.72);overflow:hidden;box-shadow:0 14px 34px rgba(0,0,0,.15)}
-.progress-ux-details>summary{list-style:none;min-height:70px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:14px;cursor:pointer;user-select:none;transition:transform .1s ease,background .16s ease,border-color .16s ease}.progress-ux-details>summary::-webkit-details-marker{display:none}.progress-ux-details>summary>span{min-width:0}.progress-ux-details>summary strong,.progress-ux-details>summary small{display:block}.progress-ux-details>summary strong{font-size:.94rem}.progress-ux-details>summary small{color:var(--muted);font-size:.72rem;line-height:1.35;margin-top:3px}.progress-ux-details>summary>b{color:#9ff7d1;font-size:1.05rem;transition:transform .18s ease}.progress-ux-details[open]>summary>b{transform:rotate(180deg)}.progress-ux-details>summary:active{transform:scale(.985);background:rgba(159,247,209,.06)}
-.progress-ux-details-body{padding:0 12px 12px}.progress-ux-details-body>.card{margin-bottom:10px;box-shadow:none;background:rgba(13,25,41,.88)}.progress-ux-details-body>.card:last-child{margin-bottom:0}
+.progress-ux-details>summary{list-style:none;min-height:70px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:14px;cursor:pointer;user-select:none;transition:transform .1s ease,background .16s ease,border-color .16s ease}.progress-ux-details>summary::-webkit-details-marker{display:none}.progress-ux-details>summary>span{min-width:0}.progress-ux-details>summary strong,.progress-ux-details>summary small{display:block}.progress-ux-details>summary strong{font-size:.94rem}.progress-ux-details>summary small{color:var(--muted);font-size:.72rem;line-height:1.35;margin-top:3px;max-width:570px}.progress-ux-details>summary>b{color:#9ff7d1;font-size:1.05rem;transition:transform .18s ease}.progress-ux-details[open]>summary>b{transform:rotate(180deg)}.progress-ux-details>summary:active{transform:scale(.985);background:rgba(159,247,209,.06)}
+.progress-ux-details-body{padding:0 12px 12px}
+.progress-ux-detail-groups{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.progress-ux-detail-group{min-width:0;border:1px solid rgba(180,199,224,.11);border-radius:16px;background:linear-gradient(145deg,rgba(20,34,52,.9),rgba(11,22,37,.9));overflow:hidden;box-shadow:inset 0 1px rgba(255,255,255,.025)}
+.progress-ux-detail-group[hidden]{display:none!important}.progress-ux-detail-group[open]{grid-column:1/-1;border-color:rgba(159,247,209,.18);background:rgba(12,24,39,.95)}
+.progress-ux-detail-group>summary{list-style:none;min-height:78px;padding:12px 13px;display:grid;grid-template-columns:38px minmax(0,1fr) auto;gap:10px;align-items:center;cursor:pointer;user-select:none;transition:background .16s ease,transform .1s ease}.progress-ux-detail-group>summary::-webkit-details-marker{display:none}.progress-ux-detail-group>summary:active{transform:scale(.992);background:rgba(159,247,209,.04)}
+.progress-ux-group-icon{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:rgba(159,247,209,.07);font-size:1.05rem}.progress-ux-group-copy{min-width:0}.progress-ux-group-copy strong,.progress-ux-group-copy small{display:block}.progress-ux-group-copy strong{font-size:.87rem;color:#edf3fa}.progress-ux-group-copy small{margin-top:3px;color:#8fa2ba;font-size:.68rem;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.progress-ux-group-meta{display:grid;justify-items:end;gap:5px;min-width:92px}.progress-ux-group-meta em{font-style:normal;color:#9cc7b8;font-size:.63rem;text-align:right;line-height:1.25}.progress-ux-group-meta b{color:#bca5ec;font-size:.9rem;transition:transform .18s ease}.progress-ux-detail-group[open] .progress-ux-group-meta b{transform:rotate(180deg)}
+.progress-ux-detail-group-body{padding:0 9px 9px;border-top:1px solid rgba(180,199,224,.07)}.progress-ux-detail-group-body>.card{margin:9px 0 0;box-shadow:none;background:rgba(13,25,41,.88);border-color:rgba(180,199,224,.1)}
 
 .progress-ux-curriculum{position:relative}.progress-ux-curriculum .progress-ux-row-hidden{display:none!important}.progress-ux-curriculum-actions{margin-top:11px}.progress-ux-curriculum-actions .secondary{justify-content:space-between}.progress-ux-curriculum .lesson-row{transition:transform .12s ease,border-color .16s ease,background .16s ease,opacity .16s ease}
 
@@ -23,11 +30,15 @@
   .progress-ux-curriculum{margin-bottom:12px}
 }
 
+@media(max-width:700px){
+  .progress-ux-detail-groups{grid-template-columns:1fr}.progress-ux-detail-group[open]{grid-column:auto}
+}
+
 @media(max-width:520px){
   .screen-progress .content{padding-bottom:24px}
   .progress-ux-overview{padding:17px 16px}.progress-ux-metrics{gap:6px}.progress-ux-metrics>div{padding:10px 5px}.progress-ux-next{align-items:stretch;flex-direction:column}.progress-ux-next .primary{width:100%;justify-content:space-between}
-  .progress-ux-details>summary{min-height:66px;padding:13px 14px}.progress-ux-details-body{padding:0 8px 8px}.progress-ux-details-body>.card{padding:15px;border-radius:16px}
+  .progress-ux-details>summary{min-height:66px;padding:13px 14px}.progress-ux-details-body{padding:0 8px 8px}.progress-ux-detail-groups{gap:8px}.progress-ux-detail-group>summary{min-height:72px;grid-template-columns:36px minmax(0,1fr) auto;padding:11px}.progress-ux-group-icon{width:36px;height:36px}.progress-ux-group-meta{min-width:78px}.progress-ux-group-meta em{font-size:.59rem}.progress-ux-detail-group-body{padding:0 7px 7px}.progress-ux-detail-group-body>.card{padding:15px;border-radius:14px}
   .progress-ux-curriculum{padding:15px 13px}.progress-ux-curriculum .lesson-row{padding:10px}
 }
 
-@media(prefers-reduced-motion:reduce){.progress-ux-details>summary,.progress-ux-details>summary>b,.progress-ux-curriculum .lesson-row{transition:none!important}}
+@media(prefers-reduced-motion:reduce){.progress-ux-details>summary,.progress-ux-details>summary>b,.progress-ux-detail-group>summary,.progress-ux-group-meta b,.progress-ux-curriculum .lesson-row{transition:none!important}}

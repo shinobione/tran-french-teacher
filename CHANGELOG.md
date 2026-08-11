@@ -4,6 +4,22 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ## [Unreleased]
 
+### v1.19.1 — Build 26.1 — Field Feedback UX — CANDIDAT
+
+- ajoute `voice-replay.js` / `voice-replay.css` pour une réécoute locale best-effort de la propre voix de Trân ;
+- la capture est séparée de `voice-ios.js` et `free-voice.js`, qui restent byte-identiques ;
+- aucun upload et aucune persistance audio/localStorage ;
+- dernier enregistrement uniquement en mémoire de session, durée bornée et URL Blob révoquée ;
+- aucun faux score de prononciation ;
+- `Détails d’apprentissage` passe d’une pile verticale unique à 4 familles : Mémoire & révisions, Maîtrise, Pratique réelle, Soutien de Lucie ;
+- une seule famille de détails peut être ouverte à la fois ; grille 2 colonnes desktop / 1 colonne mobile ;
+- cartes moteur et données pédagogiques existantes inchangées ;
+- version candidate `1.19.1 / Build 26.1`, cache `tran-french-teacher-v1.19.1-b26.1-field-feedback` ;
+- ajoute `Build 26.1 Field Feedback UX smoke` et renforce le smoke Progression ;
+- test terrain iPhone requis pour confirmer la coexistence `SpeechRecognition + MediaRecorder`.
+
+Ce bloc reste Unreleased jusqu’à PR → tribunal complet → `main` → Pages. La validation Chrome ne remplace pas le gate iPhone pour la capture parallèle du micro.
+
 ---
 
 ## [1.19.0] — Build 26 — Real Life French III — 2026-08-11
@@ -13,15 +29,10 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 - introduit du français oral naturel côté interlocuteur : `T’es prête ?`, `J’sais pas…`, `Y a pas…` ;
 - conserve des réponses standard et plusieurs variantes simples explicitement autorisées ;
 - ajoute futur proche, passé récent, passé composé, mouvement au passé, administratif, émotion/besoin et couple ;
-- ajoute `real-life-coach.js` : rappel discret que Trân peut répondre avec ses mots dans les scènes Pack III ;
-- chaque référence Memory avancée est résolue depuis le curriculum ; une résolution n’est valide que si elle correspond à exactement un acquis ;
-- conserve la limite de 6 situations ouvertes visibles ;
-- conserve le contrat Session UX 25.2 : **1 situation = 1 session** ;
+- ajoute `real-life-coach.js` ;
+- 15 résolutions Memory avancées, 0 ambiguïté ;
+- conserve la limite de 6 situations ouvertes visibles et le contrat Session UX 25.2 ;
 - conserve Listening **0.88 / 0.64** ;
-- cache `tran-french-teacher-v1.19.0-b26-real-life-3` ;
-- ajoute `Build 26 Real Life French III smoke` avec profils l20 / l35 / l40 et garde des résolutions ;
-- corrige le contrat quality l20 pour compter la première scène Pack III : **18 scènes personnelles ouvertes** ;
-- stabilise le harness Session UX multi-Chrome avec isolation/retry borné, sans changement moteur ;
 - aucune migration learner/Memory/Scenario/Listening ;
 - voix et branding sanctuarisés ;
 - PR #37 ; commit prod `db8219e44d74f0af13421ec798a0c98d02f7a7b5` ; **8 workflows / 8 SUCCESS** ; Pages **#96 SUCCESS**.
@@ -29,19 +40,7 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 ---
 
 ## [1.18.2] — Build 25.2 — Session Goals / Milestones / App Delight — 2026-08-11
-
-- ajoute `session-ux.js`, `session-ux-adapter.js`, `session-ux.css` ;
-- ajoute un contrat commun `objectif → progression → fin → sortie` ;
-- Listening : session standard de **5 questions** ;
-- Révision mémoire : lot borné jusqu’à **5 éléments prioritaires** ;
-- Scenario : objectif explicite `1 situation` et sortie vers Aujourd’hui ;
-- Vocal guidé : cible **5 réponses** sans modifier `free-voice.js` ;
-- Practice Hub et Daily Coach compact ;
-- milestones séparés ; animations sobres + reduced motion ;
-- Listening **0.88 / 0.64** ;
-- PR #35 ; commit prod `49d866bed59bb0cb3268e1675225a4811f6c595f` ; 7 workflows sans échec ; Pages #94 SUCCESS.
-
----
+- objectif → progression → fin → sortie ; Listening 5 questions ; Révision max 5 ; Scenario 1 situation ; Vocal guidé 5 réponses ; milestones sobres ; Listening 0.88 / 0.64 ; PR #35 ; Pages #94 SUCCESS.
 
 ## [1.18.1] — Build 25.1 — Listening Slow Calibration — 2026-08-11
 - normal effectif **0.88** ; lent effectif **0.64** ; `voice-ios.js` inchangé ; PR #33 ; Pages #92 SUCCESS.

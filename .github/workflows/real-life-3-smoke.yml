@@ -24,11 +24,12 @@ jobs:
           node --check real-life-coach.js
           node --check build-meta.js
           node --check sw.js
-          grep -q "version: '1.19.0', build: 26" build-meta.js
+          # Build 26 remains a required subsystem even when the global product version advances.
+          grep -q "'FrenchTranquilleRealLife3'" build-meta.js
           grep -q 'real-life-data-3.js?v=1.19.0-b26' index.html
           grep -q 'real-life-coach.js?v=1.19.0-b26' index.html
-          grep -q 'build-meta.js?v=1.19.0-b26' index.html
-          grep -q '1.19.0-b26-real-life-3' index.html sw.js
+          grep -q 'build-meta.js?v=' index.html
+          grep -q "const B26='1.19.0-b26'" sw.js
           grep -q 'real-life-data-3.js' sw.js
           grep -q 'real-life-coach.js' sw.js
 

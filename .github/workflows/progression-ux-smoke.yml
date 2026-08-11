@@ -23,11 +23,12 @@ jobs:
           node --check progression-ux.js
           node --check build-meta.js
           node --check sw.js
-          grep -q 'progression-ux.css?v=1.18.0-b25' index.html
-          grep -q 'progression-ux.js?v=1.18.0-b25' index.html
+          grep -q 'progression-ux.css?v=1.19.1-b26.1' index.html
+          grep -q 'progression-ux.js?v=1.19.1-b26.1' index.html
           grep -q 'FrenchTranquilleProgressionUX' build-meta.js
           grep -q 'progression-ux.js' sw.js
           grep -q 'progression-ux.css' sw.js
+          grep -q 'progress-ux-detail-groups' progression-ux.js progression-ux.css
 
       - name: Sanctuaries remain byte-identical
         run: |
@@ -45,7 +46,7 @@ jobs:
 
       - name: Chrome — compact Parcours preserves lesson-8 state
         run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=26000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&progressionSmoke=compact' >/tmp/progress-compact.html
+          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=28000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&progressionSmoke=compact' >/tmp/progress-compact.html
           if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/progress-compact.html; then cat /tmp/progress-compact.html; exit 1; fi
           grep -q 'app-shell screen-progress' /tmp/progress-compact.html
           grep -q 'data-progress-ux-ready="1"' /tmp/progress-compact.html
@@ -57,13 +58,15 @@ jobs:
           grep -q 'data-progress-total-rows="40"' /tmp/progress-compact.html
           grep -q 'data-progress-expanded="0"' /tmp/progress-compact.html
           grep -q 'data-progress-details-open="0"' /tmp/progress-compact.html
+          grep -q 'data-progress-detail-groups="4"' /tmp/progress-compact.html
+          grep -q 'data-progress-open-groups="0"' /tmp/progress-compact.html
           grep -E -q 'data-progress-detail-cards="[1-9][0-9]*"' /tmp/progress-compact.html
           grep -q 'progress-ux-overview' /tmp/progress-compact.html
           test "$(grep -o 'progress-ux-row-hidden' /tmp/progress-compact.html | wc -l)" -ge 30
 
       - name: Chrome — full 40-lesson path remains accessible
         run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=26000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&progressionSmoke=expanded' >/tmp/progress-expanded.html
+          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=28000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&progressionSmoke=expanded' >/tmp/progress-expanded.html
           if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/progress-expanded.html; then cat /tmp/progress-expanded.html; exit 1; fi
           grep -q 'data-progression-smoke="expanded"' /tmp/progress-expanded.html
           grep -q 'data-progress-visible-rows="40"' /tmp/progress-expanded.html
@@ -71,15 +74,21 @@ jobs:
           grep -q 'data-progress-expanded="1"' /tmp/progress-expanded.html
           grep -q 'data-progress-current-lesson="l8"' /tmp/progress-expanded.html
 
-      - name: Chrome — detailed engines remain accessible on demand
+      - name: Chrome — learning details are grouped instead of stacked
         run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=26000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&progressionSmoke=details' >/tmp/progress-details.html
+          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=30000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&progressionSmoke=details' >/tmp/progress-details.html
           if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/progress-details.html; then cat /tmp/progress-details.html; exit 1; fi
           grep -q 'data-progression-smoke="details"' /tmp/progress-details.html
           grep -q 'data-progress-details-open="1"' /tmp/progress-details.html
+          grep -q 'data-progress-detail-groups="4"' /tmp/progress-details.html
+          grep -q 'data-progress-open-groups="1"' /tmp/progress-details.html
           grep -E -q 'data-progress-detail-cards="[1-9][0-9]*"' /tmp/progress-details.html
+          for group in memory mastery practice support; do grep -q "data-progress-group=\"$group\"" /tmp/progress-details.html; done
           grep -q 'memory-progress-card' /tmp/progress-details.html
           grep -q 'mastery-progress-card' /tmp/progress-details.html
+          grep -q 'scenario-progress-card' /tmp/progress-details.html
+          grep -q 'listening-progress-card' /tmp/progress-details.html
+          grep -q 'language-progress-card' /tmp/progress-details.html
 
       - name: Stop static server
         if: always()

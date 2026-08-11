@@ -12,6 +12,34 @@ if (PROGRESSION_CURRICULUM) {
   let scheduled = false;
   let smokeNavigationRequested = false;
 
+  const DETAIL_GROUPS = [
+    {
+      id: 'memory', icon: '🧠',
+      vi: 'Trí nhớ & ôn tập', fr: 'Mémoire & révisions',
+      subVi: 'Những gì đã học, cần ôn và các điểm hay vấp.', subFr: 'Acquis, éléments à revoir et difficultés récurrentes.',
+      selectors: ['.memory-progress-card', '.error-intelligence-card'],
+      includesLearnedList: true
+    },
+    {
+      id: 'mastery', icon: '🎯',
+      vi: 'Mức độ làm chủ', fr: 'Maîtrise',
+      subVi: 'Tiến độ theo từng chặng, không chỉ số bài đã xem.', subFr: 'Consolidation par étapes, au-delà des leçons simplement parcourues.',
+      selectors: ['.mastery-progress-card', '.stage3-progress-card', '.mastery-stage3-card']
+    },
+    {
+      id: 'practice', icon: '🎧',
+      vi: 'Thực hành thực tế', fr: 'Pratique réelle',
+      subVi: 'Nghe hiểu và các tình huống giao tiếp.', subFr: 'Compréhension orale et situations de communication.',
+      selectors: ['.scenario-progress-card', '.listening-progress-card']
+    },
+    {
+      id: 'support', icon: '🌐',
+      vi: 'Hỗ trợ của Lucie', fr: 'Soutien de Lucie',
+      subVi: 'Mức tiếng Việt / tiếng Pháp được điều chỉnh theo bằng chứng.', subFr: 'Équilibre vietnamien / français adapté aux preuves d’apprentissage.',
+      selectors: ['.language-progress-card']
+    }
+  ];
+
   function learner() {
     try { return JSON.parse(localStorage.getItem(LEARNER_KEY) || '{}') || {}; }
     catch { return {}; }
@@ -84,30 +112,96 @@ if (PROGRESSION_CURRICULUM) {
       details.className = 'progress-ux-details';
       details.innerHTML = `
         <summary>
-          <span><strong>🧠 ${esc(T('Chi tiết học tập','Détails d’apprentissage'))}</strong><small>${esc(T('Trí nhớ, mức độ làm chủ và các số liệu chi tiết','Mémoire, maîtrise et indicateurs détaillés'))}</small></span>
+          <span><strong>🧠 ${esc(T('Chi tiết học tập','Détails d’apprentissage'))}</strong><small>${esc(T('Mở đúng phần bạn muốn xem — không cần cuộn qua mọi chỉ số.','Ouvre seulement la partie qui t’intéresse — plus besoin de traverser tous les indicateurs.'))}</small></span>
           <b aria-hidden="true">⌄</b>
         </summary>
-        <div class="progress-ux-details-body"></div>`;
+        <div class="progress-ux-details-body"><div class="progress-ux-detail-groups"></div></div>`;
       column.appendChild(details);
     }
     if (smokeMode === 'details') details.open = true;
     return details;
   }
 
-  function collectSecondaryCards(column, details) {
-    const body = details.querySelector('.progress-ux-details-body');
-    if (!body) return;
+  function groupStatus(group, m) {
+    if (group.id === 'memory') {
+      const due = m.memory.due?.length || 0;
+      return T(`${m.known} mục • ${due} cần ôn`, `${m.known} acquis • ${due} à revoir`);
+    }
+    if (group.id === 'mastery') return T(`Mức ${m.level} • theo từng chặng`, `Niveau ${m.level} • par étapes`);
+    if (group.id === 'practice') return T('Nghe & tình huống', 'Écoute & situations');
+    return T('Tiếng Việt ↔ tiếng Pháp', 'Vietnamien ↔ français');
+  }
+
+  function ensureDetailGroups(details, m) {
+    const grid = details.querySelector('.progress-ux-detail-groups');
+    if (!grid) return new Map();
+    const result = new Map();
+    DETAIL_GROUPS.forEach(group => {
+      let node = grid.querySelector(`[data-progress-group="${group.id}"]`);
+      if (!node) {
+        node = document.createElement('details');
+        node.className = 'progress-ux-detail-group';
+        node.dataset.progressGroup = group.id;
+        node.innerHTML = `
+          <summary>
+            <span class="progress-ux-group-icon">${group.icon}</span>
+            <span class="progress-ux-group-copy"><strong>${esc(T(group.vi, group.fr))}</strong><small>${esc(T(group.subVi, group.subFr))}</small></span>
+            <span class="progress-ux-group-meta"><em></em><b aria-hidden="true">⌄</b></span>
+          </summary>
+          <div class="progress-ux-detail-group-body"></div>`;
+        grid.appendChild(node);
+      }
+      const meta = node.querySelector('.progress-ux-group-meta em');
+      if (meta) meta.textContent = groupStatus(group, m);
+      result.set(group.id, node);
+    });
+    if (smokeMode === 'details') result.get('memory')?.setAttribute('open', '');
+    return result;
+  }
+
+  function cardGroup(card) {
+    for (const group of DETAIL_GROUPS) {
+      if (group.includesLearnedList && card.querySelector('.learned-list')) return group.id;
+      if (group.selectors.some(selector => card.matches(selector))) return group.id;
+    }
+    return '';
+  }
+
+  function collectSecondaryCards(column, details, m) {
+    const groups = ensureDetailGroups(details, m);
     const hero = column.querySelector(':scope > .progress-hero');
     const stats = column.querySelector(':scope > .stats');
     hero?.classList.add('progress-ux-legacy-hidden');
     stats?.classList.add('progress-ux-legacy-hidden');
 
-    [...column.children].forEach(child => {
-      if (child === hero || child === stats || child === details || child.classList.contains('progress-ux-overview')) return;
-      if (child.parentElement === column) body.appendChild(child);
+    const candidates = [...column.querySelectorAll('.card')].filter(card => {
+      if (card.classList.contains('progress-ux-overview')) return false;
+      if (card.closest('.curriculum-card')) return false;
+      return Boolean(cardGroup(card));
     });
 
-    details.dataset.progressDetailCards = String(body.children.length);
+    candidates.forEach(card => {
+      const id = cardGroup(card);
+      const body = groups.get(id)?.querySelector('.progress-ux-detail-group-body');
+      if (body && card.parentElement !== body) body.appendChild(card);
+    });
+
+    let visibleGroups = 0;
+    let totalCards = 0;
+    let openGroups = 0;
+    groups.forEach(groupNode => {
+      const body = groupNode.querySelector('.progress-ux-detail-group-body');
+      const count = body?.children.length || 0;
+      totalCards += count;
+      groupNode.hidden = count === 0;
+      groupNode.dataset.progressGroupCards = String(count);
+      if (count) visibleGroups += 1;
+      if (count && groupNode.open) openGroups += 1;
+    });
+
+    details.dataset.progressDetailCards = String(totalCards);
+    details.dataset.progressDetailGroups = String(visibleGroups);
+    details.dataset.progressOpenGroups = String(openGroups);
   }
 
   function compactCurriculum(layout, m) {
@@ -164,9 +258,11 @@ if (PROGRESSION_CURRICULUM) {
     layout.dataset.progressKnown = String(m.known);
     ensureOverview(column);
     const details = ensureDetails(column);
-    collectSecondaryCards(column, details);
+    collectSecondaryCards(column, details, m);
     compactCurriculum(layout, m);
     layout.dataset.progressDetailsOpen = details.open ? '1' : '0';
+    layout.dataset.progressDetailGroups = details.dataset.progressDetailGroups || '0';
+    layout.dataset.progressOpenGroups = details.dataset.progressOpenGroups || '0';
   }
 
   function schedule() {
@@ -195,7 +291,14 @@ if (PROGRESSION_CURRICULUM) {
   }, true);
 
   document.addEventListener('toggle', event => {
-    if (event.target.matches?.('.progress-ux-details')) schedule();
+    const target = event.target;
+    if (target.matches?.('.progress-ux-detail-group') && target.open) {
+      const grid = target.parentElement;
+      grid?.querySelectorAll('.progress-ux-detail-group[open]').forEach(other => {
+        if (other !== target) other.open = false;
+      });
+    }
+    if (target.matches?.('.progress-ux-details,.progress-ux-detail-group')) schedule();
   }, true);
 
   const app = document.getElementById('app');
@@ -219,8 +322,8 @@ if (PROGRESSION_CURRICULUM) {
   requestSmokeNavigation();
 
   window.FrenchTranquilleProgressionUX = {
-    version: '1.18.0',
-    build: 25,
+    version: '1.19.1',
+    build: '26.1',
     decorate,
     metrics,
     setCurriculumExpanded(value) { curriculumExpanded = Boolean(value); schedule(); }

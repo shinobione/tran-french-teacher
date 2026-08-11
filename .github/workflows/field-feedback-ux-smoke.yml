@@ -1,0 +1,74 @@
+name: Build 26.1 Field Feedback UX smoke
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  field-feedback-ux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax and wiring
+        run: |
+          node --check voice-replay.js
+          node --check progression-ux.js
+          node --check build-meta.js
+          node --check sw.js
+          grep -q "version: '1.19.1', build: 26.1" build-meta.js
+          grep -q 'voice-replay.js?v=1.19.1-b26.1' index.html
+          grep -q 'voice-replay.css?v=1.19.1-b26.1' index.html
+          grep -q 'progression-ux.js?v=1.19.1-b26.1' index.html
+          grep -q 'progression-ux.css?v=1.19.1-b26.1' index.html
+          grep -q '1.19.1-b26.1-field-feedback' index.html sw.js
+          grep -q 'voice-replay.js' sw.js
+          grep -q 'voice-replay.css' sw.js
+          grep -q "'FrenchTranquilleVoiceReplay'" build-meta.js
+          if grep -q 'localStorage.setItem' voice-replay.js; then echo 'Voice replay must not persist learner audio/state'; exit 1; fi
+
+      - name: Sanctuaries remain byte-identical
+        run: |
+          test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
+          test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-field-feedback.log 2>&1 &
+          echo $! >/tmp/ft-field-feedback.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — Vietnamese voice replay surface exists without persistence
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=22000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&voiceReplaySmoke=1' >/tmp/voice-replay-vi.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/voice-replay-vi.html; then cat /tmp/voice-replay-vi.html; exit 1; fi
+          grep -q 'data-voice-replay-smoke="1"' /tmp/voice-replay-vi.html
+          grep -q 'data-voice-replay-supported="1"' /tmp/voice-replay-vi.html
+          grep -q 'data-voice-replay-persistent="0"' /tmp/voice-replay-vi.html
+          grep -q 'data-voice-replay-smoke-panel="1"' /tmp/voice-replay-vi.html
+          grep -q 'Giọng của tôi' /tmp/voice-replay-vi.html
+          grep -q 'Nghe lại' /tmp/voice-replay-vi.html
+
+      - name: Chrome — DEBUG FR exposes the same replay action in French
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=22000 --dump-dom 'http://127.0.0.1:4173/?debug=fr&uxSmoke=lesson8&voiceReplaySmoke=1' >/tmp/voice-replay-fr.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/voice-replay-fr.html; then cat /tmp/voice-replay-fr.html; exit 1; fi
+          grep -q 'data-voice-replay-smoke-panel="1"' /tmp/voice-replay-fr.html
+          grep -q 'Ma voix' /tmp/voice-replay-fr.html
+          grep -q 'Réécouter' /tmp/voice-replay-fr.html
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-field-feedback.pid ]; then kill "$(cat /tmp/ft-field-feedback.pid)" || true; fi

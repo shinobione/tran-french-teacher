@@ -22,6 +22,7 @@
 16. Pas de tunnel pédagogique infini par défaut.
 17. Succès visible et agréable, sans gamification agressive.
 18. Pendant une vraie session de Trân : pas de polish runtime/cache sauf incident critique.
+19. Un retour terrain utilisateur peut créer un micro-build avant le hardening si sa valeur pédagogique/UX est claire et si les sanctuaires restent intacts.
 
 ---
 
@@ -29,41 +30,70 @@
 
 **Real Life French III — ✅ PROD / CLOS**
 
-- `Parcours` compact via Build 25 ;
-- Listening effectif : **0.88 normal / 0.64 lent** via Build 25.1 ;
-- sessions bornées et sorties explicites via Build 25.2 ;
-- Pack Real Life III : **8 situations / 24 tours** ;
-- Scenario total : **36 situations / 108 tours** ;
-- français oral naturel côté interlocuteur, réponses standard côté Trân ;
-- réponses simples alternatives explicitement listées ;
-- 15 résolutions Memory avancées, 0 ambiguïté ;
+- Progression UX Build 25 ;
+- Listening **0.88 / 0.64** ;
+- Session UX Build 25.2 ;
+- Pack Real Life III : 8 situations / 24 tours ;
+- Scenario total : **36 / 108** ;
 - 40 leçons / 241 éléments ;
 - voix/branding sanctuarisés ;
 - coût 0 €.
 
-Preuve production Build 26 : PR #37, commit `db8219e44d74f0af13421ec798a0c98d02f7a7b5`, **8 workflows / 8 SUCCESS**, Pages **#96 SUCCESS**.
+Preuve : PR #37, commit `db8219e44d74f0af13421ec798a0c98d02f7a7b5`, 8 workflows / 8 SUCCESS, Pages #96 SUCCESS.
 
 ---
 
-# Build 26 — critères clôturés
+# v1.19.1 — Build 26.1 — Field Feedback UX — CANDIDAT / EN COURS
 
-- [x] version `v1.19.0 / Build 26` et cache `1.19.0-b26-real-life-3` cohérents ;
-- [x] 8 nouvelles situations / 24 tours ;
-- [x] Scenario total **36 / 108** ;
-- [x] aucun ID de scénario dupliqué ;
-- [x] 15 résolutions Memory avancées et **0 ambiguïté** ;
-- [x] réponses semi-libres déterministes et testables ;
-- [x] déblocage l20 → l35…l40 conforme ;
-- [x] catalogue visible limité à 6 scènes ouvertes ;
-- [x] Session UX 25.2 intacte : objectif 1 situation, fin et sortie ;
-- [x] profil ancien utilisateur / l8 intact ;
-- [x] voix, reconnaissance, logo, favicon byte-identiques ;
-- [x] quality / Options / nav / Progression / Listening-rate / Session UX verts ;
-- [x] Real Life III smoke vert sur PR puis `main` ;
-- [x] Pages SUCCESS ;
-- [x] docs post-prod CLOS.
+## Intention
 
-Le contrat quality historique à l20 tient désormais compte de la première scène Pack III : **18 scènes personnelles ouvertes**, dont seulement 6 affichées par défaut. Le harness Session UX utilise des navigateurs isolés/retry borné pour ses hooks Listening/Révision, sans masquer un crash applicatif.
+Traiter deux retours terrain sans attendre le hardening général :
+
+1. permettre à Trân de **réécouter sa propre voix** après une réponse vocale ;
+2. supprimer l’effet “parchemin” de `Détails d’apprentissage`.
+
+## Réécoute voix
+
+Architecture : nouvelle couche `voice-replay.js` + `voice-replay.css`, séparée de la reconnaissance validée.
+
+Contrat :
+
+- MediaRecorder/getUserMedia best-effort ;
+- aucun changement de `voice-ios.js` / `free-voice.js` ;
+- aucun upload ;
+- aucune persistance audio ;
+- dernier Blob uniquement en mémoire de session ;
+- aucun score de prononciation ;
+- si la capture parallèle échoue, la reconnaissance existante doit continuer ;
+- coexistence réelle à confirmer sur l’iPhone de Trân avant de considérer le sous-système terrain pleinement validé.
+
+## Détails d’apprentissage
+
+Quatre familles :
+
+- 🧠 Mémoire & révisions ;
+- 🎯 Maîtrise ;
+- 🎧 Pratique réelle ;
+- 🌐 Soutien de Lucie.
+
+Règles : enveloppe fermée par défaut, grille 2 colonnes desktop / 1 mobile, une seule famille ouverte à la fois, cartes moteur existantes conservées sans changement de données.
+
+## Critères de clôture Build 26.1
+
+- [x] version/cache candidate `1.19.1 / 26.1` ;
+- [x] Voice Replay isolé du moteur de reconnaissance ;
+- [x] zéro écriture localStorage dans Voice Replay ;
+- [x] 4 familles Progression ;
+- [x] smoke dédié ;
+- [x] Progression smoke renforcé ;
+- [ ] PR candidate ;
+- [ ] quality / Options / nav / Progression / Listening / Session / Real Life III verts ;
+- [ ] Field Feedback UX smoke vert ;
+- [ ] merge `main` ;
+- [ ] tribunal `main` vert ;
+- [ ] Pages SUCCESS ;
+- [ ] test iPhone de coexistence SpeechRecognition + MediaRecorder ;
+- [ ] docs post-prod CLOS.
 
 ---
 
@@ -97,7 +127,6 @@ free-voice.js
 assets/LOGO.png
 assets/Favicon.png
 bottom navigation interaction baseline
-Progression UX Build 25
 Session UX Build 25.2
 ```
 

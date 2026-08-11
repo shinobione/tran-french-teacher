@@ -1,19 +1,19 @@
-const CACHE='tran-french-teacher-v1.19.0-b26-real-life-3';
+const CACHE='tran-french-teacher-v1.19.1-b26.1-field-feedback';
 const V='1.17.0-b24';
 const UX='1.17.5-b24.5';
-const P25='1.18.0-b25';
 const P252='1.18.2-b25.2';
 const B26='1.19.0-b26';
+const B261='1.19.1-b26.1';
 const CORE=[
   './','./index.html',
   `./styles.css?v=${V}`,`./brand.css?v=${V}`,`./learning-memory.css?v=${V}`,`./visual-pass.css?v=${V}`,`./lucie-avatar.css?v=${V}`,
   `./curriculum-stage2.css?v=${V}`,`./curriculum-stage3.css?v=${V}`,`./daily-coach.css?v=${V}`,`./mastery-engine.css?v=${V}`,`./mastery-stage3.css?v=${V}`,
-  `./scenario-engine.css?v=${V}`,`./real-life-ux.css?v=${V}`,`./error-intelligence.css?v=${V}`,`./listening-engine.css?v=${V}`,`./language-ratio.css?v=${V}`,`./ux-shell.css?v=${UX}`,`./interaction-ux.css?v=${UX}`,`./mobile-polish.css?v=${UX}`,`./progression-ux.css?v=${P25}`,`./session-ux.css?v=${P252}`,
+  `./scenario-engine.css?v=${V}`,`./real-life-ux.css?v=${V}`,`./error-intelligence.css?v=${V}`,`./listening-engine.css?v=${V}`,`./language-ratio.css?v=${V}`,`./ux-shell.css?v=${UX}`,`./interaction-ux.css?v=${UX}`,`./mobile-polish.css?v=${UX}`,`./progression-ux.css?v=${B261}`,`./session-ux.css?v=${P252}`,`./voice-replay.css?v=${B261}`,
   `./progress-safety.js?v=${V}`,`./app.js?v=${V}`,`./curriculum-stage2.js?v=${V}`,`./curriculum-stage3.js?v=${V}`,`./stage2-boot.js?v=${V}`,
-  `./debug-fr.js?v=${V}`,`./voice-ios.js?v=${V}`,`./free-voice.js?v=${V}`,`./learning-memory.js?v=${V}`,`./error-intelligence.js?v=${V}`,
+  `./debug-fr.js?v=${V}`,`./voice-ios.js?v=${V}`,`./free-voice.js?v=${V}`,`./voice-replay.js?v=${B261}`,`./learning-memory.js?v=${V}`,`./error-intelligence.js?v=${V}`,
   `./language-ratio-core.js?v=${V}`,`./language-ratio.js?v=${V}`,`./daily-coach.js?v=${V}`,`./mastery-engine.js?v=${V}`,`./mastery-stage3.js?v=${V}`,
   `./scenario-data.js?v=${V}`,`./real-life-data.js?v=${V}`,`./real-life-data-2.js?v=${V}`,`./real-life-data-3.js?v=${B26}`,`./scenario-host.js?v=${V}`,`./scenario-engine.js?v=${V}`,`./real-life-ux.js?v=${V}`,`./real-life-coach.js?v=${B26}`,
-  `./listening-data.js?v=${V}`,`./listening-engine.js?v=${V}`,`./ux-shell.js?v=${UX}`,`./interaction-ux.js?v=${UX}`,`./progression-ux.js?v=${P25}`,`./session-ux.js?v=${P252}`,`./session-ux-adapter.js?v=${P252}`,`./build-meta.js?v=${B26}`,`./manifest.webmanifest?v=${V}`,
+  `./listening-data.js?v=${V}`,`./listening-engine.js?v=${V}`,`./ux-shell.js?v=${UX}`,`./interaction-ux.js?v=${UX}`,`./progression-ux.js?v=${B261}`,`./session-ux.js?v=${P252}`,`./session-ux-adapter.js?v=${P252}`,`./build-meta.js?v=${B261}`,`./manifest.webmanifest?v=${V}`,
   `./assets/LOGO.png?v=${V}`,`./assets/Favicon.png?v=${V}`,'./assets/icon-192.webp'
 ];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)));self.skipWaiting();});
