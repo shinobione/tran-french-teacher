@@ -55,42 +55,112 @@ jobs:
 
       - name: Chrome — Today controls are stable and actually navigate
         run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=30000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&b263Smoke=daily' >/tmp/b263-daily.html
-          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/b263-daily.html; then cat /tmp/b263-daily.html; exit 1; fi
-          grep -q 'data-b263-daily-ready="1"' /tmp/b263-daily.html
-          grep -q 'data-b263-smoke-more="1"' /tmp/b263-daily.html
-          grep -q 'data-b263-smoke-toggle-stable="1"' /tmp/b263-daily.html
-          grep -q 'data-b263-smoke-listening="1"' /tmp/b263-daily.html
-          grep -q 'data-b263-smoke-review="1"' /tmp/b263-daily.html
-          grep -q 'data-b263-smoke-lesson="1"' /tmp/b263-daily.html
-          grep -q 'app-shell screen-lesson' /tmp/b263-daily.html
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-b263-daily-profile-$attempt"
+            file="/tmp/b263-daily-$attempt.html"
+            rm -rf "$profile" "$file"
+            echo "Build 26.3 Today smoke attempt $attempt"
+            if ! timeout --signal=TERM --kill-after=5s 35s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=390,844 \
+              --virtual-time-budget=30000 --dump-dom \
+              'http://127.0.0.1:4173/?uxSmoke=lesson8&b263Smoke=daily' >"$file"; then
+              echo "Today Chrome attempt $attempt timed out or exited non-zero"
+              continue
+            fi
+            if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then
+              echo "Today attempt $attempt hit app boot error"
+              continue
+            fi
+            if grep -q 'data-b263-daily-ready="1"' "$file" \
+              && grep -q 'data-b263-smoke-more="1"' "$file" \
+              && grep -q 'data-b263-smoke-toggle-stable="1"' "$file" \
+              && grep -q 'data-b263-smoke-listening="1"' "$file" \
+              && grep -q 'data-b263-smoke-review="1"' "$file" \
+              && grep -q 'data-b263-smoke-lesson="1"' "$file" \
+              && grep -q 'app-shell screen-lesson' "$file"; then
+              passed=1
+              break
+            fi
+            echo "Today attempt $attempt missing markers:"
+            grep -o 'data-b263-[^ >]*' "$file" | head -30 || true
+          done
+          if [ "$passed" -ne 1 ]; then
+            echo 'Build 26.3 Today smoke failed after 3 bounded isolated attempts'
+            exit 1
+          fi
 
       - name: Chrome desktop — Paint layout is two-column and Details sticky
         run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=1280,900 --virtual-time-budget=28000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&b263Smoke=progress' >/tmp/b263-progress-desktop.html
-          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/b263-progress-desktop.html; then cat /tmp/b263-progress-desktop.html; exit 1; fi
-          grep -q 'app-shell screen-progress' /tmp/b263-progress-desktop.html
-          grep -q 'data-b263-smoke-progress="1"' /tmp/b263-progress-desktop.html
-          grep -q 'data-b263-smoke-contents="1"' /tmp/b263-progress-desktop.html
-          grep -q 'data-b263-smoke-desktop="1"' /tmp/b263-progress-desktop.html
-          grep -q 'data-b263-smoke-details-open="1"' /tmp/b263-progress-desktop.html
-          grep -q 'data-b263-smoke-sticky="1"' /tmp/b263-progress-desktop.html
-          grep -q 'data-progress-current-lesson="l8"' /tmp/b263-progress-desktop.html
-          grep -q 'data-progress-completed="7"' /tmp/b263-progress-desktop.html
-          grep -q 'data-progress-known="40"' /tmp/b263-progress-desktop.html
-          grep -q 'progress-detail-dashboard' /tmp/b263-progress-desktop.html
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-b263-desktop-profile-$attempt"
+            file="/tmp/b263-progress-desktop-$attempt.html"
+            rm -rf "$profile" "$file"
+            if ! timeout --signal=TERM --kill-after=5s 35s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=1280,900 \
+              --virtual-time-budget=28000 --dump-dom \
+              'http://127.0.0.1:4173/?uxSmoke=lesson8&b263Smoke=progress' >"$file"; then
+              echo "Desktop Chrome attempt $attempt timed out or exited non-zero"
+              continue
+            fi
+            if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then continue; fi
+            if grep -q 'app-shell screen-progress' "$file" \
+              && grep -q 'data-b263-smoke-progress="1"' "$file" \
+              && grep -q 'data-b263-smoke-contents="1"' "$file" \
+              && grep -q 'data-b263-smoke-desktop="1"' "$file" \
+              && grep -q 'data-b263-smoke-details-open="1"' "$file" \
+              && grep -q 'data-b263-smoke-sticky="1"' "$file" \
+              && grep -q 'data-progress-current-lesson="l8"' "$file" \
+              && grep -q 'data-progress-completed="7"' "$file" \
+              && grep -q 'data-progress-known="40"' "$file" \
+              && grep -q 'progress-detail-dashboard' "$file"; then
+              passed=1
+              break
+            fi
+            echo "Desktop attempt $attempt missing markers"
+            grep -o 'data-b263-[^ >]*' "$file" | head -30 || true
+          done
+          if [ "$passed" -ne 1 ]; then
+            echo 'Build 26.3 desktop layout smoke failed after 3 bounded isolated attempts'
+            exit 1
+          fi
 
       - name: Chrome mobile — summary, curriculum, then collapsed Details
         run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=28000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&b263Smoke=progress-mobile' >/tmp/b263-progress-mobile.html
-          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/b263-progress-mobile.html; then cat /tmp/b263-progress-mobile.html; exit 1; fi
-          grep -q 'app-shell screen-progress' /tmp/b263-progress-mobile.html
-          grep -q 'data-b263-smoke-progress="1"' /tmp/b263-progress-mobile.html
-          grep -q 'data-b263-smoke-contents="1"' /tmp/b263-progress-mobile.html
-          grep -q 'data-b263-smoke-desktop="0"' /tmp/b263-progress-mobile.html
-          grep -q 'data-b263-smoke-details-open="0"' /tmp/b263-progress-mobile.html
-          grep -q 'data-progress-visible-rows="5"' /tmp/b263-progress-mobile.html
-          grep -q 'data-progress-total-rows="40"' /tmp/b263-progress-mobile.html
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-b263-mobile-profile-$attempt"
+            file="/tmp/b263-progress-mobile-$attempt.html"
+            rm -rf "$profile" "$file"
+            if ! timeout --signal=TERM --kill-after=5s 35s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=390,844 \
+              --virtual-time-budget=28000 --dump-dom \
+              'http://127.0.0.1:4173/?uxSmoke=lesson8&b263Smoke=progress-mobile' >"$file"; then
+              echo "Mobile Chrome attempt $attempt timed out or exited non-zero"
+              continue
+            fi
+            if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then continue; fi
+            if grep -q 'app-shell screen-progress' "$file" \
+              && grep -q 'data-b263-smoke-progress="1"' "$file" \
+              && grep -q 'data-b263-smoke-contents="1"' "$file" \
+              && grep -q 'data-b263-smoke-desktop="0"' "$file" \
+              && grep -q 'data-b263-smoke-details-open="0"' "$file" \
+              && grep -q 'data-progress-visible-rows="5"' "$file" \
+              && grep -q 'data-progress-total-rows="40"' "$file"; then
+              passed=1
+              break
+            fi
+            echo "Mobile attempt $attempt missing markers"
+            grep -o 'data-b263-[^ >]*' "$file" | head -30 || true
+          done
+          if [ "$passed" -ne 1 ]; then
+            echo 'Build 26.3 mobile layout smoke failed after 3 bounded isolated attempts'
+            exit 1
+          fi
 
       - name: Stop static server
         if: always()

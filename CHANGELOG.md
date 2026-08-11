@@ -6,6 +6,33 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ---
 
+## [1.19.3] — Build 26.3 — Interaction Stability + Progress Layout — 2026-08-11
+
+- corrige les interactions incohérentes observées dans une vidéo terrain sur `Séance du jour` ;
+- identifie une compétition DOM entre `daily-coach.js`, `listening-engine.js` et `session-ux.js` : plusieurs `MutationObserver` pouvaient déplacer/recréer les mêmes contrôles ;
+- ajoute `build26-3-ux.js` / `build26-3-ux.css` comme couche additive d’orchestration ;
+- garde exactement 2 actions Today principales avec des nœuds stables ;
+- place les activités secondaires hors de `.daily-steps` pour éviter leur déplacement par Session UX ;
+- utilise un proxy Listening caché pour empêcher une réinjection concurrente ;
+- remplace le `<summary>` reconstruit de `Voir les autres activités` par un vrai `<button>` stable avec `aria-expanded` ;
+- rend le refresh Today strictement idempotent : aucun texte/attribut/état n’est réécrit s’il est déjà correct ;
+- route explicitement Review / Lesson / Conversation / Listening sans écrire de donnée apprenante ;
+- ajoute un smoke Chrome qui ouvre réellement les autres activités, vérifie la stabilité du même nœud, clique Listening, Review puis la leçon et exige les destinations réelles ;
+- optimise `Progrès` desktop selon le layout validé terrain : résumé + curriculum à gauche, `Détails d’apprentissage` à droite ;
+- la colonne Details est ouverte par défaut sur desktop, sticky et scrollable indépendamment ;
+- conserve sur mobile l’ordre résumé → curriculum compact → Details replié ;
+- utilise `display: contents` + CSS Grid : aucun clone ou remplacement des cartes Memory/Mastery/Listening/Scenario ;
+- conserve le dashboard Build 26.1 et son progressive disclosure ;
+- conserve curriculum **40 leçons / 241 éléments**, Scenario **36 situations / 108 tours**, Listening **0.88 / 0.65** ;
+- `voice-ios.js`, `free-voice.js`, logo et favicon restent byte-identiques ;
+- aucune migration learner/Memory/Scenario/Listening ;
+- PR #44 ; commit runtime production `5947149e9fcb3b387aa01a797607270edb4f100e` ;
+- **9 workflows fonctionnels / 9 SUCCESS** sur PR ;
+- sur `main`, le nouveau smoke 26.3 a eu un premier passage timing/flaky puis son rerun sur le **même commit** a validé Today + desktop + mobile ; les 9 contrats fonctionnels sont verts ;
+- GitHub Pages **#101 SUCCESS**.
+
+---
+
 ## [1.19.2] — Build 26.2 — Click + Listening Rate Hotfix — 2026-08-11
 
 - corrige le clic inerte observé en vidéo sur `Parcours → Détails d’apprentissage` ;
@@ -40,7 +67,6 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 - les cartes historiques restent dans le DOM et continuent à être pilotées par leurs moteurs ;
 - une carte future non reconnue tombe dans `Autres détails` ;
 - conserve Real Life III : **36 situations / 108 tours** ;
-- rend `Build 26 Real Life French III smoke` durable pour les versions futures ;
 - cache `tran-french-teacher-v1.19.1-b26.1-voice-replay-details-dashboard` ;
 - ajoute `Build 26.1 Voice replay + Details dashboard smoke` ;
 - aucune migration learner/Memory/Scenario/Listening ;
@@ -51,9 +77,7 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ### Gate terrain restant
 
-Le dashboard est livré et validé par les contrats navigateur. La fonction d’auto-écoute est également déployée, mais son usage réel `réponse reconnue → seconde prise locale → réécoute → nouvelle reconnaissance` doit encore être confirmé sur **l’iPhone de Trân** avant d’être qualifié de baseline terrain.
-
-La capture simultanée exacte du premier essai reste volontairement hors scope tant que sa coexistence avec la reconnaissance iPhone validée n’est pas prouvée.
+Le dashboard est livré et validé. La fonction d’auto-écoute est déployée, mais son usage réel `réponse reconnue → seconde prise locale → réécoute → nouvelle reconnaissance` doit encore être confirmé sur **l’iPhone de Trân**. La capture simultanée exacte du premier essai reste hors scope.
 
 ---
 
@@ -61,18 +85,13 @@ La capture simultanée exacte du premier essai reste volontairement hors scope t
 
 - ajoute `real-life-data-3.js` : **8 situations / 24 tours** ;
 - Scenario production : **36 situations / 108 tours** ;
-- introduit du français oral naturel côté interlocuteur : `T’es prête ?`, `J’sais pas…`, `Y a pas…` ;
+- introduit du français oral naturel côté interlocuteur ;
 - conserve des réponses standard et plusieurs variantes simples explicitement autorisées ;
 - ajoute futur proche, passé récent, passé composé, mouvement au passé, administratif, émotion/besoin et couple ;
-- ajoute `real-life-coach.js` : rappel discret que Trân peut répondre avec ses mots dans les scènes Pack III ;
-- chaque référence Memory avancée est résolue depuis le curriculum ; une résolution n’est valide que si elle correspond à exactement un acquis ;
+- ajoute `real-life-coach.js` ;
+- chaque référence Memory avancée doit correspondre à exactement un acquis ;
 - conserve la limite de 6 situations ouvertes visibles ;
 - conserve le contrat Session UX 25.2 : **1 situation = 1 session** ;
-- conserve Listening historique Build 25.1 ;
-- cache `tran-french-teacher-v1.19.0-b26-real-life-3` ;
-- ajoute `Build 26 Real Life French III smoke` avec profils l20 / l35 / l40 et garde des résolutions ;
-- corrige le contrat quality l20 pour compter la première scène Pack III : **18 scènes personnelles ouvertes** ;
-- stabilise le harness Session UX multi-Chrome avec isolation/retry borné, sans changement moteur ;
 - aucune migration learner/Memory/Scenario/Listening ;
 - voix et branding sanctuarisés ;
 - PR #37 ; commit prod `db8219e44d74f0af13421ec798a0c98d02f7a7b5` ; **8 workflows / 8 SUCCESS** ; Pages **#96 SUCCESS**.
@@ -80,22 +99,10 @@ La capture simultanée exacte du premier essai reste volontairement hors scope t
 ---
 
 ## [1.18.2] — Build 25.2 — Session Goals / Milestones / App Delight — 2026-08-11
-
-- ajoute `session-ux.js`, `session-ux-adapter.js`, `session-ux.css` ;
-- ajoute un contrat commun `objectif → progression → fin → sortie` ;
-- Listening : session standard de **5 questions** ;
-- Révision mémoire : lot borné jusqu’à **5 éléments prioritaires** ;
-- Scenario : objectif explicite `1 situation` et sortie vers Aujourd’hui ;
-- Vocal guidé : cible **5 réponses** sans modifier `free-voice.js` ;
-- Practice Hub et Daily Coach compact ;
-- milestones séparés ; animations sobres + reduced motion ;
-- Listening calibré par les builds suivants ;
-- PR #35 ; commit prod `49d866bed59bb0cb3268e1675225a4811f6c595f` ; 7 workflows sans échec ; Pages #94 SUCCESS.
-
----
+- objectif → progression → fin → sortie ; Listening 5 questions ; Révision jusqu’à 5 éléments ; Scenario 1 situation ; vocal guidé 5 réponses ; milestones sobres ; PR #35 ; Pages #94 SUCCESS.
 
 ## [1.18.1] — Build 25.1 — Listening Slow Calibration — 2026-08-11
-- bridge de séparation normal/lent introduit ; calibration finale corrigée en Build 26.2 à **0.88 / 0.65** sans modifier `voice-ios.js`.
+- bridge de séparation normal/lent introduit ; calibration finale corrigée en Build 26.2 à **0.88 / 0.65**.
 
 ## [1.18.0] — Build 25 — Progression UX / Progressive Disclosure — 2026-08-11
 - résumé simple de `Parcours` ; détails repliables ; 5 lignes curriculum visibles par défaut, 40 accessibles ; aucune migration.
@@ -116,13 +123,13 @@ La capture simultanée exacte du premier essai reste volontairement hors scope t
 - boucle MutationObserver Options corrigée.
 
 ## [1.17.0] — Build 24 — Real Life French II — 2026-08-11
-- 10 situations / 30 tours ; Scenario 28 / 84.
+- **10 situations / 30 tours ; Scenario 28 situations / 84 tours.**
 
 ## [1.16.0] — Build 23 — Real Life French I — 2026-08-11
 - 6 situations / 18 tours liées à la vraie vie avec Jerry.
 
 ## [1.15.0] — Build 22 — UX Foundation & Runtime Integrity — 2026-08-11
-- Aujourd’hui / Pratiquer / Parcours ; snapshot ancien utilisateur ; curriculum 40 / 241.
+- Aujourd’hui / Pratiquer / Parcours ; snapshot ancien utilisateur ; curriculum **40 leçons / 241 éléments**.
 
 ## [1.14.0] — Build 21 — Adaptive Language Ratio — 2026-08-11
 - VI-HEAVY / VI-SUPPORT / BALANCED / FR-GROWING.

@@ -18,27 +18,32 @@
 12. Toute surface tappable donne un retour visuel immédiat sur mobile.
 13. `Aujourd’hui / Pratiquer / Parcours` gardent des nœuds persistants et exactement un état actif.
 14. Progressive disclosure : tous les moteurs et compteurs ne sont pas visibles par défaut.
-15. **Contrat de session** : chaque activité possède un objectif, une progression, une fin et une sortie évidente.
+15. Chaque activité possède un objectif, une progression, une fin et une sortie évidente.
 16. Pas de tunnel pédagogique infini par défaut.
 17. Succès visible et agréable, sans gamification agressive.
 18. Pendant une vraie session de Trân : pas de polish runtime/cache sauf incident critique.
 19. Une fonction d’auto-écoute ne doit jamais dégrader la reconnaissance vocale validée.
-20. Les détails pédagogiques peuvent être riches, mais ils doivent être groupés par intention et jamais affichés comme un dump vertical des moteurs.
-21. Un mode `Lent` doit être **effectivement plus lent dans la couche voix finale**, pas seulement porter une valeur différente dans le moteur appelant.
-22. Les surfaces repliables critiques doivent avoir un contrat de clic navigateur réel, pas seulement exister dans le DOM.
+20. Les détails pédagogiques peuvent être riches, mais ils doivent être groupés par intention et jamais affichés comme un dump vertical.
+21. Un mode `Lent` doit être **effectivement plus lent dans la couche voix finale**.
+22. Les surfaces repliables critiques ont un contrat de clic navigateur réel.
+23. **Un contrôle visible ne doit pas être remplacé entre `pointerdown` et `click`.** Les couches DOM récentes doivent être idempotentes et ne pas se disputer les mêmes nœuds.
+24. Les tests d’interaction doivent vérifier la **destination réelle**, pas seulement la présence du bouton.
 
 ---
 
-# Baseline production — v1.19.2 / Build 26.2
+# Baseline production — v1.19.3 / Build 26.3
 
-**Click + Listening Rate Hotfix — ✅ PROD**
+**Interaction Stability + Progress Layout — ✅ PROD**
 
-- commit production : `4d1d224aa4eb6612fe6b0dc997f3871bbb502317` ;
-- PR #42 ;
-- **8 workflows / 8 SUCCESS** sur PR puis `main` ;
-- GitHub Pages **#100 SUCCESS** ;
+- commit runtime production : `5947149e9fcb3b387aa01a797607270edb4f100e` ;
+- PR #44 ;
+- **9 workflows fonctionnels / 9 SUCCESS** sur la PR ;
+- même tribunal fonctionnel vert sur `main` après rerun du smoke 26.3 sur le même commit ;
+- GitHub Pages **#101 SUCCESS** ;
+- Today : `Révision mémoire`, `Continuer le parcours`, `Écouter 3 minutes`, `Voir les autres activités` couverts par un smoke de clic réel ;
+- Progress desktop : résumé + parcours à gauche, détails sticky/scroll interne à droite ;
+- Progress mobile : résumé → parcours compact → détails repliés ;
 - Progression UX Build 25 intact ;
-- `Détails d’apprentissage` : clic explicite/déterministe validé dans Chrome ;
 - Listening : **0.88 normal / 0.65 lent effectif** ;
 - Session UX Build 25.2 intact ;
 - Real Life French III Build 26 intact : **36 situations / 108 tours** ;
@@ -52,98 +57,82 @@ Baseline historique protégée : **v1.17.0 — Build 24 — Real Life French II*
 
 ---
 
-# Build 26.2 — critères clôturés
+# Build 26.3 — critères clôturés
 
-## Retour terrain : clic Détails
+## Interaction Stability — Today
 
-La vidéo terrain montre un clic sur `Parcours → Détails d’apprentissage` sans ouverture alors qu’un clic de leçon juste après fonctionne.
+Retour terrain vidéo :
+
+- `Continuer le parcours` fonctionnait correctement ;
+- `Révision mémoire` pouvait recevoir le feedback sans naviguer ;
+- `Écouter 3 minutes` et `Voir les autres activités` pouvaient être inertes/incohérents.
+
+Cause auditée : Daily Coach, Listening et Session UX composaient la même surface et plusieurs `MutationObserver` pouvaient déplacer/recréer les contrôles.
 
 Correction :
 
-- `<details>` conservé ;
-- interception explicite du clic `summary` ;
-- `preventDefault()` puis toggle contrôlé par `progression-ux.js` ;
-- dataset de diagnostic d’ouverture ;
-- vrai Chrome clique le résumé et doit constater l’état `open`.
+- [x] couche additive `build26-3-ux.js/css` ;
+- [x] exactement 2 actions Today principales stables ;
+- [x] extras hors de `.daily-steps` legacy ;
+- [x] proxy Listening caché pour stopper la réinjection concurrente ;
+- [x] `Voir les autres activités` = vrai `<button>` avec `aria-expanded` ;
+- [x] rendu strictement idempotent ;
+- [x] routes Review / Lesson / Conversation / Listening explicites ;
+- [x] aucune écriture learner/Memory/Scenario/Listening ;
+- [x] vrai Chrome ouvre les extras ;
+- [x] le même nœud toggle survit ;
+- [x] vrai Chrome clique Listening et voit l’overlay ;
+- [x] vrai Chrome clique Review et atteint l’écran Révision ;
+- [x] vrai Chrome revient Home puis clique la leçon et atteint l’écran Lesson.
 
-Critères :
+## Progress Layout — desktop + mobile
 
-- [x] clic réel `Détails` ouvre le panneau ;
-- [x] deuxième logique de toggle disponible sans réimplémenter le dashboard ;
-- [x] dashboard Build 26.1 toujours groupé ;
-- [x] Memory + Mastery toujours présents ;
-- [x] curriculum 40 leçons toujours accessible.
-
-## Retour terrain : Listening lent
-
-Cause auditée :
+Desktop :
 
 ```text
-Listening slow request = 0.68
-bridge ancien         = 0.64
-voice-ios minimum     = 0.65
-0.64 rejeté           → fallback ~0.84
+Résumé / prochaine étape  | Détails d’apprentissage
+Parcours A0 → A1          | dashboard + groupe actif
+                           | sticky / scroll interne
 ```
 
-Donc le comportement réellement entendu était proche de :
+Mobile :
 
 ```text
-Normal = 0.88
-Lent   = ~0.84
-```
-
-Build 26.2 utilise le plancher déjà autorisé par la couche voix :
-
-```text
-Normal = 0.88
-Lent   = 0.65
+Résumé
+↓
+Parcours compact
+↓
+Détails repliés
 ```
 
 Critères :
 
-- [x] `voice-ios.js` byte-identique ;
-- [x] `free-voice.js` byte-identique ;
-- [x] normal effectif 0.88 ;
-- [x] lent effectif 0.65 ;
-- [x] Session UX 5/5 reste valide ;
-- [x] Listening-rate smoke protège le rate final ;
-- [x] cache/version `v1.19.2 / Build 26.2` cohérents ;
-- [x] quality / Options / nav / Progression / Listening / Session UX / Real Life III / Build 26.1 verts ;
-- [x] même tribunal `main` vert ;
-- [x] Pages #100 SUCCESS.
+- [x] aucun clone des cartes pédagogiques ;
+- [x] wrapper historique repositionné via `display: contents` ;
+- [x] Details ouvert par défaut sur desktop ;
+- [x] Details `position: sticky` sur desktop ;
+- [x] dashboard Build 26.1 toujours présent ;
+- [x] Details replié par défaut sur mobile ;
+- [x] curriculum mobile reste compact **5 / 40** ;
+- [x] profil synthétique l8 conserve sa progression ;
+- [x] PR #44 : 9/9 workflows verts ;
+- [x] `main` : contrats verts ;
+- [x] Pages #101 SUCCESS.
 
 ---
 
-# Build 26.1 — état conservé
+# Build 26.2 — baseline conservée
+
+- clic `Détails d’apprentissage` déterministe ;
+- Listening effectif : **0.88 normal / 0.65 lent** ;
+- `voice-ios.js` / `free-voice.js` byte-identiques ;
+- aucune migration.
+
+# Build 26.1 — baseline conservée / gate terrain iPhone
 
 ## Voice Self-Playback
 
-Après une réponse reconnue, Free Voice peut proposer :
-
-```text
-🎧 Écoute-toi
-[ 🎙️ M’enregistrer pour me réécouter ]
-          ↓
-[ ▶ Réécouter ma voix ] [ ↻ Refaire ]
-```
-
-Le choix reste volontairement conservateur : la reconnaissance se termine **avant** l’ouverture de cette seconde prise locale.
-
-Contrat : local uniquement, aucune persistance, aucun upload, aucun effet sur Memory/Error/Mastery/Session, capture max 9 secondes, pistes micro stoppées, Blob URL révoquée, et reconnaissance pédagogique toujours utilisable si la capture échoue.
-
-## Learning Details Dashboard
-
-`Parcours → Détails d’apprentissage` reste regroupé par intention :
-
-```text
-🧠 Mémoire & révisions
-🎯 Maîtrise
-🎧 Compréhension orale
-🎭 Français réel
-🧩 A1 & rythme
-```
-
-Une seule famille détaillée est ouverte à la fois ; les cartes historiques restent les vrais nœuds DOM et toute future carte non classifiée tombe dans `Autres détails`.
+Après une réponse reconnue, Free Voice propose une **seconde prise locale volontaire** destinée à l’auto-écoute. Aucun upload, aucune persistance, aucun effet sur Memory/Error/Mastery/Session, capture max 9 secondes, pistes micro stoppées.
 
 ### Gate terrain restant
 
@@ -151,11 +140,31 @@ Une seule famille détaillée est ouverte à la fois ; les cartes historiques re
 
 La capture simultanée exacte du premier essai reste hors scope tant que cette coexistence n’est pas prouvée.
 
+## Learning Details Dashboard
+
+Familles conservées :
+
+```text
+🧠 Mémoire & révisions
+🎯 Maîtrise
+🎧 Compréhension orale
+🎭 Français réel
+🧩 A1 & rythme
+⋯ Autres détails
+```
+
 ---
 
 # v1.20.0 — Build 27 — Data & Recovery Hardening
 
-Sauvegarde/restauration, migrations versionnées, snapshot pré-migration, localStorage corrompu toléré, tests zéro-perte.
+**Prochain gros chantier après le gate iPhone.**
+
+- sauvegarde/restauration cohérente ;
+- migrations versionnées ;
+- snapshot avant migration ;
+- localStorage corrompu toléré ;
+- tests zéro-perte ;
+- rollback documenté.
 
 # v1.21.0 — Build 28 — iPhone / PWA / Accessibility Hardening
 
@@ -163,7 +172,7 @@ Safe areas, tactile, contraste, tailles, offline/install et vrais tests iPhone.
 
 # v1.22.0 — Build 29 — Architecture Hardening
 
-Découpage du noyau uniquement avec snapshots comparatifs.
+Découpage du noyau uniquement avec snapshots comparatifs ; pas de grande réécriture cosmétique du cœur.
 
 # V2.0.0 — Freeze / Release
 
@@ -182,11 +191,12 @@ voice-ios.js
 free-voice.js
 assets/LOGO.png
 assets/Favicon.png
-bottom navigation interaction baseline
+bottom navigation compatibility bus
 Progression UX Build 25
 Session UX Build 25.2
 Real Life III Build 26
 Voice Replay + Details Dashboard Build 26.1
+Click + Listening Rate Build 26.2
 ```
 
 # Easter egg réservé
