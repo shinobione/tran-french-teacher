@@ -1,219 +1,191 @@
 # French Trân’quille — ROADMAP
 
-> Document canonique pour le futur du projet.  
-> Le `README.md` décrit l’état actuel. `CHANGELOG.md` décrit ce qui est déjà livré.  
-> Cette roadmap décrit **ce qui vient ensuite, dans quel ordre, et avec quelles conditions de clôture**.
+> Document canonique du futur du projet.  
+> `README.md` = état courant. `CHANGELOG.md` = historique livré.  
+> Ici : **ordre, dépendances et critères de clôture**.
 
 ## Principes non négociables
 
 1. **Cible principale : Trân sur iPhone / Safari / PWA iOS.** Android et PC restent supportés.
-2. **0 € d’exploitation récurrente** tant qu’une décision explicite ne change pas cette règle : pas d’API payante, pas de backend obligatoire.
-3. **Vietnamien majoritaire au départ**, français augmenté progressivement selon les acquis réels, jamais seulement selon le numéro de leçon.
-4. **Oral prioritaire**, mais aucune prétention de mesurer une prononciation que le navigateur ne permet pas réellement d’observer.
-5. **Communication réelle > théorie scolaire.** Les règles grammaticales apparaissent parce qu’elles permettent de parler.
-6. **Aucun reset silencieux de progression.** Toute migration doit préserver les données locales ou documenter explicitement l’exception.
-7. **Un gros build = une intention principale claire.** Les hotfixes gardent le numéro de build et ajoutent `.1`, `.2`, etc.
-8. **Aucun merge important sans vrai Chrome headless vert.** Le test iPhone réel reste indispensable pour Safari/Siri.
-9. **Toute modification importante met à jour la documentation vivante** : README, CHANGELOG, ROADMAP si nécessaire, architecture/politique concernées.
+2. **0 € d’exploitation récurrente** tant qu’une décision explicite ne change pas cette règle.
+3. **Vietnamien majoritaire au départ**, français augmenté selon les acquis réels.
+4. **Oral prioritaire**, sans inventer une mesure phonétique non observable.
+5. **Communication réelle > théorie scolaire.**
+6. **Aucun reset silencieux de progression.**
+7. **Un gros build = une intention principale claire.** Hotfix : `Build X.1`, `X.2`, etc.
+8. **Aucun merge important sans vrai Chrome headless vert.** Safari réel reste obligatoire pour les fonctions iOS spécifiques.
+9. **README / CHANGELOG / ROADMAP / architecture sont synchronisés avec le code.**
 10. French Trân’quille reste une **PWA dédiée**, pas un clone de ChatGPT ni un jeu infantilisant.
 
 ---
 
-# État de référence
+# État de référence livré
 
-## v1.10.0 — Build 17 — LIVRÉ
+## v1.10.0 — Build 17 — ✅ PROD
 
 - 25 leçons / 148 éléments ;
-- Learning Memory + révision espacée ;
+- Learning Memory ;
 - Daily Coach ;
 - Mastery Engine ;
-- Scenario Lab : **12 situations / 36 tours** ;
-- scénarios déverrouillés selon les leçons réellement terminées ;
-- succès / échecs / aides reconnectés à Learning Memory ;
-- voix navigateur + fallback texte ;
-- profil vierge supporté : scénarios visibles mais verrouillés ;
-- CI avec **Chrome Home + Chrome Conversation** ;
+- Scenario Lab : 12 situations / 36 tours ;
+- Free Voice + fallback texte ;
+- Chrome Home + Conversation ;
 - GitHub Pages ;
-- documentation canonique ;
-- coût : **0 €**.
+- coût 0 €.
 
 ---
 
-# PHASE PWA-3B / PWA-4 — ADAPTATION + USAGE RÉEL
+# PHASE PWA-3B / ADAPTATION
 
 ## v1.9.0 — Build 16 — Mastery Engine — ✅ CLOS
 
-- [x] 4 étapes de maîtrise ;
-- [x] preuves Learning Memory obligatoires avant `Maîtrisé` ;
-- [x] estimation interne non assimilée au CECRL officiel ;
+- [x] 4 grandes étapes ;
+- [x] preuves mémoire avant `Maîtrisé` ;
+- [x] estimation interne non assimilée à une certification CECRL ;
 - [x] priorité suivante ;
-- [x] documentation canonique ;
+- [x] docs canoniques ;
 - [x] Chrome + Pages verts.
-
----
 
 ## v1.10.0 — Build 17 — Scenario Lab — ✅ CLOS
 
-### Livré
-
-12 scénarios, 3 tours chacun :
-
-1. café ;
-2. gare ;
-3. restaurant ;
-4. supermarché ;
-5. pharmacie ;
-6. problème dans l’appartement ;
-7. appel à Jerry ;
-8. arrivée en France ;
-9. rencontre avec des proches ;
-10. demander de l’aide ;
-11. rendez-vous ;
-12. petite conversation sociale.
-
-Total : **36 tours de dialogue**.
-
-### Clôture Build 17
-
-- [x] 12 scénarios présents et IDs uniques ;
-- [x] au moins 3 tours par scénario ;
-- [x] déverrouillage basé sur `completedLessons` ;
-- [x] aucun modèle révélé avant plusieurs échecs ;
-- [x] Learning Memory reçoit succès / échec / aide ;
-- [x] statistiques locales persistées ;
-- [x] Progression affiche les situations ;
-- [x] diagnostic Scenario Lab présent ;
-- [x] profil vierge supporté via `scenario-host.js` ;
-- [x] Home Build 16 toujours saine ;
-- [x] Chrome Home vert ;
-- [x] Chrome Conversation `?scenarioSmoke=1` vert ;
-- [x] README / ROADMAP / CHANGELOG / ARCHITECTURE synchronisés ;
-- [x] cache/version Build 17 synchronisés ;
-- [x] CI PR verte ;
-- [x] CI main verte ;
-- [x] GitHub Pages vert.
-
-### Non inclus volontairement
-
-- compréhension sémantique libre par IA ;
-- conversation générative illimitée ;
-- score de prononciation ;
-- calibration Siri spécifique ;
-- nouvelle extension du curriculum.
+- [x] 12 scénarios / 36 tours ;
+- [x] déverrouillage par leçons ;
+- [x] variantes acceptées ;
+- [x] indice puis modèle ;
+- [x] modèle compté comme aide ;
+- [x] Learning Memory alimentée ;
+- [x] stats locales ;
+- [x] profil vierge supporté ;
+- [x] Chrome Home + Conversation ;
+- [x] CI main + Pages verts.
 
 ---
 
-## v1.11.0 — Build 18 — Error Intelligence — 🔥 PROCHAIN
+## v1.11.0 — Build 18 — Error Intelligence — 🔥 EN COURS
 
 ### But
 
-Passer de « difficile/correct/facile » à une mémoire des **raisons observables pour lesquelles un acquis revient mal**, sans inventer un diagnostic linguistique que l’application ne peut pas prouver.
+Mémoriser **les difficultés observables** et leur répétition afin de mieux décider ce qui doit revenir, sans inventer de diagnostic grammatical ou phonétique.
 
-### Taxonomie V1 — preuves d’abord
+### Taxonomie V1
 
-Les premières catégories seront volontairement observables :
+```text
+retrieval-difficult
+text-mismatch
+scenario-miss
+assisted
+voice-unrecognized
+partial
+practice-miss
+repeated-miss
+```
 
-- **retrieval-difficult** — l’élément est évalué difficile en révision ;
-- **text-mismatch** — réponse texte différente de la cible ;
-- **scenario-miss** — réponse refusée dans un scénario ;
-- **assisted** — modèle nécessaire dans Scenario Lab ;
-- **voice-unrecognized** — le navigateur n’a pas reconnu la phrase attendue ;
-- **repeated-miss** — plusieurs échecs rapprochés sur le même élément ;
-- **partial** — réponse contenant une partie démontrable de la cible, quand cette information est disponible.
+Les catégories plus linguistiques (`article`, `négation`, `ordre des mots`, etc.) sont reportées tant qu’une comparaison entrée/cible ne permet pas de les prouver de manière fiable.
 
-Les catégories grammaticales (`article`, `négation`, `ordre des mots`, etc.) ne seront ajoutées que lorsqu’une comparaison entrée/cible permet de les établir avec assez de certitude. **Pas de pseudo-diagnostic.**
+### Architecture retenue
 
-### Livrables Build 18
+```text
+Learning Memory = quoi réviser et quand
+Error Intelligence = où / comment la difficulté a été observée
+Mastery Engine = degré global de consolidation
+Daily Coach = quoi faire maintenant
+```
 
-- stockage local versionné `french-tranquille:error-intelligence:v1` ;
-- historique compact par élément, avec limite de taille ;
-- compteurs par type d’erreur et par source ;
-- erreur dominante uniquement si elle est suffisamment répétée ;
-- détection de répétition / récence ;
-- carte Error Intelligence dans Progression ;
-- mini-bilan des difficultés récentes ;
-- priorité Daily Coach influencée par récence + répétition ;
-- pont vers Mastery Engine sans modifier les critères de certification inexistants ;
-- export JSON dédié ou extension sûre de la sauvegarde existante ;
-- diagnostic dans Réglages ;
-- CI avec contrat de stockage + Chrome dédié.
+### Livré sur branche Build 18
 
-### Critères de clôture Build 18
+- [x] stockage `french-tranquille:error-intelligence:v1` ;
+- [x] historique borné : 20 événements / élément, 120 récents globaux ;
+- [x] compteurs agrégés ;
+- [x] récence ;
+- [x] répétition sur fenêtre de 30 min ;
+- [x] récupération après réussite ;
+- [x] erreur dominante uniquement après répétition ;
+- [x] score de priorité interne ;
+- [x] focus ajouté à Daily Coach ;
+- [x] carte Error Intelligence dans Progression ;
+- [x] mini-bilan de session ;
+- [x] export JSON dédié ;
+- [x] diagnostic Réglages ;
+- [x] Free Voice → Learning Memory ;
+- [x] Free Voice → Error Intelligence ;
+- [x] erreurs techniques micro exclues de la mémoire linguistique ;
+- [x] Scenario Lab observé via ses sources Learning Memory ;
+- [x] rating Révision difficile exploitable ;
+- [x] README / CHANGELOG / ARCHITECTURE actualisés.
 
-- [ ] aucun événement d’erreur ne casse Learning Memory existante ;
-- [ ] taille de l’historique bornée ;
-- [ ] catégories fondées sur des preuves observables ;
-- [ ] Scenario Lab produit `miss` / `assisted` exploitables ;
-- [ ] Free Voice produit au minimum `voice-unrecognized` lorsque c’est réellement observable ;
-- [ ] révision difficile produit `retrieval-difficult` ;
-- [ ] Daily Coach peut remonter un élément récidiviste ;
-- [ ] Progression montre les difficultés sans stigmatiser ;
-- [ ] export/import ou export dédié validé ;
-- [ ] aucune régression des 25 leçons / 12 scénarios ;
+### À valider avant clôture
+
+- [ ] contrat CI Error Intelligence ;
+- [ ] limite de taille vérifiée automatiquement ;
+- [ ] absence de double comptage Free Voice ;
+- [ ] aucune régression Learning Memory ;
+- [ ] aucune régression 25 leçons / 12 scénarios ;
 - [ ] Chrome Home vert ;
 - [ ] Chrome Scenario Lab vert ;
-- [ ] Chrome Error Intelligence vert ;
-- [ ] README / ROADMAP / CHANGELOG / ARCHITECTURE synchronisés ;
-- [ ] CI PR + main + Pages verts.
+- [ ] Chrome Error Intelligence `?errorSmoke=1` vert ;
+- [ ] PR verte ;
+- [ ] merge ;
+- [ ] CI `main` verte ;
+- [ ] GitHub Pages vert ;
+- [ ] ROADMAP + CHANGELOG clôturés après preuve de prod.
 
 ---
 
 # PHASE PWA-2B — VOICE CALIBRATION
 
-## Build 18.x ou 19 selon disponibilité — Safari/Siri Calibration Gate
+## Safari/Siri Calibration Gate — dépendance externe
 
-**Cette étape dépend d’un vrai test sur l’iPhone de Trân. Elle ne sera pas simulée.**
+**Bloqué jusqu’au vrai test sur l’iPhone de Trân. Rien ne sera simulé.**
 
-Données nécessaires :
+À récolter :
 
 - phrase cible ;
 - transcription Safari ;
-- alternatives si disponibles ;
+- alternatives ;
 - nombre d’essais ;
 - faux refus ;
 - faux positifs.
 
-Après collecte :
+Puis seulement :
 
-- tolérances par type de phrase ;
-- variantes réellement observées ;
+- tolérances réelles ;
+- variantes observées ;
 - distinction phrase reconnue / prononciation correcte ;
 - aucun faux score phonétique.
+
+Ce gate peut devenir **Build 18.x** si le test arrive avant Build 19, ou être traité plus tard sans bloquer le curriculum.
 
 ---
 
 # PHASE PWA-4B — A1 CORE
 
-## v1.12.0 — Build 19 — Curriculum 26 → 40
+## v1.12.0 — Build 19 — Curriculum 26 → 40 — PROCHAIN APRÈS BUILD 18
 
-Axes prévus :
+Axes :
 
 - nombres 11 → 100 ;
-- dates / calendrier ;
-- heures plus complètes ;
-- jours / mois ;
+- dates, jours, mois ;
+- heures complètes ;
 - possessifs de base ;
-- présent `tu / il / elle / nous` dans des structures fréquentes ;
-- aller + infinitif, futur proche ;
-- venir de + infinitif simple ;
-- passé composé ultra-fréquent seulement après consolidation du présent ;
+- présent `tu / il / elle / nous` sur structures fréquentes ;
+- `aller + infinitif` — futur proche ;
+- `venir de + infinitif` simple ;
+- passé composé ultra-fréquent après consolidation du présent ;
 - transport / administration / rendez-vous ;
 - émotions et besoins ;
-- conversation avec Jerry et les proches.
+- situations avec Jerry et les proches.
 
-**Règle :** pas de chapitre de conjugaison hors-sol ; chaque structure vient d’une situation.
+**Règle :** aucune conjugaison hors-sol ; chaque structure est motivée par une situation.
 
 ---
 
 ## v1.13.0 — Build 20 — Listening Comprehension
 
-- Lucie lit une phrase ;
-- choix de sens ;
-- contraste entre phrases proches ;
+- phrase audio → choix de sens ;
+- contrastes proches ;
 - vitesse lente puis normale ;
-- mini-dialogues audio ;
-- répétition optionnelle ;
-- erreurs envoyées à Learning Memory / Error Intelligence.
+- mini-dialogues ;
+- erreurs envoyées à Learning Memory + Error Intelligence.
 
 ---
 
@@ -221,13 +193,13 @@ Axes prévus :
 
 Le ratio VI/FR dépendra :
 
-- maîtrise par étape ;
-- compréhension réussie ;
-- quantité d’indices ;
-- fragilités ;
-- difficulté du scénario.
+- Mastery ;
+- compréhension ;
+- indices nécessaires ;
+- Error Intelligence ;
+- difficulté de la situation.
 
-Pas de bascule brutale : le vietnamien recule seulement quand les preuves d’apprentissage le permettent.
+Le vietnamien recule uniquement quand les preuves le permettent.
 
 ---
 
@@ -250,29 +222,27 @@ Pas de bascule brutale : le vietnamien recule seulement quand les preuves d’ap
 
 ### Registres
 
-- français neutre ;
-- français oral courant ;
+- neutre ;
+- oral courant ;
 - familier raisonnable ;
-- différence phrase correcte / phrase naturelle.
+- phrase correcte vs phrase naturelle.
 
 ---
 
-# PHASE PWA-6 — HARDENING / V2
+# PHASE PWA-6 — V2 / HARDENING
 
 ## v2.0.0 — objectif A1 Core stable
 
-Pour clôturer V2 :
-
 - curriculum A0 → A1 cohérent ;
 - Scenario Lab stable ;
-- mémoire et erreurs versionnées ;
+- mémoire + erreurs versionnées ;
 - sauvegarde/import robuste ;
-- PWA installable iPhone ;
+- PWA iPhone validée ;
 - tests Safari réels ;
 - Chrome/Android sans régression majeure ;
 - offline testé ;
-- documentation complète ;
-- aucun secret/API client ;
+- docs complètes ;
+- aucune clé/API client ;
 - aucune dépendance payante obligatoire.
 
 ---
@@ -282,16 +252,16 @@ Pour clôturer V2 :
 - vrai avatar Lucie ;
 - sons de validation discrets ;
 - fiches imprimables ;
-- export de bilan lisible ;
+- bilan lisible/exportable ;
 - admin local données ;
 - mode 5 minutes ;
-- mode écoute/déplacement ;
-- statistiques hebdomadaires locales ;
-- solution multi-appareil gratuite si sûre.
+- écoute/déplacement ;
+- statistiques hebdomadaires ;
+- multi-appareil gratuit si une solution sûre existe.
 
 ---
 
-# IDÉES EXPRESSÉMENT REPORTÉES
+# REPORTÉ EXPLICITEMENT
 
 - backend payant ;
 - OpenAI API / Realtime payant ;
@@ -305,4 +275,4 @@ Pour clôturer V2 :
 
 # EASTER EGG RÉSERVÉ
 
-**Leçon 69** 😇🍌🍑 — vocabulaire adulte/intime, consentement, registres de langue et expressions de couple. Elle reste verrouillée jusqu’à ce que le niveau permette de la traiter proprement.
+**Leçon 69** 😇🍌🍑 — vocabulaire adulte/intime, consentement, registres de langue et expressions de couple. Verrouillée jusqu’à ce que le niveau permette de la traiter correctement.
