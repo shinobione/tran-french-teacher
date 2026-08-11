@@ -5,7 +5,7 @@ if (PROGRESSION_CURRICULUM) {
   const DEBUG_KEY = 'tran-french-teacher:debug-fr:v1';
   const isDebug = () => localStorage.getItem(DEBUG_KEY) === '1';
   const T = (vi, fr) => isDebug() ? fr : vi;
-  const esc = (value = '') => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const esc = (value = '') => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]));
   const params = new URLSearchParams(location.search);
   const smokeMode = params.get('progressionSmoke');
   let curriculumExpanded = smokeMode === 'expanded';
@@ -178,7 +178,23 @@ if (PROGRESSION_CURRICULUM) {
     });
   }
 
+  function toggleDetails(details) {
+    if (!details) return;
+    details.open = !details.open;
+    details.dataset.progressDetailsManualToggle = details.open ? 'open' : 'closed';
+    const layout = details.closest('.progress-layout');
+    if (layout) layout.dataset.progressDetailsOpen = details.open ? '1' : '0';
+    schedule();
+  }
+
   document.addEventListener('click', event => {
+    const summary = event.target.closest('.progress-ux-details > summary');
+    if (summary) {
+      event.preventDefault();
+      toggleDetails(summary.parentElement);
+      return;
+    }
+
     const current = event.target.closest('[data-progress-current]');
     if (current) {
       event.preventDefault();
@@ -210,7 +226,17 @@ if (PROGRESSION_CURRICULUM) {
       setTimeout(() => {
         decorate();
         const layout = document.querySelector('.screen-progress .progress-layout');
-        if (layout) layout.dataset.progressionSmoke = smokeMode;
+        if (layout) {
+          layout.dataset.progressionSmoke = smokeMode;
+          if (smokeMode === 'details-click') {
+            const details = layout.querySelector('.progress-ux-details');
+            if (details) {
+              details.open = false;
+              details.querySelector('summary')?.click();
+              layout.dataset.progressDetailsClickSmoke = details.open ? '1' : '0';
+            }
+          }
+        }
       }, 120);
     });
   }
@@ -219,10 +245,11 @@ if (PROGRESSION_CURRICULUM) {
   requestSmokeNavigation();
 
   window.FrenchTranquilleProgressionUX = {
-    version: '1.18.0',
-    build: 25,
+    version: '1.19.2',
+    build: '26.2',
     decorate,
     metrics,
+    toggleDetails,
     setCurriculumExpanded(value) { curriculumExpanded = Boolean(value); schedule(); }
   };
 }
