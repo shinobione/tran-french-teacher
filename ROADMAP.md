@@ -44,7 +44,7 @@ Preuve production Build 25.2 : commit `49d866bed59bb0cb3268e1675225a4811f6c595f`
 
 ---
 
-# v1.19.0 — Build 26 — Real Life French III — PROCHAIN
+# v1.19.0 — Build 26 — Real Life French III — CANDIDAT / EN COURS
 
 ## Intention
 
@@ -54,29 +54,29 @@ Objectif : **moins de roulettes, plus de compréhension du français oral réel,
 
 ## Principes
 
-- le français oral naturel peut apparaître côté interlocuteur : `T’es prête ?`, `J’sais pas`, `Y a pas…` ;
+- français oral naturel possible côté interlocuteur : `T’es prête ?`, `J’sais pas`, `Y a pas…` ;
 - Trân peut répondre en français standard ;
 - plusieurs formulations simples équivalentes peuvent être acceptées ;
 - aucune pseudo-IA locale qui “devine” arbitrairement le sens ;
 - les réponses acceptées restent explicitement définies ;
-- les références Memory doivent résoudre exactement un acquis ;
-- le Scenario Engine reste propriétaire de ses stats/persistance ;
-- Session UX 25.2 doit continuer à borner une session à **1 situation**.
+- chaque référence Memory avancée doit résoudre exactement un acquis ;
+- Scenario Engine reste propriétaire de ses stats/persistance ;
+- Session UX 25.2 continue à borner une session à **1 situation**.
 
-## Pack III cible
+## Pack III candidat
 
-8 situations / 24 tours prévues autour de :
+8 situations / 24 tours :
 
-1. comprendre Jerry quand il parle vite ;
-2. futur proche : `Je vais appeler Jerry.` ;
-3. passé récent : `Je viens de rentrer.` ;
-4. passé composé : `J’ai mangé.` ;
-5. mouvement : `Je suis rentrée à la maison.` ;
-6. administratif : `Pouvez-vous m’expliquer ?` ;
-7. émotion / besoin : `Je suis inquiète.` / `J’ai besoin de parler.` ;
-8. couple : `Tu me manques.`.
+1. comprendre Jerry quand il parle vite — dès l20 ;
+2. futur proche `Je vais appeler Jerry.` — l35 ;
+3. passé récent `Je viens de rentrer.` — l36 ;
+4. passé composé `J’ai mangé.` — l37 ;
+5. mouvement `Je suis rentrée à la maison.` — l38 ;
+6. administratif `Pouvez-vous m’expliquer ?` — l39 ;
+7. émotion/besoin `Je suis inquiète.` / `J’ai besoin de parler.` / `Tu me manques.` — l40 ;
+8. mini-échange de couple multi-acquis — l40.
 
-Le pack préparatoire historique `real-life-data-3.js` / `real-life-coach.js` doit être **porté sur la baseline 25.2**, pas mergé tel quel depuis son ancienne branche.
+Scenario candidat attendu : **36 situations / 108 tours**.
 
 ## UX
 
@@ -86,17 +86,19 @@ Dans les scènes Pack III seulement, Lucie peut afficher discrètement :
 
 Pas de nouveau réglage, mode ou bouton.
 
+Le catalogue conserve la limite de **6 situations ouvertes visibles** avant `Voir d’autres situations`.
+
 ## Critères de clôture Build 26
 
-- version `v1.19.0 / Build 26` et cache cohérents ;
+- version `v1.19.0 / Build 26` et cache `1.19.0-b26-real-life-3` cohérents ;
 - 8 nouvelles situations / 24 tours ;
-- Scenario total attendu : **36 situations / 108 tours** si aucun doublon supprimé ;
-- aucun clone d’une situation existante ;
-- toutes les références `memoryQueries` résolvent exactement 1 acquis ;
-- les réponses semi-libres restent déterministes et testables ;
-- Pack III disponible selon les leçons requises ;
-- catalogue visible toujours limité par la logique existante ;
-- Session UX 25.2 reste fonctionnelle : objectif `1 situation`, fin et sortie ;
+- Scenario total **36 / 108** ;
+- aucun ID de scénario dupliqué ;
+- 15 résolutions Memory avancées attendues et **0 ambiguïté** ;
+- réponses semi-libres déterministes et testables ;
+- déblocage l20 → l35…l40 conforme ;
+- catalogue visible limité ;
+- Session UX 25.2 intacte : objectif 1 situation, fin et sortie ;
 - profil ancien utilisateur / l8 intact ;
 - voix, reconnaissance, logo, favicon byte-identiques ;
 - quality / Options / nav / Progression / Listening-rate / Session UX verts ;
