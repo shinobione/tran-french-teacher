@@ -1,0 +1,420 @@
+/* French Trân'quille — v1.7.1 Build 14
+   UX / Visual pass: Conversation, Révision, Learning Memory.
+   Purposefully restrained: richer hierarchy, not a neon redesign. */
+
+:root{
+  --page-ink:#080d18;
+  --panel-deep:#111827;
+  --panel-warm:#171a2c;
+  --panel-soft:#121d2d;
+  --mint-2:#93eec9;
+  --lilac-2:#bda5f5;
+  --plum:#8f73d8;
+  --coral:#ee9a97;
+  --amber:#e8c47d;
+  --cream:#f2ede4;
+}
+
+/* ----- Global palette: slightly warmer, less clinical ----- */
+body{
+  background:
+    radial-gradient(circle at 13% -8%,rgba(85,200,181,.13),transparent 31%),
+    radial-gradient(circle at 88% -6%,rgba(143,115,216,.16),transparent 34%),
+    radial-gradient(circle at 52% 104%,rgba(238,154,151,.055),transparent 28%),
+    linear-gradient(180deg,#0b1220 0%,#080d18 72%,#080c15 100%);
+}
+
+.card{
+  background:linear-gradient(155deg,rgba(25,32,50,.96),rgba(13,23,37,.96));
+  border-color:rgba(190,199,222,.14);
+  box-shadow:0 18px 50px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.018);
+}
+
+.pill{
+  border-color:rgba(189,165,245,.24);
+  background:linear-gradient(180deg,rgba(143,115,216,.13),rgba(22,31,49,.92));
+  color:#d2c9ed;
+}
+
+.icon-btn{
+  background:linear-gradient(180deg,#151e30,#101827);
+  border-color:rgba(189,165,245,.19);
+}
+
+.primary{
+  background:linear-gradient(135deg,#f4efe7,#e8e0d5);
+  box-shadow:0 9px 24px rgba(0,0,0,.16);
+}
+
+.secondary{
+  background:linear-gradient(180deg,rgba(30,39,59,.96),rgba(20,30,46,.96));
+  border-color:rgba(189,165,245,.22);
+}
+
+.bottom-nav{
+  background:rgba(7,12,22,.965);
+  border-top-color:rgba(189,165,245,.12);
+}
+
+.bottom-nav button.active{color:#f4efe7}
+.bottom-nav button.active b{color:var(--mint-2)}
+
+/* ----- Conversation: turn the page into a real practice space ----- */
+.screen-conversation .narrow{
+  width:min(1040px,100%);
+  display:grid;
+  grid-template-columns:minmax(0,1.13fr) minmax(300px,.87fr);
+  gap:16px;
+  align-items:start;
+}
+
+.screen-conversation #free-voice-card{
+  grid-column:1;
+  grid-row:1 / span 2;
+  min-height:460px;
+  position:relative;
+  overflow:hidden;
+  border-color:rgba(147,238,201,.22)!important;
+  background:
+    radial-gradient(circle at 88% 8%,rgba(147,238,201,.10),transparent 28%),
+    radial-gradient(circle at 10% 96%,rgba(143,115,216,.10),transparent 33%),
+    linear-gradient(160deg,rgba(23,32,48,.98),rgba(11,21,34,.98))!important;
+}
+
+.screen-conversation #free-voice-card::before{
+  content:"";
+  position:absolute;
+  inset:0 auto 0 0;
+  width:3px;
+  background:linear-gradient(180deg,var(--mint-2),rgba(189,165,245,.75),transparent 92%);
+}
+
+.screen-conversation #free-voice-card .free-voice-head{
+  padding-bottom:13px;
+  margin-bottom:14px;
+  border-bottom:1px solid rgba(190,199,222,.10);
+}
+
+.screen-conversation #free-voice-card .free-voice-head>span:last-child{
+  width:50px;
+  height:50px;
+  display:grid;
+  place-items:center;
+  border-radius:16px;
+  background:rgba(147,238,201,.08);
+  border:1px solid rgba(147,238,201,.18);
+  font-size:1.35rem;
+}
+
+body .screen-conversation #free-voice-card .free-voice-badge{
+  background:rgba(147,238,201,.09)!important;
+  border-color:rgba(147,238,201,.26)!important;
+  color:#b9f2d8!important;
+}
+
+body .screen-conversation #free-voice-card .free-voice-prompt{
+  margin:18px 0!important;
+  padding:20px!important;
+  border-radius:18px!important;
+  border:1px solid rgba(189,165,245,.18)!important;
+  background:linear-gradient(145deg,rgba(11,20,33,.95),rgba(28,28,47,.92))!important;
+  color:#f2eef7!important;
+  font-size:1.02rem;
+  line-height:1.62!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.018);
+}
+
+body .screen-conversation #free-voice-card .free-voice-prompt small{
+  display:inline-flex;
+  margin-top:12px;
+  color:#8fa1ba;
+  font-size:.72rem;
+}
+
+body .screen-conversation #free-voice-card .free-voice-actions{
+  gap:10px!important;
+}
+
+body .screen-conversation #free-voice-card .free-voice-actions button{
+  background:linear-gradient(180deg,#18263a,#121d2d)!important;
+  border-color:rgba(190,199,222,.16)!important;
+}
+
+body .screen-conversation #free-voice-card .free-voice-actions .free-mic{
+  background:linear-gradient(135deg,#f4efe7,#e6ddd1)!important;
+  color:#09131f!important;
+  min-height:62px!important;
+  box-shadow:0 12px 28px rgba(0,0,0,.18);
+}
+
+body .screen-conversation #free-voice-card .free-voice-result{
+  border-left:3px solid var(--lilac-2);
+  background:rgba(143,115,216,.08)!important;
+}
+
+body .screen-conversation #free-voice-card .free-voice-feedback{
+  border-left:3px solid var(--amber);
+  background:rgba(232,196,125,.075)!important;
+  color:#e7d19e!important;
+}
+
+body .screen-conversation #free-voice-card .free-voice-feedback.ok{
+  border-left-color:var(--mint-2);
+  background:rgba(147,238,201,.075)!important;
+  color:#b8efd7!important;
+}
+
+.screen-conversation .conversation-card{
+  grid-column:2;
+  position:relative;
+  overflow:hidden;
+  border-color:rgba(189,165,245,.19);
+  background:
+    radial-gradient(circle at 100% 0,rgba(143,115,216,.09),transparent 34%),
+    linear-gradient(160deg,rgba(26,29,48,.96),rgba(14,23,37,.96));
+}
+
+.screen-conversation .conversation-card::before{
+  content:"";
+  position:absolute;
+  left:0;right:0;top:0;
+  height:3px;
+  background:linear-gradient(90deg,var(--lilac-2),rgba(238,154,151,.72),transparent 88%);
+}
+
+.screen-conversation .conversation-card .luc-row{
+  margin-bottom:16px;
+}
+
+.screen-conversation .conversation-card>p{
+  font-size:1.03rem;
+  color:#edf0f7;
+  padding:14px 15px;
+  border-radius:15px 15px 15px 5px;
+  background:rgba(189,165,245,.075);
+  border:1px solid rgba(189,165,245,.13);
+}
+
+.screen-conversation .conversation-card .hint{
+  background:rgba(232,196,125,.06);
+  border:1px solid rgba(232,196,125,.12);
+  color:#b9ad93;
+}
+
+.screen-conversation .conversation-card input{
+  background:#0b1422;
+  border-color:rgba(189,165,245,.20);
+}
+
+.screen-conversation .conversation-card input:focus{
+  border-color:rgba(189,165,245,.55);
+  box-shadow:0 0 0 3px rgba(143,115,216,.08);
+}
+
+.screen-conversation .quiet{
+  grid-column:2;
+  margin-bottom:0;
+  background:rgba(17,26,41,.72);
+  box-shadow:none;
+  border-style:dashed;
+}
+
+/* ----- Review: make the recall card the visual focus ----- */
+.screen-review .narrow{
+  width:min(820px,100%);
+}
+
+.screen-review .flashcard{
+  position:relative;
+  overflow:hidden;
+  min-height:510px;
+  padding:clamp(22px,4vw,38px);
+  justify-content:flex-start;
+  background:
+    radial-gradient(circle at 92% 7%,rgba(232,196,125,.10),transparent 26%),
+    radial-gradient(circle at 8% 100%,rgba(143,115,216,.12),transparent 31%),
+    linear-gradient(155deg,rgba(27,30,48,.98),rgba(11,21,34,.98));
+  border-color:rgba(232,196,125,.16);
+}
+
+.screen-review .flashcard::after{
+  content:"↻";
+  position:absolute;
+  right:-18px;
+  bottom:-55px;
+  font-size:11rem;
+  line-height:1;
+  color:rgba(255,255,255,.022);
+  pointer-events:none;
+}
+
+.screen-review .memory-review-head{
+  width:100%;
+  margin-bottom:34px;
+  position:relative;
+  z-index:1;
+}
+
+.screen-review .flashcard .prompt{
+  margin:0 auto 8px;
+  color:#9cabc0;
+  letter-spacing:.02em;
+}
+
+.screen-review .flashcard h2{
+  width:min(580px,100%);
+  margin:12px auto 8px;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(2rem,6vw,3.15rem);
+  line-height:1.12;
+  color:#f6f0e8;
+}
+
+.screen-review .memory-due{
+  margin:8px auto 26px!important;
+  color:#8e9db2!important;
+}
+
+.screen-review .flashcard .primary{
+  width:min(430px,100%);
+  margin:34px auto 0;
+  min-height:58px;
+}
+
+.screen-review .flashcard .answer{
+  width:min(600px,100%);
+  margin:24px auto 0;
+  padding:24px 18px 0;
+  border-top-color:rgba(189,165,245,.20);
+  position:relative;
+  z-index:1;
+}
+
+.screen-review .flashcard .answer>span{
+  color:#f4efe7;
+  font-size:clamp(1.8rem,5vw,2.55rem);
+}
+
+.screen-review .ratings{
+  width:min(600px,100%);
+  margin:18px auto 0;
+  gap:10px;
+  position:relative;
+  z-index:1;
+}
+
+.screen-review .ratings button{
+  min-height:56px;
+  font-weight:750;
+  background:#121c2c;
+  transition:transform .15s ease,border-color .15s ease,background .15s ease;
+}
+
+.screen-review .ratings button:hover{transform:translateY(-1px)}
+.screen-review .ratings button:nth-child(1){border-color:rgba(238,154,151,.28);background:rgba(238,154,151,.065)}
+.screen-review .ratings button:nth-child(2){border-color:rgba(232,196,125,.28);background:rgba(232,196,125,.06)}
+.screen-review .ratings button:nth-child(3){border-color:rgba(147,238,201,.28);background:rgba(147,238,201,.06)}
+
+/* ----- PWA-3 Memory: pedagogical dashboard instead of technical addon ----- */
+.memory-home-card,
+.memory-progress-card,
+.memory-backup-card{
+  position:relative;
+  overflow:hidden;
+}
+
+.memory-home-card{
+  border-color:rgba(189,165,245,.18)!important;
+  background:
+    radial-gradient(circle at 96% 7%,rgba(147,238,201,.08),transparent 27%),
+    linear-gradient(155deg,rgba(27,29,48,.96),rgba(13,23,37,.96))!important;
+}
+
+.memory-home-card::before,
+.memory-progress-card::before{
+  content:"";
+  position:absolute;
+  left:0;top:0;bottom:0;
+  width:3px;
+  background:linear-gradient(180deg,var(--lilac-2),var(--mint-2),transparent 90%);
+}
+
+.memory-home-due{
+  background:linear-gradient(145deg,rgba(238,154,151,.11),rgba(143,115,216,.10))!important;
+  border-color:rgba(238,154,151,.18)!important;
+  color:#f2d2cf;
+}
+
+.memory-metrics{
+  gap:9px!important;
+}
+
+.memory-metrics>div{
+  background:rgba(9,17,29,.58)!important;
+  border-color:rgba(190,199,222,.10)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.015);
+}
+
+.memory-metrics>div:nth-child(1){border-top:2px solid rgba(238,154,151,.58)!important}
+.memory-metrics>div:nth-child(2){border-top:2px solid rgba(232,196,125,.58)!important}
+.memory-metrics>div:nth-child(3){border-top:2px solid rgba(189,165,245,.58)!important}
+.memory-metrics>div:nth-child(4){border-top:2px solid rgba(147,238,201,.58)!important}
+
+.memory-progress-card{
+  background:
+    radial-gradient(circle at 92% 8%,rgba(143,115,216,.085),transparent 30%),
+    linear-gradient(155deg,rgba(25,31,49,.97),rgba(13,23,37,.97))!important;
+}
+
+.memory-fragile-list>span{
+  background:rgba(9,17,29,.58)!important;
+  border:1px solid rgba(238,154,151,.11);
+}
+
+.memory-backup-card{
+  border-color:rgba(232,196,125,.17)!important;
+  background:linear-gradient(155deg,rgba(30,31,43,.96),rgba(14,23,36,.96))!important;
+}
+
+.learned-list>div{
+  background:linear-gradient(145deg,rgba(16,27,43,.96),rgba(12,22,35,.96))!important;
+  border:1px solid rgba(190,199,222,.08);
+}
+
+.memory-new{background:rgba(130,151,178,.08)!important}
+.memory-fragile{background:rgba(238,154,151,.08)!important;border-color:rgba(238,154,151,.24)!important;color:#f2b9b6!important}
+.memory-learning{background:rgba(189,165,245,.08)!important;border-color:rgba(189,165,245,.24)!important;color:#d6c9f4!important}
+.memory-solid{background:rgba(147,238,201,.08)!important;border-color:rgba(147,238,201,.24)!important;color:#b7edd5!important}
+
+/* ----- Responsive ----- */
+@media(max-width:860px){
+  .screen-conversation .narrow{
+    width:min(680px,100%);
+    grid-template-columns:1fr;
+  }
+  .screen-conversation #free-voice-card,
+  .screen-conversation .conversation-card,
+  .screen-conversation .quiet{
+    grid-column:1;
+    grid-row:auto;
+  }
+  .screen-conversation #free-voice-card{min-height:0}
+  .screen-conversation .quiet{margin-bottom:16px}
+  .screen-review .flashcard{min-height:460px}
+}
+
+@media(max-width:520px){
+  .screen-conversation #free-voice-card,
+  .screen-conversation .conversation-card{
+    border-radius:20px;
+  }
+  body .screen-conversation #free-voice-card .free-voice-prompt{padding:16px!important}
+  .screen-review .flashcard{
+    min-height:430px;
+    padding:20px 17px;
+  }
+  .screen-review .memory-review-head{margin-bottom:24px}
+  .screen-review .ratings{grid-template-columns:1fr;gap:8px}
+  .screen-review .ratings button{min-height:48px}
+  .memory-metrics{grid-template-columns:1fr 1fr!important}
+}
