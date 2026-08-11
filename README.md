@@ -1,323 +1,166 @@
 # French Trân’quille
 
-PWA de français pensée pour **Trân**, vietnamienne débutante absolue au départ (**A0**), avec pédagogie majoritairement vietnamienne au début puis introduction progressive du français réellement utile.
+PWA de français pensée pour **Trân**, vietnamienne débutante au départ (**A0**), avec vietnamien comme langue de soutien puis davantage de français à mesure que les acquis deviennent réellement utilisables.
 
-## Version actuelle
+## Candidat actuel
 
-- **v1.11.0**
-- **Build 18**
-- Phase : **PWA-3B / Error Intelligence**
-- curriculum : **25 leçons / 148 éléments**
+- **v1.12.0**
+- **Build 19 — A1 Core**
+- curriculum cible : **40 leçons / 238 éléments**
+- ajout Build 19 : **15 leçons / 90 éléments**
 - Scenario Lab : **12 situations / 36 tours**
-- parcours : **A0 → premières fondations A1**
+- Learning Memory + Daily Coach + Mastery + Error Intelligence
 - coût d’exploitation : **0 €**
+- cible principale : **iPhone / Safari / PWA iOS**
 
-## Documentation canonique
+> Build 19 reste un candidat tant que PR, CI `main` et GitHub Pages ne sont pas tous verts. Le statut de production vit dans `CHANGELOG.md` et `ROADMAP.md`.
 
-- [`ROADMAP.md`](./ROADMAP.md) — futur, ordre, dépendances, critères de clôture ;
-- [`CHANGELOG.md`](./CHANGELOG.md) — historique des builds ;
-- [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) — modules, stockage et ordre runtime ;
-- [`docs/BUILD-POLICY.md`](./docs/BUILD-POLICY.md) — règles de livraison ;
-- PWA : `https://shinobione.github.io/tran-french-teacher/`.
+## Liens projet
 
----
-
-# Build 18 — Error Intelligence
-
-Build 18 répond à une question simple :
-
-> **Pourquoi Lucie décide-t-elle qu’un élément mérite de revenir ?**
-
-Learning Memory savait déjà qu’un élément était nouveau, fragile, en cours ou solide. Error Intelligence ajoute une couche de **preuves observables** : où l’élément a posé problème, si cela se répète, si Trân a eu besoin d’un modèle, et si elle a ensuite récupéré.
-
-## Règle fondamentale : pas de pseudo-diagnostic
-
-French Trân’quille ne prétend pas savoir qu’une erreur vient d’un article, d’une négation ou d’un ordre des mots simplement parce que la phrase cible contient ces structures.
-
-Build 18 commence par des catégories démontrables :
-
-```text
-retrieval-difficult
-text-mismatch
-scenario-miss
-assisted
-voice-unrecognized
-partial
-practice-miss
-repeated-miss
-```
-
-Exemples :
-
-- **retrieval-difficult** : une carte de révision est explicitement notée difficile ;
-- **scenario-miss** : une réponse est refusée dans Scenario Lab ;
-- **assisted** : le modèle a dû être utilisé pour continuer ;
-- **voice-unrecognized** : le navigateur a produit une transcription qui ne correspond pas à la cible ;
-- **partial** : une partie significative de la cible est réellement présente dans la réponse texte ;
-- **repeated-miss** : l’élément échoue plusieurs fois dans une fenêtre rapprochée.
-
-`voice-unrecognized` signifie **« la phrase cible n’a pas été reconnue par le navigateur »**, pas **« mauvaise prononciation »**.
+- [`ROADMAP.md`](./ROADMAP.md)
+- [`CHANGELOG.md`](./CHANGELOG.md)
+- [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md)
+- [`docs/BUILD-POLICY.md`](./docs/BUILD-POLICY.md)
+- [`docs/BUILD-19-A1-CORE.md`](./docs/BUILD-19-A1-CORE.md)
+- PWA : `https://shinobione.github.io/tran-french-teacher/`
 
 ---
 
-## Stockage Error Intelligence
+# Build 19 — A1 Core
 
-Clé locale :
+Build 19 étend le parcours sans réécrire le moteur historique.
 
 ```text
-french-tranquille:error-intelligence:v1
+25 leçons / 148 éléments
+        ↓
++ 15 leçons / 90 éléments
+        ↓
+40 leçons / 238 éléments
 ```
 
-Pour chaque élément, le moteur conserve notamment :
+Les nouvelles leçons sont chargées par `curriculum-stage3.js` avant le rerender curriculum existant. Les 25 anciennes leçons restent inchangées.
 
-- compteurs par type ;
-- nombre total de difficultés ;
-- récupérations ;
-- série actuelle d’erreurs ;
-- dernière difficulté ;
-- dernière récupération ;
-- dernier type ;
-- dernière source ;
-- petit historique d’événements.
+## Leçons 26 → 40
 
-### Taille bornée
+26. **Nombres 11 → 20** ;
+27. **Nombres 20 → 100 & prix** ;
+28. **Jours de la semaine** ;
+29. **Mois & dates** ;
+30. **Heure plus précise** — et quart, et demie, moins le quart, midi, minuit ;
+31. **Possessifs** — mon/ma/mes, ton/ta/tes ;
+32. **Présent avec tu** ;
+33. **Présent avec il / elle** ;
+34. **Présent avec nous** ;
+35. **Futur proche** — aller + infinitif ;
+36. **Passé récent** — venir de + infinitif ;
+37. **Passé composé fréquent avec avoir** ;
+38. **Passé composé avec être** et formes féminines utiles à Trân ;
+39. **Administration & documents** ;
+40. **Émotions, besoins & proches** — dont `Tu me manques`.
 
-Afin de ne pas laisser `localStorage` grossir indéfiniment :
+Chaque leçon Build 19 contient exactement **6 éléments**, une intro VI/FR, une mini-structure utile et une situation finale.
 
-- maximum **20 événements par élément** ;
-- maximum **120 événements récents globaux**.
+## Philosophie grammaticale
 
-Les compteurs agrégés restent conservés même lorsque les événements les plus anciens sortent de la fenêtre détaillée.
+On ne crée pas de chapitre « conjugaison du présent » isolé.
+
+La progression est volontairement :
+
+```text
+je déjà connu
+→ tu
+→ il / elle
+→ nous
+→ futur proche
+→ passé récent
+→ passé composé fréquent
+```
+
+Les formes arrivent parce qu’elles permettent de parler, pas parce qu’un programme scolaire exige un tableau.
 
 ---
 
-# Récence, répétition et récupération
+# A1 Core Mastery
 
-Le moteur tient compte de trois choses différentes.
+`mastery-stage3.js` ajoute un **cinquième palier** indépendant des quatre étapes historiques.
 
-### Récence
+Il suit les leçons 26–40 avec :
 
-Une difficulté survenue il y a quelques minutes pèse davantage qu’un ancien incident.
+- leçons terminées ;
+- éléments connus ;
+- éléments réellement révisés ;
+- éléments solides ;
+- fragilités.
 
-### Répétition
+Le statut `Maîtrisé` exige notamment :
 
-Deux difficultés rapprochées sur le même élément constituent une preuve plus forte qu’une erreur isolée.
+- 15/15 leçons terminées ;
+- ≥ 95 % des items connus ;
+- ≥ 70 % avec preuve de révision ;
+- ≥ 55 % solides ;
+- ≤ 20 % fragiles.
 
-### Récupération
-
-Une réussite après des difficultés remet `errorStreak` à zéro et augmente le compteur de récupération.
-
-Le but n’est donc pas d’accumuler une liste permanente de « fautes de Trân », mais de détecter **ce qui mérite de revenir maintenant** puis de laisser la difficulté perdre du poids lorsqu’elle disparaît.
-
----
-
-# Daily Coach + Error Intelligence
-
-Build 18 enrichit la carte **Séance du jour**.
-
-Lorsqu’un élément présente une priorité suffisamment forte, une ligne dédiée peut apparaître avec :
-
-- la phrase concernée ;
-- le type de preuve dominante si elle est réellement répétée ;
-- la récence ;
-- un accès direct à Révision.
-
-Le calcul combine :
-
-```text
-récence
-+ répétition
-+ nombre d’incidents
-+ nécessité d’assistance
-- récupérations
-```
-
-Error Intelligence n’écrase pas Daily Coach : il lui fournit un **signal supplémentaire**.
+Ce score reste **un indicateur pédagogique interne**, jamais une certification CECRL.
 
 ---
 
-# Progression — Error Intelligence
+# Mémoire et adaptation
 
-Progression reçoit une carte dédiée affichant :
+Les nouveaux IDs Stage 3 rejoignent le curriculum global ; ils deviennent donc automatiquement visibles par :
 
-- difficultés observées sur 24 h ;
-- éléments récurrents ;
-- modèles utilisés ;
-- incidents voix ;
-- récupérations ;
-- points prioritaires à retravailler ;
-- mini-bilan de la session courante.
+- **Learning Memory** ;
+- **Free Voice** ;
+- **Error Intelligence** ;
+- **Daily Coach** ;
+- **Mastery Stage 3**.
 
-L’interface évite volontairement le vocabulaire culpabilisant : il s’agit de **points à retravailler**, pas d’un tableau rouge de fautes.
+Aucune nouvelle clé apprenant n’est nécessaire et aucun reset n’est prévu.
 
----
+## Learning Memory
 
-# Free Voice → Learning Memory
+Clé : `french-tranquille:learning-memory:v1`
 
-Build 18 corrige aussi une dette historique.
+États : Nouveau / Fragile / En cours / Solide.
 
-Le Guided Free Voice validait les réponses localement, mais ses tentatives n’alimentaient pas encore directement Learning Memory.
+## Error Intelligence
 
-Désormais :
+Clé : `french-tranquille:error-intelligence:v1`
 
-```text
-Free Voice
-   ↓
-phrase reconnue / non reconnue
-   ↓
-Learning Memory.recordPractice()
-   ↓
-Error Intelligence.recordAttempt()
-```
+Build 18 reste intact : historique borné **20 événements / élément**, **120 récents globaux**, récence, répétition, récupération et classification fondée sur des preuves observables.
 
-Sources utilisées :
+## Scenario Lab
 
-```text
-free-voice-voice
-free-voice-text
-```
+Clé : `french-tranquille:scenarios:v1`
 
-Le mode texte permet également de reconnaître une réponse **partielle** lorsque l’intersection de mots avec la cible est objectivement suffisante.
-
-Une erreur d’autorisation micro ou un navigateur sans reconnaissance vocale **n’est pas enregistrée comme erreur d’apprentissage** : ce serait une erreur technique, pas une preuve linguistique.
+Les 12 scénarios Build 17 restent présents. Build 19 n’ajoute volontairement pas de nouveaux scénarios : son intention principale est le curriculum A1 Core.
 
 ---
 
-# Scenario Lab → Error Intelligence
+# Voix
 
-Scenario Lab alimentait déjà Learning Memory avec :
+Toujours 0 € :
 
-```text
-scenario-success
-scenario-miss
-scenario-assisted
-```
+- `speechSynthesis` ;
+- `SpeechRecognition` / `webkitSpeechRecognition` quand disponible ;
+- fallback texte permanent ;
+- Free Voice → Learning Memory + Error Intelligence.
 
-Error Intelligence observe les changements de Learning Memory et transforme les deux derniers en preuves :
+La calibration Safari/Siri reste un **gate séparé** jusqu’au test réel sur l’iPhone de Trân.
 
-```text
-scenario-miss → erreur en situation
-scenario-assisted → modèle nécessaire
-```
-
-Les succès ultérieurs peuvent compter comme récupération.
+French Trân’quille ne transforme jamais « la transcription ne correspond pas » en faux verdict phonétique.
 
 ---
 
-# Révision → Error Intelligence
-
-Lorsqu’un élément est évalué **Difficile** dans la révision intelligente, Learning Memory enregistre un rating `0`.
-
-Build 18 l’interprète comme :
-
-```text
-retrieval-difficult
-```
-
-C’est une preuve valide : l’utilisatrice a explicitement indiqué que le rappel était difficile.
-
----
-
-# Export local
-
-Réglages reçoit un export Error Intelligence séparé :
-
-```text
-french-tranquille-errors-YYYY-MM-DD.json
-```
-
-Format :
-
-```text
-french-tranquille-error-intelligence
-version 1
-```
-
-Il contient uniquement les données locales Error Intelligence.
-
-Aucun envoi réseau n’est effectué.
-
-La sauvegarde pédagogique générale Build 13 reste inchangée pour éviter de casser son format historique dans le même build.
-
----
-
-# Build 17 — Scenario Lab
-
-Scenario Lab reste disponible avec :
-
-- 12 situations ;
-- 36 tours ;
-- déverrouillage selon les leçons terminées ;
-- indices ;
-- modèles après plusieurs erreurs ;
-- stats locales ;
-- synthèse vocale ;
-- SpeechRecognition lorsqu’exposé ;
-- fallback texte ;
-- pont Learning Memory.
-
-Clé :
-
-```text
-french-tranquille:scenarios:v1
-```
-
----
-
-# Build 16 — Mastery Engine
-
-Le Mastery Engine distingue :
-
-```text
-leçon terminée
-≠ acquis connu
-≠ compétence consolidée
-```
-
-Étapes suivies :
-
-1. Survie A0 ;
-2. Vie quotidienne A0 ;
-3. Fondations A1 ;
-4. Premiers échanges A1.
-
-Les niveaux A0 / A0+ / A1- / A1 affichés sont des **indicateurs internes**, jamais une certification CECRL.
-
-Build 18 ne modifie pas les seuils de maîtrise : Error Intelligence est exposé comme signal complémentaire pour les futurs builds adaptatifs.
-
----
-
-# Learning Memory
-
-Clé :
-
-```text
-french-tranquille:learning-memory:v1
-```
-
-États :
-
-```text
-Nouveau
-Fragile
-En cours
-Solide
-```
-
-Learning Memory reste la source de vérité pour l’espacement des révisions. Error Intelligence explique davantage **la nature observable et la récence des difficultés**.
-
----
-
-# Architecture runtime
-
-Ordre actuel :
+# Runtime Build 19
 
 ```text
 app.js
 ↓
-curriculum-stage2.js
+curriculum-stage2.js       # leçons 16–25
 ↓
-stage2-boot.js
+curriculum-stage3.js       # leçons 26–40
+↓
+stage2-boot.js             # un seul rerender pour Stage 2 + 3
 ↓
 debug / voice
 ↓
@@ -327,6 +170,8 @@ daily-coach.js
 ↓
 mastery-engine.js
 ↓
+mastery-stage3.js
+↓
 scenario-data.js
 ↓
 scenario-host.js
@@ -334,110 +179,53 @@ scenario-host.js
 scenario-engine.js
 ↓
 error-intelligence.js
+↓
+build-meta.js              # source finale de version runtime
 ```
 
 `app.js` historique reste sanctuarisé.
 
-Voir [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md).
-
 ---
 
-# Données locales principales
+# Qualité Build 19
 
-```text
-francais-avec-luc:learner:v1
-french-tranquille:learning-memory:v1
-french-tranquille:scenarios:v1
-french-tranquille:error-intelligence:v1
-tran-french-teacher:debug-fr:v1
-```
+Le workflow est normalisé autour de l’état courant plutôt que d’empiler un `grep` différent pour chaque build depuis la V1.
 
-Aucun Build 18 ne force de reset.
+Contrats :
 
----
+- syntaxe de tous les modules ;
+- 15 leçons Stage 3 ;
+- 6 items par leçon ;
+- 90 items Stage 3 ;
+- IDs curriculum uniques ;
+- non-régression Scenario Lab ;
+- non-régression Error Intelligence ;
+- câblage PWA/cache/version ;
+- Mastery A1 Core ;
+- Chrome Home : 40 leçons + leçon 40 ;
+- Chrome Scenario ;
+- Chrome Error Intelligence ;
+- Chrome A1 Core / Progression.
 
-# Voix — limitation assumée
-
-French Trân’quille utilise :
-
-- `speechSynthesis` ;
-- `SpeechRecognition` / `webkitSpeechRecognition` quand disponible ;
-- fallback texte permanent.
-
-Il peut mesurer :
-
-- transcription obtenue ;
-- cible reconnue ou non ;
-- nombre d’essais ;
-- répétition d’un échec de reconnaissance.
-
-Il ne peut pas déduire proprement :
-
-- qualité du R ;
-- U / OU ;
-- nasalisation ;
-- accent ;
-- précision phonétique réelle.
-
-La calibration Safari/Siri spécifique reste donc un **gate nécessitant un test réel iPhone**.
+Voir [`docs/BUILD-19-A1-CORE.md`](./docs/BUILD-19-A1-CORE.md).
 
 ---
 
 # DEBUG FR
 
-Le DEBUG FR reste local au navigateur de contrôle :
+Le DEBUG FR reste local au navigateur de Jerry. L’appareil de Trân reste en vietnamien.
 
-- appareil de Trân inchangé ;
-- activation dans Réglages ;
-- raccourci `?debug=fr`.
-
----
-
-# Qualité / CI
-
-Build 18 doit passer :
-
-```text
-syntax checks
-→ anciens guards Builds 12–17
-→ contrat Error Intelligence
-→ limites de stockage
-→ Free Voice / Memory bridge
-→ Chrome Home
-→ Chrome Scenario Lab
-→ Chrome Error Intelligence
-→ merge
-→ CI main
-→ GitHub Pages
-```
-
-Le smoke test Error Intelligence utilise `?errorSmoke=1` pour générer uniquement dans le navigateur CI quelques preuves locales contrôlées puis ouvrir Progression.
-
-Voir [`docs/BUILD-POLICY.md`](./docs/BUILD-POLICY.md).
+Raccourci : `?debug=fr`.
 
 ---
 
 # Roadmap
 
-👉 [`ROADMAP.md`](./ROADMAP.md)
+Après Build 19 :
 
-Après Build 18 :
-
-- Safari/Siri Calibration Gate lorsqu’un vrai test iPhone est disponible ;
-- **Build 19 — Curriculum 26→40 / A1 Core** ;
 - **Build 20 — Listening Comprehension** ;
 - **Build 21 — Adaptive Language Ratio** ;
+- Safari/Siri Calibration Gate dès que le test réel iPhone est disponible ;
 - puis Real Life French et durcissement V2.
 
----
-
-# Historique
-
-👉 [`CHANGELOG.md`](./CHANGELOG.md)
-
-Derniers jalons :
-
-- Build 15 — 25 leçons / 148 éléments + Daily Coach ;
-- Build 16 — Mastery Engine + gouvernance documentaire ;
-- Build 17 — Scenario Lab ;
-- **Build 18 — Error Intelligence**.
+Le détail et les critères de clôture sont dans [`ROADMAP.md`](./ROADMAP.md).
