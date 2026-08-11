@@ -87,7 +87,7 @@ jobs:
               && grep -q 'data-session-listening-done="1"' "$file" \
               && grep -q 'data-session-complete="listening"' "$file" \
               && grep -q 'session-complete-mode' "$file" \
-              && grep -q 'data-listening-slow-rate="0.64"' "$file"; then
+              && grep -q 'data-listening-slow-rate="0.65"' "$file"; then
               passed=1
               break
             fi
