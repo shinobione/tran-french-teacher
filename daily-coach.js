@@ -64,6 +64,9 @@ if (DAILY_CURRICULUM) {
       else main.appendChild(card);
     }
     const p = plan();
+    const signature = [p.lesson?.id || 'done',p.mem.due.length,p.mem.fragile.length,p.knownCount,p.reviewedToday,p.practicedToday,isDebug()?1:0].join(':');
+    if (card.dataset.dailySignature === signature) return;
+    card.dataset.dailySignature = signature;
     const lessonText = p.lesson ? `${p.lesson.icon} ${T('Bài','Leçon')} ${p.lesson.number}` : T('Parcours terminé','Parcours terminé');
     card.innerHTML = `
       <div class="daily-head"><div><span class="pill">PWA-3 • TODAY</span><h2>☀️ ${esc(T('Buổi học hôm nay','Séance du jour'))}</h2></div><span class="daily-time">≈ 10–15 min</span></div>
@@ -86,7 +89,6 @@ if (DAILY_CURRICULUM) {
   function injectProgress() {
     const column = document.querySelector('.screen-progress .progress-layout > div:first-child');
     if (!column || column.querySelector('.daily-rhythm-card')) return;
-    const p = plan();
     const card = document.createElement('section');
     card.className = 'card daily-rhythm-card';
     card.innerHTML = `
@@ -125,7 +127,12 @@ if (DAILY_CURRICULUM) {
     }
   });
 
-  const observer = new MutationObserver(() => queueMicrotask(decorate));
+  let scheduled = false;
+  const observer = new MutationObserver(() => {
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => { scheduled = false; decorate(); });
+  });
   const app = document.getElementById('app');
   if (app) observer.observe(app,{childList:true,subtree:true});
   decorate();
