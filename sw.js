@@ -1,6 +1,6 @@
-const CACHE='tran-french-teacher-v1.17.4-b24.4-mobile-polish';
+const CACHE='tran-french-teacher-v1.17.5-b24.5-nav-state-sync';
 const V='1.17.0-b24';
-const UX='1.17.4-b24.4';
+const UX='1.17.5-b24.5';
 const CORE=[
   './','./index.html',
   `./styles.css?v=${V}`,`./brand.css?v=${V}`,`./learning-memory.css?v=${V}`,`./visual-pass.css?v=${V}`,`./lucie-avatar.css?v=${V}`,
