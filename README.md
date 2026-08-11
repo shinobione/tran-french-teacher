@@ -2,119 +2,108 @@
 
 PWA de français pensée pour **Trân**, avec priorité à l’oral, au français utile dans la vraie vie et à une interface simple sur iPhone.
 
-## Version production
+## Version candidate
 
-- **v1.18.2**
-- **Build 25.2 — Session Goals / Milestones / App Delight**
-- statut : **PROD / CLOS**
-- baseline UX : **Build 25 — Progression UX / Progressive Disclosure**
-- calibration Listening : **Build 25.1 — 0.88 normal / 0.64 lent**
-- baseline fonctionnelle historique : **v1.17.0 — Build 24 — Real Life French II**
+- **v1.19.0**
+- **Build 26 — Real Life French III**
+- statut : **CANDIDAT / EN COURS**
+- baseline production : **v1.18.2 — Build 25.2 — Session Goals / Milestones / App Delight**
+- calibration Listening : **0.88 normal / 0.64 lent**
 - curriculum : **40 leçons / 241 éléments**
-- Scenario : **28 situations / 84 tours**
+- Scenario candidat : **36 situations / 108 tours**
 - coût : **0 €**
 
-## Ce que Build 25.2 change
+## Build 26 — objectif
 
-Une activité ne ressemble plus à un tunnel sans fin.
+Enrichir `Pratiquer → Parler français` sans ajouter de nouveau bouton : davantage de français oral naturel côté interlocuteur, des réponses un peu moins récitées et plusieurs formulations simples explicitement acceptées.
 
-Contrat commun :
+Le moteur reste **déterministe et local**. Il ne prétend pas comprendre librement n’importe quelle phrase.
 
-```text
-AVANT   → objectif court
-PENDANT → progression visible
-FIN     → réussite explicite
-APRÈS   → sortie logique en 1 tap
-```
+### Pack Real Life III
 
-Sessions standard :
+8 nouvelles situations / 24 tours :
 
-- Listening : **5 questions** ;
-- Révision mémoire : **jusqu’à 5 éléments prioritaires** ;
-- Scenario : **1 situation complète** ;
-- Vocal guidé : **5 réponses reconnues** ;
-- pratique guidée historique : **1 réponse correcte** ;
-- leçon : fin enregistrée confirmée après sauvegarde.
+- 👂 comprendre `T’es prête ?`, `J’sais pas…`, `Y a pas…` ;
+- 📆 futur proche : `Je vais appeler Jerry.` ;
+- 🏠 passé récent : `Je viens de rentrer.` ;
+- 🍜 passé composé : `J’ai mangé.` ;
+- 🚪 mouvement au passé : `Je suis rentrée à la maison.` ;
+- 📄 administration : `Pouvez-vous m’expliquer ?` ;
+- 💬 émotion / besoin : `Je suis inquiète.` / `J’ai besoin de parler.` ;
+- ❤️ petit échange de couple : `Tu me manques.` et réemploi de plusieurs acquis.
 
-Après une session terminée, `Retour à Aujourd’hui` est l’action principale. Continuer reste volontaire et secondaire.
+La première situation est accessible à partir de la leçon 20 ; les suivantes se débloquent avec les leçons 35 à 40.
 
-## Pratiquer → Parler français
+## Réponses avec ses mots
 
-L’écran ne superpose plus tous les moteurs. Il ouvre un hub simple :
+Dans le Pack III, Lucie peut rappeler discrètement :
 
-```text
-Recommandé maintenant
-[ Situation réelle • ≈ 3 min ]
+> Tu peux répondre avec tes mots. Une phrase simple qui exprime la bonne idée suffit.
 
-Autres façons
-[ Répondre à l’oral ]
-[ Pratique guidée ]
-```
+Cela signifie **plusieurs réponses prévues acceptables**, pas une validation IA floue.
 
-Une fois un mode choisi, un seul moteur domine l’écran.
+## Memory safety
 
-## Home / Séance du jour
+Les nouveaux acquis avancés sont résolus depuis le curriculum réellement chargé. Une requête doit produire **exactement un acquis**. Zéro résultat ou plusieurs résultats = contrat CI rouge.
 
-`Séance du jour` limite le flux principal à **2 actions**. Les activités supplémentaires restent accessibles via `Voir les autres activités`.
+## Session UX conservée
 
-## App Delight
-
-Succès premium et court : barre à 100 %, coche, glow mint/lilas, pulse discret et transition < 1 seconde. `prefers-reduced-motion` est respecté.
-
-Pas de son forcé, XP, monnaie, classement ni pluie de confettis.
-
-## Milestones
-
-Clé indépendante :
+Build 25.2 reste propriétaire de l’expérience de session :
 
 ```text
-french-tranquille:milestones:v1
+1 situation
+→ progression des tours
+→ fin explicite
+→ Retour à Aujourd’hui
 ```
 
-Elle ne modifie aucune donnée pédagogique. Les acquis déjà atteints à sa première installation sont silencieusement baselinés afin d’éviter une avalanche rétroactive.
+Le Pack III n’ajoute ni menu ni écran technique.
 
-## Listening
+## Listening / voix
 
-Calibration production :
+Calibration inchangée :
 
 ```text
 normal = 0.88
 lent   = 0.64
 ```
 
-`voice-ios.js` reste inchangé.
+`voice-ios.js` et `free-voice.js` restent byte-identiques.
 
-## Progression UX
+## CI candidate
 
-`Parcours` reste compact : 5 leçons visibles par défaut, 40 accessibles à la demande, détails Memory/Mastery repliables.
+Nouveau workflow **Build 26 Real Life French III smoke** :
 
-## Validation production
+- l20 : 1 scène Pack III ouverte ;
+- l35 : 2 scènes ouvertes ;
+- l40 : les 8 scènes ouvertes ;
+- Scenario total **36 / 108** ;
+- 15 résolutions Memory avancées ;
+- **0 résolution ambiguë** ;
+- maximum 6 situations ouvertes visibles dans le catalogue ;
+- branding / voix sanctuarisés.
 
-Commit production Build 25.2 : `49d866bed59bb0cb3268e1675225a4811f6c595f`.
-
-- 7 workflows déclenchés sur ce SHA ;
-- aucun workflow en échec ;
-- GitHub Pages **SUCCESS** ;
-- Progression UX smoke **SUCCESS** ;
-- Session UX smoke + quality / Options / nav-mobile / Listening-rate obligatoires.
+Les contrats quality / Options / nav-mobile / Progression UX / Listening-rate / Session UX restent obligatoires.
 
 ## Sanctuaires
 
 ```text
 francais-avec-luc:learner:v1
+Learning Memory / Scenario / Listening state
 assets/LOGO.png
 assets/Favicon.png
 voice-ios.js
 free-voice.js
-curriculum / Learning Memory / Scenario / Listening state
+Progression UX Build 25
+Session UX Build 25.2
 ```
 
 ## Suite
 
-1. **v1.19.0 — Build 26 — Real Life French III** — PROCHAIN.
-2. Build 27 — Data & Recovery.
-3. Build 28 — iPhone/PWA/Accessibility.
+1. **Build 26 — Real Life French III** — EN COURS.
+2. Build 27 — Data & Recovery Hardening.
+3. Build 28 — iPhone / PWA / Accessibility Hardening.
 4. Build 29 — Architecture Hardening.
 5. V2.0.0 — Freeze / Release.
 
-Voir `ROADMAP.md`, `CHANGELOG.md`, `docs/ARCHITECTURE.md`, `docs/BUILD-25-2-SESSION-UX.md`.
+Voir `ROADMAP.md`, `CHANGELOG.md`, `docs/ARCHITECTURE.md`, `docs/BUILD-26-REAL-LIFE-FRENCH-III.md`.
