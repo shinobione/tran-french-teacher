@@ -38,8 +38,6 @@
 
   function schedule(){if(scheduled)return;scheduled=true;requestAnimationFrame(()=>{scheduled=false;decorate()})}
 
-  // Window capture runs before the Session UX document handler. Reset a completed
-  // Scenario to its list before leaving, so the next visit opens the practice hub.
   window.addEventListener('click',event=>{
     if(event.target.closest?.('[data-session-home]')&&document.querySelector('.scenario-done')){
       document.querySelector('.scenario-done [data-scenario-list]')?.click();
@@ -73,16 +71,37 @@
   const app=document.getElementById('app');if(app)new MutationObserver(schedule).observe(app,{childList:true,subtree:true});
   new MutationObserver(schedule).observe(document.documentElement,{attributes:true,attributeFilter:['data-session-practice-mode']});
 
-  // Listening renders outside #app and replaces the overlay's innerHTML after each
-  // answer/next action. Wake the main Session UX only for those overlay mutations;
-  // otherwise its 5-question counter would stay frozen at the opening baseline.
+  function reconcileLateListeningBaseline(){
+    const overlay=document.querySelector('.listening-overlay');
+    const feedback=overlay?.querySelector('.listening-feedback');
+    const api=window.FrenchTranquilleSessionUX;
+    const session=api?.state?.().listeningSession;
+    const engine=window.FrenchTranquilleListening?.state?.();
+    if(!overlay||!feedback||!session||session.lateBaselineReconciled||!engine)return;
+    const attempts=Number(engine.totals?.attempts||0);
+    const correct=Number(engine.totals?.correct||0);
+    if(attempts===Number(session.baselineAttempts||0)){
+      session.baselineAttempts=Math.max(0,Number(session.baselineAttempts||0)-1);
+      if(feedback.classList.contains('ok')&&correct===Number(session.baselineCorrect||0)){
+        session.baselineCorrect=Math.max(0,Number(session.baselineCorrect||0)-1);
+      }
+      session.lateBaselineReconciled=true;
+      document.documentElement.dataset.sessionListeningBaselineReconciled='1';
+    }
+  }
+
+  // Listening lives outside #app and replaces its innerHTML after every answer.
+  // Reconcile a possible first-answer race, then wake Session UX for the new totals.
   new MutationObserver(mutations=>{
     const listeningChanged=mutations.some(m=>{
       const target=m.target?.nodeType===1?m.target:null;
       if(target?.closest?.('.listening-overlay'))return true;
       return [...m.addedNodes,...m.removedNodes].some(node=>node?.nodeType===1&&(node.matches?.('.listening-overlay')||node.querySelector?.('.listening-overlay')));
     });
-    if(listeningChanged)window.FrenchTranquilleSessionUX?.schedule?.();
+    if(listeningChanged){
+      reconcileLateListeningBaseline();
+      window.FrenchTranquilleSessionUX?.schedule?.();
+    }
   }).observe(document.body,{childList:true,subtree:true});
 
   schedule();smokeHook();
