@@ -107,8 +107,7 @@ if (PROGRESSION_CURRICULUM) {
       if (child.parentElement === column) body.appendChild(child);
     });
 
-    const count = body.children.length;
-    details.dataset.progressDetailCards = String(count);
+    details.dataset.progressDetailCards = String(body.children.length);
   }
 
   function compactCurriculum(layout, m) {
@@ -160,6 +159,9 @@ if (PROGRESSION_CURRICULUM) {
     const column = layout.querySelector(':scope > div:first-child');
     if (!column) return;
     const m = metrics();
+    layout.dataset.progressCurrentLesson = m.lesson?.id || '';
+    layout.dataset.progressCompleted = String(m.completedCount);
+    layout.dataset.progressKnown = String(m.known);
     ensureOverview(column);
     const details = ensureDetails(column);
     collectSecondaryCards(column, details);
