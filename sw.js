@@ -1,12 +1,12 @@
-const CACHE='tran-french-teacher-v1.15.0-b22';
-const V='1.15.0-b22';
+const CACHE='tran-french-teacher-v1.16.0-b23';
+const V='1.16.0-b23';
 const CORE=[
   './','./index.html',
   `./styles.css?v=${V}`,`./brand.css?v=${V}`,`./learning-memory.css?v=${V}`,
   `./visual-pass.css?v=${V}`,`./lucie-avatar.css?v=${V}`,
   `./curriculum-stage2.css?v=${V}`,`./curriculum-stage3.css?v=${V}`,
   `./daily-coach.css?v=${V}`,`./mastery-engine.css?v=${V}`,`./mastery-stage3.css?v=${V}`,
-  `./scenario-engine.css?v=${V}`,`./error-intelligence.css?v=${V}`,
+  `./scenario-engine.css?v=${V}`,`./real-life-ux.css?v=${V}`,`./error-intelligence.css?v=${V}`,
   `./listening-engine.css?v=${V}`,`./language-ratio.css?v=${V}`,`./ux-shell.css?v=${V}`,
   `./progress-safety.js?v=${V}`,`./app.js?v=${V}`,
   `./curriculum-stage2.js?v=${V}`,`./curriculum-stage3.js?v=${V}`,`./stage2-boot.js?v=${V}`,
@@ -14,7 +14,8 @@ const CORE=[
   `./learning-memory.js?v=${V}`,`./error-intelligence.js?v=${V}`,
   `./language-ratio-core.js?v=${V}`,`./language-ratio.js?v=${V}`,
   `./daily-coach.js?v=${V}`,`./mastery-engine.js?v=${V}`,`./mastery-stage3.js?v=${V}`,
-  `./scenario-data.js?v=${V}`,`./scenario-host.js?v=${V}`,`./scenario-engine.js?v=${V}`,
+  `./scenario-data.js?v=${V}`,`./real-life-data.js?v=${V}`,`./scenario-host.js?v=${V}`,
+  `./scenario-engine.js?v=${V}`,`./real-life-ux.js?v=${V}`,
   `./listening-data.js?v=${V}`,`./listening-engine.js?v=${V}`,`./ux-shell.js?v=${V}`,
   `./build-meta.js?v=${V}`,`./manifest.webmanifest?v=${V}`,
   `./assets/LOGO.png?v=${V}`,`./assets/Favicon.png?v=${V}`,'./assets/icon-192.webp'

@@ -5,119 +5,99 @@
 ## Principes non négociables
 
 1. iPhone / Safari / PWA iOS = cible principale.
-2. L’application doit être utilisable par une personne peu à l’aise avec l’informatique.
-3. 0 € d’exploitation récurrente tant qu’une décision explicite ne change pas cette règle.
-4. Vietnamien comme soutien ; français augmenté selon des preuves d’apprentissage.
+2. Interface utilisable sans connaissances techniques.
+3. 0 € d’exploitation récurrente sauf décision explicite.
+4. Vietnamien comme soutien ; français augmenté selon les preuves.
 5. Oral prioritaire, sans faux diagnostic phonétique.
 6. Communication réelle > théorie scolaire.
-7. **Aucun reset silencieux et aucune migration sans smoke sur données anciennes simulées.**
-8. Un gros build = une intention principale ; hotfix = `.1`, `.2`, etc.
-9. Aucun merge important sans Chrome headless vert ; Safari réel reste requis pour iOS spécifique.
+7. Aucun reset silencieux ; toute migration garde un smoke ancien utilisateur.
+8. Un gros build = une intention principale.
+9. Chrome headless obligatoire avant merge important.
 10. README / CHANGELOG / ROADMAP / ARCHITECTURE synchronisés.
-11. PWA dédiée, pas clone de chatbot ni gamification agressive.
+11. Pas de gamification agressive ni clone de chatbot.
 12. Un nouveau moteur n’obtient pas automatiquement une nouvelle entrée de navigation.
 
 ---
 
 # Baseline production — v1.15.0 Build 22
 
-- Curriculum A0 → A1 Core : **40 leçons / 241 éléments audités** ;
-- Learning Memory ;
-- Daily Coach ;
-- Mastery + A1 Core ;
-- Scenario Lab ;
-- Error Intelligence ;
-- Free Voice ;
-- Listening ;
-- Adaptive Language Ratio ;
-- UX apprenante : **Aujourd’hui / Pratiquer / Parcours** ;
+- **40 leçons / 241 éléments** ;
+- Learning Memory ; Daily Coach ; Mastery ; Scenario ; Error ; Listening ; Adaptive Language ;
+- UX : **Aujourd’hui / Pratiquer / Parcours** ;
 - DEBUG FR local ;
-- coût : **0 €**.
+- progression protégée ;
+- voix iPhone et reconnaissance vocale baseline validée ;
+- coût 0 €.
 
-Trân utilise déjà l’application autour de la leçon 8. Sa reconnaissance vocale iPhone et la voix de Lucie constituent une baseline réelle validée : ne pas les modifier sans problème reproductible.
+## Builds 16 → 22
 
----
-
-# Phases récentes
-
-## Build 16 — Mastery Engine — ✅ CLOS
-## Build 17 — Scenario Lab — ✅ CLOS
-## Build 18 — Error Intelligence — ✅ CLOS
-## Build 19 — A1 Core — ✅ CLOS
-## Build 20 — Listening Comprehension — ✅ INTÉGRÉ AU RUNTIME
-## Build 21 — Adaptive Language Ratio — ✅ INTÉGRÉ AU RUNTIME
-## Build 22 — UX Foundation & Runtime Integrity — ✅ CLOS
-
-### Preuves de clôture Build 22
-
-- PR #16 verte ;
-- smoke Home UX vert ;
-- smoke « Trân leçon 8 » zéro-perte vert ;
-- branding + voix byte-identiques ;
-- runtime **40 / 241** vérifié ;
-- Scenario / Error / Listening / Adaptive Language non régressés ;
-- merge `main` : `2c961ed5f0e36f378dc5ffa272f6eda83646e3d6` ;
-- CI `main` run #59 : SUCCESS ;
-- GitHub Pages run #75 : SUCCESS.
+- Build 16 — Mastery Engine — ✅ CLOS
+- Build 17 — Scenario Lab — ✅ CLOS
+- Build 18 — Error Intelligence — ✅ CLOS
+- Build 19 — A1 Core — ✅ CLOS
+- Build 20 — Listening — ✅ INTÉGRÉ
+- Build 21 — Adaptive Language — ✅ INTÉGRÉ
+- Build 22 — UX Foundation & Runtime Integrity — ✅ CLOS
 
 ---
 
-# v1.16.0 — Build 23 — Real Life French I — 🔜 PROCHAIN
+# v1.16.0 — Build 23 — Real Life French I — 🔥 EN COURS
 
-## Quotidien avec Jerry
+## Intention
 
-Objectif : transformer les acquis déjà connus en **mini-situations de vraie vie** directement utiles à Trân.
+Faire de **Pratiquer → Parler français** un entraînement qui ressemble à la vraie vie de Trân, sans ajouter un nouvel écran principal.
 
-Build 23 doit produire de la valeur dès son niveau actuel. Les situations les plus simples doivent donc fonctionner avec les acquis des premières leçons au lieu d’attendre la fin du parcours.
+## Pack I — codé
 
-## UX
+6 situations / 18 tours :
 
-Aucun nouveau bouton dans le menu du bas.
+1. Jerry parle trop vite — requis `l2` ;
+2. Jerry présente Trân à quelqu’un — `l3` ;
+3. prendre un café avec Jerry — `l4` ;
+4. parler de ses goûts — `l5` ;
+5. faire un petit achat — `l7` ;
+6. trouver un lieu avec Jerry — `l8`.
 
-Build 23 vivra derrière **Pratiquer**, soit comme sélection automatique de situations dans Conversation, soit comme entrée contextualisée dans la Practice Sheet si cela reste plus simple que le moteur historique.
+## UX Scenario — codée
 
-Le nom technique « Real Life French » n’a pas besoin d’être exposé à Trân.
+- [x] situations personnelles disponibles remontées en premier ;
+- [x] badge `Ta vraie vie` ;
+- [x] titre apprenant `Parler en situation` au lieu de `Scenario Lab` ;
+- [x] seulement 2 futures situations verrouillées visibles par défaut ;
+- [x] bouton pour dévoiler le reste ;
+- [x] aucun nouveau bouton dans le menu Build 22.
 
-## Pack I — situations prévues
+## Pédagogie
 
-- retrouver Jerry et le saluer ;
-- se présenter à quelqu’un avec lui ;
-- demander de répéter ;
-- demander de parler plus lentement ;
-- commander une boisson ;
-- dire ce qu’elle aime / n’aime pas ;
-- comprendre ou donner un petit prix ;
-- demander où se trouve un lieu ;
-- dire qu’elle n’a pas compris ;
-- petit trajet / rendez-vous simple.
+- [x] réponses obligatoires limitées aux acquis des leçons requises ;
+- [x] premier raté → indice historique ;
+- [x] blocage → modèle historique ;
+- [x] Memory `scenario-success / miss / assisted` conservée ;
+- [x] clavier + reconnaissance existants conservés ;
+- [x] aucune modification du moteur vocal ;
+- [x] même clé Scenario existante.
 
-## Contraintes pédagogiques
+## Protection
 
-- aucune réponse obligatoire ne doit dépendre d’un élément non appris ;
-- chaque situation déclare ses prérequis ;
-- les situations se débloquent automatiquement ;
-- premier raté → indice ;
-- blocage persistant → modèle court ;
-- succès et difficultés alimentent Memory / Error ;
-- Adaptive Language module la quantité de vietnamien ;
-- voix existante réutilisée sans recalibrage ;
-- progression actuelle de Trân intacte.
-
-## Tests prévus
-
-- profil synthétique leçon 8 : pack de situations déjà utilisables ;
-- profil débutant : uniquement situations réellement accessibles ;
-- aucun reset de l’ancienne progression ;
-- voix/free-voice hashes inchangés sauf build vocal dédié ;
-- nouvelle capacité utilisable depuis le shell Build 22 ;
-- Chrome Conversation + Practice ;
-- PR → main → Pages.
+- [x] ancienne progression inchangée ;
+- [x] logo/favicon inchangés ;
+- [x] voice/free-voice inchangés ;
+- [ ] smoke leçon 8 zéro-perte sur head final ;
+- [ ] smoke Real Life : 6 scénarios présents ;
+- [ ] profil leçon 8 : 5 scénarios du pack déjà ouverts, le sixième (`l8`) encore verrouillé ;
+- [ ] vue Conversation : scénarios personnels en premier et futurs condensés ;
+- [ ] Scenario total = 18 situations / 54 tours ;
+- [ ] non-régression Error / Listening / Adaptive ;
+- [ ] PR verte ;
+- [ ] `main` vert ;
+- [ ] Pages verte ;
+- [ ] docs release / CLOS.
 
 ---
 
-# v1.17.0 — Build 24 — Real Life French II
+# v1.17.0 — Build 24 — Real Life French II — PROCHAIN
 
-Déplacements, gare, téléphone, rencontres avec les proches, repas, logement et premières conversations plus longues.
+Déplacements, gare, téléphone, rencontres avec les proches, repas, logement et premières conversations plus longues. Les nouveaux scénarios devront continuer à se débloquer par acquis et rester derrière **Pratiquer**.
 
 ---
 
@@ -129,15 +109,13 @@ Problèmes quotidiens, émotions, explications, français oral courant vs forme 
 
 # V2.0.0 — Hardening
 
-- parcours A0→A1 cohérent ;
 - UX apprenante stabilisée ;
-- adaptation vérifiable ;
 - migrations versionnées ;
-- sauvegarde/restore robustes ;
+- sauvegarde/restore robuste ;
 - offline/PWA ;
 - iPhone réel ;
+- dette `app.js` traitée dans un build dédié avec comparaison d’état ;
 - nettoyage des scripts/workflows temporaires ;
-- dette `app.js` évaluée dans un build dédié avec migration comparative ;
 - documentation finale.
 
 ---

@@ -4,7 +4,23 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ## [Unreleased]
 
-- prochain jalon : **v1.16.0 — Build 23 — Real Life French I**.
+### v1.16.0 — Build 23 — Real Life French I — candidat
+
+- ajout de `real-life-data.js` : **6 situations / 18 tours** liées à la vraie vie de Trân avec Jerry ;
+- prérequis progressifs `l2` → `l8` ;
+- réponses obligatoires limitées aux acquis déjà enseignés ;
+- Scenario total candidat : **18 situations / 54 tours** ;
+- aucune nouvelle clé de progression ;
+- même stockage `french-tranquille:scenarios:v1` ;
+- ajout de `real-life-ux.js` / `real-life-ux.css` ;
+- situations personnelles disponibles remontées en premier ;
+- titre apprenant `Parler en situation` ;
+- futures scènes verrouillées condensées à deux par défaut ;
+- shell Build 22 inchangé ;
+- voix / reconnaissance / logo / favicon sanctuarisés ;
+- cache candidat `1.16.0-b23`.
+
+Reste Unreleased jusqu’à PR → `main` → GitHub Pages.
 
 ---
 

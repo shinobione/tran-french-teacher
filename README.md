@@ -1,63 +1,67 @@
 # French Trân’quille
 
-PWA de français pensée pour **Trân**, avec une priorité forte donnée à l’oral, au français réellement utile et à une interface suffisamment simple pour être utilisée sans connaissances techniques.
+PWA de français pensée pour **Trân**, avec priorité à l’oral, au français utile dans la vraie vie et à une interface simple sur iPhone.
 
-## Version en production
+## Candidat actuel
 
-- **v1.15.0**
-- **Build 22 — UX Foundation & Runtime Integrity**
-- statut : **PROD / GitHub Pages**
-- cible principale : **iPhone / Safari / PWA iOS**
-- curriculum audité : **40 leçons / 241 éléments**
-- coût d’exploitation : **0 €**
+- **v1.16.0**
+- **Build 23 — Real Life French I**
+- statut : **CANDIDAT / branche `build23-real-life-french-1`**
+- socle production : **v1.15.0 Build 22**
+- curriculum : **40 leçons / 241 éléments**
+- coût : **0 €**
 
-> Build 22 a été validé sur PR, puis sur le commit mergé de `main`, puis déployé par GitHub Pages. Le smoke « leçon 8 » a confirmé la conservation de la progression, des acquis et de la progression partielle.
+## Intention
 
-## Expérience apprenante
+Build 23 ne crée aucun nouveau bouton principal. Il enrichit **Pratiquer → Parler français** avec des situations qui ressemblent à la vraie vie de Trân.
 
-La navigation principale côté Trân est volontairement limitée à :
+Pack I : **6 situations / 18 tours** ajoutés au moteur Scenario existant :
 
-```text
-Hôm nay / Aujourd’hui
-Luyện tập / Pratiquer
-Lộ trình / Parcours
-```
+- Jerry parle trop vite ;
+- Jerry présente Trân à quelqu’un ;
+- prendre un café avec Jerry ;
+- parler de ses goûts avec Jerry ;
+- faire un petit achat ;
+- trouver un lieu avec Jerry.
 
-`Pratiquer` regroupe Réviser, Parler et Écouter. Les moteurs techniques — Learning Memory, Mastery, Scenario Lab, Error Intelligence, Listening et Adaptive Language — restent actifs mais ne deviennent pas autant de concepts à comprendre.
+Les prérequis vont uniquement des leçons **2 à 8**. Un profil autour de la leçon 8 peut donc déjà utiliser la majorité du pack.
 
-### Aujourd’hui
+## UX
 
-La Home conserve le logo French Trân’quille et met en avant la prochaine leçon, la position dans le parcours, un bouton principal et la séance du jour.
-
-### Leçon
-
-Leçon = mode Focus : gros texte, grandes zones tactiles, pas de menu du bas pendant l’exercice, navigation Précédent/Continuer stable.
-
-### Parcours
-
-Le parcours commence par une synthèse humaine : leçon actuelle, progression globale, nombre de leçons terminées et acquis. Les diagnostics détaillés restent disponibles en **DEBUG FR**.
-
-## Progression protégée
-
-La clé historique reste :
+Le shell Build 22 reste inchangé :
 
 ```text
-francais-avec-luc:learner:v1
+Aujourd’hui
+Pratiquer
+Parcours
 ```
 
-Build 22 ne la renomme pas et ne réinitialise aucun schéma.
+Dans Conversation :
 
-Une photo locale de sécurité non destructive est créée une seule fois dans :
+- situations personnelles disponibles remontées en premier ;
+- badge discret `♡ Cuộc sống của bạn / Ta vraie vie` ;
+- seulement deux situations futures verrouillées affichées par défaut ;
+- les autres restent derrière `Voir les situations futures` ;
+- le titre technique `Scenario Lab` est remplacé côté apprenante par **Parler en situation**.
 
-```text
-french-tranquille:safety:pre-build22:v1
-```
+## Pédagogie
 
-La CI a démarré la PWA avec un profil synthétique arrivé à la leçon 8 et a vérifié après boot complet : 7 leçons terminées, `l8` toujours en cours au même step, 40 acquis, snapshot identique et nouvelle navigation en 3 entrées.
+Chaque réponse obligatoire correspond à des acquis déjà présents : `Je ne comprends pas`, `Pouvez-vous répéter ?`, `Je voudrais…`, goûts, nombres/prix, `Où est… ?`, gauche/droite, etc.
 
-## Voix et branding sanctuarisés
+Le moteur historique conserve :
 
-Le retour iPhone réel étant positif, Build 22 n’a modifié ni `voice-ios.js` ni `free-voice.js`. Le logo et le favicon ont eux aussi été conservés byte-identiques et protégés par hash dans la CI.
+- premier raté → indice ;
+- deuxième raté → modèle ;
+- voix ou clavier ;
+- Memory `scenario-success / miss / assisted` ;
+- statistiques locales ;
+- aucun score phonétique fictif.
+
+## Progression, voix et branding
+
+Aucune nouvelle clé apprenant. Aucun reset.
+
+Build 23 ne modifie pas :
 
 ```text
 assets/LOGO.png
@@ -66,42 +70,43 @@ voice-ios.js
 free-voice.js
 ```
 
-## Runtime réconcilié
+Le smoke « leçon 8 » de Build 22 reste obligatoire en CI.
 
-L’audit Build 22 a détecté que plusieurs modules récents existaient dans le repo alors que le loader/service worker de production était resté sur une composition plus ancienne.
+## Runtime Build 23
 
-Build 22 active explicitement :
+Nouveaux fichiers :
 
 ```text
-Safety snapshot
-→ app historique
-→ Stage 2
-→ Stage 3
-→ Voice / Free Voice
-→ Learning Memory
-→ Error Intelligence
-→ Adaptive Language
-→ Daily Coach
-→ Mastery
-→ Scenario Lab
-→ Listening
-→ UX Shell
-→ Build Meta en dernier
+real-life-data.js
+real-life-ux.js
+real-life-ux.css
 ```
 
-L’audit a également établi que Stage 3 contient réellement **93 éléments** ; le total runtime correct est donc **40 leçons / 241 éléments**, et non 238.
+Chargement :
 
-## Liens projet
+```text
+scenario-data
+→ real-life-data
+→ scenario-host
+→ scenario-engine
+→ real-life-ux
+```
+
+Le pack étend la même clé Scenario existante :
+
+```text
+french-tranquille:scenarios:v1
+```
+
+Les statistiques déjà enregistrées restent compatibles.
+
+## Documentation
 
 - [`ROADMAP.md`](./ROADMAP.md)
 - [`CHANGELOG.md`](./CHANGELOG.md)
 - [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md)
 - [`docs/BUILD-POLICY.md`](./docs/BUILD-POLICY.md)
 - [`docs/BUILD-22-UX-FOUNDATION.md`](./docs/BUILD-22-UX-FOUNDATION.md)
-- PWA : `https://shinobione.github.io/tran-french-teacher/`
+- [`docs/BUILD-23-REAL-LIFE-FRENCH-I.md`](./docs/BUILD-23-REAL-LIFE-FRENCH-I.md)
 
-## Prochain build
-
-**v1.16.0 — Build 23 — Real Life French I : quotidien avec Jerry**.
-
-Le principe reste celui de Build 22 : les nouvelles capacités doivent apparaître derrière les gestes simples existants, pas créer un nouveau bouton de navigation à chaque moteur.
+Build 23 ne sera déclaré `PROD / CLOS` qu’après PR, CI `main` et GitHub Pages vertes.
