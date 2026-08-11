@@ -7,6 +7,7 @@ const CORE=[
   `./brand.css?v=${V}`,
   `./learning-memory.css?v=${V}`,
   `./visual-pass.css?v=${V}`,
+  './lucie-avatar.css?v=1.7.1-b14-avatar1',
   `./app.js?v=${V}`,
   `./debug-fr.js?v=${V}`,
   `./voice-ios.js?v=${V}`,
