@@ -1,12 +1,22 @@
 # Build 26.4 — Single-scroll Progress + Tyffany
 
-Status: **CANDIDATE**
+Status: **PROD / CLOS**
 
-Version target: **v1.19.4 — Build 26.4**
+Version: **v1.19.4 — Build 26.4**
+
+Production evidence:
+
+- runtime PR **#46** ;
+- runtime commit `7e74b3727dfefdddb41521a2be92ece8301a32e7` ;
+- PR #46 tribunal: **10/10 SUCCESS** ;
+- GitHub Pages runtime **#103 SUCCESS** ;
+- CI determinism PR **#47** ;
+- CI-only commit `4852e95684ad79d0988e05de641b56a8ad0ede22` ;
+- final `main`: **10 functional workflows / 10 SUCCESS + Pages #104 SUCCESS**.
 
 ## Field feedback
 
-The Build 26.3 two-column Progress layout is directionally correct, but real desktop screenshots revealed an awkward nested-scroll pattern:
+The Build 26.3 two-column Progress layout was directionally correct, but real desktop screenshots revealed an awkward nested-scroll pattern:
 
 ```text
 browser/page scrollbar
@@ -40,6 +50,16 @@ overflow: visible
 
 The document/browser becomes the only vertical scroll owner. The right card simply grows with its selected detail content.
 
+Production Chrome validated with Mastery active:
+
+```text
+overflow-y = visible
+max-height = none
+nested scroll = 0
+page scrollable = 1
+single scroll = 1
+```
+
 Mobile remains unchanged:
 
 ```text
@@ -56,7 +76,7 @@ The rename is implemented as an additive compatibility layer in `build26-4-ux.js
 
 ### Learner-facing contract
 
-Rendered occurrences of `Lucie` become `Tyffany`, including dynamically injected UI and safe text-bearing attributes. The public curriculum tutor export is also normalized to `Tyffany`.
+Rendered occurrences of `Lucie` become `Tyffany`, including dynamically injected UI and safe text-bearing attributes. The public curriculum tutor export is normalized to `Tyffany`.
 
 Speech output containing the old teacher name is normalized before being sent to the existing speech synthesis chain, so legacy preview strings say **Tyffany** without changing the voice-selection engine.
 
@@ -77,7 +97,7 @@ These identifiers are implementation details, not learner-facing branding. Renam
 
 ## Data and product sanctuaries
 
-Build 26.4 must preserve:
+Build 26.4 preserves:
 
 - learner key `francais-avec-luc:learner:v1`;
 - Learning Memory / Scenario / Listening schemas;
@@ -95,31 +115,42 @@ Build 26.4 must preserve:
 - `assets/LOGO.png`;
 - `assets/Favicon.png`.
 
-## CI gate
+## CI closure
 
-A dedicated Build 26.4 workflow must prove:
+The dedicated Build 26.4 workflow proves:
 
 ### Branding
 
-- the rendered learner UI contains `Tyffany`;
-- the rendered learner UI contains no visible `Lucie` after the compatibility layer runs;
-- `FrenchTranquilleCurriculum.tutor === 'Tyffany'`;
+- rendered learner UI contains `Tyffany` ;
+- rendered learner UI contains no visible `Lucie` after the compatibility layer runs ;
+- `FrenchTranquilleCurriculum.tutor === 'Tyffany'` ;
 - voice and branding sanctuary hashes are unchanged.
 
 ### Progress desktop
 
 Using a synthetic lesson-8 profile and an opened Mastery group:
 
-- the Progress screen remains present;
-- the Details Dashboard still opens Mastery;
-- `overflow-y` computes to `visible`;
-- `max-height` computes to `none`;
-- the Details card does not own a nested scrollbar;
-- the page itself is scrollable when content exceeds the viewport;
-- learner progress remains l8 / 7 completed / 40 known in the synthetic regression profile.
+- Progress screen remains present ;
+- Details Dashboard opens Mastery ;
+- `overflow-y` computes to `visible` ;
+- `max-height` computes to `none` ;
+- Details owns no nested scrollbar ;
+- page itself is scrollable when content exceeds the viewport ;
+- learner progress remains l8 / 7 completed / 40 known.
 
-### Existing tribunal
+### Harness note
 
-All previous quality, Options, navigation, Progression, Listening, Session, Real Life, Voice Replay and Build 26.3 interaction contracts must remain green.
+The first `main` run after runtime merge showed every single-scroll product marker correct but the test sometimes attempted to select Mastery before its dashboard tile existed. PR #47 changed only the workflow URL to reuse the existing deterministic Build 26.1 dashboard smoke state (`detailsDashboardSmoke=mastery`). It did **not** modify runtime/PWA code.
 
-Build 26.4 is not production until PR CI, `main` CI and GitHub Pages all succeed.
+Final `main` passed the full quality, Options, navigation, Progression, Listening, Session, Real Life, Voice Replay, Build 26.3 and Build 26.4 tribunal, plus Pages #104.
+
+## Remaining field gate
+
+Build 26.4 itself is closed. The separate Build 26.1 iPhone self-playback field gate remains open:
+
+```text
+recognized answer
+→ local replay recording
+→ playback
+→ next recognized answer still works normally
+```
