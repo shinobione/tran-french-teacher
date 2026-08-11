@@ -4,7 +4,7 @@
   const DEBUG_KEY = 'tran-french-teacher:debug-fr:v1';
   const isDebug = () => localStorage.getItem(DEBUG_KEY) === '1';
   const T = (vi, fr) => isDebug() ? fr : vi;
-  const esc = (value='') => String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const esc = (value='') => String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]));
   const supported = Boolean(navigator.mediaDevices?.getUserMedia && window.MediaRecorder);
   const smoke = new URLSearchParams(location.search).get('voiceReplaySmoke') === '1';
 
@@ -235,32 +235,49 @@
     });
   }
 
+  function pollSmoke(find, done, remaining=45) {
+    const found = find();
+    if (found) {
+      done(found);
+      return;
+    }
+    if (remaining <= 0) {
+      document.documentElement.dataset.voiceReplaySmokeTimeout = '1';
+      return;
+    }
+    setTimeout(()=>pollSmoke(find,done,remaining-1),120);
+  }
+
   function runSmoke() {
     if (!smoke) return;
-    setTimeout(() => {
-      document.querySelector('[data-ux-nav="practice"]')?.click();
-      setTimeout(() => {
-        document.querySelector('[data-session-practice-mode="voice"]')?.click();
-        setTimeout(() => {
-          const card = document.getElementById('free-voice-card');
-          if (!card) {
-            document.documentElement.dataset.voiceReplaySmokeCard = '0';
-            return;
+    pollSmoke(
+      () => document.querySelector('[data-ux-nav="practice"]'),
+      practice => {
+        practice.click();
+        pollSmoke(
+          () => document.querySelector('[data-session-practice-mode="voice"]'),
+          voiceMode => {
+            voiceMode.click();
+            pollSmoke(
+              () => document.getElementById('free-voice-card'),
+              card => {
+                document.documentElement.dataset.voiceReplaySmokeCard = '1';
+                if (!card.querySelector('.free-voice-result')) {
+                  const fake = document.createElement('div');
+                  fake.className = 'free-voice-result';
+                  fake.dataset.voiceReplaySmokeResult = '1';
+                  fake.innerHTML = '<small>Smoke</small><br><strong>Bonjour</strong>';
+                  card.appendChild(fake);
+                }
+                render();
+                document.documentElement.dataset.voiceReplaySmokePanel = card.querySelector('.voice-replay-panel') ? '1' : '0';
+                document.documentElement.dataset.voiceReplaySmokeSupported = supported ? '1' : '0';
+              }
+            );
           }
-          document.documentElement.dataset.voiceReplaySmokeCard = '1';
-          if (!card.querySelector('.free-voice-result')) {
-            const fake = document.createElement('div');
-            fake.className = 'free-voice-result';
-            fake.dataset.voiceReplaySmokeResult = '1';
-            fake.innerHTML = '<small>Smoke</small><br><strong>Bonjour</strong>';
-            card.appendChild(fake);
-          }
-          render();
-          document.documentElement.dataset.voiceReplaySmokePanel = card.querySelector('.voice-replay-panel') ? '1' : '0';
-          document.documentElement.dataset.voiceReplaySmokeSupported = supported ? '1' : '0';
-        },280);
-      },240);
-    },220);
+        );
+      }
+    );
   }
 
   const app = document.getElementById('app');
