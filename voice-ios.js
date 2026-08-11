@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const VERSION='1.5.0', BUILD=10;
+  const VERSION='1.6.0', BUILD=11;
   const VOICE_KEY='tran-french-teacher:luc-voice:v1';
   const DEBUG_KEY='tran-french-teacher:debug-fr:v1';
   const RATE_KEY='tran-french-teacher:luc-rate:v1';

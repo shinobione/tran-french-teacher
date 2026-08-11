@@ -1,5 +1,5 @@
-const CACHE='tran-french-teacher-v1.5.0-b10.2';
-const V='1.5.0-b10.2';
+const CACHE='tran-french-teacher-v1.6.0-b11';
+const V='1.6.0-b11';
 const CORE=[
   './',
   './index.html',
