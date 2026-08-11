@@ -1,0 +1,39 @@
+name: Build21 one-shot wiring
+
+on:
+  push:
+    branches: [build21-adaptive-language]
+
+permissions:
+  contents: write
+
+jobs:
+  wire:
+    if: "!contains(github.event.head_commit.message, '[build21-wired]')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: build21-adaptive-language
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Wire Build 21
+        run: python tools/build21-wire.py
+      - name: Remove one-shot helpers
+        run: |
+          rm -f .github/workflows/build21-wire.yml
+          rm -f tools/build21-wire.py
+          rm -f tools/quality-build21.yml
+      - name: Commit wired Build 21
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          if git diff --cached --quiet; then
+            echo 'Nothing to wire.'
+            exit 0
+          fi
+          git commit -m 'Build 21 wire Adaptive Language runtime, docs and CI [build21-wired]'
+          git push origin HEAD:build21-adaptive-language
