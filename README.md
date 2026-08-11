@@ -4,48 +4,38 @@ PWA de français pensée pour **Trân**, avec priorité à l’oral, au françai
 
 ## Version production
 
-- **v1.19.1**
-- **Build 26.1 — Voice Self-Playback + Learning Details Dashboard**
+- **v1.19.2**
+- **Build 26.2 — Click + Listening Rate Hotfix**
 - statut : **✅ PROD / réécoute iPhone à valider terrain**
-- commit production : `8ad7e5eb9cb2f64c58c086847c3e035463ab3ba3`
-- PR : **#40**
-- GitHub Pages : **#98 SUCCESS**
+- commit production : `4d1d224aa4eb6612fe6b0dc997f3871bbb502317`
+- PR : **#42**
+- GitHub Pages : **#100 SUCCESS**
 - tribunal production : **8 workflows / 8 SUCCESS**
-- calibration Listening : **0.88 normal / 0.64 lent**
+- calibration Listening : **0.88 normal / 0.65 lent**
 - curriculum : **40 leçons / 241 éléments**
 - Scenario : **36 situations / 108 tours**
 - coût : **0 €**
 
-## 🎙️ Réécouter sa propre voix
+## 🩹 Build 26.2 — hotfix terrain
 
-Après une réponse vocale reconnue dans Free Voice, Trân voit désormais une petite zone d’auto-écoute :
+Deux retours terrain ont déclenché ce patch :
+
+1. `Parcours → Détails d’apprentissage` pouvait recevoir le clic sans s’ouvrir ;
+2. la lecture `🐢 Lent` sonnait presque comme la lecture normale.
+
+### Détails d’apprentissage
+
+Le panneau reste un `<details>` natif, mais son ouverture/fermeture ne dépend plus uniquement du comportement implicite du navigateur. `progression-ux.js` intercepte maintenant le clic sur le `summary` et applique un toggle déterministe.
+
+Un vrai smoke Chrome clique désormais sur le résumé et exige :
 
 ```text
-🎧 Écoute-toi
-[ 🎙️ M’enregistrer pour me réécouter ]
-          ↓
-[ ▶ Réécouter ma voix ]   [ ↻ Refaire ]
+data-progress-details-click-smoke="1"
+data-progress-details-open="1"
+data-progress-details-manual-toggle="open"
 ```
 
-Le choix est volontairement prudent : la reconnaissance existante termine d’abord, puis cette **seconde prise locale** est enregistrée. Nous ne lançons pas deux moteurs micro en parallèle sur l’iPhone.
-
-Contrat :
-
-- `voice-ios.js` et `free-voice.js` restent byte-identiques ;
-- `MediaRecorder` / `getUserMedia` seulement si disponibles ;
-- aucun upload ;
-- aucune sauvegarde audio ;
-- aucun événement Learning Memory / Error / Mastery créé par l’auto-écoute ;
-- Blob URL temporaire ;
-- piste micro stoppée après la prise ;
-- arrêt automatique après 9 secondes ;
-- échec de capture = exercice vocal existant toujours utilisable.
-
-La capture exacte du **premier essai** reste hors scope tant qu’un test réel sur l’iPhone de Trân n’a pas prouvé qu’une capture parallèle n’abîme pas la reconnaissance déjà validée.
-
-## 🧠 Détails d’apprentissage : fin du parchemin
-
-`Parcours → Détails d’apprentissage` garde une seule entrée, mais les cartes ne sont plus empilées verticalement. Elles sont regroupées par intention :
+Le dashboard Build 26.1 reste inchangé derrière cette entrée :
 
 ```text
 🧠 Mémoire & révisions
@@ -55,29 +45,80 @@ La capture exacte du **premier essai** reste hors scope tant qu’un test réel 
 🧩 A1 & rythme
 ```
 
-Une tuile affiche un résumé court ; **une seule famille détaillée est ouverte à la fois**. Les vraies cartes historiques restent dans le DOM et continuent d’être pilotées par leurs moteurs. Une future carte inconnue tombe dans `Autres détails` au lieu de disparaître.
+### Listening lent : cause exacte
 
-Le dashboard est validé par Chrome et les contrats de progression ; il ne crée ni ne migre de données apprenantes.
+Le moteur Listening demandait `0.68`. Le bridge Build 25.1 essayait ensuite d’imposer `0.64` à la couche voix.
 
-## Baseline Build 26 conservée
+Mais `voice-ios.js` accepte volontairement seulement les vitesses **>= 0.65**. La valeur `0.64` était donc rejetée et la couche voix retombait sur sa valeur par défaut d’environ **0.84**.
 
-Real Life French III reste intégralement chargé : **8 situations / 24 tours**, Scenario total **36 / 108**, Session UX Build 25.2 et Listening **0.88 / 0.64** inchangés.
+En pratique avant Build 26.2 :
 
-Baseline historique protégée : **v1.17.0 — Build 24 — Real Life French II**, Scenario **28 situations / 84 tours** avant Pack III.
+```text
+Normal → 0.88
+Lent   → ~0.84
+```
+
+La différence était donc presque inaudible.
+
+Build 26.2 place le lent exactement sur le plancher déjà accepté :
+
+```text
+Normal → 0.88
+Lent   → 0.65
+```
+
+`voice-ios.js` reste **byte-identique** : aucun changement de voix, pitch ou reconnaissance.
+
+## 🎙️ Réécouter sa propre voix
+
+Build 26.1 reste actif. Après une réponse vocale reconnue dans Free Voice, Trân peut faire une **seconde prise locale volontaire** pour s’écouter :
+
+```text
+🎧 Écoute-toi
+[ 🎙️ M’enregistrer pour me réécouter ]
+          ↓
+[ ▶ Réécouter ma voix ]   [ ↻ Refaire ]
+```
+
+Contrat inchangé :
+
+- `voice-ios.js` et `free-voice.js` byte-identiques ;
+- `MediaRecorder` / `getUserMedia` seulement si disponibles ;
+- aucun upload ;
+- aucune sauvegarde audio ;
+- aucun événement Learning Memory / Error / Mastery créé par l’auto-écoute ;
+- Blob URL temporaire ;
+- piste micro stoppée après la prise ;
+- arrêt automatique après 9 secondes ;
+- échec de capture = exercice vocal existant toujours utilisable.
+
+La capture exacte du premier essai reste hors scope tant qu’un test réel sur l’iPhone de Trân n’a pas prouvé qu’une capture parallèle n’abîme pas la reconnaissance validée.
+
+## Baselines conservées
+
+- Progression UX Build 25 ;
+- Listening **0.88 / 0.65** ;
+- Session UX Build 25.2 ;
+- Real Life French III Build 26 : **36 situations / 108 tours** ;
+- Voice Replay + Details Dashboard Build 26.1 ;
+- ancien profil l8 / progression protégée ;
+- logo, favicon, `voice-ios.js`, `free-voice.js` sanctuarisés.
+
+Aucune migration learner/Memory/Scenario/Listening n’a été faite dans Build 26.2.
 
 ## CI / production
 
-Sur le commit `8ad7e5e…` :
+Sur PR #42 puis `main` :
 
 - quality ✅ ;
 - Options ✅ ;
 - nav/mobile ✅ ;
-- Progression UX ✅ ;
-- Listening-rate ✅ ;
+- Progression UX + vrai clic `Détails` ✅ ;
+- Listening-rate **0.88 / 0.65** ✅ ;
 - Session UX ✅ ;
 - Real Life French III ✅ ;
-- Build 26.1 Voice Replay + Details Dashboard ✅ ;
-- GitHub Pages #98 ✅.
+- Voice Replay + Details Dashboard ✅ ;
+- GitHub Pages **#100 ✅**.
 
 ## Sanctuaires
 
@@ -91,11 +132,12 @@ free-voice.js
 Progression UX Build 25
 Session UX Build 25.2
 Real Life III Build 26
+Voice Replay + Details Dashboard Build 26.1
 ```
 
 ## Suite
 
-1. **Test terrain iPhone Build 26.1** : vérifier `M’enregistrer → Réécouter` après une vraie réponse reconnue.
+1. **Test terrain iPhone** : auto-écoute après une vraie réponse reconnue + vérification de la reconnaissance suivante.
 2. Build 27 — Data & Recovery Hardening.
 3. Build 28 — iPhone / PWA / Accessibility Hardening.
 4. Build 29 — Architecture Hardening.
