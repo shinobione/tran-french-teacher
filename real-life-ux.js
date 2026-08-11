@@ -5,16 +5,40 @@
   const isDebug = () => localStorage.getItem(DEBUG_KEY) === '1';
   const T = (vi, fr) => isDebug() ? fr : vi;
   const smoke = new URLSearchParams(location.search).get('realLifeSmoke');
+  const MAX_OPEN = 6;
+  let showAllOpen = false;
   let showAllLocked = false;
   let scheduled = false;
 
-  function publishSmoke(realLife, locked) {
-    if (smoke !== 'lesson8') return;
+  function scenarioRank(id = '') {
+    const s = window.FrenchTranquilleScenarioData?.scenarios?.find(x => x.id === id);
+    if (!s) return 0;
+    return Math.max(0, ...(s.requiredLessons || []).map(key => Number(String(key).replace(/^l/,'')) || 0));
+  }
+
+  function publishSmoke(realLife, locked, openVisible) {
+    if (!smoke) return;
     const html = document.documentElement;
-    html.dataset.realLifeUiTiles = String(realLife.length);
+    const pack2 = new Set(window.FrenchTranquilleRealLife2?.scenarioIds || []);
+    const pack2Open = realLife.filter(tile => pack2.has(tile.dataset.scenarioStart || '')).length;
+    html.dataset.realLifeUiTiles = String(realLife.length); // compatibility Build 23
+    html.dataset.realLifeOpenTotal = String(realLife.length);
+    html.dataset.realLifeOpenVisible = String(openVisible);
+    html.dataset.realLifeOpenHidden = String(Math.max(0, realLife.length - openVisible));
+    html.dataset.realLifePack2Open = String(pack2Open);
     html.dataset.realLifeLockedVisible = String(locked.filter(tile => !tile.classList.contains('real-life-locked-hidden')).length);
     html.dataset.realLifeReadyLabel = document.querySelector('.real-life-ready') ? '1' : '0';
     html.dataset.realLifeTechnicalTitle = /Scenario Lab/i.test(document.querySelector('.scenario-head h2')?.textContent || '') ? '1' : '0';
+  }
+
+  function ensureControls(card, grid) {
+    let controls = card.querySelector('.scenario-list-controls');
+    if (!controls) {
+      controls = document.createElement('div');
+      controls.className = 'scenario-list-controls';
+      grid.insertAdjacentElement('afterend', controls);
+    }
+    return controls;
   }
 
   function decorateCard(card) {
@@ -26,8 +50,8 @@
     if (pill) pill.textContent = T('LUYỆN NÓI','PRATIQUER');
     if (title) title.textContent = `🎭 ${T('Nói trong tình huống thật','Parler en situation')}`;
     if (intro) intro.textContent = T(
-      'Chọn một tình huống đang mở. Lucie sẽ giúp bạn giữ cuộc hội thoại từng bước.',
-      'Choisis une situation disponible. Lucie t’aide à tenir le dialogue étape par étape.'
+      'Lucie gợi ý một vài tình huống phù hợp với những gì bạn đã học. Không cần làm tất cả.',
+      'Lucie te propose quelques situations adaptées à ce que tu as appris. Pas besoin de tout faire.'
     );
 
     const grid = card.querySelector('.scenario-grid');
@@ -59,27 +83,43 @@
       else locked.push(tile);
     }
 
-    [...realLife, ...otherOpen, ...locked].forEach(tile => grid.appendChild(tile));
+    realLife.sort((a,b) => scenarioRank(b.dataset.scenarioStart) - scenarioRank(a.dataset.scenarioStart));
+    otherOpen.sort((a,b) => scenarioRank(b.dataset.scenarioStart) - scenarioRank(a.dataset.scenarioStart));
+    const openOrdered = [...realLife, ...otherOpen];
 
-    locked.forEach((tile, index) => {
-      tile.classList.toggle('real-life-locked-hidden', !showAllLocked && index >= 2);
-    });
+    [...openOrdered, ...locked].forEach(tile => grid.appendChild(tile));
 
-    let toggle = card.querySelector('[data-real-life-toggle-locked]');
-    if (locked.length > 2) {
-      if (!toggle) {
-        toggle = document.createElement('button');
-        toggle.type = 'button';
-        toggle.className = 'scenario-more secondary';
-        toggle.dataset.realLifeToggleLocked = '1';
-        grid.insertAdjacentElement('afterend', toggle);
+    openOrdered.forEach((tile,index) => tile.classList.toggle('real-life-open-hidden', !showAllOpen && index >= MAX_OPEN));
+    locked.forEach((tile,index) => tile.classList.toggle('real-life-locked-hidden', !showAllLocked && index >= 2));
+
+    const controls = ensureControls(card, grid);
+    let openToggle = controls.querySelector('[data-real-life-toggle-open]');
+    if (openOrdered.length > MAX_OPEN) {
+      if (!openToggle) {
+        openToggle = document.createElement('button');
+        openToggle.type = 'button';
+        openToggle.className = 'scenario-more secondary';
+        openToggle.dataset.realLifeToggleOpen = '1';
+        controls.appendChild(openToggle);
       }
-      toggle.textContent = showAllLocked
+      openToggle.textContent = showAllOpen
+        ? T('Chỉ xem gợi ý','Afficher seulement les suggestions')
+        : T(`Xem thêm ${openOrdered.length - MAX_OPEN} tình huống`,`Voir ${openOrdered.length - MAX_OPEN} autres situations`);
+    } else openToggle?.remove();
+
+    let lockedToggle = controls.querySelector('[data-real-life-toggle-locked]');
+    if (locked.length > 2) {
+      if (!lockedToggle) {
+        lockedToggle = document.createElement('button');
+        lockedToggle.type = 'button';
+        lockedToggle.className = 'scenario-more secondary';
+        lockedToggle.dataset.realLifeToggleLocked = '1';
+        controls.appendChild(lockedToggle);
+      }
+      lockedToggle.textContent = showAllLocked
         ? T('Ẩn các tình huống sau','Masquer les situations futures')
-        : T(`Xem thêm ${locked.length - 2} tình huống sau`,`Voir ${locked.length - 2} situations futures`);
-    } else {
-      toggle?.remove();
-    }
+        : T(`Xem ${locked.length - 2} tình huống sau`,`Voir ${locked.length - 2} situations futures`);
+    } else lockedToggle?.remove();
 
     const stats = card.querySelector('.scenario-stats');
     let ready = stats?.querySelector('.real-life-ready');
@@ -90,7 +130,7 @@
     }
     if (ready) ready.textContent = `♡ ${realLife.length} ${T('tình huống gần gũi','situations personnelles')}`;
 
-    publishSmoke(realLife, locked);
+    publishSmoke(realLife, locked, Math.min(openOrdered.length, showAllOpen ? openOrdered.length : MAX_OPEN));
   }
 
   function decorateRunner(card) {
@@ -113,18 +153,23 @@
   function schedule() {
     if (scheduled) return;
     scheduled = true;
-    requestAnimationFrame(() => {
-      scheduled = false;
-      decorate();
-    });
+    requestAnimationFrame(() => { scheduled = false; decorate(); });
   }
 
   document.addEventListener('click', event => {
-    const button = event.target.closest('[data-real-life-toggle-locked]');
-    if (!button) return;
-    event.preventDefault();
-    showAllLocked = !showAllLocked;
-    decorate();
+    const openButton = event.target.closest('[data-real-life-toggle-open]');
+    if (openButton) {
+      event.preventDefault();
+      showAllOpen = !showAllOpen;
+      decorate();
+      return;
+    }
+    const lockedButton = event.target.closest('[data-real-life-toggle-locked]');
+    if (lockedButton) {
+      event.preventDefault();
+      showAllLocked = !showAllLocked;
+      decorate();
+    }
   });
 
   const app = document.getElementById('app');
@@ -132,8 +177,9 @@
   decorate();
 
   window.FrenchTranquilleRealLifeUX = {
-    version:'1.16.0',build:23,
+    version:'1.17.0',build:24,
     refresh:decorate,
+    setShowAllOpen:value => { showAllOpen = Boolean(value); decorate(); },
     setShowAllLocked:value => { showAllLocked = Boolean(value); decorate(); }
   };
 })();
