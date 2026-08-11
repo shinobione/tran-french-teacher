@@ -1,0 +1,168 @@
+/* French Trân’quille — v1.17.3 Build 24.3 — Premium Interaction UX */
+:root{
+  --ux-press-scale:.976;
+  --ux-press-ease:cubic-bezier(.2,.8,.2,1);
+  --ux-screen-ease:cubic-bezier(.22,.82,.24,1);
+  --ux-tap-glow:rgba(143,227,208,.18);
+}
+
+/* Every tappable surface must answer immediately. */
+button:not(:disabled),
+a[href],
+[role="button"]:not([aria-disabled="true"]),
+[data-go],
+[data-ux-nav],
+[data-ux-practice],
+.daily-step,
+.option:not(:disabled),
+.scenario-card:not(.locked),
+.listening-option:not([aria-disabled="true"]){
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+  transform-origin:center;
+  transition:
+    transform 90ms var(--ux-press-ease),
+    filter 120ms ease,
+    background-color 140ms ease,
+    border-color 140ms ease,
+    box-shadow 160ms ease,
+    color 140ms ease;
+}
+
+button:not(:disabled):focus-visible,
+a[href]:focus-visible,
+[role="button"]:not([aria-disabled="true"]):focus-visible{
+  outline:2px solid rgba(143,227,208,.75);
+  outline-offset:3px;
+  box-shadow:0 0 0 5px rgba(143,227,208,.10);
+}
+
+.ux-pressing,
+button:not(:disabled):active,
+a[href]:active,
+[role="button"]:not([aria-disabled="true"]):active,
+.daily-step:active,
+.option:not(:disabled):active,
+.scenario-card:not(.locked):active,
+.listening-option:not([aria-disabled="true"]):active{
+  transform:translateY(1px) scale(var(--ux-press-scale)) !important;
+  filter:brightness(1.09) saturate(1.05);
+}
+
+.ux-clicked{
+  animation:uxTapFlash 220ms var(--ux-press-ease);
+}
+
+@keyframes uxTapFlash{
+  0%{box-shadow:0 0 0 0 rgba(143,227,208,.0)}
+  42%{box-shadow:0 0 0 5px var(--ux-tap-glow)}
+  100%{box-shadow:0 0 0 0 rgba(143,227,208,0)}
+}
+
+/* Bottom navigation: persistent app-state feedback. */
+.ux-bottom-nav button{
+  position:relative;
+  overflow:hidden;
+}
+.ux-bottom-nav button::after{
+  content:"";
+  position:absolute;
+  left:50%;bottom:3px;
+  width:18px;height:3px;border-radius:999px;
+  background:linear-gradient(90deg,var(--ux-accent),var(--ux-accent2));
+  opacity:0;
+  transform:translateX(-50%) scaleX(.45);
+  transition:opacity 150ms ease,transform 180ms var(--ux-screen-ease);
+}
+.ux-bottom-nav button.active{
+  background:linear-gradient(180deg,rgba(143,227,208,.12),rgba(198,169,255,.075));
+  box-shadow:inset 0 0 0 1px rgba(143,227,208,.10),0 8px 24px rgba(0,0,0,.16);
+}
+.ux-bottom-nav button.active::after{opacity:1;transform:translateX(-50%) scaleX(1)}
+.ux-bottom-nav button.ux-pressing{background:rgba(143,227,208,.16)}
+
+/* Screen entry: short and native-feeling, never a website-style page transition. */
+.app-shell.ux-screen-enter,
+.ux-practice-overlay.ux-screen-enter{
+  animation:uxScreenEnter 185ms var(--ux-screen-ease) both;
+}
+@keyframes uxScreenEnter{
+  from{opacity:.72;transform:translateY(7px)}
+  to{opacity:1;transform:none}
+}
+
+/* Practice is a first-class tab, not a modal sheet. */
+html.ux-practice-open,html.ux-practice-open body{overflow:hidden}
+.ux-practice-overlay{
+  z-index:850 !important;
+  inset:0 0 calc(72px + env(safe-area-inset-bottom,0px)) 0 !important;
+  display:block !important;
+  overflow:auto;
+  overscroll-behavior:contain;
+  background:
+    radial-gradient(circle at 18% 0%,rgba(143,227,208,.075),transparent 32%),
+    radial-gradient(circle at 86% 8%,rgba(198,169,255,.09),transparent 34%),
+    linear-gradient(180deg,#101729 0%,#08101d 100%) !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  padding:0 !important;
+}
+.ux-practice-sheet{
+  width:min(760px,100%) !important;
+  min-height:100% !important;
+  max-height:none !important;
+  margin:0 auto !important;
+  overflow:visible !important;
+  background:transparent !important;
+  border:0 !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+  padding:calc(24px + env(safe-area-inset-top,0px)) 18px 34px !important;
+}
+.ux-practice-sheet header{
+  padding:10px 2px 18px;
+  border-bottom:1px solid rgba(217,225,255,.09);
+  margin-bottom:18px;
+}
+.ux-practice-title img{
+  width:54px !important;height:54px !important;
+  border-radius:17px !important;
+  box-shadow:0 10px 30px rgba(0,0,0,.22),0 0 0 1px rgba(143,227,208,.15);
+}
+.ux-practice-title h1{font-size:clamp(1.3rem,5vw,1.7rem) !important}
+.ux-practice-title span{font-size:.72rem !important}
+.ux-practice-help{margin:0 2px 16px !important;font-size:.94rem !important}
+.ux-practice-actions{gap:12px !important}
+.ux-practice-actions>button{
+  min-height:82px;
+  border-color:rgba(217,225,255,.12) !important;
+  background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,.035)) !important;
+  box-shadow:0 14px 34px rgba(0,0,0,.14);
+}
+.ux-practice-actions>button:not(:disabled):hover{
+  border-color:rgba(143,227,208,.24) !important;
+}
+.ux-practice-actions>button.ux-pressing{
+  border-color:rgba(143,227,208,.34) !important;
+  background:linear-gradient(135deg,rgba(143,227,208,.11),rgba(198,169,255,.07)) !important;
+}
+.ux-close{display:none !important}
+
+/* Mobile: stronger tactile readability and app-like spacing. */
+@media (max-width:600px){
+  :root{--ux-press-scale:.965}
+  button:not(:disabled),[role="button"]:not([aria-disabled="true"]),[data-go],[data-ux-nav],[data-ux-practice]{min-height:48px}
+  .ux-bottom-nav{padding-top:7px !important}
+  .ux-bottom-nav button{min-height:56px !important;border-radius:16px !important}
+  .ux-bottom-nav button>span{transition:transform 120ms var(--ux-press-ease),color 140ms ease}
+  .ux-bottom-nav button.ux-pressing>span{transform:scale(.9)}
+  .ux-practice-sheet{padding-inline:14px !important}
+  .ux-practice-actions>button{min-height:86px;padding:13px !important;border-radius:20px !important}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto !important}
+  button,a,[role="button"],.daily-step,.option,.scenario-card,.listening-option{transition:none !important}
+  .ux-clicked,.app-shell.ux-screen-enter,.ux-practice-overlay.ux-screen-enter{animation:none !important}
+  .ux-pressing,button:active,a:active,[role="button"]:active{transform:none !important}
+}
