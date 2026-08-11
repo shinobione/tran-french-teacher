@@ -4,58 +4,66 @@ Ce fichier conserve l’historique des versions livrées. Les intentions futures
 
 ## [Unreleased]
 
-### v1.11.0 — Build 18 — Error Intelligence
+Aucun changement non livré pour le moment.
+
+---
+
+## [1.11.0] — Build 18 — Error Intelligence — 2026-08-11
 
 - ajout du stockage local `french-tranquille:error-intelligence:v1` ;
-- taxonomie fondée sur des preuves observables : rappel difficile, mismatch texte, erreur scénario, modèle nécessaire, phrase vocale non reconnue, réponse partielle, difficulté générique et répétition ;
-- historique borné à 20 événements détaillés par élément et 120 événements globaux récents ;
+- taxonomie fondée sur des preuves observables : `retrieval-difficult`, `text-mismatch`, `scenario-miss`, `assisted`, `voice-unrecognized`, `partial`, `practice-miss`, `repeated-miss` ;
+- historique borné à **20 événements détaillés par élément** et **120 événements globaux récents** ;
 - compteurs agrégés conservés au-delà de la fenêtre détaillée ;
-- prise en compte de la récence ;
-- détection des difficultés répétées dans une fenêtre de 30 minutes ;
-- suivi des récupérations après réussite ;
+- récence ;
+- répétition dans une fenêtre de 30 minutes ;
+- récupération après réussite ;
 - calcul de priorité local ;
-- focus Error Intelligence injecté dans Daily Coach quand une difficulté devient prioritaire ;
+- focus Error Intelligence dans Daily Coach ;
 - carte Error Intelligence dans Progression ;
 - mini-bilan de session ;
-- diagnostic dans Réglages ;
+- diagnostic Réglages ;
 - export JSON dédié `french-tranquille-error-intelligence` version 1 ;
-- Free Voice maintenant relié à Learning Memory ;
-- Free Voice envoie des preuves distinctes `free-voice-voice` et `free-voice-text` ;
-- une erreur technique micro/permission n’est pas enregistrée comme erreur d’apprentissage ;
-- Scenario Lab `scenario-miss` / `scenario-assisted` observés via Learning Memory ;
+- Free Voice relié à Learning Memory ;
+- Free Voice relié directement à Error Intelligence ;
+- sources `free-voice-voice` / `free-voice-text` ;
+- erreur technique micro/permission exclue de la mémoire linguistique ;
+- `scenario-miss` / `scenario-assisted` observés via Learning Memory ;
 - rating Révision difficile interprété comme `retrieval-difficult` ;
-- aucun diagnostic grammatical inventé sans preuve entrée/cible suffisante ;
-- ajout du smoke hook `?errorSmoke=1` pour la CI navigateur.
+- correction du bug de classification où `free-voice-text` pouvait être confondu avec un canal vocal à cause d’un `includes('voice')` trop large ;
+- classification remplacée par un canal explicite / suffixe exact ;
+- aucun diagnostic grammatical ou phonétique inventé sans preuve ;
+- hook CI `?errorSmoke=1` ;
+- smoke Chrome validant réellement les limites **20 / 120**, la répétition et le cas `partial` ;
+- Chrome Home, Scenario Lab et Error Intelligence validés sur PR puis sur `main` ;
+- GitHub Pages validé.
 
 ---
 
 ## [1.10.0] — Build 17 — Scenario Lab — 2026-08-11
 
-- ajout de 12 situations multi-tours déterministes ;
-- 3 tours par situation, soit 36 tours de dialogue ;
+- 12 situations multi-tours déterministes ;
+- 3 tours par situation, soit 36 tours ;
 - déverrouillage selon les leçons terminées ;
-- variantes de réponses acceptées ;
+- variantes acceptées ;
 - normalisation accents / apostrophes / ponctuation ;
 - premier échec → indice ;
 - erreurs répétées → modèle ;
-- modèle utilisé compté comme aide ;
+- modèle utilisé = aide ;
 - succès / échecs / aides reliés à Learning Memory ;
 - synthèse vocale de l’interlocuteur ;
-- micro navigateur quand SpeechRecognition est disponible ;
-- fallback texte permanent ;
-- stockage local `french-tranquille:scenarios:v1` ;
+- micro navigateur lorsque disponible ;
+- fallback texte ;
+- stockage `french-tranquille:scenarios:v1` ;
 - statistiques par scénario ;
 - carte Situations réelles dans Progression ;
 - diagnostic Scenario Lab ;
-- adaptateur `scenario-host.js` pour rendre le lab visible même sur profil vierge ;
-- double smoke test Chrome : Home + Conversation via `?scenarioSmoke=1` ;
-- CI PR, CI `main` et GitHub Pages validés.
+- `scenario-host.js` pour le profil vierge ;
+- Chrome Home + Conversation ;
+- CI main + Pages validés.
 
 ---
 
 ## [1.9.0] — Build 16 — Mastery Engine — 2026-08-11
-
-### Mastery Engine
 
 - moteur local de maîtrise par grandes étapes ;
 - distinction leçon terminée / élément connu / compétence consolidée ;
@@ -64,27 +72,14 @@ Ce fichier conserve l’historique des versions livrées. Les intentions futures
 - estimation interne A0 / A0+ / Pré-A1 / A1 en construction ;
 - priorité suivante suggérée par Lucie ;
 - dashboard de maîtrise dans Progression ;
-- résumé de maîtrise sur la home ;
+- résumé sur la home ;
 - diagnostic enrichi ;
-- aucun statut Maîtrisé sans suffisamment de preuves mémoire.
-
-### Gouvernance du projet
-
-- création de `ROADMAP.md` ;
-- création de `CHANGELOG.md` ;
-- création de `docs/ARCHITECTURE.md` ;
-- création de `docs/BUILD-POLICY.md` ;
-- README recentré sur l’état en production ;
-- politique branche → PR → CI → Chrome → merge → Pages.
-
-### Qualité
-
+- aucune assimilation à une certification CECRL ;
+- création de `ROADMAP.md`, `CHANGELOG.md`, `docs/ARCHITECTURE.md`, `docs/BUILD-POLICY.md` ;
+- politique branche → PR → CI → Chrome → merge → Pages ;
 - cache PWA `1.9.0-b16` ;
-- guards CI Mastery + documentation ;
-- vrai Chrome headless vérifiant 25 leçons + Learning Memory + Daily Coach + Mastery Engine ;
+- vrai Chrome headless ;
 - `app.js` historique laissé intact.
-
-> L’indicateur de maîtrise est un outil pédagogique interne et ne constitue pas une certification CECRL.
 
 ---
 
@@ -92,7 +87,7 @@ Ce fichier conserve l’historique des versions livrées. Les intentions futures
 
 - passage à 25 leçons / 148 éléments ;
 - leçons 16 à 25 ;
-- être, avoir, vouloir, pouvoir, il y a ;
+- `être`, `avoir`, `vouloir`, `pouvoir`, `il y a` ;
 - logement, téléphone, météo, courses, petite conversation, présent, questions simples ;
 - notes Structure utile ;
 - parcours en quatre étapes ;
@@ -104,7 +99,7 @@ Ce fichier conserve l’historique des versions livrées. Les intentions futures
 ## [1.7.1] — Build 14 / 14.1 — 2026-08-11
 
 - refonte UX/visuelle Conversation, Révision et Learning Memory ;
-- hiérarchie desktop/mobile améliorée ;
+- hiérarchie desktop/mobile ;
 - avatar `L` remplacé par l’icône French Trân’quille.
 
 ## [1.7.0] — Build 13 — 2026-08-11
@@ -162,7 +157,7 @@ Ce fichier conserve l’historique des versions livrées. Les intentions futures
 ## [1.1.x] — Builds 5–6
 
 - expérimentation OpenAI Realtime / Vercel ;
-- abandonnée pour rester à 0 € ;
+- abandonnée pour conserver un coût nul ;
 - fichiers retirés de `main`.
 
 ## [1.0.3] — Build 4
