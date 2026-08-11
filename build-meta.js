@@ -1,6 +1,6 @@
-// Production baseline this UX build is applied on.
+// Production baseline kept explicit for historical CI contracts.
 const PRODUCTION_BASELINE = { version: '1.17.0', build: 24 };
-const META = { version: '1.18.0', build: 25, baseline: PRODUCTION_BASELINE };
+const META = { version: '1.18.1', build: '25.1', baseline: PRODUCTION_BASELINE };
 
 window.FrenchTranquilleBuildMeta = META;
 
@@ -19,39 +19,39 @@ window.FrenchTranquilleBuildMeta = META;
   }
 });
 
-// Listening explicitly requests two pedagogical speech rates (.88 normal / .68 slow).
-// voice-ios.js intentionally owns the selected French voice and the global Lucie rate,
-// so it normally normalizes every utterance to that global rate. Preserve Listening's
-// explicit rate only for those two known values, without modifying the sanctuarized
-// voice runtime or the user's saved Lucie speed.
+const LISTENING_RATES = Object.freeze({ normal: 0.88, engineSlow: 0.68, slow: 0.64 });
+window.FrenchTranquilleListeningRates = LISTENING_RATES;
+document.documentElement.dataset.listeningNormalRate = String(LISTENING_RATES.normal);
+document.documentElement.dataset.listeningSlowRate = String(LISTENING_RATES.slow);
+document.documentElement.dataset.listeningEngineSlowRate = String(LISTENING_RATES.engineSlow);
+
+function listeningEffectiveRate(value) {
+  if (Math.abs(value - LISTENING_RATES.normal) < 0.001) return LISTENING_RATES.normal;
+  if (Math.abs(value - LISTENING_RATES.engineSlow) < 0.001) return LISTENING_RATES.slow;
+  return null;
+}
+
 function installListeningRateBridge() {
   if (!('speechSynthesis' in window) || !window.speechSynthesis?.speak) return;
   const synth = window.speechSynthesis;
   if (synth.__frenchTranquilleListeningRateBridge) return;
-
   const inheritedSpeak = synth.speak.bind(synth);
   const RATE_KEY = 'tran-french-teacher:luc-rate:v1';
-  const isListeningRate = value => Math.abs(value - 0.88) < 0.001 || Math.abs(value - 0.68) < 0.001;
-
   synth.speak = utterance => {
     const requestedRate = Number(utterance?.rate);
-    if (!Number.isFinite(requestedRate) || !isListeningRate(requestedRate)) {
-      return inheritedSpeak(utterance);
-    }
-
+    const effectiveRate = Number.isFinite(requestedRate) ? listeningEffectiveRate(requestedRate) : null;
+    if (effectiveRate === null) return inheritedSpeak(utterance);
     const previousRate = localStorage.getItem(RATE_KEY);
     try {
-      localStorage.setItem(RATE_KEY, String(requestedRate));
+      localStorage.setItem(RATE_KEY, String(effectiveRate));
       return inheritedSpeak(utterance);
     } finally {
       if (previousRate === null) localStorage.removeItem(RATE_KEY);
       else localStorage.setItem(RATE_KEY, previousRate);
     }
   };
-
   synth.__frenchTranquilleListeningRateBridge = true;
 }
-
 installListeningRateBridge();
 
 function patchDiagnostics() {
@@ -65,7 +65,6 @@ function patchDiagnostics() {
     }
   });
 }
-
 patchDiagnostics();
 const app = document.getElementById('app');
 if (app) new MutationObserver(patchDiagnostics).observe(app, { subtree: true, childList: true });
