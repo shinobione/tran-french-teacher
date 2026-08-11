@@ -2,39 +2,46 @@
 
 PWA de français pensée pour **Trân**, avec priorité à l’oral, au français utile dans la vraie vie et à une interface simple sur iPhone.
 
-## Candidat actuel
+## Version en production
 
 - **v1.17.5**
 - **Build 24.5 — Navigation State Sync**
-- statut : **CANDIDAT / branche `hotfix24-4-nav-state-sync`**
-- socle UX : Build 24.4 — Mobile Polish / Interaction Timing
+- statut : **PROD / CLOS**
+- commit production : `a64ba268934c4cc811c578764b6aac00427c086a`
 - baseline fonctionnelle : **v1.17.0 — Build 24 — Real Life French II**
 - curriculum : **40 leçons / 241 éléments**
 - Scenario : **28 situations / 84 tours**
 - coût : **0 €**
 
-## Pourquoi Build 24.5
+## Mobile interaction baseline
 
-Build 24.4 a corrigé le vrai problème de feedback mobile : bottom-nav persistante, `tap echo` qui survit aux rerenders et header de leçon allégé. Sa PR était verte, mais le smoke mobile rejoué sur le commit `main` a détecté une course de synchronisation : l’écran Home était bien revenu alors que l’état visuel pouvait encore rester sur Parcours.
+French Trân’quille doit se comporter comme une application mobile :
 
-Build 24.5 retire cette dépendance au timing du `MutationObserver` :
-
-- l’onglet demandé reçoit immédiatement l’état actif ;
-- après la navigation native, `renderBottomNav()` confirme l’état immédiatement ;
-- une seconde confirmation a lieu au prochain `requestAnimationFrame` ;
-- une dernière réconciliation courte à 80 ms couvre les chemins de rendu différés ;
-- nouveau token d’assets **`1.17.5-b24.5`** ;
-- nouveau cache PWA **`tran-french-teacher-v1.17.5-b24.5-nav-state-sync`**.
-
-La règle reste : **exactement un onglet actif**, feedback perceptible à chaque vrai changement, mêmes nœuds DOM avant/après navigation.
-
-## Mobile Polish conservé
-
-- `tap echo` premium sur les actions tappables ;
-- bottom-nav persistante ;
-- Pratiquer = vrai troisième écran ;
+- retour visuel immédiat sur toute surface tappable ;
+- `tap echo` perceptible même si l’action provoque un rerender ;
+- nœuds DOM persistants pour `Aujourd’hui / Pratiquer / Parcours` ;
+- exactement un onglet actif ;
+- état actif synchronisé explicitement après navigation, sans dépendre uniquement du timing d’un `MutationObserver` ;
+- `Pratiquer` est un vrai troisième écran ;
 - header de leçon transparent/non-sticky ;
-- support `prefers-reduced-motion`.
+- `prefers-reduced-motion` respecté.
+
+## Validation Build 24.5
+
+PR #27 :
+
+- quality #83 : **SUCCESS** ;
+- Options #14 : **SUCCESS** ;
+- nav/mobile #33 : **SUCCESS**.
+
+Production `main` sur le même SHA :
+
+- quality #84 : **SUCCESS** ;
+- Options #15 : **SUCCESS** ;
+- nav/mobile #34 : **SUCCESS** ;
+- GitHub Pages #86 : **SUCCESS**.
+
+Le smoke mobile vérifie maintenant réellement : feedback `pointerdown`, `tap echo`, identité persistante des trois boutons, onglet actif unique, navigation `Pratiquer → Parcours → Aujourd’hui` et header de leçon allégé.
 
 ## Sanctuaires
 
@@ -49,6 +56,8 @@ free-voice.js
 curriculum / Learning Memory / Scenario / Listening
 ```
 
-Build 24.5 ne sera déclaré `PROD / CLOS` qu’après PR, quality, Options, nav/mobile smoke sur le head final, puis les mêmes preuves sur `main` et GitHub Pages.
+## Suite
 
-Prochain jalon fonctionnel après stabilisation : **v1.18.0 — Build 25 — Real Life French III**.
+Prochain jalon fonctionnel : **v1.18.0 — Build 25 — Real Life French III**.
+
+Voir aussi : `ROADMAP.md`, `CHANGELOG.md`, `docs/ARCHITECTURE.md` et `docs/HOTFIX-24.5-NAV-STATE-SYNC.md`.
