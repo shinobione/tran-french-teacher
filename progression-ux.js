@@ -77,8 +77,8 @@ if (PROGRESSION_CURRICULUM) {
     return card;
   }
 
-  function ensureDetails(column) {
-    let details = column.querySelector(':scope > .progress-ux-details');
+  function ensureDetails(layout, column) {
+    let details = layout.querySelector(':scope > .progress-ux-details') || column.querySelector(':scope > .progress-ux-details');
     if (!details) {
       details = document.createElement('details');
       details.className = 'progress-ux-details';
@@ -88,8 +88,8 @@ if (PROGRESSION_CURRICULUM) {
           <b aria-hidden="true">⌄</b>
         </summary>
         <div class="progress-ux-details-body"></div>`;
-      column.appendChild(details);
     }
+    if (details.parentElement !== layout) layout.appendChild(details);
     if (smokeMode === 'details') details.open = true;
     return details;
   }
@@ -103,17 +103,25 @@ if (PROGRESSION_CURRICULUM) {
     stats?.classList.add('progress-ux-legacy-hidden');
 
     [...column.children].forEach(child => {
-      if (child === hero || child === stats || child === details || child.classList.contains('progress-ux-overview')) return;
+      if (
+        child === hero ||
+        child === stats ||
+        child === details ||
+        child.classList.contains('progress-ux-overview') ||
+        child.classList.contains('progress-ux-curriculum') ||
+        child.classList.contains('curriculum-card')
+      ) return;
       if (child.parentElement === column) body.appendChild(child);
     });
 
     details.dataset.progressDetailCards = String(body.children.length);
   }
 
-  function compactCurriculum(layout, m) {
+  function compactCurriculum(layout, m, column) {
     const card = layout.querySelector('.curriculum-card');
     if (!card) return;
     card.classList.add('progress-ux-curriculum');
+    if (card.parentElement !== column) column.appendChild(card);
     const rows = [...card.querySelectorAll('.lesson-list > .lesson-row')];
     if (!rows.length) return;
 
@@ -163,10 +171,11 @@ if (PROGRESSION_CURRICULUM) {
     layout.dataset.progressCompleted = String(m.completedCount);
     layout.dataset.progressKnown = String(m.known);
     ensureOverview(column);
-    const details = ensureDetails(column);
+    const details = ensureDetails(layout, column);
+    compactCurriculum(layout, m, column);
     collectSecondaryCards(column, details);
-    compactCurriculum(layout, m);
     layout.dataset.progressDetailsOpen = details.open ? '1' : '0';
+    layout.dataset.progressComposition = 'independent-columns';
   }
 
   function schedule() {
@@ -245,8 +254,8 @@ if (PROGRESSION_CURRICULUM) {
   requestSmokeNavigation();
 
   window.FrenchTranquilleProgressionUX = {
-    version: '1.19.2',
-    build: '26.2',
+    version: '1.19.5',
+    build: '26.5',
     decorate,
     metrics,
     toggleDetails,

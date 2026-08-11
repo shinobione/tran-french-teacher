@@ -175,7 +175,8 @@
   }
 
   function decoratePractice(){
-    const root=document.querySelector('.screen-conversation .narrow');if(!root){practiceMode=null;voiceSession=null;return}
+    const root=document.querySelector('.screen-conversation .narrow');
+    if(!root){practiceMode=null;voiceSession=null;return}
     const scenario=root.querySelector('.scenario-lab-card');const voice=root.querySelector('#free-voice-card');const guided=root.querySelector('.conversation-card');const quiet=root.querySelector('.card.quiet');
     const scenarioRunning=Boolean(scenario?.querySelector('.scenario-runner,.scenario-done'));
     if(scenarioRunning)practiceMode='scenario';
@@ -189,11 +190,24 @@
     quiet?.classList.add('session-mode-hidden');
     let modeHead=root.querySelector(':scope > .practice-mode-head');
     if(practiceMode&&!scenarioRunning){if(!modeHead){modeHead=document.createElement('div');modeHead.className='practice-mode-head';modeHead.innerHTML=`<button class="secondary" data-session-practice-back>‹ ${esc(T('Chọn cách luyện khác','Changer de pratique'))}</button>`;root.prepend(modeHead)}}else modeHead?.remove();
+    root.classList.toggle('session-practice-hub-mode',!practiceMode);
+    root.classList.toggle('session-practice-active-mode',Boolean(practiceMode));
+    root.dataset.sessionPracticeLayout=practiceMode?'single-active':'single-hub';
     document.documentElement.dataset.sessionPracticeMode=practiceMode||'hub';
     decorateVoice();decorateScenario();
   }
 
   function beginVoiceSession(target=5){voiceSession={count:0,target,done:false}}
+
+  function setPracticeMode(next){
+    const normalized=['scenario','voice','guided'].includes(next)?next:null;
+    practiceMode=normalized;
+    if(practiceMode==='voice')beginVoiceSession(5);
+    else if(!practiceMode)voiceSession=null;
+    decoratePractice();
+    return practiceMode;
+  }
+
   function decorateVoice(){
     if(practiceMode!=='voice')return;
     const card=document.querySelector('#free-voice-card');if(!card)return;
@@ -245,11 +259,18 @@
   function schedule(){if(scheduled)return;scheduled=true;requestAnimationFrame(()=>{scheduled=false;decorate()})}
   function decorate(){decorateListening();decorateReview();decoratePractice();decorateDaily();decorateLesson();checkMilestones();runSmokeHook()}
 
+  document.addEventListener('pointerup',event=>{
+    const back=event.target.closest?.('[data-session-practice-back]');
+    if(!back)return;
+    event.preventDefault();
+    setPracticeMode(null);
+  },true);
+
   document.addEventListener('click',event=>{
     if(event.target.closest('[data-session-home]')){event.preventDefault();navigateHome();return}
     const more=event.target.closest('[data-session-more]');if(more){event.preventDefault();const kind=more.dataset.sessionMore;if(kind==='listening'&&listeningSession){const st=listeningState();listeningSession={baselineAttempts:Number(st.totals?.attempts||0),baselineCorrect:Number(st.totals?.correct||0),target:3,done:false};const shell=document.querySelector('.listening-shell');shell?.classList.remove('session-complete-mode');shell?.querySelector(':scope > .session-success')?.remove();shell?.querySelector('[data-listening-next]')?.click();schedule()}if(kind==='review'&&reviewSession){const totals=reviewTotals();reviewSession={baselineReviews:totals.reviews,baselineGood:totals.good,target:Math.max(1,Math.min(3,window.FrenchTranquilleMemory?.summary?.().entries?.length||3)),done:false};document.querySelector('.screen-review .flashcard')?.classList.remove('session-hidden');document.querySelector('.session-review-success')?.remove();schedule()}if(kind==='voice'){beginVoiceSession(3);document.querySelector('#free-voice-card')?.remove();schedule()}return}
-    const mode=event.target.closest('[data-session-practice-mode]');if(mode){event.preventDefault();practiceMode=mode.dataset.sessionPracticeMode;if(practiceMode==='voice')beginVoiceSession(5);schedule();return}
-    if(event.target.closest('[data-session-practice-back]')){event.preventDefault();practiceMode=null;voiceSession=null;schedule();return}
+    const mode=event.target.closest('[data-session-practice-mode]');if(mode){event.preventDefault();setPracticeMode(mode.dataset.sessionPracticeMode);return}
+    if(event.target.closest('[data-session-practice-back]')){event.preventDefault();setPracticeMode(null);return}
     if(event.target.closest('#free-voice-next')&&practiceMode==='voice'&&voiceSession&&!voiceSession.done){voiceSession.count+=1;if(voiceSession.count>=voiceSession.target){voiceSession.done=true;const mem=window.FrenchTranquilleMemory?.summary?.();if(mem?.entries?.some(e=>e.lastSource==='free-voice-voice'&&Number(e.successes||0)>0))unlockMilestone('first-voice')}setTimeout(schedule,0)}
     if(event.target.closest('.screen-lesson [data-next]')&&document.querySelector('.screen-lesson')?.classList.contains('session-lesson-final'))pendingLessonFinish=true;
     if(event.target.closest('[data-session-dismiss-lesson]'))event.target.closest('.lesson-session-complete')?.remove();
@@ -268,5 +289,13 @@
   }
 
   schedule();
-  window.FrenchTranquilleSessionUX={version:'1.18.2',build:'25.2',milestoneKey:MILESTONE_KEY,schedule,state:()=>({practiceMode,listeningSession,reviewSession,voiceSession})};
+  window.FrenchTranquilleSessionUX={
+    version:'1.19.5',
+    build:'26.5',
+    milestoneKey:MILESTONE_KEY,
+    schedule,
+    setPracticeMode,
+    returnToPracticeHub:()=>setPracticeMode(null),
+    state:()=>({practiceMode,listeningSession,reviewSession,voiceSession})
+  };
 })();

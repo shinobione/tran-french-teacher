@@ -59,35 +59,98 @@ jobs:
 
       - name: Chrome — learning details are grouped, not stacked
         run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=32000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&progressionSmoke=details&detailsDashboardSmoke=memory' >/tmp/details-dashboard.html
-          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/details-dashboard.html; then cat /tmp/details-dashboard.html; exit 1; fi
-          grep -q 'data-progress-detail-dashboard="1"' /tmp/details-dashboard.html
-          grep -E -q 'data-progress-detail-groups="[3-9]"' /tmp/details-dashboard.html
-          grep -q 'data-progress-detail-active="memory"' /tmp/details-dashboard.html
-          grep -q 'progress-detail-grid' /tmp/details-dashboard.html
-          grep -q 'data-progress-detail-panel="memory"' /tmp/details-dashboard.html
-          grep -q 'memory-progress-card' /tmp/details-dashboard.html
-          grep -q 'mastery-progress-card' /tmp/details-dashboard.html
-          test "$(grep -o 'data-progress-detail-open=' /tmp/details-dashboard.html | wc -l)" -ge 3
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-261-details-profile-$attempt"
+            file="/tmp/details-dashboard-$attempt.html"
+            rm -rf "$profile" "$file"
+            if ! timeout --signal=TERM --kill-after=5s 40s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=390,844 \
+              --virtual-time-budget=32000 --dump-dom \
+              'http://127.0.0.1:4173/?uxSmoke=lesson8&progressionSmoke=details&detailsDashboardSmoke=memory' >"$file"; then
+              echo "Details Chrome attempt $attempt timed out or exited non-zero"
+              continue
+            fi
+            if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then continue; fi
+            if grep -q 'data-progress-detail-dashboard="1"' "$file" \
+              && grep -E -q 'data-progress-detail-groups="[3-9]"' "$file" \
+              && grep -q 'data-progress-detail-active="memory"' "$file" \
+              && grep -q 'progress-detail-grid' "$file" \
+              && grep -q 'data-progress-detail-panel="memory"' "$file" \
+              && grep -q 'memory-progress-card' "$file" \
+              && grep -q 'mastery-progress-card' "$file" \
+              && test "$(grep -o 'data-progress-detail-open=' "$file" | wc -l)" -ge 3; then
+              passed=1
+              break
+            fi
+            echo "Details attempt $attempt missing markers"
+          done
+          if [ "$passed" -ne 1 ]; then
+            echo 'Build 26.1 Details dashboard smoke failed after 3 bounded isolated attempts'
+            exit 1
+          fi
 
       - name: Chrome — Real Life III remains loaded beside UX patch
         run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=30000 --dump-dom 'http://127.0.0.1:4173/?realLifeSmoke=lesson40&sessionSmoke=practice' >/tmp/real-life-40.html
-          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/real-life-40.html; then cat /tmp/real-life-40.html; exit 1; fi
-          grep -q 'data-real-life-pack3-open="8"' /tmp/real-life-40.html
-          grep -q 'data-real-life-scenario-total="36"' /tmp/real-life-40.html
-          grep -q 'data-real-life-turn-total="108"' /tmp/real-life-40.html
-          grep -q 'data-real-life-resolution-invalid="0"' /tmp/real-life-40.html
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-261-real-life-profile-$attempt"
+            file="/tmp/real-life-40-$attempt.html"
+            rm -rf "$profile" "$file"
+            if ! timeout --signal=TERM --kill-after=5s 40s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=390,844 \
+              --virtual-time-budget=30000 --dump-dom \
+              'http://127.0.0.1:4173/?realLifeSmoke=lesson40&sessionSmoke=practice' >"$file"; then
+              echo "Real Life Chrome attempt $attempt timed out or exited non-zero"
+              continue
+            fi
+            if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then continue; fi
+            if grep -q 'data-real-life-pack3-open="8"' "$file" \
+              && grep -q 'data-real-life-scenario-total="36"' "$file" \
+              && grep -q 'data-real-life-turn-total="108"' "$file" \
+              && grep -q 'data-real-life-resolution-invalid="0"' "$file"; then
+              passed=1
+              break
+            fi
+            echo "Real Life attempt $attempt missing markers"
+          done
+          if [ "$passed" -ne 1 ]; then
+            echo 'Build 26.1 Real Life coexistence smoke failed after 3 bounded isolated attempts'
+            exit 1
+          fi
 
       - name: Chrome — voice replay layer appears after a spoken-result surface
         run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=32000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&voiceReplaySmoke=1' >/tmp/voice-replay.html
-          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/voice-replay.html; then cat /tmp/voice-replay.html; exit 1; fi
-          grep -q 'data-voice-replay-module="1"' /tmp/voice-replay.html
-          grep -q 'data-voice-replay-smoke-card="1"' /tmp/voice-replay.html
-          grep -q 'data-voice-replay-smoke-panel="1"' /tmp/voice-replay.html
-          grep -q 'data-voice-replay="1"' /tmp/voice-replay.html
-          grep -q 'free-voice-card' /tmp/voice-replay.html
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-261-replay-profile-$attempt"
+            file="/tmp/voice-replay-$attempt.html"
+            rm -rf "$profile" "$file"
+            if ! timeout --signal=TERM --kill-after=5s 40s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=390,844 \
+              --virtual-time-budget=32000 --dump-dom \
+              'http://127.0.0.1:4173/?uxSmoke=lesson8&voiceReplaySmoke=1' >"$file"; then
+              echo "Voice replay Chrome attempt $attempt timed out or exited non-zero"
+              continue
+            fi
+            if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then continue; fi
+            if grep -q 'data-voice-replay-module="1"' "$file" \
+              && grep -q 'data-voice-replay-smoke-card="1"' "$file" \
+              && grep -q 'data-voice-replay-smoke-panel="1"' "$file" \
+              && grep -q 'data-voice-replay="1"' "$file" \
+              && grep -q 'free-voice-card' "$file"; then
+              passed=1
+              break
+            fi
+            echo "Voice replay attempt $attempt missing markers"
+          done
+          if [ "$passed" -ne 1 ]; then
+            echo 'Build 26.1 voice replay smoke failed after 3 bounded isolated attempts'
+            exit 1
+          fi
 
       - name: Stop static server
         if: always()

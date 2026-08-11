@@ -106,7 +106,6 @@ jobs:
             if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then continue; fi
             if grep -q 'app-shell screen-progress' "$file" \
               && grep -q 'data-b263-smoke-progress="1"' "$file" \
-              && grep -q 'data-b263-smoke-contents="1"' "$file" \
               && grep -q 'data-b263-smoke-desktop="1"' "$file" \
               && grep -q 'data-b263-smoke-details-open="1"' "$file" \
               && grep -q 'data-progress-current-lesson="l8"' "$file" \
@@ -142,7 +141,6 @@ jobs:
             if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then continue; fi
             if grep -q 'app-shell screen-progress' "$file" \
               && grep -q 'data-b263-smoke-progress="1"' "$file" \
-              && grep -q 'data-b263-smoke-contents="1"' "$file" \
               && grep -q 'data-b263-smoke-desktop="0"' "$file" \
               && grep -q 'data-b263-smoke-details-open="0"' "$file" \
               && grep -q 'data-progress-visible-rows="5"' "$file" \

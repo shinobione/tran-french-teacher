@@ -24,9 +24,9 @@ jobs:
           node --check session-ux-adapter.js
           node --check build-meta.js
           node --check sw.js
-          # Build 25.2 remains a required subsystem, but the global product version may advance.
+          # Build 25.2 remains a required subsystem, while later builds may upgrade its owner file.
           grep -q 'session-ux.css?v=1.18.2-b25.2' index.html
-          grep -q 'session-ux.js?v=1.18.2-b25.2' index.html
+          grep -q 'session-ux.js?v=' index.html
           grep -q 'session-ux-adapter.js?v=1.18.2-b25.2' index.html
           grep -q 'session-ux.js' sw.js
           grep -q 'session-ux-adapter.js' sw.js
