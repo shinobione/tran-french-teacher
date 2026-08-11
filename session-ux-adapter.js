@@ -25,7 +25,8 @@
     if(count>=guided.target)guided.done=true;
     let goal=card.querySelector(':scope > .session-guided-contract');
     if(!goal){goal=document.createElement('div');goal.className='session-guided-contract';card.prepend(goal)}
-    goal.innerHTML=genericProgress(count,guided.target);
+    const signature=`${count}:${guided.target}:${guided.done?1:0}`;
+    if(goal.dataset.signature!==signature){goal.dataset.signature=signature;goal.innerHTML=genericProgress(count,guided.target)}
     card.classList.toggle('session-hidden',guided.done);
     let done=document.querySelector('.session-guided-success');
     if(guided.done&&!done){done=document.createElement('div');done.className='session-guided-success';done.innerHTML=success();card.insertAdjacentElement('afterend',done)}
@@ -71,6 +72,19 @@
 
   const app=document.getElementById('app');if(app)new MutationObserver(schedule).observe(app,{childList:true,subtree:true});
   new MutationObserver(schedule).observe(document.documentElement,{attributes:true,attributeFilter:['data-session-practice-mode']});
+
+  // Listening renders outside #app and replaces the overlay's innerHTML after each
+  // answer/next action. Wake the main Session UX only for those overlay mutations;
+  // otherwise its 5-question counter would stay frozen at the opening baseline.
+  new MutationObserver(mutations=>{
+    const listeningChanged=mutations.some(m=>{
+      const target=m.target?.nodeType===1?m.target:null;
+      if(target?.closest?.('.listening-overlay'))return true;
+      return [...m.addedNodes,...m.removedNodes].some(node=>node?.nodeType===1&&(node.matches?.('.listening-overlay')||node.querySelector?.('.listening-overlay')));
+    });
+    if(listeningChanged)window.FrenchTranquilleSessionUX?.schedule?.();
+  }).observe(document.body,{childList:true,subtree:true});
+
   schedule();smokeHook();
 
   window.FrenchTranquilleSessionUXAdapter={version:'1.18.2',build:'25.2'};
