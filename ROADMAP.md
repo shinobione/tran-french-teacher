@@ -23,6 +23,9 @@
 17. L’état actif de navigation doit être synchronisé explicitement.
 18. **Progressive disclosure** : l’apprenante ne voit pas par défaut tous les moteurs, compteurs et catalogues internes.
 19. **Freeze terrain** : pendant une vraie session de Trân, aucun changement runtime sauf incident critique.
+20. **Contrat de session** : chaque activité a un début, un objectif visible, une progression, une fin explicite et une sortie évidente.
+21. Aucun écran pédagogique ne doit être un **tunnel sans fin** : l’objectif par défaut est court, fini et compréhensible.
+22. Le plaisir d’utilisation vient de micro-interactions et de réussites observables, **pas d’une gamification agressive**.
 
 ---
 
@@ -169,9 +172,144 @@ Garde-fous :
 
 ---
 
+# v1.18.2 — Build 25.2 — Session Goals / Milestones / App Delight
+
+## Problème terrain
+
+Les écrans d’entraînement savent présenter une tâche, mais pas toujours répondre clairement à :
+
+> **« Combien je dois en faire ? Quand est-ce que j’ai fini ? »**
+
+Le screenshot Listening est représentatif : l’exercice est propre, mais un compteur de session sans cible claire ne donne pas de **but à atteindre** ni de moment évident pour sortir.
+
+## Objectif produit
+
+Chaque mode pédagogique doit suivre le même contrat :
+
+```text
+AVANT
+Voici ton petit objectif.
+
+PENDANT
+Tu en es ici.
+
+FIN
+C’est terminé pour cette session.
+
+APRÈS
+Retourner à Aujourd’hui ou continuer volontairement.
+```
+
+L’app doit donner envie de rester parce qu’elle est claire, satisfaisante et vivante — pas parce qu’elle retient artificiellement l’utilisatrice.
+
+## Objectifs de session par défaut
+
+Lucie choisit une petite session adaptée ; Trân ne doit pas configurer dix options.
+
+Cibles indicatives à valider lors de l’implémentation :
+
+- **Listening** : 5 questions pour une session standard courte ; possibilité volontaire de continuer ensuite ;
+- **Révision mémoire** : lot fini d’environ 5 éléments prioritaires ;
+- **Scenario** : 1 situation complète, avec nombre de tours visible ;
+- **Entraînement vocal guidé** : petit lot fini de 5 réponses ;
+- **Leçon** : étapes déjà bornées, mais état de fin et retour vers la suite renforcés.
+
+Le moteur peut adapter légèrement ces nombres, mais **jamais afficher une activité comme infinie par défaut**.
+
+## Indicateurs pendant l’activité
+
+Toujours privilégier une lecture humaine :
+
+```text
+🎧 Session d’écoute
+3 / 5
+Encore 2
+```
+
+plutôt qu’un dashboard de compteurs internes.
+
+Un seul indicateur principal. Les statistiques détaillées vivent dans Parcours / détails.
+
+## État de réussite
+
+À la fin d’une session :
+
+- confirmation claire `Session terminée` ;
+- résumé très court : réussites + 1 ou 2 choses à revoir ;
+- progression réellement enregistrée avant l’écran de fin ;
+- action principale : **Retour à Aujourd’hui** ou **Continuer le parcours**, selon le contexte ;
+- action secondaire : **Encore 3 minutes** / **Continuer à pratiquer**, uniquement sur demande.
+
+Aucune obligation de poursuivre pour « valider » ce qui vient d’être fait.
+
+## Animations de succès — premium, pas casino
+
+Autorisé :
+
+- remplissage final de la barre ;
+- coche animée ;
+- glow mint/lilas court ;
+- pulse discret du logo / avatar Lucie ;
+- micro-animation de la chèvre si un asset adapté existe un jour ;
+- transition douce vers le résumé de session.
+
+Contraintes :
+
+- environ **400–800 ms**, puis repos ;
+- pas de confettis permanents ;
+- pas de son forcé ;
+- pas d’XP artificiels ;
+- `prefers-reduced-motion` respecté ;
+- l’animation ne retarde jamais l’accès au bouton de sortie.
+
+## Milestones significatifs
+
+Récompenser des **progrès réels**, pas des clics :
+
+- première leçon terminée ;
+- première réponse vocale reconnue ;
+- première session Listening terminée ;
+- première situation réelle terminée ;
+- premier acquis revenu avec succès en révision ;
+- 10 / 25 / 50 acquis réellement consolidés ;
+- fin d’un bloc pédagogique A0 ou A1 ;
+- première session terminée sans aide/modèle lorsque la donnée le permet réellement.
+
+Présentation : une petite carte ou animation ponctuelle, puis disparition. Pas de mur de badges obligatoire.
+
+## Cohérence générale / App Feel
+
+Ce build doit aussi imposer une grammaire d’interface commune :
+
+- **une action principale par écran** ;
+- titres, retours et sorties aux mêmes endroits ;
+- vocabulaire apprenant cohérent ;
+- espaces et tailles plus respirables ;
+- informations techniques retirées de l’interface normale ;
+- état `vide / en cours / réussi / à revoir` immédiatement compréhensible ;
+- boutons de sortie explicites : `Retour`, `Terminer`, `Aujourd’hui` selon le contexte ;
+- aucun écran où il faut deviner si on peut partir sans perdre son travail.
+
+## Critères de clôture Build 25.2
+
+- chaque activité principale possède un objectif de session visible ;
+- aucune session standard ne démarre avec une cible indéfinie ;
+- progression `x / objectif` compréhensible ;
+- fin explicite et atteignable ;
+- sortie en 1 tap après réussite ;
+- option de continuer clairement secondaire ;
+- animation de succès sobre et < 1 seconde ;
+- `prefers-reduced-motion` testé ;
+- aucun nouveau système d’XP / monnaie / classement ;
+- aucune perte d’état si Trân quitte juste après une réussite ;
+- tests mobile : début → progression → fin → sortie ;
+- sanctuaires progression / voix / branding inchangés.
+
+---
+
 # v1.19.0 — Build 26 — Real Life French III
 
-Anciennement prévu comme Build 25. Il est volontairement repoussé : **on n’ajoute pas de contenu avant d’avoir rendu l’information existante plus respirable**.
+Anciennement prévu comme Build 25. Il est volontairement repoussé : **on n’ajoute pas de contenu avant d’avoir rendu l’information existante plus respirable et les sessions plus clairement bornées**.
 
 Intention conservée : problèmes quotidiens, émotions, explications, français oral courant vs forme écrite et conversation moins guidée.
 
