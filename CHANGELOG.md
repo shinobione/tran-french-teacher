@@ -4,7 +4,11 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ## [Unreleased]
 
-### v1.17.3 — Build 24.3 — Premium Interaction UX — candidat
+Aucun build fonctionnel en cours de validation. Prochain jalon : **v1.18.0 — Build 25 — Real Life French III**.
+
+---
+
+## [1.17.3] — Build 24.3 — Premium Interaction UX — 2026-08-11
 
 - ajoute une couche globale `interaction-ux.js` / `interaction-ux.css` ;
 - impose un retour visuel immédiat sur les surfaces tappables : `pointerdown`, compression courte, glow/contraste et confirmation au clic ;
@@ -15,35 +19,36 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 - maintient `Pratiquer` actif pendant l’écran ;
 - renforce les zones tactiles mobiles ;
 - cache PWA `1.17.3-b24.3-premium-interaction` ;
-- nouveau smoke Chrome mobile 390×844 : `pointerdown` réel, feedback `.ux-pressing`, géométrie Pratiquer ↔ bottom bar et navigation complète ;
-- aucune modification de la progression, du curriculum, de Learning Memory, de Scenario, de la voix ou du branding.
+- smoke Chrome mobile 390×844 : `pointerdown` réel, feedback `.ux-pressing`, géométrie Pratiquer ↔ bottom bar et navigation complète ;
+- aucune modification de la progression, du curriculum, de Learning Memory, de Scenario, de la voix ou du branding ;
+- PR #24, quality main #76, Options main #7, nav interaction main #20 et Pages #83 : SUCCESS.
 
-Reste Unreleased jusqu’à PR → `main` → GitHub Pages.
-
-### v1.17.2 — Build 24.2 — Navigation Interaction Hotfix — candidat
+## [1.17.2] — Build 24.2 — Navigation Interaction Hotfix — 2026-08-11
 
 - corrige un état réel où `Aujourd’hui / Pratiquer / Parcours` pouvait rester visible mais ne plus répondre aux clics ;
-- stabilise les nœuds DOM de la barre UX : aucun remplacement si son état visuel n’a pas changé ;
+- stabilise les nœuds DOM de la barre UX ;
 - traite les clics de navigation en phase de capture ;
-- nouveau token UX `1.17.2-b24.2` pour `ux-shell.js`, `ux-shell.css` et `build-meta.js` ;
-- identité de cache PWA alignée entre `index.html` et `sw.js` : `1.17.2-b24.2-nav-hotfix` ;
-- ajout d’un smoke Chrome permanent avec hit-testing réel, scroll desktop et navigation `Pratiquer → Parcours → Aujourd’hui` ;
-- aucune modification de la progression, du curriculum, de Learning Memory, des scénarios, de la voix ou du branding.
+- aligne l’identité du cache PWA ;
+- ajoute un smoke Chrome permanent avec hit-testing réel et navigation physique.
 
-### v1.17.0 — Build 24 — Real Life French II — candidat
+## [1.17.1] — Build 24.1 — Options Crash Hotfix — 2026-08-11
+
+- corrige la boucle de `MutationObserver` sur le diagnostic de l’écran Options ;
+- rend le patch de version idempotent ;
+- ajoute un smoke Chrome dédié à Options en mode apprenante et DEBUG FR.
+
+## [1.17.0] — Build 24 — Real Life French II — 2026-08-11
 
 - ajout de `real-life-data-2.js` : **10 situations / 30 tours** pour les acquis des leçons 9→20 ;
 - pack II centré sur des séquences croisées plutôt que des doublons des scénarios gare/resto/pharmacie historiques ;
 - rendez-vous/train, shopping, dîner, santé, présentation de Jerry, retour, réservation, logement et téléphone ;
-- total Scenario candidat : **28 situations / 84 tours** ;
+- Scenario total : **28 situations / 84 tours** ;
 - Real Life I + II : **16 situations / 48 tours** ;
 - aucune nouvelle clé de progression ;
 - même stockage `french-tranquille:scenarios:v1` ;
-- `real-life-ux.js` fait évoluer le catalogue vers une vue de recommandation : **6 situations ouvertes max visibles par défaut** ;
+- `real-life-ux.js` limite la vue à **6 situations ouvertes max** par défaut ;
 - tri des scènes personnelles selon les prérequis les plus récents ;
-- bouton pour afficher les autres scènes ouvertes ;
 - seulement deux scènes futures verrouillées visibles ;
-- cache candidat `1.17.0-b24` ;
 - logo/favicon/voice/free-voice restent sanctuarisés.
 
 ---
