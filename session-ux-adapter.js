@@ -39,6 +39,13 @@
   function schedule(){if(scheduled)return;scheduled=true;requestAnimationFrame(()=>{scheduled=false;decorate()})}
 
   window.addEventListener('click',event=>{
+    const session=window.FrenchTranquilleSessionUX?.state?.().listeningSession;
+    if(event.target.closest?.('[data-listening-next]')&&session?.done){
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      window.FrenchTranquilleSessionUX?.schedule?.();
+      return;
+    }
     if(event.target.closest?.('[data-session-home]')&&document.querySelector('.scenario-done')){
       document.querySelector('.scenario-done [data-scenario-list]')?.click();
     }
@@ -90,8 +97,6 @@
     }
   }
 
-  // Listening lives outside #app and replaces its innerHTML after every answer.
-  // Reconcile a possible first-answer race, then wake Session UX for the new totals.
   new MutationObserver(mutations=>{
     const listeningChanged=mutations.some(m=>{
       const target=m.target?.nodeType===1?m.target:null;
