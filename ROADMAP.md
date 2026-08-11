@@ -21,29 +21,32 @@
 
 # État de référence livré
 
-## v1.10.0 — Build 17 — ✅ PROD
+## v1.11.0 — Build 18 — ✅ PROD
 
-- 25 leçons / 148 éléments ;
-- Learning Memory ;
+- **25 leçons / 148 éléments** ;
+- Learning Memory + révision espacée ;
 - Daily Coach ;
 - Mastery Engine ;
-- Scenario Lab : 12 situations / 36 tours ;
-- Free Voice + fallback texte ;
-- Chrome Home + Conversation ;
+- Scenario Lab : **12 situations / 36 tours** ;
+- Error Intelligence fondée sur des preuves observables ;
+- historique d’erreurs borné ;
+- récence / répétition / récupération ;
+- Free Voice relié à Learning Memory + Error Intelligence ;
+- Chrome Home + Scenario + Error Intelligence ;
 - GitHub Pages ;
-- coût 0 €.
+- coût : **0 €**.
 
 ---
 
-# PHASE PWA-3B / ADAPTATION
+# PHASE PWA-3B — ADAPTATION RÉELLE
 
 ## v1.9.0 — Build 16 — Mastery Engine — ✅ CLOS
 
-- [x] 4 grandes étapes ;
-- [x] preuves mémoire avant `Maîtrisé` ;
+- [x] quatre étapes de maîtrise ;
+- [x] preuves Learning Memory avant `Maîtrisé` ;
 - [x] estimation interne non assimilée à une certification CECRL ;
 - [x] priorité suivante ;
-- [x] docs canoniques ;
+- [x] documentation canonique ;
 - [x] Chrome + Pages verts.
 
 ## v1.10.0 — Build 17 — Scenario Lab — ✅ CLOS
@@ -59,75 +62,43 @@
 - [x] Chrome Home + Conversation ;
 - [x] CI main + Pages verts.
 
----
+## v1.11.0 — Build 18 — Error Intelligence — ✅ CLOS
 
-## v1.11.0 — Build 18 — Error Intelligence — 🔥 EN COURS
-
-### But
-
-Mémoriser **les difficultés observables** et leur répétition afin de mieux décider ce qui doit revenir, sans inventer de diagnostic grammatical ou phonétique.
-
-### Taxonomie V1
-
-```text
-retrieval-difficult
-text-mismatch
-scenario-miss
-assisted
-voice-unrecognized
-partial
-practice-miss
-repeated-miss
-```
-
-Les catégories plus linguistiques (`article`, `négation`, `ordre des mots`, etc.) sont reportées tant qu’une comparaison entrée/cible ne permet pas de les prouver de manière fiable.
-
-### Architecture retenue
-
-```text
-Learning Memory = quoi réviser et quand
-Error Intelligence = où / comment la difficulté a été observée
-Mastery Engine = degré global de consolidation
-Daily Coach = quoi faire maintenant
-```
-
-### Livré sur branche Build 18
+### Livré
 
 - [x] stockage `french-tranquille:error-intelligence:v1` ;
-- [x] historique borné : 20 événements / élément, 120 récents globaux ;
-- [x] compteurs agrégés ;
+- [x] taxonomie fondée sur des preuves observables ;
+- [x] `retrieval-difficult` ;
+- [x] `text-mismatch` ;
+- [x] `scenario-miss` ;
+- [x] `assisted` ;
+- [x] `voice-unrecognized` ;
+- [x] `partial` ;
+- [x] `practice-miss` ;
+- [x] `repeated-miss` ;
+- [x] historique borné à **20 événements / élément** ;
+- [x] historique global borné à **120 événements récents** ;
 - [x] récence ;
-- [x] répétition sur fenêtre de 30 min ;
+- [x] répétition sur fenêtre de 30 minutes ;
 - [x] récupération après réussite ;
-- [x] erreur dominante uniquement après répétition ;
 - [x] score de priorité interne ;
-- [x] focus ajouté à Daily Coach ;
-- [x] carte Error Intelligence dans Progression ;
+- [x] focus Error Intelligence dans Daily Coach ;
+- [x] carte dédiée dans Progression ;
 - [x] mini-bilan de session ;
-- [x] export JSON dédié ;
+- [x] export JSON local ;
 - [x] diagnostic Réglages ;
 - [x] Free Voice → Learning Memory ;
 - [x] Free Voice → Error Intelligence ;
 - [x] erreurs techniques micro exclues de la mémoire linguistique ;
-- [x] Scenario Lab observé via ses sources Learning Memory ;
-- [x] rating Révision difficile exploitable ;
-- [x] README / CHANGELOG / ARCHITECTURE actualisés.
-
-### À valider avant clôture
-
-- [ ] contrat CI Error Intelligence ;
-- [ ] limite de taille vérifiée automatiquement ;
-- [ ] absence de double comptage Free Voice ;
-- [ ] aucune régression Learning Memory ;
-- [ ] aucune régression 25 leçons / 12 scénarios ;
-- [ ] Chrome Home vert ;
-- [ ] Chrome Scenario Lab vert ;
-- [ ] Chrome Error Intelligence `?errorSmoke=1` vert ;
-- [ ] PR verte ;
-- [ ] merge ;
-- [ ] CI `main` verte ;
-- [ ] GitHub Pages vert ;
-- [ ] ROADMAP + CHANGELOG clôturés après preuve de prod.
+- [x] bug `free-voice-text` / `voice` corrigé par classification exacte du canal ;
+- [x] aucun pseudo-diagnostic grammatical ou phonétique ;
+- [x] Chrome Home vert ;
+- [x] Chrome Scenario Lab vert ;
+- [x] Chrome Error Intelligence vert ;
+- [x] smoke réel des limites **20 / 120** ;
+- [x] PR verte ;
+- [x] CI `main` verte ;
+- [x] GitHub Pages vert.
 
 ---
 
@@ -153,29 +124,76 @@ Puis seulement :
 - distinction phrase reconnue / prononciation correcte ;
 - aucun faux score phonétique.
 
-Ce gate peut devenir **Build 18.x** si le test arrive avant Build 19, ou être traité plus tard sans bloquer le curriculum.
+Ce gate peut être traité en hotfix/build intermédiaire dès que les données réelles existent, sans bloquer le curriculum.
 
 ---
 
 # PHASE PWA-4B — A1 CORE
 
-## v1.12.0 — Build 19 — Curriculum 26 → 40 — PROCHAIN APRÈS BUILD 18
+## v1.12.0 — Build 19 — Curriculum 26 → 40 — 🔥 PROCHAIN
 
-Axes :
+### But
 
-- nombres 11 → 100 ;
-- dates, jours, mois ;
-- heures complètes ;
-- possessifs de base ;
-- présent `tu / il / elle / nous` sur structures fréquentes ;
-- `aller + infinitif` — futur proche ;
-- `venir de + infinitif` simple ;
-- passé composé ultra-fréquent après consolidation du présent ;
-- transport / administration / rendez-vous ;
-- émotions et besoins ;
-- situations avec Jerry et les proches.
+Faire passer French Trân’quille d’un **early A1** à un **A1 Core réellement utilisable**, sans transformer l’app en manuel de conjugaison.
 
-**Règle :** aucune conjugaison hors-sol ; chaque structure est motivée par une situation.
+### Périmètre prévu
+
+15 nouvelles leçons, chacune centrée sur une situation :
+
+26. nombres **11 → 20** ;
+27. nombres **20 → 100** et prix ;
+28. **jours de la semaine** et disponibilité ;
+29. **mois / dates** et anniversaire / rendez-vous ;
+30. **heure complète** : et quart, et demie, moins le quart ;
+31. **mon / ma / mes**, ton / ta / tes ;
+32. présent utile avec **tu** ;
+33. présent utile avec **il / elle** ;
+34. présent utile avec **nous** ;
+35. **aller + infinitif** — futur proche ;
+36. **venir de + infinitif** — action toute récente ;
+37. **passé composé ultra-fréquent** : j’ai mangé / j’ai travaillé / j’ai regardé ;
+38. **je suis allée / arrivée / rentrée** dans des situations concrètes ;
+39. **administration / rendez-vous / documents** ;
+40. **émotions, besoins et conversation avec Jerry / proches**.
+
+### Règles pédagogiques
+
+- pas de tableau de conjugaison hors contexte ;
+- 5–7 éléments nouveaux maximum par leçon ;
+- réutilisation d’anciens acquis ;
+- notes de structure courtes VI/FR ;
+- phrases réellement utiles ;
+- formes féminines cohérentes avec Trân quand nécessaire ;
+- le français oral naturel peut être signalé sans sacrifier la forme correcte ;
+- les nouveaux éléments doivent automatiquement devenir disponibles pour Memory, Voice, Mastery et futurs scénarios.
+
+### Architecture envisagée
+
+```text
+app.js                 — intact
+curriculum-stage2.js   — leçons 16–25
+curriculum-stage3.js   — leçons 26–40
+stage3-boot.js         — rerender contrôlé
+```
+
+### Critères de clôture Build 19
+
+- [ ] 15 nouvelles leçons ;
+- [ ] total attendu documenté ;
+- [ ] IDs de leçons et d’items uniques ;
+- [ ] aucune régression des 25 anciennes leçons ;
+- [ ] toutes les nouvelles leçons ont intro + items + challenge ;
+- [ ] structures grammaticales expliquées sans chapitre scolaire isolé ;
+- [ ] Learning Memory voit les nouveaux items ;
+- [ ] Free Voice voit les nouveaux items ;
+- [ ] Mastery Engine étendu à un nouveau palier A1 Core ;
+- [ ] Error Intelligence accepte les nouveaux IDs ;
+- [ ] curriculum UX reste bornée/scrollable ;
+- [ ] Chrome Home vert ;
+- [ ] Chrome ancienne Conversation vert ;
+- [ ] Chrome Build 19 / leçon 40 vert ;
+- [ ] README / ROADMAP / CHANGELOG / ARCHITECTURE synchronisés ;
+- [ ] CI PR + main + Pages verts.
 
 ---
 
@@ -186,8 +204,6 @@ Axes :
 - vitesse lente puis normale ;
 - mini-dialogues ;
 - erreurs envoyées à Learning Memory + Error Intelligence.
-
----
 
 ## v1.14.0 — Build 21 — Adaptive Language Ratio
 
