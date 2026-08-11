@@ -1,0 +1,39 @@
+/* French Trân'quille — v1.19.4 Build 26.4
+   Single-scroll Progress desktop polish + Tyffany teacher branding companion. */
+
+/*
+ * Build 26.3 proved the two-column Progress layout, but its sticky details card
+ * created a second scrollbar inside the page. Build 26.4 deliberately keeps
+ * the two-column information architecture while returning scrolling ownership
+ * to the document itself.
+ */
+@media(min-width:861px){
+  .screen-progress .progress-layout.progress-ux-ready .progress-ux-details{
+    position:relative!important;
+    top:auto!important;
+    max-height:none!important;
+    overflow:visible!important;
+    overscroll-behavior:auto!important;
+    scrollbar-gutter:auto!important;
+    scrollbar-width:auto!important;
+  }
+
+  .screen-progress .progress-layout.progress-ux-ready .progress-ux-details>summary{
+    position:static!important;
+    top:auto!important;
+    z-index:auto!important;
+    backdrop-filter:none!important;
+  }
+
+  .screen-progress .progress-layout.progress-ux-ready .progress-ux-details::-webkit-scrollbar{
+    width:auto;
+  }
+}
+
+/* Mobile remains Build 26.3: one column, Details collapsed by default. */
+@media(max-width:860px){
+  .screen-progress .progress-layout.progress-ux-ready .progress-ux-details{
+    max-height:none!important;
+    overflow:hidden!important;
+  }
+}

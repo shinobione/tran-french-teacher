@@ -9,6 +9,8 @@ UX Shell simple
         ↓
 Progression UX + Session UX + Build 26.3 Interaction layer
         ↓
+Build 26.4 single-scroll + Tyffany compatibility layer
+        ↓
 Details Dashboard + Voice Replay
         ↓
 moteurs pédagogiques locaux
@@ -24,7 +26,7 @@ La complexité appartient aux moteurs ; Trân voit d’abord l’information uti
 
 ---
 
-# Runtime production — v1.19.3 Build 26.3
+# Runtime candidate — v1.19.4 Build 26.4
 
 ```text
 progress-safety.js
@@ -60,6 +62,7 @@ session-ux-adapter.js
 voice-replay.js
 progress-details-dashboard.js
 build26-3-ux.js
+build26-4-ux.js
 build-meta.js
 ```
 
@@ -71,9 +74,129 @@ session-ux.css
 voice-replay.css
 progress-details-dashboard.css
 build26-3-ux.css
+build26-4-ux.css
 ```
 
-Production runtime : `5947149e9fcb3b387aa01a797607270edb4f100e` — PR #44 — GitHub Pages #101 SUCCESS.
+Baseline production précédente : v1.19.3 / Build 26.3 — runtime `5947149e9fcb3b387aa01a797607270edb4f100e` — PR #44 — Pages #101 SUCCESS.
+
+---
+
+# Build 26.4 — propriété du scroll
+
+## Problème observé
+
+Build 26.3 a correctement créé le layout desktop 2 colonnes, mais avait donné à `.progress-ux-details` son propre viewport vertical :
+
+```css
+position: sticky;
+max-height: calc(100vh - 36px);
+overflow: auto;
+```
+
+Avec un groupe long comme Mastery, le résultat réel était :
+
+```text
+scrollbar de la page
++
+scrollbar dans la carte Détails
+```
+
+Cette hiérarchie impose deux gestes de scroll concurrents sans nécessité pédagogique.
+
+## Contrat Build 26.4
+
+`build26-4-ux.css` ne détruit pas la grille Build 26.3. Il remplace uniquement la politique de scroll sur desktop :
+
+```css
+position: relative;
+top: auto;
+max-height: none;
+overflow: visible;
+overscroll-behavior: auto;
+scrollbar-gutter: auto;
+```
+
+Le `summary` de la frontière Details redevient lui aussi statique dans le flux.
+
+Conséquence :
+
+- le document est l’unique propriétaire du scroll vertical ;
+- la carte Details grandit avec le groupe actif ;
+- les cartes pédagogiques restent les mêmes nœuds DOM ;
+- aucun moteur ne reçoit de nouvelle responsabilité ;
+- aucune donnée n’est migrée.
+
+Mobile conserve le contrat Build 26.3 : Details replié et aucun changement de disposition.
+
+---
+
+# Build 26.4 — branding Tyffany sans migration
+
+## Pourquoi une couche additive
+
+Le nom initial `Lucie` est présent dans des chaînes historiques et dans des identifiants techniques vieux de plusieurs builds :
+
+```text
+LucieVoice
+tran-french-teacher:luc-voice:v1
+tran-french-teacher:luc-rate:v1
+tran-french-teacher:luc-pitch:v1
+lucie-* ids/classes
+```
+
+Ces identifiants contiennent des préférences locales et des contrats CI. Les renommer n’apporte aucune valeur à Trân et augmenterait le risque de perte de réglages.
+
+Le nom produit visible devient donc **Tyffany** via `build26-4-ux.js`, sans migration interne.
+
+## Pipeline de branding
+
+```text
+moteur historique rend du texte
+        ↓
+Build26.4 patch idempotent des text nodes
+        ↓
+Lucie visible → Tyffany visible
+```
+
+Attributs textuels sûrs également normalisés :
+
+```text
+aria-label
+title
+alt
+placeholder
+data-speak
+```
+
+Les `id`, `class`, clés localStorage et noms d’API ne sont **pas** renommés.
+
+Le public export :
+
+```text
+FrenchTranquilleCurriculum.tutor = "Tyffany"
+```
+
+La couche expose aussi :
+
+```text
+FrenchTranquilleTeacher.name = "Tyffany"
+```
+
+## Speech synthesis
+
+`voice-ios.js` reste byte-identique.
+
+Build 26.4 enveloppe seulement la dernière fonction `speechSynthesis.speak` déjà composée par les couches existantes afin de remplacer l’ancien nom dans `utterance.text` lorsqu’il apparaît.
+
+```text
+"Je m'appelle Lucie"
+        ↓
+"Je m'appelle Tyffany"
+        ↓
+chaîne voix existante inchangée
+```
+
+Le choix de voix, le rate, le pitch et la reconnaissance vocale ne sont pas modifiés.
 
 ---
 
@@ -104,7 +227,7 @@ Le symptôme terrain était cohérent :
 
 ## Couche `build26-3-ux.js`
 
-Cette couche **n’est pas un nouveau moteur pédagogique**. Elle orchestre uniquement la surface Today et le placement Progress.
+Cette couche n’est pas un moteur pédagogique. Elle orchestre Today et le placement Progress.
 
 ```text
 DailyCoach.plan()
@@ -115,30 +238,11 @@ Build26.3 surface stable
       └── extras hors .daily-steps
 ```
 
-### Contrat Today
-
-- exactement 2 actions principales directes dans `.daily-steps` ;
-- activités secondaires dans `.b263-daily-extras` ;
-- proxy Listening caché avec `data-listening-open`, sans classe `.daily-step` ;
-- `Voir les autres activités` = vrai `<button>` avec `aria-expanded` ;
-- routage en phase capture :
-  - Review → bus de compatibilité bottom-nav ;
-  - Lesson → vrai `[data-open-lesson]` ;
-  - Conversation → bus de compatibilité conversation ;
-  - Listening → `FrenchTranquilleListening.open()` ;
-- aucune écriture learner / Memory / Scenario / Listening.
-
-### Idempotence
-
-La couche ne réécrit un label, un attribut, un état `hidden` ou un dataset que si la valeur doit réellement changer. Ce contrat est important car l’application conserve plusieurs `MutationObserver` historiques.
-
-`daily-coach.js` reste la source du plan ; Build 26.3 conserve sa signature legacy afin qu’il ne reconstruise pas la surface quand le plan n’a pas changé.
+Contrat : nœuds stables, vrai bouton disclosure, routage explicite, rendu idempotent, aucune écriture learner/Memory/Scenario/Listening.
 
 ---
 
-# Build 26.3 — Progress Layout
-
-L’objectif est de réorganiser **les nœuds existants**, pas de recréer les moteurs.
+# Build 26.3 — structure Progress conservée
 
 Structure historique simplifiée :
 
@@ -156,30 +260,21 @@ Build 26.3 applique :
 .progress-layout > div:first-child { display: contents; }
 ```
 
-Les descendants deviennent donc des items du CSS Grid principal sans clone ni migration DOM.
+Les descendants deviennent des items du CSS Grid principal sans clone ni migration DOM.
 
 ## Desktop / tablette large
 
 ```text
 ┌──────────────────────────┬─────────────────────────────┐
 │ progress-ux-overview     │ progress-ux-details         │
-│                          │ dashboard + groupe actif     │
-├──────────────────────────┤                             │
-│ progress-ux-curriculum   │ sticky / overflow auto      │
+├──────────────────────────┤ dashboard + groupe actif    │
+│ progress-ux-curriculum   │                             │
 └──────────────────────────┴─────────────────────────────┘
 ```
 
-`progress-ux-details` :
-
-- ouvert par défaut au premier rendu desktop ;
-- `position: sticky` ;
-- `max-height` basé sur le viewport ;
-- scroll interne ;
-- header sticky.
+Build 26.3 avait initialement ajouté sticky + scroll interne. Build 26.4 remplace uniquement cette partie.
 
 ## Mobile
-
-Ordre conservateur :
 
 ```text
 progress-ux-overview
@@ -191,15 +286,13 @@ progress-ux-details (replié par défaut)
 
 Le curriculum reste **5 / 40** visible par défaut.
 
-Un `WeakSet` garde la notion de « premier rendu » afin que la couche responsive ne rouvre/referme pas sans cesse un panneau que l’utilisateur vient de manipuler.
-
 ---
 
 # Progression UX — Build 25 + Build 26.2
 
 `progression-ux.js` reste propriétaire du résumé, du curriculum compact et de la frontière `<details>`.
 
-Build 26.2 a ajouté le toggle explicite/déterministe de `Détails d’apprentissage`. Build 26.3 ne remplace pas ce contrat : il change uniquement la **position responsive** de cette frontière.
+Build 26.2 a ajouté le toggle explicite/déterministe de `Détails d’apprentissage`. Les builds 26.3/26.4 ne remplacent pas ce contrat.
 
 ---
 
@@ -242,8 +335,6 @@ Les sessions restent bornées :
 - Scenario : 1 situation ;
 - vocal guidé : objectif borné sans modification de `free-voice.js`.
 
-Build 26.3 ne change pas ces moteurs. Il stabilise seulement leurs entrées depuis Today.
-
 ---
 
 # Real Life French III — Build 26
@@ -264,7 +355,7 @@ session-ux.js
 
 Production : **36 situations / 108 tours**.
 
-Baseline historique protégée : `real-life-data-2.js` correspond à la phase **v1.17.0 — Build 24 — Real Life French II**, où Scenario comptait **28 situations / 84 tours** avant Pack III.
+Baseline historique protégée : `real-life-data-2.js` correspond à **v1.17.0 — Build 24 — Real Life French II**, où Scenario comptait **28 situations / 84 tours** avant Pack III.
 
 ---
 
@@ -303,7 +394,7 @@ french-tranquille:safety:pre-build22:v1
 Curriculum : **40 leçons / 241 éléments**.
 Scenario : **36 situations / 108 tours**.
 
-Build 26.3 ne crée aucune clé learner et ne migre aucun état.
+Build 26.4 ne crée aucune clé learner et ne migre aucun état.
 
 # Voice / branding — sanctuaires
 
@@ -314,25 +405,29 @@ assets/LOGO.png
 assets/Favicon.png
 ```
 
-# CI Build 26.3 — production
+Le nom visible Tyffany est une couche de branding ; les identifiants historiques internes restent compatibles.
 
-PR #44 : **9 workflows fonctionnels / 9 SUCCESS**.
+---
 
-Le nouveau smoke Build 26.3 vérifie physiquement :
+# CI candidate Build 26.4
 
-1. ouverture de `Voir les autres activités` ;
-2. identité du même nœud toggle avant/après ;
-3. clic `Écouter 3 minutes` → overlay Listening ;
-4. clic `Révision mémoire` → écran Review ;
-5. retour Home puis clic `Continuer le parcours` → écran Lesson ;
-6. desktop `display: contents` + Details ouvert/sticky + dashboard présent ;
-7. mobile Details replié + curriculum 5/40 ;
-8. profil synthétique l8 inchangé.
+Le workflow dédié vérifie :
 
-Sur `main`, le premier passage de ce nouveau smoke a été sensible au timing Chrome ; le rerun sur le **même commit runtime** a passé Today, desktop et mobile. Les 9 contrats fonctionnels sont verts et GitHub Pages **#101 SUCCESS**.
+1. version/cache/wiring 1.19.4 ;
+2. hashes voix/branding inchangés ;
+3. Tyffany visible dans le DOM apprenant ;
+4. aucun Lucie visible après patch ;
+5. tutor export = Tyffany ;
+6. Progress l8 réellement ouvert ;
+7. groupe Mastery réellement sélectionné ;
+8. `overflow-y: visible` ;
+9. `max-height: none` ;
+10. aucun nested scroll ;
+11. page elle-même scrollable ;
+12. progression synthétique l8 intacte.
+
+Le workflow Build 26.3 reste actif pour ses contrats Today et sa structure 2 colonnes, mais n’impose plus l’ancienne politique sticky comme invariant éternel.
 
 # Dette / gate terrain
 
-Le layout Progress et les interactions Today sont des baselines production. L’auto-écoute reste production déployée mais **terrain iPhone non confirmée**.
-
-`app.js` reste monolithique par choix de sécurité. Son extraction est réservée à Architecture Hardening.
+Build 26.4 ne modifie pas le gate iPhone de l’auto-écoute. `app.js` reste monolithique par choix de sécurité ; son extraction est réservée à Architecture Hardening.

@@ -1,6 +1,6 @@
 // Production baseline kept explicit for historical CI contracts.
 const PRODUCTION_BASELINE = { version: '1.17.0', build: 24 };
-const META = { version: '1.19.3', build: '26.3', baseline: PRODUCTION_BASELINE };
+const META = { version: '1.19.4', build: '26.4', baseline: PRODUCTION_BASELINE };
 
 window.FrenchTranquilleBuildMeta = META;
 
@@ -13,7 +13,7 @@ window.FrenchTranquilleBuildMeta = META;
   'FrenchTranquilleErrors','FrenchTranquilleListening','FrenchTranquilleLanguage','FrenchTranquilleUX',
   'FrenchTranquilleInteraction','FrenchTranquilleSafety','FrenchTranquilleProgressionUX',
   'FrenchTranquilleSessionUX','FrenchTranquilleSessionUXAdapter','FrenchTranquilleVoiceReplay',
-  'FrenchTranquilleProgressDetailsDashboard','FrenchTranquilleBuild263UX'
+  'FrenchTranquilleProgressDetailsDashboard','FrenchTranquilleBuild263UX','FrenchTranquilleBuild264UX'
 ].forEach(name => {
   const api = window[name];
   if (api && typeof api === 'object') {
@@ -23,7 +23,7 @@ window.FrenchTranquilleBuildMeta = META;
 });
 
 // voice-ios.js accepts >= 0.65. Keep slow exactly on that safe floor so the
-// Listening bridge cannot fall back to Lucie's default ~0.84 rate.
+// Listening bridge cannot fall back to the configured teacher voice's default ~0.84 rate.
 const LISTENING_RATES = Object.freeze({ normal: 0.88, engineSlow: 0.68, slow: 0.65 });
 window.FrenchTranquilleListeningRates = LISTENING_RATES;
 document.documentElement.dataset.listeningNormalRate = String(LISTENING_RATES.normal);
