@@ -4,41 +4,37 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ## [Unreleased]
 
-### v1.17.5 — Build 24.5 — Navigation State Sync — candidat
+Prochain jalon : **v1.18.0 — Build 25 — Real Life French III**.
 
-- correctif de stabilisation après le smoke `main` de Build 24.4 ;
-- supprime la dépendance au timing du `MutationObserver` pour l’état actif de la bottom bar ;
-- synchronise immédiatement l’onglet demandé, puis confirme après navigation native, au prochain frame et à +80 ms ;
-- conserve les nœuds DOM persistants et le `tap echo` de Build 24.4 ;
+---
+
+## [1.17.5] — Build 24.5 — Navigation State Sync — 2026-08-11
+
+- clôt la stabilisation mobile initiée par Build 24.4 ;
+- supprime la dépendance au seul timing du `MutationObserver` pour l’état actif de la bottom bar ;
+- synchronise l’onglet demandé immédiatement, après navigation native, au prochain frame et à +80 ms ;
+- conserve les nœuds DOM persistants et le `tap echo` ;
 - force les assets UX sous `1.17.5-b24.5` ;
 - cache PWA `tran-french-teacher-v1.17.5-b24.5-nav-state-sync` ;
+- PR #27 : quality #83 / Options #14 / nav-mobile #33 SUCCESS ;
+- `main` : quality #84 / Options #15 / nav-mobile #34 SUCCESS ;
+- GitHub Pages #86 SUCCESS ;
 - aucune modification de la progression, du curriculum, de la voix, de Learning Memory, Scenario, Listening ou du branding.
 
-### v1.17.4 — Build 24.4 — Mobile Polish / Interaction Timing — intégré mais non clos
+### Build 24.4 — Mobile Polish / Interaction Timing
 
-- corrige le feedback mobile qui disparaissait lors d’un vrai changement d’onglet ;
-- remplace la reconstruction `innerHTML` de la bottom bar par des nœuds DOM persistants ;
-- ajoute un `tap echo` indépendant du composant ;
-- impose un seul onglet actif ;
-- nettoie le header de leçon : plus de gros bandeau violet/sticky ;
-- PR verte, mais le smoke mobile rejoué sur `main` a révélé une course de synchronisation `active-wrong:progress:home` ;
-- la clôture est donc reportée à Build 24.5.
+Build 24.4 a apporté les nœuds persistants, le `tap echo` et le header de leçon allégé. Sa PR était verte, mais le smoke `main` a révélé une course `active-wrong:progress:home`. La clôture fonctionnelle de ce chantier est donc portée par Build 24.5.
 
 ---
 
 ## [1.17.3] — Build 24.3 — Premium Interaction UX — 2026-08-11
-
-- couche globale `interaction-ux.js/css` ;
-- retour visuel immédiat `pointerdown`, compression courte, glow/contraste et confirmation ;
-- Pratiquer = vrai troisième écran/tab ;
-- zones tactiles mobiles renforcées ;
-- PR #24, quality main #76, Options #7, nav interaction #20 et Pages #83 : SUCCESS.
+- couche globale d’interaction premium ; Pratiquer = vrai troisième écran ; PR #24 + quality #76 + Options #7 + nav #20 + Pages #83 SUCCESS.
 
 ## [1.17.2] — Build 24.2 — Navigation Interaction Hotfix — 2026-08-11
-- corrige un état où la navigation pouvait rester visible mais inerte ; stabilise le cache et ajoute un smoke de clic physique.
+- navigation visible mais inerte corrigée ; cache réaligné ; smoke de clic physique ajouté.
 
 ## [1.17.1] — Build 24.1 — Options Crash Hotfix — 2026-08-11
-- corrige la boucle `MutationObserver` du diagnostic Options et ajoute un smoke dédié.
+- boucle `MutationObserver` du diagnostic Options corrigée ; smoke dédié ajouté.
 
 ## [1.17.0] — Build 24 — Real Life French II — 2026-08-11
 - 10 situations / 30 tours ; Scenario total 28 / 84 ; catalogue limité à 6 propositions ouvertes visibles.
