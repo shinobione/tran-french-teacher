@@ -1,69 +1,87 @@
 # French Trân’quille — NEXT UX PASS
 
-Statut : **BUILD 25 EN COURS / SUITE PLANIFIÉE**  
+Statut : **BUILD 25 CLOS / SUITE PLANIFIÉE**  
 Date terrain : **2026-08-11**
 
-Ce document traduit les retours d’utilisation réelle en ordre de travail.
+## Build 25 — Progression UX — ✅ LIVRÉ
+
+`Parcours` utilise désormais une logique de progressive disclosure : résumé simple, détails à la demande, seulement 5 leçons visibles par défaut et les 40 disponibles volontairement.
+
+Le contrat l8 et les moteurs Memory/Mastery restent intacts. Voir `docs/BUILD-25-PROGRESSION-UX.md`.
 
 ---
 
-# Freeze terrain
+# Build 25.1 — Listening Slow Calibration — PROCHAIN
 
-Le freeze est **LEVÉ** : Trân a terminé sa session.
-
-La règle reste permanente : pendant une utilisation réelle, aucune modification runtime/cache sauf crash, perte de données ou blocage critique.
-
----
-
-# 1. Parcours / Progression — P0 — BUILD 25 EN COURS
-
-## Observation
-
-L’écran est devenu beaucoup trop long : position, niveau, Learning Memory, Mastery, A1, situations, acquis et 40 leçons s’empilent comme si tout était une tâche à lire.
-
-## Cible
-
-Au premier affichage :
+État courant :
 
 ```text
-OÙ TU EN ES
-↓
-CE QUI COMPTE MAINTENANT
-↓
-CE QUI VIENT ENSUITE
+normal = 0.88
+lent   = 0.68
 ```
 
-Le reste est accessible volontairement.
+Retour terrain : lent reste un peu rapide.
 
-## Implémentation candidate
+Candidat suivant :
 
-`progression-ux.js` orchestre les cartes existantes :
+```text
+normal = 0.88
+lent   = 0.64
+```
 
-- résumé simple en tête ;
-- vieux hero/stats masqués, pas supprimés ;
-- cartes techniques regroupées dans `Détails d’apprentissage` ;
-- 5 leçons autour de la position actuelle visibles par défaut ;
-- bouton `Voir les 40 leçons` ;
-- aucune migration de données.
+`0.62` seulement si le prochain test iPhone montre que 0.64 reste trop rapide.
 
-Tests dédiés : compact / expanded / details sur profil synthétique leçon 8.
+Contraintes : même voix, même pitch, normal inchangé, `voice-ios.js` sanctuarisé, aucune donnée apprenante touchée.
 
 ---
 
-# 2. Conversation / Pratique — P1
+# Build 25.2 — Session Goals / Milestones / App Delight
 
-## Observation
+## Problème transversal
 
-`Parler français` peut encore empiler :
+Les écrans d’entraînement peuvent encore ressembler à des tunnels : on sait quoi faire, mais pas toujours combien, quand c’est fini et où aller ensuite.
 
-- situation réelle ;
-- entraînement vocal guidé ;
-- pratique guidée Lucie ;
-- rappel vocal gratuit.
+## Contrat commun
 
-## Cible future
+```text
+AVANT   → objectif court
+PENDANT → progression visible
+FIN     → réussite explicite
+APRÈS   → sortie logique
+```
 
-Une recommandation principale, puis quelques alternatives :
+Cibles indicatives :
+
+```text
+Listening         5 questions
+Révision mémoire  5 éléments
+Scenario           1 situation
+Vocal guidé        5 réponses
+Leçon              fin renforcée
+```
+
+Continuer après réussite reste un choix secondaire.
+
+## Succès premium
+
+Barre à 100 %, coche, glow mint/lilas, petit pulse Lucie/logo, transition courte 400–800 ms. `prefers-reduced-motion` respecté. Pas de son forcé, XP, monnaie, classement ou confettis permanents.
+
+## Milestones utiles
+
+- première leçon terminée ;
+- première réponse vocale reconnue ;
+- première session Listening ;
+- première situation réelle ;
+- premier rappel réussi ;
+- 10 / 25 / 50 acquis consolidés ;
+- fin de bloc A0 / A1 ;
+- première session sans aide si cette preuve existe réellement.
+
+## Conversation / Pratiquer
+
+Ne plus empiler en permanence Situation réelle + Vocal guidé + Lucie pratique + rappel vocal.
+
+Cible :
 
 ```text
 Recommandé maintenant
@@ -74,97 +92,36 @@ Autres façons
 [ Pratique guidée ]
 ```
 
-Une fois un mode choisi, un seul moteur occupe l’écran.
+Une fois le mode choisi, un seul moteur occupe l’écran.
 
-Ce chantier sera intégré au travail **Build 25.2 App Delight / Session Goals**, pas au Build 25 actuel afin de garder un gros build = une intention.
+## Home / Séance du jour
 
----
-
-# 3. Home / Séance du jour — P1
-
-La Home est nettement meilleure mais `Séance du jour` peut encore montrer trop d’actions.
-
-Cible : action prioritaire + prochaine leçon + éventuellement une pratique courte, puis `Voir les autres activités`.
-
-À traiter avec Build 25.2.
+Afficher priorité + prochaine leçon + éventuellement une pratique courte. Les autres activités derrière un dépliage.
 
 ---
 
-# 4. Listening — P2 — Build 25.1
+# Build 26 — Real Life French III
 
-État :
-
-```text
-normal = 0.88
-lent   = 0.68
-```
-
-Retour terrain : lent pourrait encore descendre légèrement.
-
-A/B prévu :
-
-```text
-0.68
-0.64
-0.62
-```
-
-Même iPhone, même voix, même phrase. Premier candidat : **0.64**.
+Repoussé derrière les passes UX. Plus de français réel, moins de roulettes, aucun nouveau bouton principal.
 
 ---
 
-# 5. Sessions sans but clair — P0 — Build 25.2
+# Règle générale
 
-## Problème
+Avant toute nouvelle UI :
 
-Dans Listening et plusieurs entraînements, l’utilisatrice peut ne pas savoir :
+1. Trân a-t-elle besoin de voir cette information maintenant ?
+2. L’aide-t-elle à décider de la prochaine action ?
+3. Peut-elle rester derrière `Voir détails` ?
 
-- combien elle doit faire ;
-- combien il reste ;
-- quand la session est terminée ;
-- comment sortir sans avoir l’impression d’abandonner.
+Avant tout exercice :
 
-## Contrat de session
+1. Quel est le but ?
+2. Comment voit-elle qu’elle avance ?
+3. Qu’est-ce qui signifie `terminé` ?
+4. Où va-t-elle ensuite ?
 
-Chaque activité doit avoir :
-
-```text
-AVANT  → objectif
-PENDANT → progression
-FIN → réussite explicite
-APRÈS → destination claire
-```
-
-Cibles indicatives :
-
-```text
-Listening         5 questions
-Révision mémoire  5 éléments
-Scenario           1 situation
-Vocal guidé        5 réponses
-Leçon              étapes déjà bornées
-```
-
-## Succès premium
-
-Autorisé : barre 100 %, coche, glow mint/lilas, pulse discret Lucie/logo, 400–800 ms.
-
-Interdit : XP, monnaie, classement, confettis permanents, son forcé.
-
-Milestones significatifs : première leçon, premier vocal reconnu, première session Listening, première situation, premier rappel réussi, 10/25/50 acquis consolidés, fin de bloc A0/A1.
-
----
-
-# Ordre officiel
-
-1. **v1.18.0 Build 25 — Progression UX** — EN COURS.
-2. **v1.18.1 Build 25.1 — Listening Slow Calibration**.
-3. **v1.18.2 Build 25.2 — Session Goals / Milestones / App Delight**.
-4. **v1.19.0 Build 26 — Real Life French III**.
-5. Build 27 — Data & Recovery.
-6. Build 28 — iPhone/PWA/Accessibility.
-7. Build 29 — Architecture Hardening.
-8. V2.0.0 — Freeze / Release.
+Si une réponse manque, l’expérience n’est pas terminée.
 
 ---
 
@@ -180,7 +137,7 @@ voice-ios.js
 free-voice.js
 assets/LOGO.png
 assets/Favicon.png
-bottom navigation interaction baseline 24.5
+bottom navigation interaction baseline
 ```
 
-La refonte réorganise l’expérience ; elle ne réinvente pas les moteurs.
+La suite clarifie l’expérience ; elle ne réinvente pas les moteurs.

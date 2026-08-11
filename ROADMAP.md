@@ -4,179 +4,56 @@
 
 ## Principes non négociables
 
-1. iPhone / Safari / PWA iOS = cible principale.
-2. Navigateur PC et Android = cibles secondaires supportées.
-3. Interface utilisable sans connaissances techniques.
-4. 0 € d’exploitation récurrente sauf décision explicite.
-5. Vietnamien comme soutien ; français augmenté selon les preuves.
-6. Oral prioritaire, sans faux diagnostic phonétique.
-7. Communication réelle > théorie scolaire.
-8. Aucun reset silencieux ; toute migration garde un smoke ancien utilisateur.
-9. Un gros build = une intention principale.
-10. Chrome headless obligatoire avant merge important.
-11. README / CHANGELOG / ROADMAP / ARCHITECTURE synchronisés.
-12. Pas de gamification agressive ni clone de chatbot.
-13. Un nouveau moteur n’obtient pas automatiquement une nouvelle entrée de navigation.
-14. **Toute surface tappable doit produire un retour visuel immédiat sur mobile.**
-15. Le feedback d’un tap doit rester perceptible même si l’action déclenche un rerender ou un changement d’écran.
-16. Les trois entrées `Aujourd’hui / Pratiquer / Parcours` gardent des nœuds DOM persistants et exactement un état actif.
-17. L’état actif de navigation doit être synchronisé explicitement.
-18. **Progressive disclosure** : l’apprenante ne voit pas par défaut tous les moteurs, compteurs et catalogues internes.
-19. **Freeze terrain** : pendant une vraie session de Trân, aucun changement runtime sauf incident critique.
-20. **Contrat de session** : chaque activité a un début, un objectif visible, une progression, une fin explicite et une sortie évidente.
-21. Aucun écran pédagogique ne doit être un tunnel sans fin.
-22. Le plaisir d’utilisation vient de micro-interactions et de réussites observables, pas d’une gamification agressive.
+1. iPhone / Safari / PWA iOS = cible principale ; PC et Android restent supportés.
+2. Interface utilisable sans connaissances techniques.
+3. 0 € d’exploitation récurrente sauf décision explicite.
+4. Vietnamien comme soutien, français augmenté selon les preuves.
+5. Oral prioritaire, sans faux diagnostic phonétique.
+6. Communication réelle > théorie scolaire.
+7. Aucun reset silencieux ; toute migration garde un smoke ancien utilisateur.
+8. Un gros build = une intention principale.
+9. Chrome réel avant merge important ; même tribunal sur `main`.
+10. README / CHANGELOG / ROADMAP / ARCHITECTURE synchronisés.
+11. Un nouveau moteur n’obtient pas automatiquement une nouvelle entrée de navigation.
+12. Toute surface tappable donne un retour visuel immédiat sur mobile.
+13. `Aujourd’hui / Pratiquer / Parcours` gardent des nœuds persistants et exactement un état actif.
+14. **Progressive disclosure** : l’apprenante ne voit pas par défaut tous les moteurs et compteurs internes.
+15. **Contrat de session** : chaque activité possède un objectif, une progression, une fin et une sortie évidente.
+16. Pas de tunnel pédagogique infini par défaut.
+17. Succès visible et agréable, sans gamification agressive.
+18. Pendant une vraie session de Trân : pas de polish runtime/cache sauf incident critique.
 
 ---
 
-# Baseline production avant Build 25
+# Baseline production — v1.18.0 / Build 25
 
-- v1.17.5 — Build 24.5 — Navigation State Sync — PROD / CLOS ;
-- baseline fonctionnelle **Build 24 — Real Life French II** ;
+**Progression UX / Progressive Disclosure — ✅ PROD / CLOS**
+
 - 40 leçons / 241 éléments ;
-- Scenario 28 / 84 ;
-- bottom bar Aujourd’hui / Pratiquer / Parcours ;
-- voix/reconnaissance iPhone validées ;
-- progression protégée ;
+- Scenario 28 situations / 84 tours ;
+- navigation Aujourd’hui / Pratiquer / Parcours ;
+- feedback tactile premium 24.x conservé ;
+- `Parcours` compact par défaut ;
+- 5 leçons autour de la position actuelle visibles par défaut ;
+- les 40 leçons restent accessibles à la demande ;
+- Memory / Mastery / A1 restent disponibles derrière `Détails d’apprentissage` ;
+- aucune migration de données ;
+- voix/reconnaissance iPhone sanctuarisées ;
 - coût 0 €.
 
-Microfix Listening PR #29 : **0.88 normal / 0.68 lent** réellement distincts, `voice-ios.js` inchangé.
+### Preuves Build 25
 
-## État Builds 24.x
+PR #31 : quality #93, Options #24, nav/mobile #43 et Progression UX #1 — SUCCESS.
 
-- Build 24 — Real Life French II — ✅ INTÉGRÉ
-- Build 24.1 — Options Crash — ✅ PROD
-- Build 24.2 — Navigation Interaction — ✅ PROD
-- Build 24.3 — Premium Interaction UX — ✅ CLOS
-- Build 24.4 — Mobile Polish — ✅ INTÉGRÉ, clôturé techniquement par 24.5
-- Build 24.5 — Navigation State Sync — ✅ PROD / CLOS
-- microfix Listening PR #29 — ✅ PROD
+`main` `4f354221f923004b0cefdaf6b3281e51ba30dbf9` : quality #94, Options #25, nav/mobile #44, Progression UX #2 et Pages #90 — SUCCESS.
+
+Contrat leçon 8 : `l8 / 7 terminées / 40 acquis / 5 lignes visibles / 40 disponibles` préservé.
 
 ---
 
-# FREEZE TERRAIN
+# v1.18.1 — Build 25.1 — Listening Slow Calibration — PROCHAIN
 
-**LEVÉ le 11/08/2026 à 19:10 heure locale.**
-
-Trân a terminé sa session. Les changements runtime peuvent reprendre via branches/PR/CI.
-
-La règle reste active pour les prochaines sessions réelles : pas de polish live pendant qu’elle utilise l’app, sauf incident critique.
-
----
-
-# v1.18.0 — Build 25 — Progression UX / Progressive Disclosure — EN COURS
-
-## Problème terrain
-
-`Parcours` est devenu un écran interminable. La navigation principale est simple, mais l’écran Progression expose Memory, Mastery, A1, situations, acquis et 40 leçons comme si tout avait la même importance.
-
-## Décision d’architecture
-
-**Ne pas réécrire les moteurs.**
-
-Nouveau module :
-
-```text
-progression-ux.js
-progression-ux.css
-```
-
-Il se charge après les moteurs existants et orchestre leur DOM :
-
-- les cartes techniques restent présentes ;
-- elles sont regroupées derrière `Détails d’apprentissage` ;
-- le vieux hero/stats reste dans le DOM mais est masqué au profit d’un résumé simple ;
-- le curriculum complet reste intact ;
-- seulement 5 leçons autour de la position actuelle sont visibles par défaut ;
-- `Voir les 40 leçons` révèle la liste complète.
-
-Aucune clé localStorage n’est modifiée.
-
-## Niveau 1 — visible immédiatement
-
-`Parcours` doit répondre en quelques secondes à :
-
-1. Où j’en suis ?
-2. Combien ai-je déjà fait ?
-3. Combien d’acquis / de choses à revoir ?
-4. Quelle est ma prochaine étape ?
-
-Résumé candidat :
-
-- leçon actuelle ;
-- progression globale ;
-- leçons terminées ;
-- acquis ;
-- à revoir ;
-- CTA `Continuer`.
-
-## Niveau 2 — détails volontaires
-
-Un seul bloc repliable : **Détails d’apprentissage**.
-
-Il contient les cartes déjà générées par :
-
-- Learning Memory ;
-- Mastery ;
-- A1 Core ;
-- autres injecteurs Progress existants.
-
-Les moteurs continuent de fonctionner et de mettre leurs cartes à jour normalement.
-
-## Niveau 3 — parcours complet
-
-Par défaut, autour de la leçon actuelle :
-
-```text
-1 leçon récente
-leçon actuelle
-3 prochaines leçons
-```
-
-Puis bouton explicite : **Voir les 40 leçons**.
-
-## Contrat zéro-perte Build 25
-
-Profil synthétique représentatif : l1–l7 terminées, l8 en cours, 40 acquis.
-
-Chrome doit retrouver après boot :
-
-```text
-current = l8
-completed = 7
-known = 40
-visible curriculum rows = 5
-curriculum total = 40
-details open = false
-```
-
-Deuxième smoke : 40 lignes accessibles à la demande.
-
-Troisième smoke : cartes Memory / Mastery toujours accessibles derrière les détails.
-
-## Critères de clôture
-
-- v1.18.0 / Build 25 cohérent dans runtime/cache/docs ;
-- première vue beaucoup plus courte ;
-- aucune liste de 40 ouverte par défaut ;
-- détails existants non supprimés ;
-- ancienne progression inchangée ;
-- bottom bar 24.5 inchangée ;
-- branding et voix byte-identiques ;
-- quality historique verte ;
-- Options verte ;
-- nav/mobile verte ;
-- nouveau workflow `Progression UX smoke` vert sur PR puis sur `main` ;
-- GitHub Pages verte ;
-- clôture docs uniquement après preuve prod.
-
-Voir `docs/BUILD-25-PROGRESSION-UX.md` et `docs/NEXT-UX-PASS.md`.
-
----
-
-# v1.18.1 — Build 25.1 — Listening Slow Calibration
-
-Petit jalon distinct après Build 25.
+## Retour terrain
 
 État actuel :
 
@@ -185,55 +62,95 @@ normal = 0.88
 lent   = 0.68
 ```
 
-Retour terrain : lent encore légèrement rapide.
+`0.68` est désormais réellement distinct de `0.88`, mais reste légèrement rapide à l’oreille.
 
-Ordre d’essai prévu : **0.64**, puis **0.62** seulement si nécessaire.
+## Plan
 
-Garde-fous : normal inchangé, même voix/pitch, `voice-ios.js` sanctuarisé, A/B iPhone.
+Premier candidat :
+
+```text
+normal = 0.88
+lent   = 0.64
+```
+
+`0.62` ne sera tenté que si 0.64 paraît encore trop rapide lors du prochain test iPhone.
+
+## Garde-fous
+
+- `voice-ios.js` non modifié ;
+- même voix / même pitch ;
+- vitesse normale inchangée ;
+- cache/version cohérents ;
+- contrat explicite prouvant deux rates distincts ;
+- quality / Options / nav-mobile / Progression UX restent verts ;
+- aucune donnée apprenante modifiée.
 
 ---
 
 # v1.18.2 — Build 25.2 — Session Goals / Milestones / App Delight
 
-Chaque mode doit suivre :
+## Problème
+
+Plusieurs écrans savent proposer un exercice mais ne disent pas assez clairement :
+
+> Combien dois-je en faire ? Où j’en suis ? Quand ai-je fini ? Où vais-je ensuite ?
+
+## Contrat de session commun
 
 ```text
-objectif clair
-↓
-progression visible
-↓
-fin explicite
-↓
-sortie évidente
+AVANT   → objectif court
+PENDANT → progression visible
+FIN     → état terminé explicite
+APRÈS   → sortie logique en 1 tap
 ```
 
 Cibles indicatives :
 
 - Listening : 5 questions ;
-- Révision : 5 éléments prioritaires ;
+- Révision mémoire : 5 éléments prioritaires ;
 - Scenario : 1 situation complète ;
-- vocal guidé : 5 réponses ;
-- leçon : fin renforcée et retour logique.
+- Vocal guidé : 5 réponses ;
+- Leçon : fin de leçon renforcée et destination suivante claire.
 
-Animations succès premium et sobres : coche, barre 100 %, glow mint/lilas, pulse court Lucie/logo, 400–800 ms, reduced motion respecté.
+Continuer après réussite reste volontaire et secondaire.
 
-Milestones uniquement sur progrès réels : première leçon, premier vocal reconnu, première session Listening, première situation, 10/25/50 acquis consolidés, fin de bloc A0/A1.
+## App Delight
 
-Aucun XP, monnaie ou classement.
+Animations premium sobres : barre 100 %, coche, glow mint/lilas, pulse court Lucie/logo, transition 400–800 ms, `prefers-reduced-motion` respecté.
+
+Pas de son forcé, pluie de confettis, XP, monnaie ou classement.
+
+## Milestones significatifs
+
+- première leçon terminée ;
+- première réponse vocale reconnue ;
+- première session Listening ;
+- première situation réelle ;
+- premier rappel réussi ;
+- 10 / 25 / 50 acquis consolidés ;
+- fin de bloc A0 / A1 ;
+- première session sans aide lorsque cette preuve existe réellement.
+
+## UX transversale à traiter dans ce build
+
+- `Pratiquer → Parler français` ne doit plus empiler tous les moteurs ;
+- une recommandation principale d’abord, alternatives ensuite ;
+- `Séance du jour` doit rester courte : priorité + prochaine leçon + pratique éventuelle, puis détails ;
+- une action principale par écran ;
+- sorties cohérentes et toujours visibles ;
+- informations techniques hors interface apprenante normale.
 
 ---
 
 # v1.19.0 — Build 26 — Real Life French III
 
-Ancien chantier Build 25 volontairement repoussé derrière les passes UX.
-
-Objectif : problèmes quotidiens, émotions, français oral courant, réponses moins dirigées. Toujours derrière `Pratiquer → Parler français`.
+Contenu repoussé derrière les passes UX : problèmes quotidiens, émotions, français oral courant, réponses moins dirigées. Toujours derrière `Pratiquer → Parler français`, sans nouvelle entrée principale.
 
 ---
 
 # v1.20.0 — Build 27 — Data & Recovery Hardening
 
-Sauvegarde/restauration unifiée, migrations versionnées, snapshot pré-migration, localStorage corrompu toléré, tests zéro-perte.
+Sauvegarde/restauration unifiée, migrations versionnées, snapshot pré-migration, tolérance au localStorage corrompu, tests zéro-perte.
 
 # v1.21.0 — Build 28 — iPhone / PWA / Accessibility Hardening
 
@@ -248,6 +165,20 @@ Découpage du vieux noyau uniquement avec snapshots comparatifs avant/après.
 Release cohérente, sauvegardable, testée, documentée et utilisable sans connaître l’architecture interne.
 
 ---
+
+# Sanctuaires
+
+```text
+francais-avec-luc:learner:v1
+Learning Memory state
+Scenario state
+Listening state
+voice-ios.js
+free-voice.js
+assets/LOGO.png
+assets/Favicon.png
+bottom navigation interaction baseline
+```
 
 # Backlog secondaire
 
