@@ -4,16 +4,32 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ## [Unreleased]
 
-Aucune modification runtime préparée pendant la session réelle de Trân.
+### v1.18.0 — Build 25 — Progression UX / Progressive Disclosure — CANDIDAT
 
-Prochaine priorité planifiée : **v1.18.0 — Build 25 — Progression UX / Progressive Disclosure**.
+Le freeze terrain est levé. Le chantier runtime reprend sur branche dédiée.
 
-Le précédent projet **Real Life French III** est conservé mais déplacé en **Build 26**, après la réduction de densité de `Parcours`.
+Candidat actuel :
 
-### Notes terrain à traiter plus tard
+- nouveau `progression-ux.js` + `progression-ux.css` ;
+- Build meta candidat : **v1.18.0 / Build 25** ;
+- cache candidat : `tran-french-teacher-v1.18.0-b25-progression-ux` ;
+- vue Parcours réorganisée sans migration de données ;
+- ancien hero/stats conservé dans le DOM mais remplacé visuellement par un résumé simple ;
+- cartes Memory / Mastery / A1 et autres injecteurs déplacées derrière `Détails d’apprentissage` ;
+- seulement 5 lignes du curriculum visibles par défaut autour de la leçon actuelle ;
+- les 40 leçons restent accessibles via `Voir les 40 leçons` ;
+- CTA direct vers la leçon actuelle ;
+- nouveau workflow `Build 25 Progression UX smoke` : compact / expanded / details ;
+- profil synthétique l8 attendu inchangé : 7 leçons terminées, l8 actuelle, 40 acquis ;
+- hashes logo/favicon/voice/free-voice inchangés.
 
-- Listening : `0.68` en mode lent est nettement distinct de `0.88`, mais peut encore être légèrement ralenti après test iPhone ;
-- `Parcours` / Progression : densité et longueur excessives sur mobile ; priorité à une architecture résumé → détails → vue complète.
+Ce bloc reste **Unreleased** tant que PR → CI → `main` → Pages n’est pas complètement vert.
+
+### Notes terrain planifiées ensuite
+
+- Build 25.1 : Listening lent à tester vers 0.64 puis 0.62 si nécessaire ;
+- Build 25.2 : objectifs de session, milestones significatifs et animations de succès premium sobres ;
+- Real Life French III déplacé en Build 26.
 
 ---
 
