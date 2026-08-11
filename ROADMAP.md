@@ -44,6 +44,8 @@
 
 Preuve production Build 25.2 : commit `49d866bed59bb0cb3268e1675225a4811f6c595f`, 7 workflows déclenchés, aucun échec, Pages SUCCESS.
 
+Baseline fonctionnelle historique conservée pour les contrats CI : **v1.17.0 — Build 24 — Real Life French II**.
+
 ---
 
 # v1.18.3 — Build 25.3 — Voice Self-Playback + Learning Details Dashboard — EN COURS
