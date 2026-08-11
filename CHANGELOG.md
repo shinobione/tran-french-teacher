@@ -4,38 +4,35 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ## [Unreleased]
 
-### v1.17.4 — Build 24.4 — Mobile Polish / Interaction Timing — candidat
+### v1.17.5 — Build 24.5 — Navigation State Sync — candidat
+
+- correctif de stabilisation après le smoke `main` de Build 24.4 ;
+- supprime la dépendance au timing du `MutationObserver` pour l’état actif de la bottom bar ;
+- synchronise immédiatement l’onglet demandé, puis confirme après navigation native, au prochain frame et à +80 ms ;
+- conserve les nœuds DOM persistants et le `tap echo` de Build 24.4 ;
+- force les assets UX sous `1.17.5-b24.5` ;
+- cache PWA `tran-french-teacher-v1.17.5-b24.5-nav-state-sync` ;
+- aucune modification de la progression, du curriculum, de la voix, de Learning Memory, Scenario, Listening ou du branding.
+
+### v1.17.4 — Build 24.4 — Mobile Polish / Interaction Timing — intégré mais non clos
 
 - corrige le feedback mobile qui disparaissait lors d’un vrai changement d’onglet ;
 - remplace la reconstruction `innerHTML` de la bottom bar par des nœuds DOM persistants ;
-- met à jour uniquement `active / aria-current` ;
-- ajoute un `tap echo` indépendant du composant pour survivre aux rerenders ;
-- évite le flash intermédiaire vers Home en quittant Pratiquer ;
-- impose exactement un onglet actif ;
-- ajoute `mobile-polish.css` ;
-- nettoie le header de leçon : plus de gros bandeau violet/sticky, titre intégré et séparation légère ;
-- cache PWA `1.17.4-b24.4-mobile-polish` ;
-- smoke Chrome mobile renforcé : identité DOM avant/après navigation, tap echo, active unique et header de leçon ;
-- aucune modification de la progression, du curriculum, de la voix, de Learning Memory, Scenario, Listening ou du branding.
-
-Reste Unreleased jusqu’à PR → `main` → GitHub Pages.
+- ajoute un `tap echo` indépendant du composant ;
+- impose un seul onglet actif ;
+- nettoie le header de leçon : plus de gros bandeau violet/sticky ;
+- PR verte, mais le smoke mobile rejoué sur `main` a révélé une course de synchronisation `active-wrong:progress:home` ;
+- la clôture est donc reportée à Build 24.5.
 
 ---
 
 ## [1.17.3] — Build 24.3 — Premium Interaction UX — 2026-08-11
 
-- ajoute une couche globale `interaction-ux.js` / `interaction-ux.css` ;
-- impose un retour visuel immédiat sur les surfaces tappables : `pointerdown`, compression courte, glow/contraste et confirmation au clic ;
-- renforce l’état actif de la bottom bar ;
-- ajoute une transition courte d’entrée des écrans ;
-- respecte `prefers-reduced-motion` ;
-- transforme visuellement `Pratiquer` en vrai troisième écran/tab : plus de backdrop flouté, plus de croix, bottom bar toujours visible ;
-- maintient `Pratiquer` actif pendant l’écran ;
-- renforce les zones tactiles mobiles ;
-- cache PWA `1.17.3-b24.3-premium-interaction` ;
-- smoke Chrome mobile 390×844 ;
-- aucune modification de la progression, du curriculum, de Learning Memory, de Scenario, de la voix ou du branding ;
-- PR #24, quality main #76, Options main #7, nav interaction main #20 et Pages #83 : SUCCESS.
+- couche globale `interaction-ux.js/css` ;
+- retour visuel immédiat `pointerdown`, compression courte, glow/contraste et confirmation ;
+- Pratiquer = vrai troisième écran/tab ;
+- zones tactiles mobiles renforcées ;
+- PR #24, quality main #76, Options #7, nav interaction #20 et Pages #83 : SUCCESS.
 
 ## [1.17.2] — Build 24.2 — Navigation Interaction Hotfix — 2026-08-11
 - corrige un état où la navigation pouvait rester visible mais inerte ; stabilise le cache et ajoute un smoke de clic physique.
