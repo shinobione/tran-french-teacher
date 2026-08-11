@@ -8,8 +8,10 @@ PWA de français pensée pour **Trân**, avec une priorité forte donnée à l�
 - **Build 22 — UX Foundation & Runtime Integrity**
 - statut : **CANDIDAT / branche `build22-ux-foundation`**
 - cible principale : **iPhone / Safari / PWA iOS**
-- curriculum attendu : **40 leçons / 238 éléments**
+- curriculum audité : **40 leçons / 241 éléments**
 - coût d’exploitation : **0 €**
+
+> Audit Build 22 : les fichiers Stage 3 contiennent réellement 93 éléments, et non les 90 documentés auparavant. Le produit total est donc 241 éléments. Aucun contenu utile n’est supprimé pour faire correspondre un ancien compteur.
 
 ## Pourquoi Build 22
 
