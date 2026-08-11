@@ -51,6 +51,16 @@ jobs:
                 await wait(300);
                 root.dataset.navScrollY=String(Math.round(w.scrollY));
 
+                const before=d.querySelector('[data-ux-nav="practice"]');
+                const probe=d.createElement('i'); probe.hidden=true; probe.textContent='probe';
+                d.querySelector('#app')?.appendChild(probe);
+                await wait(180);
+                const after=d.querySelector('[data-ux-nav="practice"]');
+                root.dataset.navNodeStable=String(before===after);
+                probe.remove();
+                await wait(120);
+                if(before!==after)throw new Error('nav-node-replaced-on-app-mutation');
+
                 physicalClick(d,'[data-ux-nav="practice"]','Practice');
                 await wait(350);
                 if(!d.querySelector('.ux-practice-overlay'))throw new Error('practice-did-not-open');
@@ -70,7 +80,7 @@ jobs:
                 await wait(450);
                 if(!d.querySelector('.app-shell.screen-home'))throw new Error('home-did-not-return');
 
-                finish('ok','scrolled-desktop-physical-hit-and-navigation-ok');
+                finish('ok','stable-nav-and-scrolled-physical-clicks-ok');
               }catch(e){finish('fail',e?.message||String(e))}
             },1800));
             setTimeout(()=>finish('fail','timeout'),9000);
@@ -85,11 +95,12 @@ jobs:
           sleep 1
           google-chrome --version
 
-      - name: Chrome — physical bottom-nav clicks after scroll
+      - name: Chrome — stable physical bottom-nav clicks after scroll
         run: |
           timeout 30s google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=15000 --dump-dom 'http://127.0.0.1:4173/nav-click-smoke.html' >/tmp/nav.html
           grep -q 'data-nav-smoke="ok"' /tmp/nav.html || { cat /tmp/nav.html; exit 1; }
-          grep -q 'data-nav-detail="scrolled-desktop-physical-hit-and-navigation-ok"' /tmp/nav.html
+          grep -q 'data-nav-node-stable="true"' /tmp/nav.html
+          grep -q 'data-nav-detail="stable-nav-and-scrolled-physical-clicks-ok"' /tmp/nav.html
 
       - name: Stop static server
         if: always()
