@@ -23,6 +23,7 @@ const CORE=[
   `./daily-coach.js?v=${V}`,
   `./mastery-engine.js?v=${V}`,
   `./scenario-data.js?v=${V}`,
+  `./scenario-host.js?v=${V}`,
   `./scenario-engine.js?v=${V}`,
   `./manifest.webmanifest?v=${V}`,
   `./assets/LOGO.png?v=${V}`,
