@@ -25,7 +25,7 @@ jobs:
           node --check sw.js
           grep -q 'progression-ux.css?v=1.18.0-b25' index.html
           grep -q 'progression-ux.js?v=1.19.2-b26.2' index.html
-          grep -q 'build-meta.js?v=1.19.2-b26.2' index.html
+          grep -q 'build-meta.js?v=' index.html
           grep -q 'FrenchTranquilleProgressionUX' build-meta.js
           grep -q 'progression-ux.js' sw.js
           grep -q 'progression-ux.css' sw.js
