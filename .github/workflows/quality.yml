@@ -31,6 +31,7 @@ jobs:
           node --check daily-coach.js
           node --check mastery-engine.js
           node --check scenario-data.js
+          node --check scenario-host.js
           node --check scenario-engine.js
 
       - name: Curriculum UX guard
@@ -132,13 +133,16 @@ jobs:
           grep -q 'scenario-miss' scenario-engine.js
           grep -q 'scenario-assisted' scenario-engine.js
           grep -q 'scenarioSmoke' scenario-engine.js
+          grep -q 'scenario-host' scenario-host.js
           grep -q "version:'1.10.0'" scenario-engine.js
           grep -q 'build:17' scenario-engine.js
           grep -q 'scenario-engine.css' index.html
           grep -q 'scenario-data.js' index.html
+          grep -q 'scenario-host.js' index.html
           grep -q 'scenario-engine.js' index.html
           grep -q 'scenario-engine.css' sw.js
           grep -q 'scenario-data.js' sw.js
+          grep -q 'scenario-host.js' sw.js
           grep -q 'scenario-engine.js' sw.js
           grep -q "version: '1.10.0', build: 17" build-meta.js
           grep -q '1.10.0-b17' index.html
@@ -230,12 +234,14 @@ jobs:
             exit 1
           fi
           grep -q 'app-shell screen-conversation' /tmp/french-tranquille-scenarios.html
+          grep -q 'scenario-host' /tmp/french-tranquille-scenarios.html
           grep -q 'scenario-lab-card' /tmp/french-tranquille-scenarios.html
           grep -q 'Phòng tình huống' /tmp/french-tranquille-scenarios.html
           grep -q 'Ở quán cà phê' /tmp/french-tranquille-scenarios.html
           grep -q 'Ở nhà ga' /tmp/french-tranquille-scenarios.html
-          grep -q 'Petite conversation sociale' /tmp/french-tranquille-scenarios.html
-          echo 'Real Chrome Scenario Lab render OK'
+          grep -q 'Trò chuyện xã giao' /tmp/french-tranquille-scenarios.html
+          grep -q 'Mở sau Bài 4' /tmp/french-tranquille-scenarios.html
+          echo 'Real Chrome Scenario Lab fresh-profile render OK'
 
       - name: Stop static test server
         if: always()
