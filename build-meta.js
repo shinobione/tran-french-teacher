@@ -12,6 +12,11 @@ if (window.LucieVoice) {
   window.LucieVoice.build = META.build;
 }
 
+if (window.FrenchTranquilleFreeVoice) {
+  window.FrenchTranquilleFreeVoice.version = META.version;
+  window.FrenchTranquilleFreeVoice.build = META.build;
+}
+
 if (window.FrenchTranquilleStage2) {
   window.FrenchTranquilleStage2.version = META.version;
   window.FrenchTranquilleStage2.build = META.build;
