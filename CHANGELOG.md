@@ -4,7 +4,24 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ## [Unreleased]
 
-Prochaine étape : **v1.19.0 — Build 26 — Real Life French III**.
+### v1.19.0 — Build 26 — Real Life French III — CANDIDAT
+
+- ajoute `real-life-data-3.js` : **8 situations / 24 tours** ;
+- Scenario candidat : **36 situations / 108 tours** ;
+- introduit du français oral naturel côté interlocuteur : `T’es prête ?`, `J’sais pas…`, `Y a pas…` ;
+- conserve des réponses standard et plusieurs variantes simples explicitement autorisées ;
+- ajoute futur proche, passé récent, passé composé, mouvement au passé, administratif, émotion/besoin et couple ;
+- ajoute `real-life-coach.js` : rappel discret que Trân peut répondre avec ses mots dans les scènes Pack III ;
+- chaque référence Memory avancée est résolue depuis le curriculum ; une résolution n’est valide que si elle correspond à exactement un acquis ;
+- conserve la limite de 6 situations ouvertes visibles ;
+- conserve le contrat Session UX 25.2 : **1 situation = 1 session** ;
+- conserve Listening **0.88 / 0.64** ;
+- cache candidat `tran-french-teacher-v1.19.0-b26-real-life-3` ;
+- ajoute `Build 26 Real Life French III smoke` avec profils l20 / l35 / l40 et garde des résolutions ;
+- aucune migration learner/Memory/Scenario/Listening ;
+- voix et branding sanctuarisés.
+
+Ce bloc reste Unreleased jusqu’à PR → tribunal complet → `main` → même tribunal → Pages.
 
 ---
 
@@ -12,51 +29,25 @@ Prochaine étape : **v1.19.0 — Build 26 — Real Life French III**.
 
 - ajoute `session-ux.js`, `session-ux-adapter.js`, `session-ux.css` ;
 - ajoute un contrat commun `objectif → progression → fin → sortie` ;
-- Listening devient une session standard de **5 questions** avec état de fin explicite ;
-- Révision mémoire devient un lot borné jusqu’à **5 éléments prioritaires** ;
-- Scenario conserve sa fin native mais reçoit un objectif explicite `1 situation` et une sortie vers Aujourd’hui ;
-- Vocal guidé reçoit une cible de **5 réponses** sans modification de `free-voice.js` ;
-- pratique guidée historique devient une mini-session d’**1 réponse correcte** ;
-- la fin de leçon est annoncée et confirmée après enregistrement ;
-- `Pratiquer → Parler français` utilise un hub : une recommandation principale, alternatives secondaires, un seul moteur dominant ;
-- `Séance du jour` garde 2 actions principales, les autres derrière un détail ;
-- nouvelle clé non pédagogique `french-tranquille:milestones:v1` ; les jalons déjà atteints sont marqués comme baseline à la première installation ;
-- animations de succès sobres + `prefers-reduced-motion` ;
-- conserve Listening **0.88 / 0.64** ;
-- cache `tran-french-teacher-v1.18.2-b25.2-session-ux` ;
-- ajoute `Build 25.2 Session UX smoke` : Home / Practice / Listening 5/5 / Review bornée ;
-- aucune migration learner/Memory/Scenario/Listening ;
-- voix et branding sanctuarisés ;
-- PR #35 mergée ;
-- commit production `49d866bed59bb0cb3268e1675225a4811f6c595f` ;
-- 7 workflows `main`, aucun échec ;
-- GitHub Pages #94 SUCCESS.
+- Listening : session standard de **5 questions** ;
+- Révision mémoire : lot borné jusqu’à **5 éléments prioritaires** ;
+- Scenario : objectif explicite `1 situation` et sortie vers Aujourd’hui ;
+- Vocal guidé : cible **5 réponses** sans modifier `free-voice.js` ;
+- Practice Hub et Daily Coach compact ;
+- milestones séparés ; animations sobres + reduced motion ;
+- Listening **0.88 / 0.64** ;
+- PR #35 ; commit prod `49d866bed59bb0cb3268e1675225a4811f6c595f` ; 7 workflows sans échec ; Pages #94 SUCCESS.
 
 ---
 
 ## [1.18.1] — Build 25.1 — Listening Slow Calibration — 2026-08-11
-
-- normal effectif **0.88** ; lent effectif **0.64** ;
-- bridge `build-meta.js`, `voice-ios.js` inchangé ;
-- PR #33 : quality #99 / Options #30 / nav #49 / Progression #7 / Listening-rate #2 SUCCESS ;
-- `main` `178c8b71d47887d8f9efd3389aa358d2f3e1a8eb` : quality #100 / Options #31 / nav #50 / Progression #8 / Listening-rate #3 SUCCESS ;
-- Pages #92 SUCCESS.
-
----
+- normal effectif **0.88** ; lent effectif **0.64** ; `voice-ios.js` inchangé ; PR #33 ; Pages #92 SUCCESS.
 
 ## [1.18.0] — Build 25 — Progression UX / Progressive Disclosure — 2026-08-11
-
-- résumé simple de `Parcours` ;
-- Memory / Mastery / A1 derrière `Détails d’apprentissage` ;
-- 5 lignes curriculum visibles par défaut, 40 accessibles ;
-- aucune migration ;
-- PR #31 puis `main` : quality / Options / nav / Progression UX / Pages SUCCESS ;
-- contrat l8 préservé.
-
----
+- résumé simple de `Parcours` ; détails repliables ; 5 lignes curriculum visibles par défaut, 40 accessibles ; aucune migration.
 
 ## Post-release microfix — Listening speed separation — 2026-08-11
-- PR #29 : corrige l’écrasement Normal/Lent ; `0.88 / 0.68`, `voice-ios.js` inchangé.
+- PR #29 : séparation `0.88 / 0.68`, `voice-ios.js` inchangé.
 
 ## [1.17.5] — Build 24.5 — Navigation State Sync — 2026-08-11
 - bottom bar persistante, tap echo, état actif déterministe.
