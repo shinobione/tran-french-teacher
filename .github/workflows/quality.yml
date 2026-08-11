@@ -229,8 +229,9 @@ jobs:
             --virtual-time-budget=10000 \
             --dump-dom \
             'http://127.0.0.1:4173/?scenarioSmoke=1' > /tmp/french-tranquille-scenarios.html
-          if grep -q 'French Trân’quille n’a pas démarré' /tmp/french-tranquille-scenarios.html; then
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/french-tranquille-scenarios.html; then
             cat /tmp/french-tranquille-scenarios.html
+            echo 'Rendered fatal screen detected in Scenario Lab.'
             exit 1
           fi
           grep -q 'app-shell screen-conversation' /tmp/french-tranquille-scenarios.html
