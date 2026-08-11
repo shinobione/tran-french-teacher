@@ -1,4 +1,4 @@
-const META = { version: '1.16.0', build: 23 };
+const META = { version: '1.17.0', build: 24 };
 
 window.FrenchTranquilleBuildMeta = META;
 
@@ -6,7 +6,7 @@ window.FrenchTranquilleBuildMeta = META;
   'FrenchTranquilleCurriculum','LucieVoice','FrenchTranquilleFreeVoice','FrenchTranquilleStage2',
   'FrenchTranquilleStage3','FrenchTranquilleDailyCoach','FrenchTranquilleMastery',
   'FrenchTranquilleMasteryStage3','FrenchTranquilleScenarioData','FrenchTranquilleScenarios',
-  'FrenchTranquilleRealLife1','FrenchTranquilleRealLifeUX',
+  'FrenchTranquilleRealLife1','FrenchTranquilleRealLife2','FrenchTranquilleRealLifeUX',
   'FrenchTranquilleErrors','FrenchTranquilleListening','FrenchTranquilleLanguage','FrenchTranquilleUX',
   'FrenchTranquilleSafety'
 ].forEach(name => {

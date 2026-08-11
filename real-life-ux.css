@@ -1,10 +1,12 @@
-/* French Trân’quille — v1.16.0 Build 23 — Real Life French I */
+/* French Trân’quille — v1.17.0 Build 24 — Real Life French II */
 .real-life-tile{border-color:rgba(143,227,208,.24)!important;background:linear-gradient(135deg,rgba(143,227,208,.07),rgba(198,169,255,.055))!important}
 .real-life-badge{display:inline-flex;width:max-content;align-items:center;gap:4px;margin-bottom:5px;padding:3px 7px;border-radius:999px;background:rgba(143,227,208,.11);color:#9be8d6;font-size:.63rem;font-style:normal;font-weight:850;letter-spacing:.025em}
-.real-life-locked-hidden{display:none!important}
-.scenario-more{width:100%;margin-top:10px;min-height:48px;border-radius:15px}
+.real-life-open-hidden,.real-life-locked-hidden{display:none!important}
+.scenario-list-controls{display:grid;gap:8px;margin-top:10px}
+.scenario-more{width:100%;min-height:48px;border-radius:15px}
 .scenario-stats .real-life-ready{color:#aeeadb}
 .ux-learner-mode .scenario-head .pill{background:rgba(143,227,208,.1);color:#aeeadb}
+@media(min-width:680px){.scenario-list-controls{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:520px){
   .scenario-grid{gap:9px}
   .scenario-tile{min-height:82px;padding:11px}
