@@ -33,25 +33,27 @@
 
 ---
 
-# Baseline production — v1.19.3 / Build 26.3
+# Baseline production — v1.19.4 / Build 26.4
 
-**Interaction Stability + Progress Layout — ✅ PROD**
+**Single-scroll Progress + Tyffany — ✅ PROD**
 
-- commit runtime production : `5947149e9fcb3b387aa01a797607270edb4f100e` ;
-- PR #44 ;
-- **9 workflows fonctionnels / 9 SUCCESS** sur la PR ;
-- même tribunal fonctionnel vert sur `main` après rerun du smoke 26.3 sur le même commit ;
-- GitHub Pages **#101 SUCCESS** ;
-- Today : `Révision mémoire`, `Continuer le parcours`, `Écouter 3 minutes`, `Voir les autres activités` couverts par un smoke de clic réel ;
-- Progress desktop : résumé + parcours à gauche, détails à droite ;
-- Progress mobile : résumé → parcours compact → détails repliés ;
+- commit runtime production : `7e74b3727dfefdddb41521a2be92ece8301a32e7` ;
+- PR runtime #46 ;
+- stabilisation CI-only : PR #47 / `4852e95684ad79d0988e05de641b56a8ad0ede22` ;
+- PR #46 : **10 workflows / 10 SUCCESS** ;
+- final `main` : **10 workflows fonctionnels / 10 SUCCESS + Pages SUCCESS** ;
+- GitHub Pages runtime **#103 SUCCESS** ;
+- GitHub Pages latest main **#104 SUCCESS** ;
+- Progress desktop : résumé + parcours à gauche, détails à droite, **un seul scroll vertical appartenant à la page** ;
+- Tyffany = nom visible de la professeure ; identifiants historiques Lucie conservés en interne ;
+- Today interactions Build 26.3 intactes ;
 - Progression UX Build 25 intact ;
 - Listening : **0.88 normal / 0.65 lent effectif** ;
 - Session UX Build 25.2 intact ;
-- Real Life French III Build 26 intact : **36 situations / 108 tours** ;
+- Real Life French III Build 26 : **36 situations / 108 tours** ;
 - Voice Replay + Details Dashboard Build 26.1 intact ;
 - curriculum : **40 leçons / 241 éléments** ;
-- voix/branding sanctuarisés ;
+- `voice-ios.js` / `free-voice.js` / logo / favicon sanctuarisés ;
 - aucune migration de données apprenantes ;
 - coût 0 €.
 
@@ -59,11 +61,11 @@ Baseline historique protégée : **v1.17.0 — Build 24 — Real Life French II*
 
 ---
 
-# v1.19.4 — Build 26.4 — Single-scroll Progress + Tyffany — CANDIDATE
+# Build 26.4 — critères clôturés
 
 ## Retour terrain : double scrollbar dans Progrès
 
-Build 26.3 a validé la structure desktop 2 colonnes, mais les captures réelles montrent que `Détails d’apprentissage` possède un scrollbar interne dans une page déjà scrollable.
+Build 26.3 a validé la structure desktop 2 colonnes, mais les captures réelles montraient que `Détails d’apprentissage` possédait un scrollbar interne dans une page déjà scrollable.
 
 Cause :
 
@@ -81,21 +83,22 @@ Build 26.4 garde les deux colonnes mais rend à la page la propriété du scroll
 - [x] architecture 2 colonnes conservée ;
 - [x] aucun clone des cartes pédagogiques ;
 - [x] `display: contents` Build 26.3 conservé ;
-- [x] override candidat `max-height:none` ;
-- [x] override candidat `overflow:visible` ;
+- [x] `max-height:none` ;
+- [x] `overflow:visible` ;
 - [x] header Details non sticky dans un conteneur interne ;
 - [x] mobile reste résumé → parcours → détails repliés ;
-- [ ] Chrome candidat confirme `overflow-y: visible` ;
-- [ ] Chrome candidat confirme absence de nested scroll ;
-- [ ] Chrome candidat confirme que la page devient le scroll owner avec un groupe Mastery long ;
-- [ ] tribunal PR complet vert ;
-- [ ] merge `main` ;
-- [ ] tribunal `main` vert ;
-- [ ] GitHub Pages SUCCESS.
+- [x] Chrome confirme `overflow-y: visible` ;
+- [x] Chrome confirme absence de nested scroll ;
+- [x] Chrome confirme que la page devient le scroll owner avec un groupe Mastery long ;
+- [x] tribunal PR #46 complet vert ;
+- [x] merge `main` ;
+- [x] harness Mastery rendu déterministe via PR #47 CI-only ;
+- [x] tribunal final `main` vert ;
+- [x] GitHub Pages #103/#104 SUCCESS.
 
 ## Renommage professeure : Tyffany
 
-Le nom produit visible devient **Tyffany**.
+Le nom produit visible est **Tyffany**.
 
 Contrat :
 
@@ -108,13 +111,13 @@ Contrat :
 - [x] `free-voice.js` byte-identique ;
 - [x] anciennes clés `luc-*`, IDs `lucie-*` et API `LucieVoice` conservés comme compatibilité ;
 - [x] clé learner `francais-avec-luc:learner:v1` conservée ;
-- [ ] Chrome candidat voit Tyffany et aucun Lucie visible ;
-- [ ] options/debug voix reste fonctionnel ;
-- [ ] aucun effet sur reconnaissance, choix de voix, rate ou pitch.
+- [x] Chrome voit Tyffany et aucun Lucie visible ;
+- [x] Options/DEBUG restent protégés par leurs workflows ;
+- [x] aucun effet sur reconnaissance, choix de voix, rate ou pitch.
 
 ## CI Build 26.4
 
-Nouveau workflow dédié :
+Le workflow dédié vérifie désormais :
 
 - syntaxe/wiring/cache/version 1.19.4 ;
 - hashes voix/branding inchangés ;
@@ -125,6 +128,8 @@ Nouveau workflow dédié :
 - Details sans scrollbar imbriqué ;
 - page scrollable ;
 - ancien profil l8 intact.
+
+Le premier passage `main` avait tous les marqueurs single-scroll corrects mais pouvait demander l’ouverture de Mastery avant la création de la tuile. PR #47 a uniquement fiabilisé ce harness en réutilisant l’état de smoke déterministe du dashboard Build 26.1. **Aucun runtime/PWA n’a changé dans #47.**
 
 ---
 
@@ -161,7 +166,7 @@ Résumé / prochaine étape  | Détails d’apprentissage
 Parcours A0 → A1          | dashboard + groupe actif
 ```
 
-Build 26.3 avait initialement rendu Details sticky avec un scroll interne. **Build 26.4 est autorisé à remplacer uniquement cette politique de scroll**, sans remettre en cause la structure 2 colonnes.
+Build 26.3 avait initialement rendu Details sticky avec un scroll interne. Build 26.4 remplace uniquement cette politique de scroll, sans remettre en cause la structure 2 colonnes.
 
 Mobile :
 
@@ -180,9 +185,7 @@ Critères structurels conservés :
 - [x] dashboard Build 26.1 toujours présent ;
 - [x] Details replié par défaut sur mobile ;
 - [x] curriculum mobile compact **5 / 40** ;
-- [x] profil synthétique l8 conserve sa progression ;
-- [x] PR #44 : 9/9 workflows verts ;
-- [x] Pages #101 SUCCESS.
+- [x] profil synthétique l8 conserve sa progression.
 
 ---
 
@@ -222,7 +225,7 @@ Familles conservées :
 
 # v1.20.0 — Build 27 — Data & Recovery Hardening
 
-**Prochain gros chantier après Build 26.4 et le gate iPhone.**
+**Prochain gros chantier après le gate iPhone.**
 
 - sauvegarde/restauration cohérente ;
 - migrations versionnées ;
