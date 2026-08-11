@@ -1,0 +1,146 @@
+/* French Trân’quille — v1.15.0 Build 22 — UX Foundation */
+:root{
+  --ux-bg:#171026;
+  --ux-panel:rgba(28,22,47,.92);
+  --ux-panel-soft:rgba(255,255,255,.055);
+  --ux-border:rgba(217,225,255,.12);
+  --ux-text:#f8f5ff;
+  --ux-muted:#b9b0c9;
+  --ux-accent:#8fe3d0;
+  --ux-accent2:#c6a9ff;
+}
+
+html,body{overscroll-behavior-y:none}
+body{padding-bottom:calc(78px + env(safe-area-inset-bottom,0px))}
+button{min-height:48px;touch-action:manipulation}
+.bottom-nav{display:none!important}
+
+.ux-bottom-nav{
+  position:fixed;z-index:900;left:50%;bottom:0;transform:translateX(-50%);
+  width:min(720px,100%);display:grid;grid-template-columns:repeat(3,1fr);gap:4px;
+  padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px));
+  background:rgba(18,13,31,.94);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+  border-top:1px solid var(--ux-border);box-shadow:0 -12px 38px rgba(0,0,0,.28)
+}
+.ux-bottom-nav button{
+  border:0;background:transparent;color:var(--ux-muted);border-radius:18px;padding:8px 4px 7px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font:inherit
+}
+.ux-bottom-nav button>span{font-size:1.3rem;line-height:1}
+.ux-bottom-nav button>strong{font-size:.74rem;line-height:1.15;font-weight:750}
+.ux-bottom-nav button.active{background:rgba(143,227,208,.11);color:var(--ux-text)}
+.ux-bottom-nav button.active>span{color:var(--ux-accent)}
+body[data-ux-screen="lesson"],body[data-ux-screen="settings"]{padding-bottom:0}
+body[data-ux-screen="lesson"] .ux-bottom-nav,body[data-ux-screen="settings"] .ux-bottom-nav{display:none}
+
+/* Home: one obvious next action, no dashboard zoo */
+.screen-home .home-dashboard{grid-template-columns:minmax(0,1fr)!important;max-width:760px;margin-inline:auto}
+.screen-home .home-side .curriculum-card{display:none!important}
+.screen-home .grid-actions{display:none!important}
+.screen-home .memory-home-card,
+.screen-home .mastery-home-card,
+.screen-home .listening-home-card,
+.screen-home .language-profile-card,
+.screen-home .error-intelligence-card{display:none!important}
+.screen-home .brand-home{padding-top:6px;padding-bottom:2px;margin-bottom:4px}
+.screen-home .brand-home-logo{width:min(330px,86vw);max-height:190px;object-fit:contain}
+.screen-home .brand-home p{font-size:.94rem;margin-top:-4px;color:var(--ux-muted)}
+.screen-home .hero{padding:16px 18px;margin-bottom:10px}
+.screen-home .hero p{display:none}
+.screen-home .hero h2{font-size:clamp(1.05rem,4vw,1.35rem);margin:2px 0 0}
+.screen-home .lesson-card{border:1px solid rgba(143,227,208,.2);box-shadow:0 16px 44px rgba(0,0,0,.18)}
+.screen-home .lesson-card h2{font-size:clamp(1.25rem,5vw,1.65rem)}
+.screen-home .lesson-card .primary{min-height:58px;font-size:1rem;border-radius:17px}
+.screen-home .home-side{margin-top:0}
+.screen-home .home-side>.stats{max-width:760px;margin:0 auto;grid-template-columns:repeat(3,1fr)}
+.screen-home .home-side>.stats .stat{min-height:auto;padding:12px 8px}
+.screen-home .ux-home-note{margin:4px 4px 10px;color:var(--ux-muted);font-size:.9rem;text-align:center}
+.ux-lesson-position{display:inline-flex;align-items:center;border-radius:999px;padding:5px 9px;background:rgba(198,169,255,.1);color:#d9c8ff;font-size:.72rem;font-weight:800}
+.screen-home .daily-coach-card{padding:18px;margin-top:12px}
+.screen-home .daily-coach-card .pill,.screen-home .daily-coach-card .daily-foot{display:none}
+.screen-home .daily-coach-card .daily-head{align-items:center;margin-bottom:4px}
+.screen-home .daily-coach-card .daily-head h2{font-size:1.1rem}
+.screen-home .daily-coach-card .daily-time{font-size:.72rem}
+.screen-home .daily-coach-card>p{font-size:.92rem;color:var(--ux-muted)}
+.screen-home .daily-steps{gap:8px}
+.screen-home .daily-step{min-height:64px;border-radius:16px}
+
+/* Lesson = focus mode */
+.screen-lesson .content{padding-bottom:104px}
+.screen-lesson .topbar{position:sticky;top:0;z-index:20;background:rgba(23,16,38,.92);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.screen-lesson .topbar .eyebrow{display:none}
+.screen-lesson .topbar h1{font-size:clamp(1rem,4vw,1.2rem);line-height:1.25}
+.screen-lesson .lesson-wrap{max-width:680px}
+.screen-lesson .lesson-step{padding:22px 18px}
+.screen-lesson .lesson-step h2{font-size:1.28rem}
+.screen-lesson .french-block .fr{font-size:clamp(1.55rem,8vw,2.35rem)}
+.screen-lesson .option{min-height:54px;border-radius:15px;text-align:left}
+.screen-lesson .lesson-nav{position:fixed;z-index:40;left:50%;bottom:0;transform:translateX(-50%);width:min(720px,100%);padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));background:rgba(18,13,31,.95);border-top:1px solid var(--ux-border);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.screen-lesson .lesson-nav .primary{min-height:56px;flex:1.4}
+.screen-lesson .lesson-nav .secondary{min-height:56px;flex:.8}
+.ux-learner-mode .screen-lesson .language-lesson-strip{display:none!important}
+
+/* Practice chooser */
+.ux-practice-overlay{position:fixed;z-index:1200;inset:0;background:rgba(8,6,15,.62);display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.ux-practice-sheet{width:min(720px,100%);max-height:min(720px,92dvh);overflow:auto;background:linear-gradient(180deg,rgba(35,27,58,.99),rgba(20,15,34,.99));border:1px solid var(--ux-border);border-radius:28px 28px 0 0;padding:18px 16px calc(22px + env(safe-area-inset-bottom,0px));box-shadow:0 -24px 80px rgba(0,0,0,.42)}
+.ux-practice-sheet header{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.ux-practice-title{display:flex;align-items:center;gap:12px}
+.ux-practice-title img{width:48px;height:48px;border-radius:14px;object-fit:cover}
+.ux-practice-title span{display:block;font-size:.67rem;font-weight:850;letter-spacing:.12em;color:var(--ux-accent)}
+.ux-practice-title h1{font-size:1.16rem;margin:2px 0 0}
+.ux-close{width:48px;height:48px;min-height:48px;border:1px solid var(--ux-border);border-radius:50%;background:var(--ux-panel-soft);color:var(--ux-text);font-size:1.6rem}
+.ux-practice-help{color:var(--ux-muted);font-size:.9rem;margin:14px 2px 10px}
+.ux-practice-actions{display:grid;gap:10px}
+.ux-practice-actions>button{display:grid;grid-template-columns:52px 1fr 24px;align-items:center;gap:10px;text-align:left;border:1px solid var(--ux-border);border-radius:18px;background:rgba(255,255,255,.055);color:var(--ux-text);padding:12px}
+.ux-practice-actions>button:not(:disabled):active{transform:scale(.992)}
+.ux-practice-actions>button:disabled{opacity:.48}
+.ux-practice-icon{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;background:rgba(143,227,208,.1);font-size:1.35rem}
+.ux-practice-actions strong{display:block;font-size:1rem}
+.ux-practice-actions small{display:block;color:var(--ux-muted);margin-top:4px;line-height:1.35}
+.ux-practice-actions b{font-size:1.2rem;color:var(--ux-accent)}
+
+/* Journey: learner-facing summary first; technical intelligence stays behind DEBUG */
+.screen-progress .progress-layout{max-width:920px;margin-inline:auto}
+.ux-journey-summary{border:1px solid rgba(143,227,208,.2);padding:20px}
+.ux-kicker{font-size:.69rem;letter-spacing:.1em;font-weight:850;color:var(--ux-accent)}
+.ux-journey-summary h2{margin:7px 0 5px;font-size:1.35rem}
+.ux-journey-summary p{margin:0 0 14px;color:var(--ux-muted)}
+.ux-journey-bar{height:10px;border-radius:999px;background:rgba(255,255,255,.07);overflow:hidden}
+.ux-journey-bar i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--ux-accent),var(--ux-accent2))}
+.ux-journey-meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:10px;color:var(--ux-muted);font-size:.82rem}
+.ux-journey-meta strong{color:var(--ux-text)}
+.ux-learner-mode .screen-progress .memory-progress-card,
+.ux-learner-mode .screen-progress .daily-rhythm-card,
+.ux-learner-mode .screen-progress .mastery-progress-card,
+.ux-learner-mode .screen-progress .mastery-stage3-card,
+.ux-learner-mode .screen-progress .stage3-progress-card,
+.ux-learner-mode .screen-progress .scenario-progress-card,
+.ux-learner-mode .screen-progress .error-intelligence-card,
+.ux-learner-mode .screen-progress .listening-progress-card,
+.ux-learner-mode .screen-progress .language-progress-card{display:none!important}
+.ux-learner-mode .screen-progress .progress-hero{display:none}
+
+/* Settings: Trân sees only useful settings; Jerry DEBUG keeps diagnostics */
+.ux-learner-mode .screen-settings .diagnostics,
+.ux-learner-mode .screen-settings .danger-zone,
+.ux-learner-mode .screen-settings .memory-backup-card{display:none!important}
+.ux-settings-note{padding:16px 18px}
+.ux-settings-note strong{display:block;margin-bottom:5px}
+.ux-settings-note p{margin:0;color:var(--ux-muted);font-size:.9rem;line-height:1.45}
+
+@media (min-width:760px){
+  .ux-bottom-nav{bottom:14px;border:1px solid var(--ux-border);border-radius:22px;padding:8px 10px;box-shadow:0 18px 50px rgba(0,0,0,.35)}
+  body{padding-bottom:98px}
+  .ux-practice-sheet{border-radius:28px;margin-bottom:16px}
+}
+
+@media (max-width:520px){
+  .screen-home .content{padding-inline:12px}
+  .screen-home .brand-home-logo{width:min(290px,90vw);max-height:165px}
+  .screen-home .hero{padding:14px}
+  .screen-home .lesson-card{padding:18px 16px}
+  .screen-home .home-side>.stats{gap:7px}
+  .screen-home .home-side>.stats .stat span{font-size:1rem}
+  .ux-practice-sheet{padding-inline:14px}
+  .screen-progress .content{padding-inline:12px}
+}

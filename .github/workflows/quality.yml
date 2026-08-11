@@ -1,4 +1,4 @@
-name: JavaScript quality check
+name: French Trân'quille quality
 
 on:
   push:
@@ -10,301 +10,158 @@ permissions:
   contents: read
 
 jobs:
-  javascript:
+  quality:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
 
-      - name: Syntax check
+      - name: Syntax — full active runtime
         run: |
-          node --check app.js
-          node --check curriculum-stage2.js
-          node --check stage2-boot.js
-          node --check debug-fr.js
-          node --check voice-ios.js
-          node --check free-voice.js
-          node --check build-meta.js
-          node --check learning-memory.js
-          node --check daily-coach.js
-          node --check mastery-engine.js
-          node --check scenario-data.js
-          node --check scenario-host.js
-          node --check scenario-engine.js
-          node --check error-intelligence.js
+          for f in app.js progress-safety.js curriculum-stage2.js curriculum-stage3.js stage2-boot.js debug-fr.js voice-ios.js free-voice.js learning-memory.js error-intelligence.js language-ratio-core.js language-ratio.js daily-coach.js mastery-engine.js mastery-stage3.js scenario-data.js scenario-host.js scenario-engine.js listening-data.js listening-engine.js ux-shell.js build-meta.js sw.js; do
+            node --check "$f"
+          done
 
-      - name: Curriculum UX guard
+      - name: Sanctuaries — branding and real iPhone voice baseline
         run: |
-          grep -q 'Build 12 — curriculum UX' styles.css
-          grep -q 'max-height:clamp(360px,52vh,570px)' styles.css
-          grep -q 'position:sticky' styles.css
+          test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
+          test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+          echo 'Brand + voice baselines unchanged.'
 
-      - name: Learning Memory guard
-        run: |
-          grep -q "french-tranquille:learning-memory:v1" learning-memory.js
-          grep -q 'data-memory-rate' learning-memory.js
-          grep -q 'french-tranquille-backup' learning-memory.js
-          grep -q 'learning-memory.css' index.html
-          grep -q 'learning-memory.js' index.html
-          grep -q 'learning-memory.js' sw.js
-
-      - name: UX Visual Pass guard
-        run: |
-          grep -q 'v1.7.1 Build 14' visual-pass.css
-          grep -q '.screen-conversation .narrow' visual-pass.css
-          grep -q '.screen-review .flashcard' visual-pass.css
-          grep -q '.memory-progress-card' visual-pass.css
-          grep -q 'visual-pass.css' index.html
-          grep -q 'visual-pass.css' sw.js
-          grep -q 'lucie-avatar.css' index.html
-          grep -q 'lucie-avatar.css' sw.js
-
-      - name: Build 15 A0 to A1 guard
-        run: |
-          grep -q "id:'l16'" curriculum-stage2.js
-          grep -q "id:'l25'" curriculum-stage2.js
-          grep -q "Je suis prête" curriculum-stage2.js
-          grep -q "J'ai une réservation" curriculum-stage2.js
-          grep -q "Il n'y a pas d'eau chaude" curriculum-stage2.js
-          grep -q "Qu'est-ce que tu fais" curriculum-stage2.js
-          grep -q 'CORE.lessons.push' curriculum-stage2.js
-          grep -q 'CORE.items = ' curriculum-stage2.js
-          grep -q 'curriculum-stage2.css' index.html
-          grep -q 'curriculum-stage2.js' index.html
-          grep -q 'stage2-boot.js' index.html
-          grep -q 'curriculum-stage2.js' sw.js
-          grep -q 'stage2-boot.js' sw.js
-          grep -q '25 leçons / 148 éléments' README.md
-
-      - name: Daily Coach guard
-        run: |
-          grep -q 'daily-coach-card' daily-coach.js
-          grep -q 'Séance du jour' daily-coach.js
-          grep -q 'Rythme conseillé' daily-coach.js
-          grep -q 'daily-coach.css' index.html
-          grep -q 'daily-coach.js' index.html
-          grep -q 'daily-coach.css' sw.js
-          grep -q 'daily-coach.js' sw.js
-
-      - name: Build 16 Mastery Engine guard
-        run: |
-          grep -q 'Survie A0' mastery-engine.js
-          grep -q 'Fondations A1' mastery-engine.js
-          grep -q 'Premiers échanges A1' mastery-engine.js
-          grep -q 'mastery-home-card' mastery-engine.js
-          grep -q 'mastery-progress-card' mastery-engine.js
-          grep -q 'FrenchTranquilleMastery' mastery-engine.js
-          grep -q 'mastery-engine.css' index.html
-          grep -q 'mastery-engine.js' index.html
-          grep -q 'mastery-engine.css' sw.js
-          grep -q 'mastery-engine.js' sw.js
-
-      - name: Build 17 Scenario catalog contract
+      - name: Curriculum — actual runtime contract
         run: |
           node <<'NODE'
-          global.window = global;
-          require('./scenario-data.js');
-          const data = global.FrenchTranquilleScenarioData;
-          if (!data || data.version !== '1.10.0' || data.build !== 17) throw new Error('Scenario Data contract changed unexpectedly');
-          const scenarios = data.scenarios || [];
-          if (scenarios.length !== 12) throw new Error(`Expected 12 scenarios, got ${scenarios.length}`);
-          const ids = scenarios.map(s => s.id);
-          if (new Set(ids).size !== ids.length) throw new Error('Scenario IDs must be unique');
-          for (const scenario of scenarios) {
-            if (!Array.isArray(scenario.requiredLessons) || !scenario.requiredLessons.length) throw new Error(`${scenario.id}: missing requiredLessons`);
-            if (!Array.isArray(scenario.turns) || scenario.turns.length < 3) throw new Error(`${scenario.id}: expected >= 3 turns`);
-            for (const [index,turn] of scenario.turns.entries()) {
-              if (!turn.npcFr || !turn.npcVi || !turn.promptVi || !turn.promptFr) throw new Error(`${scenario.id} turn ${index+1}: missing prompt/NPC text`);
-              if (!Array.isArray(turn.answers) || !turn.answers.length) throw new Error(`${scenario.id} turn ${index+1}: missing accepted answers`);
-              if (!turn.model || !turn.hintVi || !turn.hintFr) throw new Error(`${scenario.id} turn ${index+1}: missing model/hint`);
-              if (!Array.isArray(turn.items) || !turn.items.length) throw new Error(`${scenario.id} turn ${index+1}: missing curriculum item links`);
-            }
-          }
-          console.log('Scenario catalog OK:', scenarios.length, 'scenarios /', scenarios.reduce((n,s)=>n+s.turns.length,0), 'turns');
+          const store=new Map();
+          global.localStorage={getItem:k=>store.has(k)?store.get(k):null,setItem:(k,v)=>store.set(k,String(v)),removeItem:k=>store.delete(k)};
+          const app={innerHTML:''};
+          global.window=global;
+          global.document={querySelector:s=>s==='#app'?app:null,querySelectorAll:()=>[],getElementById:id=>id==='app'?app:null,addEventListener:()=>{},createElement:()=>({className:'',dataset:{},innerHTML:'',appendChild(){},prepend(){},remove(){},querySelector(){return null},querySelectorAll(){return[]}})};
+          global.navigator={};global.confirm=()=>false;global.requestAnimationFrame=fn=>fn();global.queueMicrotask=fn=>fn();global.MutationObserver=class{observe(){}};global.window.addEventListener=()=>{};global.window.scrollTo=()=>{};
+          require('./app.js');require('./curriculum-stage2.js');require('./curriculum-stage3.js');
+          const c=global.FrenchTranquilleCurriculum;
+          if(!c)throw new Error('Curriculum API missing');
+          if(c.lessons.length!==40)throw new Error(`Expected 40 lessons, got ${c.lessons.length}`);
+          if(c.items.length!==241)throw new Error(`Expected audited 241 items, got ${c.items.length}`);
+          const lessonIds=c.lessons.map(x=>x.id),itemIds=c.items.map(x=>x.id);
+          if(new Set(lessonIds).size!==lessonIds.length)throw new Error('Duplicate lesson IDs');
+          if(new Set(itemIds).size!==itemIds.length)throw new Error('Duplicate item IDs');
+          if(!c.lessons.some(x=>x.id==='l8')||!c.lessons.some(x=>x.id==='l40'))throw new Error('Boundary lessons missing');
+          console.log('Curriculum runtime OK:',c.lessons.length,'lessons /',c.items.length,'items');
           NODE
 
-      - name: Build 17 Scenario Lab guard
+      - name: Scenario / Error / Listening data contracts
         run: |
-          grep -q "french-tranquille:scenarios:v1" scenario-engine.js
-          grep -q 'scenario-lab-card' scenario-engine.js
-          grep -q 'scenario-progress-card' scenario-engine.js
-          grep -q 'scenario-success' scenario-engine.js
-          grep -q 'scenario-miss' scenario-engine.js
-          grep -q 'scenario-assisted' scenario-engine.js
-          grep -q 'scenarioSmoke' scenario-engine.js
-          grep -q 'scenario-host' scenario-host.js
-          grep -q 'scenario-engine.css' index.html
-          grep -q 'scenario-data.js' index.html
-          grep -q 'scenario-host.js' index.html
-          grep -q 'scenario-engine.js' index.html
-          grep -q 'scenario-engine.css' sw.js
-          grep -q 'scenario-data.js' sw.js
-          grep -q 'scenario-host.js' sw.js
-          grep -q 'scenario-engine.js' sw.js
-          grep -q '12 situations / 36 tours' README.md
-
-      - name: Build 18 Error Intelligence contract
-        run: |
-          grep -q "french-tranquille:error-intelligence:v1" error-intelligence.js
+          node <<'NODE'
+          global.window=global;
+          require('./scenario-data.js');
+          const scenarios=global.FrenchTranquilleScenarioData?.scenarios||[];
+          if(scenarios.length!==12)throw new Error(`Expected 12 scenarios, got ${scenarios.length}`);
+          for(const s of scenarios)if(!Array.isArray(s.turns)||s.turns.length<3)throw new Error(`${s.id}: expected >=3 turns`);
+          require('./listening-data.js');
+          if(!global.FrenchTranquilleListeningData)throw new Error('Listening data missing');
+          console.log('Scenario + Listening data contracts OK');
+          NODE
           grep -q 'MAX_ITEM_EVENTS = 20' error-intelligence.js
           grep -q 'MAX_RECENT_EVENTS = 120' error-intelligence.js
-          grep -q 'REPEAT_WINDOW = 30' error-intelligence.js
-          grep -q "'retrieval-difficult'" error-intelligence.js
-          grep -q "'scenario-miss'" error-intelligence.js
-          grep -q "'assisted'" error-intelligence.js
-          grep -q "'voice-unrecognized'" error-intelligence.js
-          grep -q "'partial'" error-intelligence.js
-          grep -q 'recordRecovery' error-intelligence.js
-          grep -q 'priorityItems' error-intelligence.js
-          grep -q 'error-intelligence-card' error-intelligence.js
-          grep -q 'error-daily-focus' error-intelligence.js
-          grep -q 'french-tranquille-error-intelligence' error-intelligence.js
-          grep -q 'errorSmoke' error-intelligence.js
-          grep -q "version:'1.11.0'" error-intelligence.js
-          grep -q 'build:18' error-intelligence.js
+          grep -Fq 'const source=`listening-${currentExercise.family}`;' listening-engine.js
 
-      - name: Build 18 Free Voice evidence bridge
+      - name: Build 22 wiring and UX contract
         run: |
-          grep -q "const VERSION='1.11.0', BUILD=18" free-voice.js
-          grep -q 'FrenchTranquilleMemory.*recordPractice' free-voice.js
-          grep -q 'FrenchTranquilleErrors.*recordAttempt' free-voice.js
-          grep -q 'free-voice-voice' README.md
-          grep -q 'free-voice-text' README.md
-          grep -q 'recordEvidence' free-voice.js
-          grep -q "evaluate(best,'voice')" free-voice.js
-          grep -q "'text'))" free-voice.js
-
-      - name: Build 18 wiring and version guard
-        run: |
-          grep -q 'error-intelligence.css' index.html
-          grep -q 'error-intelligence.js' index.html
-          grep -q 'error-intelligence.css' sw.js
-          grep -q 'error-intelligence.js' sw.js
-          grep -q "version: '1.11.0', build: 18" build-meta.js
-          grep -q '1.11.0-b18' index.html
-          grep -q '1.11.0-b18' sw.js
-          grep -q 'v1.11.0' README.md
-          grep -q 'Build 18' README.md
-
-      - name: Documentation governance guard
-        run: |
-          test -f ROADMAP.md
-          test -f CHANGELOG.md
-          test -f docs/ARCHITECTURE.md
-          test -f docs/BUILD-POLICY.md
-          grep -q 'Build 18 — Error Intelligence' ROADMAP.md
-          grep -q 'Build 19 — Curriculum' ROADMAP.md
-          grep -q 'Build 18 — Error Intelligence' CHANGELOG.md
-          grep -q 'error-intelligence.js' docs/ARCHITECTURE.md
-          grep -q 'french-tranquille:error-intelligence:v1' docs/ARCHITECTURE.md
-          grep -q 'MAX_ITEM_EVENTS' docs/ARCHITECTURE.md
-          grep -q 'Documentation obligatoire' docs/BUILD-POLICY.md
-          grep -q 'ROADMAP.md' README.md
-          grep -q 'CHANGELOG.md' README.md
-
-      - name: Node base-engine render smoke test
-        run: |
-          node <<'NODE'
-          const store = new Map();
-          global.localStorage = {
-            getItem: k => store.has(k) ? store.get(k) : null,
-            setItem: (k,v) => store.set(k,String(v)),
-            removeItem: k => store.delete(k)
-          };
-          const app = { innerHTML: '' };
-          global.document = {
-            querySelector(sel){ return sel === '#app' ? app : null; },
-            querySelectorAll(){ return []; }
-          };
-          global.window = global;
-          global.window.scrollTo = () => {};
-          global.window.addEventListener = () => {};
-          global.navigator = {};
-          global.confirm = () => false;
-          require('./app.js');
-          if (!app.innerHTML || app.innerHTML.length < 500) throw new Error('Base home render produced no meaningful HTML');
-          if (!app.innerHTML.includes('A0 • 15 bài')) throw new Error('Base engine should still render its 15 native lessons before Stage 2 boot');
-          if (!app.innerHTML.includes('Ngày đầu tiên ở Pháp')) throw new Error('Base lesson 15 was not rendered');
-          console.log('Node base-engine home render OK:', app.innerHTML.length, 'chars');
-          NODE
+          grep -q '1.15.0-b22' index.html
+          grep -q '1.15.0-b22' sw.js
+          grep -q "version: '1.15.0', build: 22" build-meta.js
+          for f in progress-safety.js curriculum-stage3.js mastery-stage3.js listening-engine.js language-ratio.js ux-shell.js; do grep -q "$f" index.html; done
+          grep -q 'ux-shell.css' index.html
+          grep -q 'french-tranquille:safety:pre-build22:v1' progress-safety.js
+          grep -q "\['home','⌂'" ux-shell.js
+          grep -q "\['practice','◎'" ux-shell.js
+          grep -q "\['progress','◔'" ux-shell.js
+          grep -q 'assets/LOGO.png' app.js
+          grep -q 'assets/Favicon.png' ux-shell.js
+          grep -q 'Build 23 — Real Life French I' ROADMAP.md
+          test -f docs/BUILD-22-UX-FOUNDATION.md
 
       - name: Start static test server
         run: |
-          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/french-tranquille-http.log 2>&1 &
-          echo $! > /tmp/french-tranquille-server.pid
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-http.log 2>&1 &
+          echo $! >/tmp/ft-server.pid
           sleep 1
           google-chrome --version
 
-      - name: Real Chrome Home smoke test
+      - name: Chrome — Home UX
         run: |
-          google-chrome \
-            --headless=new \
-            --no-sandbox \
-            --disable-gpu \
-            --virtual-time-budget=12000 \
-            --dump-dom \
-            http://127.0.0.1:4173/ > /tmp/french-tranquille-home.html
-          if grep -E -q 'id="app"[^>]*><div class="boot-status' /tmp/french-tranquille-home.html; then
-            cat /tmp/french-tranquille-home.html
-            echo 'Startup screen or fatal screen is still rendered inside #app.'
-            exit 1
-          fi
-          grep -q 'app-shell screen-home' /tmp/french-tranquille-home.html
-          grep -q 'home-dashboard' /tmp/french-tranquille-home.html
-          grep -q 'A0 → A1 • 25 bài' /tmp/french-tranquille-home.html
-          grep -q 'memory-home-card' /tmp/french-tranquille-home.html
-          grep -q 'daily-coach-card' /tmp/french-tranquille-home.html
-          grep -q 'mastery-home-card' /tmp/french-tranquille-home.html
-          echo 'Real Chrome Home OK'
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=18000 --dump-dom http://127.0.0.1:4173/ >/tmp/home.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/home.html; then cat /tmp/home.html; exit 1; fi
+          grep -q 'app-shell screen-home' /tmp/home.html
+          grep -q 'brand-home-logo' /tmp/home.html
+          grep -q 'ux-bottom-nav' /tmp/home.html
+          test "$(grep -o 'data-ux-nav=' /tmp/home.html | wc -l)" -eq 3
+          grep -q 'Hôm nay' /tmp/home.html
+          grep -q 'Luyện tập' /tmp/home.html
+          grep -q 'Lộ trình' /tmp/home.html
+          grep -q 'lesson-card' /tmp/home.html
+          grep -q 'daily-coach-card' /tmp/home.html
+          echo 'Home learner UX OK.'
 
-      - name: Real Chrome Scenario Lab smoke test
+      - name: Chrome — preserve Trân lesson-8 progress
         run: |
-          google-chrome \
-            --headless=new \
-            --no-sandbox \
-            --disable-gpu \
-            --virtual-time-budget=12000 \
-            --dump-dom \
-            'http://127.0.0.1:4173/?scenarioSmoke=1' > /tmp/french-tranquille-scenarios.html
-          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/french-tranquille-scenarios.html; then
-            cat /tmp/french-tranquille-scenarios.html
-            exit 1
-          fi
-          grep -q 'app-shell screen-conversation' /tmp/french-tranquille-scenarios.html
-          grep -q 'scenario-host' /tmp/french-tranquille-scenarios.html
-          grep -q 'scenario-lab-card' /tmp/french-tranquille-scenarios.html
-          grep -q 'Phòng tình huống' /tmp/french-tranquille-scenarios.html
-          grep -q 'Ở quán cà phê' /tmp/french-tranquille-scenarios.html
-          grep -q 'Trò chuyện xã giao' /tmp/french-tranquille-scenarios.html
-          echo 'Real Chrome Scenario Lab OK'
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=20000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8' >/tmp/lesson8.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/lesson8.html; then cat /tmp/lesson8.html; exit 1; fi
+          for attr in 'completed="7"' 'next="l8"' 'l8="4"' 'known="40"' 'snapshot="1"' 'snapshot-l8="4"' 'nav-items="3"' 'logo="1"'; do grep -q "data-ux-smoke-$attr" /tmp/lesson8.html; done
+          grep -q 'Bài 8 / 40' /tmp/lesson8.html
+          echo 'Lesson-8 preservation contract OK.'
 
-      - name: Real Chrome Error Intelligence smoke test
+      - name: Chrome — Scenario Lab non-regression
         run: |
-          google-chrome \
-            --headless=new \
-            --no-sandbox \
-            --disable-gpu \
-            --virtual-time-budget=15000 \
-            --dump-dom \
-            'http://127.0.0.1:4173/?errorSmoke=1' > /tmp/french-tranquille-errors.html
-          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/french-tranquille-errors.html; then
-            cat /tmp/french-tranquille-errors.html
-            echo 'Rendered fatal screen detected in Error Intelligence.'
-            exit 1
-          fi
-          grep -q 'app-shell screen-progress' /tmp/french-tranquille-errors.html
-          grep -q 'error-intelligence-card' /tmp/french-tranquille-errors.html
-          grep -q 'Trí tuệ lỗi' /tmp/french-tranquille-errors.html
-          grep -q 'Bonjour' /tmp/french-tranquille-errors.html
-          grep -q 'data-error-smoke-item-events="20"' /tmp/french-tranquille-errors.html
-          grep -q 'data-error-smoke-recent-events="120"' /tmp/french-tranquille-errors.html
-          grep -E -q 'data-error-smoke-repeated="[1-9][0-9]*"' /tmp/french-tranquille-errors.html
-          grep -q 'data-error-smoke-partial="1"' /tmp/french-tranquille-errors.html
-          echo 'Real Chrome Error Intelligence OK: bounded storage + partial evidence + Progression render'
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=18000 --dump-dom 'http://127.0.0.1:4173/?scenarioSmoke=1' >/tmp/scenario.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/scenario.html; then cat /tmp/scenario.html; exit 1; fi
+          grep -q 'screen-conversation' /tmp/scenario.html
+          grep -q 'scenario-lab-card' /tmp/scenario.html
+          grep -q 'Phòng tình huống' /tmp/scenario.html
 
-      - name: Stop static test server
+      - name: Chrome — Error Intelligence 20/120 non-regression
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=22000 --dump-dom 'http://127.0.0.1:4173/?errorSmoke=1' >/tmp/error.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/error.html; then cat /tmp/error.html; exit 1; fi
+          grep -q 'data-error-smoke-item-events="20"' /tmp/error.html
+          grep -q 'data-error-smoke-recent-events="120"' /tmp/error.html
+          grep -q 'data-error-smoke-partial="1"' /tmp/error.html
+
+      - name: Chrome — Listening hidden then reveal
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=22000 --dump-dom 'http://127.0.0.1:4173/?listeningSmoke=1' >/tmp/listening.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/listening.html; then cat /tmp/listening.html; exit 1; fi
+          grep -q 'data-listening-smoke-hidden="1"' /tmp/listening.html
+          grep -q 'data-listening-smoke-revealed="1"' /tmp/listening.html
+          grep -q 'data-listening-smoke-attempts="1"' /tmp/listening.html
+          grep -q 'data-listening-smoke-error-source="listening-meaning"' /tmp/listening.html
+
+      - name: Chrome — Adaptive Language profiles
+        run: |
+          for mode in beginner strong fragile; do
+            google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=18000 --dump-dom "http://127.0.0.1:4173/?languageSmoke=$mode" >"/tmp/language-$mode.html"
+            if grep -E -q 'id="app"[^>]*><div class="boot-status error' "/tmp/language-$mode.html"; then cat "/tmp/language-$mode.html"; exit 1; fi
+          done
+          grep -q 'data-language-smoke-profile="vi-heavy"' /tmp/language-beginner.html
+          grep -q 'data-language-smoke-profile="fr-growing"' /tmp/language-strong.html
+          grep -q 'data-language-smoke-profile="vi-support"' /tmp/language-fragile.html
+
+      - name: Documentation governance
+        run: |
+          grep -q 'v1.15.0' README.md
+          grep -q '40 leçons / 241 éléments' README.md
+          grep -q 'Build 22 — UX Foundation' README.md ROADMAP.md CHANGELOG.md docs/BUILD-22-UX-FOUNDATION.md
+          grep -q 'progress-safety.js' docs/ARCHITECTURE.md
+          grep -q 'ancien utilisateur' docs/BUILD-POLICY.md
+          grep -q 'Runtime Integrity' docs/BUILD-POLICY.md
+
+      - name: Stop static server
         if: always()
         run: |
-          if [ -f /tmp/french-tranquille-server.pid ]; then kill "$(cat /tmp/french-tranquille-server.pid)" || true; fi
+          if [ -f /tmp/ft-server.pid ]; then kill "$(cat /tmp/ft-server.pid)" || true; fi

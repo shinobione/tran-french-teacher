@@ -5,211 +5,394 @@
 PWA statique GitHub Pages :
 
 ```text
-iPhone/Safari/PWA | Android/Chromium | PC
-                    ↓
-               GitHub Pages
-                    ↓
-        HTML + CSS + JavaScript
-                    ↓
-          localStorage + Web APIs
+iPhone / Safari / PWA
+        ↓
+French Trân’quille UI
+        ↓
+UX Shell simple
+        ↓
+moteurs pédagogiques locaux
+        ↓
+localStorage + Web APIs navigateur
 ```
 
 Aucun backend obligatoire, aucune base distante, aucune clé API cliente, aucune dépendance payante nécessaire.
 
 ---
 
-# Ordre runtime — Build 19
+# Principe Build 22
+
+L’architecture distingue désormais clairement :
 
 ```text
-app.js
-↓
-curriculum-stage2.js        # leçons 16–25
-↓
-curriculum-stage3.js        # leçons 26–40
-↓
-stage2-boot.js              # rerender unique après les deux extensions
-↓
-debug-fr.js
-↓
-voice-ios.js
-↓
-free-voice.js
-↓
-learning-memory.js
-↓
-daily-coach.js
-↓
-mastery-engine.js           # étapes 1–4
-↓
-mastery-stage3.js           # palier A1 Core 26–40
-↓
-scenario-data.js
-↓
-scenario-host.js
-↓
-scenario-engine.js
-↓
-error-intelligence.js
-↓
-build-meta.js               # chargé en dernier, version runtime finale
+COMPLEXITÉ INTERNE
+Memory / Mastery / Error / Scenario / Listening / Language
+
+                  ↓
+
+INTERFACE APPRENANTE
+Aujourd’hui / Pratiquer / Parcours
 ```
+
+Un moteur n’obtient pas automatiquement un bouton de navigation parce qu’il existe.
+
+---
+
+# Runtime — v1.15.0 Build 22
+
+Ordre canonique :
+
+```text
+progress-safety.js          # snapshot avant toute évolution
+        ↓
+app.js                      # moteur historique + leçons 1–15
+        ↓
+curriculum-stage2.js        # leçons 16–25
+        ↓
+curriculum-stage3.js        # leçons 26–40
+        ↓
+stage2-boot.js              # rerender curriculum unique
+        ↓
+debug-fr.js
+        ↓
+voice-ios.js                # baseline iPhone validé
+        ↓
+free-voice.js               # baseline reconnaissance validé
+        ↓
+learning-memory.js
+        ↓
+error-intelligence.js
+        ↓
+language-ratio-core.js
+        ↓
+language-ratio.js
+        ↓
+daily-coach.js
+        ↓
+mastery-engine.js
+        ↓
+mastery-stage3.js
+        ↓
+scenario-data.js
+scenario-host.js
+scenario-engine.js
+        ↓
+listening-data.js
+listening-engine.js
+        ↓
+ux-shell.js                 # façade apprenante
+        ↓
+build-meta.js               # version finale, TOUJOURS dernier
+```
+
+Build 22 réconcilie explicitement cet ordre après avoir détecté un **loader drift** : des modules récents existaient dans le repo mais le `index.html` et le service worker de `main` audité étaient restés sur une composition Build 18.
+
+---
+
+# Noyau historique
+
+## `app.js`
+
+Responsabilités :
+
+- état apprenant historique ;
+- leçons 1–15 ;
+- rendu des écrans Home / Lesson / Conversation / Review / Progress / Settings ;
+- navigation historique `.bottom-nav` ;
+- sauvegarde dans la clé legacy.
+
+Il reste monolithique et n’est pas réécrit dans Build 22.
+
+### Pourquoi garder `.bottom-nav` ?
+
+De nombreux modules historiques déclenchent encore :
+
+```text
+.bottom-nav [data-go="review"]
+.bottom-nav [data-go="conversation"]
+```
+
+Build 22 garde ce menu dans le DOM comme **bus de compatibilité invisible**.
+
+`ux-shell.css` le masque côté utilisateur.
+
+---
+
+# UX Shell — Build 22
+
+## `ux-shell.js`
+
+Façade apprenante.
+
+Elle ne stocke aucune progression pédagogique.
+
+Responsabilités :
+
+- créer la navigation 3 destinations ;
+- ouvrir la Practice Sheet ;
+- router vers les écrans historiques sans les dupliquer ;
+- injecter une synthèse de parcours ;
+- masquer les surfaces techniques côté apprenante ;
+- préserver DEBUG FR ;
+- exposer les attributs smoke Build 22.
+
+## Navigation
+
+```text
+Hôm nay / Aujourd’hui → home
+Luyện tập / Pratiquer → overlay local
+Lộ trình / Parcours → progress
+```
+
+Practice Sheet :
+
+```text
+Réviser → screen-review
+Parler  → screen-conversation
+Écouter → FrenchTranquilleListening.open()
+```
+
+Les anciens écrans restent les moteurs réels : pas de duplication de logique.
+
+## `ux-shell.css`
+
+Mode apprenante :
+
+- Home en une colonne ;
+- curriculum complet retiré de la Home ;
+- cartes techniques masquées ;
+- Leçon en focus ;
+- bottom nav masquée pendant Leçon/Réglages ;
+- Parcours humain avant métriques techniques ;
+- réglages dangereux/diagnostics masqués.
+
+Mode DEBUG FR : les informations techniques restent disponibles.
+
+---
+
+# Sécurité de progression
+
+## Clé apprenant canonique historique
+
+```text
+francais-avec-luc:learner:v1
+```
+
+Aucun changement Build 22.
+
+Schema actuel : 2.
+
+Données principales :
+
+```text
+lessonProgress
+completedLessons
+knownItems
+reviewState
+conversationWins
+lastActivity
+streak
+```
+
+## `progress-safety.js`
+
+Nouvelle clé :
+
+```text
+french-tranquille:safety:pre-build22:v1
+```
+
+Elle crée **une seule photo locale non destructive** des données existantes avant la refonte.
+
+La capture peut inclure :
+
+```text
+francais-avec-luc:learner:v1
+french-tranquille:learning-memory:v1
+french-tranquille:error-intelligence:v1
+french-tranquille:scenarios:v1
+french-tranquille:listening:v1
+```
+
+Elle n’effectue aucune restauration automatique et ne modifie jamais les valeurs capturées.
 
 ---
 
 # Curriculum
 
-## `app.js`
+## Base
 
-Moteur historique + leçons 1–15 + UI de base. Sanctuarisé.
+`app.js` : leçons 1–15.
 
-## `curriculum-stage2.js`
+## Stage 2
 
-Leçons 16–25, 60 éléments, structures Early A1.
+`curriculum-stage2.js` : leçons 16–25.
 
-## `curriculum-stage3.js` — Build 19
+## Stage 3
 
-Leçons 26–40, **90 éléments** après normalisation.
+`curriculum-stage3.js` : leçons 26–40.
 
-Responsabilités :
+Audit Build 22 : Stage 3 contient réellement **93 éléments**, pas 90. Le runtime complet conserve ces acquis et corrige la documentation au lieu de supprimer du contenu.
 
-- étendre `FrenchTranquilleCurriculum.lessons` ;
-- étendre `FrenchTranquilleCurriculum.items` ;
-- exposer `FrenchTranquilleStage3` ;
-- note grammaticale courte VI/FR ;
-- chapitre visuel A1 Core ;
-- carte Progression Stage 3.
+Le Stage 3 doit être chargé **avant** `stage2-boot.js` afin qu’un seul rerender voie les 40 leçons.
 
-Le module est chargé avant `stage2-boot.js`, donc un seul rerender rend les 40 leçons visibles.
+Contrat runtime audité :
 
-## `stage2-boot.js`
-
-Nom historique conservé. Son rôle Build 19 devient en pratique **curriculum extension boot** : il rerend l’UI une fois après Stage 2 + Stage 3.
-
----
-
-# Mastery
-
-## `mastery-engine.js`
-
-Quatre étapes historiques : Survie A0, Vie quotidienne A0, Fondations A1, Premiers échanges A1.
-
-## `mastery-stage3.js` — Build 19
-
-Cinquième palier : **A1 Core (leçons 26–40)**.
-
-Entrées : progression, connus, Learning Memory, révisions, solides, fragiles.
-
-Maîtrise : 15/15 leçons + ≥95 % connus + ≥70 % révisés + ≥55 % solides + ≤20 % fragiles.
-
-Expose `FrenchTranquilleMasteryStage3`.
+```text
+40 leçons
+241 éléments
+```
 
 ---
 
 # Learning Memory
 
-`learning-memory.js` — clé `french-tranquille:learning-memory:v1`.
+Clé :
 
-Le module lit le curriculum global ; les items Stage 3 deviennent donc automatiquement éligibles à la mémoire.
+```text
+french-tranquille:learning-memory:v1
+```
 
 États : new / fragile / learning / solid.
+
+Son UI détaillée est une **source d’intelligence**, pas une destination principale côté Trân.
 
 ---
 
 # Error Intelligence
 
-`error-intelligence.js` — clé `french-tranquille:error-intelligence:v1`.
-
-- preuves observables ;
-- historique 20/élément, 120 récents ;
-- récence/répétition/récupération ;
-- priorité Daily Coach ;
-- export local.
-
-Il reconstruit sa table d’items depuis le curriculum global, donc Stage 3 est compatible sans migration de schéma.
-
----
-
-# Voix
-
-`free-voice.js` lit `FrenchTranquilleCurriculum.items` au moment de la pratique : les nouveaux items appris peuvent donc entrer dans le pool vocal.
-
-Free Voice → Learning Memory + Error Intelligence.
-
-Aucun score phonétique. Safari/Siri doit être calibré avec de vraies données iPhone.
-
----
-
-# Scenario Lab
-
-`scenario-data.js` + `scenario-host.js` + `scenario-engine.js`.
-
-12 scénarios / 36 tours Build 17. Build 19 ne modifie pas leur catalogue : test de non-régression uniquement.
-
-Clé : `french-tranquille:scenarios:v1`.
-
----
-
-# Daily Coach
-
-`daily-coach.js` combine Memory/progression ; Error Intelligence peut injecter un focus prioritaire.
-
-Stage 3 augmente naturellement le parcours disponible via le curriculum global.
-
----
-
-# Build metadata
-
-## `build-meta.js`
-
-Build 19 le charge **après tous les autres modules**.
-
-Il applique la version/build finale à : Curriculum, Voice, FreeVoice, Stage2, Stage3, DailyCoach, Mastery, MasteryStage3, ScenarioData, Scenarios et Errors.
-
-Cela évite qu’un module chargé plus tard réexpose un ancien numéro interne.
-
----
-
-# Stockage local principal
+Clé :
 
 ```text
-francais-avec-luc:learner:v1
-french-tranquille:learning-memory:v1
-french-tranquille:scenarios:v1
 french-tranquille:error-intelligence:v1
-tran-french-teacher:debug-fr:v1
 ```
 
-Aucune nouvelle clé apprenant Build 19 : pas de reset ni migration destructive.
+Historique borné :
+
+```text
+20 événements / item
+120 événements récents globaux
+```
+
+Erreur = observation, pas diagnostic phonétique.
+
+---
+
+# Listening
+
+Fichiers :
+
+```text
+listening-data.js
+listening-engine.js
+listening-engine.css
+```
+
+Clé :
+
+```text
+french-tranquille:listening:v1
+```
+
+L’interface Listening reste un overlay spécialisé. Build 22 l’ouvre depuis la Practice Sheet au lieu d’exposer une carte permanente sur la Home.
+
+---
+
+# Adaptive Language
+
+```text
+language-ratio-core.js
+language-ratio.js
+```
+
+Le moteur calcule VI-HEAVY / VI-SUPPORT / BALANCED / FR-GROWING.
+
+Ses résultats pilotent les modules mais sa carte de diagnostic n’a pas besoin d’être visible à l’apprenante.
+
+Le détail reste disponible en DEBUG FR.
+
+---
+
+# Voice — baseline réel
+
+Retour iPhone avant Build 22 :
+
+- reconnaissance des réponses françaises satisfaisante ;
+- voix de Lucie naturelle.
+
+Décision architecture :
+
+```text
+voice-ios.js  = sanctuarisé Build 22
+free-voice.js = sanctuarisé Build 22
+```
+
+Leur blob Git doit rester identique pendant cette refonte.
+
+Le Safari Calibration Gate n’est plus une étape obligatoire tant que l’utilisatrice réelle ne signale pas de problème reproductible.
+
+---
+
+# Branding — baseline réel
+
+Assets sanctuarisés :
+
+```text
+assets/LOGO.png
+assets/Favicon.png
+```
+
+Build 22 les réutilise dans Home, Practice Sheet, favicon et PWA.
+
+---
+
+# DEBUG FR
+
+DEBUG FR reste local au navigateur.
+
+En learner mode : interfaces techniques masquées.
+
+En DEBUG FR : diagnostics, Memory, Mastery, Error, Listening stats et Language Ratio peuvent rester visibles pour l’administration/debug.
 
 ---
 
 # Service Worker
 
-Build 19 : cache `1.12.0-b19`, précache Stage3 + MasteryStage3, réseau d’abord pour GET, fallback cache/index, purge des anciens caches.
+Build 22 :
+
+```text
+tran-french-teacher-v1.15.0-b22
+```
+
+Le précache doit refléter exactement le runtime canonique Build 22, y compris Stage 3, Listening, Language et UX Shell.
+
+Stratégie GET : réseau d’abord, cache fallback.
 
 ---
 
-# CI Build 19
+# CI Build 22
 
-Le workflow est normalisé autour de l’état courant :
+Contrats obligatoires :
 
-- syntaxe ;
-- garde du cœur historique ;
-- contrat Stage 3 = 15 leçons / 6 items chacune / 90 items ;
-- unicité globale des IDs ;
-- câblage/version/cache ;
-- contrat Mastery A1 Core ;
-- compatibilité Memory/Voice/Error ;
-- Scenario non-régression ;
-- Chrome Home 40 leçons ;
-- Chrome Scenario ;
-- Chrome Error ;
-- Chrome A1 Core.
+1. syntaxe de tous les modules actifs ;
+2. hashes logo/favicon immuables ;
+3. hashes voice/free-voice immuables ;
+4. loader + SW contiennent le runtime canonique ;
+5. curriculum **40 / 241** ;
+6. Chrome Home avec navigation 3 destinations ;
+7. Chrome « Trân leçon 8 » : progression strictement conservée ;
+8. Scenario Lab non régressé ;
+9. Error Intelligence 20/120 ;
+10. Listening hidden→reveal ;
+11. Adaptive Language beginner/strong/fragile ;
+12. aucune fatal card.
 
 ---
 
 # Dette technique
 
-`app.js` reste monolithique. Les extensions DOM doivent être idempotentes et ne jamais créer de boucle MutationObserver.
+`app.js` reste monolithique.
 
-Une extraction future d’`app.js` devra être un build de migration dédié, pas un refactor glissé au milieu d’un build pédagogique.
+Build 22 choisit volontairement **une façade séparée** plutôt qu’un refactor du noyau sous les pieds d’une utilisatrice active.
+
+Une extraction de `app.js` devra être un build dédié, avec migration state + tests comparatifs, probablement pendant Hardening V2.
