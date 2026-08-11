@@ -1,8 +1,11 @@
 # Build 26 — Real Life French III
 
-Version candidate : **v1.19.0**  
-Statut : **CANDIDAT / EN COURS**  
-Date : **2026-08-11**
+Version : **v1.19.0**  
+Statut : **✅ PROD / CLOS**  
+Date : **2026-08-11**  
+PR : **#37**  
+Commit production : `db8219e44d74f0af13421ec798a0c98d02f7a7b5`  
+GitHub Pages : **#96 SUCCESS**
 
 ## Intention
 
@@ -23,7 +26,7 @@ real-life-coach.js
 ```text
 8 situations
 24 tours
-Scenario candidat : 36 / 108
+Scenario production : 36 / 108
 ```
 
 Déblocage : l20, l35, l36, l37, l38, l39, l40.
@@ -48,7 +51,7 @@ Plusieurs variantes simples sont explicitement listées. `openResponse:true` ne 
 
 Les acquis avancés sont résolus contre le curriculum chargé. Une requête est valide uniquement si elle donne exactement 1 item.
 
-Candidat :
+Production :
 
 ```text
 15 résolutions
@@ -67,6 +70,18 @@ build   = 26
 cache   = tran-french-teacher-v1.19.0-b26-real-life-3
 ```
 
+## Ajustements CI faits avant merge
+
+### Quality l20
+
+Le vieux smoke attendait 17 scènes personnelles ouvertes à l20. C’était exact avant Pack III. Build 26 ouvre une première scène supplémentaire dès l20 : le contrat réel devient **18**, dont seulement 6 visibles dans le catalogue compact.
+
+### Session UX
+
+Le smoke multi-Chrome Listening/Révision produisait des faux rouges de timing intermittents. Les hooks ont été isolés dans des profils Chrome distincts avec retry borné et diagnostics. Les critères fonctionnels restent stricts : progression atteinte, fin explicite, carte de succès et état masqué après clôture.
+
+Aucun moteur pédagogique, aucune donnée apprenante et aucun fichier voix sanctuarisé n’a été modifié pour faire passer ces tests.
+
 ## Sanctuaires
 
 ```text
@@ -80,16 +95,16 @@ Progression UX Build 25
 Session UX Build 25.2
 ```
 
-## Tribunal
+## Tribunal production
 
-- quality ;
-- Options ;
-- nav/mobile ;
-- Progression UX ;
-- Listening-rate ;
-- Session UX ;
-- Real Life French III smoke ;
-- Pages après merge.
+- quality ✅ ;
+- Options ✅ ;
+- nav/mobile ✅ ;
+- Progression UX ✅ ;
+- Listening-rate ✅ ;
+- Session UX ✅ ;
+- Real Life French III smoke ✅ ;
+- GitHub Pages ✅.
 
 ## Checklist
 
@@ -100,11 +115,11 @@ Session UX Build 25.2
 - [x] version/cache Build 26 ;
 - [x] smoke dédié ;
 - [x] docs candidat synchronisées ;
-- [ ] PR ouverte ;
-- [ ] tribunal PR vert ;
-- [ ] merge main ;
-- [ ] tribunal main vert ;
-- [ ] Pages SUCCESS ;
-- [ ] docs post-prod CLOS.
+- [x] PR ouverte ;
+- [x] tribunal PR vert ;
+- [x] merge main ;
+- [x] tribunal main vert ;
+- [x] Pages SUCCESS ;
+- [x] docs post-prod CLOS.
 
-Le build reste candidat jusqu’à la dernière case.
+Build 26 est clos.
