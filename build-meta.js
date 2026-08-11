@@ -1,6 +1,6 @@
 // Production baseline kept explicit for historical CI contracts.
 const PRODUCTION_BASELINE = { version: '1.17.0', build: 24 };
-const META = { version: '1.18.2', build: '25.2', baseline: PRODUCTION_BASELINE };
+const META = { version: '1.18.3', build: '25.3', baseline: PRODUCTION_BASELINE };
 
 window.FrenchTranquilleBuildMeta = META;
 
@@ -11,7 +11,8 @@ window.FrenchTranquilleBuildMeta = META;
   'FrenchTranquilleRealLife1','FrenchTranquilleRealLife2','FrenchTranquilleRealLifeUX',
   'FrenchTranquilleErrors','FrenchTranquilleListening','FrenchTranquilleLanguage','FrenchTranquilleUX',
   'FrenchTranquilleInteraction','FrenchTranquilleSafety','FrenchTranquilleProgressionUX',
-  'FrenchTranquilleSessionUX','FrenchTranquilleSessionUXAdapter'
+  'FrenchTranquilleSessionUX','FrenchTranquilleSessionUXAdapter','FrenchTranquilleVoiceReplay',
+  'FrenchTranquilleProgressDetailsDashboard'
 ].forEach(name => {
   const api = window[name];
   if (api && typeof api === 'object') {
