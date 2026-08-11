@@ -22,7 +22,7 @@ La complexité appartient aux moteurs ; Trân voit d’abord l’information uti
 
 ---
 
-# Runtime candidat — v1.19.1 Build 26.1
+# Runtime production — v1.19.1 Build 26.1
 
 ```text
 progress-safety.js
@@ -66,6 +66,8 @@ CSS additif :
 voice-replay.css
 progress-details-dashboard.css
 ```
+
+Production commit : `8ad7e5eb9cb2f64c58c086847c3e035463ab3ba3` — PR #40 — Pages #98 SUCCESS.
 
 ---
 
@@ -114,9 +116,11 @@ Production : **36 situations / 108 tours**, **15 résolutions Memory avancées**
 
 Build 26.1 ne modifie ni `real-life-data-3.js`, ni `real-life-coach.js`, ni le Scenario Engine.
 
+Baseline historique protégée : `real-life-data-2.js` / **v1.17.0 Build 24**, Scenario **28 / 84** avant Pack III.
+
 ---
 
-# Voice Self-Playback — Build 26.1 — CANDIDAT
+# Voice Self-Playback — Build 26.1 — PROD / gate iPhone terrain
 
 ## Position dans le runtime
 
@@ -140,9 +144,13 @@ Il ne patch pas `SpeechRecognition`, `free-voice.js` ou `voice-ios.js`.
 
 ## Pourquoi une seconde prise
 
-Le Web Speech API donne le résultat de reconnaissance mais n’expose pas le flux audio brut de `SpeechRecognition` comme un `MediaStream` réutilisable. Build 26.1 évite donc de lancer volontairement `getUserMedia()` tant que le bouton micro de Free Voice est encore désactivé par la reconnaissance.
+Le Web Speech API fournit le résultat de reconnaissance, mais pas un flux audio brut réutilisable par l’application. Build 26.1 évite également de demander un second accès micro tant que Free Voice indique encore que la reconnaissance est active.
 
 Une fois la reconnaissance terminée, Trân peut répéter la même phrase pour s’écouter.
+
+Cette architecture est déployée, mais le parcours réel `reconnaissance → seconde prise → lecture → reconnaissance suivante` doit encore être confirmé sur l’iPhone de Trân avant d’être considéré comme baseline terrain.
+
+La capture simultanée exacte du premier essai reste hors scope.
 
 ## Capture / confidentialité
 
@@ -170,9 +178,9 @@ Garde-fous :
 
 ---
 
-# Learning Details Dashboard — Build 26.1 — CANDIDAT
+# Learning Details Dashboard — Build 26.1 — PROD
 
-Build 25 a déjà créé `details.progress-ux-details`. Build 26.1 travaille **à l’intérieur** de cette frontière.
+Build 25 a créé `details.progress-ux-details`. Build 26.1 travaille **à l’intérieur** de cette frontière.
 
 Avant :
 
@@ -262,26 +270,29 @@ assets/Favicon.png
 
 ---
 
-# CI Build 26.1 — candidat
+# CI Build 26.1 — production
 
-Contrats obligatoires :
+Contrats validés sur PR #40 puis `main` :
 
-1. quality historique ;
-2. Options ;
-3. nav/mobile ;
-4. Progression UX ;
-5. Listening-rate 0.88 / 0.64 ;
-6. Session UX ;
-7. Real Life French III ;
-8. **Voice replay + Details dashboard** ;
-9. hashes branding/voice ;
-10. profil l8 ;
-11. aucune fatal card.
+1. quality historique ✅ ;
+2. Options ✅ ;
+3. nav/mobile ✅ ;
+4. Progression UX ✅ ;
+5. Listening-rate 0.88 / 0.64 ✅ ;
+6. Session UX ✅ ;
+7. Real Life French III ✅ ;
+8. Voice replay + Details dashboard ✅ ;
+9. hashes branding/voice ✅ ;
+10. profil l8 ✅ ;
+11. aucune fatal card ✅ ;
+12. GitHub Pages #98 ✅.
 
-Le workflow Build 26 Real Life French III est rendu durable : il vérifie les fichiers/markers Build 26 et le comportement **36 / 108**, mais ne fige plus `build-meta.js` ou le cache global à `1.19.0`.
+Le workflow Build 26 Real Life French III est désormais durable : il vérifie les fichiers/markers Build 26 et le comportement **36 / 108**, sans figer la version globale à `1.19.0`.
 
-Le nouveau workflow 26.1 vérifie replay local-only, dashboard groupé, coexistence Pack III et surface replay dans un vrai Chrome.
+Le smoke 26.1 teste le replay comme composant isolé ; navigation et Practice Hub restent testés par leurs propres contrats, ce qui évite une dépendance de timing artificielle entre plusieurs couches UI.
 
-# Dette technique
+# Dette / gate terrain
+
+Le dashboard est une baseline production. L’auto-écoute reste **production déployée mais terrain iPhone non confirmée** jusqu’au test réel de Trân.
 
 `app.js` reste monolithique par choix de sécurité. Son extraction est réservée à Architecture Hardening.
