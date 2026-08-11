@@ -25,129 +25,86 @@
 
 ---
 
-# Baseline production — v1.18.1 / Build 25.1
+# Baseline production — v1.18.2 / Build 25.2
 
-**Listening Slow Calibration — ✅ PROD / CLOS**
+**Session Goals / Milestones / App Delight — ✅ PROD / CLOS**
 
-- Listening effectif : **0.88 normal / 0.64 lent** ;
-- Build 25 Progression UX conservé ;
+- `Parcours` compact via Build 25 ;
+- Listening effectif : **0.88 normal / 0.64 lent** via Build 25.1 ;
+- sessions bornées et sorties explicites via Build 25.2 ;
+- Practice Hub : un seul moteur dominant ;
+- Home : 2 actions principales + extras repliés ;
+- milestones séparés des données pédagogiques ;
 - 40 leçons / 241 éléments ;
 - Scenario 28 / 84 ;
 - voix/branding sanctuarisés ;
 - coût 0 €.
 
-Preuves `main` `178c8b71d47887d8f9efd3389aa358d2f3e1a8eb` : quality #100, Options #31, nav #50, Progression #8, Listening-rate #3, Pages #92 — SUCCESS.
+Preuve production Build 25.2 : commit `49d866bed59bb0cb3268e1675225a4811f6c595f`, 7 workflows déclenchés, aucun échec, Pages SUCCESS.
 
 ---
 
-# v1.18.2 — Build 25.2 — Session Goals / Milestones / App Delight — EN COURS
+# v1.19.0 — Build 26 — Real Life French III — PROCHAIN
 
-## Problème terrain
+## Intention
 
-Plusieurs modes fonctionnent mais ne disent pas assez clairement :
+Maintenant que l’interface est plus respirable et que les sessions ont une vraie fin, enrichir `Pratiquer → Parler français` sans ajouter de nouveau bouton principal.
 
-> Combien je dois faire ? Où j’en suis ? Quand est-ce fini ? Puis-je partir maintenant ?
+Objectif : **moins de roulettes, plus de compréhension du français oral réel, réponses légèrement plus libres mais toujours déterministes/locales**.
 
-## Architecture candidate
+## Principes
 
-Nouveaux modules :
+- le français oral naturel peut apparaître côté interlocuteur : `T’es prête ?`, `J’sais pas`, `Y a pas…` ;
+- Trân peut répondre en français standard ;
+- plusieurs formulations simples équivalentes peuvent être acceptées ;
+- aucune pseudo-IA locale qui “devine” arbitrairement le sens ;
+- les réponses acceptées restent explicitement définies ;
+- les références Memory doivent résoudre exactement un acquis ;
+- le Scenario Engine reste propriétaire de ses stats/persistance ;
+- Session UX 25.2 doit continuer à borner une session à **1 situation**.
 
-```text
-session-ux.js
-session-ux-adapter.js
-session-ux.css
-.github/workflows/session-ux-smoke.yml
-```
+## Pack III cible
 
-La couche Session UX **orchestre les moteurs existants**. Elle ne réécrit ni Voice, ni Memory, ni Scenario, ni Listening.
+8 situations / 24 tours prévues autour de :
 
-## Contrat commun
+1. comprendre Jerry quand il parle vite ;
+2. futur proche : `Je vais appeler Jerry.` ;
+3. passé récent : `Je viens de rentrer.` ;
+4. passé composé : `J’ai mangé.` ;
+5. mouvement : `Je suis rentrée à la maison.` ;
+6. administratif : `Pouvez-vous m’expliquer ?` ;
+7. émotion / besoin : `Je suis inquiète.` / `J’ai besoin de parler.` ;
+8. couple : `Tu me manques.`.
 
-```text
-AVANT   → objectif court
-PENDANT → progression visible
-FIN     → réussite explicite
-APRÈS   → sortie logique en 1 tap
-```
+Le pack préparatoire historique `real-life-data-3.js` / `real-life-coach.js` doit être **porté sur la baseline 25.2**, pas mergé tel quel depuis son ancienne branche.
 
-## Sessions candidates
+## UX
 
-- **Listening** : 5 questions ; après 5/5, écran `Session terminée`, résultat bref, `Retour à Aujourd’hui` principal, `Encore 3 minutes` secondaire.
-- **Révision mémoire** : jusqu’à 5 éléments prioritaires ; fin explicite puis sortie.
-- **Scenario** : une situation complète ; le nombre de tours existant devient l’indicateur de progression ; l’état de fin natif est conservé.
-- **Entraînement vocal guidé** : 5 réponses reconnues, sans modifier `free-voice.js`.
-- **Pratique guidée historique** : 1 réponse correcte par mini-session.
-- **Leçon** : étapes existantes conservées ; dernière étape annoncée, puis confirmation sur Home après enregistrement.
+Dans les scènes Pack III seulement, Lucie peut afficher discrètement :
 
-## Pratiquer → Parler français
+> `Tu peux répondre avec tes mots. Une phrase simple qui exprime la bonne idée suffit.`
 
-Le grand empilement de moteurs disparaît du flux principal.
+Pas de nouveau réglage, mode ou bouton.
 
-Candidat :
+## Critères de clôture Build 26
 
-```text
-Recommandé maintenant
-[ Situation réelle • ≈ 3 min ]
-
-Autres façons
-[ Répondre à l’oral ]
-[ Pratique guidée ]
-```
-
-Une fois un mode sélectionné, les autres moteurs sont masqués sans être supprimés.
-
-## Aujourd’hui / Séance du jour
-
-Maximum **2 actions principales** dans le flux. Les autres restent accessibles dans `Voir les autres activités`.
-
-## App Delight
-
-Succès sobre et premium :
-
-- barre à 100 % ;
-- coche ;
-- glow mint/lilas ;
-- petit pulse ;
-- transition 400–800 ms ;
-- `prefers-reduced-motion` respecté.
-
-Pas de son forcé, XP, monnaie, classement ou confettis permanents.
-
-## Milestones
-
-Nouvelle clé séparée :
-
-```text
-french-tranquille:milestones:v1
-```
-
-Elle ne change aucune donnée pédagogique. Les jalons déjà atteints lors de l’installation sont marqués `baseline` pour éviter une avalanche rétroactive.
-
-Jalons candidats : première leçon, premier vocal reconnu, première session Listening, première situation réelle, premier rappel réussi, 10/25/50 acquis consolidés, fin A0/A1.
-
-## Critères de clôture
-
-- v1.18.2 / Build 25.2 / cache cohérents ;
-- Home : 2 actions visibles + extras repliés ;
-- Practice : hub simple et un seul moteur dominant ;
-- Listening : 5/5 puis fin explicite ;
-- Révision : cible bornée puis fin explicite ;
-- Scenario / Vocal / Guided : objectifs visibles et sortie claire ;
-- fin de leçon confirmée après sauvegarde ;
-- reduced motion testé ;
-- aucune donnée pédagogique migrée ou écrasée ;
-- profil l8 intact ;
-- voix/logo/favicon byte-identiques ;
-- quality / Options / nav / Progression / Listening-rate verts ;
-- nouveau **Session UX smoke** vert sur PR puis `main` ;
-- GitHub Pages verte ;
-- docs CLOS uniquement après preuve production.
+- version `v1.19.0 / Build 26` et cache cohérents ;
+- 8 nouvelles situations / 24 tours ;
+- Scenario total attendu : **36 situations / 108 tours** si aucun doublon supprimé ;
+- aucun clone d’une situation existante ;
+- toutes les références `memoryQueries` résolvent exactement 1 acquis ;
+- les réponses semi-libres restent déterministes et testables ;
+- Pack III disponible selon les leçons requises ;
+- catalogue visible toujours limité par la logique existante ;
+- Session UX 25.2 reste fonctionnelle : objectif `1 situation`, fin et sortie ;
+- profil ancien utilisateur / l8 intact ;
+- voix, reconnaissance, logo, favicon byte-identiques ;
+- quality / Options / nav / Progression / Listening-rate / Session UX verts ;
+- nouveau smoke Real Life III vert sur PR puis `main` ;
+- Pages SUCCESS ;
+- docs CLOS après production.
 
 ---
-
-# v1.19.0 — Build 26 — Real Life French III
-
-Contenu repoussé derrière les passes UX : problèmes quotidiens, émotions, français oral courant, réponses moins dirigées. Toujours derrière `Pratiquer → Parler français`.
 
 # v1.20.0 — Build 27 — Data & Recovery Hardening
 
@@ -179,6 +136,8 @@ free-voice.js
 assets/LOGO.png
 assets/Favicon.png
 bottom navigation interaction baseline
+Progression UX Build 25
+Session UX Build 25.2
 ```
 
 # Easter egg réservé

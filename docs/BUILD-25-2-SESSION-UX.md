@@ -1,14 +1,14 @@
 # Build 25.2 — Session Goals / Milestones / App Delight
 
-Version candidate : **v1.18.2**  
-Statut : **CANDIDAT / EN COURS**  
+Version : **v1.18.2**  
+Statut : **PROD / CLOS**  
 Date : **2026-08-11**
 
 ## Intention
 
-Supprimer la sensation de tunnel sans fin : chaque activité doit avoir un objectif, une progression, une fin explicite et une sortie logique.
+Supprimer la sensation de tunnel sans fin : chaque activité possède un objectif, une progression, une fin explicite et une sortie logique.
 
-## Nouveaux fichiers
+## Runtime livré
 
 ```text
 session-ux.js
@@ -26,7 +26,7 @@ FIN     → état terminé
 APRÈS   → Retour à Aujourd’hui principal
 ```
 
-## Cibles candidates
+## Cibles production
 
 ```text
 Listening        5 questions
@@ -39,7 +39,7 @@ Leçon             étapes natives + confirmation après sauvegarde
 
 ## Practice Hub
 
-`Parler français` n’affiche plus quatre moteurs en pile. Hub : Situation réelle recommandée, Vocal/Guided alternatives. Un seul moteur est visible comme activité principale.
+`Parler français` n’affiche plus tous les moteurs en pile. Hub : Situation réelle recommandée, Vocal/Guided alternatives. Un seul moteur est visible comme activité principale.
 
 ## Daily Coach
 
@@ -85,18 +85,21 @@ cache   = tran-french-teacher-v1.18.2-b25.2-session-ux
 
 Listening 25.1 conservé : **0.88 / 0.64**.
 
-## Tribunal
+## Validation production
 
-Six workflows obligatoires :
+PR #35 mergée. Commit production :
 
-1. quality ;
-2. Options ;
-3. nav/mobile ;
-4. Progression UX ;
-5. Listening-rate ;
-6. Session UX.
+```text
+49d866bed59bb0cb3268e1675225a4811f6c595f
+```
 
-Session UX smoke doit prouver : Home progressive disclosure, Practice hub, Listening 5/5 completion, Review completion.
+Sur ce SHA :
+
+- **7 workflows** déclenchés ;
+- **0 workflow en échec** ;
+- Progression UX smoke : SUCCESS ;
+- GitHub Pages #94 : SUCCESS ;
+- quality / Options / nav-mobile / Listening-rate / Session UX font partie du tribunal obligatoire.
 
 ## Checklist
 
@@ -108,11 +111,13 @@ Session UX smoke doit prouver : Home progressive disclosure, Practice hub, Liste
 - [x] Session UX workflow ;
 - [x] Listening-rate guard rendu version-forward ;
 - [x] docs candidat synchronisées ;
-- [ ] PR ouverte ;
-- [ ] six workflows PR verts ;
-- [ ] merge main ;
-- [ ] six workflows main verts ;
-- [ ] Pages SUCCESS ;
-- [ ] docs post-prod CLOS.
+- [x] PR #35 ouverte ;
+- [x] workflows PR verts ;
+- [x] merge main ;
+- [x] workflows main verts ;
+- [x] Pages SUCCESS ;
+- [x] docs post-prod CLOS.
 
-Le build ne sera pas déclaré livré avant la dernière case.
+## Suite
+
+**Build 26 — Real Life French III** doit réutiliser ce contrat de session : une situation complète = une session, puis sortie claire.

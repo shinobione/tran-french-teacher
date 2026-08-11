@@ -4,7 +4,11 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ## [Unreleased]
 
-### v1.18.2 — Build 25.2 — Session Goals / Milestones / App Delight — CANDIDAT
+Prochaine étape : **v1.19.0 — Build 26 — Real Life French III**.
+
+---
+
+## [1.18.2] — Build 25.2 — Session Goals / Milestones / App Delight — 2026-08-11
 
 - ajoute `session-ux.js`, `session-ux-adapter.js`, `session-ux.css` ;
 - ajoute un contrat commun `objectif → progression → fin → sortie` ;
@@ -19,12 +23,14 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 - nouvelle clé non pédagogique `french-tranquille:milestones:v1` ; les jalons déjà atteints sont marqués comme baseline à la première installation ;
 - animations de succès sobres + `prefers-reduced-motion` ;
 - conserve Listening **0.88 / 0.64** ;
-- cache candidat `tran-french-teacher-v1.18.2-b25.2-session-ux` ;
+- cache `tran-french-teacher-v1.18.2-b25.2-session-ux` ;
 - ajoute `Build 25.2 Session UX smoke` : Home / Practice / Listening 5/5 / Review bornée ;
 - aucune migration learner/Memory/Scenario/Listening ;
-- voix et branding sanctuarisés.
-
-Ce bloc reste Unreleased jusqu’à PR → six workflows → `main` → six workflows → Pages.
+- voix et branding sanctuarisés ;
+- PR #35 mergée ;
+- commit production `49d866bed59bb0cb3268e1675225a4811f6c595f` ;
+- 7 workflows `main`, aucun échec ;
+- GitHub Pages #94 SUCCESS.
 
 ---
 
