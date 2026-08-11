@@ -4,10 +4,12 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ## [Unreleased]
 
-### v1.19.0 — Build 26 — Real Life French III — CANDIDAT
+---
+
+## [1.19.0] — Build 26 — Real Life French III — 2026-08-11
 
 - ajoute `real-life-data-3.js` : **8 situations / 24 tours** ;
-- Scenario candidat : **36 situations / 108 tours** ;
+- Scenario production : **36 situations / 108 tours** ;
 - introduit du français oral naturel côté interlocuteur : `T’es prête ?`, `J’sais pas…`, `Y a pas…` ;
 - conserve des réponses standard et plusieurs variantes simples explicitement autorisées ;
 - ajoute futur proche, passé récent, passé composé, mouvement au passé, administratif, émotion/besoin et couple ;
@@ -16,12 +18,13 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 - conserve la limite de 6 situations ouvertes visibles ;
 - conserve le contrat Session UX 25.2 : **1 situation = 1 session** ;
 - conserve Listening **0.88 / 0.64** ;
-- cache candidat `tran-french-teacher-v1.19.0-b26-real-life-3` ;
+- cache `tran-french-teacher-v1.19.0-b26-real-life-3` ;
 - ajoute `Build 26 Real Life French III smoke` avec profils l20 / l35 / l40 et garde des résolutions ;
+- corrige le contrat quality l20 pour compter la première scène Pack III : **18 scènes personnelles ouvertes** ;
+- stabilise le harness Session UX multi-Chrome avec isolation/retry borné, sans changement moteur ;
 - aucune migration learner/Memory/Scenario/Listening ;
-- voix et branding sanctuarisés.
-
-Ce bloc reste Unreleased jusqu’à PR → tribunal complet → `main` → même tribunal → Pages.
+- voix et branding sanctuarisés ;
+- PR #37 ; commit prod `db8219e44d74f0af13421ec798a0c98d02f7a7b5` ; **8 workflows / 8 SUCCESS** ; Pages **#96 SUCCESS**.
 
 ---
 
