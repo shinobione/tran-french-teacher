@@ -4,6 +4,18 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ## [Unreleased]
 
+### v1.17.2 — Build 24.2 — Navigation Interaction Hotfix — candidat
+
+- corrige un état réel où `Aujourd’hui / Pratiquer / Parcours` pouvait rester visible mais ne plus répondre aux clics ;
+- stabilise les nœuds DOM de la barre UX : aucun remplacement si son état visuel n’a pas changé ;
+- traite les clics de navigation en phase de capture ;
+- nouveau token UX `1.17.2-b24.2` pour `ux-shell.js`, `ux-shell.css` et `build-meta.js` ;
+- identité de cache PWA alignée entre `index.html` et `sw.js` : `1.17.2-b24.2-nav-hotfix` ;
+- ajout d’un smoke Chrome permanent avec hit-testing réel, scroll desktop et navigation `Pratiquer → Parcours → Aujourd’hui` ;
+- aucune modification de la progression, du curriculum, de Learning Memory, des scénarios, de la voix ou du branding.
+
+Reste Unreleased jusqu’à PR → `main` → GitHub Pages.
+
 ### v1.17.0 — Build 24 — Real Life French II — candidat
 
 - ajout de `real-life-data-2.js` : **10 situations / 30 tours** pour les acquis des leçons 9→20 ;
