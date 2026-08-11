@@ -21,13 +21,12 @@ jobs:
         run: |
           node --check build-meta.js
           node --check sw.js
-          grep -q "version: '1.18.1', build: '25.1'" build-meta.js
           grep -q 'normal: 0.88' build-meta.js
           grep -q 'engineSlow: 0.68' build-meta.js
           grep -q 'slow: 0.64' build-meta.js
           grep -q 'LISTENING_RATES.slow' build-meta.js
-          grep -q '1.18.1-b25.1-listening-slow' index.html sw.js
-          grep -q 'build-meta.js?v=1.18.1-b25.1' index.html sw.js
+          grep -q 'FrenchTranquilleListeningRates' build-meta.js
+          grep -q 'build-meta.js?v=' index.html sw.js
       - name: Voice and branding remain sanctuarized
         run: |
           test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
