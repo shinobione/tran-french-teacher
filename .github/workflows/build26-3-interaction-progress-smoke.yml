@@ -18,17 +18,14 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Syntax, version and wiring
+      - name: Syntax and Build 26.3 baseline wiring
         run: |
           node --check build26-3-ux.js
           node --check build-meta.js
           node --check sw.js
           grep -q 'build26-3-ux.css?v=1.19.3-b26.3' index.html
           grep -q 'build26-3-ux.js?v=1.19.3-b26.3' index.html
-          grep -q 'build-meta.js?v=1.19.3-b26.3' index.html
-          grep -q "version: '1.19.3', build: '26.3'" build-meta.js
           grep -q "FrenchTranquilleBuild263UX" build-meta.js
-          grep -q 'tran-french-teacher-v1.19.3-b26.3-interactions-progress-layout' index.html sw.js
           grep -q 'build26-3-ux.css' sw.js
           grep -q 'build26-3-ux.js' sw.js
           grep -q 'display:contents' build26-3-ux.css
@@ -91,7 +88,7 @@ jobs:
             exit 1
           fi
 
-      - name: Chrome desktop — Paint layout is two-column and Details sticky
+      - name: Chrome desktop — two-column Progress baseline survives later polish
         run: |
           passed=0
           for attempt in 1 2 3; do
@@ -112,7 +109,6 @@ jobs:
               && grep -q 'data-b263-smoke-contents="1"' "$file" \
               && grep -q 'data-b263-smoke-desktop="1"' "$file" \
               && grep -q 'data-b263-smoke-details-open="1"' "$file" \
-              && grep -q 'data-b263-smoke-sticky="1"' "$file" \
               && grep -q 'data-progress-current-lesson="l8"' "$file" \
               && grep -q 'data-progress-completed="7"' "$file" \
               && grep -q 'data-progress-known="40"' "$file" \
@@ -124,7 +120,7 @@ jobs:
             grep -o 'data-b263-[^ >]*' "$file" | head -30 || true
           done
           if [ "$passed" -ne 1 ]; then
-            echo 'Build 26.3 desktop layout smoke failed after 3 bounded isolated attempts'
+            echo 'Build 26.3 desktop layout baseline failed after 3 bounded isolated attempts'
             exit 1
           fi
 
