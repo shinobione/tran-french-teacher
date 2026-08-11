@@ -7,7 +7,7 @@ iPhone / Safari / PWA
         ↓
 UX Shell simple
         ↓
-Progression UX / Session UX
+Progression UX + Session UX
         ↓
 moteurs pédagogiques locaux
         ↓
@@ -22,7 +22,7 @@ La complexité appartient aux moteurs ; Trân voit d’abord l’information uti
 
 ---
 
-# Runtime canonique — v1.18.1 Build 25.1
+# Runtime candidat — v1.18.2 Build 25.2
 
 ```text
 progress-safety.js
@@ -51,60 +51,172 @@ listening-engine.js
 ux-shell.js
 interaction-ux.js
 progression-ux.js
+session-ux.js
+session-ux-adapter.js
 build-meta.js
 ```
+
+CSS Session UX : `session-ux.css`.
 
 ---
 
 # Progression UX — Build 25
 
-`progression-ux.js` orchestre le rendu existant sans modifier les moteurs ni persister de données : résumé apprenant, détails repliables, 5 lignes curriculum visibles par défaut, 40 accessibles à la demande.
+`progression-ux.js` orchestre `Parcours` sans persister de données : résumé apprenant, détails repliables, 5 lignes curriculum visibles par défaut, 40 accessibles à la demande.
 
 ---
 
 # Listening — Build 25.1
 
-Le moteur historique demande encore :
+Calibration canonique :
 
 ```text
-normal request = 0.88
-slow request   = 0.68
+normal request 0.88 → effectif 0.88
+slow request   0.68 → effectif 0.64
 ```
 
-`build-meta.js` installe le bridge ciblé :
+Le bridge vit dans `build-meta.js`. `voice-ios.js`, voix et pitch sont inchangés.
+
+---
+
+# Session UX — Build 25.2
+
+## Pourquoi une façade
+
+Les moteurs savent déjà enregistrer leurs propres données et certains possèdent une fin native. Les réécrire pour ajouter un simple contrat de session augmenterait inutilement le risque.
+
+Build 25.2 utilise donc :
 
 ```text
-0.88 request → 0.88 effectif
-0.68 request → 0.64 effectif
+moteur existant
+   ↓ produit/stocke normalement
+session-ux.js
+   ↓ observe progression et orchestre l’affichage
+objectif / progression / fin / sortie
 ```
 
-Pendant l’appel hérité à `speechSynthesis.speak`, le bridge place temporairement l’effective rate dans `tran-french-teacher:luc-rate:v1`, puis restaure exactement la valeur précédente.
+`session-ux-adapter.js` couvre uniquement les vieilles zones qui n’exposent pas d’API de session propre.
 
-Observabilité canonique :
+## Listening
+
+À l’ouverture de `.listening-overlay`, Session UX mémorise les compteurs courants comme baseline.
+
+Session standard : **5 tentatives**.
 
 ```text
-window.FrenchTranquilleListeningRates
-html[data-listening-normal-rate="0.88"]
-html[data-listening-engine-slow-rate="0.68"]
-html[data-listening-slow-rate="0.64"]
+attempts session = totals.attempts - baselineAttempts
+correct session  = totals.correct  - baselineCorrect
 ```
 
-Aucune modification de `voice-ios.js`, du pitch, de la voix choisie ou du réglage Lucie persistant.
+À 5/5, les données sont déjà persistées par Listening ; Session UX masque l’exercice et affiche l’état de fin. Continuer volontairement démarre un nouveau petit lot de 3 à partir des nouveaux compteurs.
+
+## Révision mémoire
+
+Session UX lit les totaux persistés de `french-tranquille:learning-memory:v1`.
+
+Cible : `min(5, due || entries)`, minimum 1.
+
+Après chaque rating, Learning Memory persiste d’abord ; Session UX calcule ensuite le delta de reviews. À la cible, la flashcard est remplacée par l’état de réussite.
+
+## Scenario
+
+Scenario garde son moteur natif : validation, tours, stats et `scenario-done`.
+
+Session UX ajoute :
+
+- objectif `1 situation` ;
+- progression à partir du compteur de tour natif ;
+- succès visuel sur `scenario-done` ;
+- action principale `Retour à Aujourd’hui` ;
+- replay masqué de la hiérarchie principale.
+
+## Vocal guidé
+
+`free-voice.js` reste sanctuarisé.
+
+Session UX observe les clics réussis sur `#free-voice-next`; cible : **5 réponses reconnues**. La carte est remplacée par un état de fin au cinquième succès.
+
+## Pratique guidée historique
+
+`session-ux-adapter.js` utilise le delta de `conversationWins`. Une mini-session = **1 réponse correcte**. L’ancien moteur reste intact.
+
+## Leçon
+
+Leçon conserve ses étapes et son écriture historique.
+
+Session UX :
+
+1. indique explicitement `Dernière étape` lorsque le bouton devient `Terminer` ;
+2. capture l’intention de terminer ;
+3. laisse `app.js` enregistrer la leçon et revenir à Home ;
+4. affiche alors une confirmation `Leçon enregistrée`.
+
+La réussite visuelle arrive donc après sauvegarde, jamais avant.
+
+---
+
+# Practice Hub
+
+Dans `screen-conversation`, les moteurs existants restent dans le DOM mais sont masqués par défaut.
+
+Vue initiale :
+
+```text
+Recommandé maintenant
+Situation réelle
+
+Autres façons
+Vocal guidé
+Pratique guidée
+```
+
+Une seule capacité devient dominante après sélection.
+
+---
+
+# Daily Coach compact
+
+Session UX garde **2 actions principales** dans `.daily-steps` et déplace les autres boutons existants dans `details.session-daily-more`.
+
+Aucun bouton moteur n’est détruit ; ils changent uniquement de parent DOM.
+
+---
+
+# Milestones
+
+Clé indépendante :
+
+```text
+french-tranquille:milestones:v1
+```
+
+Ce n’est pas une donnée pédagogique et elle n’influence aucun score/moteur.
+
+Au premier démarrage, les achievements déjà vrais deviennent `baseline`, donc aucune avalanche rétroactive. Seuls les nouveaux franchissements déclenchent une micro-carte.
+
+---
+
+# Animations
+
+`session-ux.css` utilise des transitions courtes de réussite. `@media(prefers-reduced-motion:reduce)` les supprime/simplifie.
+
+Pas de son forcé, XP, monnaie ou classement.
 
 ---
 
 # État et sécurité
 
-Clés historiques à préserver :
+Clés pédagogiques existantes inchangées :
 
 ```text
 francais-avec-luc:learner:v1
 french-tranquille:scenarios:v1
 french-tranquille:listening:v1
+french-tranquille:learning-memory:v1
 french-tranquille:safety:pre-build22:v1
 ```
 
-Curriculum : **40 leçons / 241 éléments**. Scenario : **28 situations / 84 tours**.
+Curriculum : **40 leçons / 241 éléments**. Scenario : **28 / 84**.
 
 ---
 
@@ -119,37 +231,28 @@ assets/Favicon.png
 
 ---
 
-# UX Shell
-
-Navigation : `Aujourd’hui / Pratiquer / Parcours`.
-
-Builds 24.3–24.5 garantissent feedback pointerdown, tap echo, nœuds persistants, état actif unique et header léger. Build 25 / 25.1 préservent cette baseline.
-
----
-
-# CI canonique
+# CI candidate Build 25.2
 
 Contrats obligatoires :
 
 1. quality historique ;
 2. Options ;
 3. nav/mobile ;
-4. Progression UX compact / expanded / details ;
-5. Listening rate smoke ;
-6. branding + voice hashes ;
-7. curriculum 40/241 ;
-8. Scenario 28/84 ;
-9. Error / Listening / Adaptive ;
-10. ancien profil l8 ;
-11. aucune fatal card.
+4. Progression UX ;
+5. Listening-rate 0.88 / 0.64 ;
+6. nouveau **Session UX smoke** ;
+7. hashes branding/voice ;
+8. profil l8 ;
+9. aucune fatal card.
 
-Build 25.1 a passé ces contrats sur PR puis sur `main`, plus Pages #92.
+Session UX smoke vérifie notamment :
 
----
-
-# Prochain chantier architectural UX
-
-Build 25.2 introduira une **Session UX layer** : objectif visible, progression, fin explicite et sortie logique, sans réécrire les moteurs existants quand une façade peut suffire.
+```text
+Home       2 actions principales + extras repliés
+Practice   hub unique
+Listening  5/5 → completion
+Review     cible bornée → completion
+```
 
 ---
 
