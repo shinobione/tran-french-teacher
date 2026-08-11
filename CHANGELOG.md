@@ -4,26 +4,31 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ## [Unreleased]
 
-### v1.19.1 — Build 26.1 — Voice Self-Playback + Learning Details Dashboard — CANDIDAT
+Prochain jalon : **v1.20.0 — Build 27 — Data & Recovery Hardening**.
+
+---
+
+## [1.19.1] — Build 26.1 — Voice Self-Playback + Learning Details Dashboard — 2026-08-11
 
 - ajoute `voice-replay.js` / `voice-replay.css` sans modifier `free-voice.js` ni `voice-ios.js` ;
 - après une réponse vocale reconnue, propose une seconde prise locale destinée uniquement à l’auto-écoute ;
 - utilise `MediaRecorder` / `getUserMedia` si disponibles ;
 - aucun upload, aucune persistance, aucun événement pédagogique créé par le replay ;
 - Blob URL temporaire révoquée, piste micro arrêtée, capture max 9 secondes ;
-- n’essaie pas encore d’enregistrer simultanément le premier essai reconnu sur iPhone ;
+- n’enregistre pas simultanément le premier essai reconnu sur iPhone ;
 - ajoute `progress-details-dashboard.js` / `progress-details-dashboard.css` ;
 - remplace l’empilement de `Détails d’apprentissage` par des familles compactes : Mémoire, Maîtrise, Écoute, Français réel, A1/rythme ;
 - une seule famille détaillée est visible à la fois ;
 - les cartes historiques restent dans le DOM et continuent à être pilotées par leurs moteurs ;
 - conserve Real Life III : **36 situations / 108 tours** ;
 - rend `Build 26 Real Life French III smoke` durable pour les versions futures ;
-- cache candidat `tran-french-teacher-v1.19.1-b26.1-voice-replay-details-dashboard` ;
+- cache `tran-french-teacher-v1.19.1-b26.1-voice-replay-details-dashboard` ;
 - ajoute `Build 26.1 Voice replay + Details dashboard smoke` ;
 - aucune migration learner/Memory/Scenario/Listening ;
-- voix et branding sanctuarisés.
-
-Ce bloc reste **Unreleased** jusqu’à PR → tribunal complet → `main` → même tribunal → Pages → docs CLOS.
+- voix et branding sanctuarisés ;
+- PR #40 : **8 workflows applicatifs SUCCESS** ;
+- commit production `8ad7e5eb9cb2f64c58c086847c3e035463ab3ba3` : **8 workflows applicatifs SUCCESS** ;
+- GitHub Pages **#98 SUCCESS**.
 
 ---
 
