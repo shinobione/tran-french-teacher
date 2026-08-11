@@ -7,6 +7,8 @@ iPhone / Safari / PWA
         ↓
 UX Shell simple
         ↓
+Progression UX / Session UX
+        ↓
 moteurs pédagogiques locaux
         ↓
 localStorage + Web APIs navigateur
@@ -30,15 +32,15 @@ Aujourd’hui / Pratiquer / Parcours
 
 Un nouveau moteur n’obtient pas une nouvelle destination de navigation.
 
-Règle ajoutée après observation terrain :
+Règles terrain :
 
 > **un moteur peut être important sans être visible en permanence.**
 
-L’interface doit utiliser une logique de **progressive disclosure** : résumé utile d’abord, détails ensuite, diagnostics seulement si demandé ou en DEBUG FR.
+> **la complexité appartient à Lucie ; Trân reçoit d’abord l’information utile pour décider quoi faire.**
 
 ---
 
-# Runtime canonique — baseline v1.17.5 Build 24.5
+# Runtime candidat — v1.18.0 Build 25
 
 ```text
 progress-safety.js
@@ -66,12 +68,82 @@ listening-data.js
 listening-engine.js
 ux-shell.js
 interaction-ux.js            # feedback tactile premium
-build-meta.js                # dernier : metadata + ponts runtime ciblés
+progression-ux.js            # Build 25 : progressive disclosure de Parcours
+build-meta.js                # dernier : metadata + pont Listening
 ```
 
-CSS Scenario personnel : `real-life-ux.css`.
+CSS Build 25 : `progression-ux.css`.
 
-Le microfix Listening du 11/08/2026 est porté par `build-meta.js` sans modification de `voice-ios.js`. Son rôle est uniquement de laisser passer les vitesses pédagogiques explicites du module Listening au lieu de les laisser être écrasées par la vitesse globale Lucie.
+`progression-ux.js` est volontairement chargé **après** les moteurs qui injectent leurs cartes. Il ne remplace ni Memory, ni Mastery, ni le curriculum : il orchestre leur DOM une fois rendu.
+
+---
+
+# Build 25 — Progression UX
+
+## Pourquoi une couche séparée
+
+Les cartes Progress sont injectées par plusieurs modules indépendants. Réécrire chacun d’eux uniquement pour simplifier l’écran créerait une large surface de régression.
+
+Build 25 utilise donc une façade dédiée :
+
+```text
+moteurs existants
+   ↓ rendent leurs cartes normalement
+progression-ux.js
+   ↓ hiérarchise l’affichage
+Parcours compact
+```
+
+## Comportement DOM
+
+Dans `.screen-progress .progress-layout` :
+
+1. un nouveau résumé `.progress-ux-overview` est ajouté ;
+2. le vieux `.progress-hero` et `.stats` sont **masqués mais non supprimés** ;
+3. les cartes secondaires du premier rail sont déplacées dans :
+
+```text
+<details class="progress-ux-details">
+  <summary>Détails d’apprentissage</summary>
+  <div class="progress-ux-details-body">
+    cartes existantes
+  </div>
+</details>
+```
+
+Les sélecteurs des moteurs continuent à fonctionner car les cartes gardent leurs classes et restent descendantes de `.progress-layout`.
+
+Si un injecteur recrée une carte au premier niveau après une mutation, l’orchestrateur la remet dans le bloc de détails au frame suivant.
+
+## Curriculum compact
+
+Le `.curriculum-card` complet reste intact.
+
+Par défaut, Build 25 montre au plus :
+
+```text
+leçon précédente
+leçon actuelle
+3 leçons suivantes
+```
+
+Les autres lignes reçoivent `progress-ux-row-hidden`.
+
+`Voir les 40 leçons` enlève ce masquage sans recréer le curriculum.
+
+## Zéro migration
+
+Build 25 n’écrit aucune nouvelle donnée apprenante et ne modifie aucune clé existante.
+
+Il lit :
+
+```text
+francais-avec-luc:learner:v1
+FrenchTranquilleMemory.summary()
+FrenchTranquilleMastery.levelEstimate()
+```
+
+mais ne persiste rien.
 
 ---
 
@@ -95,13 +167,13 @@ Clé Listening :
 french-tranquille:listening:v1
 ```
 
-Snapshot de sécurité depuis Build 22 :
+Snapshot sécurité :
 
 ```text
 french-tranquille:safety:pre-build22:v1
 ```
 
-Aucun changement UX futur ne doit renommer ces clés pour des raisons esthétiques.
+Aucun changement UX ne doit renommer ces clés pour des raisons esthétiques.
 
 ---
 
@@ -120,14 +192,13 @@ Contrat actuel : **40 leçons / 241 éléments**.
 Le moteur historique reste responsable de :
 
 - verrouillage par `requiredLessons` ;
-- validation des réponses ;
-- indice ;
-- modèle après blocage ;
+- validation ;
+- indices/modèles ;
 - voix/clavier ;
 - Learning Memory ;
 - stats persistantes.
 
-## Packs data
+Packs :
 
 ```text
 scenario-data.js      12 situations / 36 tours
@@ -137,77 +208,50 @@ real-life-data-2.js   10 situations / 30 tours
 
 Total : **28 situations / 84 tours**.
 
-Chaque pack étend le même tableau `FrenchTranquilleScenarioData.scenarios` avant l’initialisation du moteur.
-
-Aucune migration du state Scenario n’est nécessaire : les stats existantes sont indexées par ID et les nouveaux IDs sont additifs.
+`real-life-ux.js` limite déjà les scènes ouvertes visibles à `MAX_OPEN = 6`. Build 25 applique la même philosophie à Parcours.
 
 ---
 
-# `real-life-ux.js` — catalogue scalable
+# Learning Memory / Error / Adaptive / Mastery
 
-La façade Scenario reste limitée par défaut :
+Ces moteurs travaillent derrière l’interface :
 
-```text
-MAX_OPEN = 6
-```
-
-Principe : quelques scènes pertinentes visibles, puis expansion volontaire. Cette même philosophie doit maintenant être appliquée à **Parcours / Progression**.
-
----
-
-# Learning Memory / Error / Adaptive
-
-Les moteurs travaillent derrière l’interface apprenante :
-
-- Learning Memory mémorise la solidité et les besoins de révision ;
-- Error Intelligence mémorise uniquement des erreurs observables ;
+- Memory suit solidité et échéances ;
+- Error conserve uniquement des erreurs observables ;
 - Adaptive Language ajuste le soutien VI/FR ;
-- Mastery synthétise les preuves ;
-- Daily Coach choisit quoi remettre devant Trân.
+- Mastery synthétise des preuves ;
+- Daily Coach choisit les priorités.
 
-Ces moteurs **ne doivent pas imposer chacun leur propre grande carte permanente** dans l’écran Parcours.
+Build 25 ne change aucune de leurs règles. Il retire seulement leurs grands panneaux du flux principal de Parcours.
 
 ---
 
 # Listening
 
-Audio local via `speechSynthesis`.
+Audio via `speechSynthesis`.
 
-État production après PR #29 :
+État courant :
 
 ```text
 normal = 0.88
 lent   = 0.68
 ```
 
-Le retour terrain indique que `lent` pourrait être légèrement plus lent. La calibration est reportée à un mini-jalon après test iPhone ; candidat envisagé : **0.62–0.64**.
+Le microfix PR #29 est porté par `build-meta.js` sans modifier `voice-ios.js`.
 
-Aucune modification pendant une session réelle de Trân.
+Build 25.1 testera plus tard **0.64**, puis éventuellement **0.62**.
 
 ---
 
-# Voice — sanctuaire réel
+# Voice — sanctuaire
 
-Retour iPhone validé : voix Lucie naturelle et reconnaissance des réponses satisfaisante.
+Retours terrain iPhone : voix Lucie naturelle et reconnaissance française satisfaisante.
 
-Sanctuaires :
+Sanctuaires byte-identiques en CI :
 
 ```text
 voice-ios.js
 free-voice.js
-```
-
-Le microfix Listening n’a pas modifié `voice-ios.js`.
-
-Aucune recalibration générale sans problème réel reproductible.
-
----
-
-# Branding
-
-Sanctuaires :
-
-```text
 assets/LOGO.png
 assets/Favicon.png
 ```
@@ -216,7 +260,7 @@ assets/Favicon.png
 
 # UX Shell
 
-Toujours :
+Navigation :
 
 ```text
 Aujourd’hui
@@ -224,80 +268,56 @@ Pratiquer
 Parcours
 ```
 
-Builds 24.3–24.5 garantissent :
+Builds 24.3–24.5 garantissent feedback pointerdown, tap echo, nœuds persistants, état actif unique, Pratiquer comme écran et header de leçon allégé.
 
-- feedback `pointerdown` ;
-- `tap echo` ;
-- boutons persistants ;
-- un seul onglet actif ;
-- synchronisation déterministe de l’état actif ;
-- `Pratiquer` comme vrai écran ;
-- header de leçon allégé.
+Build 25 n’intervient pas dans cette couche.
 
 ---
 
-# Dette UX prioritaire : Parcours
+# CI Build 25
 
-Observation terrain du 11/08/2026 : l’écran `Parcours` est trop long et expose trop d’implémentation interne.
+Le nouveau workflow `progression-ux-smoke.yml` ajoute trois navigateurs logiques sur viewport 390×844 :
 
-Éléments actuellement susceptibles de s’empiler :
+## Compact
 
-- position dans le parcours ;
-- stats globales ;
-- Learning Memory ;
-- plusieurs cartes Mastery ;
-- situations réelles ;
-- fondations A1 ;
-- éléments acquis ;
-- liste complète des 40 leçons ;
-- métriques détaillées.
-
-Cible Build 25 :
+Profil l8 synthétique :
 
 ```text
-NIVEAU 1 — Résumé
-  position + progrès + prochaine étape
-
-NIVEAU 2 — Détails repliables
-  Memory / Mastery / Listening / Real Life / A1
-
-NIVEAU 3 — Vue complète
-  tous les acquis / toutes les leçons / diagnostics
+current = l8
+completed = 7
+known = 40
+visible rows = 5
+total rows = 40
+details open = 0
 ```
 
-Aucune donnée ne sera supprimée : la refonte porte sur **l’architecture d’information**, pas sur les moteurs.
+## Expanded
 
-Voir `docs/NEXT-UX-PASS.md`.
+Même profil :
+
+```text
+visible rows = 40
+expanded = 1
+```
+
+## Details
+
+Le bloc détails est ouvert et Chrome doit encore retrouver au minimum :
+
+```text
+memory-progress-card
+mastery-progress-card
+```
+
+Les workflows quality / Options / nav-mobile restent obligatoires.
 
 ---
 
 # Freeze terrain
 
-Tant que Trân utilise activement la PWA :
+Le freeze du 11/08 est levé pour le chantier Build 25.
 
-- pas de merge runtime ;
-- pas de service-worker bump ;
-- pas de modification de cache ;
-- documentation sur branche uniquement ;
-- exception : incident critique reproductible.
-
----
-
-# CI à conserver
-
-Contrats minimum :
-
-1. syntaxe runtime complet ;
-2. hashes branding + voice ;
-3. curriculum 40/241 ;
-4. Scenario 28/84 ;
-5. ancien utilisateur/progression ;
-6. Error / Listening / Adaptive ;
-7. Options ;
-8. navigation mobile réelle ;
-9. aucune fatal card.
-
-Build 25 devra ajouter un contrat de **densité / progressive disclosure** sans supprimer les tests 24.5.
+Règle permanente : pendant une vraie session de Trân, aucun nouveau runtime/cache sauf incident critique.
 
 ---
 

@@ -1,6 +1,6 @@
-// Production baseline this navigation-state hotfix is applied on.
+// Production baseline this UX build is applied on.
 const PRODUCTION_BASELINE = { version: '1.17.0', build: 24 };
-const META = { version: '1.17.5', build: 24.5, baseline: PRODUCTION_BASELINE };
+const META = { version: '1.18.0', build: 25, baseline: PRODUCTION_BASELINE };
 
 window.FrenchTranquilleBuildMeta = META;
 
@@ -10,7 +10,7 @@ window.FrenchTranquilleBuildMeta = META;
   'FrenchTranquilleMasteryStage3','FrenchTranquilleScenarioData','FrenchTranquilleScenarios',
   'FrenchTranquilleRealLife1','FrenchTranquilleRealLife2','FrenchTranquilleRealLifeUX',
   'FrenchTranquilleErrors','FrenchTranquilleListening','FrenchTranquilleLanguage','FrenchTranquilleUX',
-  'FrenchTranquilleInteraction','FrenchTranquilleSafety'
+  'FrenchTranquilleInteraction','FrenchTranquilleSafety','FrenchTranquilleProgressionUX'
 ].forEach(name => {
   const api = window[name];
   if (api && typeof api === 'object') {

@@ -1,0 +1,33 @@
+.screen-progress .progress-layout.progress-ux-ready{align-items:start}
+.screen-progress .progress-ux-legacy-hidden{display:none!important}
+
+.progress-ux-overview{position:relative;overflow:hidden;border-color:rgba(159,247,209,.16)}
+.progress-ux-overview::before{content:"";position:absolute;inset:0 0 auto;height:2px;background:linear-gradient(90deg,var(--mint),var(--lilac));opacity:.78}
+.progress-ux-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:12px}
+.progress-ux-head>div{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.progress-ux-head small{color:var(--muted);font-size:.76rem}.progress-ux-head>strong{font-size:1.05rem;color:#d9e6f3}
+.progress-ux-overview>h2{font-size:clamp(1.25rem,3vw,1.55rem);margin:4px 0 7px}.progress-ux-current{margin:0!important;color:#dce7f3!important;font-size:1rem}
+.progress-ux-global{margin:17px 0 15px}
+.progress-ux-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 15px}.progress-ux-metrics>div{padding:11px 9px;border-radius:14px;background:rgba(7,17,29,.42);border:1px solid rgba(180,199,224,.09);text-align:center}.progress-ux-metrics strong,.progress-ux-metrics span{display:block}.progress-ux-metrics strong{font-size:1.15rem}.progress-ux-metrics span{margin-top:2px;color:#8ea2bb;font-size:.69rem}
+.progress-ux-next{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 14px;border-radius:16px;background:linear-gradient(135deg,rgba(159,247,209,.08),rgba(201,167,255,.06));border:1px solid rgba(159,247,209,.13)}.progress-ux-next>div{min-width:0}.progress-ux-next small,.progress-ux-next strong,.progress-ux-next span{display:block}.progress-ux-next small{text-transform:uppercase;letter-spacing:.08em;color:#8fcfb9;font-size:.61rem}.progress-ux-next strong{margin-top:4px}.progress-ux-next span{margin-top:2px;color:var(--muted);font-size:.72rem}.progress-ux-next .primary{min-height:44px;padding-inline:14px;flex:0 0 auto}
+
+.progress-ux-details{margin:0 0 16px;border:1px solid var(--line);border-radius:19px;background:rgba(14,26,42,.72);overflow:hidden;box-shadow:0 14px 34px rgba(0,0,0,.15)}
+.progress-ux-details>summary{list-style:none;min-height:70px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:14px;cursor:pointer;user-select:none;transition:transform .1s ease,background .16s ease,border-color .16s ease}.progress-ux-details>summary::-webkit-details-marker{display:none}.progress-ux-details>summary>span{min-width:0}.progress-ux-details>summary strong,.progress-ux-details>summary small{display:block}.progress-ux-details>summary strong{font-size:.94rem}.progress-ux-details>summary small{color:var(--muted);font-size:.72rem;line-height:1.35;margin-top:3px}.progress-ux-details>summary>b{color:#9ff7d1;font-size:1.05rem;transition:transform .18s ease}.progress-ux-details[open]>summary>b{transform:rotate(180deg)}.progress-ux-details>summary:active{transform:scale(.985);background:rgba(159,247,209,.06)}
+.progress-ux-details-body{padding:0 12px 12px}.progress-ux-details-body>.card{margin-bottom:10px;box-shadow:none;background:rgba(13,25,41,.88)}.progress-ux-details-body>.card:last-child{margin-bottom:0}
+
+.progress-ux-curriculum{position:relative}.progress-ux-curriculum .progress-ux-row-hidden{display:none!important}.progress-ux-curriculum-actions{margin-top:11px}.progress-ux-curriculum-actions .secondary{justify-content:space-between}.progress-ux-curriculum .lesson-row{transition:transform .12s ease,border-color .16s ease,background .16s ease,opacity .16s ease}
+
+@media(max-width:860px){
+  .screen-progress .progress-layout.progress-ux-ready{gap:0}
+  .progress-ux-overview{margin-bottom:12px}
+  .progress-ux-details{margin-bottom:12px}
+  .progress-ux-curriculum{margin-bottom:12px}
+}
+
+@media(max-width:520px){
+  .screen-progress .content{padding-bottom:24px}
+  .progress-ux-overview{padding:17px 16px}.progress-ux-metrics{gap:6px}.progress-ux-metrics>div{padding:10px 5px}.progress-ux-next{align-items:stretch;flex-direction:column}.progress-ux-next .primary{width:100%;justify-content:space-between}
+  .progress-ux-details>summary{min-height:66px;padding:13px 14px}.progress-ux-details-body{padding:0 8px 8px}.progress-ux-details-body>.card{padding:15px;border-radius:16px}
+  .progress-ux-curriculum{padding:15px 13px}.progress-ux-curriculum .lesson-row{padding:10px}
+}
+
+@media(prefers-reduced-motion:reduce){.progress-ux-details>summary,.progress-ux-details>summary>b,.progress-ux-curriculum .lesson-row{transition:none!important}}
