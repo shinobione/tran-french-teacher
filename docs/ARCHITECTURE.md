@@ -7,7 +7,7 @@ iPhone / Safari / PWA
         ↓
 UX Shell simple
         ↓
-Progression UX + Session UX
+Progression UX + Session UX + Details Dashboard + Voice Replay
         ↓
 moteurs pédagogiques locaux
         ↓
@@ -22,7 +22,7 @@ La complexité appartient aux moteurs ; Trân voit d’abord l’information uti
 
 ---
 
-# Runtime production — v1.19.0 Build 26
+# Runtime candidat — v1.19.1 Build 26.1
 
 ```text
 progress-safety.js
@@ -55,7 +55,16 @@ interaction-ux.js
 progression-ux.js
 session-ux.js
 session-ux-adapter.js
+voice-replay.js
+progress-details-dashboard.js
 build-meta.js
+```
+
+CSS additif :
+
+```text
+voice-replay.css
+progress-details-dashboard.css
 ```
 
 ---
@@ -81,7 +90,7 @@ Chaque moteur conserve ses écritures ; `session-ux.js` observe et orchestre `ob
 
 ---
 
-# Build 26 — Real Life French III — PROD
+# Build 26 — Real Life French III — PROD / INTACT
 
 ## Insertion runtime
 
@@ -99,69 +108,128 @@ session-ux.js         ← contrat 1 situation
 
 `real-life-data-3.js` enrichit le tableau `FrenchTranquilleScenarioData.scenarios` avant le démarrage du host/engine. Il ne crée aucune nouvelle clé localStorage.
 
-## Réponses semi-libres déterministes
+Les réponses semi-libres restent déterministes : plusieurs variantes explicitement listées, aucune classification sémantique libre.
 
-`openResponse:true` signifie uniquement que plusieurs variantes explicitement listées sont acceptées. Le moteur ne fait aucune classification sémantique libre.
+Production : **36 situations / 108 tours**, **15 résolutions Memory avancées**, 0 ambiguïté.
 
-Exemple :
+Build 26.1 ne modifie ni `real-life-data-3.js`, ni `real-life-coach.js`, ni le Scenario Engine.
 
-```text
-Je suis inquiète.
-Je suis un peu inquiète.
-Oui, je suis inquiète.
-```
+---
 
-## Français oral naturel
+# Voice Self-Playback — Build 26.1 — CANDIDAT
 
-Le français relâché apparaît côté interlocuteur pour entraîner la compréhension :
+## Position dans le runtime
+
+`voice-replay.js` est une **couche additive après résultat vocal** :
 
 ```text
-T'es prête ?
-J'sais pas… on rentre ?
-Y a pas de réseau.
+free-voice.js
+   ↓ réponse reconnue / persistée normalement
+.free-voice-result
+   ↓
+voice-replay.js
+   ↓ prise locale volontaire secondaire
+MediaRecorder
+   ↓
+Blob URL temporaire
+   ↓
+Audio(blobUrl)
 ```
 
-Trân n’est pas obligée de reproduire ces contractions ; elle peut répondre en français standard.
+Il ne patch pas `SpeechRecognition`, `free-voice.js` ou `voice-ios.js`.
 
-## Résolution Memory
+## Pourquoi une seconde prise
 
-Pour les acquis avancés, `real-life-data-3.js` résout une requête textuelle contre le curriculum réellement chargé.
+Le Web Speech API donne le résultat de reconnaissance mais n’expose pas le flux audio brut de `SpeechRecognition` comme un `MediaStream` réutilisable. Build 26.1 évite donc de lancer volontairement `getUserMedia()` tant que le bouton micro de Free Voice est encore désactivé par la reconnaissance.
 
-Règle :
+Une fois la reconnaissance terminée, Trân peut répéter la même phrase pour s’écouter.
+
+## Capture / confidentialité
 
 ```text
-0 match  → invalide
-1 match  → accepté
-2+ match → ambigu / invalide
+navigator.mediaDevices.getUserMedia({audio:true})
+        ↓
+MediaRecorder
+        ↓
+Blob mémoire
+        ↓
+URL.createObjectURL(blob)
 ```
 
-Les résolutions et erreurs sont exposées dans `FrenchTranquilleRealLife3.resolution` et `invalidResolution` pour le CI.
+Garde-fous :
 
-Production : **15 résolutions avancées, 0 invalide**.
+- feature detection ;
+- aucun upload réseau ;
+- aucun `localStorage.setItem` ;
+- aucun événement Learning Memory / Error / Mastery / Session ;
+- arrêt automatique après 9 s ;
+- `MediaStreamTrack.stop()` à la fin ;
+- `URL.revokeObjectURL()` au changement d’exercice / fermeture ;
+- en cas d’échec de capture, la reconnaissance pédagogique reste intacte ;
+- rendu idempotent par signature pour éviter les boucles `MutationObserver`.
 
-## Déblocage
+---
 
-- l20 : français oral naturel ;
-- l35 : futur proche ;
-- l36 : passé récent ;
-- l37 : passé composé ;
-- l38 : mouvement au passé ;
-- l39 : administratif ;
-- l40 : émotion/besoin + couple.
+# Learning Details Dashboard — Build 26.1 — CANDIDAT
 
-Scenario production total : **36 situations / 108 tours**.
+Build 25 a déjà créé `details.progress-ux-details`. Build 26.1 travaille **à l’intérieur** de cette frontière.
 
-## Coach Pack III
+Avant :
 
-`real-life-coach.js` n’altère pas le moteur. Il ajoute uniquement, dans une scène Pack III active, une note apprenante : répondre avec ses mots est possible si l’idée reste dans les variantes prévues.
+```text
+Détails d’apprentissage
+├── Learning Memory
+├── Error Intelligence
+├── Mastery
+├── A1 Mastery
+├── Listening
+├── Scenario / Real Life
+├── Adaptive Language
+└── ...
+```
 
-Il publie aussi des `data-*` uniquement lorsque `?realLifeSmoke=...` est présent afin de rendre les contrats Chrome mesurables.
+Après :
+
+```text
+Détails d’apprentissage
+└── Dashboard
+    ├── 🧠 Mémoire & révisions
+    ├── 🎯 Maîtrise
+    ├── 🎧 Compréhension orale
+    ├── 🎭 Français réel
+    └── 🧩 A1 & rythme
+          ↓
+       1 panel visible
+```
+
+## Classification
+
+```text
+memory    → Memory + Error
+mastery   → Mastery + A1 Mastery
+listening → Listening
+real-life → Scenario / Real Life
+path      → Stage2 / Stage3 / Adaptive / Daily / A1 path
+other     → futur contenu non classifié
+```
+
+Aucune carte n’est clonée ou supprimée. Le dashboard déplace les **vrais nœuds DOM existants** dans `.progress-detail-panel-cards`, eux-mêmes toujours descendants de `.progress-layout`.
+
+Les anciens moteurs continuent donc à retrouver et mettre à jour leurs cartes via leurs sélecteurs descendants.
+
+## Anti-boucle
+
+- signature de rendu ;
+- panels réutilisés ;
+- observer `childList` seulement ;
+- orchestration au `requestAnimationFrame` ;
+- aucune persistance.
 
 ---
 
 # Practice Hub / Daily Coach / Milestones
 
-Les couches Build 25.2 restent inchangées : un seul moteur dominant dans Practice, deux actions principales sur Home, milestones non pédagogiques et succès avec reduced motion.
+Build 25.2 reste inchangé : un seul moteur dominant dans Practice, deux actions principales sur Home, milestones non pédagogiques et succès avec reduced motion.
 
 ---
 
@@ -177,7 +245,9 @@ french-tranquille:learning-memory:v1
 french-tranquille:safety:pre-build22:v1
 ```
 
-Curriculum : **40 leçons / 241 éléments**.
+Curriculum : **40 leçons / 241 éléments**. Scenario Build 26 : **36 / 108**.
+
+Build 26.1 ne crée aucune nouvelle clé de donnée apprenante.
 
 ---
 
@@ -192,7 +262,7 @@ assets/Favicon.png
 
 ---
 
-# CI Build 26 — production
+# CI Build 26.1 — candidat
 
 Contrats obligatoires :
 
@@ -202,17 +272,15 @@ Contrats obligatoires :
 4. Progression UX ;
 5. Listening-rate 0.88 / 0.64 ;
 6. Session UX ;
-7. **Real Life French III smoke** ;
-8. hashes branding/voice ;
-9. profil l8 ;
-10. aucune fatal card ;
-11. GitHub Pages.
+7. Real Life French III ;
+8. **Voice replay + Details dashboard** ;
+9. hashes branding/voice ;
+10. profil l8 ;
+11. aucune fatal card.
 
-Real Life III smoke vérifie l20 / l35 / l40, **36 / 108**, 15 résolutions, 0 ambiguïté et maximum 6 situations ouvertes visibles.
+Le workflow Build 26 Real Life French III est rendu durable : il vérifie les fichiers/markers Build 26 et le comportement **36 / 108**, mais ne fige plus `build-meta.js` ou le cache global à `1.19.0`.
 
-Le contrat quality à l20 vérifie désormais les **18** scènes personnelles réellement ouvertes avec Pack III. Le smoke Session UX utilise des profils Chrome isolés/retry borné sur les hooks Listening/Révision afin d’éviter les faux rouges de timing ; les assertions fonctionnelles restent obligatoires.
-
-Preuve : PR #37, commit production `db8219e44d74f0af13421ec798a0c98d02f7a7b5`, 8/8 workflows SUCCESS, Pages #96 SUCCESS.
+Le nouveau workflow 26.1 vérifie replay local-only, dashboard groupé, coexistence Pack III et surface replay dans un vrai Chrome.
 
 # Dette technique
 
