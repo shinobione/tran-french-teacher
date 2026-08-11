@@ -50,7 +50,11 @@ learning-memory.js
   ↓
 daily-coach.js
   ↓
-mastery-engine.js        ← Build 16
+mastery-engine.js       ← Build 16
+  ↓
+scenario-data.js        ← Build 17
+  ↓
+scenario-engine.js      ← Build 17
 ```
 
 Les styles spécifiques suivent la même logique de couches sans remplacer le socle global.
@@ -101,8 +105,6 @@ Le module doit être chargé **avant** les moteurs qui lisent le curriculum comp
 
 Responsabilité : déclencher proprement un rerender du moteur après extension du curriculum afin que l’UI de base voie les 25 leçons.
 
-Ce fichier existe pour éviter de réécrire `app.js` uniquement afin d’ajouter les nouvelles leçons.
-
 ---
 
 ## `voice-ios.js`
@@ -123,7 +125,7 @@ La disponibilité exacte dépend de l’appareil.
 
 Responsabilité : entraînement vocal gratuit.
 
-- SpeechRecognition / webkitSpeechRecognition quand disponible ;
+- `SpeechRecognition` / `webkitSpeechRecognition` quand disponible ;
 - fallback clavier ;
 - validation de transcription ;
 - variantes tolérées ;
@@ -197,8 +199,6 @@ prochaine leçon
 conversation courte
 ```
 
-Aucun serveur n’est nécessaire.
-
 ---
 
 ## `mastery-engine.js` — Build 16
@@ -212,21 +212,9 @@ Responsabilité : estimer la **maîtrise pédagogique interne** par grande étap
 3. Fondations A1 — leçons 16–20 ;
 4. Premiers échanges A1 — leçons 21–25.
 
-Entrées :
+Entrées : progression, acquis, Learning Memory, preuves de révision et fragilités.
 
-- leçons terminées ;
-- éléments connus ;
-- entrées Learning Memory ;
-- quantité de preuves de révision ;
-- qualité moyenne de mémoire ;
-- fragilités restantes.
-
-Sorties :
-
-- score interne ;
-- état de maîtrise ;
-- estimation interne globale ;
-- priorité suivante.
+Sorties : score interne, état de maîtrise, estimation globale et priorité suivante.
 
 Le score n’est pas une certification CECRL.
 
@@ -238,22 +226,132 @@ window.FrenchTranquilleMastery
 
 ---
 
+## `scenario-data.js` — Build 17
+
+Responsabilité : **catalogue déclaratif de situations multi-tours**.
+
+Chaque scénario contient :
+
+- identifiant ;
+- icône ;
+- titre/description VI + FR ;
+- leçons requises pour le déverrouillage ;
+- une suite ordonnée de tours.
+
+Chaque tour contient :
+
+```text
+npcFr / npcVi
+promptVi / promptFr
+answers[]
+model
+hintVi / hintFr
+items[]
+```
+
+`answers[]` contient les variantes acceptables sans rendre la réponse visible avant tentative. `items[]` relie le tour aux éléments du curriculum pour nourrir Learning Memory.
+
+Build 17 V1 contient **12 scénarios × 3 tours = 36 tours**.
+
+Expose :
+
+```text
+window.FrenchTranquilleScenarioData
+```
+
+Le catalogue est séparé du moteur pour permettre d’ajouter ou ajuster des situations sans réécrire la logique d’exécution.
+
+---
+
+## `scenario-engine.js` — Build 17
+
+Responsabilité : exécuter les scénarios localement dans Conversation.
+
+### Déverrouillage
+
+Un scénario est disponible lorsque toutes ses `requiredLessons` sont présentes dans `completedLessons`.
+
+### Validation
+
+Le moteur :
+
+- normalise casse, accents, apostrophes et ponctuation ;
+- accepte plusieurs réponses déclarées ;
+- premier échec → indice ;
+- après plusieurs échecs → modèle ;
+- modèle utilisé = aide, pas réussite autonome ;
+- réussite/échec/aide alimentent `FrenchTranquilleMemory.recordPractice`.
+
+### Voix
+
+- interlocuteur lu par `speechSynthesis` ;
+- micro via `SpeechRecognition` / `webkitSpeechRecognition` quand disponible ;
+- fallback texte permanent ;
+- aucune prétention à noter phonétiquement la prononciation.
+
+### Progression scénario
+
+Clé :
+
+```text
+french-tranquille:scenarios:v1
+```
+
+Conserve :
+
+- plays ;
+- completions ;
+- bestErrors ;
+- lastPlayed ;
+- lastCompleted ;
+- totalCompletions global.
+
+### UI
+
+Le moteur injecte :
+
+- le **Scenario Lab** au sommet de Conversation ;
+- le runner multi-tours ;
+- le bilan de fin ;
+- une carte **Situations réelles** dans Progression ;
+- un diagnostic dans Réglages.
+
+### Test hook
+
+```text
+?scenarioSmoke=1
+```
+
+ouvre automatiquement Conversation après le boot afin que la CI Chrome puisse vérifier le rendu Scenario Lab séparément de la home.
+
+Expose :
+
+```text
+window.FrenchTranquilleScenarios
+```
+
+---
+
 # Stockage local
 
 ## État apprenant historique
-
-Clé conservée pour compatibilité :
 
 ```text
 francais-avec-luc:learner:v1
 ```
 
-Le nom historique de la clé n’est pas modifié afin de ne pas effacer la progression existante lors du rebranding Luc → Lucie / French Trân’quille.
+Le nom historique est conservé pour ne pas effacer la progression lors des changements de branding.
 
 ## Learning Memory
 
 ```text
 french-tranquille:learning-memory:v1
+```
+
+## Scenario Lab
+
+```text
+french-tranquille:scenarios:v1
 ```
 
 ## DEBUG FR
@@ -262,7 +360,7 @@ french-tranquille:learning-memory:v1
 tran-french-teacher:debug-fr:v1
 ```
 
-D’autres préférences vocales possèdent leurs propres clés locales dans les modules voix.
+D’autres préférences vocales possèdent leurs propres clés locales.
 
 ---
 
@@ -270,11 +368,11 @@ D’autres préférences vocales possèdent leurs propres clés locales dans les
 
 `sw.js` :
 
-- precache les fichiers critiques ;
+- précache les fichiers critiques ;
 - réseau d’abord pour les GET ;
 - mise en cache des réponses valides ;
-- fallback vers cache/index en cas d’échec ;
-- suppression des anciens caches lors de l’activation.
+- fallback vers cache/index ;
+- suppression des anciens caches à l’activation.
 
 Chaque gros build change :
 
@@ -286,7 +384,7 @@ Chaque gros build change :
 
 # Sécurité et confidentialité
 
-Les données d’apprentissage restent actuellement sur l’appareil :
+Les données d’apprentissage restent sur l’appareil :
 
 - aucune télémétrie serveur ;
 - aucun upload automatique ;
@@ -297,17 +395,18 @@ Les données d’apprentissage restent actuellement sur l’appareil :
 
 # CI
 
-Le workflow de qualité vérifie au minimum :
+Le workflow vérifie :
 
 - syntaxe JS ;
 - guards des fonctionnalités majeures ;
 - rendu Node du moteur historique ;
-- lancement réel Chrome headless ;
+- Chrome headless Home ;
 - disparition de l’écran de boot ;
-- rendu de la home ;
-- présence des modules attendus.
+- curriculum 25 leçons ;
+- Memory + Daily Coach + Mastery ;
+- **Chrome headless Conversation / Scenario Lab via `?scenarioSmoke=1`**.
 
-Les fonctions iOS spécifiques nécessitent toujours un test réel Safari en complément.
+Les fonctions iOS spécifiques nécessitent toujours un test réel Safari.
 
 ---
 
@@ -315,28 +414,16 @@ Les fonctions iOS spécifiques nécessitent toujours un test réel Safari en com
 
 ## `app.js` monolithique
 
-Le moteur historique reste volumineux. Il est volontairement sanctuarisé à court terme car les builds 10–15 ont montré qu’une réécriture rapide augmente fortement le risque de régression.
-
-Une extraction future pourra séparer :
-
-```text
-curriculum/
-state/
-ui/
-practice/
-review/
-```
-
-mais cette migration devra être un **build dédié**, pas un effet secondaire d’une feature.
+Le moteur historique reste volumineux et volontairement sanctuarisé à court terme. Une extraction future devra être un build de migration dédié.
 
 ## Décorateurs DOM
 
-Learning Memory, Stage 2, Daily Coach et Mastery Engine utilisent des injections DOM / MutationObserver pour étendre l’UI historique.
+Learning Memory, Stage 2, Daily Coach, Mastery Engine et Scenario Lab étendent l’UI historique via injections DOM / MutationObserver.
 
 Règle : chaque décorateur doit être **idempotent** :
 
-- ne pas réécrire le DOM si la signature fonctionnelle n’a pas changé ;
+- ne pas réécrire le DOM si sa signature n’a pas changé ;
 - ne pas créer deux fois la même carte ;
-- ne pas provoquer une boucle MutationObserver.
+- ne pas provoquer de boucle MutationObserver.
 
-Build 15 a déjà intercepté ce type de boucle avant merge ; le Chrome smoke test doit continuer à protéger ce point.
+Les smoke tests Chrome protègent explicitement ce point.
