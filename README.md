@@ -13,6 +13,10 @@ PWA de français pensée pour **Trân**, avec priorité à l’oral, au françai
 - Scenario candidat : **36 situations / 108 tours**
 - coût : **0 €**
 
+## Baseline fonctionnelle historique conservée
+
+Le contrat **v1.17.0 — Build 24 — Real Life French II** reste une baseline de non-régression explicite : avant Pack III, Scenario comptait **28 situations / 84 tours**. Build 26 enrichit cette baseline ; il ne remplace ni les Packs I/II ni leurs tests.
+
 ## Build 26 — objectif
 
 Enrichir `Pratiquer → Parler français` sans ajouter de nouveau bouton : davantage de français oral naturel côté interlocuteur, des réponses un peu moins récitées et plusieurs formulations simples explicitement acceptées.
