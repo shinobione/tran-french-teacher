@@ -46,6 +46,12 @@ jobs:
           if (!app.innerHTML || app.innerHTML.length < 500) {
             throw new Error('Home render produced no meaningful HTML');
           }
+          if (!app.innerHTML.includes('A0 • 15 bài')) {
+            throw new Error('Expected 15-lesson curriculum badge was not rendered');
+          }
+          if (!app.innerHTML.includes('Ngày đầu tiên ở Pháp')) {
+            throw new Error('Lesson 15 was not rendered');
+          }
           console.log('Node home render OK:', app.innerHTML.length, 'chars');
           NODE
       - name: Real Chrome browser smoke test
@@ -69,5 +75,6 @@ jobs:
           fi
           grep -E -q 'id="app"[^>]*><div class="app-shell screen-home"' /tmp/french-tranquille-dom.html
           grep -q 'home-dashboard' /tmp/french-tranquille-dom.html
-          grep -q 'A0 • 7 bài' /tmp/french-tranquille-dom.html
+          grep -q 'A0 • 15 bài' /tmp/french-tranquille-dom.html
+          grep -q 'Ngày đầu tiên ở Pháp' /tmp/french-tranquille-dom.html
           echo 'Real Chrome home render OK'
