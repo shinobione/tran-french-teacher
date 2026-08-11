@@ -1,0 +1,189 @@
+name: JavaScript quality check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  javascript:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax check
+        run: |
+          for f in app.js curriculum-stage2.js curriculum-stage3.js stage2-boot.js debug-fr.js voice-ios.js free-voice.js learning-memory.js daily-coach.js mastery-engine.js mastery-stage3.js scenario-data.js scenario-host.js scenario-engine.js error-intelligence.js listening-data.js listening-engine.js build-meta.js; do node --check "$f"; done
+
+      - name: Current curriculum contract
+        run: |
+          node <<'NODE'
+          const fs=require('fs');
+          const s=fs.readFileSync('curriculum-stage3.js','utf8');
+          const lessons=[...s.matchAll(/id:'(l(?:2[6-9]|3[0-9]|40))'/g)].map(m=>m[1]);
+          if(lessons.length!==15||new Set(lessons).size!==15)throw new Error('Stage3 must remain 15 unique lessons');
+          const blocks=s.split(/\n\s*\{\n\s*id:'l/).slice(1);
+          let total=0;
+          for(const b of blocks){const area=(b.split('items:[')[1]||'').split('],')[0];const n=(area.match(/\{id:'/g)||[]).length;if(n!==6)throw new Error('Stage3 lesson lost its 6-item contract');total+=n}
+          if(total!==90)throw new Error(`Stage3 expected 90 items, got ${total}`);
+          const files=['app.js','curriculum-stage2.js','curriculum-stage3.js'];
+          const ids=[];
+          for(const file of files){const text=fs.readFileSync(file,'utf8');for(const m of text.matchAll(/\{id:'([^']+)'/g))ids.push([m[1],file])}
+          const seen=new Map();for(const [id,file] of ids){if(seen.has(id))throw new Error(`Duplicate curriculum ID ${id}: ${seen.get(id)} + ${file}`);seen.set(id,file)}
+          console.log('Curriculum current-state contract OK:',lessons.length,'Stage3 lessons /',total,'Stage3 items /',ids.length,'IDs');
+          NODE
+
+      - name: Listening data contract
+        run: |
+          node <<'NODE'
+          const fs=require('fs');
+          global.window=global;
+          require('./listening-data.js');
+          const d=global.FrenchTranquilleListeningData;
+          if(!d||d.version!=='1.13.0'||d.build!==20)throw new Error('Listening data version/build mismatch');
+          if(d.contrasts.length<10)throw new Error('Expected at least 10 contrast groups');
+          if(d.dialogues.length<8)throw new Error('Expected at least 8 mini-dialogues');
+          const files=['app.js','curriculum-stage2.js','curriculum-stage3.js'];
+          const ids=new Set();for(const file of files){const text=fs.readFileSync(file,'utf8');for(const m of text.matchAll(/\{id:'([^']+)'/g))ids.add(m[1])}
+          for(const c of d.contrasts){if(!c.id||!Array.isArray(c.items)||c.items.length<2)throw new Error(`Bad contrast ${c.id}`);for(const id of c.items)if(!ids.has(id))throw new Error(`Contrast ${c.id} references unknown item ${id}`)}
+          for(const x of d.dialogues){if(!x.id||!Array.isArray(x.lines)||x.lines.length<2)throw new Error(`Bad dialogue ${x.id}`);if(!Array.isArray(x.options)||x.options.length<3)throw new Error(`Dialogue ${x.id} needs >=3 options`);if(x.answer<0||x.answer>=x.options.length)throw new Error(`Dialogue ${x.id} answer out of range`);for(const id of [...x.requiredItems,...x.evidenceItems])if(!ids.has(id))throw new Error(`Dialogue ${x.id} references unknown item ${id}`)}
+          console.log('Listening data OK:',d.contrasts.length,'contrasts /',d.dialogues.length,'dialogues');
+          NODE
+
+      - name: Listening engine guard
+        run: |
+          grep -q "french-tranquille:listening:v1" listening-engine.js
+          grep -q 'MAX_RECENT = 100' listening-engine.js
+          grep -q "listening-meaning" listening-engine.js
+          grep -q "listening-contrast" listening-engine.js
+          grep -q "listening-dialogue" listening-engine.js
+          grep -q 'listening-transcript' listening-engine.js
+          grep -q 'data-listening-slow' listening-engine.js
+          grep -q 'listening-home-card' listening-engine.js
+          grep -q 'listening-progress-card' listening-engine.js
+          grep -q 'listening-daily-step' listening-engine.js
+          grep -q 'FrenchTranquilleMemory.*recordPractice' listening-engine.js
+          grep -q 'FrenchTranquilleErrors.*recordAttempt' listening-engine.js
+          grep -q 'listeningSmoke' listening-engine.js
+
+      - name: Error Intelligence Listening bridge
+        run: |
+          grep -q "'listening-miss'" error-intelligence.js
+          grep -q "startsWith('listening-')" error-intelligence.js
+          grep -q "channel === 'listening'" error-intelligence.js
+          grep -q 'MAX_ITEM_EVENTS = 20' error-intelligence.js
+          grep -q 'MAX_RECENT_EVENTS = 120' error-intelligence.js
+          grep -q 'sourceChannel' error-intelligence.js
+
+      - name: Existing adaptive systems guard
+        run: |
+          grep -q "french-tranquille:learning-memory:v1" learning-memory.js
+          grep -q 'daily-coach-card' daily-coach.js
+          grep -q 'FrenchTranquilleMasteryStage3' mastery-stage3.js
+          grep -q "french-tranquille:scenarios:v1" scenario-engine.js
+          grep -q 'scenario-host' scenario-host.js
+          grep -q "french-tranquille:error-intelligence:v1" error-intelligence.js
+
+      - name: Build 20 wiring and docs guard
+        run: |
+          grep -q 'listening-engine.css' index.html
+          grep -q 'listening-data.js' index.html
+          grep -q 'listening-engine.js' index.html
+          grep -q 'listening-engine.css' sw.js
+          grep -q 'listening-data.js' sw.js
+          grep -q 'listening-engine.js' sw.js
+          grep -q "version: '1.13.0', build: 20" build-meta.js
+          grep -q 'FrenchTranquilleListeningData' build-meta.js
+          grep -q 'FrenchTranquilleListening' build-meta.js
+          grep -q '1.13.0-b20' index.html
+          grep -q '1.13.0-b20' sw.js
+          grep -q 'Build 20' README.md
+          grep -q 'Build 20' ROADMAP.md
+          grep -q 'Build 20' CHANGELOG.md
+          grep -q 'listening-engine.js' docs/ARCHITECTURE.md
+          test -f docs/BUILD-20-LISTENING.md
+
+      - name: Scenario data non-regression
+        run: |
+          node <<'NODE'
+          global.window=global;require('./scenario-data.js');const s=global.FrenchTranquilleScenarioData?.scenarios||[];if(s.length!==12)throw new Error(`Expected 12 scenarios, got ${s.length}`);if(s.some(x=>x.turns.length<3))throw new Error('Scenario turn regression');console.log('Scenario catalog OK');
+          NODE
+
+      - name: Node base-engine smoke
+        run: |
+          node <<'NODE'
+          const store=new Map();global.localStorage={getItem:k=>store.has(k)?store.get(k):null,setItem:(k,v)=>store.set(k,String(v)),removeItem:k=>store.delete(k)};const app={innerHTML:''};global.document={querySelector:s=>s==='#app'?app:null,querySelectorAll:()=>[]};global.window=global;global.window.scrollTo=()=>{};global.window.addEventListener=()=>{};global.navigator={};global.confirm=()=>false;require('./app.js');if(!app.innerHTML||app.innerHTML.length<500)throw new Error('Base render failed');if(!app.innerHTML.includes('A0 • 15 bài'))throw new Error('Historical base engine changed');console.log('Base engine OK');
+          NODE
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-http.log 2>&1 &
+          echo $! >/tmp/ft-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome Home / 40 lessons + Listening card
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=15000 --dump-dom http://127.0.0.1:4173/ >/tmp/home.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status' /tmp/home.html; then cat /tmp/home.html; exit 1; fi
+          grep -q 'app-shell screen-home' /tmp/home.html
+          grep -q 'A0 → A1 • 40 bài' /tmp/home.html
+          grep -q '40. Cảm xúc, nhu cầu & Jerry' /tmp/home.html
+          grep -q 'listening-home-card' /tmp/home.html
+          grep -q 'Luyện nghe chủ động' /tmp/home.html
+          grep -q 'mastery-stage3-chip' /tmp/home.html
+          echo 'Chrome Home + Listening entry OK'
+
+      - name: Chrome Listening behavior
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=16000 --dump-dom 'http://127.0.0.1:4173/?listeningSmoke=1' >/tmp/listening.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/listening.html; then cat /tmp/listening.html; exit 1; fi
+          grep -q 'listening-overlay' /tmp/listening.html
+          grep -q 'Luyện nghe' /tmp/listening.html
+          grep -q 'data-listening-smoke-hidden="1"' /tmp/listening.html
+          grep -q 'data-listening-smoke-revealed="1"' /tmp/listening.html
+          grep -q 'data-listening-smoke-attempts="1"' /tmp/listening.html
+          grep -q 'data-listening-smoke-error-source="listening-meaning"' /tmp/listening.html
+          grep -q 'data-listening-smoke-error-type="listening-miss"' /tmp/listening.html
+          grep -q 'listening-transcript' /tmp/listening.html
+          grep -q 'Tốc độ thường' /tmp/listening.html
+          grep -q 'Chậm' /tmp/listening.html
+          echo 'Chrome Listening hidden→reveal + Error bridge OK'
+
+      - name: Chrome Scenario non-regression
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=13000 --dump-dom 'http://127.0.0.1:4173/?scenarioSmoke=1' >/tmp/scenario.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/scenario.html; then cat /tmp/scenario.html; exit 1; fi
+          grep -q 'app-shell screen-conversation' /tmp/scenario.html
+          grep -q 'scenario-lab-card' /tmp/scenario.html
+          echo 'Chrome Scenario OK'
+
+      - name: Chrome Error Intelligence non-regression
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=17000 --dump-dom 'http://127.0.0.1:4173/?errorSmoke=1' >/tmp/error.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/error.html; then cat /tmp/error.html; exit 1; fi
+          grep -q 'error-intelligence-card' /tmp/error.html
+          grep -q 'data-error-smoke-item-events="20"' /tmp/error.html
+          grep -q 'data-error-smoke-recent-events="120"' /tmp/error.html
+          grep -q 'data-error-smoke-partial="1"' /tmp/error.html
+          echo 'Chrome Error OK'
+
+      - name: Chrome A1 Core non-regression
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=15000 --dump-dom 'http://127.0.0.1:4173/?stage3Smoke=1' >/tmp/stage3.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/stage3.html; then cat /tmp/stage3.html; exit 1; fi
+          grep -q 'mastery-stage3-card' /tmp/stage3.html
+          grep -q 'Mức độ làm chủ A1 Core' /tmp/stage3.html
+          echo 'Chrome A1 Core OK'
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-server.pid ]; then kill "$(cat /tmp/ft-server.pid)" || true; fi
