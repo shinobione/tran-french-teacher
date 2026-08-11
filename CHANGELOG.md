@@ -4,7 +4,28 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ## [Unreleased]
 
-Prochaine étape : **v1.19.0 — Build 26 — Real Life French III**.
+### v1.18.3 — Build 25.3 — Voice Self-Playback + Learning Details Dashboard — CANDIDAT
+
+- ajoute `voice-replay.js` / `voice-replay.css` sans modifier `free-voice.js` ni `voice-ios.js` ;
+- après une réponse vocale reconnue, propose une seconde prise locale destinée uniquement à l’auto-écoute ;
+- enregistrement via `MediaRecorder` / `getUserMedia` si disponibles ;
+- aucun upload, aucune persistance, aucun `localStorage.setItem` dans la couche replay ;
+- Blob URL temporaire révoquée et piste micro arrêtée ;
+- capture bornée à 9 secondes ;
+- n’essaie pas encore d’enregistrer simultanément le premier essai reconnu sur iPhone ;
+- ajoute `progress-details-dashboard.js` / `progress-details-dashboard.css` ;
+- remplace l’empilement de `Détails d’apprentissage` par des catégories compactes : Mémoire, Maîtrise, Écoute, Français réel, A1/rythme ;
+- une seule catégorie détaillée est visible à la fois ;
+- les cartes historiques restent dans le DOM et continuent à être pilotées par leurs moteurs ;
+- les cartes non reconnues sont conservées dans `Autres détails` ;
+- cache candidat `tran-french-teacher-v1.18.3-b25.3-voice-replay-details-dashboard` ;
+- ajoute `Build 25.3 Voice replay + Details dashboard smoke` ;
+- aucune migration learner / Memory / Scenario / Listening ;
+- branding et voix validée restent sanctuarisés.
+
+Ce bloc reste **Unreleased** jusqu’à PR → anciens workflows + smoke 25.3 → `main` → mêmes workflows → Pages → docs CLOS.
+
+Prochaine étape ensuite : **v1.19.0 — Build 26 — Real Life French III**.
 
 ---
 
