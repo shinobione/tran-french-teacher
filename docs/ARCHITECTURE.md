@@ -22,7 +22,7 @@ La complexité appartient aux moteurs ; Trân voit d’abord l’information uti
 
 ---
 
-# Runtime candidat — v1.18.2 Build 25.2
+# Runtime production — v1.18.2 Build 25.2
 
 ```text
 progress-safety.js
@@ -60,15 +60,15 @@ CSS Session UX : `session-ux.css`.
 
 ---
 
-# Progression UX — Build 25
+# Progression UX — Build 25 — CANONIQUE
 
 `progression-ux.js` orchestre `Parcours` sans persister de données : résumé apprenant, détails repliables, 5 lignes curriculum visibles par défaut, 40 accessibles à la demande.
 
 ---
 
-# Listening — Build 25.1
+# Listening — Build 25.1 — CANONIQUE
 
-Calibration canonique :
+Calibration :
 
 ```text
 normal request 0.88 → effectif 0.88
@@ -79,13 +79,11 @@ Le bridge vit dans `build-meta.js`. `voice-ios.js`, voix et pitch sont inchangé
 
 ---
 
-# Session UX — Build 25.2
+# Session UX — Build 25.2 — CANONIQUE
 
 ## Pourquoi une façade
 
 Les moteurs savent déjà enregistrer leurs propres données et certains possèdent une fin native. Les réécrire pour ajouter un simple contrat de session augmenterait inutilement le risque.
-
-Build 25.2 utilise donc :
 
 ```text
 moteur existant
@@ -99,65 +97,33 @@ objectif / progression / fin / sortie
 
 ## Listening
 
-À l’ouverture de `.listening-overlay`, Session UX mémorise les compteurs courants comme baseline.
-
-Session standard : **5 tentatives**.
-
-```text
-attempts session = totals.attempts - baselineAttempts
-correct session  = totals.correct  - baselineCorrect
-```
-
-À 5/5, les données sont déjà persistées par Listening ; Session UX masque l’exercice et affiche l’état de fin. Continuer volontairement démarre un nouveau petit lot de 3 à partir des nouveaux compteurs.
+Session standard : **5 tentatives**. À 5/5, les données sont déjà persistées par Listening ; Session UX masque l’exercice et affiche l’état de fin. Continuer volontairement démarre un nouveau petit lot.
 
 ## Révision mémoire
 
-Session UX lit les totaux persistés de `french-tranquille:learning-memory:v1`.
-
-Cible : `min(5, due || entries)`, minimum 1.
-
-Après chaque rating, Learning Memory persiste d’abord ; Session UX calcule ensuite le delta de reviews. À la cible, la flashcard est remplacée par l’état de réussite.
+Cible : `min(5, due || entries)`, minimum 1. Learning Memory persiste d’abord ; Session UX calcule ensuite le delta de reviews et affiche la réussite à la cible.
 
 ## Scenario
 
-Scenario garde son moteur natif : validation, tours, stats et `scenario-done`.
-
-Session UX ajoute :
-
-- objectif `1 situation` ;
-- progression à partir du compteur de tour natif ;
-- succès visuel sur `scenario-done` ;
-- action principale `Retour à Aujourd’hui` ;
-- replay masqué de la hiérarchie principale.
+Scenario garde validation, tours, stats et fin native. Session UX ajoute objectif `1 situation`, progression à partir du tour natif, succès visuel et retour principal vers Aujourd’hui.
 
 ## Vocal guidé
 
-`free-voice.js` reste sanctuarisé.
-
-Session UX observe les clics réussis sur `#free-voice-next`; cible : **5 réponses reconnues**. La carte est remplacée par un état de fin au cinquième succès.
+`free-voice.js` reste sanctuarisé. Session UX observe les succès et borne la mini-session à **5 réponses reconnues**.
 
 ## Pratique guidée historique
 
-`session-ux-adapter.js` utilise le delta de `conversationWins`. Une mini-session = **1 réponse correcte**. L’ancien moteur reste intact.
+`session-ux-adapter.js` utilise le delta de `conversationWins`. Une mini-session = **1 réponse correcte**.
 
 ## Leçon
 
-Leçon conserve ses étapes et son écriture historique.
-
-Session UX :
-
-1. indique explicitement `Dernière étape` lorsque le bouton devient `Terminer` ;
-2. capture l’intention de terminer ;
-3. laisse `app.js` enregistrer la leçon et revenir à Home ;
-4. affiche alors une confirmation `Leçon enregistrée`.
-
-La réussite visuelle arrive donc après sauvegarde, jamais avant.
+La réussite visuelle intervient après l’écriture historique de la leçon et le retour Home, jamais avant sauvegarde.
 
 ---
 
 # Practice Hub
 
-Dans `screen-conversation`, les moteurs existants restent dans le DOM mais sont masqués par défaut.
+Dans `screen-conversation`, les moteurs existants restent disponibles mais ne sont plus empilés comme quatre tâches concurrentes.
 
 Vue initiale :
 
@@ -176,9 +142,7 @@ Une seule capacité devient dominante après sélection.
 
 # Daily Coach compact
 
-Session UX garde **2 actions principales** dans `.daily-steps` et déplace les autres boutons existants dans `details.session-daily-more`.
-
-Aucun bouton moteur n’est détruit ; ils changent uniquement de parent DOM.
+Session UX garde **2 actions principales** et range les extras sous `details.session-daily-more`.
 
 ---
 
@@ -190,9 +154,7 @@ Clé indépendante :
 french-tranquille:milestones:v1
 ```
 
-Ce n’est pas une donnée pédagogique et elle n’influence aucun score/moteur.
-
-Au premier démarrage, les achievements déjà vrais deviennent `baseline`, donc aucune avalanche rétroactive. Seuls les nouveaux franchissements déclenchent une micro-carte.
+Elle ne modifie aucun score/moteur pédagogique. Les achievements déjà vrais au premier démarrage deviennent `baseline` ; seuls les nouveaux franchissements déclenchent une micro-carte.
 
 ---
 
@@ -216,7 +178,27 @@ french-tranquille:learning-memory:v1
 french-tranquille:safety:pre-build22:v1
 ```
 
-Curriculum : **40 leçons / 241 éléments**. Scenario : **28 / 84**.
+Curriculum : **40 leçons / 241 éléments**. Scenario : **28 / 84** avant Build 26.
+
+---
+
+# Build 26 — extension prévue
+
+`Real Life French III` doit s’insérer entre `real-life-data-2.js` et le Scenario runtime, sans modifier les propriétaires de données :
+
+```text
+scenario-data.js
+real-life-data.js
+real-life-data-2.js
+real-life-data-3.js   ← Build 26
+scenario-host.js
+scenario-engine.js
+real-life-ux.js
+real-life-coach.js    ← aide UX Pack III uniquement
+session-ux.js         ← conserve objectif 1 situation
+```
+
+Les références vers les acquis avancés doivent être résolues contre le curriculum réellement chargé, avec unicité obligatoire.
 
 ---
 
@@ -231,34 +213,11 @@ assets/Favicon.png
 
 ---
 
-# CI candidate Build 25.2
+# CI production Build 25.2
 
-Contrats obligatoires :
+Commit `49d866bed59bb0cb3268e1675225a4811f6c595f` : 7 workflows déclenchés, aucun échec, Pages SUCCESS.
 
-1. quality historique ;
-2. Options ;
-3. nav/mobile ;
-4. Progression UX ;
-5. Listening-rate 0.88 / 0.64 ;
-6. nouveau **Session UX smoke** ;
-7. hashes branding/voice ;
-8. profil l8 ;
-9. aucune fatal card.
-
-Session UX smoke vérifie notamment :
-
-```text
-Home       2 actions principales + extras repliés
-Practice   hub unique
-Listening  5/5 → completion
-Review     cible bornée → completion
-```
-
----
-
-# Freeze terrain
-
-Quand Trân utilise activement la PWA : aucun nouveau runtime/cache sauf incident critique.
+Contrats conservés pour Build 26 : quality, Options, nav/mobile, Progression UX, Listening-rate, Session UX, hashes branding/voice, profil ancien utilisateur et absence de fatal card.
 
 # Dette technique
 
