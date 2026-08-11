@@ -4,9 +4,9 @@ PWA de français pensée pour **Trân**, vietnamienne débutante absolue (**A0**
 
 ## Version actuelle
 
-- **v1.6.0**
-- **Build 11**
-- Phase : **Curriculum A0 étendu + Voice-ready**
+- **v1.6.1**
+- **Build 12**
+- Phase : **Curriculum A0 étendu + Curriculum UX + Voice-ready**
 - coût d'exploitation : **0 €**
 
 ## Plateformes cibles
@@ -22,9 +22,21 @@ PWA de français pensée pour **Trân**, vietnamienne débutante absolue (**A0**
 
 L'interface, les leçons, les révisions et la progression locale sont conçues pour fonctionner sur les trois familles de plateformes. La disponibilité de la **reconnaissance vocale** dépend du navigateur et du système ; le fallback texte reste toujours disponible.
 
-## Build 11 — Curriculum Expansion
+## Build 12 — Curriculum UX
 
-La PWA passe de **7 leçons / 40 éléments** à **15 leçons / 88 éléments A0**.
+Le passage à 15 leçons ne doit pas transformer la homepage en liste verticale interminable.
+
+Le Build 12 garde les **15 leçons / 88 éléments A0**, mais réintègre le parcours dans le layout :
+
+- sur **desktop**, la colonne parcours reste stable et la liste des leçons défile dans sa propre zone ;
+- sur **iPhone / Android / tablette**, la hauteur de cette zone s'adapte au viewport pour éviter que la homepage ne déborde sur plusieurs écrans ;
+- les lignes sont légèrement compactées sur la home tout en gardant les touch targets ;
+- les descriptions longues sont limitées visuellement à deux lignes dans l'aperçu ;
+- le scroll interne utilise une barre discrète sur PC et conserve le comportement tactile natif sur mobile ;
+- la page **Progression** reste l'endroit naturel pour consulter le parcours complet dans son contexte ;
+- la colonne latérale de la homepage devient sticky sur grand écran afin que le parcours reste visible sans casser le reste du dashboard.
+
+## Curriculum A0 — 15 leçons / 88 éléments
 
 1. **Chào hỏi & giới thiệu — Saluer & se présenter**
 2. **Lịch sự & hiểu người khác — Politesse & compréhension**
@@ -51,7 +63,7 @@ Chaque leçon conserve la même logique A0 :
 - mini-situation finale ;
 - réintégration automatique dans Révision, Conversation et entraînement vocal.
 
-### Nouveaux thèmes réels
+### Thèmes réels déjà couverts
 
 - demander où se trouvent les toilettes, la gare ou la pharmacie ;
 - gauche / droite ;
@@ -67,7 +79,7 @@ Chaque leçon conserve la même logique A0 :
 
 - déverrouillage séquentiel des leçons ;
 - progression mémorisée par leçon ;
-- migration automatique des données Build 1–10 ;
+- migration automatique des données Build 1–11 ;
 - aucun reset forcé des acquis existants ;
 - vocabulaire connu partagé entre leçons, révisions et conversation ;
 - statistiques : leçons terminées, éléments acquis, éléments à revoir, série de jours.
@@ -84,14 +96,14 @@ Chaque leçon conserve la même logique A0 :
 - fallback texte systématique ;
 - aucune API payante, aucun backend payant.
 
-### Build 11 — Voice-ready curriculum
+### Curriculum voice-ready
 
 Le moteur vocal n'est plus limité à une liste fermée d'expressions. **Tout élément réellement appris peut maintenant revenir dans la pratique vocale** :
 
 - les phrases importantes disposent d'un scénario contextuel dédié ;
 - les autres éléments utilisent automatiquement un prompt simple en vietnamien ;
 - une séance vocale sélectionne jusqu'à 10 acquis ;
-- le moteur accepte toujours plusieurs variantes de transcription lorsque le navigateur les fournit.
+- le moteur accepte plusieurs variantes de transcription lorsque le navigateur les fournit.
 
 Le prochain jalon voix reste le **test réel sur l'iPhone de Trân avec Safari/Siri**, puis l'ajustement des tolérances à partir des transcriptions observées.
 
@@ -105,13 +117,13 @@ Dans `⚙ Réglages` :
 
 ## Qualité / CI
 
-Depuis Build 10.2, chaque modification de `main` passe :
+Chaque modification importante passe :
 
 - `node --check` des scripts JavaScript ;
 - smoke test de rendu Node ;
-- **vrai smoke test dans Google Chrome headless** vérifiant que la homepage remplace correctement l'écran de boot.
+- **vrai smoke test dans Google Chrome headless** vérifiant que la homepage remplace correctement l'écran de boot et contient le parcours attendu.
 
-Cette protection a été ajoutée après la collision navigateur `window.top` rencontrée pendant Build 10.
+Depuis Build 12, `build-meta.js` centralise également l'affichage runtime de la version/build afin d'éviter les diagnostics désynchronisés lors de petits patches d'interface.
 
 ## Hébergement
 
@@ -157,4 +169,5 @@ https://shinobione.github.io/tran-french-teacher/
 - **v1.4.0 / Build 9** — French Trân’quille + Lucie ;
 - **v1.5.0 / Build 10** — Responsive multi-device + 7 leçons / 40 éléments ;
 - **Build 10.1–10.2** — watchdog de démarrage, isolation ES modules et vrai smoke test Chrome ;
-- **v1.6.0 / Build 11** — 15 leçons / 88 éléments + curriculum entièrement voice-ready.
+- **v1.6.0 / Build 11** — 15 leçons / 88 éléments + curriculum entièrement voice-ready ;
+- **v1.6.1 / Build 12** — curriculum intégré au layout : zone scrollable/sticky responsive, sans homepage interminable.
