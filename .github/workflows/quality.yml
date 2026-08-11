@@ -23,6 +23,12 @@ jobs:
           node --check debug-fr.js
           node --check voice-ios.js
           node --check free-voice.js
+          node --check build-meta.js
+      - name: Curriculum UX guard
+        run: |
+          grep -q 'Build 12 — curriculum UX' styles.css
+          grep -q 'max-height:clamp(360px,52vh,570px)' styles.css
+          grep -q 'position:sticky' styles.css
       - name: Node render smoke test
         run: |
           node <<'NODE'

@@ -1,5 +1,5 @@
-const CACHE='tran-french-teacher-v1.6.0-b11';
-const V='1.6.0-b11';
+const CACHE='tran-french-teacher-v1.6.1-b12';
+const V='1.6.1-b12';
 const CORE=[
   './',
   './index.html',
@@ -9,6 +9,7 @@ const CORE=[
   `./debug-fr.js?v=${V}`,
   `./voice-ios.js?v=${V}`,
   `./free-voice.js?v=${V}`,
+  `./build-meta.js?v=${V}`,
   `./manifest.webmanifest?v=${V}`,
   `./assets/LOGO.png?v=${V}`,
   `./assets/Favicon.png?v=${V}`,
