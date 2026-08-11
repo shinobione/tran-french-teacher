@@ -1,0 +1,90 @@
+name: French Trân'quille nav click smoke
+
+on:
+  push:
+    branches: [hotfix-nav-clicks]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  nav-click-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Build physical-click harness
+        run: |
+          cat > nav-click-smoke.html <<'HTML'
+          <!doctype html><html><head><meta charset="utf-8"><title>Nav click smoke</title></head><body>
+          <script>
+          (() => {
+            const frame=document.createElement('iframe');
+            frame.src='./index.html?debug=fr';
+            frame.style.cssText='width:1280px;height:900px;border:0';
+            document.body.appendChild(frame);
+            let done=false;
+            const root=document.documentElement;
+            const finish=(status,detail='')=>{if(done)return;done=true;root.dataset.navSmoke=status;root.dataset.navDetail=detail};
+            const wait=ms=>new Promise(r=>setTimeout(r,ms));
+            const describe=el=>el?`${el.tagName.toLowerCase()}.${String(el.className||'').replace(/\s+/g,'.')}[${el.getAttribute('data-ux-nav')||''}]`:'null';
+            function physicalClick(d,selector,label){
+              const button=d.querySelector(selector);
+              if(!button)throw new Error(`${label}:button-missing`);
+              const r=button.getBoundingClientRect();
+              const x=r.left+r.width/2,y=r.top+r.height/2;
+              const hit=d.elementFromPoint(x,y);
+              root.dataset[`nav${label}Hit`]=describe(hit);
+              if(!hit||!button.contains(hit))throw new Error(`${label}:hit-${describe(hit)}`);
+              hit.dispatchEvent(new frame.contentWindow.MouseEvent('click',{bubbles:true,cancelable:true,view:frame.contentWindow,clientX:x,clientY:y}));
+            }
+            frame.addEventListener('load',()=>setTimeout(async()=>{
+              try{
+                const d=frame.contentDocument;
+                if(!d.querySelector('.app-shell.screen-home'))throw new Error('home-missing');
+
+                physicalClick(d,'[data-ux-nav="practice"]','Practice');
+                await wait(350);
+                if(!d.querySelector('.ux-practice-overlay'))throw new Error('practice-did-not-open');
+                d.querySelector('[data-ux-close]')?.click();
+                await wait(250);
+                if(d.querySelector('.ux-practice-overlay'))throw new Error('practice-did-not-close');
+
+                physicalClick(d,'[data-ux-nav="progress"]','Progress');
+                await wait(450);
+                if(!d.querySelector('.app-shell.screen-progress'))throw new Error('progress-did-not-open');
+
+                physicalClick(d,'[data-ux-nav="home"]','Home');
+                await wait(450);
+                if(!d.querySelector('.app-shell.screen-home'))throw new Error('home-did-not-return');
+
+                finish('ok','physical-hit-and-navigation-ok');
+              }catch(e){finish('fail',e?.message||String(e))}
+            },1800));
+            setTimeout(()=>finish('fail','timeout'),8000);
+          })();
+          </script></body></html>
+          HTML
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-nav-http.log 2>&1 &
+          echo $! >/tmp/ft-nav-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — physical bottom-nav clicks
+        run: |
+          timeout 30s google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=14000 --dump-dom 'http://127.0.0.1:4173/nav-click-smoke.html' >/tmp/nav.html
+          grep -q 'data-nav-smoke="ok"' /tmp/nav.html || { cat /tmp/nav.html; exit 1; }
+          grep -q 'data-nav-detail="physical-hit-and-navigation-ok"' /tmp/nav.html
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-nav-server.pid ]; then kill "$(cat /tmp/ft-nav-server.pid)" || true; fi
