@@ -6,129 +6,101 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ---
 
+## [1.19.5] — Build 26.5 — Conversation Exit + Layout Repair — 2026-08-12
+
+- corrige le clic mort `Changer de pratique` observé en Conversation : le contrôle pouvait recevoir son feedback visuel sans quitter la pratique guidée ;
+- ajoute une transition explicite/synchrone `setPracticeMode()` et un binding direct du contrôle visible ;
+- couvre séparément la sortie par `pointerup` tactile/souris et par `click` clavier/souris ;
+- supprime le grand vide desktop hérité de l’ancienne grille Build 14 : un seul mode actif utilise désormais une seule colonne de travail centrée ;
+- sépare visuellement **Tyffany** du label `Pratique guidée` ;
+- répare la composition Progress : Overview + Curriculum vivent dans une colonne gauche indépendante, tandis que `Détails d’apprentissage` devient son frère direct à droite ;
+- corrige ainsi le grand trou vertical qui apparaissait dans le parcours gauche lorsqu’un groupe long comme `Maîtrise` était ouvert à droite ;
+- conserve la politique Build 26.4 : **aucun nested scroll**, le document reste propriétaire du scroll vertical ;
+- conserve sur mobile l’ordre Résumé → Curriculum compact **5/40** → Détails repliés ;
+- ajoute `build26-5-ux.css` / `build26-5-ux.js` et le cache `tran-french-teacher-v1.19.5-b26.5-conversation-layout-repair` ;
+- ajoute un smoke Chrome Build 26.5 mesurant la vraie géométrie : back + carte active alignés, pointer/click vers hub, gap Overview→Curriculum **0–48 px**, colonnes côte à côte, nested scroll 0, mobile order intact ;
+- rend les workflows Session UX, Progression UX, Build 26.3 et Build 26.4 durables : ils protègent leurs comportements historiques sans figer éternellement les query-strings d’un fichier propriétaire ;
+- borne le smoke Build 26.1 par profils Chrome isolés, retries et timeouts pour supprimer les runners qui pouvaient rester ouverts indéfiniment ;
+- conserve curriculum **40 leçons / 241 éléments**, Scenario **36 situations / 108 tours**, Listening **0.88 / 0.65** ;
+- `voice-ios.js`, `free-voice.js`, logo et favicon restent byte-identiques ;
+- aucune migration learner/Memory/Scenario/Listening ;
+- PR runtime **#49** ; head validé `3f3b1ab80ccfc8142df8e7b9b2288cf4373905d4` ; **11/11 workflows SUCCESS** sur PR ;
+- commit runtime production `2cd29f20faa8db850f92c343074809cc91b42c76` ; **11/11 workflows fonctionnels SUCCESS** sur `main` ;
+- GitHub Pages runtime **#106 SUCCESS**.
+
+---
+
 ## [1.19.4] — Build 26.4 — Single-scroll Progress + Tyffany — 2026-08-12
 
 - conserve le layout Progress 2 colonnes de Build 26.3 mais supprime le deuxième contexte de scroll vertical dans `Détails d’apprentissage` ;
-- ajoute `build26-4-ux.css` qui remplace sur desktop `sticky + max-height viewport + overflow:auto` par un panneau dans le flux avec `max-height:none` et `overflow:visible` ;
+- remplace sur desktop `sticky + max-height viewport + overflow:auto` par `max-height:none` et `overflow:visible` ;
 - la page redevient l’unique propriétaire du scroll vertical ;
 - mobile reste résumé → curriculum compact → Details replié ;
 - ajoute `build26-4-ux.js` comme couche de branding compatible ;
-- le nom apprenant **Lucie** devient **Tyffany** dans le DOM rendu et les attributs textuels sûrs ;
-- `FrenchTranquilleCurriculum.tutor` est normalisé à `Tyffany` ;
-- les phrases envoyées à `speechSynthesis` contenant l’ancien nom sont normalisées en `Tyffany` avant lecture ;
-- les identifiants techniques historiques `LucieVoice`, `luc-*`, `lucie-*` et la clé `francais-avec-luc:learner:v1` sont volontairement conservés pour éviter toute migration inutile ;
+- le nom apprenant **Lucie** devient **Tyffany** dans le DOM rendu, l’export tutor et les paroles synthétiques ;
+- les identifiants techniques historiques `LucieVoice`, `luc-*`, `lucie-*` et `francais-avec-luc:learner:v1` sont conservés ;
 - `voice-ios.js`, `free-voice.js`, logo et favicon restent byte-identiques ;
 - aucune migration learner/Memory/Scenario/Listening ;
-- ajoute un smoke Chrome Build 26.4 : Tyffany visible, aucun Lucie visible, tutor export Tyffany, Mastery ouvert, Details sans nested scroll, page scrollable, profil l8 intact ;
-- rend le smoke Build 26.3 durable : il protège toujours la structure 2 colonnes et les vrais clics Today sans imposer à vie l’ancienne politique `sticky` ;
-- cache `tran-french-teacher-v1.19.4-b26.4-single-scroll-tyffany` ;
-- PR runtime #46 ; commit runtime `7e74b3727dfefdddb41521a2be92ece8301a32e7` ; **10/10 workflows SUCCESS** sur PR ; Pages runtime **#103 SUCCESS** ;
-- le premier passage du smoke 26.4 sur `main` a confirmé tous les marqueurs single-scroll mais pouvait sélectionner Mastery trop tôt ;
-- PR #47 corrige uniquement ce harness CI en réutilisant `detailsDashboardSmoke=mastery`, sans modification runtime/PWA ;
-- commit CI-only `4852e95684ad79d0988e05de641b56a8ad0ede22` ; final `main` **10/10 workflows fonctionnels SUCCESS + Pages #104 SUCCESS**.
+- PR #46 ; runtime `7e74b3727dfefdddb41521a2be92ece8301a32e7` ; **10/10 workflows SUCCESS** ; Pages #103 ;
+- PR #47 stabilise uniquement le harness Mastery ; commit CI-only `4852e95684ad79d0988e05de641b56a8ad0ede22` ; final `main` 10/10 + Pages #104 ;
+- l’implémentation de grille `display:contents` héritée reste historique ; Build 26.5 la supersède ensuite pour rendre les deux colonnes structurellement indépendantes, sans revenir sur le contrat single-scroll.
 
 ---
 
 ## [1.19.3] — Build 26.3 — Interaction Stability + Progress Layout — 2026-08-11
 
-- corrige les interactions incohérentes observées dans une vidéo terrain sur `Séance du jour` ;
-- identifie une compétition DOM entre `daily-coach.js`, `listening-engine.js` et `session-ux.js` : plusieurs `MutationObserver` pouvaient déplacer/recréer les mêmes contrôles ;
-- ajoute `build26-3-ux.js` / `build26-3-ux.css` comme couche additive d’orchestration ;
-- garde exactement 2 actions Today principales avec des nœuds stables ;
-- place les activités secondaires hors de `.daily-steps` pour éviter leur déplacement par Session UX ;
-- utilise un proxy Listening caché pour empêcher une réinjection concurrente ;
-- remplace le `<summary>` reconstruit de `Voir les autres activités` par un vrai `<button>` stable avec `aria-expanded` ;
-- rend le refresh Today strictement idempotent : aucun texte/attribut/état n’est réécrit s’il est déjà correct ;
-- route explicitement Review / Lesson / Conversation / Listening sans écrire de donnée apprenante ;
-- ajoute un smoke Chrome qui ouvre réellement les autres activités, vérifie la stabilité du même nœud, clique Listening, Review puis la leçon et exige les destinations réelles ;
-- optimise `Progrès` desktop selon le layout validé terrain : résumé + curriculum à gauche, `Détails d’apprentissage` à droite ;
-- la colonne Details était initialement ouverte par défaut sur desktop, sticky et scrollable indépendamment ; Build 26.4 remplace ensuite uniquement cette politique de scroll ;
-- conserve sur mobile l’ordre résumé → curriculum compact → Details replié ;
-- utilise `display: contents` + CSS Grid : aucun clone ou remplacement des cartes Memory/Mastery/Listening/Scenario ;
-- conserve le dashboard Build 26.1 et son progressive disclosure ;
-- conserve curriculum **40 leçons / 241 éléments**, Scenario **36 situations / 108 tours**, Listening **0.88 / 0.65** ;
-- `voice-ios.js`, `free-voice.js`, logo et favicon restent byte-identiques ;
-- aucune migration learner/Memory/Scenario/Listening ;
-- PR #44 ; commit runtime production `5947149e9fcb3b387aa01a797607270edb4f100e` ;
-- **9 workflows fonctionnels / 9 SUCCESS** sur PR ;
-- sur `main`, le nouveau smoke 26.3 a eu un premier passage timing/flaky puis son rerun sur le **même commit** a validé Today + desktop + mobile ; les 9 contrats fonctionnels sont verts ;
-- GitHub Pages **#101 SUCCESS**.
+- corrige les interactions incohérentes de `Séance du jour` causées par une compétition DOM entre Daily Coach, Listening et Session UX ;
+- stabilise `Révision mémoire`, `Écouter 3 minutes`, `Voir les autres activités` et `Continuer le parcours` avec de vraies destinations ;
+- introduit le layout Progress desktop Résumé+Curriculum à gauche / Details à droite ;
+- mobile conserve Résumé → Curriculum compact → Details replié ;
+- aucun clone des cartes Memory/Mastery/Listening/Scenario ;
+- curriculum **40/241**, Scenario **36/108**, Listening **0.88/0.65** conservés ;
+- PR #44 ; runtime `5947149e9fcb3b387aa01a797607270edb4f100e` ; **9/9 workflows SUCCESS** ; Pages #101 ;
+- l’intention 2 colonnes reste valide ; l’implémentation `display:contents` est supersédée en Build 26.5.
 
 ---
 
 ## [1.19.2] — Build 26.2 — Click + Listening Rate Hotfix — 2026-08-11
 
-- corrige le clic inerte observé en vidéo sur `Parcours → Détails d’apprentissage` ;
-- remplace la dépendance au toggle natif implicite de `<details>` par un toggle explicite et déterministe dans `progression-ux.js` ;
-- ajoute un smoke Chrome qui clique réellement le `summary` et exige l’ouverture du panneau ;
-- corrige la cause réelle du mode Listening `Lent` quasi identique au normal : le bridge demandait `0.64`, mais `voice-ios.js` refuse les rates `< 0.65` et retombait donc sur ~`0.84` ;
-- fixe le rate lent effectif à **0.65**, soit le plancher déjà accepté par la couche voix ;
-- résultat effectif : **0.88 normal / 0.65 lent** ;
-- `voice-ios.js`, `free-voice.js`, logo et favicon restent byte-identiques ;
-- aucun changement de voix, pitch ou reconnaissance ;
-- aucune migration learner/Memory/Scenario/Listening ;
-- rend le smoke Build 26.1 durable vis-à-vis des hotfixes de version globale ;
-- aligne Session UX et Listening-rate CI sur le contrat **0.88 / 0.65** ;
-- cache `tran-french-teacher-v1.19.2-b26.2-clicks-listening-rate` ;
-- PR #42 ; commit production `4d1d224aa4eb6612fe6b0dc997f3871bbb502317` ;
-- **8 workflows / 8 SUCCESS** sur PR puis `main` ;
-- GitHub Pages **#100 SUCCESS**.
+- corrige le clic `Parcours → Détails d’apprentissage` avec un toggle explicite/déterministe ;
+- fixe le mode Lent effectif à **0.65** car `voice-ios.js` refuse les rates `<0.65` ;
+- résultat final : **0.88 normal / 0.65 lent** ;
+- `voice-ios.js`, `free-voice.js`, logo et favicon byte-identiques ;
+- PR #42 ; runtime `4d1d224aa4eb6612fe6b0dc997f3871bbb502317` ; **8/8 SUCCESS** ; Pages #100.
 
 ---
 
 ## [1.19.1] — Build 26.1 — Voice Self-Playback + Learning Details Dashboard — 2026-08-11
 
-- ajoute `voice-replay.js` / `voice-replay.css` sans modifier `free-voice.js` ni `voice-ios.js` ;
-- après une réponse vocale reconnue, propose une **seconde prise locale volontaire** destinée uniquement à l’auto-écoute ;
-- utilise `MediaRecorder` / `getUserMedia` si disponibles ;
-- aucun upload, aucune persistance, aucun événement pédagogique créé par le replay ;
-- Blob URL temporaire révoquée, piste micro arrêtée, capture max 9 secondes ;
-- n’essaie pas d’enregistrer simultanément le premier essai reconnu sur iPhone ;
-- ajoute `progress-details-dashboard.js` / `progress-details-dashboard.css` ;
-- remplace l’empilement de `Détails d’apprentissage` par des familles compactes : Mémoire, Maîtrise, Écoute, Français réel, A1/rythme ;
-- une seule famille détaillée est visible à la fois ;
-- les cartes historiques restent dans le DOM et continuent à être pilotées par leurs moteurs ;
-- une carte future non reconnue tombe dans `Autres détails` ;
-- conserve Real Life III : **36 situations / 108 tours** ;
-- cache `tran-french-teacher-v1.19.1-b26.1-voice-replay-details-dashboard` ;
-- ajoute `Build 26.1 Voice replay + Details dashboard smoke` ;
-- aucune migration learner/Memory/Scenario/Listening ;
-- voix et branding sanctuarisés ;
-- PR #40 ; commit production `8ad7e5eb9cb2f64c58c086847c3e035463ab3ba3` ;
-- **8 workflows / 8 SUCCESS** sur PR puis `main` ;
-- GitHub Pages **#98 SUCCESS**.
+- ajoute une seconde prise locale volontaire après une réponse reconnue pour que Trân puisse s’écouter ;
+- aucun upload, aucune persistance, Blob URL temporaire, capture max 9 s ;
+- `voice-ios.js` / `free-voice.js` inchangés ;
+- ajoute le dashboard groupé Mémoire / Maîtrise / Écoute / Français réel / A1 & rythme / Autres ;
+- une seule famille détaillée visible à la fois ;
+- PR #40 ; runtime `8ad7e5eb9cb2f64c58c086847c3e035463ab3ba3` ; **8/8 SUCCESS** ; Pages #98.
 
 ### Gate terrain restant
 
-Le dashboard est livré et validé. La fonction d’auto-écoute est déployée, mais son usage réel `réponse reconnue → seconde prise locale → réécoute → nouvelle reconnaissance` doit encore être confirmé sur **l’iPhone de Trân**. La capture simultanée exacte du premier essai reste hors scope.
+Le dashboard est livré. L’auto-écoute doit encore confirmer sur le vrai iPhone : `réponse reconnue → seconde prise → réécoute → nouvelle reconnaissance`.
 
 ---
 
 ## [1.19.0] — Build 26 — Real Life French III — 2026-08-11
 
-- ajoute `real-life-data-3.js` : **8 situations / 24 tours** ;
-- Scenario production : **36 situations / 108 tours** ;
-- introduit du français oral naturel côté interlocuteur ;
-- conserve des réponses standard et plusieurs variantes simples explicitement autorisées ;
-- ajoute futur proche, passé récent, passé composé, mouvement au passé, administratif, émotion/besoin et couple ;
-- ajoute `real-life-coach.js` ;
-- chaque référence Memory avancée doit correspondre à exactement un acquis ;
-- conserve la limite de 6 situations ouvertes visibles ;
-- conserve le contrat Session UX 25.2 : **1 situation = 1 session** ;
-- aucune migration learner/Memory/Scenario/Listening ;
-- voix et branding sanctuarisés ;
-- PR #37 ; commit prod `db8219e44d74f0af13421ec798a0c98d02f7a7b5` ; **8 workflows / 8 SUCCESS** ; Pages **#96 SUCCESS**.
+- ajoute **8 situations / 24 tours** ; Scenario production **36 situations / 108 tours** ;
+- français oral naturel côté interlocuteur, variantes déterministes, futur proche, passé récent, passé composé, administratif, émotion/besoin/couple ;
+- PR #37 ; runtime `db8219e44d74f0af13421ec798a0c98d02f7a7b5` ; **8/8 SUCCESS** ; Pages #96.
 
 ---
 
 ## [1.18.2] — Build 25.2 — Session Goals / Milestones / App Delight — 2026-08-11
-- objectif → progression → fin → sortie ; Listening 5 questions ; Révision jusqu’à 5 éléments ; Scenario 1 situation ; vocal guidé 5 réponses ; milestones sobres ; PR #35 ; Pages #94 SUCCESS.
+- objectif → progression → fin → sortie ; Listening 5 questions ; Révision jusqu’à 5 éléments ; Scenario 1 situation ; vocal guidé 5 réponses ; PR #35 ; Pages #94.
 
 ## [1.18.1] — Build 25.1 — Listening Slow Calibration — 2026-08-11
-- bridge de séparation normal/lent introduit ; calibration finale corrigée en Build 26.2 à **0.88 / 0.65**.
+- bridge de séparation normal/lent ; calibration finale corrigée ensuite à **0.88 / 0.65**.
 
 ## [1.18.0] — Build 25 — Progression UX / Progressive Disclosure — 2026-08-11
-- résumé simple de `Parcours` ; détails repliables ; 5 lignes curriculum visibles par défaut, 40 accessibles ; aucune migration.
+- résumé simple de `Parcours` ; détails repliables ; 5 lignes curriculum visibles par défaut, 40 accessibles.
 
 ## Post-release microfix — Listening speed separation — 2026-08-11
 - PR #29 : séparation des demandes Listening, `voice-ios.js` inchangé.
@@ -176,7 +148,7 @@ Le dashboard est livré et validé. La fonction d’auto-écoute est déployée,
 - 25 leçons / 148 éléments ; Early A1 ; Daily Coach.
 
 ## [1.7.1] — Build 14 / 14.1 — 2026-08-11
-- UX Conversation/Révision/Memory ; avatar Lucie (nom produit renommé Tyffany en Build 26.4).
+- UX Conversation/Révision/Memory ; avatar Lucie, nom produit renommé Tyffany en Build 26.4.
 
 ## [1.7.0] — Build 13 — 2026-08-11
 - Learning Memory ; révision espacée ; export/import JSON.
@@ -191,7 +163,7 @@ Le dashboard est livré et validé. La fonction d’auto-écoute est déployée,
 - responsive ; watchdog ; ES modules ; Chrome headless.
 
 ## [1.4.0] — Build 9
-- French Trân’quille ; Lucie comme nom initial ; logo/favicon/PWA. Le nom visible devient Tyffany en Build 26.4.
+- French Trân’quille ; Lucie comme nom initial ; logo/favicon/PWA.
 
 ## [1.3.0] — Build 8
 - Guided Free Voice.
