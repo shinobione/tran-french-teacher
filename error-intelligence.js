@@ -173,17 +173,28 @@ if (ERROR_CURRICULUM) {
     return entry;
   }
 
+  function sourceChannel(source = '') {
+    const value = String(source).toLowerCase();
+    if (value === 'voice' || value.endsWith('-voice')) return 'voice';
+    if (value === 'text' || value.endsWith('-text')) return 'text';
+    if (value === 'scenario-assisted' || value.endsWith('-scenario-assisted')) return 'scenario-assisted';
+    if (value.includes('scenario-assisted')) return 'scenario-assisted';
+    if (value.includes('scenario')) return 'scenario';
+    return 'practice';
+  }
+
   function recordAttempt({ itemId, ok, source = 'practice', input = '', target = '' } = {}) {
     if (!itemId) return;
     if (ok) {
       recordRecovery(itemId, source);
       return;
     }
+    const channel = sourceChannel(source);
     let type = 'practice-miss';
-    if (source.includes('voice')) type = 'voice-unrecognized';
-    else if (source.includes('text')) type = demonstrablyPartial(input, target) ? 'partial' : 'text-mismatch';
-    else if (source.includes('scenario-assisted')) type = 'assisted';
-    else if (source.includes('scenario')) type = 'scenario-miss';
+    if (channel === 'voice') type = 'voice-unrecognized';
+    else if (channel === 'text') type = demonstrablyPartial(input, target) ? 'partial' : 'text-mismatch';
+    else if (channel === 'scenario-assisted') type = 'assisted';
+    else if (channel === 'scenario') type = 'scenario-miss';
     recordError(itemId, type, source);
   }
 
