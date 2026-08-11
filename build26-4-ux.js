@@ -94,6 +94,41 @@
     document.documentElement.dataset.b264ProgressSingleScroll = !nested && innerWidth >= 861 ? '1' : '0';
   }
 
+  function settleMasterySmoke(attempt = 0) {
+    const active = document.documentElement.dataset.detailsDashboardActive;
+    const panel = document.querySelector('[data-progress-detail-panel="mastery"]');
+    const visible = panel && !panel.hidden;
+    if (active === 'mastery' && visible) {
+      exposeProgressDiagnostics();
+      document.documentElement.dataset.b264SmokeProgress = document.querySelector('.screen-progress .progress-ux-details') ? '1' : '0';
+      document.documentElement.dataset.b264SmokeMastery = '1';
+      return;
+    }
+    if (attempt >= 14) {
+      exposeProgressDiagnostics();
+      document.documentElement.dataset.b264SmokeProgress = document.querySelector('.screen-progress .progress-ux-details') ? '1' : '0';
+      document.documentElement.dataset.b264SmokeMastery = '0';
+      return;
+    }
+    setTimeout(() => settleMasterySmoke(attempt + 1), 100);
+  }
+
+  function openMasteryForSmoke() {
+    const details = document.querySelector('.screen-progress .progress-ux-details');
+    if (!details) {
+      document.documentElement.dataset.b264SmokeProgress = '0';
+      document.documentElement.dataset.b264SmokeMastery = '0';
+      return;
+    }
+    details.open = true;
+    setTimeout(() => {
+      const active = document.documentElement.dataset.detailsDashboardActive;
+      const tile = document.querySelector('[data-progress-detail-open="mastery"]');
+      if (active !== 'mastery') tile?.click();
+      settleMasterySmoke();
+    }, 220);
+  }
+
   function runSmokeHooks() {
     if (smoke === 'brand') {
       setTimeout(() => {
@@ -110,16 +145,7 @@
     if (smoke === 'progress') {
       setTimeout(() => {
         (document.querySelector('[data-ux-nav="progress"]') || document.querySelector('.bottom-nav [data-go="progress"]'))?.click();
-        setTimeout(() => {
-          document.querySelector('.progress-ux-details')?.setAttribute('open','');
-          window.FrenchTranquilleProgressDetailsDashboard?.open?.('mastery');
-          setTimeout(() => {
-            exposeProgressDiagnostics();
-            const details = document.querySelector('.screen-progress .progress-ux-details');
-            document.documentElement.dataset.b264SmokeProgress = details ? '1' : '0';
-            document.documentElement.dataset.b264SmokeMastery = document.documentElement.dataset.detailsDashboardActive === 'mastery' ? '1' : '0';
-          }, 320);
-        }, 680);
+        setTimeout(openMasteryForSmoke, 680);
       }, 220);
     }
   }
