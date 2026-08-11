@@ -4,21 +4,24 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ## [Unreleased]
 
-### v1.18.1 — Build 25.1 — Listening Slow Calibration — CANDIDAT
+Prochain jalon : **v1.18.2 — Build 25.2 — Session Goals / Milestones / App Delight**.
+
+---
+
+## [1.18.1] — Build 25.1 — Listening Slow Calibration — 2026-08-11
 
 - vitesse normale effective conservée à **0.88** ;
 - slow historique demandé par Listening = **0.68** ;
-- calibration effective candidate = **0.64** ;
+- calibration effective livrée = **0.64** ;
 - calibration portée uniquement par le bridge `build-meta.js` ;
 - `voice-ios.js`, pitch, voix choisie et vitesse Lucie persistée inchangés ;
 - expose `FrenchTranquilleListeningRates` + `data-listening-*-rate` ;
-- cache candidat `tran-french-teacher-v1.18.1-b25.1-listening-slow` ;
-- nouveau workflow `Build 25.1 Listening rate smoke` ;
-- `0.62` reste reporté au prochain retour terrain si 0.64 est encore trop rapide.
-
-Ce bloc reste Unreleased jusqu’à PR → CI → `main` → Pages.
-
-Prochain gros jalon : **Build 25.2 — Session Goals / Milestones / App Delight**.
+- cache `tran-french-teacher-v1.18.1-b25.1-listening-slow` ;
+- workflow `Build 25.1 Listening rate smoke` ;
+- PR #33 : quality #99 / Options #30 / nav #49 / Progression #7 / Listening-rate #2 — SUCCESS ;
+- `main` `178c8b71d47887d8f9efd3389aa358d2f3e1a8eb` : quality #100 / Options #31 / nav #50 / Progression #8 / Listening-rate #3 — SUCCESS ;
+- GitHub Pages #92 — SUCCESS ;
+- `0.62` reporté : décision uniquement après nouveau retour terrain si `0.64` reste trop rapide.
 
 ---
 
