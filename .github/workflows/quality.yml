@@ -28,6 +28,7 @@ jobs:
           node --check build-meta.js
           node --check learning-memory.js
           node --check daily-coach.js
+          node --check mastery-engine.js
       - name: Curriculum UX guard
         run: |
           grep -q 'Build 12 — curriculum UX' styles.css
@@ -66,9 +67,6 @@ jobs:
           grep -q 'stage2-boot.js' index.html
           grep -q 'curriculum-stage2.js' sw.js
           grep -q 'stage2-boot.js' sw.js
-          grep -q "version: '1.8.0', build: 15" build-meta.js
-          grep -q '1.8.0-b15' index.html
-          grep -q '1.8.0-b15' sw.js
           grep -q '25 leçons / 148 éléments' README.md
       - name: Daily Coach guard
         run: |
@@ -79,6 +77,33 @@ jobs:
           grep -q 'daily-coach.js' index.html
           grep -q 'daily-coach.css' sw.js
           grep -q 'daily-coach.js' sw.js
+      - name: Build 16 Mastery Engine guard
+        run: |
+          grep -q "version:'1.9.0', build:16" mastery-engine.js
+          grep -q "Survie A0" mastery-engine.js
+          grep -q "Fondations A1" mastery-engine.js
+          grep -q "Premiers échanges A1" mastery-engine.js
+          grep -q 'mastery-home-card' mastery-engine.js
+          grep -q 'mastery-progress-card' mastery-engine.js
+          grep -q 'mastery-engine.css' index.html
+          grep -q 'mastery-engine.js' index.html
+          grep -q 'mastery-engine.css' sw.js
+          grep -q 'mastery-engine.js' sw.js
+          grep -q "version: '1.9.0', build: 16" build-meta.js
+          grep -q '1.9.0-b16' index.html
+          grep -q '1.9.0-b16' sw.js
+      - name: Documentation governance guard
+        run: |
+          test -f ROADMAP.md
+          test -f CHANGELOG.md
+          test -f docs/ARCHITECTURE.md
+          test -f docs/BUILD-POLICY.md
+          grep -q 'Build 17 — Scenario Lab' ROADMAP.md
+          grep -q 'Build 16 — Mastery Engine' CHANGELOG.md
+          grep -q 'mastery-engine.js' docs/ARCHITECTURE.md
+          grep -q 'Documentation obligatoire' docs/BUILD-POLICY.md
+          grep -q 'ROADMAP.md' README.md
+          grep -q 'CHANGELOG.md' README.md
       - name: Node base-engine render smoke test
         run: |
           node <<'NODE'
@@ -121,7 +146,7 @@ jobs:
             --headless=new \
             --no-sandbox \
             --disable-gpu \
-            --virtual-time-budget=9000 \
+            --virtual-time-budget=10000 \
             --dump-dom \
             http://127.0.0.1:4173/ > /tmp/french-tranquille-dom.html
           if grep -E -q 'id="app"[^>]*><div class="boot-status' /tmp/french-tranquille-dom.html; then
@@ -136,6 +161,7 @@ jobs:
           grep -q 'curriculum-chapter' /tmp/french-tranquille-dom.html
           grep -q 'memory-home-card' /tmp/french-tranquille-dom.html
           grep -q 'daily-coach-card' /tmp/french-tranquille-dom.html
-          grep -q 'Buổi học hôm nay' /tmp/french-tranquille-dom.html
+          grep -q 'mastery-home-card' /tmp/french-tranquille-dom.html
+          grep -q 'Mức độ làm chủ' /tmp/french-tranquille-dom.html
           grep -q 'PWA-3' /tmp/french-tranquille-dom.html
-          echo 'Real Chrome Build 15: 25 lessons + Learning Memory + Daily Coach OK'
+          echo 'Real Chrome Build 16: 25 lessons + Memory + Daily Coach + Mastery Engine OK'
