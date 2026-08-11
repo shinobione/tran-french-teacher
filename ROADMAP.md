@@ -11,10 +11,10 @@
 3. **Vietnamien majoritaire au départ**, français augmenté progressivement selon les acquis réels, jamais seulement selon le numéro de leçon.
 4. **Oral prioritaire**, mais aucune prétention de mesurer une prononciation que le navigateur ne permet pas réellement d’observer.
 5. **Communication réelle > théorie scolaire.** Les règles grammaticales apparaissent parce qu’elles permettent de parler.
-6. **Aucun reset silencieux de progression.** Toute migration de données doit préserver les données locales ou documenter explicitement l’exception.
+6. **Aucun reset silencieux de progression.** Toute migration doit préserver les données locales ou documenter explicitement l’exception.
 7. **Un gros build = une intention principale claire.** Les hotfixes gardent le numéro de build et ajoutent `.1`, `.2`, etc.
-8. **Aucun merge important sans vrai Chrome headless vert.** Le test iPhone réel reste indispensable pour les fonctions spécifiques Safari/Siri.
-9. **Toute modification importante met à jour la documentation vivante** : README, CHANGELOG, ROADMAP si nécessaire, et documents d’architecture/politique concernés.
+8. **Aucun merge important sans vrai Chrome headless vert.** Le test iPhone réel reste indispensable pour Safari/Siri.
+9. **Toute modification importante met à jour la documentation vivante** : README, CHANGELOG, ROADMAP si nécessaire, architecture/politique concernées.
 10. French Trân’quille reste une **PWA dédiée**, pas un clone de ChatGPT ni un jeu infantilisant.
 
 ---
@@ -24,94 +24,101 @@
 ## v1.9.0 — Build 16 — LIVRÉ
 
 - 25 leçons / 148 éléments ;
-- A0 → premières fondations A1 ;
-- Learning Memory locale + révision espacée ;
+- Learning Memory + révision espacée ;
 - Daily Coach ;
-- **Mastery Engine** par grandes étapes ;
+- Mastery Engine ;
 - distinction leçon terminée / acquis / maîtrise ;
-- estimation interne A0 / A0+ / Pré-A1 / A1 en construction ;
-- Free Voice gratuit + fallback texte ;
-- UX desktop/mobile responsive ;
-- branding French Trân’quille + Lucie ;
-- CI avec vrai Chrome headless ;
+- estimation interne A0 → A1 en construction ;
+- Free Voice + fallback texte ;
+- CI Chrome headless ;
 - GitHub Pages ;
-- gouvernance documentaire canonique ;
-- coût d’exploitation : 0 €.
+- documentation canonique ;
+- coût : 0 €.
 
 ---
 
-# PHASE PWA-3B — ADAPTATION RÉELLE
+# PHASE PWA-3B / PWA-4 — ADAPTATION + USAGE RÉEL
 
 ## v1.9.0 — Build 16 — Mastery Engine — ✅ CLOS
 
-### But
-
-Ne plus confondre **« leçon terminée »** avec **« compétence réellement utilisable »**.
-
-### Livré
-
-- carte de maîtrise par grandes étapes ;
-- score interne basé sur progression, acquis, preuves de révision, Learning Memory et fragilités ;
-- états Non commencé / Découverte / Consolidation / Presque solide / Maîtrisé ;
-- estimation interne A0 / A0+ / Pré-A1 / A1 en construction ;
-- priorité suivante proposée par Lucie ;
-- aucune assimilation à une certification CECRL officielle ;
-- diagnostic enrichi ;
-- documentation canonique créée.
-
-### Clôture Build 16
-
-- [x] 4 étapes visibles dans Progression ;
-- [x] aucun statut « Maîtrisé » sans preuves mémoire suffisantes ;
-- [x] aucune régression des 25 leçons ;
-- [x] décorateurs idempotents / aucune boucle MutationObserver observée ;
-- [x] Chrome headless vert ;
-- [x] README / CHANGELOG / ROADMAP / ARCHITECTURE / BUILD-POLICY synchronisés ;
-- [x] cache/version Build 16 synchronisés ;
-- [x] PR validée avant merge.
+- [x] 4 étapes de maîtrise ;
+- [x] preuves Learning Memory obligatoires avant `Maîtrisé` ;
+- [x] estimation interne non assimilée au CECRL officiel ;
+- [x] priorité suivante ;
+- [x] documentation canonique ;
+- [x] Chrome + Pages verts.
 
 ---
 
-## v1.10.0 — Build 17 — Scenario Lab — PROCHAIN
+## v1.10.0 — Build 17 — Scenario Lab — 🔥 EN COURS
 
 ### But
 
-Transformer Conversation en **situations multi-tours**, sans IA payante.
+Transformer Conversation en **situations multi-tours réellement jouables**, sans IA payante.
 
-### Scénarios V1 prévus
+### Périmètre V1
 
-- café ;
-- gare ;
-- restaurant ;
-- supermarché ;
-- pharmacie ;
-- problème dans l’appartement ;
-- appel à Jerry ;
-- arrivée en France ;
-- rencontre avec des proches ;
-- demander de l’aide ;
-- rendez-vous ;
-- petite conversation sociale.
+12 scénarios, 3 tours chacun :
 
-### Fonctionnement
+1. café ;
+2. gare ;
+3. restaurant ;
+4. supermarché ;
+5. pharmacie ;
+6. problème dans l’appartement ;
+7. appel à Jerry ;
+8. arrivée en France ;
+9. rencontre avec des proches ;
+10. demander de l’aide ;
+11. rendez-vous ;
+12. petite conversation sociale.
 
-- plusieurs tours de dialogue ;
-- variantes acceptées ;
-- indice au premier blocage ;
-- modèle après plusieurs échecs ;
-- échec/réussite envoyé à Learning Memory ;
-- scénarios déverrouillés selon les acquis ;
+Total : **36 tours de dialogue**.
+
+### Fonctionnement attendu
+
+- scénarios déverrouillés selon les leçons terminées ;
+- plusieurs variantes de réponse acceptées ;
+- première erreur → indice ;
+- erreurs répétées → modèle ;
+- utilisation du modèle comptée comme aide ;
+- réussites / échecs / aides reliés à Learning Memory ;
 - progression locale par scénario ;
-- texte systématiquement disponible ;
-- voix utilisée lorsque le navigateur le permet.
+- interlocuteur réécoutable ;
+- micro utilisé si le navigateur l’expose ;
+- fallback texte permanent ;
+- aucune notation phonétique inventée.
 
-### Clôture
+### Critères de clôture Build 17
 
-Un scénario doit pouvoir être joué jusqu’au bout **sans IA, sans réseau applicatif et sans réponse codée visible avant tentative**.
+- [ ] 12 scénarios présents et IDs uniques ;
+- [ ] au moins 3 tours par scénario ;
+- [ ] déverrouillage basé sur `completedLessons` ;
+- [ ] aucun scénario ne révèle son modèle avant plusieurs échecs ;
+- [ ] Learning Memory reçoit succès / échec / aide ;
+- [ ] statistiques locales persistées ;
+- [ ] Progression affiche les situations ;
+- [ ] diagnostic Scenario Lab présent ;
+- [ ] Home Build16 toujours saine ;
+- [ ] Chrome Home vert ;
+- [ ] Chrome Conversation `?scenarioSmoke=1` vert ;
+- [ ] README / ROADMAP / CHANGELOG / ARCHITECTURE synchronisés ;
+- [ ] cache/version Build 17 synchronisés ;
+- [ ] CI PR verte ;
+- [ ] CI main verte ;
+- [ ] GitHub Pages vert.
+
+### Non inclus dans Build 17
+
+- compréhension sémantique libre par IA ;
+- conversation générative illimitée ;
+- score de prononciation ;
+- calibration Siri spécifique ;
+- nouvelle extension du curriculum.
 
 ---
 
-## v1.11.0 — Build 18 — Error Intelligence
+## v1.11.0 — Build 18 — Error Intelligence — PROCHAIN
 
 ### But
 
@@ -127,15 +134,18 @@ Passer de « difficile/correct/facile » à une mémoire des **types de confusio
 - verbe / structure ;
 - transcription vocale non reconnue ;
 - réponse partielle ;
-- hésitation répétée.
+- hésitation répétée ;
+- aide/modèle nécessaire dans Scenario Lab.
 
 ### Livrables
 
 - historique compact par élément ;
 - confusion récurrente ;
+- source d’erreur (`review`, `voice`, `scenario`, etc.) ;
 - priorité quotidienne influencée par le type d’erreur ;
 - mini-bilan après séance ;
-- export JSON versionné.
+- export JSON versionné ;
+- pont vers Mastery Engine.
 
 ---
 
@@ -145,22 +155,20 @@ Passer de « difficile/correct/facile » à une mémoire des **types de confusio
 
 **Cette étape dépend d’un vrai test sur l’iPhone de Trân. Elle ne sera pas simulée.**
 
-### Données nécessaires
-
-Pour plusieurs phrases déjà apprises :
+Données nécessaires :
 
 - phrase cible ;
 - transcription Safari ;
-- alternatives de transcription si disponibles ;
+- alternatives si disponibles ;
 - nombre d’essais ;
-- cas où Trân estime avoir correctement prononcé mais Safari refuse ;
-- cas où Safari accepte une mauvaise phrase.
+- faux refus ;
+- faux positifs.
 
-### Après collecte
+Après collecte :
 
 - tolérances par type de phrase ;
 - variantes réellement observées ;
-- distinction « phrase reconnue » / « prononciation correcte » ;
+- distinction phrase reconnue / prononciation correcte ;
 - aucun faux score phonétique.
 
 ---
@@ -169,67 +177,48 @@ Pour plusieurs phrases déjà apprises :
 
 ## v1.12.0 — Build 19 — Curriculum 26 → 40
 
-### Axes prévus
+Axes prévus :
 
 - nombres 11 → 100 ;
-- dates et calendrier ;
+- dates / calendrier ;
 - heures plus complètes ;
 - jours / mois ;
 - possessifs de base ;
-- présent : tu / il / elle / nous dans des structures fréquentes ;
-- aller + infinitif pour le futur proche ;
-- venir de + infinitif dans un contexte simple ;
-- passé composé ultra-fréquent, seulement après assez de présent ;
+- présent `tu / il / elle / nous` dans des structures fréquentes ;
+- aller + infinitif, futur proche ;
+- venir de + infinitif simple ;
+- passé composé ultra-fréquent seulement après consolidation du présent ;
 - transport / administration / rendez-vous ;
 - émotions et besoins ;
 - conversation avec Jerry et les proches.
 
-### Règle
-
-Pas de « chapitre de conjugaison ». Chaque structure est introduite par une situation.
+**Règle :** pas de chapitre de conjugaison hors-sol ; chaque structure vient d’une situation.
 
 ---
 
 ## v1.13.0 — Build 20 — Listening Comprehension
 
-### But
-
-Faire progresser la compréhension orale même sans reconnaissance vocale avancée.
-
-### Prévu
-
 - Lucie lit une phrase ;
 - choix de sens ;
-- contraste entre deux phrases proches ;
+- contraste entre phrases proches ;
 - vitesse lente puis normale ;
 - mini-dialogues audio ;
 - répétition optionnelle ;
-- erreurs envoyées à Learning Memory.
+- erreurs envoyées à Learning Memory / Error Intelligence.
 
 ---
 
 ## v1.14.0 — Build 21 — Adaptive Language Ratio
 
-### But
-
-Faire évoluer automatiquement la proportion VI/FR.
-
-### Principe
-
-Le ratio ne dépend pas du nombre de jours. Il dépend :
+Le ratio VI/FR dépendra :
 
 - maîtrise par étape ;
 - compréhension réussie ;
-- quantité d’indices nécessaires ;
-- fragilité des éléments ;
-- niveau de la situation.
+- quantité d’indices ;
+- fragilités ;
+- difficulté du scénario.
 
-### Exemple
-
-- début A0 : explications massivement vietnamiennes ;
-- A0 renforcé : davantage de consignes françaises très répétitives ;
-- early A1 : consignes simples en français, explications difficiles en vietnamien ;
-- jamais de bascule brutale.
+Pas de bascule brutale : le vietnamien recule seulement quand les preuves d’apprentissage le permettent.
 
 ---
 
@@ -239,15 +228,13 @@ Le ratio ne dépend pas du nombre de jours. Il dépend :
 
 ### Français avec Jerry
 
-Mini-situations inspirées de la vraie vie :
-
 - arrivée / retrouvailles ;
 - chez soi ;
 - repas ;
-- amis et famille ;
+- amis / famille ;
 - téléphone ;
-- déplacement ;
-- problème quotidien ;
+- déplacements ;
+- problèmes du quotidien ;
 - expressions affectives naturelles ;
 - humour simple ;
 - petites incompréhensions de couple.
@@ -256,27 +243,27 @@ Mini-situations inspirées de la vraie vie :
 
 - français neutre ;
 - français oral courant ;
-- expressions familières raisonnables ;
-- différence entre phrase correcte et phrase naturelle.
+- familier raisonnable ;
+- différence phrase correcte / phrase naturelle.
 
 ---
 
 # PHASE PWA-6 — HARDENING / V2
 
-## v2.0.0 — objectif de clôture A1 Core
+## v2.0.0 — objectif A1 Core stable
 
-Pour considérer French Trân’quille V2 stable :
+Pour clôturer V2 :
 
 - curriculum A0 → A1 cohérent ;
-- scénario multi-tours stable ;
+- Scenario Lab stable ;
 - mémoire et erreurs versionnées ;
 - sauvegarde/import robuste ;
 - PWA installable iPhone ;
-- tests Safari réels effectués ;
+- tests Safari réels ;
 - Chrome/Android sans régression majeure ;
 - offline testé ;
 - documentation complète ;
-- aucun secret/API côté client ;
+- aucun secret/API client ;
 - aucune dépendance payante obligatoire.
 
 ---
@@ -284,14 +271,14 @@ Pour considérer French Trân’quille V2 stable :
 # BACKLOG NON BLOQUANT
 
 - vrai avatar Lucie ;
-- sons de validation très discrets ;
-- fiches de révision imprimables ;
-- export de bilan lisible par Jerry ;
-- outil admin local de diagnostic des données ;
-- mode « 5 minutes seulement » ;
-- mode déplacement / écoute mains libres ;
+- sons de validation discrets ;
+- fiches imprimables ;
+- export de bilan lisible ;
+- admin local données ;
+- mode 5 minutes ;
+- mode écoute/déplacement ;
 - statistiques hebdomadaires locales ;
-- meilleure gestion multi-appareil sans serveur si une solution gratuite et sûre est viable.
+- solution multi-appareil gratuite si sûre.
 
 ---
 
@@ -300,13 +287,13 @@ Pour considérer French Trân’quille V2 stable :
 - backend payant ;
 - OpenAI API / Realtime payant ;
 - avatar vidéo ;
-- classement / XP artificiel ;
+- XP/classement ;
 - gamification agressive ;
-- score de prononciation pseudo-scientifique ;
+- score phonétique pseudo-scientifique ;
 - app native iOS tant que la PWA suffit.
 
 ---
 
 # EASTER EGG RÉSERVÉ
 
-**Leçon 69** 😇🍌🍑 — vocabulaire adulte/intime, consentement, registres de langue et expressions de couple. Elle restera verrouillée jusqu’à ce que le niveau linguistique permette de la traiter proprement.
+**Leçon 69** 😇🍌🍑 — vocabulaire adulte/intime, consentement, registres de langue et expressions de couple. Elle reste verrouillée jusqu’à ce que le niveau permette de la traiter proprement.

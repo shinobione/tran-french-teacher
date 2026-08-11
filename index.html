@@ -11,17 +11,18 @@
   <meta name="apple-mobile-web-app-title" content="French Trân’quille" />
   <meta name="application-name" content="French Trân’quille" />
   <meta name="description" content="French Trân’quille — gia sư tiếng Pháp cá nhân cho Trân, từ A0 đến những nền tảng A1 đầu tiên." />
-  <link rel="manifest" href="./manifest.webmanifest?v=1.9.0-b16" />
-  <link rel="icon" type="image/png" href="./assets/Favicon.png?v=1.9.0-b16" />
-  <link rel="apple-touch-icon" href="./assets/Favicon.png?v=1.9.0-b16" />
-  <link rel="stylesheet" href="./styles.css?v=1.9.0-b16" />
-  <link rel="stylesheet" href="./brand.css?v=1.9.0-b16" />
-  <link rel="stylesheet" href="./learning-memory.css?v=1.9.0-b16" />
-  <link rel="stylesheet" href="./visual-pass.css?v=1.9.0-b16" />
-  <link rel="stylesheet" href="./lucie-avatar.css?v=1.9.0-b16" />
-  <link rel="stylesheet" href="./curriculum-stage2.css?v=1.9.0-b16" />
-  <link rel="stylesheet" href="./daily-coach.css?v=1.9.0-b16" />
-  <link rel="stylesheet" href="./mastery-engine.css?v=1.9.0-b16" />
+  <link rel="manifest" href="./manifest.webmanifest?v=1.10.0-b17" />
+  <link rel="icon" type="image/png" href="./assets/Favicon.png?v=1.10.0-b17" />
+  <link rel="apple-touch-icon" href="./assets/Favicon.png?v=1.10.0-b17" />
+  <link rel="stylesheet" href="./styles.css?v=1.10.0-b17" />
+  <link rel="stylesheet" href="./brand.css?v=1.10.0-b17" />
+  <link rel="stylesheet" href="./learning-memory.css?v=1.10.0-b17" />
+  <link rel="stylesheet" href="./visual-pass.css?v=1.10.0-b17" />
+  <link rel="stylesheet" href="./lucie-avatar.css?v=1.10.0-b17" />
+  <link rel="stylesheet" href="./curriculum-stage2.css?v=1.10.0-b17" />
+  <link rel="stylesheet" href="./daily-coach.css?v=1.10.0-b17" />
+  <link rel="stylesheet" href="./mastery-engine.css?v=1.10.0-b17" />
+  <link rel="stylesheet" href="./scenario-engine.css?v=1.10.0-b17" />
   <title>French Trân’quille</title>
   <style>
     .boot-status{width:min(560px,calc(100% - 32px));margin:18vh auto 0;padding:22px;border:1px solid rgba(180,199,224,.16);border-radius:20px;background:rgba(14,26,42,.86);color:#f7f3eb;text-align:center;font-family:Inter,system-ui,sans-serif;box-shadow:0 18px 50px rgba(0,0,0,.22)}
@@ -34,12 +35,12 @@
   </div>
   <script>
     (() => {
-      const HOTFIX = '1.9.0-b16';
+      const HOTFIX = '1.10.0-b17';
       const root = () => document.getElementById('app');
       const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
       const fatal = (message, detail='') => {
         const app = root(); if (!app) return;
-        app.innerHTML = `<div class="boot-status error"><strong>⚠️ French Trân’quille n’a pas démarré</strong><small>Ứng dụng gặp lỗi khi khởi động.<br>Build 16 affiche le diagnostic au lieu d’un écran vide.</small>${detail ? `<code>${escapeHtml(message)}\n${escapeHtml(detail)}</code>` : `<code>${escapeHtml(message)}</code>`}</div>`;
+        app.innerHTML = `<div class="boot-status error"><strong>⚠️ French Trân’quille n’a pas démarré</strong><small>Ứng dụng gặp lỗi khi khởi động.<br>Build 17 affiche le diagnostic au lieu d’un écran vide.</small>${detail ? `<code>${escapeHtml(message)}\n${escapeHtml(detail)}</code>` : `<code>${escapeHtml(message)}</code>`}</div>`;
       };
       window.addEventListener('error', event => fatal(event.message || 'JavaScript error', `${event.filename || ''}:${event.lineno || ''}:${event.colno || ''}`));
       window.addEventListener('unhandledrejection', event => fatal('Unhandled promise rejection', event.reason?.stack || event.reason || ''));
@@ -54,15 +55,18 @@
       }, 3000));
     })();
   </script>
-  <script type="module" src="./app.js?v=1.9.0-b16"></script>
-  <script type="module" src="./curriculum-stage2.js?v=1.9.0-b16"></script>
-  <script type="module" src="./stage2-boot.js?v=1.9.0-b16"></script>
-  <script type="module" src="./debug-fr.js?v=1.9.0-b16"></script>
-  <script type="module" src="./voice-ios.js?v=1.9.0-b16"></script>
-  <script type="module" src="./free-voice.js?v=1.9.0-b16"></script>
-  <script type="module" src="./build-meta.js?v=1.9.0-b16"></script>
-  <script type="module" src="./learning-memory.js?v=1.9.0-b16"></script>
-  <script type="module" src="./daily-coach.js?v=1.9.0-b16"></script>
-  <script type="module" src="./mastery-engine.js?v=1.9.0-b16"></script>
+  <script type="module" src="./app.js?v=1.10.0-b17"></script>
+  <script type="module" src="./curriculum-stage2.js?v=1.10.0-b17"></script>
+  <script type="module" src="./stage2-boot.js?v=1.10.0-b17"></script>
+  <script type="module" src="./debug-fr.js?v=1.10.0-b17"></script>
+  <script type="module" src="./voice-ios.js?v=1.10.0-b17"></script>
+  <script type="module" src="./free-voice.js?v=1.10.0-b17"></script>
+  <script type="module" src="./build-meta.js?v=1.10.0-b17"></script>
+  <script type="module" src="./learning-memory.js?v=1.10.0-b17"></script>
+  <script type="module" src="./daily-coach.js?v=1.10.0-b17"></script>
+  <script type="module" src="./mastery-engine.js?v=1.10.0-b17"></script>
+  <script type="module" src="./scenario-data.js?v=1.10.0-b17"></script>
+  <script type="module" src="./scenario-host.js?v=1.10.0-b17"></script>
+  <script type="module" src="./scenario-engine.js?v=1.10.0-b17"></script>
 </body>
 </html>

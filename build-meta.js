@@ -1,4 +1,4 @@
-const META = { version: '1.9.0', build: 16 };
+const META = { version: '1.10.0', build: 17 };
 
 window.FrenchTranquilleBuildMeta = META;
 
@@ -30,6 +30,16 @@ if (window.FrenchTranquilleDailyCoach) {
 if (window.FrenchTranquilleMastery) {
   window.FrenchTranquilleMastery.version = META.version;
   window.FrenchTranquilleMastery.build = META.build;
+}
+
+if (window.FrenchTranquilleScenarioData) {
+  window.FrenchTranquilleScenarioData.version = META.version;
+  window.FrenchTranquilleScenarioData.build = META.build;
+}
+
+if (window.FrenchTranquilleScenarios) {
+  window.FrenchTranquilleScenarios.version = META.version;
+  window.FrenchTranquilleScenarios.build = META.build;
 }
 
 function patchDiagnostics() {

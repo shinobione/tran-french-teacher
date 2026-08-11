@@ -17,6 +17,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+
       - name: Syntax check
         run: |
           node --check app.js
@@ -29,11 +30,16 @@ jobs:
           node --check learning-memory.js
           node --check daily-coach.js
           node --check mastery-engine.js
+          node --check scenario-data.js
+          node --check scenario-host.js
+          node --check scenario-engine.js
+
       - name: Curriculum UX guard
         run: |
           grep -q 'Build 12 — curriculum UX' styles.css
           grep -q 'max-height:clamp(360px,52vh,570px)' styles.css
           grep -q 'position:sticky' styles.css
+
       - name: Learning Memory guard
         run: |
           grep -q "french-tranquille:learning-memory:v1" learning-memory.js
@@ -42,6 +48,7 @@ jobs:
           grep -q 'learning-memory.css' index.html
           grep -q 'learning-memory.js' index.html
           grep -q 'learning-memory.js' sw.js
+
       - name: UX Visual Pass guard
         run: |
           grep -q 'v1.7.1 Build 14' visual-pass.css
@@ -52,6 +59,7 @@ jobs:
           grep -q 'visual-pass.css' sw.js
           grep -q 'lucie-avatar.css' index.html
           grep -q 'lucie-avatar.css' sw.js
+
       - name: Build 15 A0 to A1 guard
         run: |
           grep -q "id:'l16'" curriculum-stage2.js
@@ -68,6 +76,7 @@ jobs:
           grep -q 'curriculum-stage2.js' sw.js
           grep -q 'stage2-boot.js' sw.js
           grep -q '25 leçons / 148 éléments' README.md
+
       - name: Daily Coach guard
         run: |
           grep -q 'daily-coach-card' daily-coach.js
@@ -77,33 +86,83 @@ jobs:
           grep -q 'daily-coach.js' index.html
           grep -q 'daily-coach.css' sw.js
           grep -q 'daily-coach.js' sw.js
+
       - name: Build 16 Mastery Engine guard
         run: |
-          grep -q "version:'1.9.0', build:16" mastery-engine.js
           grep -q "Survie A0" mastery-engine.js
           grep -q "Fondations A1" mastery-engine.js
           grep -q "Premiers échanges A1" mastery-engine.js
           grep -q 'mastery-home-card' mastery-engine.js
           grep -q 'mastery-progress-card' mastery-engine.js
+          grep -q 'FrenchTranquilleMastery' mastery-engine.js
           grep -q 'mastery-engine.css' index.html
           grep -q 'mastery-engine.js' index.html
           grep -q 'mastery-engine.css' sw.js
           grep -q 'mastery-engine.js' sw.js
-          grep -q "version: '1.9.0', build: 16" build-meta.js
-          grep -q '1.9.0-b16' index.html
-          grep -q '1.9.0-b16' sw.js
+
+      - name: Build 17 Scenario catalog contract
+        run: |
+          node <<'NODE'
+          global.window = global;
+          require('./scenario-data.js');
+          const data = global.FrenchTranquilleScenarioData;
+          if (!data || data.version !== '1.10.0' || data.build !== 17) throw new Error('Scenario Data version/build mismatch');
+          const scenarios = data.scenarios || [];
+          if (scenarios.length !== 12) throw new Error(`Expected 12 scenarios, got ${scenarios.length}`);
+          const ids = scenarios.map(s => s.id);
+          if (new Set(ids).size !== ids.length) throw new Error('Scenario IDs must be unique');
+          for (const scenario of scenarios) {
+            if (!Array.isArray(scenario.requiredLessons) || !scenario.requiredLessons.length) throw new Error(`${scenario.id}: missing requiredLessons`);
+            if (!Array.isArray(scenario.turns) || scenario.turns.length < 3) throw new Error(`${scenario.id}: expected >= 3 turns`);
+            for (const [index,turn] of scenario.turns.entries()) {
+              if (!turn.npcFr || !turn.npcVi || !turn.promptVi || !turn.promptFr) throw new Error(`${scenario.id} turn ${index+1}: missing prompt/NPC text`);
+              if (!Array.isArray(turn.answers) || !turn.answers.length) throw new Error(`${scenario.id} turn ${index+1}: missing accepted answers`);
+              if (!turn.model || !turn.hintVi || !turn.hintFr) throw new Error(`${scenario.id} turn ${index+1}: missing model/hint`);
+              if (!Array.isArray(turn.items) || !turn.items.length) throw new Error(`${scenario.id} turn ${index+1}: missing curriculum item links`);
+            }
+          }
+          console.log('Scenario catalog OK:', scenarios.length, 'scenarios /', scenarios.reduce((n,s)=>n+s.turns.length,0), 'turns');
+          NODE
+
+      - name: Build 17 Scenario Lab guard
+        run: |
+          grep -q "french-tranquille:scenarios:v1" scenario-engine.js
+          grep -q 'scenario-lab-card' scenario-engine.js
+          grep -q 'scenario-progress-card' scenario-engine.js
+          grep -q 'scenario-success' scenario-engine.js
+          grep -q 'scenario-miss' scenario-engine.js
+          grep -q 'scenario-assisted' scenario-engine.js
+          grep -q 'scenarioSmoke' scenario-engine.js
+          grep -q 'scenario-host' scenario-host.js
+          grep -q "version:'1.10.0'" scenario-engine.js
+          grep -q 'build:17' scenario-engine.js
+          grep -q 'scenario-engine.css' index.html
+          grep -q 'scenario-data.js' index.html
+          grep -q 'scenario-host.js' index.html
+          grep -q 'scenario-engine.js' index.html
+          grep -q 'scenario-engine.css' sw.js
+          grep -q 'scenario-data.js' sw.js
+          grep -q 'scenario-host.js' sw.js
+          grep -q 'scenario-engine.js' sw.js
+          grep -q "version: '1.10.0', build: 17" build-meta.js
+          grep -q '1.10.0-b17' index.html
+          grep -q '1.10.0-b17' sw.js
+          grep -q '12 situations / 36 tours de dialogue' README.md
+
       - name: Documentation governance guard
         run: |
           test -f ROADMAP.md
           test -f CHANGELOG.md
           test -f docs/ARCHITECTURE.md
           test -f docs/BUILD-POLICY.md
-          grep -q 'Build 17 — Scenario Lab' ROADMAP.md
-          grep -q 'Build 16 — Mastery Engine' CHANGELOG.md
-          grep -q 'mastery-engine.js' docs/ARCHITECTURE.md
+          grep -q 'Build 18 — Error Intelligence' ROADMAP.md
+          grep -q 'Build 17 — Scenario Lab' CHANGELOG.md
+          grep -q 'scenario-engine.js' docs/ARCHITECTURE.md
+          grep -q 'french-tranquille:scenarios:v1' docs/ARCHITECTURE.md
           grep -q 'Documentation obligatoire' docs/BUILD-POLICY.md
           grep -q 'ROADMAP.md' README.md
           grep -q 'CHANGELOG.md' README.md
+
       - name: Node base-engine render smoke test
         run: |
           node <<'NODE'
@@ -124,44 +183,68 @@ jobs:
           global.navigator = {};
           global.confirm = () => false;
           require('./app.js');
-          if (!app.innerHTML || app.innerHTML.length < 500) {
-            throw new Error('Base home render produced no meaningful HTML');
-          }
-          if (!app.innerHTML.includes('A0 • 15 bài')) {
-            throw new Error('Base engine should still render its 15 native lessons before Stage 2 boot');
-          }
-          if (!app.innerHTML.includes('Ngày đầu tiên ở Pháp')) {
-            throw new Error('Base lesson 15 was not rendered');
-          }
+          if (!app.innerHTML || app.innerHTML.length < 500) throw new Error('Base home render produced no meaningful HTML');
+          if (!app.innerHTML.includes('A0 • 15 bài')) throw new Error('Base engine should still render its 15 native lessons before Stage 2 boot');
+          if (!app.innerHTML.includes('Ngày đầu tiên ở Pháp')) throw new Error('Base lesson 15 was not rendered');
           console.log('Node base-engine home render OK:', app.innerHTML.length, 'chars');
           NODE
-      - name: Real Chrome browser smoke test
+
+      - name: Start static test server
         run: |
-          google-chrome --version
           python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/french-tranquille-http.log 2>&1 &
-          SERVER_PID=$!
-          trap 'kill $SERVER_PID || true' EXIT
+          echo $! > /tmp/french-tranquille-server.pid
           sleep 1
+          google-chrome --version
+
+      - name: Real Chrome Home smoke test
+        run: |
           google-chrome \
             --headless=new \
             --no-sandbox \
             --disable-gpu \
             --virtual-time-budget=10000 \
             --dump-dom \
-            http://127.0.0.1:4173/ > /tmp/french-tranquille-dom.html
-          if grep -E -q 'id="app"[^>]*><div class="boot-status' /tmp/french-tranquille-dom.html; then
-            cat /tmp/french-tranquille-dom.html
+            http://127.0.0.1:4173/ > /tmp/french-tranquille-home.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status' /tmp/french-tranquille-home.html; then
+            cat /tmp/french-tranquille-home.html
             echo 'Startup screen or fatal screen is still rendered inside #app.'
             exit 1
           fi
-          grep -E -q 'id="app"[^>]*><div class="app-shell screen-home"' /tmp/french-tranquille-dom.html
-          grep -q 'home-dashboard' /tmp/french-tranquille-dom.html
-          grep -q 'A0 → A1 • 25 bài' /tmp/french-tranquille-dom.html
-          grep -q 'Câu hỏi ngắn để tiếp tục hội thoại' /tmp/french-tranquille-dom.html
-          grep -q 'curriculum-chapter' /tmp/french-tranquille-dom.html
-          grep -q 'memory-home-card' /tmp/french-tranquille-dom.html
-          grep -q 'daily-coach-card' /tmp/french-tranquille-dom.html
-          grep -q 'mastery-home-card' /tmp/french-tranquille-dom.html
-          grep -q 'Mức độ làm chủ' /tmp/french-tranquille-dom.html
-          grep -q 'PWA-3' /tmp/french-tranquille-dom.html
-          echo 'Real Chrome Build 16: 25 lessons + Memory + Daily Coach + Mastery Engine OK'
+          grep -E -q 'id="app"[^>]*><div class="app-shell screen-home"' /tmp/french-tranquille-home.html
+          grep -q 'home-dashboard' /tmp/french-tranquille-home.html
+          grep -q 'A0 → A1 • 25 bài' /tmp/french-tranquille-home.html
+          grep -q 'Câu hỏi ngắn để tiếp tục hội thoại' /tmp/french-tranquille-home.html
+          grep -q 'memory-home-card' /tmp/french-tranquille-home.html
+          grep -q 'daily-coach-card' /tmp/french-tranquille-home.html
+          grep -q 'mastery-home-card' /tmp/french-tranquille-home.html
+          grep -q 'Mức độ làm chủ' /tmp/french-tranquille-home.html
+          echo 'Real Chrome Home: 25 lessons + Memory + Daily Coach + Mastery OK'
+
+      - name: Real Chrome Scenario Lab smoke test
+        run: |
+          google-chrome \
+            --headless=new \
+            --no-sandbox \
+            --disable-gpu \
+            --virtual-time-budget=10000 \
+            --dump-dom \
+            'http://127.0.0.1:4173/?scenarioSmoke=1' > /tmp/french-tranquille-scenarios.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/french-tranquille-scenarios.html; then
+            cat /tmp/french-tranquille-scenarios.html
+            echo 'Rendered fatal screen detected in Scenario Lab.'
+            exit 1
+          fi
+          grep -q 'app-shell screen-conversation' /tmp/french-tranquille-scenarios.html
+          grep -q 'scenario-host' /tmp/french-tranquille-scenarios.html
+          grep -q 'scenario-lab-card' /tmp/french-tranquille-scenarios.html
+          grep -q 'Phòng tình huống' /tmp/french-tranquille-scenarios.html
+          grep -q 'Ở quán cà phê' /tmp/french-tranquille-scenarios.html
+          grep -q 'Ở nhà ga' /tmp/french-tranquille-scenarios.html
+          grep -q 'Trò chuyện xã giao' /tmp/french-tranquille-scenarios.html
+          grep -q 'Mở sau Bài 4' /tmp/french-tranquille-scenarios.html
+          echo 'Real Chrome Scenario Lab fresh-profile render OK'
+
+      - name: Stop static test server
+        if: always()
+        run: |
+          if [ -f /tmp/french-tranquille-server.pid ]; then kill "$(cat /tmp/french-tranquille-server.pid)" || true; fi
