@@ -1,0 +1,176 @@
+# Build 26.5 — Conversation Exit + Layout Repair
+
+Status: **CANDIDATE — field regression repair**
+
+Version target: **v1.19.5 — Build 26.5**
+
+## Field evidence
+
+Real desktop screenshots exposed two regressions after the recent progressive-disclosure and Progress layout passes.
+
+### 1. Conversation could become a cul-de-sac
+
+Inside Guided Practice, the visible `Changer de pratique` control received press feedback but could remain inert. The learner could therefore become trapped in that mode.
+
+The handler was not simply missing: Session UX already had a document-level capture click handler. The risky part was that Conversation is still composed by several mutation-driven layers. This is the same class of interaction risk previously observed on Today: a visible control must not depend on a delayed global transition while surrounding DOM may be recomposed.
+
+Build 26.5 makes the transition explicit and synchronous:
+
+```text
+Guided / Voice / Scenario
+        ↓
+setPracticeMode(mode)
+        ↓
+visible mode rendered immediately
+
+Changer de pratique
+        ↓ pointerup OR click
+setPracticeMode(null)
+        ↓
+practice hub rendered immediately
+```
+
+The visible back control is also bound directly by the Build 26.5 compatibility layer, so mouse, touch/pointer and keyboard-style click do not depend only on the document delegate.
+
+## 2. Conversation desktop layout inherited an obsolete two-column grid
+
+Build 14 used a two-column Conversation surface because Free Voice and Guided Practice were shown together:
+
+```text
+Free Voice | Guided Practice
+```
+
+Build 25.2 later introduced one active practice mode at a time, but the old grid still forced `.conversation-card` into column 2. With all other modes hidden, the result was:
+
+```text
+Changer de pratique             [ large empty canyon ]             Guided Practice
+```
+
+Build 26.5 keeps the old CSS as historical baseline but adds a later layout layer:
+
+```text
+Conversation active mode
+┌──────────────────────────────────────────┐
+│ Changer de pratique                      │
+│                                          │
+│ Guided Practice / Voice / Scenario       │
+└──────────────────────────────────────────┘
+```
+
+The active working surface is one centered column. On mobile it remains one column naturally.
+
+The Tyffany identity and the mode label are also separated visually instead of rendering as `TyffanyPratique guidée`.
+
+## 3. Progress had independent scrolling but not independent columns
+
+Build 26.3 created the two-column desktop information architecture with two grid rows:
+
+```text
+summary     | details
+curriculum  | details
+```
+
+Details therefore spanned both rows. Build 26.4 correctly removed its nested scrollbar and let the page own vertical scrolling. However, a tall active Details group such as Mastery could now contribute intrinsic height across both rows, stretching them and pushing the left Curriculum far below the Summary.
+
+Build 26.5 changes the DOM composition rather than hiding the symptom with negative margins:
+
+```text
+progress-layout
+├── left column wrapper
+│   ├── Overview
+│   └── Curriculum
+└── Details
+```
+
+Desktop outer grid:
+
+```text
+left | details
+```
+
+The left wrapper owns its own compact flow, so a tall Details group cannot change the vertical gap between Overview and Curriculum.
+
+Mobile remains:
+
+```text
+Overview
+↓
+compact Curriculum
+↓
+Details collapsed by default
+```
+
+No pedagogical card is cloned. Details Dashboard continues moving the same historical Memory/Mastery/Listening/Scenario/A1 cards.
+
+## Browser gate
+
+The dedicated Build 26.5 Chrome workflow reproduces the field cases.
+
+### Conversation desktop
+
+It must prove:
+
+- Guided Practice is the only visible active mode;
+- back control and active card share the same centered working column;
+- real pointer sequence exits Guided Practice to the hub;
+- plain `.click()` also exits Guided Practice to the hub;
+- Session UX state is `hub` after exit.
+
+### Progress desktop
+
+With lesson-8 synthetic regression state and a long Mastery group open:
+
+- Details is a direct right-column child;
+- Curriculum belongs to the left wrapper;
+- Overview → Curriculum gap is between 0 and 48 px;
+- Details and left column are side-by-side;
+- nested Details scroll remains 0;
+- the page remains the vertical scroll owner;
+- l8 / 7 completed / 40 known stays intact.
+
+### Progress mobile
+
+Chrome 390×844 must prove:
+
+- Overview → Curriculum → Details order;
+- Details collapsed;
+- compact curriculum still 5 / 40.
+
+## CI durability cleanup
+
+The field repair legitimately upgrades `session-ux.js` and `progression-ux.js`. Several historical workflows had started treating exact asset query versions as permanent invariants (`session-ux.js?v=1.18.2-b25.2`, `progression-ux.js?v=1.19.2-b26.2`, global Build 26.4 metadata).
+
+Those guards are changed to protect **the historical behavior and subsystem presence**, not to forbid future owner-file fixes. Their browser assertions remain active.
+
+## Sanctuaries
+
+Build 26.5 must not alter:
+
+```text
+francais-avec-luc:learner:v1
+Learning Memory state
+Scenario state
+Listening state
+voice-ios.js
+free-voice.js
+assets/LOGO.png
+assets/Favicon.png
+```
+
+Product baselines remain:
+
+- curriculum **40 lessons / 241 items**;
+- Scenario **36 situations / 108 turns**;
+- Listening **0.88 normal / 0.65 slow**;
+- Tyffany = learner-facing teacher name;
+- Build 26.1 self-playback iPhone field gate remains open.
+
+## Production gate
+
+Build 26.5 is not production until:
+
+1. PR browser tribunal is fully green;
+2. PR is merged with an immutable head SHA;
+3. the same functional tribunal is green on `main`;
+4. GitHub Pages succeeds on `main`;
+5. canonical README / ROADMAP / CHANGELOG / ARCHITECTURE are closed against production evidence.
