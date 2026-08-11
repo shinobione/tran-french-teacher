@@ -2,11 +2,12 @@
 
 PWA de français pensée pour **Trân**, avec priorité à l’oral, au français utile dans la vraie vie et à une interface simple sur iPhone.
 
-## Version production
+## Version candidate
 
-- **v1.18.2**
-- **Build 25.2 — Session Goals / Milestones / App Delight**
-- statut : **PROD / CLOS**
+- **v1.18.3**
+- **Build 25.3 — Voice Self-Playback + Learning Details Dashboard**
+- statut : **CANDIDAT / EN COURS**
+- baseline production : **v1.18.2 — Build 25.2 — Session Goals / Milestones / App Delight**
 - baseline UX : **Build 25 — Progression UX / Progressive Disclosure**
 - calibration Listening : **Build 25.1 — 0.88 normal / 0.64 lent**
 - baseline fonctionnelle historique : **v1.17.0 — Build 24 — Real Life French II**
@@ -14,11 +15,62 @@ PWA de français pensée pour **Trân**, avec priorité à l’oral, au françai
 - Scenario : **28 situations / 84 tours**
 - coût : **0 €**
 
-## Ce que Build 25.2 change
+## Build 25.3 — retour terrain
 
-Une activité ne ressemble plus à un tunnel sans fin.
+Deux retours réels sont traités avant de reprendre le contenu :
 
-Contrat commun :
+1. après avoir parlé, Trân doit pouvoir **entendre sa propre voix** pour se comparer au modèle ;
+2. `Parcours → Détails d’apprentissage` ne doit plus devenir un long empilement vertical de tous les moteurs internes.
+
+## 🎙️ Réécoute de sa propre voix
+
+Le moteur vocal validé reste sanctuarisé : **`free-voice.js` et `voice-ios.js` ne sont pas modifiés**.
+
+Après une réponse vocale transcrite, une couche additive propose :
+
+```text
+🎧 Écoute-toi
+[ 🎙️ M’enregistrer pour me réécouter ]
+```
+
+L’utilisatrice répète la même réponse une fois. Cette seconde prise sert uniquement à l’auto-écoute :
+
+```text
+[ ▶ Réécouter ma voix ]   [ ↻ Refaire ]
+```
+
+Contrat de confidentialité :
+
+- enregistrement **local uniquement** ;
+- Blob temporaire en mémoire ;
+- aucun upload ;
+- aucun `localStorage` ;
+- piste micro arrêtée après la prise ;
+- URL Blob révoquée au changement d’exercice / fermeture de page.
+
+Ce choix est volontairement conservateur sur iPhone : la PWA ne tente pas encore d’enregistrer simultanément le flux utilisé par `SpeechRecognition`. La reconnaissance qui fonctionne déjà reste prioritaire. Une capture simultanée exacte du premier essai ne sera envisagée qu’après test réel sur l’iPhone de Trân.
+
+## 🧠 Détails d’apprentissage — fin du « parchemin »
+
+Le grand bloc repliable reste l’entrée unique, mais son contenu devient un **dashboard de cartes logiques**.
+
+Les cartes existantes sont reclassées automatiquement :
+
+```text
+🧠 Mémoire & révisions
+🎯 Maîtrise
+🎧 Compréhension orale
+🎭 Français réel
+🧩 A1 & rythme
+```
+
+Les catégories réellement disponibles apparaissent sous forme de tuiles compactes. **Une seule catégorie détaillée est ouverte à la fois.** Les cartes historiques de Memory, Error Intelligence, Mastery, A1, Listening, Scenario et Adaptive Language restent dans le DOM et continuent à être mises à jour par leurs moteurs ; elles ne sont simplement plus toutes affichées simultanément.
+
+Les cartes inconnues/futures ne sont jamais perdues : elles tombent dans `Autres détails` jusqu’à ce qu’une catégorie explicite leur soit attribuée.
+
+## Build 25.2 — baseline conservée
+
+Le contrat de session reste :
 
 ```text
 AVANT   → objectif court
@@ -27,76 +79,35 @@ FIN     → réussite explicite
 APRÈS   → sortie logique en 1 tap
 ```
 
-Sessions standard :
-
-- Listening : **5 questions** ;
-- Révision mémoire : **jusqu’à 5 éléments prioritaires** ;
-- Scenario : **1 situation complète** ;
-- Vocal guidé : **5 réponses reconnues** ;
-- pratique guidée historique : **1 réponse correcte** ;
-- leçon : fin enregistrée confirmée après sauvegarde.
-
-Après une session terminée, `Retour à Aujourd’hui` est l’action principale. Continuer reste volontaire et secondaire.
-
-## Pratiquer → Parler français
-
-L’écran ne superpose plus tous les moteurs. Il ouvre un hub simple :
-
-```text
-Recommandé maintenant
-[ Situation réelle • ≈ 3 min ]
-
-Autres façons
-[ Répondre à l’oral ]
-[ Pratique guidée ]
-```
-
-Une fois un mode choisi, un seul moteur domine l’écran.
-
-## Home / Séance du jour
-
-`Séance du jour` limite le flux principal à **2 actions**. Les activités supplémentaires restent accessibles via `Voir les autres activités`.
-
-## App Delight
-
-Succès premium et court : barre à 100 %, coche, glow mint/lilas, pulse discret et transition < 1 seconde. `prefers-reduced-motion` est respecté.
-
-Pas de son forcé, XP, monnaie, classement ni pluie de confettis.
-
-## Milestones
-
-Clé indépendante :
-
-```text
-french-tranquille:milestones:v1
-```
-
-Elle ne modifie aucune donnée pédagogique. Les acquis déjà atteints à sa première installation sont silencieusement baselinés afin d’éviter une avalanche rétroactive.
+Listening = 5 questions ; Révision = jusqu’à 5 éléments ; Scenario = 1 situation ; Vocal guidé = 5 réponses reconnues. `Retour à Aujourd’hui` reste l’action principale de sortie.
 
 ## Listening
 
-Calibration production :
+Calibration production conservée :
 
 ```text
 normal = 0.88
 lent   = 0.64
 ```
 
-`voice-ios.js` reste inchangé.
+## Cache candidat
 
-## Progression UX
+```text
+tran-french-teacher-v1.18.3-b25.3-voice-replay-details-dashboard
+```
 
-`Parcours` reste compact : 5 leçons visibles par défaut, 40 accessibles à la demande, détails Memory/Mastery repliables.
+## Validation candidate
 
-## Validation production
+Nouveau workflow : **Build 25.3 Voice replay + Details dashboard smoke**.
 
-Commit production Build 25.2 : `49d866bed59bb0cb3268e1675225a4811f6c595f`.
+Il vérifie notamment :
 
-- 7 workflows déclenchés sur ce SHA ;
-- aucun workflow en échec ;
-- GitHub Pages **SUCCESS** ;
-- Progression UX smoke **SUCCESS** ;
-- Session UX smoke + quality / Options / nav-mobile / Listening-rate obligatoires.
+- syntaxe et câblage des deux nouvelles couches ;
+- replay local sans upload ni persistance ;
+- `free-voice.js` / `voice-ios.js` byte-identiques ;
+- vrai Chrome : Détails d’apprentissage regroupés et non stackés ;
+- vrai Chrome : surface de replay injectée après une réponse vocale synthétique ;
+- tous les anciens workflows restent obligatoires avant merge.
 
 ## Sanctuaires
 
@@ -111,10 +122,11 @@ curriculum / Learning Memory / Scenario / Listening state
 
 ## Suite
 
-1. **v1.19.0 — Build 26 — Real Life French III** — PROCHAIN.
-2. Build 27 — Data & Recovery.
-3. Build 28 — iPhone/PWA/Accessibility.
-4. Build 29 — Architecture Hardening.
-5. V2.0.0 — Freeze / Release.
+1. **v1.18.3 — Build 25.3** — candidat actuel.
+2. **v1.19.0 — Build 26 — Real Life French III**.
+3. Build 27 — Data & Recovery.
+4. Build 28 — iPhone/PWA/Accessibility.
+5. Build 29 — Architecture Hardening.
+6. V2.0.0 — Freeze / Release.
 
-Voir `ROADMAP.md`, `CHANGELOG.md`, `docs/ARCHITECTURE.md`, `docs/BUILD-25-2-SESSION-UX.md`.
+Voir `ROADMAP.md`, `CHANGELOG.md`, `docs/ARCHITECTURE.md`, `docs/BUILD-25-3-VOICE-REPLAY-DETAILS-DASHBOARD.md`.
