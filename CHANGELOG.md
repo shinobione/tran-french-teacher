@@ -4,7 +4,33 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ## [Unreleased]
 
-Prochain jalon : **v1.18.0 — Build 25 — Real Life French III**.
+Aucune modification runtime préparée pendant la session réelle de Trân.
+
+Prochaine priorité planifiée : **v1.18.0 — Build 25 — Progression UX / Progressive Disclosure**.
+
+Le précédent projet **Real Life French III** est conservé mais déplacé en **Build 26**, après la réduction de densité de `Parcours`.
+
+### Notes terrain à traiter plus tard
+
+- Listening : `0.68` en mode lent est nettement distinct de `0.88`, mais peut encore être légèrement ralenti après test iPhone ;
+- `Parcours` / Progression : densité et longueur excessives sur mobile ; priorité à une architecture résumé → détails → vue complète.
+
+---
+
+## Post-release microfix — Listening speed separation — 2026-08-11
+
+PR #29 / commit `58f64a46bf8b2943a791a1098402e36285e91814` :
+
+- corrige l’écrasement des vitesses explicites du module Listening par la vitesse globale Lucie ;
+- conserve `normal = 0.88` et `lent = 0.68` ;
+- même voix, même timbre ;
+- `voice-ios.js` non modifié ;
+- quality #88 : SUCCESS ;
+- Options : SUCCESS ;
+- nav/mobile : SUCCESS ;
+- GitHub Pages #88 : SUCCESS.
+
+Ce microfix n’a pas reçu de nouveau numéro de version produit ; la baseline reste **v1.17.5 / Build 24.5**.
 
 ---
 
