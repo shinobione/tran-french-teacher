@@ -30,139 +30,108 @@
 **Progression UX / Progressive Disclosure — ✅ PROD / CLOS**
 
 - 40 leçons / 241 éléments ;
-- Scenario 28 situations / 84 tours ;
-- navigation Aujourd’hui / Pratiquer / Parcours ;
-- feedback tactile premium 24.x conservé ;
-- `Parcours` compact par défaut ;
-- 5 leçons autour de la position actuelle visibles par défaut ;
-- les 40 leçons restent accessibles à la demande ;
-- Memory / Mastery / A1 restent disponibles derrière `Détails d’apprentissage` ;
-- aucune migration de données ;
-- voix/reconnaissance iPhone sanctuarisées ;
-- coût 0 €.
+- Scenario 28 / 84 ;
+- Parcours compact ;
+- 5 leçons visibles par défaut / 40 accessibles ;
+- détails Memory/Mastery/A1 repliables ;
+- aucune migration ;
+- voix et branding sanctuarisés.
 
-### Preuves Build 25
-
-PR #31 : quality #93, Options #24, nav/mobile #43 et Progression UX #1 — SUCCESS.
-
-`main` `4f354221f923004b0cefdaf6b3281e51ba30dbf9` : quality #94, Options #25, nav/mobile #44, Progression UX #2 et Pages #90 — SUCCESS.
-
-Contrat leçon 8 : `l8 / 7 terminées / 40 acquis / 5 lignes visibles / 40 disponibles` préservé.
+Preuves : PR #31 puis `main` `4f354221f923004b0cefdaf6b3281e51ba30dbf9`, quality #94 / Options #25 / nav #44 / Progression #2 / Pages #90 — SUCCESS.
 
 ---
 
-# v1.18.1 — Build 25.1 — Listening Slow Calibration — PROCHAIN
+# v1.18.1 — Build 25.1 — Listening Slow Calibration — EN COURS
 
 ## Retour terrain
-
-État actuel :
 
 ```text
 normal = 0.88
 lent   = 0.68
 ```
 
-`0.68` est désormais réellement distinct de `0.88`, mais reste légèrement rapide à l’oreille.
+Le mode lent est distinct mais reste un peu rapide.
 
-## Plan
-
-Premier candidat :
+## Candidat implémenté
 
 ```text
-normal = 0.88
-lent   = 0.64
+normal effectif = 0.88
+lent effectif   = 0.64
 ```
 
-`0.62` ne sera tenté que si 0.64 paraît encore trop rapide lors du prochain test iPhone.
+Le moteur Listening continue à demander son ancien slow `0.68`. Le bridge `build-meta.js` transforme uniquement cette demande en **0.64** juste avant `voice-ios.js`. Cela évite de modifier la voix validée, le pitch ou la vitesse Lucie sauvegardée.
 
-## Garde-fous
+## Observabilité / CI
 
-- `voice-ios.js` non modifié ;
-- même voix / même pitch ;
-- vitesse normale inchangée ;
-- cache/version cohérents ;
-- contrat explicite prouvant deux rates distincts ;
-- quality / Options / nav-mobile / Progression UX restent verts ;
-- aucune donnée apprenante modifiée.
+`build-meta.js` expose :
+
+```text
+normal: 0.88
+engineSlow: 0.68
+slow: 0.64
+```
+
+et les mêmes valeurs en `data-listening-*-rate` sur `<html>`.
+
+Nouveau workflow : **Build 25.1 Listening rate smoke**.
+
+## Critères de clôture
+
+- v1.18.1 / Build 25.1 cohérent ;
+- cache `tran-french-teacher-v1.18.1-b25.1-listening-slow` ;
+- normal reste 0.88 ;
+- slow effectif = 0.64 ;
+- `voice-ios.js` byte-identique ;
+- `free-voice.js`, logo, favicon inchangés ;
+- quality / Options / nav-mobile / Progression UX / Listening-rate verts sur PR et `main` ;
+- Pages verte ;
+- aucune donnée apprenante modifiée ;
+- 0.62 seulement après nouveau retour terrain si nécessaire.
 
 ---
 
 # v1.18.2 — Build 25.2 — Session Goals / Milestones / App Delight
 
-## Problème
-
-Plusieurs écrans savent proposer un exercice mais ne disent pas assez clairement :
-
-> Combien dois-je en faire ? Où j’en suis ? Quand ai-je fini ? Où vais-je ensuite ?
-
-## Contrat de session commun
+Chaque activité doit suivre :
 
 ```text
-AVANT   → objectif court
-PENDANT → progression visible
-FIN     → état terminé explicite
-APRÈS   → sortie logique en 1 tap
+objectif court → progression visible → fin explicite → sortie logique
 ```
 
-Cibles indicatives :
+Cibles indicatives : Listening 5 questions, Révision 5 éléments, Scenario 1 situation, vocal guidé 5 réponses, fin de leçon renforcée.
 
-- Listening : 5 questions ;
-- Révision mémoire : 5 éléments prioritaires ;
-- Scenario : 1 situation complète ;
-- Vocal guidé : 5 réponses ;
-- Leçon : fin de leçon renforcée et destination suivante claire.
+Animations premium sobres : barre 100 %, coche, glow mint/lilas, pulse court Lucie/logo, 400–800 ms, reduced motion respecté. Pas d’XP, monnaie, classement ou confettis permanents.
 
-Continuer après réussite reste volontaire et secondaire.
+Milestones : première leçon, premier vocal reconnu, première session Listening, première situation, premier rappel réussi, 10/25/50 acquis consolidés, fin A0/A1.
 
-## App Delight
+À traiter aussi :
 
-Animations premium sobres : barre 100 %, coche, glow mint/lilas, pulse court Lucie/logo, transition 400–800 ms, `prefers-reduced-motion` respecté.
-
-Pas de son forcé, pluie de confettis, XP, monnaie ou classement.
-
-## Milestones significatifs
-
-- première leçon terminée ;
-- première réponse vocale reconnue ;
-- première session Listening ;
-- première situation réelle ;
-- premier rappel réussi ;
-- 10 / 25 / 50 acquis consolidés ;
-- fin de bloc A0 / A1 ;
-- première session sans aide lorsque cette preuve existe réellement.
-
-## UX transversale à traiter dans ce build
-
-- `Pratiquer → Parler français` ne doit plus empiler tous les moteurs ;
-- une recommandation principale d’abord, alternatives ensuite ;
-- `Séance du jour` doit rester courte : priorité + prochaine leçon + pratique éventuelle, puis détails ;
+- `Parler français` → recommandation principale puis alternatives, pas quatre moteurs empilés ;
+- `Séance du jour` → priorité + prochaine leçon + pratique courte, reste replié ;
 - une action principale par écran ;
-- sorties cohérentes et toujours visibles ;
-- informations techniques hors interface apprenante normale.
+- sortie claire sans perte de travail.
 
 ---
 
 # v1.19.0 — Build 26 — Real Life French III
 
-Contenu repoussé derrière les passes UX : problèmes quotidiens, émotions, français oral courant, réponses moins dirigées. Toujours derrière `Pratiquer → Parler français`, sans nouvelle entrée principale.
-
----
+Contenu repoussé derrière les passes UX : problèmes quotidiens, émotions, français oral courant, réponses moins dirigées. Toujours derrière `Pratiquer → Parler français`.
 
 # v1.20.0 — Build 27 — Data & Recovery Hardening
 
-Sauvegarde/restauration unifiée, migrations versionnées, snapshot pré-migration, tolérance au localStorage corrompu, tests zéro-perte.
+Sauvegarde/restauration, migrations versionnées, snapshot pré-migration, localStorage corrompu toléré, tests zéro-perte.
 
 # v1.21.0 — Build 28 — iPhone / PWA / Accessibility Hardening
 
-Safe areas, tactile, contraste, tailles, offline/install, vrais tests iPhone et ergonomie faible aisance numérique.
+Safe areas, tactile, contraste, tailles, offline/install et vrais tests iPhone.
 
 # v1.22.0 — Build 29 — Architecture Hardening
 
-Découpage du vieux noyau uniquement avec snapshots comparatifs avant/après.
+Découpage du noyau uniquement avec snapshots comparatifs.
 
 # V2.0.0 — Freeze / Release
 
-Release cohérente, sauvegardable, testée, documentée et utilisable sans connaître l’architecture interne.
+Release cohérente, sauvegardable, testée et documentée.
 
 ---
 
@@ -179,14 +148,6 @@ assets/LOGO.png
 assets/Favicon.png
 bottom navigation interaction baseline
 ```
-
-# Backlog secondaire
-
-Vrai avatar Lucie, sons discrets, fiches imprimables, bilan exportable, admin local, mode 5 min, écoute/déplacement, stats hebdo, multi-appareil gratuit si solution sûre.
-
-# Reporté
-
-Backend/API payants, avatar vidéo, XP/classement, gamification agressive, score phonétique pseudo-scientifique, app native tant que la PWA suffit.
 
 # Easter egg réservé
 
