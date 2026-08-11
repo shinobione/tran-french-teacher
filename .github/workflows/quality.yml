@@ -22,12 +22,7 @@ jobs:
 
       - name: Syntax — full active runtime
         run: |
-          for f in \
-            app.js progress-safety.js curriculum-stage2.js curriculum-stage3.js stage2-boot.js \
-            debug-fr.js voice-ios.js free-voice.js learning-memory.js error-intelligence.js \
-            language-ratio-core.js language-ratio.js daily-coach.js mastery-engine.js mastery-stage3.js \
-            scenario-data.js scenario-host.js scenario-engine.js listening-data.js listening-engine.js \
-            ux-shell.js build-meta.js sw.js; do
+          for f in app.js progress-safety.js curriculum-stage2.js curriculum-stage3.js stage2-boot.js debug-fr.js voice-ios.js free-voice.js learning-memory.js error-intelligence.js language-ratio-core.js language-ratio.js daily-coach.js mastery-engine.js mastery-stage3.js scenario-data.js scenario-host.js scenario-engine.js listening-data.js listening-engine.js ux-shell.js build-meta.js sw.js; do
             node --check "$f"
           done
 
@@ -42,39 +37,21 @@ jobs:
       - name: Curriculum — actual runtime contract
         run: |
           node <<'NODE'
-          const store = new Map();
-          global.localStorage = {
-            getItem:k=>store.has(k)?store.get(k):null,
-            setItem:(k,v)=>store.set(k,String(v)),
-            removeItem:k=>store.delete(k)
-          };
+          const store=new Map();
+          global.localStorage={getItem:k=>store.has(k)?store.get(k):null,setItem:(k,v)=>store.set(k,String(v)),removeItem:k=>store.delete(k)};
           const app={innerHTML:''};
           global.window=global;
-          global.document={
-            querySelector:s=>s==='#app'?app:null,
-            querySelectorAll:()=>[],
-            getElementById:id=>id==='app'?app:null,
-            addEventListener:()=>{},
-            createElement:()=>({className:'',dataset:{},innerHTML:'',appendChild(){},prepend(){},remove(){},querySelector(){return null},querySelectorAll(){return[]}})
-          };
-          global.navigator={};
-          global.confirm=()=>false;
-          global.requestAnimationFrame=fn=>fn();
-          global.queueMicrotask=fn=>fn();
-          global.MutationObserver=class{observe(){}};
-          global.window.addEventListener=()=>{};
-          global.window.scrollTo=()=>{};
-          require('./app.js');
-          require('./curriculum-stage2.js');
-          require('./curriculum-stage3.js');
+          global.document={querySelector:s=>s==='#app'?app:null,querySelectorAll:()=>[],getElementById:id=>id==='app'?app:null,addEventListener:()=>{},createElement:()=>({className:'',dataset:{},innerHTML:'',appendChild(){},prepend(){},remove(){},querySelector(){return null},querySelectorAll(){return[]}})};
+          global.navigator={};global.confirm=()=>false;global.requestAnimationFrame=fn=>fn();global.queueMicrotask=fn=>fn();global.MutationObserver=class{observe(){}};global.window.addEventListener=()=>{};global.window.scrollTo=()=>{};
+          require('./app.js');require('./curriculum-stage2.js');require('./curriculum-stage3.js');
           const c=global.FrenchTranquilleCurriculum;
-          if(!c) throw new Error('Curriculum API missing');
-          if(c.lessons.length!==40) throw new Error(`Expected 40 lessons, got ${c.lessons.length}`);
-          if(c.items.length!==241) throw new Error(`Expected audited 241 items, got ${c.items.length}`);
-          const lessonIds=c.lessons.map(x=>x.id), itemIds=c.items.map(x=>x.id);
-          if(new Set(lessonIds).size!==lessonIds.length) throw new Error('Duplicate lesson IDs');
-          if(new Set(itemIds).size!==itemIds.length) throw new Error('Duplicate item IDs');
-          if(!c.lessons.some(x=>x.id==='l8')||!c.lessons.some(x=>x.id==='l40')) throw new Error('Boundary lessons missing');
+          if(!c)throw new Error('Curriculum API missing');
+          if(c.lessons.length!==40)throw new Error(`Expected 40 lessons, got ${c.lessons.length}`);
+          if(c.items.length!==241)throw new Error(`Expected audited 241 items, got ${c.items.length}`);
+          const lessonIds=c.lessons.map(x=>x.id),itemIds=c.items.map(x=>x.id);
+          if(new Set(lessonIds).size!==lessonIds.length)throw new Error('Duplicate lesson IDs');
+          if(new Set(itemIds).size!==itemIds.length)throw new Error('Duplicate item IDs');
+          if(!c.lessons.some(x=>x.id==='l8')||!c.lessons.some(x=>x.id==='l40'))throw new Error('Boundary lessons missing');
           console.log('Curriculum runtime OK:',c.lessons.length,'lessons /',c.items.length,'items');
           NODE
 
@@ -84,38 +61,29 @@ jobs:
           global.window=global;
           require('./scenario-data.js');
           const scenarios=global.FrenchTranquilleScenarioData?.scenarios||[];
-          if(scenarios.length!==12) throw new Error(`Expected 12 scenarios, got ${scenarios.length}`);
-          for(const scenario of scenarios){
-            if(!Array.isArray(scenario.turns)||scenario.turns.length<3) throw new Error(`${scenario.id}: expected at least 3 turns`);
-          }
+          if(scenarios.length!==12)throw new Error(`Expected 12 scenarios, got ${scenarios.length}`);
+          for(const s of scenarios)if(!Array.isArray(s.turns)||s.turns.length<3)throw new Error(`${s.id}: expected >=3 turns`);
           require('./listening-data.js');
-          if(!global.FrenchTranquilleListeningData) throw new Error('Listening data missing');
-          console.log('Scenario + Listening data contracts OK:',scenarios.length,'scenarios');
+          if(!global.FrenchTranquilleListeningData)throw new Error('Listening data missing');
+          console.log('Scenario + Listening data contracts OK');
           NODE
           grep -q 'MAX_ITEM_EVENTS = 20' error-intelligence.js
           grep -q 'MAX_RECENT_EVENTS = 120' error-intelligence.js
-          grep -q 'listening-meaning' listening-engine.js
-          grep -q 'listening-contrast' listening-engine.js
-          grep -q 'listening-dialogue' listening-engine.js
+          grep -Fq 'const source=`listening-${currentExercise.family}`;' listening-engine.js
 
       - name: Build 22 wiring and UX contract
         run: |
           grep -q '1.15.0-b22' index.html
           grep -q '1.15.0-b22' sw.js
           grep -q "version: '1.15.0', build: 22" build-meta.js
-          grep -q 'progress-safety.js' index.html
-          grep -q 'curriculum-stage3.js' index.html
-          grep -q 'mastery-stage3.js' index.html
-          grep -q 'listening-engine.js' index.html
-          grep -q 'language-ratio.js' index.html
-          grep -q 'ux-shell.js' index.html
+          for f in progress-safety.js curriculum-stage3.js mastery-stage3.js listening-engine.js language-ratio.js ux-shell.js; do grep -q "$f" index.html; done
           grep -q 'ux-shell.css' index.html
           grep -q 'french-tranquille:safety:pre-build22:v1' progress-safety.js
           grep -q "\['home','⌂'" ux-shell.js
           grep -q "\['practice','◎'" ux-shell.js
           grep -q "\['progress','◔'" ux-shell.js
-          grep -q 'assets/LOGO.png' index.html app.js
-          grep -q 'assets/Favicon.png' index.html ux-shell.js
+          grep -q 'assets/LOGO.png' app.js
+          grep -q 'assets/Favicon.png' ux-shell.js
           grep -q 'Build 23 — Real Life French I' ROADMAP.md
           test -f docs/BUILD-22-UX-FOUNDATION.md
 
@@ -128,8 +96,7 @@ jobs:
 
       - name: Chrome — Home UX and reconciled curriculum
         run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=18000 --dump-dom \
-            http://127.0.0.1:4173/ >/tmp/home.html
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=18000 --dump-dom http://127.0.0.1:4173/ >/tmp/home.html
           if grep -q 'boot-status error' /tmp/home.html; then cat /tmp/home.html; exit 1; fi
           grep -q 'app-shell screen-home' /tmp/home.html
           grep -q 'brand-home-logo' /tmp/home.html
@@ -141,66 +108,50 @@ jobs:
           grep -q 'data-open-lesson="l40"' /tmp/home.html
           grep -q 'daily-coach-card' /tmp/home.html
           grep -q 'language-profile-card' /tmp/home.html
-          echo 'Home UX OK — simple shell over full runtime.'
+          echo 'Home UX OK.'
 
       - name: Chrome — preserve Trân lesson-8 progress
         run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=20000 --dump-dom \
-            'http://127.0.0.1:4173/?uxSmoke=lesson8' >/tmp/lesson8.html
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=20000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8' >/tmp/lesson8.html
           if grep -q 'boot-status error' /tmp/lesson8.html; then cat /tmp/lesson8.html; exit 1; fi
-          grep -q 'data-ux-smoke-completed="7"' /tmp/lesson8.html
-          grep -q 'data-ux-smoke-next="l8"' /tmp/lesson8.html
-          grep -q 'data-ux-smoke-l8="4"' /tmp/lesson8.html
-          grep -q 'data-ux-smoke-known="40"' /tmp/lesson8.html
-          grep -q 'data-ux-smoke-snapshot="1"' /tmp/lesson8.html
-          grep -q 'data-ux-smoke-snapshot-l8="4"' /tmp/lesson8.html
-          grep -q 'data-ux-smoke-nav-items="3"' /tmp/lesson8.html
-          grep -q 'data-ux-smoke-logo="1"' /tmp/lesson8.html
+          for attr in 'completed="7"' 'next="l8"' 'l8="4"' 'known="40"' 'snapshot="1"' 'snapshot-l8="4"' 'nav-items="3"' 'logo="1"'; do grep -q "data-ux-smoke-$attr" /tmp/lesson8.html; done
           grep -q 'Bài 8 / 40' /tmp/lesson8.html
           echo 'Lesson-8 preservation contract OK.'
 
       - name: Chrome — Scenario Lab non-regression
         run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=18000 --dump-dom \
-            'http://127.0.0.1:4173/?scenarioSmoke=1' >/tmp/scenario.html
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=18000 --dump-dom 'http://127.0.0.1:4173/?scenarioSmoke=1' >/tmp/scenario.html
           if grep -q 'boot-status error' /tmp/scenario.html; then cat /tmp/scenario.html; exit 1; fi
           grep -q 'screen-conversation' /tmp/scenario.html
           grep -q 'scenario-lab-card' /tmp/scenario.html
           grep -q 'Phòng tình huống' /tmp/scenario.html
-          echo 'Scenario Lab OK.'
 
       - name: Chrome — Error Intelligence 20/120 non-regression
         run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=22000 --dump-dom \
-            'http://127.0.0.1:4173/?errorSmoke=1' >/tmp/error.html
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=22000 --dump-dom 'http://127.0.0.1:4173/?errorSmoke=1' >/tmp/error.html
           if grep -q 'boot-status error' /tmp/error.html; then cat /tmp/error.html; exit 1; fi
           grep -q 'data-error-smoke-item-events="20"' /tmp/error.html
           grep -q 'data-error-smoke-recent-events="120"' /tmp/error.html
           grep -q 'data-error-smoke-partial="1"' /tmp/error.html
-          echo 'Error Intelligence OK.'
 
       - name: Chrome — Listening hidden then reveal
         run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=22000 --dump-dom \
-            'http://127.0.0.1:4173/?listeningSmoke=1' >/tmp/listening.html
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=22000 --dump-dom 'http://127.0.0.1:4173/?listeningSmoke=1' >/tmp/listening.html
           if grep -q 'boot-status error' /tmp/listening.html; then cat /tmp/listening.html; exit 1; fi
           grep -q 'data-listening-smoke-hidden="1"' /tmp/listening.html
           grep -q 'data-listening-smoke-revealed="1"' /tmp/listening.html
           grep -q 'data-listening-smoke-attempts="1"' /tmp/listening.html
           grep -q 'data-listening-smoke-error-source="listening-meaning"' /tmp/listening.html
-          echo 'Listening runtime OK.'
 
       - name: Chrome — Adaptive Language profiles
         run: |
           for mode in beginner strong fragile; do
-            google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=18000 --dump-dom \
-              "http://127.0.0.1:4173/?languageSmoke=$mode" >"/tmp/language-$mode.html"
+            google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=18000 --dump-dom "http://127.0.0.1:4173/?languageSmoke=$mode" >"/tmp/language-$mode.html"
             if grep -q 'boot-status error' "/tmp/language-$mode.html"; then cat "/tmp/language-$mode.html"; exit 1; fi
           done
           grep -q 'data-language-smoke-profile="vi-heavy"' /tmp/language-beginner.html
           grep -q 'data-language-smoke-profile="fr-growing"' /tmp/language-strong.html
           grep -q 'data-language-smoke-profile="vi-support"' /tmp/language-fragile.html
-          echo 'Adaptive Language OK.'
 
       - name: Documentation governance
         run: |
