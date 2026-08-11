@@ -1,0 +1,99 @@
+/* French Trân'quille — v1.19.3 Build 26.3
+   Interaction stability + desktop Progress layout. */
+
+/* Today: Build 26.3 keeps the primary and disclosure controls as stable buttons. */
+.b263-listening-proxy{display:none!important}
+.b263-daily-more-toggle{
+  width:100%;
+  min-height:48px;
+  margin-top:8px;
+  padding:10px 13px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  border:1px solid rgba(180,199,224,.11);
+  border-radius:14px;
+  background:rgba(8,18,31,.38);
+  color:#91a5bd;
+  cursor:pointer;
+  text-align:left;
+  transition:transform .1s ease,border-color .16s ease,background .16s ease,color .16s ease;
+}
+.b263-daily-more-toggle:hover{border-color:rgba(159,247,209,.20);background:rgba(15,29,45,.58);color:#b8c9da}
+.b263-daily-more-toggle:active{transform:scale(.987)}
+.b263-daily-more-toggle strong{font-size:.75rem;font-weight:780}
+.b263-daily-more-toggle span{font-size:.82rem;color:#9ff7d1}
+.b263-daily-extras{
+  display:grid;
+  gap:8px;
+  margin-top:8px;
+  padding:7px;
+  border:1px solid rgba(180,199,224,.09);
+  border-radius:14px;
+  background:rgba(8,18,31,.34);
+}
+.b263-daily-extras[hidden]{display:none!important}
+.b263-daily-extras .daily-step{margin:0}
+.b263-daily-primary-action,.b263-daily-extra-action{transition:transform .12s ease,border-color .16s ease,background .16s ease,box-shadow .16s ease}
+.b263-daily-primary-action:focus-visible,.b263-daily-extra-action:focus-visible,.b263-daily-more-toggle:focus-visible{
+  outline:2px solid rgba(159,247,209,.72);
+  outline-offset:2px;
+}
+
+/* Progress desktop: summary + curriculum left, learning details right. */
+.screen-progress .progress-layout.progress-ux-ready{
+  grid-template-columns:minmax(0,.94fr) minmax(440px,1.06fr);
+  grid-template-areas:
+    "summary details"
+    "curriculum details";
+  gap:16px 18px;
+  align-items:start;
+}
+.screen-progress .progress-layout.progress-ux-ready>div:first-child{display:contents}
+.screen-progress .progress-layout.progress-ux-ready .progress-ux-overview{grid-area:summary;margin:0;min-width:0}
+.screen-progress .progress-layout.progress-ux-ready .progress-ux-curriculum{grid-area:curriculum;margin:0;min-width:0}
+.screen-progress .progress-layout.progress-ux-ready .progress-ux-details{grid-area:details;margin:0;min-width:0}
+
+@media(min-width:861px){
+  .screen-progress .progress-layout.progress-ux-ready .progress-ux-details{
+    position:sticky;
+    top:18px;
+    max-height:calc(100vh - 36px);
+    overflow:auto;
+    overscroll-behavior:contain;
+    scrollbar-gutter:stable;
+    scrollbar-width:thin;
+    scrollbar-color:#40546f transparent;
+  }
+  .screen-progress .progress-layout.progress-ux-ready .progress-ux-details::-webkit-scrollbar{width:7px}
+  .screen-progress .progress-layout.progress-ux-ready .progress-ux-details::-webkit-scrollbar-track{background:transparent}
+  .screen-progress .progress-layout.progress-ux-ready .progress-ux-details::-webkit-scrollbar-thumb{background:#40546f;border-radius:999px}
+  .screen-progress .progress-layout.progress-ux-ready .progress-ux-details::-webkit-scrollbar-thumb:hover{background:#57708f}
+  .screen-progress .progress-layout.progress-ux-ready .progress-ux-details>summary{position:sticky;top:0;z-index:3;background:rgba(14,26,42,.98);backdrop-filter:blur(12px)}
+}
+
+@media(max-width:860px){
+  .screen-progress .progress-layout.progress-ux-ready{
+    grid-template-columns:1fr;
+    grid-template-areas:
+      "summary"
+      "curriculum"
+      "details";
+    gap:12px;
+  }
+  .screen-progress .progress-layout.progress-ux-ready .progress-ux-details{
+    position:static;
+    max-height:none;
+    overflow:hidden;
+  }
+}
+
+@media(max-width:520px){
+  .b263-daily-more-toggle{min-height:46px;padding:9px 11px}
+  .b263-daily-extras{padding:6px;gap:7px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .b263-daily-more-toggle,.b263-daily-primary-action,.b263-daily-extra-action{transition:none!important}
+}
