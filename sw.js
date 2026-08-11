@@ -12,6 +12,7 @@ const CORE=[
   `./daily-coach.css?v=${V}`,
   `./app.js?v=${V}`,
   `./curriculum-stage2.js?v=${V}`,
+  `./stage2-boot.js?v=${V}`,
   `./debug-fr.js?v=${V}`,
   `./voice-ios.js?v=${V}`,
   `./free-voice.js?v=${V}`,
