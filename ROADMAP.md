@@ -27,7 +27,9 @@
 21. Un mode `Lent` doit être **effectivement plus lent dans la couche voix finale**.
 22. Les surfaces repliables critiques ont un contrat de clic navigateur réel.
 23. **Un contrôle visible ne doit pas être remplacé entre `pointerdown` et `click`.** Les couches DOM récentes doivent être idempotentes et ne pas se disputer les mêmes nœuds.
-24. Les tests d’interaction doivent vérifier la **destination réelle**, pas seulement la présence du bouton.
+24. Les tests d’interaction vérifient la **destination réelle**, pas seulement la présence du bouton.
+25. **Une page ne doit pas imposer deux scrolls verticaux concurrents sans nécessité forte.** Sur Progress desktop, le document est le propriétaire du scroll ; un panneau pédagogique long s’étend dans le flux plutôt que d’ajouter un ascenseur imbriqué.
+26. Un renommage produit ne justifie pas une migration technique risquée : les identifiants historiques peuvent rester internes si l’UI visible est cohérente.
 
 ---
 
@@ -41,7 +43,7 @@
 - même tribunal fonctionnel vert sur `main` après rerun du smoke 26.3 sur le même commit ;
 - GitHub Pages **#101 SUCCESS** ;
 - Today : `Révision mémoire`, `Continuer le parcours`, `Écouter 3 minutes`, `Voir les autres activités` couverts par un smoke de clic réel ;
-- Progress desktop : résumé + parcours à gauche, détails sticky/scroll interne à droite ;
+- Progress desktop : résumé + parcours à gauche, détails à droite ;
 - Progress mobile : résumé → parcours compact → détails repliés ;
 - Progression UX Build 25 intact ;
 - Listening : **0.88 normal / 0.65 lent effectif** ;
@@ -54,6 +56,75 @@
 - coût 0 €.
 
 Baseline historique protégée : **v1.17.0 — Build 24 — Real Life French II**, Scenario **28 situations / 84 tours** avant Pack III.
+
+---
+
+# v1.19.4 — Build 26.4 — Single-scroll Progress + Tyffany — CANDIDATE
+
+## Retour terrain : double scrollbar dans Progrès
+
+Build 26.3 a validé la structure desktop 2 colonnes, mais les captures réelles montrent que `Détails d’apprentissage` possède un scrollbar interne dans une page déjà scrollable.
+
+Cause :
+
+```text
+position: sticky
++ max-height calculé sur le viewport
++ overflow:auto
+= second contexte de scroll vertical
+```
+
+Build 26.4 garde les deux colonnes mais rend à la page la propriété du scroll.
+
+### Critères UX desktop
+
+- [x] architecture 2 colonnes conservée ;
+- [x] aucun clone des cartes pédagogiques ;
+- [x] `display: contents` Build 26.3 conservé ;
+- [x] override candidat `max-height:none` ;
+- [x] override candidat `overflow:visible` ;
+- [x] header Details non sticky dans un conteneur interne ;
+- [x] mobile reste résumé → parcours → détails repliés ;
+- [ ] Chrome candidat confirme `overflow-y: visible` ;
+- [ ] Chrome candidat confirme absence de nested scroll ;
+- [ ] Chrome candidat confirme que la page devient le scroll owner avec un groupe Mastery long ;
+- [ ] tribunal PR complet vert ;
+- [ ] merge `main` ;
+- [ ] tribunal `main` vert ;
+- [ ] GitHub Pages SUCCESS.
+
+## Renommage professeure : Tyffany
+
+Le nom produit visible devient **Tyffany**.
+
+Contrat :
+
+- [x] couche additive `build26-4-ux.js` ;
+- [x] texte rendu `Lucie` → `Tyffany` ;
+- [x] attributs visibles/sûrs normalisés ;
+- [x] `FrenchTranquilleCurriculum.tutor` normalisé à `Tyffany` ;
+- [x] parole synthétique contenant l’ancien nom normalisée avant lecture ;
+- [x] `voice-ios.js` byte-identique ;
+- [x] `free-voice.js` byte-identique ;
+- [x] anciennes clés `luc-*`, IDs `lucie-*` et API `LucieVoice` conservés comme compatibilité ;
+- [x] clé learner `francais-avec-luc:learner:v1` conservée ;
+- [ ] Chrome candidat voit Tyffany et aucun Lucie visible ;
+- [ ] options/debug voix reste fonctionnel ;
+- [ ] aucun effet sur reconnaissance, choix de voix, rate ou pitch.
+
+## CI Build 26.4
+
+Nouveau workflow dédié :
+
+- syntaxe/wiring/cache/version 1.19.4 ;
+- hashes voix/branding inchangés ;
+- rendu Tyffany ;
+- aucun Lucie visible après branding ;
+- tutor export Tyffany ;
+- Progress l8 + Mastery ouvert ;
+- Details sans scrollbar imbriqué ;
+- page scrollable ;
+- ancien profil l8 intact.
 
 ---
 
@@ -74,26 +145,23 @@ Correction :
 - [x] couche additive `build26-3-ux.js/css` ;
 - [x] exactement 2 actions Today principales stables ;
 - [x] extras hors de `.daily-steps` legacy ;
-- [x] proxy Listening caché pour stopper la réinjection concurrente ;
-- [x] `Voir les autres activités` = vrai `<button>` avec `aria-expanded` ;
+- [x] proxy Listening caché ;
+- [x] `Voir les autres activités` = vrai `<button>` ;
 - [x] rendu strictement idempotent ;
 - [x] routes Review / Lesson / Conversation / Listening explicites ;
 - [x] aucune écriture learner/Memory/Scenario/Listening ;
-- [x] vrai Chrome ouvre les extras ;
-- [x] le même nœud toggle survit ;
-- [x] vrai Chrome clique Listening et voit l’overlay ;
-- [x] vrai Chrome clique Review et atteint l’écran Révision ;
-- [x] vrai Chrome revient Home puis clique la leçon et atteint l’écran Lesson.
+- [x] vrais clics Chrome jusqu’aux destinations.
 
-## Progress Layout — desktop + mobile
+## Progress Layout — baseline structurelle
 
 Desktop :
 
 ```text
 Résumé / prochaine étape  | Détails d’apprentissage
 Parcours A0 → A1          | dashboard + groupe actif
-                           | sticky / scroll interne
 ```
+
+Build 26.3 avait initialement rendu Details sticky avec un scroll interne. **Build 26.4 est autorisé à remplacer uniquement cette politique de scroll**, sans remettre en cause la structure 2 colonnes.
 
 Mobile :
 
@@ -105,18 +173,15 @@ Parcours compact
 Détails repliés
 ```
 
-Critères :
+Critères structurels conservés :
 
 - [x] aucun clone des cartes pédagogiques ;
-- [x] wrapper historique repositionné via `display: contents` ;
-- [x] Details ouvert par défaut sur desktop ;
-- [x] Details `position: sticky` sur desktop ;
+- [x] wrapper historique via `display: contents` ;
 - [x] dashboard Build 26.1 toujours présent ;
 - [x] Details replié par défaut sur mobile ;
-- [x] curriculum mobile reste compact **5 / 40** ;
+- [x] curriculum mobile compact **5 / 40** ;
 - [x] profil synthétique l8 conserve sa progression ;
 - [x] PR #44 : 9/9 workflows verts ;
-- [x] `main` : contrats verts ;
 - [x] Pages #101 SUCCESS.
 
 ---
@@ -157,7 +222,7 @@ Familles conservées :
 
 # v1.20.0 — Build 27 — Data & Recovery Hardening
 
-**Prochain gros chantier après le gate iPhone.**
+**Prochain gros chantier après Build 26.4 et le gate iPhone.**
 
 - sauvegarde/restauration cohérente ;
 - migrations versionnées ;
@@ -198,6 +263,8 @@ Real Life III Build 26
 Voice Replay + Details Dashboard Build 26.1
 Click + Listening Rate Build 26.2
 ```
+
+Compatibilité interne conservée malgré le branding Tyffany : `LucieVoice`, `luc-*`, `lucie-*`.
 
 # Easter egg réservé
 
