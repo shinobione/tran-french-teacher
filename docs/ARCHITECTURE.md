@@ -26,7 +26,7 @@ La complexité appartient aux moteurs ; Trân voit d’abord l’information uti
 
 ---
 
-# Runtime candidate — v1.19.4 Build 26.4
+# Runtime production — v1.19.4 Build 26.4
 
 ```text
 progress-safety.js
@@ -77,7 +77,9 @@ build26-3-ux.css
 build26-4-ux.css
 ```
 
-Baseline production précédente : v1.19.3 / Build 26.3 — runtime `5947149e9fcb3b387aa01a797607270edb4f100e` — PR #44 — Pages #101 SUCCESS.
+Production runtime : `7e74b3727dfefdddb41521a2be92ece8301a32e7` — PR #46 — Pages #103 SUCCESS.
+
+Latest `main` après stabilisation CI-only : `4852e95684ad79d0988e05de641b56a8ad0ede22` — PR #47 — Pages #104 SUCCESS. PR #47 ne modifie aucun fichier runtime/PWA.
 
 ---
 
@@ -101,7 +103,7 @@ scrollbar de la page
 scrollbar dans la carte Détails
 ```
 
-Cette hiérarchie impose deux gestes de scroll concurrents sans nécessité pédagogique.
+Cette hiérarchie imposait deux gestes de scroll concurrents sans nécessité pédagogique.
 
 ## Contrat Build 26.4
 
@@ -125,6 +127,16 @@ Conséquence :
 - les cartes pédagogiques restent les mêmes nœuds DOM ;
 - aucun moteur ne reçoit de nouvelle responsabilité ;
 - aucune donnée n’est migrée.
+
+Chrome de production avec Mastery actif a confirmé :
+
+```text
+overflow-y = visible
+max-height = none
+nested scroll = 0
+page scrollable = 1
+single scroll = 1
+```
 
 Mobile conserve le contrat Build 26.3 : Details replié et aucun changement de disposition.
 
@@ -409,7 +421,7 @@ Le nom visible Tyffany est une couche de branding ; les identifiants historiques
 
 ---
 
-# CI candidate Build 26.4
+# CI Build 26.4 — production
 
 Le workflow dédié vérifie :
 
@@ -426,8 +438,10 @@ Le workflow dédié vérifie :
 11. page elle-même scrollable ;
 12. progression synthétique l8 intacte.
 
-Le workflow Build 26.3 reste actif pour ses contrats Today et sa structure 2 colonnes, mais n’impose plus l’ancienne politique sticky comme invariant éternel.
+PR #46 a passé **10/10 workflows**. Le premier passage `main` a montré tous les marqueurs single-scroll corrects mais le harness pouvait demander Mastery avant la création de sa tuile. PR #47 est **CI-only** et réutilise l’état `detailsDashboardSmoke=mastery` du dashboard Build 26.1. Le `main` final passe les 10 workflows fonctionnels + Pages #104.
+
+Le workflow Build 26.3 reste actif pour ses contrats Today et sa structure 2 colonnes, sans imposer l’ancienne politique sticky comme invariant éternel.
 
 # Dette / gate terrain
 
-Build 26.4 ne modifie pas le gate iPhone de l’auto-écoute. `app.js` reste monolithique par choix de sécurité ; son extraction est réservée à Architecture Hardening.
+Build 26.4 est **PROD / CLOS**. Le gate iPhone de l’auto-écoute Build 26.1 reste ouvert. `app.js` reste monolithique par choix de sécurité ; son extraction est réservée à Architecture Hardening.

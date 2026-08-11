@@ -2,14 +2,17 @@
 
 PWA de français pensée pour **Trân**, avec priorité à l’oral, au français utile dans la vraie vie et à une interface simple sur iPhone.
 
-## Version candidate
+## Version production
 
 - **v1.19.4**
 - **Build 26.4 — Single-scroll Progress + Tyffany**
-- statut : **🧪 CANDIDATE / validation CI puis production**
-- baseline production actuelle : **v1.19.3 / Build 26.3**
-- commit runtime production actuel : `5947149e9fcb3b387aa01a797607270edb4f100e`
-- GitHub Pages production actuelle : **#101 SUCCESS**
+- statut : **✅ PROD / réécoute iPhone à valider terrain**
+- commit runtime production : `7e74b3727dfefdddb41521a2be92ece8301a32e7`
+- PR runtime : **#46**
+- stabilisation CI-only : **PR #47 / `4852e95684ad79d0988e05de641b56a8ad0ede22`**
+- GitHub Pages runtime : **#103 SUCCESS**
+- GitHub Pages latest main : **#104 SUCCESS**
+- tribunal final : **10 workflows fonctionnels / 10 SUCCESS + Pages SUCCESS**
 - calibration Listening : **0.88 normal / 0.65 lent**
 - curriculum : **40 leçons / 241 éléments**
 - Scenario : **36 situations / 108 tours**
@@ -39,6 +42,16 @@ Build 26.4 : flux normal + max-height:none + overflow:visible
 
 **Le seul ascenseur vertical est donc celui de la page.** La carte Details grandit avec le groupe sélectionné.
 
+Le Chrome de production a validé avec un groupe Maîtrise réellement actif :
+
+```text
+overflow-y = visible
+max-height = none
+nested scroll = 0
+page scrollable = 1
+single scroll = 1
+```
+
 Sur mobile, le contrat reste inchangé :
 
 ```text
@@ -51,9 +64,9 @@ Détails d’apprentissage repliés
 
 Les cartes Memory/Mastery/Listening/Scenario/A1 restent les **mêmes nœuds DOM historiques** : aucun clone, aucune migration de donnée.
 
-## 👩‍🏫 Lucie devient Tyffany
+## 👩‍🏫 Tyffany est maintenant la professeure
 
-Le nom visible de la professeure devient **Tyffany** dans l’interface et dans les phrases vocales contenant l’ancien nom.
+Le nom visible de la professeure est désormais **Tyffany** dans l’interface et dans les phrases vocales contenant l’ancien nom.
 
 Le changement est volontairement traité comme du **branding compatible** :
 
@@ -64,7 +77,7 @@ Le changement est volontairement traité comme du **branding compatible** :
 - les anciens IDs techniques `LucieVoice`, `luc-*`, `lucie-*` restent inchangés ;
 - la clé historique `francais-avec-luc:learner:v1` reste inchangée pour protéger la progression.
 
-Autrement dit : **on renomme la prof, pas le sous-sol technique de l’immeuble.** 😄
+Autrement dit : **on a renommé la prof, pas le sous-sol technique de l’immeuble.** 😄
 
 ## 🖱️ Build 26.3 — interactions terrain stabilisées
 
@@ -182,19 +195,25 @@ La capture exacte du premier essai reste hors scope tant que cette coexistence n
 
 Le contrat **v1.17.0 — Build 24 — Real Life French II** reste explicitement protégé : avant Real Life III, Scenario comptait **28 situations / 84 tours**. Le marqueur historique `real-life-data-2.js` reste conservé dans l’architecture.
 
-## CI candidate Build 26.4
+## CI / production Build 26.4
 
-Le nouveau workflow doit prouver :
+PR #46 : **10/10 workflows SUCCESS**.
 
-- Tyffany réellement rendue dans l’UI ;
-- aucun `Lucie` visible après application de la couche de compatibilité ;
-- export tutor = Tyffany ;
-- `voice-ios.js` / `free-voice.js` toujours byte-identiques ;
-- desktop : Details `overflow-y: visible`, `max-height: none`, aucun nested scroll ;
-- la page reste le propriétaire du scroll ;
-- dashboard Mastery réellement ouvert pendant le smoke ;
-- profil l8 inchangé ;
-- tout le tribunal historique reste vert.
+Sur le premier passage `main`, tous les marqueurs produit du single-scroll étaient corrects mais le hook test Maîtrise pouvait se déclencher avant la création de sa tuile. PR #47 a corrigé **uniquement le harness CI**, en réutilisant l’état de smoke déterministe du dashboard Build 26.1. Aucun fichier runtime/PWA n’a été modifié par #47.
+
+État final `main` :
+
+- quality ✅ ;
+- Options ✅ ;
+- nav/mobile ✅ ;
+- Progression UX ✅ ;
+- Listening rate ✅ ;
+- Session UX ✅ ;
+- Real Life French III ✅ ;
+- Voice Replay + Details Dashboard ✅ ;
+- Build 26.3 interactions + two-column baseline ✅ ;
+- Build 26.4 single-scroll + Tyffany ✅ ;
+- GitHub Pages **#104 ✅**.
 
 ## Sanctuaires
 
@@ -216,11 +235,10 @@ Les noms techniques `LucieVoice`, `luc-*` et `lucie-*` sont volontairement conse
 
 ## Suite
 
-1. Valider Build 26.4 : PR → tribunal complet → `main` → Pages.
-2. **Gate terrain iPhone Build 26.1** : auto-écoute puis reconnaissance suivante.
-3. **Build 27 — Data & Recovery Hardening**.
-4. **Build 28 — iPhone / PWA / Accessibility Hardening**.
-5. **Build 29 — Architecture Hardening**.
-6. **V2.0.0 — Freeze / Release**.
+1. **Gate terrain iPhone Build 26.1** : auto-écoute puis reconnaissance suivante.
+2. **Build 27 — Data & Recovery Hardening**.
+3. **Build 28 — iPhone / PWA / Accessibility Hardening**.
+4. **Build 29 — Architecture Hardening**.
+5. **V2.0.0 — Freeze / Release**.
 
 Voir `ROADMAP.md`, `CHANGELOG.md`, `docs/ARCHITECTURE.md`, `docs/BUILD-26-1-VOICE-REPLAY-DETAILS-DASHBOARD.md`, `docs/BUILD-26-2-CLICK-LISTENING-HOTFIX.md`, `docs/BUILD-26-3-INTERACTION-PROGRESS-LAYOUT.md` et `docs/BUILD-26-4-SINGLE-SCROLL-TYFFANY.md`.
