@@ -25,86 +25,45 @@
 
 ---
 
-# Baseline production — v1.18.2 / Build 25.2
+# Baseline production — v1.19.0 / Build 26
 
-**Session Goals / Milestones / App Delight — ✅ PROD / CLOS**
+**Real Life French III — ✅ PROD / CLOS**
 
 - `Parcours` compact via Build 25 ;
 - Listening effectif : **0.88 normal / 0.64 lent** via Build 25.1 ;
 - sessions bornées et sorties explicites via Build 25.2 ;
-- Practice Hub : un seul moteur dominant ;
-- Home : 2 actions principales + extras repliés ;
-- milestones séparés des données pédagogiques ;
+- Pack Real Life III : **8 situations / 24 tours** ;
+- Scenario total : **36 situations / 108 tours** ;
+- français oral naturel côté interlocuteur, réponses standard côté Trân ;
+- réponses simples alternatives explicitement listées ;
+- 15 résolutions Memory avancées, 0 ambiguïté ;
 - 40 leçons / 241 éléments ;
-- Scenario 28 / 84 ;
 - voix/branding sanctuarisés ;
 - coût 0 €.
 
-Preuve production Build 25.2 : commit `49d866bed59bb0cb3268e1675225a4811f6c595f`, 7 workflows déclenchés, aucun échec, Pages SUCCESS.
+Preuve production Build 26 : PR #37, commit `db8219e44d74f0af13421ec798a0c98d02f7a7b5`, **8 workflows / 8 SUCCESS**, Pages **#96 SUCCESS**.
 
 ---
 
-# v1.19.0 — Build 26 — Real Life French III — CANDIDAT / EN COURS
+# Build 26 — critères clôturés
 
-## Intention
+- [x] version `v1.19.0 / Build 26` et cache `1.19.0-b26-real-life-3` cohérents ;
+- [x] 8 nouvelles situations / 24 tours ;
+- [x] Scenario total **36 / 108** ;
+- [x] aucun ID de scénario dupliqué ;
+- [x] 15 résolutions Memory avancées et **0 ambiguïté** ;
+- [x] réponses semi-libres déterministes et testables ;
+- [x] déblocage l20 → l35…l40 conforme ;
+- [x] catalogue visible limité à 6 scènes ouvertes ;
+- [x] Session UX 25.2 intacte : objectif 1 situation, fin et sortie ;
+- [x] profil ancien utilisateur / l8 intact ;
+- [x] voix, reconnaissance, logo, favicon byte-identiques ;
+- [x] quality / Options / nav / Progression / Listening-rate / Session UX verts ;
+- [x] Real Life III smoke vert sur PR puis `main` ;
+- [x] Pages SUCCESS ;
+- [x] docs post-prod CLOS.
 
-Maintenant que l’interface est plus respirable et que les sessions ont une vraie fin, enrichir `Pratiquer → Parler français` sans ajouter de nouveau bouton principal.
-
-Objectif : **moins de roulettes, plus de compréhension du français oral réel, réponses légèrement plus libres mais toujours déterministes/locales**.
-
-## Principes
-
-- français oral naturel possible côté interlocuteur : `T’es prête ?`, `J’sais pas`, `Y a pas…` ;
-- Trân peut répondre en français standard ;
-- plusieurs formulations simples équivalentes peuvent être acceptées ;
-- aucune pseudo-IA locale qui “devine” arbitrairement le sens ;
-- les réponses acceptées restent explicitement définies ;
-- chaque référence Memory avancée doit résoudre exactement un acquis ;
-- Scenario Engine reste propriétaire de ses stats/persistance ;
-- Session UX 25.2 continue à borner une session à **1 situation**.
-
-## Pack III candidat
-
-8 situations / 24 tours :
-
-1. comprendre Jerry quand il parle vite — dès l20 ;
-2. futur proche `Je vais appeler Jerry.` — l35 ;
-3. passé récent `Je viens de rentrer.` — l36 ;
-4. passé composé `J’ai mangé.` — l37 ;
-5. mouvement `Je suis rentrée à la maison.` — l38 ;
-6. administratif `Pouvez-vous m’expliquer ?` — l39 ;
-7. émotion/besoin `Je suis inquiète.` / `J’ai besoin de parler.` / `Tu me manques.` — l40 ;
-8. mini-échange de couple multi-acquis — l40.
-
-Scenario candidat attendu : **36 situations / 108 tours**.
-
-## UX
-
-Dans les scènes Pack III seulement, Lucie peut afficher discrètement :
-
-> `Tu peux répondre avec tes mots. Une phrase simple qui exprime la bonne idée suffit.`
-
-Pas de nouveau réglage, mode ou bouton.
-
-Le catalogue conserve la limite de **6 situations ouvertes visibles** avant `Voir d’autres situations`.
-
-## Critères de clôture Build 26
-
-- version `v1.19.0 / Build 26` et cache `1.19.0-b26-real-life-3` cohérents ;
-- 8 nouvelles situations / 24 tours ;
-- Scenario total **36 / 108** ;
-- aucun ID de scénario dupliqué ;
-- 15 résolutions Memory avancées attendues et **0 ambiguïté** ;
-- réponses semi-libres déterministes et testables ;
-- déblocage l20 → l35…l40 conforme ;
-- catalogue visible limité ;
-- Session UX 25.2 intacte : objectif 1 situation, fin et sortie ;
-- profil ancien utilisateur / l8 intact ;
-- voix, reconnaissance, logo, favicon byte-identiques ;
-- quality / Options / nav / Progression / Listening-rate / Session UX verts ;
-- nouveau smoke Real Life III vert sur PR puis `main` ;
-- Pages SUCCESS ;
-- docs CLOS après production.
+Le contrat quality historique à l20 tient désormais compte de la première scène Pack III : **18 scènes personnelles ouvertes**, dont seulement 6 affichées par défaut. Le harness Session UX utilise des navigateurs isolés/retry borné pour ses hooks Listening/Révision, sans masquer un crash applicatif.
 
 ---
 
