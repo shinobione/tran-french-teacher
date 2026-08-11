@@ -232,13 +232,15 @@ Elle n’effectue aucune restauration automatique et ne modifie jamais les valeu
 
 `curriculum-stage3.js` : leçons 26–40.
 
+Audit Build 22 : Stage 3 contient réellement **93 éléments**, pas 90. Le runtime complet conserve ces acquis et corrige la documentation au lieu de supprimer du contenu.
+
 Le Stage 3 doit être chargé **avant** `stage2-boot.js` afin qu’un seul rerender voie les 40 leçons.
 
-Cible runtime :
+Contrat runtime audité :
 
 ```text
 40 leçons
-238 éléments
+241 éléments
 ```
 
 ---
@@ -376,7 +378,7 @@ Contrats obligatoires :
 2. hashes logo/favicon immuables ;
 3. hashes voice/free-voice immuables ;
 4. loader + SW contiennent le runtime canonique ;
-5. curriculum 40 / 238 ;
+5. curriculum **40 / 241** ;
 6. Chrome Home avec navigation 3 destinations ;
 7. Chrome « Trân leçon 8 » : progression strictement conservée ;
 8. Scenario Lab non régressé ;
