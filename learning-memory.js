@@ -246,7 +246,10 @@ if (CURRICULUM) {
     currentReviewId = entry.id;
     const item = ITEM_BY_ID[entry.id];
     const s = summary();
+    const signature = `${entry.id}:${reviewRevealed ? 1 : 0}:${statusOf(entry)}:${entry.attempts}:${s.due.length}`;
+    if (card.dataset.memorySignature === signature) return;
     card.dataset.memoryReview = '1';
+    card.dataset.memorySignature = signature;
     card.innerHTML = `
       <div class="memory-review-head">
         <span class="pill">🧠 ${esc(T('Trí nhớ của Lucie','Mémoire de Lucie'))}</span>
