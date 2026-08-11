@@ -22,6 +22,8 @@
 16. Pas de tunnel pédagogique infini par défaut.
 17. Succès visible et agréable, sans gamification agressive.
 18. Pendant une vraie session de Trân : pas de polish runtime/cache sauf incident critique.
+19. Une fonction d’auto-écoute ne doit jamais dégrader la reconnaissance vocale validée.
+20. Les détails pédagogiques peuvent être riches, mais ils doivent être groupés par intention et jamais affichés comme un dump vertical des moteurs.
 
 ---
 
@@ -43,6 +45,8 @@
 
 Preuve production Build 26 : PR #37, commit `db8219e44d74f0af13421ec798a0c98d02f7a7b5`, **8 workflows / 8 SUCCESS**, Pages **#96 SUCCESS**.
 
+Baseline historique protégée : **v1.17.0 — Build 24 — Real Life French II**, Scenario **28 situations / 84 tours** avant Pack III.
+
 ---
 
 # Build 26 — critères clôturés
@@ -55,15 +59,89 @@ Preuve production Build 26 : PR #37, commit `db8219e44d74f0af13421ec798a0c98d02f
 - [x] réponses semi-libres déterministes et testables ;
 - [x] déblocage l20 → l35…l40 conforme ;
 - [x] catalogue visible limité à 6 scènes ouvertes ;
-- [x] Session UX 25.2 intacte : objectif 1 situation, fin et sortie ;
+- [x] Session UX 25.2 intacte ;
 - [x] profil ancien utilisateur / l8 intact ;
 - [x] voix, reconnaissance, logo, favicon byte-identiques ;
-- [x] quality / Options / nav / Progression / Listening-rate / Session UX verts ;
-- [x] Real Life III smoke vert sur PR puis `main` ;
-- [x] Pages SUCCESS ;
-- [x] docs post-prod CLOS.
+- [x] 8 workflows / 8 SUCCESS + Pages #96 SUCCESS ;
+- [x] docs CLOS.
 
-Le contrat quality historique à l20 tient désormais compte de la première scène Pack III : **18 scènes personnelles ouvertes**, dont seulement 6 affichées par défaut. Le harness Session UX utilise des navigateurs isolés/retry borné pour ses hooks Listening/Révision, sans masquer un crash applicatif.
+---
+
+# v1.19.1 — Build 26.1 — Voice Self-Playback + Learning Details Dashboard — EN COURS
+
+## Retours terrain
+
+1. Trân souhaite pouvoir réécouter sa propre voix après un exercice oral afin de se comparer au modèle.
+2. `Parcours → Détails d’apprentissage` reste trop long une fois ouvert : les cartes techniques sont encore stackées verticalement.
+
+## Voice Self-Playback
+
+Le moteur vocal validé reste un sanctuaire : **`free-voice.js` et `voice-ios.js` ne sont pas modifiés**.
+
+Après une réponse reconnue :
+
+```text
+🎧 Écoute-toi
+[ 🎙️ M’enregistrer pour me réécouter ]
+          ↓
+[ ▶ Réécouter ma voix ] [ ↻ Refaire ]
+```
+
+Contrat :
+
+- la reconnaissance finit avant l’ouverture de la seconde capture ;
+- `MediaRecorder` / `getUserMedia` avec feature detection ;
+- local uniquement ;
+- aucune persistance ;
+- aucun upload ;
+- aucun effet sur Memory/Error/Mastery/Session ;
+- Blob URL révoquée ;
+- piste micro stoppée ;
+- capture max 9 secondes ;
+- si la capture échoue, la reconnaissance reste utilisable ;
+- capture simultanée exacte du premier essai reportée après validation iPhone réelle.
+
+## Learning Details Dashboard
+
+`Détails d’apprentissage` devient un dashboard compact :
+
+```text
+🧠 Mémoire & révisions
+🎯 Maîtrise
+🎧 Compréhension orale
+🎭 Français réel
+🧩 A1 & rythme
+```
+
+Règles :
+
+- seules les catégories présentes sont affichées ;
+- une seule famille détaillée est ouverte à la fois ;
+- les cartes historiques restent les vrais nœuds DOM ;
+- les moteurs continuent à les mettre à jour ;
+- toute carte non reconnue tombe dans `Autres détails` ;
+- aucune donnée apprenante n’est créée ou migrée.
+
+## CI / compatibilité
+
+Le workflow Build 26 Real Life III est rendu durable : il protège `real-life-data-3.js` / `real-life-coach.js` et leurs contrats **36 / 108** sans obliger la version globale à rester `1.19.0`.
+
+Nouveau tribunal : **Build 26.1 Voice replay + Details dashboard smoke**.
+
+## Critères de clôture Build 26.1
+
+- version `v1.19.1 / Build 26.1` et cache cohérents ;
+- 4 nouveaux fichiers UX câblés/précachés ;
+- replay sans réseau ni persistance ;
+- `free-voice.js`, `voice-ios.js`, logo, favicon byte-identiques ;
+- vrai Chrome : au moins 3 groupes de détails sur profil l8 ;
+- Memory + Mastery toujours présents ;
+- une seule famille active dans le smoke ;
+- vrai Chrome : surface replay injectée après résultat vocal synthétique ;
+- Real Life III reste **36 situations / 108 tours** ;
+- quality / Options / nav / Progression / Listening-rate / Session UX / Real Life III / Build26.1 verts sur PR puis `main` ;
+- Pages SUCCESS ;
+- docs post-prod CLOS.
 
 ---
 
@@ -99,6 +177,7 @@ assets/Favicon.png
 bottom navigation interaction baseline
 Progression UX Build 25
 Session UX Build 25.2
+Real Life III Build 26
 ```
 
 # Easter egg réservé
