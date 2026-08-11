@@ -16,21 +16,25 @@
 10. README / CHANGELOG / ROADMAP / ARCHITECTURE synchronisés.
 11. Pas de gamification agressive ni clone de chatbot.
 12. Un nouveau moteur n’obtient pas automatiquement une nouvelle entrée de navigation.
+13. **Toute surface tappable doit produire un retour visuel immédiat sur mobile.**
+14. Les trois entrées principales `Aujourd’hui / Pratiquer / Parcours` doivent se comporter comme des écrans de même niveau.
 
 ---
 
-# Baseline production — v1.16.0 Build 23
+# Baseline production — v1.17.2 Build 24.2
 
+- socle : **Build 24 — Real Life French II** ;
 - **40 leçons / 241 éléments** ;
 - Learning Memory ; Daily Coach ; Mastery ; Error ; Listening ; Adaptive Language ;
-- Scenario : **18 situations / 54 tours** ;
-- Real Life I : **6 situations / 18 tours** ;
+- Scenario : **28 situations / 84 tours** ;
+- Real Life I + II : **16 situations / 48 tours** ;
 - UX : **Aujourd’hui / Pratiquer / Parcours** ;
+- navigation click hotfix 24.2 ;
 - progression protégée ;
 - voix iPhone et reconnaissance vocale baseline validée ;
 - coût 0 €.
 
-## Builds 16 → 23
+## Builds 16 → 24.2
 
 - Build 16 — Mastery Engine — ✅ CLOS
 - Build 17 — Scenario Lab — ✅ CLOS
@@ -40,84 +44,57 @@
 - Build 21 — Adaptive Language — ✅ INTÉGRÉ
 - Build 22 — UX Foundation & Runtime Integrity — ✅ CLOS
 - Build 23 — Real Life French I — ✅ CLOS
+- Build 24 — Real Life French II — ✅ INTÉGRÉ
+- Build 24.1 — Options Crash Hotfix — ✅ PROD
+- Build 24.2 — Navigation Interaction Hotfix — ✅ PROD
 
 ---
 
-# v1.17.0 — Build 24 — Real Life French II — 🔥 EN COURS
+# v1.17.3 — Build 24.3 — Premium Interaction UX — 🔥 EN COURS
 
 ## Intention
 
-Prolonger **Pratiquer → Parler français** vers les acquis des leçons 9–20, en créant des séquences personnelles qui relient plusieurs compétences au lieu de dupliquer les scénarios génériques existants.
+Faire ressentir French Trân’quille comme une **application mobile premium**, sans modifier la pédagogie ni les données.
 
-## Pack II — codé
+## Interaction globale
 
-10 situations / 30 tours :
+- [x] `pointerdown` global sur les surfaces tappables ;
+- [x] compression courte et réponse visuelle immédiate ;
+- [x] glow/contraste court et confirmation de clic ;
+- [x] état actif renforcé dans la bottom bar ;
+- [x] transition courte d’entrée des écrans ;
+- [x] `prefers-reduced-motion` ;
+- [x] zones tactiles mobiles >= 48 px.
 
-1. `jerry-rdv-train` — l9+l10 ;
-2. `jerry-shopping-budget` — l11 ;
-3. `jerry-diner-choix` — l5+l12 ;
-4. `jerry-mal-dehors` — l8+l13 ;
-5. `jerry-presente-fiance` — l14 ;
-6. `jerry-prete-rentrer` — l16+l18 ;
-7. `jerry-reservation-aide` — l17 ;
-8. `jerry-cle-appartement` — l18+l19 ;
-9. `jerry-probleme-eau` — l17+l19 ;
-10. `jerry-reseau-message` — l20.
+## Pratiquer = vrai troisième écran
 
-Total candidat :
+- [x] suppression visuelle du backdrop modal ;
+- [x] suppression de la croix ;
+- [x] bottom bar conservée ;
+- [x] onglet `Pratiquer` actif pendant l’écran ;
+- [x] contenu plein écran sous la navigation ;
+- [x] mêmes règles d’interaction que Aujourd’hui et Parcours.
 
-```text
-Scenario = 28 situations / 84 tours
-Real Life I + II = 16 situations / 48 tours
-```
+## Sanctuaires
 
-## UX catalogue — codée
+- [x] aucune clé de progression modifiée ;
+- [x] logo/favicon inchangés ;
+- [x] `voice-ios.js` inchangé ;
+- [x] `free-voice.js` inchangé ;
+- [x] aucun curriculum/scénario modifié.
 
-- [x] aucun nouveau menu ;
-- [x] scènes personnelles ouvertes prioritaires ;
-- [x] tri vers les prérequis les plus récents ;
-- [x] **6 situations ouvertes max visibles** par défaut ;
-- [x] bouton pour voir les autres situations ouvertes ;
-- [x] 2 futures scènes verrouillées max visibles ;
-- [x] badge `Ta vraie vie` conservé.
+## Contrat navigateur
 
-## Profils de contrôle
-
-### l8
-
-- [ ] smoke Build 23 reste vert ;
-- [ ] progression l8 zéro-perte.
-
-### l15
-
-- [ ] pack II : **5** scènes ouvertes ;
-- [ ] catalogue visible limité à 6 ;
-- [ ] scènes ouvertes supplémentaires cachées mais accessibles.
-
-### l20
-
-- [ ] pack II : **10** scènes ouvertes ;
-- [ ] catalogue visible toujours limité à 6 ;
-- [ ] téléphone/logement accessibles.
-
-## Protection
-
-- [x] aucune nouvelle clé apprenant ;
-- [x] même clé Scenario ;
-- [x] logo/favicon non modifiés ;
-- [x] voice/free-voice non modifiés ;
-- [ ] hashes vérifiés par CI ;
-- [ ] Error / Listening / Adaptive non régressés.
-
-## Clôture
-
-- [x] data pack II ;
-- [x] UX catalogue scalable ;
-- [x] runtime/cache Build 24 ;
-- [ ] README / CHANGELOG / ARCHITECTURE / dossier Build 24 ;
-- [ ] CI Build 24 ;
+- [x] viewport mobile 390×844 ;
+- [x] `pointerdown` doit créer `.ux-pressing` ;
+- [x] Pratiquer doit toucher géométriquement la bottom bar ;
+- [x] aucune croix de modale visible ;
+- [x] Pratiquer actif ;
+- [x] navigation physique Pratiquer → Parcours → Aujourd’hui ;
+- [ ] quality générale verte ;
+- [ ] Options smoke vert ;
 - [ ] PR verte ;
-- [ ] main vert ;
+- [ ] `main` vert ;
 - [ ] Pages verte ;
 - [ ] docs release CLOS.
 
@@ -127,20 +104,35 @@ Real Life I + II = 16 situations / 48 tours
 
 Problèmes quotidiens, émotions, explications, français oral courant vs forme écrite, humour simple et conversation moins guidée.
 
-La priorité sera de passer de réponses isolées vers des mini-conversations plus libres **sans rendre l’interface plus complexe**.
+La priorité reste de rendre Lucie plus capable **sans rendre l’interface plus complexe**.
 
 ---
 
-# V2.0.0 — Hardening
+# v1.19.0 — Build 26 — Data & Recovery Hardening
 
-- UX apprenante stabilisée ;
-- migrations versionnées ;
-- sauvegarde/restore robuste ;
-- offline/PWA ;
-- iPhone réel ;
-- dette `app.js` traitée dans un build dédié avec comparaison d’état ;
-- nettoyage des scripts/workflows temporaires ;
-- documentation finale.
+- sauvegarde/restauration unifiée ;
+- migrations sûres et versionnées ;
+- snapshot automatique pré-migration ;
+- tolérance au `localStorage` corrompu ;
+- tests zéro-perte sur profils existants.
+
+# v1.20.0 — Build 27 — iPhone / PWA / Accessibility Hardening
+
+- safe areas ;
+- tactile ;
+- contraste ;
+- tailles ;
+- offline/install ;
+- tests iPhone réels ;
+- ergonomie faible aisance numérique.
+
+# v1.21.0 — Build 28 — Architecture Hardening
+
+Découpage du vieux noyau uniquement avec snapshots comparatifs avant/après.
+
+# V2.0.0 — Freeze / Release
+
+Pas une nouvelle feature : release cohérente, sauvegardable, testée, documentée et utilisable sans connaître l’architecture interne.
 
 ---
 
