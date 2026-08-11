@@ -23,11 +23,14 @@
 
 ---
 
-# Baseline stable — v1.17.3 Build 24.3
+# Baseline production — v1.17.5 Build 24.5
 
 - 40 leçons / 241 éléments ;
 - Scenario 28 / 84 ;
 - navigation Aujourd’hui / Pratiquer / Parcours ;
+- feedback premium persistant ;
+- Pratiquer = vrai écran ;
+- header leçon allégé ;
 - progression protégée ;
 - voix/reconnaissance iPhone baseline validée ;
 - coût 0 €.
@@ -38,44 +41,33 @@
 - Build 24.1 — Options Crash — ✅ PROD
 - Build 24.2 — Navigation Interaction — ✅ PROD
 - Build 24.3 — Premium Interaction UX — ✅ CLOS
-- Build 24.4 — Mobile Polish — ⚠️ INTÉGRÉ / NON CLOS : PR verte, smoke `main` a révélé une course d’état actif
-- Build 24.5 — Navigation State Sync — 🔥 EN COURS
+- Build 24.4 — Mobile Polish — ✅ INTÉGRÉ, clôturé techniquement par 24.5
+- Build 24.5 — Navigation State Sync — ✅ PROD / CLOS
 
----
+Validation 24.5 :
 
-# v1.17.5 — Build 24.5 — Navigation State Sync — 🔥 EN COURS
-
-## Intention
-
-Terminer la stabilisation mobile de 24.4 en rendant l’état actif de la bottom bar déterministe sur tous les chemins de rendu/navigateurs.
-
-## Contrat
-
-- [x] nœuds DOM persistants ;
-- [x] tap echo durable ;
-- [x] exactement un onglet actif ;
-- [x] état demandé appliqué immédiatement ;
-- [x] confirmation après navigation native ;
-- [x] réconciliation au prochain frame ;
-- [x] réconciliation courte +80 ms ;
-- [x] nouveau token `1.17.5-b24.5` ;
-- [x] nouveau cache PWA ;
-- [x] header de leçon allégé conservé ;
-- [x] aucune donnée/voix/branding modifié ;
-- [ ] PR quality verte ;
-- [ ] PR Options verte ;
-- [ ] PR nav/mobile verte ;
-- [ ] `main` quality verte ;
-- [ ] `main` Options verte ;
-- [ ] `main` nav/mobile verte ;
-- [ ] Pages verte ;
-- [ ] docs PROD/CLOS.
+- PR #27 quality #83 / Options #14 / nav-mobile #33 : SUCCESS ;
+- `main` quality #84 / Options #15 / nav-mobile #34 : SUCCESS ;
+- Pages #86 : SUCCESS.
 
 ---
 
 # v1.18.0 — Build 25 — Real Life French III — PROCHAIN
 
-Problèmes quotidiens, émotions, explications, français oral courant vs forme écrite et conversation moins guidée, **sans rendre l’interface plus complexe**.
+## Intention
+
+Poursuivre la vraie vie en français sans ajouter de complexité d’interface : problèmes quotidiens, émotions, explications, français oral courant vs forme écrite et conversation moins guidée.
+
+## Garde-fous
+
+- aucun nouveau bouton principal ;
+- même façade `Pratiquer → Parler français` ;
+- Memory / Error / Adaptive réutilisés ;
+- aucune régression mobile premium ;
+- progression existante protégée ;
+- voix/reconnaissance sanctuarisées.
+
+---
 
 # v1.19.0 — Build 26 — Data & Recovery Hardening
 
