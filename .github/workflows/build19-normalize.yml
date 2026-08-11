@@ -1,0 +1,39 @@
+name: Build19 one-shot normalize
+
+on:
+  push:
+    branches: [build19-a1-core]
+
+permissions:
+  contents: write
+
+jobs:
+  normalize:
+    if: "!contains(github.event.head_commit.message, '[build19-normalized]')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: build19-a1-core
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Normalize Build 19
+        run: python tools/build19-normalize.py
+      - name: Remove one-shot helpers
+        run: |
+          rm -f .github/workflows/build19-normalize.yml
+          rm -f tools/build19-normalize.py
+          rm -f tools/quality-build19.yml
+      - name: Commit normalized branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          if git diff --cached --quiet; then
+            echo 'Nothing to normalize.'
+            exit 0
+          fi
+          git commit -m 'Build 19 normalize curriculum and CI [build19-normalized]'
+          git push origin HEAD:build19-a1-core

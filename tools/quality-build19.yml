@@ -1,0 +1,224 @@
+name: JavaScript quality check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  javascript:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax check
+        run: |
+          node --check app.js
+          node --check curriculum-stage2.js
+          node --check curriculum-stage3.js
+          node --check stage2-boot.js
+          node --check debug-fr.js
+          node --check voice-ios.js
+          node --check free-voice.js
+          node --check learning-memory.js
+          node --check daily-coach.js
+          node --check mastery-engine.js
+          node --check mastery-stage3.js
+          node --check scenario-data.js
+          node --check scenario-host.js
+          node --check scenario-engine.js
+          node --check error-intelligence.js
+          node --check build-meta.js
+
+      - name: Historical core guard
+        run: |
+          grep -q "id:'l1'" app.js
+          grep -q "id:'l15'" app.js
+          grep -q "id:'l16'" curriculum-stage2.js
+          grep -q "id:'l25'" curriculum-stage2.js
+          grep -q "french-tranquille:learning-memory:v1" learning-memory.js
+          grep -q 'daily-coach-card' daily-coach.js
+          grep -q 'mastery-home-card' mastery-engine.js
+          grep -q "french-tranquille:scenarios:v1" scenario-engine.js
+          grep -q "french-tranquille:error-intelligence:v1" error-intelligence.js
+          grep -q 'scenario-host' scenario-host.js
+
+      - name: Curriculum Stage 3 contract
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const source = fs.readFileSync('curriculum-stage3.js','utf8');
+          const lessonIds = [...source.matchAll(/id:'(l(?:2[6-9]|3[0-9]|40))'/g)].map(m=>m[1]);
+          if (lessonIds.length !== 15) throw new Error(`Expected 15 Stage3 lessons, got ${lessonIds.length}`);
+          if (new Set(lessonIds).size !== 15) throw new Error('Stage3 lesson IDs are not unique');
+          for (let n=26;n<=40;n++) if (!lessonIds.includes(`l${n}`)) throw new Error(`Missing l${n}`);
+          const blocks = source.split(/\n\s*\{\n\s*id:'l/).slice(1);
+          if (blocks.length !== 15) throw new Error(`Expected 15 lesson blocks, got ${blocks.length}`);
+          let totalItems=0;
+          for (const block of blocks) {
+            if (!block.includes("introVi:") || !block.includes("introFr:")) throw new Error('Lesson missing intro');
+            if (!block.includes("grammarVi:") || !block.includes("grammarFr:")) throw new Error('Lesson missing grammar note');
+            if (!block.includes("challenge:")) throw new Error('Lesson missing challenge');
+            const itemArea=(block.split('items:[')[1]||'').split('],')[0];
+            const count=(itemArea.match(/\{id:'/g)||[]).length;
+            if (count !== 6) throw new Error(`Every Stage3 lesson must contain exactly 6 items; got ${count}`);
+            totalItems += count;
+          }
+          if (totalItems !== 90) throw new Error(`Expected 90 Stage3 items, got ${totalItems}`);
+          console.log('Stage3 contract OK:', lessonIds.length, 'lessons /', totalItems, 'items');
+          NODE
+
+      - name: Global curriculum ID uniqueness
+        run: |
+          node <<'NODE'
+          const fs=require('fs');
+          const files=['app.js','curriculum-stage2.js','curriculum-stage3.js'];
+          const ids=[];
+          for(const file of files){
+            const text=fs.readFileSync(file,'utf8');
+            for(const m of text.matchAll(/\{id:'([^']+)'/g)) ids.push({id:m[1],file});
+          }
+          const seen=new Map();
+          const dup=[];
+          for(const row of ids){if(seen.has(row.id))dup.push(`${row.id}: ${seen.get(row.id)} + ${row.file}`);else seen.set(row.id,row.file)}
+          if(dup.length)throw new Error('Duplicate curriculum IDs:\n'+dup.join('\n'));
+          console.log('Curriculum IDs unique:',ids.length);
+          NODE
+
+      - name: Build 19 wiring guard
+        run: |
+          grep -q 'curriculum-stage3.css' index.html
+          grep -q 'curriculum-stage3.js' index.html
+          grep -q 'mastery-stage3.css' index.html
+          grep -q 'mastery-stage3.js' index.html
+          grep -q 'curriculum-stage3.css' sw.js
+          grep -q 'curriculum-stage3.js' sw.js
+          grep -q 'mastery-stage3.css' sw.js
+          grep -q 'mastery-stage3.js' sw.js
+          grep -q "version: '1.12.0', build: 19" build-meta.js
+          grep -q '1.12.0-b19' index.html
+          grep -q '1.12.0-b19' sw.js
+          grep -q 'FrenchTranquilleStage3' build-meta.js
+          grep -q 'FrenchTranquilleMasteryStage3' build-meta.js
+
+      - name: A1 Core mastery contract
+        run: |
+          grep -q 'STAGE_LESSONS.length' mastery-stage3.js
+          grep -q 'knownRatio >= .95' mastery-stage3.js
+          grep -q 'reviewedRatio >= .70' mastery-stage3.js
+          grep -q 'solidRatio >= .55' mastery-stage3.js
+          grep -q 'fragileRatio <= .20' mastery-stage3.js
+          grep -q 'mastery-stage3-card' mastery-stage3.js
+          grep -q 'mastery-stage3-chip' mastery-stage3.js
+          grep -q 'stage3Smoke' mastery-stage3.js
+
+      - name: Learning Memory / Voice / Error compatibility
+        run: |
+          grep -q 'FrenchTranquilleCurriculum' learning-memory.js
+          grep -q 'curriculum().items' free-voice.js
+          grep -q 'FrenchTranquilleMemory.*recordPractice' free-voice.js
+          grep -q 'FrenchTranquilleErrors.*recordAttempt' free-voice.js
+          grep -q 'itemById' error-intelligence.js
+          grep -q 'sourceChannel' error-intelligence.js
+          grep -q 'MAX_ITEM_EVENTS = 20' error-intelligence.js
+          grep -q 'MAX_RECENT_EVENTS = 120' error-intelligence.js
+
+      - name: Scenario catalog non-regression
+        run: |
+          node <<'NODE'
+          global.window=global;
+          require('./scenario-data.js');
+          const s=global.FrenchTranquilleScenarioData?.scenarios||[];
+          if(s.length!==12)throw new Error(`Expected 12 scenarios, got ${s.length}`);
+          if(new Set(s.map(x=>x.id)).size!==12)throw new Error('Scenario IDs not unique');
+          if(s.some(x=>!Array.isArray(x.turns)||x.turns.length<3))throw new Error('Scenario lost its 3-turn minimum');
+          console.log('Scenario non-regression OK');
+          NODE
+
+      - name: Documentation guard
+        run: |
+          test -f README.md
+          test -f ROADMAP.md
+          test -f CHANGELOG.md
+          test -f docs/ARCHITECTURE.md
+          test -f docs/BUILD-POLICY.md
+          test -f docs/BUILD-19-A1-CORE.md
+          grep -q '40 leçons / 238 éléments' docs/BUILD-19-A1-CORE.md
+          grep -q 'Build 19' ROADMAP.md
+          grep -q 'Build 18' CHANGELOG.md
+
+      - name: Node base-engine smoke
+        run: |
+          node <<'NODE'
+          const store=new Map();
+          global.localStorage={getItem:k=>store.has(k)?store.get(k):null,setItem:(k,v)=>store.set(k,String(v)),removeItem:k=>store.delete(k)};
+          const app={innerHTML:''};
+          global.document={querySelector:s=>s==='#app'?app:null,querySelectorAll:()=>[]};
+          global.window=global;global.window.scrollTo=()=>{};global.window.addEventListener=()=>{};global.navigator={};global.confirm=()=>false;
+          require('./app.js');
+          if(!app.innerHTML||app.innerHTML.length<500)throw new Error('Base home render failed');
+          if(!app.innerHTML.includes('A0 • 15 bài'))throw new Error('Historical base engine changed unexpectedly');
+          console.log('Base engine smoke OK');
+          NODE
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/french-tranquille-http.log 2>&1 &
+          echo $! >/tmp/french-tranquille-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome Home / 40 lessons
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=14000 --dump-dom http://127.0.0.1:4173/ > /tmp/home.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status' /tmp/home.html; then cat /tmp/home.html; exit 1; fi
+          grep -q 'app-shell screen-home' /tmp/home.html
+          grep -q 'A0 → A1 • 40 bài' /tmp/home.html
+          grep -q '40. Cảm xúc, nhu cầu & Jerry' /tmp/home.html
+          grep -q 'CHẶNG 5 • A1 THỰC DỤNG' /tmp/home.html
+          grep -q 'daily-coach-card' /tmp/home.html
+          grep -q 'mastery-home-card' /tmp/home.html
+          echo 'Chrome Home Build19 OK'
+
+      - name: Chrome Scenario Lab non-regression
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=12000 --dump-dom 'http://127.0.0.1:4173/?scenarioSmoke=1' > /tmp/scenario.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/scenario.html; then cat /tmp/scenario.html; exit 1; fi
+          grep -q 'app-shell screen-conversation' /tmp/scenario.html
+          grep -q 'scenario-lab-card' /tmp/scenario.html
+          grep -q 'Phòng tình huống' /tmp/scenario.html
+          echo 'Chrome Scenario non-regression OK'
+
+      - name: Chrome Error Intelligence non-regression
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=16000 --dump-dom 'http://127.0.0.1:4173/?errorSmoke=1' > /tmp/errors.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/errors.html; then cat /tmp/errors.html; exit 1; fi
+          grep -q 'app-shell screen-progress' /tmp/errors.html
+          grep -q 'error-intelligence-card' /tmp/errors.html
+          grep -q 'data-error-smoke-item-events="20"' /tmp/errors.html
+          grep -q 'data-error-smoke-recent-events="120"' /tmp/errors.html
+          grep -q 'data-error-smoke-partial="1"' /tmp/errors.html
+          echo 'Chrome Error Intelligence non-regression OK'
+
+      - name: Chrome A1 Core mastery
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=14000 --dump-dom 'http://127.0.0.1:4173/?stage3Smoke=1' > /tmp/stage3.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/stage3.html; then cat /tmp/stage3.html; exit 1; fi
+          grep -q 'app-shell screen-progress' /tmp/stage3.html
+          grep -q 'stage3-progress-card' /tmp/stage3.html
+          grep -q 'mastery-stage3-card' /tmp/stage3.html
+          grep -q 'Khối A1 thực dụng' /tmp/stage3.html
+          grep -q 'Mức độ làm chủ A1 Core' /tmp/stage3.html
+          echo 'Chrome A1 Core mastery OK'
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/french-tranquille-server.pid ]; then kill "$(cat /tmp/french-tranquille-server.pid)" || true; fi
