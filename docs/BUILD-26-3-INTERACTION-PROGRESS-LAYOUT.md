@@ -1,116 +1,165 @@
 # Build 26.3 — Interaction Stability + Progress Layout
 
-Status: **CANDIDATE / field-fix gate**
+Status: **✅ PROD / CLOS**
 
-Version target: **v1.19.3 — Build 26.3**
+Version: **v1.19.3 — Build 26.3**
+
+- PR runtime : **#44**
+- commit runtime production : `5947149e9fcb3b387aa01a797607270edb4f100e`
+- PR : **9 workflows fonctionnels / 9 SUCCESS**
+- `main` : 9 contrats fonctionnels verts après rerun du smoke 26.3 sur le même commit
+- GitHub Pages : **#101 SUCCESS**
 
 ## Field feedback
 
-A real-use video showed a coherent split between controls:
+Une vidéo d’usage réel a montré une séparation cohérente entre les contrôles :
 
-- `Révision mémoire` and `Continuer le parcours` could receive visual press feedback, but `Révision mémoire` could still fail to navigate;
-- `Écouter 3 minutes` and `Voir les autres activités` were less coherent visually and could fail to react;
-- the desktop `Progrès` screen still did not use the available width logically.
+- `Révision mémoire` et `Continuer le parcours` pouvaient recevoir un bon feedback visuel, mais `Révision mémoire` pouvait encore ne pas naviguer ;
+- `Écouter 3 minutes` et `Voir les autres activités` étaient moins cohérents visuellement et pouvaient ne pas réagir ;
+- l’écran desktop `Progrès` n’utilisait pas logiquement l’espace disponible.
 
-## Root cause
+## Cause racine
 
-The Today surface was being composed by several independent runtime layers:
+La surface Today était composée par plusieurs couches indépendantes :
 
-1. `daily-coach.js` creates the canonical Daily buttons.
-2. `listening-engine.js` injects a Listening button into `.daily-steps`.
-3. `session-ux.js` moved Daily buttons into a native `<details>`, then on every decoration moved them back out, removed the disclosure, and rebuilt it again.
-4. Both Listening and Session UX observe DOM child-list changes.
+1. `daily-coach.js` crée les boutons Daily.
+2. `listening-engine.js` injecte Listening dans `.daily-steps`.
+3. `session-ux.js` déplaçait les boutons Daily dans un `<details>`, puis les remettait dans `.daily-steps`, supprimait le disclosure et le reconstruisait.
+4. Listening et Session UX observent tous deux les mutations `childList`.
 
-This meant a visible control could be replaced between pointer feedback and the final click event. It also made the native `<summary>` disclosure inconsistent with the global Interaction UX, which primarily decorates actual buttons.
+Un contrôle visible pouvait donc être remplacé entre le feedback `pointerdown` et le `click` final. Le `<summary>` natif de `Voir les autres activités` était également différent des vrais boutons couverts par l’Interaction Layer.
 
-`Continuer le parcours` was structurally safer because it resolves and clicks the real lesson button directly. `Révision mémoire` still depended on the compatibility navigation bus and therefore needed a stable initiating node.
+`Continuer le parcours` était structurellement plus sûr car il résolvait directement le vrai bouton de leçon.
 
 ## Runtime fix
 
-Build 26.3 adds an isolated `build26-3-ux.js` / `build26-3-ux.css` orchestration layer.
+Build 26.3 ajoute une couche isolée `build26-3-ux.js` / `build26-3-ux.css`.
 
 ### Stable Today controls
 
-- The Daily Coach plan remains the source of truth.
-- Exactly two primary `.daily-step` nodes are rendered and kept stable.
-- Extra activities live outside `.daily-steps`, so legacy Session UX no longer moves them around.
-- A hidden Listening proxy keeps the Listening injector satisfied without becoming a Session UX Daily button.
-- `Voir les autres activités` becomes a real `<button>` with deterministic `aria-expanded` state instead of a native `<summary>` rebuilt by observers.
-- Routes are explicit from a capture-phase handler:
-  - Review → canonical legacy review screen bus;
-  - Lesson → real lesson button;
-  - Conversation → canonical conversation screen bus;
+- Daily Coach reste la source du plan.
+- Exactement deux `.daily-step` principaux sont rendus et gardés stables.
+- Les activités secondaires vivent hors de `.daily-steps`, donc Session UX ne les déplace plus.
+- Un proxy Listening caché satisfait l’injecteur sans devenir une action Daily visible.
+- `Voir les autres activités` devient un vrai `<button>` stable avec `aria-expanded`.
+- Routes explicites en phase capture :
+  - Review → bus de compatibilité Review ;
+  - Lesson → vrai bouton de leçon ;
+  - Conversation → bus de compatibilité Conversation ;
   - Listening → `FrenchTranquilleListening.open()`.
-- No learner, Memory, Scenario or Listening state is written by this layer.
+- Le refresh est strictement idempotent : aucun label/attribut/état n’est réécrit s’il est déjà correct.
+- Aucune donnée learner, Memory, Scenario ou Listening n’est écrite par cette couche.
 
 ### Progress desktop layout
 
-The existing pedagogical DOM is preserved.
+Le DOM pédagogique existant est conservé.
 
-On desktop / wide tablet:
+Desktop / tablette large :
 
 ```text
 ┌──────────────────────────┬─────────────────────────────┐
-│ Summary / next step      │ Learning details            │
-│                          │ dashboard + active group     │
+│ Résumé / prochaine étape │ Détails d’apprentissage     │
+│                          │ dashboard + groupe actif     │
 ├──────────────────────────┤                             │
-│ A0 → A1 curriculum      │ sticky / internal scroll    │
+│ Parcours A0 → A1         │ sticky / scroll interne     │
 └──────────────────────────┴─────────────────────────────┘
 ```
 
-Implementation uses `display: contents` on the historical first Progress wrapper so the existing overview, curriculum and details nodes can be placed with CSS Grid without cloning or migrating them.
+La première enveloppe historique de Progress passe en `display: contents`, permettant à Overview, Curriculum et Details de devenir des items du Grid principal **sans clone et sans migration DOM**.
 
-On mobile:
+La colonne Details est :
 
-1. summary;
-2. compact curriculum;
-3. collapsed Learning Details.
+- ouverte par défaut au premier rendu desktop ;
+- sticky ;
+- limitée par la hauteur du viewport ;
+- scrollable indépendamment ;
+- dotée d’un header sticky.
 
-The Build 26.1 dashboard and all underlying engine cards remain the same DOM nodes.
+### Mobile
 
-## Sanctuaries
+Ordre :
 
-Build 26.3 must not change:
+1. résumé ;
+2. curriculum compact ;
+3. Learning Details replié par défaut.
 
-- `francais-avec-luc:learner:v1`;
-- Learning Memory / Scenario / Listening storage schemas;
-- curriculum **40 lessons / 241 items**;
-- Scenario **36 situations / 108 turns**;
-- Listening **0.88 normal / 0.65 slow**;
-- `voice-ios.js`;
-- `free-voice.js`;
-- `assets/LOGO.png`;
-- `assets/Favicon.png`;
-- Build 25.2 bounded-session behavior;
+Le dashboard Build 26.1 et toutes les cartes moteur restent les mêmes nœuds DOM.
+
+## Sanctuaires confirmés
+
+Build 26.3 n’a pas modifié :
+
+- `francais-avec-luc:learner:v1` ;
+- Learning Memory / Scenario / Listening storage schemas ;
+- curriculum **40 leçons / 241 éléments** ;
+- Scenario **36 situations / 108 tours** ;
+- Listening **0.88 normal / 0.65 lent** ;
+- `voice-ios.js` ;
+- `free-voice.js` ;
+- `assets/LOGO.png` ;
+- `assets/Favicon.png` ;
+- Build 25.2 bounded-session behavior ;
 - Build 26.1 local self-playback behavior.
 
-## CI gate
+## CI gate — résultats
 
-A dedicated Build 26.3 Chrome workflow must physically exercise the field-reported paths:
+### Today real-click smoke
 
-### Today
+Validé :
 
-- open `Voir les autres activités`;
-- prove the toggle DOM node remains the same node;
-- click `Écouter 3 minutes` and see the Listening overlay;
-- click `Révision mémoire` and reach Review;
-- return Home;
-- click `Continuer le parcours` and reach the Lesson screen.
+- [x] ouvre `Voir les autres activités` ;
+- [x] prouve que le même nœud toggle existe avant/après ;
+- [x] clique `Écouter 3 minutes` et voit l’overlay Listening ;
+- [x] clique `Révision mémoire` et atteint Review ;
+- [x] retourne Home ;
+- [x] clique `Continuer le parcours` et atteint Lesson.
 
 ### Progress desktop
 
-- lesson-8 synthetic state is preserved;
-- overview + curriculum + details all remain present;
-- historical wrapper computes to `display: contents`;
-- Details is open by default on wide screens;
-- Details computes to `position: sticky`;
-- the Build 26.1 details dashboard remains present.
+Validé :
+
+- [x] profil synthétique lesson-8 préservé ;
+- [x] Overview + Curriculum + Details présents ;
+- [x] wrapper historique = `display: contents` ;
+- [x] Details ouvert par défaut ;
+- [x] Details = `position: sticky` ;
+- [x] dashboard Build 26.1 présent.
 
 ### Progress mobile
 
-- lesson-8 state is preserved;
-- compact curriculum remains 5 / 40 by default;
-- Details is collapsed by default;
-- the same DOM remains available on demand.
+Validé :
 
-Build 26.3 is not production until the full existing tribunal plus this new field-specific smoke is green on the PR, `main`, and GitHub Pages.
+- [x] profil lesson-8 préservé ;
+- [x] curriculum compact **5 / 40** ;
+- [x] Details replié par défaut ;
+- [x] même DOM disponible à la demande.
+
+### Tribunal global
+
+Sur PR #44 :
+
+- quality ✅
+- Options ✅
+- nav/mobile ✅
+- Progression UX ✅
+- Listening rate ✅
+- Session UX ✅
+- Real Life French III ✅
+- Voice Replay + Details Dashboard ✅
+- Build 26.3 Interaction + Progress layout ✅
+
+Soit **9 / 9 workflows fonctionnels SUCCESS**.
+
+Sur `main`, le premier passage du nouveau smoke 26.3 a raté un marqueur de timing sans fatal card/runtime crash. Le rerun du **même commit** a validé Today + desktop + mobile intégralement. Les check-runs finaux du commit production sont verts, ainsi que GitHub Pages **#101**.
+
+## État après clôture
+
+Build 26.3 devient la baseline UX production pour :
+
+- les interactions `Séance du jour` ;
+- le layout desktop/tablette large de `Progrès` ;
+- l’ordre mobile de Progress.
+
+Le seul gate terrain encore ouvert dans la chaîne actuelle reste Build 26.1 : **auto-écoute réelle sur l’iPhone de Trân puis vérification que la reconnaissance vocale suivante reste normale**.
+
+La prochaine phase structurante est **Build 27 — Data & Recovery Hardening**.
