@@ -27,8 +27,6 @@ Il n’existe actuellement :
 
 # Ordre de chargement runtime
 
-L’ordre est important car plusieurs modules étendent les objets créés précédemment.
-
 ```text
 index.html
   ↓
@@ -54,91 +52,87 @@ mastery-engine.js       ← Build 16
   ↓
 scenario-data.js        ← Build 17
   ↓
+scenario-host.js        ← Build 17
+  ↓
 scenario-engine.js      ← Build 17
+  ↓
+error-intelligence.js   ← Build 18
 ```
 
-Les styles spécifiques suivent la même logique de couches sans remplacer le socle global.
+Les interactions utilisateur n’ont lieu qu’après le chargement de la page : bien que `free-voice.js` soit déclaré avant Error Intelligence, ses appels à `window.FrenchTranquilleErrors` sont donc disponibles au moment d’une vraie tentative utilisateur.
 
 ---
 
-# Modules
+# Modules principaux
 
 ## `app.js`
 
-Responsabilité : moteur historique et UI de base.
+Moteur historique / UI de base :
 
-Contient notamment :
-
-- curriculum historique leçons 1–15 ;
+- leçons 1–15 ;
 - état principal apprenant ;
-- migration des anciennes données ;
-- Accueil ;
-- Leçon ;
-- Conversation texte de base ;
-- Révision de base ;
-- Progression ;
-- Réglages ;
-- navigation interne ;
+- migration historique ;
+- Accueil / Leçon / Conversation / Révision / Progression / Réglages ;
+- navigation ;
 - synthèse vocale de base ;
-- exposition `window.FrenchTranquilleCurriculum`.
+- `window.FrenchTranquilleCurriculum`.
 
-**Politique :** ne pas réécrire ce fichier pour chaque nouvelle fonction. Les nouveaux jalons doivent préférer des modules d’extension tant que cette stratégie reste maintenable.
+**Politique :** sanctuarisé tant qu’une migration dédiée n’est pas planifiée.
 
 ---
 
 ## `curriculum-stage2.js`
 
-Responsabilité : extension curriculum Build 15.
+Build 15 :
 
 - leçons 16–25 ;
-- 60 éléments supplémentaires ;
-- notes de structures ;
-- chapitres visuels A0 → A1 ;
+- 60 éléments ;
+- structures utiles ;
+- chapitres A0 → A1 ;
 - pratique texte A1 START ;
-- mise à disposition des éléments au curriculum global.
-
-Le module doit être chargé **avant** les moteurs qui lisent le curriculum complet.
-
----
+- extension du curriculum global.
 
 ## `stage2-boot.js`
 
-Responsabilité : déclencher proprement un rerender du moteur après extension du curriculum afin que l’UI de base voie les 25 leçons.
+Force un rerender contrôlé après extension du curriculum afin que le moteur historique voie les 25 leçons.
 
 ---
+
+# Voix
 
 ## `voice-ios.js`
 
-Responsabilité : synthèse vocale et sélection des voix disponibles.
-
 - inventaire des voix françaises ;
-- choix manuel ;
-- choix Auto ;
-- préférences de voix qualitatives lorsqu’elles existent ;
-- diagnostic navigateur.
-
-La disponibilité exacte dépend de l’appareil.
-
----
+- choix Auto / manuel ;
+- diagnostic navigateur ;
+- préférences de voix qualitatives lorsqu’elles existent.
 
 ## `free-voice.js`
-
-Responsabilité : entraînement vocal gratuit.
 
 - `SpeechRecognition` / `webkitSpeechRecognition` quand disponible ;
 - fallback clavier ;
 - validation de transcription ;
 - variantes tolérées ;
-- indices progressifs ;
-- répétition des ratés.
+- synthèse du modèle ;
+- Build 18 : chaque vraie tentative appelle maintenant `FrenchTranquilleMemory.recordPractice()` ;
+- Build 18 : chaque tentative envoie également une preuve à `FrenchTranquilleErrors.recordAttempt()` lorsque le module est présent.
+
+Sources Build 18 :
+
+```text
+free-voice-voice
+free-voice-text
+```
+
+Une erreur technique `recognition.onerror` n’est pas enregistrée comme difficulté d’apprentissage.
 
 Le moteur n’est **pas** un analyseur phonétique.
 
 ---
 
-## `learning-memory.js`
+# Mémoire pédagogique
 
-Responsabilité : mémoire pédagogique locale par élément.
+## `learning-memory.js`
 
 Clé :
 
@@ -148,8 +142,7 @@ french-tranquille:learning-memory:v1
 
 Chaque entrée peut contenir :
 
-- première rencontre ;
-- dernière rencontre ;
+- première / dernière rencontre ;
 - dernière révision ;
 - échéance ;
 - tentatives ;
@@ -158,14 +151,16 @@ Chaque entrée peut contenir :
 - streak ;
 - force ;
 - dernier rating ;
-- source de l’événement.
+- dernière source.
 
 États calculés :
 
-- `new` ;
-- `fragile` ;
-- `learning` ;
-- `solid`.
+```text
+new
+fragile
+learning
+solid
+```
 
 Expose :
 
@@ -173,13 +168,147 @@ Expose :
 window.FrenchTranquilleMemory
 ```
 
-avec notamment `summary`, `statusOf`, `applyRating`, `recordPractice`, `sync`, `exportBackup`.
+avec `summary`, `statusOf`, `applyRating`, `recordPractice`, `sync`, `exportBackup`.
 
 ---
 
-## `daily-coach.js`
+## `error-intelligence.js` — Build 18
 
-Responsabilité : recommandations quotidiennes locales.
+Responsabilité : construire une mémoire **des difficultés observables** sans remplacer Learning Memory.
+
+Clé :
+
+```text
+french-tranquille:error-intelligence:v1
+```
+
+Expose :
+
+```text
+window.FrenchTranquilleErrors
+```
+
+API principale :
+
+```text
+recordError(id,type,source,detail)
+recordRecovery(id,source)
+recordAttempt({itemId,ok,source,input,target})
+sync()
+summary()
+priorityItems()
+dominantType()
+exportData()
+```
+
+### Taxonomie V1
+
+```text
+retrieval-difficult
+text-mismatch
+scenario-miss
+assisted
+voice-unrecognized
+partial
+practice-miss
+repeated-miss
+```
+
+Ces catégories sont choisies parce qu’elles correspondent à des preuves accessibles à la PWA.
+
+Build 18 **n’infère pas** automatiquement `négation`, `article`, `ordre des mots`, etc. sans données entrée/cible permettant de le démontrer.
+
+### Observation de Learning Memory
+
+`learning-memory.js` encapsule certaines écritures dans sa propre closure. Error Intelligence ne monkey-patche donc pas brutalement son stockage.
+
+Il maintient un snapshot léger des entrées exposées par `FrenchTranquilleMemory.summary()` et compare :
+
+- `attempts` ;
+- `misses` ;
+- `successes` ;
+- `lastRating` ;
+- `lastSource`.
+
+Quand l’UI évolue après une action, le snapshot est resynchronisé.
+
+Cette stratégie permet de détecter :
+
+```text
+smart-review rating 0 → retrieval-difficult
+scenario-miss          → scenario-miss
+scenario-assisted      → assisted
+succès après difficulté → recovery
+```
+
+Les sources `free-voice-*` sont ignorées par ce diff car Free Voice envoie déjà une preuve plus riche directement, ce qui évite le double comptage.
+
+### Taille bornée
+
+```text
+MAX_ITEM_EVENTS   = 20
+MAX_RECENT_EVENTS = 120
+```
+
+Les anciens événements détaillés sortent de la fenêtre, mais les compteurs agrégés restent conservés.
+
+### Répétition
+
+Une nouvelle difficulté sur le même élément dans une fenêtre de 30 minutes augmente le signal `repeated-miss`.
+
+### Récupération
+
+Une réussite ultérieure :
+
+- incrémente `recoveries` ;
+- remet `errorStreak` à zéro ;
+- réduit indirectement la priorité de l’élément.
+
+### Priorité
+
+`priorityScore()` combine :
+
+- récence ;
+- série d’erreurs ;
+- volume d’incidents ;
+- type dominant observable ;
+- récupérations.
+
+Le score sert à ordonner les besoins de révision. Il n’est pas affiché comme note pédagogique absolue.
+
+### UI Build 18
+
+Error Intelligence injecte :
+
+- un focus dans **Daily Coach** lorsqu’une difficulté devient prioritaire ;
+- une carte détaillée dans **Progression** ;
+- un export JSON dans **Réglages** ;
+- un diagnostic compact dans **Réglages**.
+
+### Export
+
+Format :
+
+```text
+french-tranquille-error-intelligence
+version 1
+```
+
+L’export est volontairement séparé de la sauvegarde générale Build 13 afin de ne pas casser son format pendant Build 18.
+
+### Test hook
+
+```text
+?errorSmoke=1
+```
+
+Le hook CI crée quelques preuves locales contrôlées (`scenario-miss`, `assisted`) puis ouvre Progression. Il ne sert qu’au test navigateur automatisé.
+
+---
+
+# Coach / maîtrise
+
+## `daily-coach.js`
 
 Analyse :
 
@@ -187,58 +316,43 @@ Analyse :
 - fragilités ;
 - révisions du jour ;
 - prochaine leçon ;
-- nombre d’acquis.
+- acquis.
 
-Produit une petite séance cible :
-
-```text
-révision mémoire
-    ↓
-prochaine leçon
-    ↓
-conversation courte
-```
-
----
+Error Intelligence n’en remplace pas la logique : il ajoute un **focus prioritaire** si ses preuves dépassent un seuil.
 
 ## `mastery-engine.js` — Build 16
 
-Responsabilité : estimer la **maîtrise pédagogique interne** par grande étape.
+Suit :
 
-Étapes :
-
-1. Survie A0 — leçons 1–7 ;
-2. Vie quotidienne A0 — leçons 8–15 ;
-3. Fondations A1 — leçons 16–20 ;
-4. Premiers échanges A1 — leçons 21–25.
+1. Survie A0 ;
+2. Vie quotidienne A0 ;
+3. Fondations A1 ;
+4. Premiers échanges A1.
 
 Entrées : progression, acquis, Learning Memory, preuves de révision et fragilités.
 
-Sorties : score interne, état de maîtrise, estimation globale et priorité suivante.
+Build 18 expose Error Intelligence comme signal futur mais **ne change pas les seuils du Mastery Engine dans ce build**.
 
-Le score n’est pas une certification CECRL.
-
-Expose :
-
-```text
-window.FrenchTranquilleMastery
-```
+Le score reste un indicateur interne, pas une certification CECRL.
 
 ---
 
+# Scenario Lab
+
 ## `scenario-data.js` — Build 17
 
-Responsabilité : **catalogue déclaratif de situations multi-tours**.
+Catalogue déclaratif :
 
-Chaque scénario contient :
+```text
+id
+icon
+titleVi/titleFr
+descVi/descFr
+requiredLessons[]
+turns[]
+```
 
-- identifiant ;
-- icône ;
-- titre/description VI + FR ;
-- leçons requises pour le déverrouillage ;
-- une suite ordonnée de tours.
-
-Chaque tour contient :
+Chaque tour :
 
 ```text
 npcFr / npcVi
@@ -249,47 +363,21 @@ hintVi / hintFr
 items[]
 ```
 
-`answers[]` contient les variantes acceptables sans rendre la réponse visible avant tentative. `items[]` relie le tour aux éléments du curriculum pour nourrir Learning Memory.
+12 scénarios × 3 tours = 36 tours.
 
-Build 17 V1 contient **12 scénarios × 3 tours = 36 tours**.
+## `scenario-host.js`
 
-Expose :
+Adaptateur pour le profil vierge : crée `.narrow.scenario-host` lorsque l’ancien écran Conversation ne possède pas encore le conteneur attendu.
 
-```text
-window.FrenchTranquilleScenarioData
-```
+## `scenario-engine.js`
 
-Le catalogue est séparé du moteur pour permettre d’ajouter ou ajuster des situations sans réécrire la logique d’exécution.
-
----
-
-## `scenario-engine.js` — Build 17
-
-Responsabilité : exécuter les scénarios localement dans Conversation.
-
-### Déverrouillage
-
-Un scénario est disponible lorsque toutes ses `requiredLessons` sont présentes dans `completedLessons`.
-
-### Validation
-
-Le moteur :
-
-- normalise casse, accents, apostrophes et ponctuation ;
-- accepte plusieurs réponses déclarées ;
-- premier échec → indice ;
-- après plusieurs échecs → modèle ;
-- modèle utilisé = aide, pas réussite autonome ;
-- réussite/échec/aide alimentent `FrenchTranquilleMemory.recordPractice`.
-
-### Voix
-
-- interlocuteur lu par `speechSynthesis` ;
-- micro via `SpeechRecognition` / `webkitSpeechRecognition` quand disponible ;
-- fallback texte permanent ;
-- aucune prétention à noter phonétiquement la prononciation.
-
-### Progression scénario
+- déverrouillage par `completedLessons` ;
+- variantes ;
+- indice ;
+- modèle assisté ;
+- stats locales ;
+- voix navigateur ;
+- pont Learning Memory.
 
 Clé :
 
@@ -297,70 +385,33 @@ Clé :
 french-tranquille:scenarios:v1
 ```
 
-Conserve :
+Sources mémoire utiles à Build 18 :
 
-- plays ;
-- completions ;
-- bestErrors ;
-- lastPlayed ;
-- lastCompleted ;
-- totalCompletions global.
+```text
+scenario-success
+scenario-miss
+scenario-assisted
+```
 
-### UI
-
-Le moteur injecte :
-
-- le **Scenario Lab** au sommet de Conversation ;
-- le runner multi-tours ;
-- le bilan de fin ;
-- une carte **Situations réelles** dans Progression ;
-- un diagnostic dans Réglages.
-
-### Test hook
+Test hook :
 
 ```text
 ?scenarioSmoke=1
-```
-
-ouvre automatiquement Conversation après le boot afin que la CI Chrome puisse vérifier le rendu Scenario Lab séparément de la home.
-
-Expose :
-
-```text
-window.FrenchTranquilleScenarios
 ```
 
 ---
 
 # Stockage local
 
-## État apprenant historique
-
 ```text
 francais-avec-luc:learner:v1
-```
-
-Le nom historique est conservé pour ne pas effacer la progression lors des changements de branding.
-
-## Learning Memory
-
-```text
 french-tranquille:learning-memory:v1
-```
-
-## Scenario Lab
-
-```text
 french-tranquille:scenarios:v1
-```
-
-## DEBUG FR
-
-```text
+french-tranquille:error-intelligence:v1
 tran-french-teacher:debug-fr:v1
 ```
 
-D’autres préférences vocales possèdent leurs propres clés locales.
+Le nom historique `francais-avec-luc` reste volontairement pour préserver les données créées avant Lucie / French Trân’quille.
 
 ---
 
@@ -368,62 +419,66 @@ D’autres préférences vocales possèdent leurs propres clés locales.
 
 `sw.js` :
 
-- précache les fichiers critiques ;
-- réseau d’abord pour les GET ;
-- mise en cache des réponses valides ;
-- fallback vers cache/index ;
-- suppression des anciens caches à l’activation.
+- precache des fichiers critiques ;
+- réseau d’abord pour GET ;
+- cache des réponses valides ;
+- fallback cache/index ;
+- purge des anciens caches à l’activation.
 
-Chaque gros build change :
+Chaque gros build synchronise :
 
-- version du cache ;
-- query string des assets ;
-- metadata runtime.
+```text
+version cache
+query strings assets
+build-meta.js
+README / CHANGELOG / ROADMAP
+```
 
 ---
 
-# Sécurité et confidentialité
+# Confidentialité
 
-Les données d’apprentissage restent sur l’appareil :
-
+- données pédagogiques locales ;
 - aucune télémétrie serveur ;
 - aucun upload automatique ;
-- sauvegarde JSON uniquement sur action explicite ;
+- exports JSON uniquement sur action explicite ;
 - aucune clé secrète dans le navigateur.
 
 ---
 
 # CI
 
-Le workflow vérifie :
+Le workflow doit conserver :
 
 - syntaxe JS ;
-- guards des fonctionnalités majeures ;
+- anciens guards ;
+- contrat Scenario Data ;
+- contrat Error Intelligence ;
+- limites de stockage ;
+- pont Free Voice → Memory / Errors ;
 - rendu Node du moteur historique ;
-- Chrome headless Home ;
-- disparition de l’écran de boot ;
-- curriculum 25 leçons ;
-- Memory + Daily Coach + Mastery ;
-- **Chrome headless Conversation / Scenario Lab via `?scenarioSmoke=1`**.
+- Chrome Home ;
+- Chrome Scenario Lab `?scenarioSmoke=1` ;
+- Chrome Error Intelligence `?errorSmoke=1`.
 
-Les fonctions iOS spécifiques nécessitent toujours un test réel Safari.
+Les fonctions iOS spécifiques nécessitent toujours un test Safari réel.
 
 ---
 
 # Dette technique connue
 
-## `app.js` monolithique
+## `app.js`
 
-Le moteur historique reste volumineux et volontairement sanctuarisé à court terme. Une extraction future devra être un build de migration dédié.
+Toujours monolithique et sanctuarisé. Une extraction future sera un build de migration dédié.
 
 ## Décorateurs DOM
 
-Learning Memory, Stage 2, Daily Coach, Mastery Engine et Scenario Lab étendent l’UI historique via injections DOM / MutationObserver.
+Les modules avancés utilisent des injections DOM / MutationObserver.
 
-Règle : chaque décorateur doit être **idempotent** :
+Règle absolue : **idempotence**.
 
-- ne pas réécrire le DOM si sa signature n’a pas changé ;
-- ne pas créer deux fois la même carte ;
+- ne pas réécrire si la signature est identique ;
+- ne pas dupliquer les cartes ;
 - ne pas provoquer de boucle MutationObserver.
 
-Les smoke tests Chrome protègent explicitement ce point.
+Les smoke tests Chrome sont la barrière de sécurité principale contre ce type de régression.
