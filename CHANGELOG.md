@@ -4,7 +4,11 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ## [Unreleased]
 
-### v1.15.0 — Build 22 — UX Foundation & Runtime Integrity — candidat
+- prochain jalon : **v1.16.0 — Build 23 — Real Life French I**.
+
+---
+
+## [1.15.0] — Build 22 — UX Foundation & Runtime Integrity — 2026-08-11
 
 - nouvelle navigation apprenante limitée à **Aujourd’hui / Pratiquer / Parcours** ;
 - `Pratiquer` regroupe Révision / Conversation / Listening ;
@@ -13,15 +17,16 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 - Parcours simplifié côté Trân, intelligence détaillée conservée en DEBUG FR ;
 - Réglages techniques / reset masqués côté apprenante ;
 - ajout de `progress-safety.js` et snapshot pré-Build22 non destructif ;
-- smoke Chrome dédié à un profil synthétique arrivé à la leçon 8 ;
+- smoke Chrome dédié à un profil synthétique arrivé à la leçon 8 : progression et acquis conservés ;
 - logo/favicon sanctuarisés et protégés par hash ;
-- `voice-ios.js` / `free-voice.js` sanctuarisés pendant la refonte après retour iPhone positif ;
-- audit de loader : Stage 3 / Listening / Adaptive Language présents dans le repo mais pas tous activés par le loader/service worker historique ;
+- `voice-ios.js` / `free-voice.js` sanctuarisés après retour iPhone positif ;
+- audit de loader : Stage 3 / Listening / Adaptive Language présents dans le repo mais pas tous activés par l’ancien loader/service worker ;
 - réconciliation du runtime complet et `build-meta.js` replacé en dernier ;
+- audit curriculum : **40 leçons / 241 éléments réels**, correction de l’ancienne référence 238 sans suppression de contenu ;
 - cache PWA `1.15.0-b22` ;
-- documentation Build 22 ajoutée.
-
-Aucun élément ci-dessus ne sera déplacé dans une release tant que PR, `main` et GitHub Pages ne seront pas verts.
+- PR #16 SUCCESS ;
+- `main` CI run #59 SUCCESS ;
+- GitHub Pages run #75 SUCCESS.
 
 ---
 
@@ -35,7 +40,7 @@ Aucun élément ci-dessus ne sera déplacé dans une release tant que PR, `main`
 - DEBUG FR prioritaire ;
 - fichiers et tests de décision livrés dans le repo.
 
-**Note d’intégrité Build 22 :** l’audit ultérieur a établi que le loader/service worker de `main` n’activait pas encore toute cette couche. Build 22 réconcilie le runtime au lieu de masquer cette dette.
+**Note d’intégrité Build 22 :** l’audit ultérieur a établi que le loader/service worker de `main` n’activait pas encore toute cette couche. Build 22 a réconcilié le runtime.
 
 ## [1.13.0] — Build 20 — Listening Comprehension — 2026-08-11
 
@@ -45,16 +50,14 @@ Aucun élément ci-dessus ne sera déplacé dans une release tant que PR, `main`
 - vitesse normale / lente ;
 - réécoute ;
 - clé `french-tranquille:listening:v1` ;
-- Memory + Error `listening-miss` ;
+- Memory + Error alimentés par les sources `listening-*` ;
 - fichiers et contrats Listening livrés dans le repo.
 
-**Note d’intégrité Build 22 :** l’audit ultérieur a montré que le loader/service worker historique n’avait pas encore activé cette couche dans toutes les compositions de `main`. Le câblage est repris explicitement dans Build 22.
+**Note d’intégrité Build 22 :** l’audit ultérieur a montré que le loader/service worker historique n’avait pas encore activé cette couche dans toutes les compositions de `main`. Build 22 a repris explicitement le câblage.
 
 ## [1.12.0] — Build 19 — A1 Core — 2026-08-11
 
-- ajout de **15 leçons / 90 éléments** ;
-- cible **40 leçons / 238 éléments** ;
-- `curriculum-stage3.js` pour les leçons 26–40 ;
+- ajout du Stage 3, leçons 26–40 ;
 - nombres 11→100, jours, mois, dates, heure précise ;
 - possessifs de base ;
 - présent avec `tu`, `il/elle`, `nous` ;
@@ -67,7 +70,7 @@ Aucun élément ci-dessus ne sera déplacé dans une release tant que PR, `main`
 - Mastery A1 Core ;
 - dossier `docs/BUILD-19-A1-CORE.md`.
 
-**Note d’intégrité Build 22 :** les fichiers Stage 3 étaient présents mais l’`index.html` de `main` audité en Build 22 était resté sur un loader Build 18. Build 22 active enfin explicitement Stage 3 dans la composition runtime contrôlée.
+**Correction d’audit Build 22 :** Stage 3 contient réellement **93 éléments**, pas 90 ; le total runtime est **241**, pas 238. Les trois éléments supplémentaires sont conservés.
 
 ## [1.11.0] — Build 18 — Error Intelligence — 2026-08-11
 

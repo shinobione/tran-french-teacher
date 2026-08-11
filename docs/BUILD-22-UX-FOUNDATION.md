@@ -1,184 +1,55 @@
 # Build 22 — UX Foundation & Runtime Integrity
 
-## Cible
+## Statut
 
-- version : **v1.15.0** ;
-- build : **22** ;
-- phase : **UX Foundation & Runtime Integrity** ;
-- cible principale : **Trân sur iPhone / Safari / PWA** ;
-- curriculum audité après câblage : **40 leçons / 241 éléments** ;
+**v1.15.0 — Build 22 — PROD / CLOS — 2026-08-11**
+
+- PR : **#16 — SUCCESS** ;
+- commit production : `2c961ed5f0e36f378dc5ffa272f6eda83646e3d6` ;
+- CI `main` : **run #59 — SUCCESS** ;
+- GitHub Pages : **run #75 — SUCCESS** ;
+- curriculum audité : **40 leçons / 241 éléments** ;
 - coût d’exploitation : **0 €**.
 
-> Audit Build 22 : Stage 3 contient réellement **93 éléments**. Les documents Build 19 annonçaient 90 ; avec le socle 148, le total réel est donc **241**. Build 22 corrige le contrat au lieu de supprimer trois acquis utiles pour retrouver artificiellement 238.
+## Pourquoi ce build
 
-## Contexte réel
+French Trân’quille est utilisée réellement. La refonte devait donc améliorer l’ergonomie sans déplacer ni réinitialiser les données d’une apprenante déjà engagée dans son parcours.
 
-French Trân’quille n’est plus un prototype : Trân l’utilise réellement et se trouve autour de la **leçon 8**.
-
-Retour utilisateur direct avant Build 22 :
-
-- reconnaissance des réponses françaises : **bonne sur son iPhone** ;
-- voix française de Lucie : **naturelle** ;
-- progression existante : **à protéger absolument**.
-
-Conséquence : Build 22 ne recalibre ni `voice-ios.js` ni `free-voice.js`. Ces deux fichiers deviennent un baseline protégé par hash CI pour cette refonte.
-
-Le logo et le favicon sont également sanctuarisés.
-
----
-
-# Problèmes UX traités
-
-L’application a grandi par couches : Curriculum, Memory, Daily Coach, Mastery, Scenario Lab, Error Intelligence, Listening et Adaptive Language.
-
-Ces moteurs sont utiles pédagogiquement mais ne doivent pas devenir autant de concepts que Trân doit comprendre.
-
-Le principe UX devient :
+Le principe retenu :
 
 > **Le moteur peut être complexe. L’usage doit rester simple.**
 
-Une personne peu à l’aise avec l’informatique doit pouvoir ouvrir la PWA et savoir immédiatement quoi faire.
+## UX livrée
 
----
-
-# Nouveau modèle mental
-
-Trois destinations apprenante seulement :
+Trois destinations apprenante :
 
 ```text
 Hôm nay / Aujourd’hui
-        │
-        ├── prochaine étape évidente
-        └── séance du jour
-
 Luyện tập / Pratiquer
-        │
-        ├── Réviser
-        ├── Parler
-        └── Écouter
-
 Lộ trình / Parcours
-        │
-        ├── où j’en suis
-        └── liste des leçons
 ```
 
-Les anciens écrans `conversation`, `review`, `progress`, etc. restent disponibles comme primitives internes pour garantir la compatibilité des modules existants.
+`Pratiquer` regroupe : Réviser, Parler, Écouter.
 
-L’ancien `.bottom-nav` reste donc dans le DOM mais devient invisible pour Trân. `ux-shell.js` l’utilise comme bus de navigation interne.
+La Home répond à « qu’est-ce que je fais maintenant ? », la Leçon fonctionne en mode Focus, le Parcours répond à « où j’en suis ? », et les diagnostics techniques restent derrière DEBUG FR.
 
----
+L’ancien `.bottom-nav` est conservé dans le DOM comme bus de compatibilité mais n’est plus l’interface apprenante.
 
-# Home
+## Protection de progression
 
-La Home doit répondre à une seule question :
-
-> **Qu’est-ce que je fais maintenant ?**
-
-Visible en priorité :
-
-- logo French Trân’quille ;
-- Lucie ;
-- prochaine leçon ;
-- position `Bài X / 40` ;
-- bouton Continuer ;
-- séance du jour ;
-- trois métriques compactes.
-
-Les cartes techniques Memory / Mastery / Error / Listening / Language Ratio restent dans le runtime mais sont masquées en mode apprenante.
-
-Elles restent visibles en DEBUG FR pour Jerry.
-
----
-
-# Leçon = mode Focus
-
-Pendant une leçon :
-
-- pas de bottom nav ;
-- titre compact ;
-- gros texte français ;
-- boutons tactiles ≥ 48 px ;
-- navigation Précédent / Continuer fixe en bas ;
-- une seule tâche cognitive à l’écran ;
-- détails techniques de Language Ratio masqués côté Trân.
-
-La logique des leçons et la progression historique ne sont pas réécrites.
-
----
-
-# Practice Sheet
-
-Le bouton central `Luyện tập / Pratiquer` ouvre une feuille simple :
-
-1. **Ôn những gì đã học / Réviser mes acquis** ;
-2. **Nói tiếng Pháp / Parler français** ;
-3. **Luyện nghe / Écouter**.
-
-Listening est désactivé visuellement tant que les acquis ne permettent pas un exercice valide.
-
-Scenario Lab reste une intelligence interne de Conversation : Trân n’a pas à connaître le nom du moteur.
-
----
-
-# Parcours
-
-L’écran Parcours montre d’abord :
-
-- leçon actuelle ;
-- pourcentage de parcours ;
-- nombre de leçons terminées ;
-- nombre d’acquis ;
-- liste complète du curriculum.
-
-Les tableaux Mastery / Error / Memory / Listening / Adaptive Language sont masqués côté apprenante pour éviter un tableau de bord d’ingénieur.
-
-Ils restent disponibles en DEBUG FR.
-
----
-
-# Réglages
-
-En mode Trân :
-
-- pas de diagnostic technique ;
-- pas de bouton reset exposé ;
-- pas d’import/export technique en première vue ;
-- un message simple confirme que voix et données restent locales/intactes.
-
-DEBUG FR conserve les outils d’administration et de diagnostic.
-
----
-
-# Protection de progression
-
-Clé apprenant historique inchangée :
+Clé canonique historique inchangée :
 
 ```text
 francais-avec-luc:learner:v1
 ```
 
-Build 22 ajoute uniquement une **photo de sécurité non destructive** :
+Snapshot pré-refonte :
 
 ```text
 french-tranquille:safety:pre-build22:v1
 ```
 
-`progress-safety.js` capture une seule fois, si elles existent :
-
-- progression apprenant ;
-- Learning Memory ;
-- Error Intelligence ;
-- Scenario Lab ;
-- Listening.
-
-Aucune de ces données n’est réécrite par la capture.
-
----
-
-# Smoke « Trân leçon 8 »
-
-La CI injecte un profil synthétique dans la vraie clé legacy :
+Le smoke Chrome a démarré avec :
 
 ```text
 l1 → l7 terminées
@@ -188,26 +59,34 @@ conversationWins = 5
 streak = 6
 ```
 
-Après chargement de **tout le runtime**, Chrome doit retrouver exactement :
+Après chargement du runtime complet, le test a confirmé :
 
-- 7 leçons terminées ;
-- prochaine leçon = `l8` ;
+- **7** leçons terminées ;
+- prochaine leçon = **l8** ;
 - `lessonProgress.l8 = 4` ;
-- 40 acquis ;
-- snapshot de sécurité présent ;
-- snapshot `l8 = 4` ;
-- 3 boutons dans la nouvelle navigation ;
+- **40** acquis conservés ;
+- snapshot présent et `l8 = 4` dans le snapshot ;
+- nouvelle navigation = **3** entrées ;
 - logo Home présent.
 
-Si une seule valeur change, Build 22 ne merge pas.
+## Sanctuaires vérifiés
 
----
+Les hashes CI ont confirmé byte-identiques pendant toute la refonte :
 
-# Runtime Integrity
+```text
+assets/LOGO.png
+assets/Favicon.png
+voice-ios.js
+free-voice.js
+```
 
-Audit Build 22 : plusieurs modules récents existaient dans `main`, mais le loader de production et le service worker restaient sur une composition Build 18.
+La reconnaissance vocale et la voix iPhone ne sont donc pas recalibrées dans Build 22.
 
-Build 22 réconcilie explicitement l’ordre :
+## Runtime Integrity
+
+L’audit a identifié un loader drift : plusieurs moteurs existaient dans le repo mais n’étaient pas tous chargés par la composition production historique.
+
+Ordre livré :
 
 ```text
 progress-safety
@@ -228,29 +107,24 @@ Mastery Stage 3
 Scenario Data / Host / Engine
 Listening Data / Engine
 UX Shell
-Build Meta (dernier)
+Build Meta — dernier
 ```
 
-Cette réconciliation fait partie du build : le but n’est pas uniquement cosmétique.
+Le service worker `1.15.0-b22` reflète cette composition.
 
----
+## Audit curriculum
 
-# Sanctuaires Build 22
+Stage 3 contient réellement **93 éléments**, et non les 90 indiqués dans l’ancienne documentation.
 
-Doivent rester byte-identiques pendant cette refonte :
+Avec le socle de 148 éléments :
 
 ```text
-assets/LOGO.png
-assets/Favicon.png
-voice-ios.js
-free-voice.js
+148 + 93 = 241
 ```
 
-Motif : logo/favicon validés, voix + reconnaissance vocales validées par l’utilisatrice réelle.
+Le contrat production est donc : **40 leçons / 241 éléments**. Aucun contenu utile n’a été supprimé pour retrouver artificiellement l’ancien chiffre 238.
 
----
-
-# Critères de clôture
+## Tribunal final
 
 - [x] nouvelle navigation = 3 destinations ;
 - [x] Home simplifiée ;
@@ -259,28 +133,25 @@ Motif : logo/favicon validés, voix + reconnaissance vocales validées par l’u
 - [x] Leçon Focus ;
 - [x] Réglages simplifiés côté Trân ;
 - [x] DEBUG FR conserve les outils techniques ;
-- [ ] logo/favicon hashes vérifiés ;
-- [ ] voice/free-voice hashes vérifiés ;
+- [x] logo/favicon hashes vérifiés ;
+- [x] voice/free-voice hashes vérifiés ;
 - [x] aucune clé principale renommée ;
 - [x] snapshot non destructif ;
-- [ ] smoke Trân leçon 8 vert ;
-- [ ] **40 leçons / 241 éléments** actifs ;
-- [ ] Listening actif ;
-- [ ] Adaptive Language actif ;
-- [ ] Scenario / Error / Mastery non régressés ;
-- [x] README / ROADMAP / CHANGELOG / ARCHITECTURE / BUILD-POLICY synchronisés ;
-- [ ] PR verte ;
-- [ ] `main` vert ;
-- [ ] GitHub Pages vert ;
-- [ ] validation manuelle iPhone recommandée après déploiement, sans modifier la voix.
+- [x] smoke Trân leçon 8 vert ;
+- [x] 40 leçons / 241 éléments actifs ;
+- [x] Listening actif ;
+- [x] Adaptive Language actif ;
+- [x] Scenario / Error non régressés ;
+- [x] PR #16 verte ;
+- [x] `main` run #59 vert ;
+- [x] GitHub Pages #75 vert.
 
----
+## Limitation / validation terrain
 
-# Suite
+Les fonctions spécifiques iPhone qui ont déjà une bonne baseline ne sont pas modifiées. Un smoke visuel/tactile réel sur l’iPhone reste utile pour juger le ressenti de la nouvelle UX, mais il n’est pas nécessaire de recalibrer la voix tant qu’aucun problème reproductible n’est signalé.
 
-Après Build 22 :
+## Suite
 
-- **Build 23 — Real Life French I : quotidien avec Jerry** ;
-- **Build 24 — Real Life French II : déplacements / proches / téléphone** ;
-- **Build 25 — Real Life French III : problèmes / émotions / français oral** ;
-- puis Hardening V2.
+**v1.16.0 — Build 23 — Real Life French I : quotidien avec Jerry.**
+
+Build 23 doit réutiliser le shell Build 22 et ne pas ajouter une nouvelle destination de navigation.
