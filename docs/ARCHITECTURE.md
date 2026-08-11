@@ -2,12 +2,8 @@
 
 ## Vue générale
 
-PWA statique GitHub Pages :
-
 ```text
 iPhone / Safari / PWA
-        ↓
-French Trân’quille UI
         ↓
 UX Shell simple
         ↓
@@ -16,17 +12,15 @@ moteurs pédagogiques locaux
 localStorage + Web APIs navigateur
 ```
 
-Aucun backend obligatoire, aucune base distante, aucune clé API cliente, aucune dépendance payante nécessaire.
+PWA statique GitHub Pages, sans backend obligatoire ni API payante.
 
 ---
 
-# Principe Build 22
-
-L’architecture distingue désormais clairement :
+# Principe produit
 
 ```text
 COMPLEXITÉ INTERNE
-Memory / Mastery / Error / Scenario / Listening / Language
+Curriculum / Memory / Mastery / Error / Scenario / Listening / Language
 
                   ↓
 
@@ -34,365 +28,245 @@ INTERFACE APPRENANTE
 Aujourd’hui / Pratiquer / Parcours
 ```
 
-Un moteur n’obtient pas automatiquement un bouton de navigation parce qu’il existe.
+Un moteur n’obtient pas automatiquement une destination de navigation.
 
 ---
 
-# Runtime — v1.15.0 Build 22
-
-Ordre canonique :
+# Runtime canonique — v1.16.0 Build 23
 
 ```text
-progress-safety.js          # snapshot avant toute évolution
-        ↓
-app.js                      # moteur historique + leçons 1–15
-        ↓
-curriculum-stage2.js        # leçons 16–25
-        ↓
-curriculum-stage3.js        # leçons 26–40
-        ↓
-stage2-boot.js              # rerender curriculum unique
-        ↓
+progress-safety.js
+app.js
+curriculum-stage2.js
+curriculum-stage3.js
+stage2-boot.js
 debug-fr.js
-        ↓
-voice-ios.js                # baseline iPhone validé
-        ↓
-free-voice.js               # baseline reconnaissance validé
-        ↓
+voice-ios.js
+free-voice.js
 learning-memory.js
-        ↓
 error-intelligence.js
-        ↓
 language-ratio-core.js
-        ↓
 language-ratio.js
-        ↓
 daily-coach.js
-        ↓
 mastery-engine.js
-        ↓
 mastery-stage3.js
-        ↓
 scenario-data.js
+real-life-data.js          ← Build 23
 scenario-host.js
 scenario-engine.js
-        ↓
+real-life-ux.js            ← Build 23
 listening-data.js
 listening-engine.js
-        ↓
-ux-shell.js                 # façade apprenante
-        ↓
-build-meta.js               # version finale, TOUJOURS dernier
+ux-shell.js
+build-meta.js              ← dernier
 ```
 
-Build 22 réconcilie explicitement cet ordre après avoir détecté un **loader drift** : des modules récents existaient dans le repo mais le `index.html` et le service worker de `main` audité étaient restés sur une composition Build 18.
+CSS Build 23 : `real-life-ux.css` est chargé avec `scenario-engine.css`.
 
 ---
 
-# Noyau historique
+# État apprenant
 
-## `app.js`
-
-Responsabilités :
-
-- état apprenant historique ;
-- leçons 1–15 ;
-- rendu des écrans Home / Lesson / Conversation / Review / Progress / Settings ;
-- navigation historique `.bottom-nav` ;
-- sauvegarde dans la clé legacy.
-
-Il reste monolithique et n’est pas réécrit dans Build 22.
-
-### Pourquoi garder `.bottom-nav` ?
-
-De nombreux modules historiques déclenchent encore :
-
-```text
-.bottom-nav [data-go="review"]
-.bottom-nav [data-go="conversation"]
-```
-
-Build 22 garde ce menu dans le DOM comme **bus de compatibilité invisible**.
-
-`ux-shell.css` le masque côté utilisateur.
-
----
-
-# UX Shell — Build 22
-
-## `ux-shell.js`
-
-Façade apprenante.
-
-Elle ne stocke aucune progression pédagogique.
-
-Responsabilités :
-
-- créer la navigation 3 destinations ;
-- ouvrir la Practice Sheet ;
-- router vers les écrans historiques sans les dupliquer ;
-- injecter une synthèse de parcours ;
-- masquer les surfaces techniques côté apprenante ;
-- préserver DEBUG FR ;
-- exposer les attributs smoke Build 22.
-
-## Navigation
-
-```text
-Hôm nay / Aujourd’hui → home
-Luyện tập / Pratiquer → overlay local
-Lộ trình / Parcours → progress
-```
-
-Practice Sheet :
-
-```text
-Réviser → screen-review
-Parler  → screen-conversation
-Écouter → FrenchTranquilleListening.open()
-```
-
-Les anciens écrans restent les moteurs réels : pas de duplication de logique.
-
-## `ux-shell.css`
-
-Mode apprenante :
-
-- Home en une colonne ;
-- curriculum complet retiré de la Home ;
-- cartes techniques masquées ;
-- Leçon en focus ;
-- bottom nav masquée pendant Leçon/Réglages ;
-- Parcours humain avant métriques techniques ;
-- réglages dangereux/diagnostics masqués.
-
-Mode DEBUG FR : les informations techniques restent disponibles.
-
----
-
-# Sécurité de progression
-
-## Clé apprenant canonique historique
+Clé historique canonique :
 
 ```text
 francais-avec-luc:learner:v1
 ```
 
-Aucun changement Build 22.
+Schema 2. Build 23 ne la modifie pas.
 
-Schema actuel : 2.
-
-Données principales :
-
-```text
-lessonProgress
-completedLessons
-knownItems
-reviewState
-conversationWins
-lastActivity
-streak
-```
-
-## `progress-safety.js`
-
-Nouvelle clé :
+Snapshot de sécurité créé depuis Build 22 :
 
 ```text
 french-tranquille:safety:pre-build22:v1
 ```
 
-Elle crée **une seule photo locale non destructive** des données existantes avant la refonte.
-
-La capture peut inclure :
-
-```text
-francais-avec-luc:learner:v1
-french-tranquille:learning-memory:v1
-french-tranquille:error-intelligence:v1
-french-tranquille:scenarios:v1
-french-tranquille:listening:v1
-```
-
-Elle n’effectue aucune restauration automatique et ne modifie jamais les valeurs capturées.
-
 ---
 
 # Curriculum
 
-## Base
+- `app.js` : l1–l15 ;
+- `curriculum-stage2.js` : l16–l25 ;
+- `curriculum-stage3.js` : l26–l40.
 
-`app.js` : leçons 1–15.
+Contrat audité : **40 leçons / 241 éléments**.
 
-## Stage 2
+---
 
-`curriculum-stage2.js` : leçons 16–25.
+# Scenario Engine
 
-## Stage 3
-
-`curriculum-stage3.js` : leçons 26–40.
-
-Audit Build 22 : Stage 3 contient réellement **93 éléments**, pas 90. Le runtime complet conserve ces acquis et corrige la documentation au lieu de supprimer du contenu.
-
-Le Stage 3 doit être chargé **avant** `stage2-boot.js` afin qu’un seul rerender voie les 40 leçons.
-
-Contrat runtime audité :
+Clé persistante :
 
 ```text
-40 leçons
-241 éléments
+french-tranquille:scenarios:v1
 ```
+
+`scenario-data.js` fournit le pack historique : **12 situations / 36 tours**.
+
+## Extension Build 23
+
+`real-life-data.js` s’exécute après `scenario-data.js` et **étend le même tableau** avant l’initialisation de `scenario-engine.js`.
+
+Il ajoute :
+
+```text
+6 situations / 18 tours
+```
+
+Total Build 23 attendu :
+
+```text
+18 situations / 54 tours
+```
+
+Aucune migration du state Scenario : les statistiques existantes restent valides par ID.
+
+Pack :
+
+```text
+real-life-jerry-1
+```
+
+Prérequis l2 → l8, donc valeur immédiate pour une apprenante au début du parcours.
+
+## `real-life-ux.js`
+
+Cette couche ne remplace pas le Scenario Engine.
+
+Elle adapte seulement sa présentation :
+
+- titre apprenant `Parler en situation` ;
+- scènes Jerry disponibles en premier ;
+- badge personnel ;
+- seulement deux prochaines scènes verrouillées visibles ;
+- dévoilement facultatif du reste.
+
+Le moteur historique continue à gérer validation, indice, modèle, voix/clavier, Memory et persistance.
 
 ---
 
 # Learning Memory
 
-Clé :
+Clé : `french-tranquille:learning-memory:v1`.
+
+Scenario continue d’enregistrer :
 
 ```text
-french-tranquille:learning-memory:v1
+scenario-success
+scenario-miss
+scenario-assisted
 ```
 
-États : new / fragile / learning / solid.
-
-Son UI détaillée est une **source d’intelligence**, pas une destination principale côté Trân.
+Les nouveaux scénarios Build 23 utilisent les mêmes sources.
 
 ---
 
 # Error Intelligence
 
-Clé :
+Clé : `french-tranquille:error-intelligence:v1`.
 
-```text
-french-tranquille:error-intelligence:v1
-```
+Contrat : 20 événements détaillés par item / 120 récents globaux.
 
-Historique borné :
-
-```text
-20 événements / item
-120 événements récents globaux
-```
-
-Erreur = observation, pas diagnostic phonétique.
+Build 23 ne change pas sa taxonomie.
 
 ---
 
 # Listening
 
-Fichiers :
+Clé : `french-tranquille:listening:v1`.
 
-```text
-listening-data.js
-listening-engine.js
-listening-engine.css
-```
-
-Clé :
-
-```text
-french-tranquille:listening:v1
-```
-
-L’interface Listening reste un overlay spécialisé. Build 22 l’ouvre depuis la Practice Sheet au lieu d’exposer une carte permanente sur la Home.
+Build 23 n’intervient pas dans Listening ; les smokes Build 22 restent des non-régressions obligatoires.
 
 ---
 
 # Adaptive Language
 
-```text
-language-ratio-core.js
-language-ratio.js
-```
-
-Le moteur calcule VI-HEAVY / VI-SUPPORT / BALANCED / FR-GROWING.
-
-Ses résultats pilotent les modules mais sa carte de diagnostic n’a pas besoin d’être visible à l’apprenante.
-
-Le détail reste disponible en DEBUG FR.
+`language-ratio-core.js` + `language-ratio.js` restent actifs. Scenario continue de consommer le soutien contextuel existant ; le pack Build 23 n’introduit pas un mode linguistique parallèle.
 
 ---
 
-# Voice — baseline réel
+# Voice — sanctuaire réel
 
-Retour iPhone avant Build 22 :
+Retour iPhone : reconnaissance des réponses françaises satisfaisante et voix Lucie naturelle.
 
-- reconnaissance des réponses françaises satisfaisante ;
-- voix de Lucie naturelle.
-
-Décision architecture :
+Build 23 conserve byte-identiques :
 
 ```text
-voice-ios.js  = sanctuarisé Build 22
-free-voice.js = sanctuarisé Build 22
+voice-ios.js
+free-voice.js
 ```
 
-Leur blob Git doit rester identique pendant cette refonte.
-
-Le Safari Calibration Gate n’est plus une étape obligatoire tant que l’utilisatrice réelle ne signale pas de problème reproductible.
+Aucune recalibration sans problème réel reproductible.
 
 ---
 
-# Branding — baseline réel
+# Branding
 
-Assets sanctuarisés :
+Sanctuaires :
 
 ```text
 assets/LOGO.png
 assets/Favicon.png
 ```
 
-Build 22 les réutilise dans Home, Practice Sheet, favicon et PWA.
+Les nouveaux visuels de scénarios utilisent uniquement CSS/emoji ; le branding principal ne change pas.
 
 ---
 
-# DEBUG FR
+# UX Shell
 
-DEBUG FR reste local au navigateur.
-
-En learner mode : interfaces techniques masquées.
-
-En DEBUG FR : diagnostics, Memory, Mastery, Error, Listening stats et Language Ratio peuvent rester visibles pour l’administration/debug.
-
----
-
-# Service Worker
-
-Build 22 :
+Navigation apprenante Build 22 conservée :
 
 ```text
-tran-french-teacher-v1.15.0-b22
+Aujourd’hui
+Pratiquer
+Parcours
 ```
 
-Le précache doit refléter exactement le runtime canonique Build 22, y compris Stage 3, Listening, Language et UX Shell.
+`Pratiquer → Parler français` continue à ouvrir l’écran Conversation historique, désormais enrichi par Build 23.
 
-Stratégie GET : réseau d’abord, cache fallback.
+L’ancien `.bottom-nav` reste le bus de compatibilité invisible.
 
 ---
 
-# CI Build 22
+# Service Worker — Build 23
 
-Contrats obligatoires :
+Cache :
 
-1. syntaxe de tous les modules actifs ;
-2. hashes logo/favicon immuables ;
-3. hashes voice/free-voice immuables ;
-4. loader + SW contiennent le runtime canonique ;
-5. curriculum **40 / 241** ;
-6. Chrome Home avec navigation 3 destinations ;
-7. Chrome « Trân leçon 8 » : progression strictement conservée ;
-8. Scenario Lab non régressé ;
-9. Error Intelligence 20/120 ;
-10. Listening hidden→reveal ;
-11. Adaptive Language beginner/strong/fragile ;
-12. aucune fatal card.
+```text
+tran-french-teacher-v1.16.0-b23
+```
+
+Le précache ajoute :
+
+```text
+real-life-data.js
+real-life-ux.js
+real-life-ux.css
+```
+
+---
+
+# CI Build 23
+
+Contrats :
+
+1. syntaxe runtime complet ;
+2. hashes branding + voice ;
+3. curriculum 40/241 ;
+4. Scenario total 18/54 ;
+5. pack Real Life = 6/18 ;
+6. tous les IDs/réponses/item refs valides ;
+7. profil leçon 8 : 5 scènes du pack ouvertes, 1 verrouillée ;
+8. progression leçon 8 conservée ;
+9. UX Conversation : scènes personnelles visibles/prioritaires, futur condensé ;
+10. Error 20/120 ;
+11. Listening ;
+12. Adaptive Language ;
+13. aucune fatal card.
 
 ---
 
 # Dette technique
 
-`app.js` reste monolithique.
-
-Build 22 choisit volontairement **une façade séparée** plutôt qu’un refactor du noyau sous les pieds d’une utilisatrice active.
-
-Une extraction de `app.js` devra être un build dédié, avec migration state + tests comparatifs, probablement pendant Hardening V2.
+`app.js` reste monolithique par choix de sécurité. Sa future extraction doit être un build dédié avec migration comparative, pas une conséquence cachée d’un build pédagogique.
