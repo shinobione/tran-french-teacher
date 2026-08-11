@@ -2,23 +2,23 @@
 
 PWA de français pensée pour **Trân**, avec priorité à l’oral, au français utile dans la vraie vie et à une interface simple sur iPhone.
 
-## Version candidate
+## Version production
 
 - **v1.19.1**
 - **Build 26.1 — Voice Self-Playback + Learning Details Dashboard**
-- statut : **CANDIDAT / EN COURS**
-- baseline production : **v1.19.0 — Build 26 — Real Life French III**
-- commit production Build 26 : `db8219e44d74f0af13421ec798a0c98d02f7a7b5`
+- statut : **✅ PROD / réécoute iPhone à valider terrain**
+- commit production : `8ad7e5eb9cb2f64c58c086847c3e035463ab3ba3`
+- PR : **#40**
+- GitHub Pages : **#98 SUCCESS**
+- tribunal production : **8 workflows / 8 SUCCESS**
 - calibration Listening : **0.88 normal / 0.64 lent**
 - curriculum : **40 leçons / 241 éléments**
 - Scenario : **36 situations / 108 tours**
 - coût : **0 €**
 
-## Build 26.1 — deux retours terrain
+## 🎙️ Réécouter sa propre voix
 
-### 🎙️ Réécouter sa propre voix
-
-Après une réponse vocale transcrite, Trân peut maintenant obtenir une **prise locale destinée uniquement à l’auto-écoute** :
+Après une réponse vocale reconnue dans Free Voice, Trân voit désormais une petite zone d’auto-écoute :
 
 ```text
 🎧 Écoute-toi
@@ -27,24 +27,25 @@ Après une réponse vocale transcrite, Trân peut maintenant obtenir une **prise
 [ ▶ Réécouter ma voix ]   [ ↻ Refaire ]
 ```
 
-Le choix est volontairement conservateur sur iPhone : la reconnaissance existante finit d’abord, puis cette seconde prise est enregistrée. **`free-voice.js` et `voice-ios.js` ne sont pas modifiés.**
+Le choix est volontairement prudent : la reconnaissance existante termine d’abord, puis cette **seconde prise locale** est enregistrée. Nous ne lançons pas deux moteurs micro en parallèle sur l’iPhone.
 
-Contrat replay :
+Contrat :
 
+- `voice-ios.js` et `free-voice.js` restent byte-identiques ;
 - `MediaRecorder` / `getUserMedia` seulement si disponibles ;
 - aucun upload ;
-- aucune sauvegarde ;
-- aucun nouvel événement Memory/Error/Mastery ;
+- aucune sauvegarde audio ;
+- aucun événement Learning Memory / Error / Mastery créé par l’auto-écoute ;
 - Blob URL temporaire ;
 - piste micro stoppée après la prise ;
 - arrêt automatique après 9 secondes ;
-- si la capture locale échoue, la reconnaissance pédagogique continue normalement.
+- échec de capture = exercice vocal existant toujours utilisable.
 
-La capture simultanée exacte du premier essai reste hors scope tant qu’elle n’est pas prouvée fiable sur le vrai iPhone de Trân.
+La capture exacte du **premier essai** reste hors scope tant qu’un test réel sur l’iPhone de Trân n’a pas prouvé qu’une capture parallèle n’abîme pas la reconnaissance déjà validée.
 
-### 🧠 Détails d’apprentissage sans « parchemin »
+## 🧠 Détails d’apprentissage : fin du parchemin
 
-`Parcours → Détails d’apprentissage` garde une seule entrée, mais n’affiche plus tous les moteurs empilés. Les cartes sont regroupées par intention :
+`Parcours → Détails d’apprentissage` garde une seule entrée, mais les cartes ne sont plus empilées verticalement. Elles sont regroupées par intention :
 
 ```text
 🧠 Mémoire & révisions
@@ -54,43 +55,29 @@ La capture simultanée exacte du premier essai reste hors scope tant qu’elle n
 🧩 A1 & rythme
 ```
 
-Une tuile montre un résumé court. **Une seule famille détaillée est ouverte à la fois.**
+Une tuile affiche un résumé court ; **une seule famille détaillée est ouverte à la fois**. Les vraies cartes historiques restent dans le DOM et continuent d’être pilotées par leurs moteurs. Une future carte inconnue tombe dans `Autres détails` au lieu de disparaître.
 
-Les vraies cartes historiques restent dans le DOM et continuent à être mises à jour par Learning Memory, Error Intelligence, Mastery, Listening, Scenario, Adaptive Language, etc. Une carte future non reconnue tombe dans `Autres détails` au lieu de disparaître.
+Le dashboard est validé par Chrome et les contrats de progression ; il ne crée ni ne migre de données apprenantes.
 
-## Build 26 — baseline conservée
+## Baseline Build 26 conservée
 
-Real Life French III reste intégralement chargé : **8 situations / 24 tours** supplémentaires, Scenario total **36 / 108**, français oral naturel côté interlocuteur et réponses simples alternatives explicitement listées.
+Real Life French III reste intégralement chargé : **8 situations / 24 tours**, Scenario total **36 / 108**, Session UX Build 25.2 et Listening **0.88 / 0.64** inchangés.
 
-Le moteur reste déterministe et local. Session UX Build 25.2 continue à imposer **1 situation = 1 session**.
+Baseline historique protégée : **v1.17.0 — Build 24 — Real Life French II**, Scenario **28 situations / 84 tours** avant Pack III.
 
-## Baseline fonctionnelle historique conservée
+## CI / production
 
-Le contrat **v1.17.0 — Build 24 — Real Life French II** reste une baseline de non-régression explicite : avant Pack III, Scenario comptait **28 situations / 84 tours**.
+Sur le commit `8ad7e5e…` :
 
-## Listening / voix
-
-```text
-normal = 0.88
-lent   = 0.64
-```
-
-`voice-ios.js` et `free-voice.js` restent byte-identiques.
-
-## CI candidate
-
-Nouveau workflow **Build 26.1 Voice replay + Details dashboard smoke** :
-
-- syntaxe / wiring / cache ;
-- replay local-only, sans réseau ni persistance ;
-- sanctuaires voix/branding ;
-- vrai Chrome : dashboard groupé avec Memory + Mastery toujours présents ;
-- vrai Chrome : Real Life III toujours **36 / 108** ;
-- vrai Chrome : surface replay après un résultat vocal synthétique.
-
-Le smoke Build 26 Real Life French III a été rendu durable : il protège désormais le sous-système Pack III sans figer pour toujours la version globale à `1.19.0`.
-
-Tous les anciens contrats quality / Options / nav-mobile / Progression UX / Listening-rate / Session UX / Real Life III restent obligatoires avant merge.
+- quality ✅ ;
+- Options ✅ ;
+- nav/mobile ✅ ;
+- Progression UX ✅ ;
+- Listening-rate ✅ ;
+- Session UX ✅ ;
+- Real Life French III ✅ ;
+- Build 26.1 Voice Replay + Details Dashboard ✅ ;
+- GitHub Pages #98 ✅.
 
 ## Sanctuaires
 
@@ -108,7 +95,7 @@ Real Life III Build 26
 
 ## Suite
 
-1. **Build 26.1 — Voice Self-Playback + Learning Details Dashboard** — EN COURS.
+1. **Test terrain iPhone Build 26.1** : vérifier `M’enregistrer → Réécouter` après une vraie réponse reconnue.
 2. Build 27 — Data & Recovery Hardening.
 3. Build 28 — iPhone / PWA / Accessibility Hardening.
 4. Build 29 — Architecture Hardening.
