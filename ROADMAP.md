@@ -49,110 +49,108 @@
 43. **Desktop agrandit une app ; il ne transforme pas l’app en dashboard SaaS.**
 44. **La tab bar possède un seul état actif à la fois**, visuellement et sémantiquement.
 45. **Une page plein écran ne chevauche jamais la tab bar persistante.**
+46. **Une donnée durable invalide ne doit jamais devenir silencieusement une donnée neuve.**
+47. **Un restore multi-store est transactionnel : validation, écriture, vérification, rollback.**
+48. **Tout import/migration/reset destructif possède un snapshot préalable.**
+49. **Un vieux backup ne peut pas effacer une donnée moderne qu’il ne connaissait pas.**
+50. **Les données corrompues sont mises en quarantaine avant d’être écartées.**
+51. **Le Recovery Engine doit agir avant le runtime susceptible d’initialiser un état neuf.**
+52. **Les réglages dépendants de l’appareil ne deviennent pas automatiquement des données pédagogiques portables.**
 
 ---
 
-# Baseline production — v1.20.0 / Build 27
+# Baseline production — v1.21.0 / Build 28
 
-## App Shell Reset — ✅ PROD / CLOS
+## Data & Recovery Hardening — ✅ PROD / CLOS
 
-- runtime : `beeb9ce8ba081ed0298edbcc339dca41600e4d09` ;
-- PR runtime : **#60** ;
-- head PR certifié : `dba27d35b59b78bb63b1bf930c5f47b119feff36` ;
-- PR : **16/16 workflows fonctionnels SUCCESS** ;
-- `main` : **16/16 fonctionnels SUCCESS** après rerun inchangé du seul premier flake historique 26.8 ;
-- GitHub Pages : **#116 SUCCESS** ;
-- total runtime `main` : **17/17 SUCCESS Pages incluse** ;
-- revue visuelle CI : Home / Practice / Progress / Journey / mobile ;
+- runtime : `ed09159a6246fe3c1892cb0ff8d03a4beffb7428` ;
+- PR runtime : **#62** ;
+- head PR certifié : `dc060ea5304b0526010bd8ac158b70c363525325` ;
+- PR : **17/17 workflows SUCCESS** ;
+- `main` : **17/17 workflows fonctionnels SUCCESS** ;
+- GitHub Pages : **#118 SUCCESS** ;
+- total runtime `main` : **18/18 SUCCESS Pages incluse** ;
 - curriculum **40 / 241** ;
 - Scenario **36 / 108** ;
 - Listening **0.88 / 0.65** ;
 - coût 0 €.
 
-### Aujourd’hui
+### Coffre V2
 
-- [x] une seule prochaine leçon dominante ;
-- [x] un seul CTA principal ;
-- [x] exactement deux raccourcis : Réviser / Écouter ;
-- [x] ancien dashboard Home invisible côté apprenante ;
-- [x] desktop 1640×900 : Home mesurée **672 px** de haut ;
-- [x] mobile 390×844 : une colonne, zéro overflow horizontal.
+- [x] registre explicite de six stores durables ;
+- [x] learner ;
+- [x] Learning Memory ;
+- [x] Error Intelligence ;
+- [x] Scenario ;
+- [x] Listening ;
+- [x] Milestones ;
+- [x] réglages voix laissés locaux à l’appareil.
 
-### Pratiquer
+### Backup / restore
 
-- [x] vraie page dédiée ;
-- [x] 4 intentions : Parler / Écouter / Réviser / Dans la vraie vie ;
-- [x] priorité aux situations personnelles Jerry quand disponibles ;
-- [x] bouton retour explicite ;
-- [x] tab `Pratiquer` unique active ;
-- [x] page alignée exactement au-dessus de la tab bar ;
-- [x] feedback pointer + tap echo mobile.
+- [x] format `french-tranquille-backup` version 2 ;
+- [x] export des six stores ;
+- [x] validation avant export/import ;
+- [x] snapshot `pre-restore` ;
+- [x] snapshot `pre-migration` ;
+- [x] restore transactionnel ;
+- [x] vérification exacte après écriture ;
+- [x] rollback automatique sur erreur ;
+- [x] backup V1 migré sans effacer les stores modernes absents du vieux format.
 
-### Progrès
+### Corruption / récupération
 
-- [x] position A0 → A1 ;
-- [x] prochaine leçon ;
-- [x] étape actuelle ;
-- [x] 5 leçons utiles autour de la position ;
-- [x] aucun cockpit Memory/Mastery/Listening/Scenario dans l’UX normale ;
-- [x] cockpit historique uniquement en DEBUG FR ;
-- [x] accès au Parcours complet dédié.
+- [x] Recovery Engine avant `app.js` ;
+- [x] JSON invalide détecté ;
+- [x] schéma invalide détecté ;
+- [x] écriture invalide bloquée en runtime ;
+- [x] quarantaine bornée ;
+- [x] snapshot `last-good` ;
+- [x] fallback snapshot historique Build 22 ;
+- [x] seul le store irrécupérable est écarté si aucun fallback valide n’existe.
 
-### Parcours complet
+### Reset
 
-- [x] 5 étapes ;
-- [x] une seule étape expose ses leçons ;
-- [x] A1 Core = 15 leçons ;
-- [x] desktop multi-colonnes lorsque utile ;
-- [x] mobile 1 colonne ;
-- [x] aucun ghost de Progrès après transition.
+- [x] snapshot `pre-reset` ;
+- [x] les six stores durables sont supprimés ensemble ;
+- [x] snapshot pré-reset conservé ;
+- [x] restore après reset testé sur ancien profil synthétique.
 
-### Navigation / mouvement
+### Tribunal Build 28
 
-- [x] bottom nav historique conservée comme bus ;
-- [x] nœuds persistants ;
-- [x] une seule tab active ;
-- [x] `prefers-reduced-motion` ;
-- [x] fade / translate court ;
-- [x] animation découplée de la destination.
+Node :
 
-### Tribunal Build 27
+- [x] backup complet ;
+- [x] round-trip exact ;
+- [x] panne simulée pendant restore ;
+- [x] rollback exact ;
+- [x] invalid JSON/schema ;
+- [x] migration V1 préservant les stores modernes.
 
-```text
-Home
-→ Pratiquer
-→ retour
-→ Progrès
-→ Parcours complet
-→ A1 Core
-→ retour
-→ vraie leçon
-```
+Chrome réel :
 
-- [x] desktop 1640×900 ;
-- [x] mobile 390×844 ;
-- [x] 4 actions Practice ;
-- [x] 5 lignes Progress ;
-- [x] 5 étapes ;
-- [x] A1 Core 15 lignes ;
-- [x] vraie leçon atteinte ;
-- [x] zéro overflow horizontal ;
-- [x] captures visuelles hors transition ;
-- [x] nav physique réelle.
+- [x] tentative d’écriture learner cassée bloquée ;
+- [x] original conservé ;
+- [x] quarantaine créée ;
+- [x] backup complet + restore ;
+- [x] reset atomique ;
+- [x] profil historique **7 leçons + `l8=4`** récupéré ;
+- [x] corruption injectée avant `app.js` réparée depuis `last-good` ;
+- [x] Home Build 27 mobile `390×844` intacte.
 
-### Baselines historiques préservées
+### Sanctuaires / baselines
 
+- [x] `voice-ios.js` byte-identique ;
+- [x] `free-voice.js` byte-identique ;
+- [x] logo byte-identique ;
+- [x] favicon byte-identique ;
+- [x] Build 27 App Shell intact ;
 - [x] Build 26.9 Content Reliability ;
 - [x] Build 26.8 round-trip ;
 - [x] Build 26.7 geometry ;
 - [x] Build 26.6 containment / **12 → 12** ;
-- [x] Build 26.5 Conversation Exit ;
-- [x] Build 26.4 single-scroll ;
-- [x] Build 26.3 interactions ;
-- [x] Build 26.1 Voice Replay ;
 - [x] Session / Listening / Options / nav ;
-- [x] learner historique ;
-- [x] voix / logo / favicon byte-identiques.
+- [x] learner historique.
 
 Baseline historique protégée : **v1.17.0 — Build 24 — Real Life French II**, Scenario **28 situations / 84 tours** avant Pack III. `real-life-data-2.js` reste un marqueur canonique.
 
@@ -162,30 +160,60 @@ Baseline historique protégée : **v1.17.0 — Build 24 — Real Life French II*
 
 - [ ] réponse reconnue → seconde prise locale → lecture correcte → réponse vocale suivante toujours reconnue normalement.
 
+Ce gate reste indépendant du Build 28 : aucune modification de `voice-ios.js` ou `free-voice.js`.
+
 ---
-
-# v1.21.0 — Build 28 — Data & Recovery Hardening
-
-**Prochain gros chantier après le gate terrain / validation visuelle réelle du shell.**
-
-- sauvegarde/restauration cohérente ;
-- migrations versionnées ;
-- snapshot avant migration ;
-- localStorage corrompu toléré ;
-- tests zéro-perte ;
-- rollback documenté.
 
 # v1.22.0 — Build 29 — iPhone / PWA / Accessibility Hardening
 
-Safe areas, tactile, contraste, tailles, offline/install et vrais tests iPhone.
+**Prochain gros chantier.**
+
+Objectif : certifier French Trân’quille comme vraie PWA iPhone utilisable confortablement, sans modifier les moteurs pédagogiques inutilement.
+
+Axes prévus :
+
+- safe areas iPhone / encoche / barre Home ;
+- tailles tactiles ;
+- contraste et lisibilité ;
+- zoom / tailles de police / texte dynamique lorsque possible ;
+- `prefers-reduced-motion` déjà présent → audit complet ;
+- clavier / focus / labels accessibles ;
+- installation PWA / lancement standalone ;
+- offline réel après installation ;
+- rotation / petits et grands iPhone ;
+- comportement du clavier virtuel ;
+- tab bar et overlays avec viewport Safari réel ;
+- tests navigateur mobile renforcés ;
+- validation terrain iPhone quand nécessaire.
+
+Critères avant clôture :
+
+- [ ] aucune donnée Build 28 perdue ;
+- [ ] App Shell Build 27 intact ;
+- [ ] voice sanctuaries intactes sauf changement terrain explicitement justifié ;
+- [ ] audit accessibility documenté ;
+- [ ] PWA install/offline documentés et testés ;
+- [ ] Chrome mobile + vrais retours iPhone quand un comportement WebKit est en jeu.
+
+---
 
 # v1.23.0 — Build 30 — Architecture Hardening
 
 Découpage du noyau uniquement avec snapshots comparatifs ; pas de grande réécriture cosmétique du cœur.
 
+Priorités :
+
+- réduire le monolithe historique sans modifier le comportement ;
+- clarifier propriétaires DOM / state / routing ;
+- isoler davantage les moteurs ;
+- conserver les six stores Build 28 et leurs migrations ;
+- comparaison avant/après par smokes reproductibles.
+
+---
+
 # V2.0.0 — Freeze / Release
 
-Release cohérente, sauvegardable, testée et documentée.
+Release cohérente, sauvegardable, restaurable, testée et documentée. Aucun nouveau moteur nécessaire pour justifier V2 : le jalon est la **fiabilité globale du produit**.
 
 ---
 
@@ -193,9 +221,17 @@ Release cohérente, sauvegardable, testée et documentée.
 
 ```text
 francais-avec-luc:learner:v1
-Learning Memory state
-Scenario state
-Listening state
+french-tranquille:learning-memory:v1
+french-tranquille:error-intelligence:v1
+french-tranquille:scenarios:v1
+french-tranquille:listening:v1
+french-tranquille:milestones:v1
+french-tranquille:recovery:last-good:v1
+french-tranquille:recovery:pre-restore:v1
+french-tranquille:recovery:pre-migration:v1
+french-tranquille:recovery:pre-reset:v1
+french-tranquille:recovery:quarantine:v1
+french-tranquille:safety:pre-build22:v1
 voice-ios.js
 free-voice.js
 assets/LOGO.png
@@ -209,6 +245,8 @@ Progress Dashboard Containment Build 26.6
 Progress Open-Details Geometry Build 26.7
 Progress Focus Flow Build 26.8
 Progress Focus Content Reliability Build 26.9
+App Shell Build 27
+Data & Recovery Build 28
 ```
 
 Compatibilité interne conservée malgré le branding Tyffany : `LucieVoice`, `luc-*`, `lucie-*`.
