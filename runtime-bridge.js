@@ -1,4 +1,4 @@
-import CONTRACTS from './runtime-contracts.js?v=1.23.0-b30';
+import CONTRACTS from './runtime-contracts.js?v=2.0.0-b30';
 
 const REQUIRED_APIS = Object.freeze([
   'FrenchTranquilleCurriculum',

@@ -1,0 +1,41 @@
+{
+  "format": "french-tranquille-release-contract",
+  "version": "2.0.0",
+  "architectureBuild": 30,
+  "status": "freeze",
+  "product": {
+    "curriculumLessons": 40,
+    "curriculumItems": 241,
+    "scenarioSituations": 36,
+    "scenarioTurns": 108,
+    "listeningNormal": 0.88,
+    "listeningSlow": 0.65,
+    "maxSpeakingMomentsPerLesson": 2,
+    "recurringCostEuro": 0
+  },
+  "durableStores": [
+    "francais-avec-luc:learner:v1",
+    "french-tranquille:learning-memory:v1",
+    "french-tranquille:error-intelligence:v1",
+    "french-tranquille:scenarios:v1",
+    "french-tranquille:listening:v1",
+    "french-tranquille:milestones:v1"
+  ],
+  "sanctuaryHashes": {
+    "app.js": "600f094266c9f0c4c7b57efdbf61129909ebd9cb",
+    "voice-ios.js": "38e97aa3ef62dd6dcda224901b435f0973618679",
+    "free-voice.js": "b4c19b1936c788ee017eac9ba14e5a62c159e8d5",
+    "assets/LOGO.png": "64eaa6ad9781c6a9075d4f68615fc44344c4e21c",
+    "assets/Favicon.png": "c358672368a960bf7617e5532aff3e3319cddb3e"
+  },
+  "protectedLayers": [
+    "Build 27 App Shell",
+    "Build 28 Data & Recovery",
+    "Build 29 iPhone / PWA / Accessibility",
+    "Build 29.2 Speaking Loop Variety & Clarity",
+    "Build 30 Architecture Hardening"
+  ],
+  "fieldGates": {
+    "exactFirstAttemptVoiceCapture": "pending-real-iphone"
+  }
+}
