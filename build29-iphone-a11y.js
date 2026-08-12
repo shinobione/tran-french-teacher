@@ -114,6 +114,7 @@
   }
 
   function audit() {
+    const homeVisible = visible(document.querySelector('.b27-home'));
     const shellButtons = [...document.querySelectorAll('.b27-page button:not(:disabled),.b27-overlay button:not(:disabled),.ux-bottom-nav button:not(:disabled)')].filter(visible);
     const tooSmall = shellButtons.filter(button => {
       const rect = button.getBoundingClientRect();
@@ -125,6 +126,7 @@
     return {
       version: VERSION,
       build: BUILD,
+      homeVisible,
       buttons: shellButtons.length,
       tooSmall: tooSmall.length,
       unnamed: unnamed.length,
