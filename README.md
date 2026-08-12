@@ -4,91 +4,70 @@ PWA de français pensée pour **Trân**, avec priorité à l’oral, au françai
 
 ## État actuel
 
-### Production certifiée
+# ✅ V2.0.0 — Freeze / Release — PROD / CLOS
 
-- **v1.23.0 — Build 30 / Architecture Hardening**
-- statut : **✅ PROD / CLOS**
-- runtime production : `5a8369df9df536f41521acefb528da71efb168a8`
-- PR runtime : **#71**
-- head PR certifié : `ffa3ddf7a16dcbc32474701cfaf2f961e86d348c`
-- tribunal PR : **21/21 workflows fonctionnels SUCCESS** ; un ancien Chrome Real Life III a nécessité un rerun inchangé, puis les leçons 20 / 35 / 40 ont toutes repassé
-- tribunal runtime `main` : **21/21 workflows fonctionnels SUCCESS**
-- GitHub Pages runtime : **#129 SUCCESS** sur le SHA exact
-- total runtime `main` : **22/22 SUCCESS Pages incluse**
+French Trân’quille V2 gèle la baseline construite jusqu’à **Architecture Build 30**. Ce jalon n’ajoute ni nouveau moteur, ni nouveau curriculum, ni nouvelle navigation : il certifie le produit existant comme release reproductible, sauvegardable, restaurable et testée.
 
-Baselines inchangées : curriculum **40 leçons / 241 éléments**, Scenario **36 situations / 108 tours**, Listening **0.88 normal / 0.65 lent**, coût **0 €**.
+### Baseline V2 gelée
 
-### Baseline historique qualité conservée
+- curriculum : **40 leçons / 241 éléments** ;
+- Scenario : **36 situations / 108 tours** ;
+- Listening : **0.88 normal / 0.65 lent** ;
+- Speaking Loop : **2 moments maximum par leçon** ;
+- stores durables Recovery : **6** ;
+- coût récurrent : **0 €** ;
+- architecture : **Build 30** ;
+- version visible dans Options : **v2.0.0 • Build 30**.
 
-La CI protège toujours explicitement **v1.17.0 — Build 24 — Real Life French II** : **28 situations / 84 tours** avant Pack III, avec `real-life-data-2.js` comme référence historique. Build 30 n’efface donc pas les contrats plus anciens sous prétexte d’introduire une nouvelle frontière.
+### Preuves de release
 
-## 🏗️ Build 30 — Architecture Hardening
+- PR runtime V2 **#73** ; head certifié `c221fa9600d23dd83b87225cc4accce01e83cfe6` ; **22/22 workflows fonctionnels SUCCESS** ;
+- runtime applicatif V2 mergé : `5f2c486b3e455220ebd903f25ee766ff2430e4a5` ; **GitHub Pages #131 SUCCESS** sur ce SHA ;
+- l’ancien workflow Progression UX a ensuite révélé un Chrome non borné sur `main` malgré son passage sur la PR ;
+- PR CI-only **#74** : **un seul YAML GitHub Actions**, mêmes assertions, Chrome isolé + timeout + retries bornés ; head `0fbd3b8e8124b3beaf7d6086d8a837580abb2cb3` ; **22/22 fonctionnels SUCCESS** ;
+- baseline finale de certification : `6e0f5cde97cfba0572efccc6344a8bd6cbe7a315` ; **23/23 workflows SUCCESS**, dont **GitHub Pages #132 SUCCESS**.
 
-Build 30 ne réécrit pas brutalement le vieux cœur `app.js`. Il pose une **frontière architecturale explicite et testée** autour du runtime existant afin de préparer V2 sans mettre en danger les données réelles de Trân.
+Le commit `6e0f5cde…` ne change aucune ligne de PWA par rapport au runtime V2 : il stabilise uniquement son tribunal Progression UX.
 
-### Contrats canoniques
+## 🔐 Contrat de release
 
-`runtime-contracts.js` centralise en lecture seule :
+`release-v2.json` décrit la baseline machine-readable : version, Architecture Build, cardinalités produit, six stores durables, hashes des sanctuaires et gate terrain restant.
 
-- les **6 stores durables** Recovery ;
-- les snapshots de sécurité ;
-- les invariants produit `40 / 241`, Scenario `36 / 108`, Listening `0.88 / 0.65`, Speaking Loop `max 2` ;
-- les propriétaires des APIs globales ;
-- les phases de boot ;
-- les routes principales `today / practice / progress` ;
-- les sanctuaires.
+Le tribunal `.github/workflows/v2-release-freeze.yml` vérifie notamment :
 
-Le contrat est gelé avec `Object.freeze` et n’écrit dans aucun store.
+- concordance Release Contract ↔ Runtime Contracts ↔ Recovery ;
+- backup V2 à six stores ;
+- Options `v2.0.0 • Build 30` ;
+- navigation réelle `Progrès → Aujourd’hui → Pratiquer` ;
+- ancienne utilisatrice synthétique conservée à **7 leçons terminées / l8=4 / 40 acquis** ;
+- stores durables strictement inchangés pendant le round-trip ;
+- zéro overflow horizontal ;
+- hashes sanctuaires exacts.
 
-### Runtime Bridge
+## 🏗️ Architecture gelée
 
-`runtime-bridge.js` expose désormais une frontière stable :
+V2 conserve les couches suivantes :
 
-```text
-FrenchTranquilleRuntime.snapshot()
-FrenchTranquilleRuntime.refresh()
-FrenchTranquilleRuntime.route('today' | 'practice' | 'progress')
-FrenchTranquilleRuntime.openLesson(id)
-```
+- **Build 27 — App Shell** : Aujourd’hui / Pratiquer / Progrès ;
+- **Build 28 — Data & Recovery** : backup V2, snapshots, restore transactionnel, rollback, quarantaine ;
+- **Build 29 — iPhone / PWA / Accessibility** : safe areas, touch ≥44 px, a11y, offline ;
+- **Build 29.2 — Speaking Loop Variety & Clarity** : Tyffany, auto-écoute locale, anti-répétition, compréhension ≠ production ;
+- **Build 30 — Architecture Hardening** : Runtime Contracts, Runtime Bridge, ownership et routes stables.
 
-Le bridge observe Curriculum, learner, stores, APIs et navigation **sans prendre possession de leurs données**.
+## 🎙️ Audio / Speaking Loop
 
-### Pourquoi cette approche
+Le comportement reste celui validé avant le freeze :
 
-Le produit moderne s’est construit autour d’un noyau historique très sollicité. Une extraction massive aurait créé un risque disproportionné. Build 30 adopte donc un **strangler refactor** : l’ancien cœur reste le témoin de référence, tandis que les prochaines extractions pourront se faire derrière des contrats connus et testables.
-
-`app.js` est volontairement resté **byte-identique** pendant ce build.
-
-## 🧪 Tribunal Architecture
-
-Le nouveau smoke Chrome desktop + mobile vérifie réellement :
-
-- Runtime boundary prête ;
-- curriculum **40 / 241** ;
-- aucun propriétaire ou store dupliqué ;
-- Recovery / Build 27 Shell / Speaking Loop présents ;
-- navigation réelle **Progrès → Aujourd’hui → Pratiquer** via le bridge ;
-- **JSON learner brut strictement identique avant/après** ;
-- un seul onglet actif ;
-- zéro overflow horizontal.
-
-Les anciens tribunaux restent actifs en parallèle : Recovery, App Shell, iPhone/offline, Listening, Scenario, Progress, Options, navigation et Speaking Loop.
-
-## 🎙️ Speaking Loop / audio
-
-Le comportement Build 29.2 reste inchangé :
-
-- `🔊 Nghe Tyffany` / `🔊 Écouter Tyffany` comme modèle natif ;
-- `↻ Ghi âm lại` / `↻ Enregistrer à nouveau` après la prise ;
+- `🔊 Nghe Tyffany` / `🔊 Écouter Tyffany` ;
+- `↻ Ghi âm lại` / `↻ Enregistrer à nouveau` ;
 - compréhension ≠ production orale ;
 - planificateur contextualisé et anti-répétition ;
-- **2 moments maximum par leçon** ;
 - aucun faux score de prononciation ;
-- audio de réécoute local, volontaire, ≤9 s, sans upload ni persistance.
+- prise locale volontaire ≤9 s, jamais uploadée ni persistée dans la progression.
 
-## 🎧 Gate terrain iPhone encore ouvert
+## 📱 Gate terrain iPhone encore ouvert
 
-La propre voix est bien réécoutable après enregistrement. Le gate plus sensible reste à valider sur le vrai iPhone :
+La V2 est gelée avec le comportement sûr actuel. Le seul gate terrain restant concerne une éventuelle évolution future :
 
 ```text
 reconnaissance Free Voice
@@ -97,11 +76,9 @@ reconnaissance Free Voice
 → reconnaissance suivante toujours normale
 ```
 
-Tant que ce gate n’est pas validé, aucun enregistrement automatique du premier essai exact n’est lancé en parallèle de SpeechRecognition.
+Tant que ce test réel iPhone n’est pas confirmé, **aucune capture automatique du premier essai exact** n’est ajoutée en parallèle de SpeechRecognition.
 
-## 🛡️ Sanctuaires
-
-Build 30 conserve notamment :
+## 🛡️ Sanctuaires V2
 
 - `app.js` — `600f094266c9f0c4c7b57efdbf61129909ebd9cb` ;
 - `voice-ios.js` — `38e97aa3ef62dd6dcda224901b435f0973618679` ;
@@ -110,11 +87,17 @@ Build 30 conserve notamment :
 - `assets/Favicon.png` — `c358672368a960bf7617e5532aff3e3319cddb3e` ;
 - learner canonique `francais-avec-luc:learner:v1`.
 
-Build 27 App Shell, Build 28 Recovery, Build 29 iPhone/PWA/A11y et Build 29.2 Speaking Loop restent protégés par leurs CI historiques.
+## Baseline historique qualité conservée
+
+La CI protège toujours explicitement **v1.17.0 — Build 24 — Real Life French II** : **28 situations / 84 tours** avant Pack III, avec `real-life-data-2.js` comme référence historique. Une release V2 ne gomme donc pas les contrats qui ont servi à construire le produit.
 
 ## Suite
 
-1. Gate terrain iPhone Build 26.1 en parallèle.
-2. **V2.0.0 — Freeze / Release** : aucune nouvelle usine à gaz ; on certifie le produit existant comme release cohérente, sauvegardable, restaurable, testée et documentée.
+V2 marque un **point de freeze**, pas le départ automatique d’une nouvelle usine à gaz. La suite canonique est maintenant :
 
-Voir `ROADMAP.md`, `CHANGELOG.md`, `docs/ARCHITECTURE.md` et `docs/BUILD-30-ARCHITECTURE-HARDENING.md`.
+1. usage réel / observation ;
+2. gate terrain iPhone Voice Replay ;
+3. maintenance et correctifs critiques si nécessaires ;
+4. toute future V2.x/V3 repartira d’une roadmap explicite, pas d’un empilement opportuniste.
+
+Voir `ROADMAP.md`, `CHANGELOG.md`, `docs/ARCHITECTURE.md` et `docs/V2-RELEASE.md`.

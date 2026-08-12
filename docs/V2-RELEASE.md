@@ -2,9 +2,9 @@
 
 ## Statut
 
-**V2.0.0 — CANDIDAT RELEASE**
+# ✅ V2.0.0 — PROD / CLOS
 
-V2 n’ajoute aucun nouveau moteur pédagogique. La release gèle et certifie la baseline déjà construite jusqu’au Build 30.
+V2 n’ajoute aucun nouveau moteur pédagogique. La release gèle et certifie la baseline construite jusqu’au **Build 30**.
 
 ## Baseline gelée
 
@@ -15,18 +15,75 @@ Curriculum             40 leçons / 241 éléments
 Scenario               36 situations / 108 tours
 Listening              0.88 normal / 0.65 lent
 Speaking Loop          max 2 moments / leçon
+Stores durables        6
 Coût récurrent         0 €
 ```
 
-Le contrat machine correspondant vit dans `release-v2.json`.
+Le contrat machine correspondant vit dans `release-v2.json` avec le statut lifecycle-neutral `freeze`.
 
-## Couches protégées
+## Preuves de certification
 
-- **Build 27 — App Shell Reset** : Aujourd’hui / Pratiquer / Progrès ;
-- **Build 28 — Data & Recovery** : backup V2, restore transactionnel, rollback, snapshots, quarantaine ;
-- **Build 29 — iPhone / PWA / Accessibility** : safe areas, touch, a11y, reduced motion, offline ;
-- **Build 29.2 — Speaking Loop Variety & Clarity** : Tyffany, auto-écoute locale, anti-répétition, compréhension ≠ production ;
-- **Build 30 — Architecture Hardening** : Runtime Contracts / Runtime Bridge / ownership / route facade.
+### PR runtime V2 #73
+
+```text
+head c221fa9600d23dd83b87225cc4accce01e83cfe6
+22 / 22 workflows fonctionnels SUCCESS
+```
+
+Aucun nouveau curriculum, aucun moteur, aucune navigation, aucune migration learner.
+
+### Runtime applicatif
+
+```text
+5f2c486b3e455220ebd903f25ee766ff2430e4a5
+GitHub Pages #131 SUCCESS
+```
+
+Sur ce `main`, l’ancien Progression UX a reproduit un problème **de runner Chrome non borné** qu’il n’avait pas reproduit sur le head PR. Tous les autres fonctionnels et Pages étaient verts ; aucune régression PWA n’était observée.
+
+### PR CI-only #74
+
+```text
+head 0fbd3b8e8124b3beaf7d6086d8a837580abb2cb3
+1 fichier .github/workflows/progression-ux-smoke.yml
+22 / 22 workflows fonctionnels SUCCESS
+```
+
+Le patch conserve exactement les quatre scénarios et assertions Progression, mais ajoute :
+
+- profils Chrome isolés ;
+- `disable-background-timer-throttling` ;
+- `disable-renderer-backgrounding` ;
+- timeout / kill-after ;
+- maximum trois tentatives bornées.
+
+**Aucun fichier PWA/runtime n’a changé.**
+
+### Baseline finale de certification
+
+```text
+main 6e0f5cde97cfba0572efccc6344a8bd6cbe7a315
+22 / 22 workflows fonctionnels SUCCESS
+GitHub Pages #132 SUCCESS
+23 / 23 workflows SUCCESS au total
+```
+
+Cette baseline sert exactement le même code applicatif V2 que `5f2c486…` ; seul le tribunal Progression UX est devenu reproductible.
+
+## Contrat de release
+
+`release-v2.json` gèle :
+
+- version `2.0.0` ;
+- Architecture Build `30` ;
+- `40/241` ;
+- Scenario `36/108` ;
+- Listening `0.88/0.65` ;
+- Speaking Loop max `2` ;
+- coût `0 €` ;
+- six stores durables ;
+- hashes sanctuaires ;
+- gate terrain iPhone encore ouvert.
 
 ## Stores durables gelés
 
@@ -53,50 +110,40 @@ assets/Favicon.png      c358672368a960bf7617e5532aff3e3319cddb3e
 
 La CI lit également ces hashes depuis `release-v2.json`.
 
-## Changements runtime autorisés par le freeze
+## Couches protégées
 
-Seulement la plomberie de release :
-
-- `FrenchTranquilleBuildMeta.version` passe à `2.0.0` ;
-- `FrenchTranquilleRuntimeContracts.version` passe à `2.0.0` ;
-- Architecture reste **Build 30** ;
-- URLs versionnées Runtime Contracts / Runtime Bridge passent à `2.0.0-b30` ;
-- le Service Worker précache le contrat de release et le smoke V2 ;
-- Build 30 CI devient version-forward tout en exigeant toujours Architecture Build 30.
-
-Aucune logique learner, Recovery, voix, curriculum, Scenario, Listening ou Speaking Loop n’est modifiée.
+- **Build 27 — App Shell Reset** : Aujourd’hui / Pratiquer / Progrès ;
+- **Build 28 — Data & Recovery** : backup V2, restore transactionnel, rollback, snapshots, quarantaine ;
+- **Build 29 — iPhone / PWA / Accessibility** : safe areas, touch, a11y, reduced motion, offline ;
+- **Build 29.2 — Speaking Loop Variety & Clarity** : Tyffany, auto-écoute locale, anti-répétition, compréhension ≠ production ;
+- **Build 30 — Architecture Hardening** : Runtime Contracts / Runtime Bridge / ownership / route facade.
 
 ## Tribunal V2 dédié
 
-Workflow : `.github/workflows/v2-release-freeze.yml`
+Workflow : `.github/workflows/v2-release-freeze.yml`.
 
 ### Contrat statique
 
-- `release-v2.json` = version `2.0.0`, Architecture `30`, baseline `40/241`, `36/108`, `0.88/0.65`, max 2 moments, 0 € ;
+- Release Contract exact ;
 - six stores uniques ;
-- concordance Runtime Contracts ↔ Recovery ↔ release contract ;
-- sanctuaires hashés ;
+- Runtime Contracts ↔ Recovery ↔ Release Contract ;
+- hashes sanctuaires ;
 - aucune écriture depuis Runtime Contracts / Runtime Bridge ;
-- assets de tribunal V2 présents dans le précache.
+- assets V2 présents dans le précache PWA.
 
 ### Chrome desktop — profil propre
 
-Le navigateur exige :
-
-- version visible `v2.0.0 • Build 30` dans Options ;
-- Runtime / release contract / backup V2 tous alignés sur `2.0.0 / 30` ;
-- curriculum `40/241` ;
-- Scenario `36/108` ;
-- Listening `0.88/0.65` ;
-- six stores Recovery ;
-- backup V2 contenant six stores ;
-- route réelle `Progrès → Aujourd’hui → Pratiquer` ;
-- stores durables byte-identiques avant/après la navigation ;
+- Options affiche `v2.0.0 • Build 30` ;
+- Runtime / Release Contract / backup V2 alignés ;
+- `40/241`, `36/108`, `0.88/0.65` ;
+- backup V2 à six stores ;
+- `Progrès → Aujourd’hui → Pratiquer` ;
+- stores durables byte-identiques avant/après ;
 - zéro overflow horizontal.
 
 ### Chrome mobile — ancienne utilisatrice
 
-Le profil synthétique historique reste :
+Le profil historique reste :
 
 ```text
 7 leçons terminées
@@ -105,19 +152,13 @@ progress l8 = 4
 40 acquis connus
 ```
 
-Le tribunal exige ces valeurs après boot V2 et après le round-trip UI, avec stores durables inchangés.
+Ces valeurs restent intactes après le boot et le round-trip V2.
 
 ## Tribunaux historiques
 
-Le tribunal V2 ne remplace rien. Tous les workflows historiques restent actifs en parallèle : Recovery, iPhone/offline/a11y, Speaking Loop 29.1/29.2, Build 30 Architecture, Options, navigation, Progress, Scenario, Listening, qualité générale, etc.
+Le tribunal V2 ne remplace aucun garde : Recovery, iPhone/offline/a11y, Speaking Loop 29.1/29.2, Build 30 Architecture, Options, navigation, Progress, Scenario, Listening et qualité générale continuent de tourner.
 
-La release ne sera pas déclarée PROD tant que :
-
-1. le head exact de PR n’a pas tous ses fonctionnels verts ;
-2. le runtime V2 n’est pas mergé sur `main` ;
-3. le même tribunal n’est pas vert sur `main` ;
-4. GitHub Pages n’a pas servi le SHA runtime exact ;
-5. la clôture documentaire séparée n’a pas elle-même repassé la CI.
+La finalisation CI de Progression garantit désormais qu’un runner Chrome ne peut plus rester vivant indéfiniment pendant un freeze.
 
 ## Gate terrain iPhone séparé
 
@@ -130,15 +171,19 @@ reconnaissance Free Voice
 → reconnaissance suivante toujours normale
 ```
 
-Ce gate n’empêche pas de geler V2 avec le comportement actuel. Il empêche uniquement une évolution future vers la capture automatique du **premier essai exact** en parallèle de SpeechRecognition.
+Ce gate **ne remet pas V2 en cause**. Il bloque uniquement une éventuelle future capture automatique du **premier essai exact** en parallèle de SpeechRecognition.
 
 ## Hors scope V2
 
 - nouveau curriculum ;
 - nouveau moteur ;
 - nouvelle navigation ;
-- nouveau score de prononciation ;
+- score de prononciation artificiel ;
 - capture automatique du premier essai ;
 - migration/renommage des stores ;
 - refonte esthétique ;
 - API ou backend payant.
+
+## Après le freeze
+
+Aucun Build 31 automatique. La prochaine roadmap doit venir d’un besoin terrain observé, pas d’une envie d’empiler une couche de plus.
