@@ -1,0 +1,131 @@
+/* French Trân'quille — v1.19.6 Build 26.6
+   Progress dashboard containment + humanized curriculum disclosure.
+
+   Details must remain a descendant of the historical first Progress column so
+   legacy engines can find the cards they already created. Visual independence
+   is achieved by a nested composition grid instead of moving Details outside
+   that ownership boundary.
+ */
+
+.screen-progress .progress-layout.progress-ux-ready{
+  min-width:0!important;
+}
+
+.screen-progress .progress-layout.progress-ux-ready > .progress-ux-composition{
+  min-width:0!important;
+}
+
+.screen-progress .progress-ux-left-flow{
+  min-width:0;
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  gap:16px;
+  align-content:start;
+}
+
+.screen-progress .progress-ux-left-flow > .progress-ux-overview,
+.screen-progress .progress-ux-left-flow > .progress-ux-curriculum{
+  min-width:0!important;
+  margin:0!important;
+}
+
+/* The old Build 26.5 direct-sibling Details rule is intentionally superseded. */
+@media(min-width:861px){
+  .screen-progress .progress-layout.progress-ux-ready{
+    display:block!important;
+  }
+
+  .screen-progress .progress-layout.progress-ux-ready > .progress-ux-composition{
+    display:grid!important;
+    grid-template-columns:minmax(0,.94fr) minmax(440px,1.06fr)!important;
+    grid-template-areas:"flow details"!important;
+    gap:18px!important;
+    align-items:start!important;
+    width:100%!important;
+  }
+
+  .screen-progress .progress-layout.progress-ux-ready > .progress-ux-composition > .progress-ux-left-flow{
+    grid-area:flow!important;
+  }
+
+  .screen-progress .progress-layout.progress-ux-ready > .progress-ux-composition > .progress-ux-details{
+    grid-area:details!important;
+    margin:0!important;
+    min-width:0!important;
+  }
+}
+
+@media(max-width:860px){
+  .screen-progress .progress-layout.progress-ux-ready{
+    display:block!important;
+  }
+
+  .screen-progress .progress-layout.progress-ux-ready > .progress-ux-composition{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:"flow" "details"!important;
+    gap:12px!important;
+  }
+
+  .screen-progress .progress-layout.progress-ux-ready > .progress-ux-composition > .progress-ux-left-flow{
+    grid-area:flow!important;
+    gap:12px;
+  }
+
+  .screen-progress .progress-layout.progress-ux-ready > .progress-ux-composition > .progress-ux-details{
+    grid-area:details!important;
+    min-width:0!important;
+    margin:0 0 12px!important;
+  }
+}
+
+/* Humanized 40-lesson view: choose a stage, then see only that stage. */
+.progress-ux-stage-nav{
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  gap:7px;
+  margin:12px 0 10px;
+}
+.progress-ux-stage-nav[hidden]{display:none!important}
+.progress-ux-stage-button{
+  width:100%;
+  min-height:54px;
+  padding:10px 12px;
+  border:1px solid rgba(180,199,224,.12);
+  border-radius:14px;
+  background:rgba(7,17,29,.42);
+  color:#e7eef6;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  text-align:left;
+  cursor:pointer;
+  transition:transform .1s ease,border-color .16s ease,background .16s ease;
+}
+.progress-ux-stage-button:active{transform:scale(.988)}
+.progress-ux-stage-button span{min-width:0}
+.progress-ux-stage-button strong,.progress-ux-stage-button small{display:block}
+.progress-ux-stage-button strong{font-size:.78rem;line-height:1.25;letter-spacing:.015em}
+.progress-ux-stage-button small{margin-top:3px;color:#8ea3bb;font-size:.66rem;line-height:1.25}
+.progress-ux-stage-button b{flex:0 0 auto;color:#91a6be;font-size:.8rem}
+.progress-ux-stage-button.active{
+  border-color:rgba(159,247,209,.3);
+  background:linear-gradient(135deg,rgba(159,247,209,.09),rgba(201,167,255,.06));
+}
+.progress-ux-stage-button.active strong,.progress-ux-stage-button.active b{color:#b9f4db}
+.progress-ux-curriculum .progress-ux-chapter-hidden{display:none!important}
+
+/* Cards owned by Details never leak margins back into the composition grid. */
+.progress-ux-details .progress-detail-panel-cards > .card{
+  min-width:0!important;
+}
+
+@media(max-width:520px){
+  .progress-ux-stage-nav{gap:6px;margin-top:10px}
+  .progress-ux-stage-button{min-height:52px;padding:9px 10px;border-radius:13px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .progress-ux-stage-button{transition:none!important}
+}
