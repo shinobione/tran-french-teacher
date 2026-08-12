@@ -281,24 +281,41 @@
     });
   }
 
+  function markRoundtrip(stage) {
+    document.documentElement.dataset.b268RoundtripStage = stage;
+  }
+
   function smokeRoundTrip() {
+    markRoundtrip('nav');
     navProgress(n => {
+      markRoundtrip('progress-ready');
       if (!n.details.open) n.details.querySelector(':scope > summary')?.click();
+      markRoundtrip('details-open-requested');
       waitFor(() => n.dashboard.querySelector('[data-progress-detail-open="memory"]'), tile => {
+        markRoundtrip('memory-ready');
         tile.click();
+        markRoundtrip('memory-clicked');
         waitFor(() => n.layout.dataset.b268Focus === 'details', () => {
+          markRoundtrip('details-focused');
           n.body.querySelector('[data-b268-focus-back="details"]')?.click();
+          markRoundtrip('details-back-clicked');
           waitFor(() => !n.layout.dataset.b268Focus && !n.details.dataset.progressDetailActive, () => {
+            markRoundtrip('details-returned');
             const toggle = n.curriculum.querySelector('[data-progress-toggle-all]');
             toggle?.click();
+            markRoundtrip('curriculum-clicked');
             waitFor(() => n.layout.dataset.b268Focus === 'curriculum', () => {
+              markRoundtrip('curriculum-focused');
               n.flow.querySelector('[data-b268-focus-back="curriculum"]')?.click();
-              waitFor(() => !n.layout.dataset.b268Focus && n.curriculum.dataset.progressExpanded === '0', () => {
+              markRoundtrip('curriculum-back-clicked');
+              waitFor(() => !n.layout.dataset.b268Focus && n.curriculum.dataset.progressExpanded !== '1', () => {
+                markRoundtrip('curriculum-returned');
                 const visibleRows = [...n.curriculum.querySelectorAll('.lesson-row')].filter(row => getComputedStyle(row).display !== 'none').length;
                 document.documentElement.dataset.b268RoundtripCompactRows = String(visibleRows);
                 document.documentElement.dataset.b268RoundtripDetailsActive = n.details.dataset.progressDetailActive || '';
                 document.documentElement.dataset.b268RoundtripFocus = n.layout.dataset.b268Focus || '';
                 document.documentElement.dataset.b268RoundtripComplete = '1';
+                markRoundtrip('complete');
               });
             });
           });
