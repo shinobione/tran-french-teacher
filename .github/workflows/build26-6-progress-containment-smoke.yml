@@ -55,7 +55,7 @@ jobs:
           sleep 1
           google-chrome --version
 
-      - name: Chrome desktop — dashboard stays bounded and curriculum uses stages
+      - name: Chrome desktop — dashboard reaches quiescence and stays bounded
         run: |
           passed=0
           for attempt in 1 2 3; do
@@ -76,18 +76,17 @@ jobs:
               && grep -q 'data-b266-left-flow="1"' "$file" \
               && grep -q 'data-b266-overview-outside-details="1"' "$file" \
               && grep -q 'data-b266-curriculum-outside-details="1"' "$file" \
+              && grep -q 'data-b266-dashboard-settled="1"' "$file" \
               && grep -q 'data-b266-dashboard-stable="1"' "$file" \
               && grep -q 'data-b266-dashboard-bounded="1"' "$file" \
+              && grep -q 'data-b266-dashboard-other-bounded="1"' "$file" \
               && grep -q 'data-b266-engine-cards-unique="1"' "$file" \
               && grep -q 'data-b266-dashboard-forbidden-final="0"' "$file" \
-              && grep -q 'data-b266-curriculum-stage-mode="1"' "$file" \
-              && grep -q 'data-b266-curriculum-no-wall="1"' "$file" \
-              && grep -q 'data-b266-curriculum-a1-core-rows="15"' "$file" \
-              && grep -q 'data-b266-curriculum-all-accessible="1"' "$file" \
-              && grep -q 'data-b266-dashboard-stable-after-curriculum="1"' "$file" \
+              && grep -q 'data-b266-containment-complete="1"' "$file" \
               && grep -q 'data-progress-current-lesson="l8"' "$file" \
               && grep -q 'data-progress-completed="7"' "$file" \
               && grep -q 'data-progress-known="40"' "$file" \
+              && grep -q 'data-progress-visible-rows="5"' "$file" \
               && grep -q 'data-progress-total-rows="40"' "$file"; then
               passed=1
               break
@@ -97,11 +96,50 @@ jobs:
             grep -o 'data-progress-[^ >]*' "$file" | head -30 || true
           done
           if [ "$passed" -ne 1 ]; then
-            echo 'Build 26.6 desktop containment/humanization smoke failed after 3 bounded attempts'
+            echo 'Build 26.6 desktop containment smoke failed after 3 bounded attempts'
             exit 1
           fi
 
-      - name: Chrome mobile — compact order and containment survive stage navigation
+      - name: Chrome desktop — full curriculum is navigated as five human-sized stages
+        run: |
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-b266-curriculum-profile-$attempt"
+            file="/tmp/b266-curriculum-$attempt.html"
+            rm -rf "$profile" "$file"
+            if ! timeout --signal=TERM --kill-after=5s 44s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=1280,900 \
+              --virtual-time-budget=32000 --dump-dom \
+              'http://127.0.0.1:4173/?uxSmoke=lesson8&debug=fr&b266Smoke=curriculum' >"$file"; then
+              echo "Build 26.6 curriculum attempt $attempt timed out or exited non-zero"
+              continue
+            fi
+            if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then continue; fi
+            if grep -q 'data-b266-curriculum-interaction-complete="1"' "$file" \
+              && grep -q 'data-b266-curriculum-stage-mode="1"' "$file" \
+              && grep -q 'data-b266-curriculum-initial-stage-rows="8"' "$file" \
+              && grep -q 'data-b266-curriculum-no-wall="1"' "$file" \
+              && grep -q 'data-b266-curriculum-a1-core-rows="15"' "$file" \
+              && grep -q 'data-b266-curriculum-all-accessible="1"' "$file" \
+              && grep -q 'data-b266-dashboard-stable-after-curriculum="1"' "$file" \
+              && grep -q 'data-progress-stage-count="5"' "$file" \
+              && grep -q 'data-progress-active-stage="25"' "$file" \
+              && grep -q 'data-progress-visible-rows="15"' "$file" \
+              && grep -q 'data-progress-total-rows="40"' "$file"; then
+              passed=1
+              break
+            fi
+            echo "Build 26.6 curriculum attempt $attempt missing markers"
+            grep -o 'data-b266-[^ >]*' "$file" | head -50 || true
+            grep -o 'data-progress-[^ >]*' "$file" | head -30 || true
+          done
+          if [ "$passed" -ne 1 ]; then
+            echo 'Build 26.6 staged curriculum interaction smoke failed after 3 bounded attempts'
+            exit 1
+          fi
+
+      - name: Chrome mobile — compact order stays bounded with Details collapsed
         run: |
           passed=0
           for attempt in 1 2 3; do
@@ -120,16 +158,14 @@ jobs:
             if grep -q 'app-shell screen-progress' "$file" \
               && grep -q 'data-b266-details-contained="1"' "$file" \
               && grep -q 'data-b266-left-flow="1"' "$file" \
+              && grep -q 'data-b266-dashboard-settled="1"' "$file" \
               && grep -q 'data-b266-dashboard-stable="1"' "$file" \
               && grep -q 'data-b266-dashboard-bounded="1"' "$file" \
               && grep -q 'data-b266-engine-cards-unique="1"' "$file" \
               && grep -q 'data-b266-dashboard-forbidden-final="0"' "$file" \
-              && grep -q 'data-b266-curriculum-stage-mode="1"' "$file" \
-              && grep -q 'data-b266-curriculum-no-wall="1"' "$file" \
-              && grep -q 'data-b266-curriculum-a1-core-rows="15"' "$file" \
-              && grep -q 'data-b266-curriculum-all-accessible="1"' "$file" \
-              && grep -q 'data-b266-dashboard-stable-after-curriculum="1"' "$file" \
               && grep -q 'data-b266-mobile-details-closed="1"' "$file" \
+              && grep -q 'data-b266-containment-complete="1"' "$file" \
+              && grep -q 'data-progress-visible-rows="5"' "$file" \
               && grep -q 'data-progress-total-rows="40"' "$file"; then
               passed=1
               break
@@ -138,7 +174,7 @@ jobs:
             grep -o 'data-b266-[^ >]*' "$file" | head -50 || true
           done
           if [ "$passed" -ne 1 ]; then
-            echo 'Build 26.6 mobile containment/humanization smoke failed after 3 bounded attempts'
+            echo 'Build 26.6 mobile containment smoke failed after 3 bounded attempts'
             exit 1
           fi
 
