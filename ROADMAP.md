@@ -67,34 +67,27 @@
 
 ---
 
-# Baseline production — v1.22.1 / Build 29.1
+# Baseline production — v1.22.2 / Build 29.2
 
-## Speaking Loop Content — ✅ PROD / CLOS
+## Speaking Loop Variety & Clarity — ✅ PROD / CLOS
 
-- PR runtime **#66** ; head `df730d60a8434819cb19f116eb0dc66c3718b5f4` ;
-- runtime `b2fde53792c38d1e6283d8779bbcedfac36f9502` ;
-- PR **19/19 fonctionnels SUCCESS** ; `main` **19/19 fonctionnels SUCCESS** ;
-- Pages **#122 SUCCESS** ; total runtime **20/20 SUCCESS Pages incluse** ;
+- PR runtime **#68** ; head certifié `947896ff8eed75aa805be63cc24821b1c2247980` ;
+- runtime `b6031cd8fa6756eee39496cd62a164b8400d15af` ;
+- PR : **20/20 workflows fonctionnels SUCCESS** ;
+- `main` : **20/20 workflows fonctionnels SUCCESS** ;
+- l’ancien smoke Build 26.8 a montré son flake historique `curriculum-clicked` sur PR/main et a été rerun **sans changement de code** jusqu’au passage complet ; ses tests Details/Curriculum de 920 px restaient verts ;
+- GitHub Pages **#126 SUCCESS** sur le SHA runtime exact ;
+- total runtime `main` : **21/21 SUCCESS Pages incluse** ;
 - curriculum **40 / 241** ; Scenario **36 / 108** ; Listening **0.88 / 0.65** ; coût 0 €.
-
-29.1 a introduit au maximum deux moments d’auto-écoute locaux par leçon, sans upload, sans persistance audio et sans modifier les sanctuaires voix/data.
-
----
-
-# v1.22.2 — Build 29.2 — Speaking Loop Variety & Clarity
-
-**Candidat actuel.**
-
-Objectif : corriger les problèmes révélés par le premier vrai usage de 29.1 sans augmenter le nombre de moments oraux.
 
 ### Clarté UI
 
 - [x] `↻ Ghi âm lại` côté Trân ;
 - [x] `↻ Enregistrer à nouveau` en DEBUG FR ;
-- [x] bouton audio natif renommé `🔊 Nghe Tyffany` / `🔊 Écouter Tyffany` ;
+- [x] bouton audio natif `🔊 Nghe Tyffany` / `🔊 Écouter Tyffany` ;
 - [x] courte explication indiquant que Tyffany fournit le modèle ;
-- [x] pas de second bouton Tyffany lorsque l’exercice possède déjà son bouton audio ;
-- [x] un seul bouton modèle au rappel final, où aucun bouton audio natif n’existe.
+- [x] zéro bouton Tyffany dupliqué lorsque l’exercice possède déjà son playback ;
+- [x] un seul bouton modèle au recap final, où aucun playback natif n’existe.
 
 ### Contrat pédagogique
 
@@ -102,13 +95,13 @@ Objectif : corriger les problèmes révélés par le premier vrai usage de 29.1 
 - [x] deuxième moment déplacé sur la fin de leçon sous forme de `recap` ;
 - [x] deux cibles distinctes par leçon ;
 - [x] nombres/unités isolés fortement défavorisés comme cibles orales ;
-- [x] réutilisation possible d’un acquis déjà connu uniquement si le contexte correspond ;
+- [x] réutilisation d’un acquis déjà connu uniquement si le contexte correspond ;
 - [x] Learning Memory consultée en lecture seule pour favoriser fragile/dû/learning ;
 - [x] fenêtre récente anti-répétition ;
 - [x] aucun `localStorage.setItem` depuis le planificateur oral ;
 - [x] toujours **2 moments maximum**.
 
-### Régression Bài 7 sous CI
+### Régression Bài 7 verrouillée
 
 Le challenge canonique reste :
 
@@ -116,25 +109,18 @@ Le challenge canonique reste :
 « dix euros » → 10 euros
 ```
 
-Mais `10 euros` ne doit plus être la cible orale finale. Avec les acquis des leçons précédentes, le rappel contextuel attendu est :
+Mais la cible orale finale attendue, avec les acquis précédents, est :
 
 ```text
 Combien ça coûte ?
 ```
 
-Le tribunal 29.2 doit aussi prouver qu’une seconde planification avec les deux cibles récentes choisit autre chose lorsqu’une alternative cohérente existe.
+Le tribunal 29.2 prouve également qu’une seconde planification avec les deux cibles récentes choisit une autre alternative cohérente.
 
-### Gates avant merge
+### Terrain audio
 
-- [ ] nouveau tribunal Build 29.2 desktop + `390×844` vert ;
-- [ ] Build 29.1 version-forward vert ;
-- [ ] Build 29 PWA/offline vert ;
-- [ ] Build 28 Recovery vert ;
-- [ ] Build 27 App Shell vert ;
-- [ ] Build 26.1 Voice Replay vert ;
-- [ ] tous les anciens contrats fonctionnels verts ;
-- [ ] sanctuaires byte-identiques ;
-- [ ] PR → `main` → Pages → clôture docs-only.
+- [x] la lecture de **sa propre voix** après enregistrement fonctionne dans le flux local ;
+- [ ] gate Free Voice complet sur vrai iPhone : reconnaissance → seconde prise → lecture → **reconnaissance suivante** toujours normale.
 
 ---
 
