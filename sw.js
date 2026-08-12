@@ -1,4 +1,4 @@
-const CACHE='tran-french-teacher-v1.22.1-b29.1-speaking-loop';
+const CACHE='tran-french-teacher-v1.22.0-b29-iphone-pwa-a11y';
 const V='1.17.0-b24';
 const UX='1.17.5-b24.5';
 const P25='1.18.0-b25';
