@@ -4,45 +4,44 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ## [Unreleased]
 
+### v1.22.2 — Build 29.2 — Speaking Loop Variety & Clarity — CANDIDAT
+
+- remplace le libellé ambigu `Refaire` par **`Ghi âm lại`** côté Trân et **`Enregistrer à nouveau`** en DEBUG FR ;
+- renomme le bouton audio natif des étapes en **`Nghe Tyffany` / `Écouter Tyffany`** et explique brièvement qu’il fournit le modèle français ;
+- supprime le bouton Tyffany redondant du Speaking Loop lorsqu’un bouton audio natif existe déjà ;
+- sépare désormais **compréhension/reconnaissance** et **production orale** : `lesson.challenge.answer` n’est plus automatiquement la cible du deuxième Speaking Loop ;
+- déplace le deuxième moment oral sur la fin de leçon sous forme de `recap` ;
+- ajoute un planificateur oral contextualisé : qualité de phrase, thème de la leçon, acquis connus, proximité de contenu, Learning Memory en lecture seule et fenêtre anti-répétition ;
+- les acquis `fragile` / `due` peuvent remonter seulement lorsqu’ils restent sémantiquement pertinents pour la leçon ;
+- nombres et unités isolés sont fortement défavorisés comme cibles de production ;
+- régression explicite Bài 7 : **`10 euros` reste une réponse de compréhension, mais ne doit plus être la cible orale finale** ; avec le contexte appris antérieurement, le rappel attendu est `Combien ça coûte ?` ;
+- ajoute un smoke Chrome 29.2 desktop + `390×844` qui vérifie variété, anti-répétition, absence du bouton modèle dupliqué, labels Tyffany, cible tactile ≥44 px, zéro overflow et absence de faux score de prononciation ;
+- le workflow historique Build 29.1 devient version-forward tout en gardant son contrat de deux moments oraux ;
+- **2 moments maximum / 40 leçons / 241 éléments** inchangés ; Scenario **36/108** et Listening **0.88/0.65** inchangés ;
+- `voice-ios.js`, `free-voice.js`, learner, logo et favicon restent sanctuarisés ;
+- aucune écriture durable depuis le planificateur oral ; audio local ≤9 s, sans upload ;
+- gate terrain Build 26.1 toujours ouvert pour `reconnaissance → seconde prise → lecture → reconnaissance suivante`.
+
 ---
 
 ## [1.22.1] — Build 29.1 — Speaking Loop Content — 2026-08-12
 
-- intègre l’auto-écoute demandée par Trân directement dans les leçons ;
-- sélectionne une phrase orale utile par leçon depuis le curriculum réellement chargé ;
-- ajoute un second moment oral après réussite de la situation finale ;
-- limite volontairement à **2 moments maximum par leçon** ;
+- intègre l’auto-écoute directement dans les leçons ;
+- limite volontairement à **2 moments maximum par leçon** et couvre **40/40 leçons** ;
 - modèle Tyffany → seconde prise locale volontaire → `Ma voix` → Tyffany → refaire/continuer ;
-- couvre **40/40 leçons** sans modifier les **40/241** acquis ;
-- aucun score numérique de prononciation ;
-- audio local, temporaire, ≤9 s, jamais uploadé ni ajouté aux stores durables ;
-- `voice-ios.js`, `free-voice.js`, logo et favicon byte-identiques ;
-- nouveau tribunal Chrome : vraie Leçon 1 → contenu → quiz → situation finale → second Speaking Loop, desktop et `390×844` ;
+- aucun score numérique de prononciation ; audio local, temporaire, ≤9 s, jamais uploadé ni ajouté aux stores durables ;
 - PR #66 head `df730d60a8434819cb19f116eb0dc66c3718b5f4` : **19/19 workflows fonctionnels SUCCESS** ;
-- runtime production `b2fde53792c38d1e6283d8779bbcedfac36f9502` ;
-- `main` : **19/19 workflows fonctionnels SUCCESS** ;
-- GitHub Pages **#122 SUCCESS** ; total runtime `main` **20/20 SUCCESS Pages incluse** ;
-- Build 29 PWA/offline, Build 28 Recovery, Build 27 App Shell et Build 26.1 Voice Replay restent verts ;
-- gate terrain exact-premier-essai toujours ouvert : aucune capture automatique parallèle à SpeechRecognition.
+- runtime production `b2fde53792c38d1e6283d8779bbcedfac36f9502` ; `main` **19/19 fonctionnels SUCCESS** ; Pages **#122 SUCCESS** ; total runtime **20/20 SUCCESS Pages incluse** ;
+- Build 29 PWA/offline, Build 28 Recovery, Build 27 App Shell et Build 26.1 Voice Replay restent verts.
 
 ---
 
 ## [1.22.0] — Build 29 — iPhone / PWA / Accessibility Hardening — 2026-08-12
-
-- durcit l’App Shell Build 27 pour l’usage iPhone/PWA réel ;
-- `viewport-fit=cover`, safe areas, cibles tactiles ≥44 px, focus visible, `aria-current`, progressbar/live regions ;
-- `VisualViewport`, standalone, petits/grands écrans, paysage, reduced-motion, contraste ;
-- manifest/install/offline durcis ; matrice Chrome **320×568 / 390×844 / 430×932** ;
-- vrai boot offline après chauffe Service Worker ;
-- PR #64, runtime `1c01648d89dfb3bd9236b9ad93fbade4e21102fa`, Pages #120 ;
-- PR #65 expérimentale **fermée sans merge** ;
-- curriculum **40/241**, Scenario **36/108**, Listening **0.88/0.65** inchangés.
-
----
+- safe areas, cibles tactiles ≥44 px, focus visible, `aria-current`, progressbar/live regions, `VisualViewport`, standalone, reduced-motion, contraste et vrai boot offline ;
+- matrice Chrome **320×568 / 390×844 / 430×932** ; PR #64 ; runtime `1c01648d89dfb3bd9236b9ad93fbade4e21102fa` ; Pages #120 ; PR #65 expérimentale fermée sans merge.
 
 ## [1.21.0] — Build 28 — Data & Recovery Hardening — 2026-08-12
-- Recovery Engine avant `app.js`, backup V2 six stores, restore transactionnel, rollback, migration V1 sûre, quarantaine, last-good et snapshots ;
-- PR #62, runtime `ed09159a6246fe3c1892cb0ff8d03a4beffb7428`, Pages #118.
+- Recovery Engine avant `app.js`, backup V2 six stores, restore transactionnel, rollback, migration V1 sûre, quarantaine, last-good et snapshots ; PR #62 ; runtime `ed09159a6246fe3c1892cb0ff8d03a4beffb7428` ; Pages #118.
 
 ## [1.20.0] — Build 27 — App Shell Reset — 2026-08-12
 - façade mobile-first Aujourd’hui / Pratiquer / Progrès ; cockpit historique en DEBUG FR ; PR #60 ; runtime `beeb9ce8ba081ed0298edbcc339dca41600e4d09` ; Pages #116.
