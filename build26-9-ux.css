@@ -1,0 +1,57 @@
+/* French Trân'quille — v1.19.9 Build 26.9
+   Progress Focus Content Reliability.
+
+   Build 26.8 correctly lets one intention own the Progress surface, but a real
+   desktop video exposed two gaps: a single engine card could remain on only
+   half of the focused surface, and an active family could temporarily retain a
+   stale hidden panel. Build 26.9 does not reparent engine cards. It only makes
+   focused content geometry explicit while JS synchronizes panel visibility. */
+
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] .progress-detail-panel:not([hidden]),
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] .progress-detail-panel:not([hidden]) .progress-detail-panel-cards{
+  width:100%!important;
+  min-width:0!important;
+  max-width:none!important;
+}
+
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] .progress-detail-panel:not([hidden]) .progress-detail-panel-cards > .card{
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+}
+
+/* A one-card family must use the whole focus surface. Build 26.8 used an
+   unconditional two-track grid, which left exactly half the desktop empty. */
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] .progress-detail-panel:not([hidden]) .progress-detail-panel-cards > .card:only-child{
+  grid-column:1 / -1!important;
+}
+
+/* The same rule remains defensive if a future family wraps its single content
+   node differently. It changes presentation only; DOM ownership stays intact. */
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] .progress-detail-panel:not([hidden]) .progress-detail-panel-cards > :only-child{
+  grid-column:1 / -1!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+}
+
+/* A ready focus must never inherit accidental clipping from an older Progress
+   layer. The document remains the only vertical scroll owner (Build 26.4). */
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"][data-b269-content-ready="1"] .progress-detail-panels,
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"][data-b269-content-ready="1"] .progress-detail-panel:not([hidden]),
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"][data-b269-content-ready="1"] .progress-detail-panel-cards{
+  overflow:visible!important;
+  max-height:none!important;
+}
+
+@media(max-width:1100px){
+  .screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] .progress-detail-panel:not([hidden]) .progress-detail-panel-cards{
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] .progress-detail-panel:not([hidden]){
+    transition:none!important;
+  }
+}
