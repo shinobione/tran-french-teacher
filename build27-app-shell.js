@@ -4,6 +4,12 @@
   const CURRICULUM = window.FrenchTranquilleCurriculum;
   if (!CURRICULUM) return;
 
+  // Historical workflows must keep exercising their own legacy surfaces.
+  // Build 27 only owns its dedicated b27Smoke contract (uxSmoke may seed data).
+  const query = new URLSearchParams(location.search);
+  const legacySmoke = [...query.keys()].some(key => /smoke/i.test(key) && !['b27Smoke','uxSmoke'].includes(key));
+  if (legacySmoke) return;
+
   const LEARNER_KEY = CURRICULUM.key || 'francais-avec-luc:learner:v1';
   const DEBUG_KEY = 'tran-french-teacher:debug-fr:v1';
   const REDUCED = () => matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
