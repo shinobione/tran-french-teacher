@@ -82,7 +82,15 @@ jobs:
             --user-data-dir="$profile" --window-size=390,844 \
             --virtual-time-budget=22000 --dump-dom \
             'http://127.0.0.1:4173/?uxSmoke=lesson8&b29Smoke=mobile' >"$file"
-          grep -q 'data-b29-smoke="passed"' "$file"
+          if ! grep -q 'data-b29-smoke="passed"' "$file"; then
+            echo '=== Build 29 diagnostic markers ==='
+            grep -o 'data-b29-[^ >]*' "$file" | head -40 || true
+            echo '=== Build 29 failure payload ==='
+            grep -o '<pre id="b29-smoke-failures"[^>]*>[^<]*' "$file" || true
+            echo '=== Build 29 shell buttons ==='
+            grep -o '<button[^>]*\(b27\|ux-bottom-nav\)[^>]*>' "$file" | head -30 || true
+            exit 1
+          fi
           grep -q 'data-b29-ready="1"' "$file"
           grep -q 'screen-home' "$file"
           grep -q 'b27-home' "$file"
