@@ -1,0 +1,135 @@
+name: Build 26.7 Progress open geometry smoke
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  progress-open-geometry:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax, version, cache and wiring
+        run: |
+          node --check build26-7-ux.js
+          node --check build-meta.js
+          node --check sw.js
+          grep -q 'build26-7-ux.css?v=1.19.7-b26.7' index.html
+          grep -q 'build26-7-ux.js?v=1.19.7-b26.7' index.html
+          grep -q 'build-meta.js?v=1.19.7-b26.7' index.html
+          grep -q "version: '1.19.7', build: '26.7'" build-meta.js
+          grep -q 'FrenchTranquilleBuild267UX' build-meta.js
+          grep -q 'tran-french-teacher-v1.19.7-b26.7-progress-open-geometry' index.html sw.js
+          grep -q 'build26-7-ux.css' sw.js
+          grep -q 'build26-7-ux.js' sw.js
+          grep -q 'data-progress-details-open="1"' build26-7-ux.css
+          grep -q 'minmax(0,1fr) minmax(0,1fr)' build26-7-ux.css
+
+      - name: Sanctuaries remain byte-identical
+        run: |
+          test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
+          test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+          grep -q "francais-avec-luc:learner:v1" app.js
+          grep -q 'normal: 0.88' build-meta.js
+          grep -q 'slow: 0.65' build-meta.js
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-b267-http.log 2>&1 &
+          echo $! >/tmp/ft-b267-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome wide desktop — opening Details cannot crush learner flow
+        run: |
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-b267-wide-$attempt"
+            file="/tmp/b267-wide-$attempt.html"
+            rm -rf "$profile" "$file"
+            if ! timeout --signal=TERM --kill-after=5s 44s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=1640,900 \
+              --virtual-time-budget=30000 --dump-dom \
+              'http://127.0.0.1:4173/?uxSmoke=lesson8&debug=fr&b267Smoke=progress' >"$file"; then
+              echo "Build 26.7 wide attempt $attempt timed out or exited non-zero"
+              continue
+            fi
+            if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then continue; fi
+            if grep -q 'data-b267-complete="1"' "$file" \
+              && grep -q 'data-b267-details-open="1"' "$file" \
+              && grep -q 'data-b267-containment="1"' "$file" \
+              && grep -q 'data-b267-desktop-usable="1"' "$file" \
+              && grep -q 'data-b267-side-by-side="1"' "$file" \
+              && grep -q 'data-b267-horizontal-overflow="0"' "$file" \
+              && grep -q 'data-b267-dashboard-columns="2"' "$file"; then
+              flow=$(grep -o 'data-b267-flow-width="[0-9]*"' "$file" | head -1 | cut -d'"' -f2)
+              details=$(grep -o 'data-b267-details-width="[0-9]*"' "$file" | head -1 | cut -d'"' -f2)
+              row=$(grep -o 'data-b267-min-lesson-row-width="[0-9]*"' "$file" | head -1 | cut -d'"' -f2)
+              echo "wide geometry: flow=$flow details=$details min-row=$row"
+              if [ "${flow:-0}" -ge 420 ] && [ "${details:-0}" -ge 420 ] && [ "${row:-0}" -ge 400 ]; then
+                passed=1
+                break
+              fi
+            fi
+            echo "Build 26.7 wide attempt $attempt missing/invalid geometry"
+            grep -o 'data-b267-[^ >]*' "$file" | head -40 || true
+          done
+          if [ "$passed" -ne 1 ]; then
+            echo 'Build 26.7 wide desktop geometry failed after 3 bounded attempts'
+            exit 1
+          fi
+
+      - name: Chrome compact desktop — opening Details stacks instead of crushing
+        run: |
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-b267-compact-$attempt"
+            file="/tmp/b267-compact-$attempt.html"
+            rm -rf "$profile" "$file"
+            if ! timeout --signal=TERM --kill-after=5s 44s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=980,900 \
+              --virtual-time-budget=30000 --dump-dom \
+              'http://127.0.0.1:4173/?uxSmoke=lesson8&debug=fr&b267Smoke=progress' >"$file"; then
+              echo "Build 26.7 compact attempt $attempt timed out or exited non-zero"
+              continue
+            fi
+            if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then continue; fi
+            if grep -q 'data-b267-complete="1"' "$file" \
+              && grep -q 'data-b267-details-open="1"' "$file" \
+              && grep -q 'data-b267-containment="1"' "$file" \
+              && grep -q 'data-b267-desktop-usable="1"' "$file" \
+              && grep -q 'data-b267-vertical-stack="1"' "$file" \
+              && grep -q 'data-b267-horizontal-overflow="0"' "$file"; then
+              flow=$(grep -o 'data-b267-flow-width="[0-9]*"' "$file" | head -1 | cut -d'"' -f2)
+              row=$(grep -o 'data-b267-min-lesson-row-width="[0-9]*"' "$file" | head -1 | cut -d'"' -f2)
+              echo "compact geometry: flow=$flow min-row=$row"
+              if [ "${flow:-0}" -ge 620 ] && [ "${row:-0}" -ge 580 ]; then
+                passed=1
+                break
+              fi
+            fi
+            echo "Build 26.7 compact attempt $attempt missing/invalid geometry"
+            grep -o 'data-b267-[^ >]*' "$file" | head -40 || true
+          done
+          if [ "$passed" -ne 1 ]; then
+            echo 'Build 26.7 compact desktop geometry failed after 3 bounded attempts'
+            exit 1
+          fi
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-b267-server.pid ]; then kill "$(cat /tmp/ft-b267-server.pid)" || true; fi

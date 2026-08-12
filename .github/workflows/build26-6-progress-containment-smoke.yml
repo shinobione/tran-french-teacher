@@ -18,21 +18,21 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Syntax, version, cache and wiring
+      - name: Syntax and owner wiring
         run: |
           node --check progression-ux.js
           node --check progress-details-dashboard.js
           node --check build26-6-ux.js
           node --check build-meta.js
           node --check sw.js
-          grep -q 'build26-6-ux.css?v=1.19.6-b26.6' index.html
-          grep -q 'build26-6-ux.js?v=1.19.6-b26.6' index.html
-          grep -q 'progression-ux.js?v=1.19.6-b26.6' index.html
-          grep -q 'progress-details-dashboard.js?v=1.19.6-b26.6' index.html
-          grep -q 'build-meta.js?v=1.19.6-b26.6' index.html
-          grep -q "version: '1.19.6', build: '26.6'" build-meta.js
+          # Build 26.6 owns containment behavior, but later builds may legitimately
+          # bump the global build meta/cache and cache-bust owner files.
+          grep -q 'build26-6-ux.css?v=' index.html
+          grep -q 'build26-6-ux.js?v=' index.html
+          grep -q 'progression-ux.js?v=' index.html
+          grep -q 'progress-details-dashboard.js?v=' index.html
+          grep -q 'build-meta.js?v=' index.html
           grep -q 'FrenchTranquilleBuild266UX' build-meta.js
-          grep -q 'tran-french-teacher-v1.19.6-b26.6-progress-dashboard-containment' index.html sw.js
           grep -q 'build26-6-ux.css' sw.js
           grep -q 'build26-6-ux.js' sw.js
           grep -q "progressComposition = 'contained-independent-columns'" progression-ux.js
