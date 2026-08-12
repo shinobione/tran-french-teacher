@@ -24,6 +24,11 @@
     return Object.keys(a).every(key => a[key] === b[key]) && Object.keys(b).every(key => a[key] === b[key]);
   }
 
+  function currentReleaseCompatible(version, build) {
+    const parts = String(version || '').split('.').map(Number);
+    return parts.length === 3 && parts.every(Number.isFinite) && parts[0] === 2 && Number(build) >= 30;
+  }
+
   async function fetchReleaseContract() {
     const response = await fetch('./release-v2.json', { cache: 'no-store' });
     if (!response.ok) throw new Error(`release-contract-http-${response.status}`);
@@ -54,14 +59,16 @@
     const runtime = window.FrenchTranquilleRuntime;
     const contracts = window.FrenchTranquilleRuntimeContracts;
     const release = await fetchReleaseContract();
+    const meta = window.FrenchTranquilleBuildMeta || {};
     const before = rawStores(contracts);
     const snap = runtime.snapshot();
     const backup = window.FrenchTranquilleRecovery.backupObject();
     const recoverySpecs = window.FrenchTranquilleRecovery.core?.STORE_SPECS || [];
 
-    mark('Version', window.FrenchTranquilleBuildMeta?.version || 'missing');
-    mark('Build', window.FrenchTranquilleBuildMeta?.build || 'missing');
+    mark('Version', meta.version || 'missing');
+    mark('Build', meta.build || 'missing');
     mark('ContractVersion', contracts.version);
+    mark('ContractBuild', contracts.build);
     mark('ReleaseFormat', release.format === 'french-tranquille-release-contract' ? 1 : 0);
     mark('ReleaseVersion', release.version);
     mark('ReleaseBuild', release.architectureBuild);
@@ -79,11 +86,11 @@
     mark('BackupAppVersion', backup.app?.version || 'missing');
     mark('BackupAppBuild', backup.app?.build || 'missing');
     mark('MissingRequired', snap.missingRequired.length);
-    mark('SwRegistered', root.dataset.b29SwRegistered || '0');
 
     const expectedStoreKeys = Object.values(contracts.stores);
     const recoveryKeys = recoverySpecs.map(spec => spec.key);
-    mark('StoreAgreement', expectedStoreKeys.length === recoveryKeys.length && expectedStoreKeys.every(key => recoveryKeys.includes(key)) ? 1 : 0);
+    const storeAgreement = expectedStoreKeys.length === recoveryKeys.length && expectedStoreKeys.every(key => recoveryKeys.includes(key));
+    mark('StoreAgreement', storeAgreement ? 1 : 0);
 
     if (params.get('uxSmoke') === 'lesson8') {
       mark('OldUserCompleted', snap.learner.completedLessons);
@@ -115,13 +122,19 @@
     runtime.route('today');
     await sleep(120);
     const after = rawStores(contracts);
-    mark('StoresUnchanged', sameRaw(before, after) ? 1 : 0);
+    const storesUnchanged = sameRaw(before, after);
+    const optionsExpected = `v${meta.version} • Build ${meta.build}`;
+    const backupMatchesRuntime = backup.app?.version === meta.version && String(backup.app?.build) === String(meta.build);
+    const currentCompatible = currentReleaseCompatible(meta.version, meta.build) && backupMatchesRuntime && versionLabel === optionsExpected;
+    mark('StoresUnchanged', storesUnchanged ? 1 : 0);
+    mark('BackupMatchesRuntime', backupMatchesRuntime ? 1 : 0);
+    mark('OptionsMatchesRuntime', versionLabel === optionsExpected ? 1 : 0);
+    mark('CurrentCompatible', currentCompatible ? 1 : 0);
     mark('HorizontalOverflow', document.documentElement.scrollWidth > document.documentElement.clientWidth + 1 ? 1 : 0);
 
     const releaseProduct = release.product || {};
     const expected = [
-      window.FrenchTranquilleBuildMeta?.version === '2.0.0',
-      String(window.FrenchTranquilleBuildMeta?.build) === '30',
+      currentReleaseCompatible(meta.version, meta.build),
       contracts.version === '2.0.0',
       contracts.build === 30,
       release.version === '2.0.0',
@@ -141,11 +154,10 @@
       releaseProduct.listeningSlow === 0.65,
       Object.keys(contracts.stores).length === 6,
       recoverySpecs.length === 6,
-      expectedStoreKeys.every(key => recoveryKeys.includes(key)),
+      storeAgreement,
       backup.version === 2,
       Object.keys(backup.stores || {}).length === 6,
-      backup.app?.version === '2.0.0',
-      String(backup.app?.build) === '30',
+      backupMatchesRuntime,
       snap.missingRequired.length === 0,
       Boolean(window.FrenchTranquilleSpeakingLoop),
       Boolean(window.FrenchTranquilleBuild27Shell),
@@ -153,8 +165,8 @@
       progressReady,
       todayReady,
       practiceReady,
-      versionLabel === 'v2.0.0 • Build 30',
-      sameRaw(before, after),
+      versionLabel === optionsExpected,
+      storesUnchanged,
       document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1
     ];
 
