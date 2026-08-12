@@ -6,108 +6,111 @@ PWA de français pensée pour **Trân**, avec priorité à l’oral, au françai
 
 ### Production certifiée
 
-- **v1.22.2 — Build 29.2 / Speaking Loop Variety & Clarity**
+- **v1.23.0 — Build 30 / Architecture Hardening**
 - statut : **✅ PROD / CLOS**
-- runtime production : `b6031cd8fa6756eee39496cd62a164b8400d15af`
-- PR runtime : **#68**
-- head PR certifié : `947896ff8eed75aa805be63cc24821b1c2247980`
-- tribunal PR : **20/20 workflows fonctionnels SUCCESS** ; l’ancien Build 26.8 a nécessité un rerun inchangé de son flake Chrome `curriculum-clicked`
-- tribunal `main` : **20/20 workflows fonctionnels SUCCESS** ; même ancien flake 26.8 confirmé puis passé sans changement runtime
-- GitHub Pages runtime : **#126 SUCCESS** sur le SHA exact
-- total runtime `main` : **21/21 SUCCESS Pages incluse**
+- runtime production : `5a8369df9df536f41521acefb528da71efb168a8`
+- PR runtime : **#71**
+- head PR certifié : `ffa3ddf7a16dcbc32474701cfaf2f961e86d348c`
+- tribunal PR : **21/21 workflows fonctionnels SUCCESS** ; un ancien Chrome Real Life III a nécessité un rerun inchangé, puis les leçons 20 / 35 / 40 ont toutes repassé
+- tribunal runtime `main` : **21/21 workflows fonctionnels SUCCESS**
+- GitHub Pages runtime : **#129 SUCCESS** sur le SHA exact
+- total runtime `main` : **22/22 SUCCESS Pages incluse**
 
 Baselines inchangées : curriculum **40 leçons / 241 éléments**, Scenario **36 situations / 108 tours**, Listening **0.88 normal / 0.65 lent**, coût **0 €**.
 
-## 🎙️ Build 29.2 — Variety & Clarity
+## 🏗️ Build 30 — Architecture Hardening
 
-Le retour terrain après Build 29.1 a révélé trois défauts concrets :
+Build 30 ne réécrit pas brutalement le vieux cœur `app.js`. Il pose une **frontière architecturale explicite et testée** autour du runtime existant afin de préparer V2 sans mettre en danger les données réelles de Trân.
 
-1. `Refaire` ne disait pas clairement ce qui allait être refait ;
-2. le bouton Tyffany du Speaking Loop doublonnait le bouton audio déjà présent dans l’exercice ;
-3. une cible de compréhension comme **`10 euros`** pouvait devenir une cible orale répétée, sans variété suffisante.
+### Contrats canoniques
 
-### Labels explicites
+`runtime-contracts.js` centralise en lecture seule :
 
-Après une prise enregistrée :
+- les **6 stores durables** Recovery ;
+- les snapshots de sécurité ;
+- les invariants produit `40 / 241`, Scenario `36 / 108`, Listening `0.88 / 0.65`, Speaking Loop `max 2` ;
+- les propriétaires des APIs globales ;
+- les phases de boot ;
+- les routes principales `today / practice / progress` ;
+- les sanctuaires.
 
-```text
-Trân :      ↻ Ghi âm lại
-DEBUG FR :  ↻ Enregistrer à nouveau
-```
+Le contrat est gelé avec `Object.freeze` et n’écrit dans aucun store.
 
-Le bouton audio natif de l’exercice devient :
+### Runtime Bridge
 
-```text
-Trân :      🔊 Nghe Tyffany
-DEBUG FR :  🔊 Écouter Tyffany
-```
-
-avec une courte explication indiquant que Tyffany lit le modèle français. Quand ce bouton natif existe, le Speaking Loop **n’en crée plus un deuxième**. Un bouton modèle reste présent dans le récapitulatif final uniquement parce que cette vue ne possède pas de bouton audio natif.
-
-### Comprendre ≠ devoir répéter
-
-Build 29.1 attachait son deuxième moment oral directement à `lesson.challenge.answer`. Cela mélangeait deux intentions pédagogiques :
-
-- reconnaître/comprendre une réponse ;
-- produire une phrase française utile.
-
-Build 29.2 sépare ces deux rôles. Le challenge reste un test de compréhension. Le deuxième moment oral devient un **rappel final contextualisé** sur l’écran de fin de leçon.
-
-Exemple canonique Bài 7 :
+`runtime-bridge.js` expose désormais une frontière stable :
 
 ```text
-Challenge de compréhension : « dix euros » → 10 euros
-Rappel oral :               « Combien ça coûte ? »
+FrenchTranquilleRuntime.snapshot()
+FrenchTranquilleRuntime.refresh()
+FrenchTranquilleRuntime.route('today' | 'practice' | 'progress')
+FrenchTranquilleRuntime.openLesson(id)
 ```
 
-`10 euros` reste donc une bonne réponse de compréhension, mais ne devient plus automatiquement un mantra à enregistrer.
+Le bridge observe Curriculum, learner, stores, APIs et navigation **sans prendre possession de leurs données**.
 
-### Planificateur oral local
+### Pourquoi cette approche
 
-La sélection ne repose pas sur un randomizer. Elle combine :
+Le produit moderne s’est construit autour d’un noyau historique très sollicité. Une extraction massive aurait créé un risque disproportionné. Build 30 adopte donc un **strangler refactor** : l’ancien cœur reste le témoin de référence, tandis que les prochaines extractions pourront se faire derrière des contrats connus et testables.
 
-- pertinence avec le thème et la leçon actuelle ;
-- qualité orale de la cible — phrase/question utile plutôt qu’un nombre ou une unité isolée ;
-- acquis déjà connus lorsque leur lien avec le contexte est réel ;
-- Learning Memory en **lecture seule** : fragile/dû peut remonter, mais seulement si l’acquis reste contextuellement pertinent ;
-- fenêtre récente anti-répétition ;
-- deux cibles distinctes par leçon ;
-- **2 moments maximum**.
+`app.js` est volontairement resté **byte-identique** pendant ce build.
 
-Le planificateur n’écrit dans aucun store durable. La progression, Memory, Recovery et backups restent propriétaires de leurs données.
+## 🧪 Tribunal Architecture
 
-Le nouveau tribunal Chrome verrouille explicitement Bài 7 : `10 euros` reste le challenge de compréhension, le rappel oral devient `Combien ça coûte ?`, puis une seconde planification doit éviter les deux cibles récentes lorsqu’une alternative cohérente existe.
+Le nouveau smoke Chrome desktop + mobile vérifie réellement :
 
-## 🎧 Retour terrain audio
+- Runtime boundary prête ;
+- curriculum **40 / 241** ;
+- aucun propriétaire ou store dupliqué ;
+- Recovery / Build 27 Shell / Speaking Loop présents ;
+- navigation réelle **Progrès → Aujourd’hui → Pratiquer** via le bridge ;
+- **JSON learner brut strictement identique avant/après** ;
+- un seul onglet actif ;
+- zéro overflow horizontal.
 
-La réécoute de **sa propre voix après enregistrement fonctionne bien** dans le nouveau flux local. Le gate Build 26.1 reste néanmoins ouvert pour le point différent et plus sensible : vérifier sur le vrai iPhone que **la reconnaissance Free Voice suivante** reste normale après `reconnaissance → seconde prise → lecture`.
+Les anciens tribunaux restent actifs en parallèle : Recovery, App Shell, iPhone/offline, Listening, Scenario, Progress, Options, navigation et Speaking Loop.
 
-Aucun enregistrement automatique du premier essai exact n’est donc activé pendant SpeechRecognition.
+## 🎙️ Speaking Loop / audio
+
+Le comportement Build 29.2 reste inchangé :
+
+- `🔊 Nghe Tyffany` / `🔊 Écouter Tyffany` comme modèle natif ;
+- `↻ Ghi âm lại` / `↻ Enregistrer à nouveau` après la prise ;
+- compréhension ≠ production orale ;
+- planificateur contextualisé et anti-répétition ;
+- **2 moments maximum par leçon** ;
+- aucun faux score de prononciation ;
+- audio de réécoute local, volontaire, ≤9 s, sans upload ni persistance.
+
+## 🎧 Gate terrain iPhone encore ouvert
+
+La propre voix est bien réécoutable après enregistrement. Le gate plus sensible reste à valider sur le vrai iPhone :
+
+```text
+reconnaissance Free Voice
+→ seconde prise locale
+→ lecture
+→ reconnaissance suivante toujours normale
+```
+
+Tant que ce gate n’est pas validé, aucun enregistrement automatique du premier essai exact n’est lancé en parallèle de SpeechRecognition.
 
 ## 🛡️ Sanctuaires
 
-Build 29.2 ne modifie pas :
+Build 30 conserve notamment :
 
+- `app.js` — `600f094266c9f0c4c7b57efdbf61129909ebd9cb` ;
 - `voice-ios.js` — `38e97aa3ef62dd6dcda224901b435f0973618679` ;
 - `free-voice.js` — `b4c19b1936c788ee017eac9ba14e5a62c159e8d5` ;
 - `assets/LOGO.png` — `64eaa6ad9781c6a9075d4f68615fc44344c4e21c` ;
 - `assets/Favicon.png` — `c358672368a960bf7617e5532aff3e3319cddb3e` ;
 - learner canonique `francais-avec-luc:learner:v1`.
 
-Audio de réécoute : local, volontaire, ≤9 s, sans upload ni persistance.
-
-## 📱 Build 29 / 🔐 Build 28 / 🧭 Build 27
-
-Les contrats existants restent actifs : safe areas, cibles tactiles ≥44 px, offline PWA, Recovery six stores, restore transactionnel, App Shell `Aujourd’hui / Pratiquer / Progrès` et cockpit technique réservé au DEBUG FR.
-
-### Baseline historique qualité
-
-La CI conserve explicitement **v1.17.0 — Build 24 — Real Life French II**, **28 situations / 84 tours** avant Pack III et `real-life-data-2.js`.
+Build 27 App Shell, Build 28 Recovery, Build 29 iPhone/PWA/A11y et Build 29.2 Speaking Loop restent protégés par leurs CI historiques.
 
 ## Suite
 
-1. Gate terrain iPhone Build 26.1 : reconnaissance → seconde prise → lecture → reconnaissance suivante.
-2. **Build 30 — Architecture Hardening**.
-3. **V2.0.0 — Freeze / Release**.
+1. Gate terrain iPhone Build 26.1 en parallèle.
+2. **V2.0.0 — Freeze / Release** : aucune nouvelle usine à gaz ; on certifie le produit existant comme release cohérente, sauvegardable, restaurable, testée et documentée.
 
-Voir `ROADMAP.md`, `CHANGELOG.md`, `docs/ARCHITECTURE.md`, `docs/BUILD-29-1-SPEAKING-LOOP-CONTENT.md` et `docs/BUILD-29-2-SPEAKING-VARIETY-CLARITY.md`.
+Voir `ROADMAP.md`, `CHANGELOG.md`, `docs/ARCHITECTURE.md` et `docs/BUILD-30-ARCHITECTURE-HARDENING.md`.
