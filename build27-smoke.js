@@ -94,14 +94,17 @@
       if (!await openProgressState()) return;
     } else if (target === 'journey') {
       if (!await openProgressState()) return;
-      if (!await click('[data-b27-open-journey]')) return;
-      if (!await waitFor('.b27-journey-page')) return;
+      const shell = window.FrenchTranquilleBuild27Shell;
+      if (!shell?.openJourney) return;
+      shell.openJourney();
+      if (!await waitFor('.b27-journey-page', 5000)) return;
     } else {
       if (!await waitFor('.b27-home')) return;
     }
 
-    // Visual artifacts must represent a genuinely settled UI. Wait for the
-    // transition classes to disappear, but keep a hard bound so stuck states fail.
+    // User navigation is already certified by flowContract. Visual states use the
+    // public Build 27 shell API where available so screenshots measure a stable
+    // target rather than a second copy of interaction timing.
     await sleep(80);
     const overlay = await waitOverlaySettled(3000);
     html.dataset.b27VisualEntering = overlay?.classList.contains('b27-entering') ? '1' : '0';
@@ -131,8 +134,6 @@
     progressNav.click();
     html.dataset.b27FlowPhase = 'progress-clicked';
 
-    // The historical navigation owns the screen; the Build 27 bridge refreshes
-    // the façade in the same gesture. Wait for the real learner page, not a timer.
     const progress = await waitFor('.b27-progress-page', 10000);
     html.dataset.b27ProgressPageReady = progress ? '1' : '0';
     if (!progress) return;
