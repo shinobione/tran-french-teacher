@@ -11,6 +11,8 @@
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   let focusMode = null;
+  let pendingFocusMode = null;
+  let transitionRunning = false;
   let transitionToken = 0;
   let scheduled = false;
 
@@ -109,13 +111,25 @@
 
   function transitionTo(n, next) {
     next = next || null;
-    if (next === focusMode) {
+
+    if (!transitionRunning && next === focusMode) {
+      setBodyFocus(focusMode, screenVisible(n.screen));
+      updateDetailsTitle(n);
+      return;
+    }
+
+    // DOM observers can fire many times while the same destination is already
+    // animating. Never restart the same transition: doing so starves its timer
+    // and can leave the UI permanently between two focus states.
+    if (transitionRunning && next === pendingFocusMode) {
       setBodyFocus(focusMode, screenVisible(n.screen));
       updateDetailsTitle(n);
       return;
     }
 
     const token = ++transitionToken;
+    transitionRunning = true;
+    pendingFocusMode = next;
     const duration = reduceMotion ? 0 : 145;
     const height = Math.ceil(n.composition.getBoundingClientRect().height);
     if (height > 0) n.composition.style.minHeight = `${height}px`;
@@ -137,6 +151,9 @@
         setTimeout(() => {
           if (token !== transitionToken) return;
           n.composition.style.minHeight = '';
+          transitionRunning = false;
+          pendingFocusMode = null;
+          schedule();
         }, reduceMotion ? 0 : 210);
       });
     }, duration);
@@ -177,6 +194,8 @@
     if (n.details.dataset.progressDetailActive) window.FrenchTranquilleProgressDetailsDashboard?.close?.();
     if (n.curriculum.dataset.progressExpanded === '1') n.curriculum.querySelector('[data-progress-toggle-all]')?.click();
     transitionToken += 1;
+    transitionRunning = false;
+    pendingFocusMode = null;
     applyFocus(n, null);
     n.composition.style.minHeight = '';
     delete n.layout.dataset.b268Transition;
