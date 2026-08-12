@@ -6,6 +6,35 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ---
 
+## [1.21.0] — Build 28 — Data & Recovery Hardening — 2026-08-12
+
+- ajoute un Recovery Engine chargé **avant `app.js`** afin qu’une donnée corrompue ne soit pas silencieusement remplacée par une progression neuve ;
+- introduit le format de sauvegarde `french-tranquille-backup` **version 2** ;
+- le coffre V2 couvre six stores durables : learner, Learning Memory, Error Intelligence, Scenario, Listening et Milestones ;
+- les réglages voix dépendants de l’appareil restent volontairement hors backup portable ;
+- validation de schéma avant export et import ;
+- snapshots automatiques `last-good`, `pre-restore`, `pre-migration`, `pre-reset` ;
+- conserve `french-tranquille:safety:pre-build22:v1` comme fallback historique ;
+- JSON ou schéma invalide au boot → quarantaine puis restauration depuis un fallback valide lorsqu’il existe ;
+- écriture invalide sur un store critique bloquée avant d’écraser la dernière valeur saine ;
+- restauration multi-store transactionnelle avec relecture, vérification exacte et rollback automatique ;
+- migration backup V1 → V2 : restaure learner + Memory mais **préserve** Error / Scenario / Listening / Milestones que le vieux format ne connaissait pas ;
+- reset learner rendu cohérent : snapshot pré-reset puis suppression des six stores durables ensemble ;
+- nouveau tribunal Node : backup complet, round-trip exact, panne simulée en plein restore, rollback exact, invalid JSON/schema, migration V1 sûre ;
+- nouveau tribunal Chrome : écriture corrompue bloquée, quarantaine, backup/restore réel, reset/récupération, ancien profil **7 leçons + `l8=4`**, corruption injectée avant `app.js` puis réparée depuis `last-good` ;
+- Home Build 27 mobile `390×844` revalidée ;
+- ancien Quality Listening smoke mis à niveau pour utiliser un learner historique valide au lieu d’un faux objet partiel désormais correctement refusé par Build 28 ;
+- workflow Build 27 rendu version-forward sans affaiblir ses contrats UI ;
+- PR #62 head final `dc060ea5304b0526010bd8ac158b70c363525325` : **17/17 workflows SUCCESS** ;
+- runtime production `ed09159a6246fe3c1892cb0ff8d03a4beffb7428` ;
+- `main` : **17/17 workflows fonctionnels SUCCESS** ;
+- GitHub Pages **#118 SUCCESS** ; total runtime `main` **18/18 SUCCESS Pages incluse** ;
+- curriculum **40/241**, Scenario **36/108**, Listening **0.88/0.65** inchangés ;
+- `voice-ios.js`, `free-voice.js`, logo et favicon byte-identiques ;
+- gate terrain iPhone Build 26.1 toujours ouvert.
+
+---
+
 ## [1.20.0] — Build 27 — App Shell Reset — 2026-08-12
 
 - abandonne le modèle « dashboard pédagogique comme façade » au profit d’un **app shell mobile-first** ;
