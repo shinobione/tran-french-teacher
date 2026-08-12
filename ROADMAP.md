@@ -59,6 +59,11 @@
 53. **L’auto-écoute est un outil pédagogique ponctuel, jamais une obligation à chaque mot.**
 54. **Pas de score de prononciation si le produit ne possède pas une vraie mesure phonétique.**
 55. **Le modèle vocal et l’enregistrement local restent séparés de la progression durable.**
+56. **Une cible de compréhension ne devient pas automatiquement une cible de production orale.**
+57. **La répétition orale doit être espacée et variée ; pas de même cible servie en boucle quand une alternative cohérente existe.**
+58. **Un acquis dû/fragile n’est réinjecté dans une leçon que s’il reste pertinent pour son contexte.**
+59. **Une fonction déjà présente dans l’exercice ne doit pas être dupliquée dans une couche pédagogique ajoutée.**
+60. **Un libellé d’action doit dire ce que l’action va réellement faire.**
 
 ---
 
@@ -66,69 +71,70 @@
 
 ## Speaking Loop Content — ✅ PROD / CLOS
 
-- PR runtime : **#66** ;
-- head PR certifié : `df730d60a8434819cb19f116eb0dc66c3718b5f4` ;
-- PR : **19/19 workflows fonctionnels SUCCESS** ;
-- runtime : `b2fde53792c38d1e6283d8779bbcedfac36f9502` ;
-- `main` : **19/19 workflows fonctionnels SUCCESS** ;
-- GitHub Pages : **#122 SUCCESS** ;
-- total runtime `main` : **20/20 SUCCESS Pages incluse** ;
-- curriculum **40 / 241** ;
-- Scenario **36 / 108** ;
-- Listening **0.88 / 0.65** ;
-- coût 0 €.
+- PR runtime **#66** ; head `df730d60a8434819cb19f116eb0dc66c3718b5f4` ;
+- runtime `b2fde53792c38d1e6283d8779bbcedfac36f9502` ;
+- PR **19/19 fonctionnels SUCCESS** ; `main` **19/19 fonctionnels SUCCESS** ;
+- Pages **#122 SUCCESS** ; total runtime **20/20 SUCCESS Pages incluse** ;
+- curriculum **40 / 241** ; Scenario **36 / 108** ; Listening **0.88 / 0.65** ; coût 0 €.
 
-### Contrat pédagogique
-
-- [x] une phrase utile sélectionnée par leçon ;
-- [x] second moment oral après réussite de la situation finale ;
-- [x] **2 moments maximum par leçon** ;
-- [x] **40/40 leçons couvertes** ;
-- [x] modèle vocal Tyffany ;
-- [x] seconde prise locale volontaire ;
-- [x] lecture `Ma voix` ;
-- [x] réécoute Tyffany / refaire ;
-- [x] `Continuer` reste disponible ;
-- [x] aucun score de prononciation inventé.
-
-### Sécurité
-
-- [x] `getUserMedia` seulement après clic explicite ;
-- [x] enregistrement local ≤9 s ;
-- [x] aucun upload ;
-- [x] aucune persistance learner/Memory/backup ;
-- [x] nettoyage Blob au changement de moment/page ;
-- [x] `voice-ios.js` byte-identique ;
-- [x] `free-voice.js` byte-identique ;
-- [x] logo / favicon byte-identiques.
-
-### Tribunal
-
-- [x] vraie Leçon 1 ouverte ;
-- [x] Speaking Loop de contenu visible ;
-- [x] quiz traversés ;
-- [x] situation finale réussie ;
-- [x] second Speaking Loop visible ;
-- [x] mobile `390×844` ;
-- [x] overflow horizontal = 0 ;
-- [x] cible tactile ≥44 px ;
-- [x] Build 29 PWA/offline vert ;
-- [x] Build 28 Recovery vert ;
-- [x] Voice Replay 26.1 vert ;
-- [x] Build 27 App Shell vert ;
-- [x] quality et marqueurs historiques verts.
+29.1 a introduit au maximum deux moments d’auto-écoute locaux par leçon, sans upload, sans persistance audio et sans modifier les sanctuaires voix/data.
 
 ---
 
-# Build 29 — iPhone / PWA / Accessibility — ✅ PROD / CLOS
+# v1.22.2 — Build 29.2 — Speaking Loop Variety & Clarity
 
-- runtime historique : `1c01648d89dfb3bd9236b9ad93fbade4e21102fa` ;
-- PR #64 ; Pages #120 ;
-- safe areas, touch ≥44 px, a11y, VisualViewport, standalone, reduced-motion, contraste ;
-- matrice Chrome 320×568 / 390×844 / 430×932 ;
-- boot offline après chauffe Service Worker.
+**Candidat actuel.**
 
-PR #65 : expérience SW **fermée sans merge**.
+Objectif : corriger les problèmes révélés par le premier vrai usage de 29.1 sans augmenter le nombre de moments oraux.
+
+### Clarté UI
+
+- [x] `↻ Ghi âm lại` côté Trân ;
+- [x] `↻ Enregistrer à nouveau` en DEBUG FR ;
+- [x] bouton audio natif renommé `🔊 Nghe Tyffany` / `🔊 Écouter Tyffany` ;
+- [x] courte explication indiquant que Tyffany fournit le modèle ;
+- [x] pas de second bouton Tyffany lorsque l’exercice possède déjà son bouton audio ;
+- [x] un seul bouton modèle au rappel final, où aucun bouton audio natif n’existe.
+
+### Contrat pédagogique
+
+- [x] challenge de compréhension séparé de la cible de production orale ;
+- [x] deuxième moment déplacé sur la fin de leçon sous forme de `recap` ;
+- [x] deux cibles distinctes par leçon ;
+- [x] nombres/unités isolés fortement défavorisés comme cibles orales ;
+- [x] réutilisation possible d’un acquis déjà connu uniquement si le contexte correspond ;
+- [x] Learning Memory consultée en lecture seule pour favoriser fragile/dû/learning ;
+- [x] fenêtre récente anti-répétition ;
+- [x] aucun `localStorage.setItem` depuis le planificateur oral ;
+- [x] toujours **2 moments maximum**.
+
+### Régression Bài 7 sous CI
+
+Le challenge canonique reste :
+
+```text
+« dix euros » → 10 euros
+```
+
+Mais `10 euros` ne doit plus être la cible orale finale. Avec les acquis des leçons précédentes, le rappel contextuel attendu est :
+
+```text
+Combien ça coûte ?
+```
+
+Le tribunal 29.2 doit aussi prouver qu’une seconde planification avec les deux cibles récentes choisit autre chose lorsqu’une alternative cohérente existe.
+
+### Gates avant merge
+
+- [ ] nouveau tribunal Build 29.2 desktop + `390×844` vert ;
+- [ ] Build 29.1 version-forward vert ;
+- [ ] Build 29 PWA/offline vert ;
+- [ ] Build 28 Recovery vert ;
+- [ ] Build 27 App Shell vert ;
+- [ ] Build 26.1 Voice Replay vert ;
+- [ ] tous les anciens contrats fonctionnels verts ;
+- [ ] sanctuaires byte-identiques ;
+- [ ] PR → `main` → Pages → clôture docs-only.
 
 ---
 
@@ -136,48 +142,23 @@ PR #65 : expérience SW **fermée sans merge**.
 
 - [ ] réponse Free Voice reconnue → seconde prise locale → lecture correcte → réponse vocale suivante toujours reconnue normalement.
 
-Ce gate reste indépendant de Build 29.1. Tant qu’il n’est pas validé, **pas d’enregistrement automatique du premier essai exact** pendant la reconnaissance Safari.
+Tant que ce gate n’est pas validé, **pas d’enregistrement automatique du premier essai exact** pendant la reconnaissance Safari.
 
 ---
 
 # v1.23.0 — Build 30 — Architecture Hardening
 
-Prochain gros chantier après le test terrain :
-
-- réduire le monolithe historique sans modifier le comportement ;
-- clarifier propriétaires DOM / state / routing ;
-- isoler davantage les moteurs ;
-- conserver les six stores Build 28 et leurs migrations ;
-- conserver App Shell 27, hardening iPhone 29 et Speaking Loop 29.1 ;
-- snapshots comparatifs avant/après.
-
----
+Après le retour terrain : réduire le monolithe historique sans changer le comportement, clarifier propriétaires DOM/state/routing, conserver Recovery, App Shell, iPhone hardening et Speaking Loop, avec snapshots comparatifs.
 
 # V2.0.0 — Freeze / Release
 
-Release cohérente, sauvegardable, restaurable, testée et documentée. Le jalon est la **fiabilité globale du produit**, pas l’ajout d’un nouveau moteur.
+Release cohérente, sauvegardable, restaurable, testée et documentée.
 
----
-
-# Baselines historiques protégées
+## Baseline historique protégée
 
 **v1.17.0 — Build 24 — Real Life French II** : **28 situations / 84 tours** avant Pack III ; `real-life-data-2.js` reste canonique.
 
-Builds structurants conservés :
-
-```text
-Build 26.1 Voice Replay + Details Dashboard
-Build 26.6 Progress Dashboard Containment
-Build 26.7 Progress Geometry
-Build 26.8 Progress Focus Flow
-Build 26.9 Progress Focus Content Reliability
-Build 27 App Shell Reset
-Build 28 Data & Recovery
-Build 29 iPhone / PWA / Accessibility
-Build 29.1 Speaking Loop Content
-```
-
-# Sanctuaires
+## Sanctuaires
 
 ```text
 francais-avec-luc:learner:v1
