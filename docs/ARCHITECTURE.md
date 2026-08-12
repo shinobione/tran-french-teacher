@@ -1,6 +1,6 @@
 # French Trân’quille — ARCHITECTURE
 
-## Vue générale — candidat Build 27
+## Vue générale — production Build 27
 
 ```text
 iPhone / Safari / PWA
@@ -23,9 +23,11 @@ PWA statique GitHub Pages, sans backend obligatoire ni API payante.
 
 Principe produit : **la complexité appartient aux moteurs ; l’utilisatrice voit seulement le contexte nécessaire à l’action en cours.**
 
+Production : **v1.20.0 / Build 27**, runtime `beeb9ce8ba081ed0298edbcc339dca41600e4d09`, PR #60, Pages #116 SUCCESS.
+
 ---
 
-# Candidat runtime — v1.20.0 Build 27
+# Runtime production — v1.20.0 Build 27
 
 Build 27 ajoute :
 
@@ -35,7 +37,7 @@ build27-app-shell.css
 build27-smoke.js
 ```
 
-Le runtime pédagogique historique reste chargé :
+Le runtime pédagogique historique reste chargé et propriétaire :
 
 ```text
 progress-safety.js
@@ -82,17 +84,13 @@ build27-smoke.js
 build-meta.js
 ```
 
-`app.js` n’est pas réécrit par Build 27. Memory, Mastery, Listening, Scenario, Error Intelligence et leurs données ne sont ni clonés ni déplacés par la nouvelle façade.
+`app.js` n’est pas réécrit. Memory, Mastery, Listening, Scenario et Error Intelligence ne sont ni clonés ni déplacés par la nouvelle façade.
 
 ---
 
 # Build 27 — séparation façade / moteurs
 
-## Problème produit
-
-Après Builds 26.6 → 26.9, le cockpit `Parcours` était techniquement fiable mais restait trop proche d’un dashboard pédagogique : beaucoup de petites cartes, familles analytiques, compteurs et sous-panneaux.
-
-La correction n’est donc plus un nouveau layout du dashboard. Build 27 introduit une **façade apprenante indépendante**.
+## Modèle
 
 ```text
 DOM + moteurs historiques
@@ -104,33 +102,21 @@ Build 27 lit seulement les états utiles
 façade simple pour Trân
 ```
 
-Les anciennes surfaces Home/Progress restent dans le DOM afin que leurs moteurs et leurs anciens tests continuent de fonctionner, mais sont masquées dans l’UX apprenante Build 27.
+Les anciennes surfaces Home/Progress restent dans le DOM pour les moteurs et leurs contrats historiques, mais sont masquées dans l’UX apprenante normale.
 
-## Isolation des anciens contrats
+## Isolation des anciens smokes
 
-Au démarrage, `build27-app-shell.js` détecte les paramètres des anciens smokes :
+`build27-app-shell.js` détecte les anciens paramètres `...Smoke`. Lorsqu’un contrat historique 26.x est actif, Build 27 ne s’installe pas. Les anciens workflows voient donc toujours les surfaces qu’ils protègent réellement.
 
-```text
-b266Smoke
-b267Smoke
-b268Smoke
-b269Smoke
-...
-```
-
-Lorsque l’un de ces contrats historiques est actif, la façade Build 27 **ne s’installe pas**. Les anciens workflows continuent donc à voir et tester les surfaces qu’ils protègent réellement.
-
-`b27Smoke` est le seul contrat propriétaire du nouveau shell. `uxSmoke=lesson8` peut rester présent uniquement pour injecter un ancien profil synthétique.
+`b27Smoke` appartient uniquement au nouveau shell ; `uxSmoke=lesson8` peut servir à injecter le profil historique sans désactiver Build 27.
 
 ---
 
-# Aujourd’hui Build 27
-
-L’ancien dashboard Home reste dans le DOM, mais la vue apprenante expose :
+# Aujourd’hui
 
 ```text
 French Trân’quille
-Bonjour / Xin chào Trân
+Xin chào / Bonjour Trân
         ↓
 prochaine leçon
 [ Continuer ]
@@ -140,7 +126,7 @@ Réviser    Écouter
 petit rappel de durée
 ```
 
-Build 27 récupère la prochaine leçon depuis le learner historique :
+La prochaine leçon vient directement du learner historique :
 
 ```text
 francais-avec-luc:learner:v1
@@ -148,19 +134,13 @@ francais-avec-luc:learner:v1
 
 Aucun nouvel état de progression n’est créé.
 
-Sur desktop de certification `1640×900`, la Home Build 27 mesure **672 px** de hauteur. Sur mobile `390×844`, elle reste mono-colonne et sans overflow horizontal.
+Certification desktop `1640×900` : Home **672 px** de haut. Mobile `390×844` : une colonne, zéro overflow horizontal.
 
 ---
 
-# Pratiquer Build 27
+# Pratiquer
 
-Le bouton central de la bottom bar est intercepté en phase de capture par la façade Build 27 et ouvre :
-
-```text
-.b27-practice-page
-```
-
-Quatre intentions seulement :
+La tab centrale ouvre `.b27-practice-page` avec :
 
 ```text
 Parler
@@ -169,18 +149,18 @@ Réviser
 Dans la vraie vie
 ```
 
-Les destinations restent les propriétaires historiques :
+Destinations propriétaires :
 
-- `Parler` → bus Conversation existant ;
-- `Écouter` → `FrenchTranquilleListening.open()` ;
-- `Réviser` → bus Review existant ;
-- `Dans la vraie vie` → `FrenchTranquilleScenarios.start(id)`.
+- Parler → bus Conversation existant ;
+- Écouter → `FrenchTranquilleListening.open()` ;
+- Réviser → bus Review existant ;
+- Dans la vraie vie → `FrenchTranquilleScenarios.start(id)`.
 
-Les scénarios personnels Jerry déjà débloqués sont privilégiés par la façade ; aucun scénario n’est dupliqué.
+Les situations personnelles Jerry déjà débloquées sont privilégiées ; aucun scénario n’est dupliqué.
 
 ## Tab bar persistante
 
-La bottom navigation reste le bus historique. Build 27 ne la recrée pas.
+Build 27 ne recrée pas la navigation historique.
 
 Contrats :
 
@@ -188,19 +168,13 @@ Contrats :
 - feedback `pointerdown` ;
 - tap echo ;
 - une seule tab `.active` ;
-- Practice page s’arrête exactement au-dessus de la tab bar sur mobile.
+- page Practice arrêtée exactement au-dessus de la tab bar mobile.
 
-Plusieurs couches historiques peuvent rappeler `FrenchTranquilleUX.refresh()`. Le bridge final de Build 27 observe donc les classes de la tab bar tant que Practice est ouvert et réaffirme idempotemment :
-
-```text
-active = practice uniquement
-```
+Le bridge final réaffirme idempotemment `active = practice` pendant que Practice est ouvert, même si une couche historique appelle `FrenchTranquilleUX.refresh()`.
 
 ## Géométrie mobile
 
-Le bottom de `.b27-overlay` n’est pas déterminé par une hauteur viewport supposée.
-
-Build 27 mesure directement :
+La façade mesure directement :
 
 ```text
 overlay.getBoundingClientRect().bottom
@@ -208,13 +182,13 @@ vs
 nav.getBoundingClientRect().top
 ```
 
-Puis corrige le `bottom` inline jusqu’à obtenir un gap nul. Cette méthode reste valide dans un iframe, avec safe-area et dans Chrome headless.
+Puis corrige le `bottom` jusqu’à un gap nul. Pas de constante magique fondée sur un viewport supposé.
 
 ---
 
-# Progrès Build 27
+# Progrès
 
-La façade apprenante ne montre plus le cockpit analytique comme navigation normale.
+UX apprenante :
 
 ```text
 position A0 → A1
@@ -228,15 +202,13 @@ prochaine leçon
 Voir tout le parcours
 ```
 
-Le cockpit historique reste accessible uniquement en DEBUG FR pour diagnostic.
+Le cockpit historique reste accessible uniquement en DEBUG FR.
 
-Le curriculum reste **40 leçons / 241 éléments**.
+Curriculum : **40 leçons / 241 éléments**.
 
 ---
 
-# Parcours complet Build 27
-
-Vue dédiée :
+# Parcours complet
 
 ```text
 1. Survie A0          1–7
@@ -246,26 +218,24 @@ Vue dédiée :
 5. A1 Core            26–40
 ```
 
-Une seule étape expose ses leçons.
-
-Desktop large : 2 colonnes de leçons lorsque l’espace le permet. Mobile : une colonne.
-
-Le workflow exige explicitement **15 lignes** lorsque `A1 Core` est sélectionné.
+Une seule étape expose ses leçons. Desktop large peut utiliser 2 colonnes ; mobile reste à 1. Le tribunal exige **15 lignes** pour A1 Core.
 
 ---
 
-# Mouvement / état Build 27
+# Mouvement / état
 
-Les pages Build 27 utilisent de courts fades/translations.
+Les pages utilisent de courts fades/translations.
 
-L’état logique n’appartient jamais à l’animation :
+```text
+montage overlay
+→ b27-entering
+→ rAF retire la classe
+→ fallback 48 ms si frame retardé
+```
 
-- un overlay reçoit `b27-entering` au montage ;
-- `requestAnimationFrame` retire la classe ;
-- un fallback borné à 48 ms retire également la classe si le frame est retardé ;
-- `prefers-reduced-motion` désactive le mouvement sans changer le flux.
+L’animation ne possède jamais l’état métier. `prefers-reduced-motion` conserve le flux sans mouvement.
 
-Les screenshots visuels CI `Practice/Journey` sont refusés tant que l’overlay possède encore `b27-entering` ou `b27-leaving`.
+Les captures CI Practice/Journey sont rejetées tant que `b27-entering` ou `b27-leaving` reste actif.
 
 ---
 
@@ -273,7 +243,7 @@ Les screenshots visuels CI `Practice/Journey` sont refusés tant que l’overlay
 
 Workflow : `.github/workflows/build27-app-shell-smoke.yml`.
 
-Desktop `1640×900` :
+Flux réel :
 
 ```text
 Home
@@ -286,7 +256,7 @@ Home
 → vraie Leçon
 ```
 
-Même flux en `390×844`.
+Desktop `1640×900` + mobile `390×844`.
 
 Contrats :
 
@@ -303,15 +273,24 @@ real lesson reached      = 1
 horizontal overflow      = 0
 ```
 
-Un second workflow `nav-click-smoke` reste le contrat tactile physique : pointer feedback, tap echo, persistance des nœuds, tab unique active, géométrie Practice/tab bar et destination réelle.
+`nav-click-smoke` protège en parallèle pointer feedback, tap echo, persistance des nœuds, tab unique active, géométrie Practice/tab bar et destination réelle.
 
-Le runtime head pré-doc candidat `7c5978cea9d4c1e9bb4b3b0e8ce75a151df3ea2e` a passé **16/16 workflows fonctionnels SUCCESS**.
+Preuves de release :
+
+```text
+PR #60 head dba27d35...    16/16 fonctionnels SUCCESS
+main beeb9ce8...           16/16 fonctionnels SUCCESS
+Pages #116                 SUCCESS
+main total                 17/17 SUCCESS Pages incluse
+```
+
+Le seul premier rouge `main` était l’ancien round-trip 26.8 ; le même job, sans changement de code, a ensuite passé Details / Curriculum / Round-trip / Mobile SUCCESS.
 
 ---
 
 # Revue visuelle Build 27
 
-Le workflow capture :
+Captures CI :
 
 ```text
 home-desktop.png
@@ -321,35 +300,30 @@ journey-desktop.png
 home-mobile.png
 ```
 
-Revue du candidat pré-doc :
+Release validée :
 
 - Home desktop : une leçon dominante + deux raccourcis ;
 - Home mobile : une colonne, targets larges, tab bar ;
 - Practice : quatre choix, aucun cockpit ;
-- Progress : progression + prochaine leçon + stage ;
-- Journey : vue dédiée, **aucun ghost de Progress après settlement**.
+- Progress : progression + prochaine leçon + étape ;
+- Journey : vue dédiée sans ghost de Progress après settlement.
 
 ---
 
-# Builds 26.6 → 26.9 restent actifs sous la façade
+# Builds 26.6 → 26.9 sous la façade
 
-Build 27 ne supprime pas leurs contrats ; il masque simplement leur cockpit dans l’UX apprenante normale.
+Build 27 ne supprime aucun de leurs contrats.
 
-## Build 26.9 — Focus Content Reliability
+## Build 26.9 — Content Reliability
+Vrai contenu visible des familles historiques.
 
-Toujours canonique pour le vrai contenu visible des familles historiques.
+## Build 26.8 — Focus Flow
+Focus/sorties historiques et round-trip.
 
-## Build 26.8 — Progress Focus Flow
+## Build 26.7 — Geometry
+Géométrie historique Détails/Parcours.
 
-Toujours canonique pour les focus/sorties historiques et leur round-trip.
-
-## Build 26.7 — garde géométrique
-
-Toujours canonique pour la géométrie historique Détails/Parcours.
-
-## Build 26.6 — frontière de propriété DOM
-
-Composition historique conservée ; contrat anti-prolifération :
+## Build 26.6 — Containment
 
 ```text
 après quiescence = 12 cartes
@@ -362,26 +336,7 @@ Build 27 ne reparent aucune de ces cartes.
 
 ---
 
-# Learning Details Dashboard — diagnostic historique
-
-Familles toujours existantes sous le capot :
-
-```text
-🧠 memory
-🎯 mastery
-🎧 listening
-🎭 real-life
-🧩 path
-⋯ other
-```
-
-Elles pilotent et diagnostiquent le moteur ; elles ne constituent plus la navigation quotidienne de Trân sous Build 27.
-
----
-
 # Listening
-
-Contrat final inchangé :
 
 ```text
 normal request 0.88 → effectif 0.88
@@ -395,26 +350,18 @@ slow request   0.68 → bridge 0.65 → effectif 0.65
 # Voice Self-Playback — Build 26.1
 
 ```text
-réponse reconnue par free-voice.js
-→ voice-replay.js
+réponse reconnue
 → seconde prise volontaire locale
 → MediaRecorder / Blob URL / Audio
 ```
 
-Pas d’upload ni persistance audio. Gate réel iPhone toujours ouvert :
-
-```text
-reconnaissance
-→ seconde prise
-→ lecture
-→ reconnaissance suivante
-```
+Pas d’upload ni persistance audio. Gate réel iPhone toujours ouvert : `reconnaissance → seconde prise → lecture → reconnaissance suivante`.
 
 ---
 
 # Real Life French
 
-Ordre historique important :
+Ordre historique :
 
 ```text
 scenario-data.js
@@ -427,15 +374,15 @@ real-life-ux.js
 real-life-coach.js
 ```
 
-Production actuelle : **36 situations / 108 tours**.
+Production : **36 situations / 108 tours**.
 
-Baseline historique protégée : `real-life-data-2.js` correspond à **v1.17.0 — Build 24 — Real Life French II**, où Scenario comptait **28 situations / 84 tours** avant Pack III.
+Baseline historique protégée : `real-life-data-2.js` = **v1.17.0 — Build 24 — Real Life French II**, avec **28 situations / 84 tours** avant Pack III.
 
 ---
 
 # État et sécurité
 
-Clés pédagogiques existantes inchangées :
+Clés inchangées :
 
 ```text
 francais-avec-luc:learner:v1
@@ -444,8 +391,6 @@ french-tranquille:listening:v1
 french-tranquille:learning-memory:v1
 french-tranquille:safety:pre-build22:v1
 ```
-
-Build 27 ne crée aucune migration.
 
 Sanctuaires byte-identiques :
 
@@ -456,27 +401,12 @@ assets/LOGO.png
 assets/Favicon.png
 ```
 
+Build 27 ne crée aucune migration.
+
 ---
 
-# Production et release
+# Dette / suite
 
-Production tant que PR #60 n’est pas mergée :
+Build 27 est **PROD / CLOS**.
 
-```text
-v1.19.9 Build 26.9
-runtime 0b31eedb78daebd58dd9bdcb0a472d56250c8fff
-GitHub Pages #114 SUCCESS
-```
-
-Build 27 reste **CANDIDAT** jusqu’à :
-
-```text
-docs candidat
-→ exact PR head tout vert
-→ merge exact
-→ main tout vert
-→ GitHub Pages SUCCESS
-→ docs PROD / CLOS
-```
-
-Après Build 27 : Data & Recovery Hardening, iPhone/PWA/Accessibility Hardening, puis Architecture Hardening avant V2.0.0.
+Prochains jalons : Build 28 Data & Recovery Hardening, Build 29 iPhone/PWA/Accessibility Hardening, Build 30 Architecture Hardening, puis V2.0.0.
