@@ -3,7 +3,7 @@ import './runtime-bridge.js?v=2.0.0-b30';
 
 // Production baseline kept explicit for historical CI contracts.
 const PRODUCTION_BASELINE = { version: '1.17.0', build: 24 };
-const META = { version: '2.0.0', build: '30', baseline: PRODUCTION_BASELINE };
+const META = { version: '2.1.0', build: '31', baseline: PRODUCTION_BASELINE };
 
 window.FrenchTranquilleBuildMeta = META;
 
@@ -68,7 +68,8 @@ installSpeakingLoopAssets();
   'FrenchTranquilleProgressDetailsDashboard','FrenchTranquilleBuild263UX','FrenchTranquilleBuild264UX',
   'FrenchTranquilleBuild265UX','FrenchTranquilleBuild266UX','FrenchTranquilleBuild267UX',
   'FrenchTranquilleBuild268UX','FrenchTranquilleBuild269UX','FrenchTranquilleBuild27Shell',
-  'FrenchTranquilleRecovery','FrenchTranquilleRuntimeContracts','FrenchTranquilleRuntime'
+  'FrenchTranquilleRecovery','FrenchTranquilleRuntimeContracts','FrenchTranquilleRuntime',
+  'FrenchTranquilleLearnerIntelligence'
 ].forEach(name => {
   const api = window[name];
   if (api && typeof api === 'object' && !Object.isFrozen(api)) {
