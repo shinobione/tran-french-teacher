@@ -24,6 +24,19 @@
     }
     return false;
   };
+  const waitOverlaySettled = async (timeout = 3000) => {
+    const start = performance.now();
+    while (performance.now() - start < timeout) {
+      const overlay = document.querySelector('.b27-overlay');
+      if (!overlay || (!overlay.classList.contains('b27-entering') && !overlay.classList.contains('b27-leaving'))) {
+        html.dataset.b27VisualSettleMs = String(Math.round(performance.now() - start));
+        return overlay;
+      }
+      await sleep(40);
+    }
+    html.dataset.b27VisualSettleMs = String(Math.round(performance.now() - start));
+    return document.querySelector('.b27-overlay');
+  };
   const click = async selector => {
     const node = await waitFor(selector);
     if (!node) return false;
@@ -87,9 +100,10 @@
       if (!await waitFor('.b27-home')) return;
     }
 
-    // Visual artifacts must represent the settled UI, not an arbitrary fade frame.
-    await sleep(650);
-    const overlay = document.querySelector('.b27-overlay');
+    // Visual artifacts must represent a genuinely settled UI. Wait for the
+    // transition classes to disappear, but keep a hard bound so stuck states fail.
+    await sleep(80);
+    const overlay = await waitOverlaySettled(3000);
     html.dataset.b27VisualEntering = overlay?.classList.contains('b27-entering') ? '1' : '0';
     html.dataset.b27VisualLeaving = overlay?.classList.contains('b27-leaving') ? '1' : '0';
     html.dataset.b27VisualReady = target;
