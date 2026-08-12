@@ -26,12 +26,13 @@ jobs:
           node --check build-meta.js
           node --check sw.js
           node tools/test-build28-data-recovery.cjs
+          # Build 28 remains a mandatory subsystem; later builds may own global metadata/cache identity.
           grep -q 'data-recovery-core.js?v=1.21.0-b28' index.html
           grep -q 'data-recovery.js?v=1.21.0-b28' index.html
           grep -q 'data-recovery-smoke.js?v=1.21.0-b28' index.html
-          grep -q 'build-meta.js?v=1.21.0-b28' index.html
-          grep -q "version: '1.21.0', build: '28'" build-meta.js
-          grep -q 'tran-french-teacher-v1.21.0-b28-data-recovery' index.html sw.js
+          grep -q 'build-meta.js?v=' index.html
+          grep -q 'FrenchTranquilleRecovery' build-meta.js
+          grep -q 'tran-french-teacher-v' index.html sw.js
           grep -q 'data-recovery-core.js' sw.js
           grep -q 'data-recovery.js' sw.js
           grep -q 'data-recovery-smoke.js' sw.js

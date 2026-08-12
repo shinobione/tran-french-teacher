@@ -1,13 +1,17 @@
 {
+  "id": "./",
   "name": "French Trân’quille",
   "short_name": "Trân’quille",
   "description": "Professeure de français personnelle pour Trân — parcours A0 vers premières fondations A1, interface vietnamienne.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
+  "orientation": "any",
   "background_color": "#08111d",
   "theme_color": "#171026",
   "lang": "vi",
+  "categories": ["education"],
+  "prefer_related_applications": false,
   "icons": [
     { "src": "./assets/icon-192.webp", "sizes": "192x192", "type": "image/webp", "purpose": "any maskable" },
     { "src": "./assets/Favicon.png", "sizes": "any", "type": "image/png", "purpose": "any maskable" }
