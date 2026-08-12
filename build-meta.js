@@ -24,8 +24,6 @@ window.FrenchTranquilleBuildMeta = META;
   }
 });
 
-// voice-ios.js accepts >= 0.65. Keep slow exactly on that safe floor so the
-// Listening bridge cannot fall back to the configured teacher voice's default ~0.84 rate.
 const LISTENING_RATES = Object.freeze({ normal: 0.88, engineSlow: 0.68, slow: 0.65 });
 window.FrenchTranquilleListeningRates = LISTENING_RATES;
 document.documentElement.dataset.listeningNormalRate = String(LISTENING_RATES.normal);
@@ -82,8 +80,6 @@ function installBuild27ShellBridges() {
     if (!(overlay instanceof HTMLElement)) return;
     const settle = () => overlay.isConnected && overlay.classList.remove('b27-entering');
     requestAnimationFrame(settle);
-    // Cosmetic motion never owns state: a skipped frame cannot leave an
-    // otherwise-ready page semi-transparent indefinitely.
     setTimeout(settle, 48);
   };
 
@@ -93,9 +89,7 @@ function installBuild27ShellBridges() {
     const navTop = nav.getBoundingClientRect().top;
     const currentBottom = Number.parseFloat(getComputedStyle(overlay).bottom) || 0;
     const delta = overlayRect.bottom - navTop;
-    if (Math.abs(delta) > 0.5) {
-      overlay.style.bottom = `${Math.max(0, currentBottom + delta)}px`;
-    }
+    if (Math.abs(delta) > 0.5) overlay.style.bottom = `${Math.max(0, currentBottom + delta)}px`;
     const correctedGap = Math.round(overlay.getBoundingClientRect().bottom - nav.getBoundingClientRect().top);
     root.dataset.b27OverlayGap = String(correctedGap);
     root.dataset.b27OverlayBottom = String(Math.round(Number.parseFloat(getComputedStyle(overlay).bottom) || 0));
@@ -113,10 +107,7 @@ function installBuild27ShellBridges() {
       });
       return;
     }
-
     overlays.forEach(overlay => {
-      // Measure the surfaces themselves instead of inferring a viewport height.
-      // This stays correct in Safari, iframes, safe-area layouts and headless Chrome.
       alignOverlayToNav(overlay, nav);
       settleOverlay(overlay);
       requestAnimationFrame(() => alignOverlayToNav(overlay, nav));
@@ -128,9 +119,6 @@ function installBuild27ShellBridges() {
     syncOverlayGeometry();
   };
 
-  // The historical tab bus owns the actual screen change. Once its click has
-  // bubbled through, rebuild the learner façade immediately instead of waiting
-  // for a later MutationObserver turn.
   window.addEventListener('click', event => {
     const nav = event.target?.closest?.('.ux-bottom-nav [data-ux-nav]');
     if (!nav || nav.dataset.uxNav === 'practice') return;
@@ -142,6 +130,15 @@ function installBuild27ShellBridges() {
   new MutationObserver(mutations => {
     if (mutations.some(mutation => mutation.type === 'attributes' && mutation.attributeName === 'class')) syncTabState();
   }).observe(root, { attributes:true, attributeFilter:['class'] });
+
+  const nav = document.querySelector('.ux-bottom-nav');
+  if (nav) {
+    new MutationObserver(mutations => {
+      if (!root.classList.contains('b27-practice-open')) return;
+      if (mutations.some(mutation => mutation.type === 'attributes' && mutation.attributeName === 'class')) syncTabState();
+    }).observe(nav, { subtree:true, attributes:true, attributeFilter:['class'] });
+  }
+
   new MutationObserver(mutations => {
     mutations.forEach(mutation => mutation.addedNodes.forEach(node => {
       if (node instanceof HTMLElement && node.classList.contains('b27-overlay')) settleOverlay(node);
