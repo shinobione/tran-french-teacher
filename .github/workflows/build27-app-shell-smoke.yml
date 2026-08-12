@@ -1,0 +1,144 @@
+name: Build 27 App shell reset smoke
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  app-shell-reset:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax, version, cache and wiring
+        run: |
+          node --check build27-app-shell.js
+          node --check build27-smoke.js
+          node --check build-meta.js
+          node --check sw.js
+          grep -q 'build27-app-shell.css?v=1.20.0-b27' index.html
+          grep -q 'build27-app-shell.js?v=1.20.0-b27' index.html
+          grep -q 'build27-smoke.js?v=1.20.0-b27' index.html
+          grep -q 'build-meta.js?v=1.20.0-b27' index.html
+          grep -q "version: '1.20.0', build: '27'" build-meta.js
+          grep -q 'FrenchTranquilleBuild27Shell' build-meta.js
+          grep -q 'tran-french-teacher-v1.20.0-b27-app-shell-reset' index.html sw.js
+          grep -q 'b27-practice-page' build27-app-shell.js build27-app-shell.css
+          grep -q 'b27-progress-page' build27-app-shell.js build27-app-shell.css
+          grep -q 'b27-journey-page' build27-app-shell.js build27-app-shell.css
+
+      - name: Learner, voice and branding sanctuaries remain byte-identical
+        run: |
+          test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
+          test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+          grep -q "francais-avec-luc:learner:v1" app.js build27-app-shell.js
+          grep -q 'normal: 0.88' build-meta.js
+          grep -q 'slow: 0.65' build-meta.js
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-b27-http.log 2>&1 &
+          echo $! >/tmp/ft-b27-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome desktop — Home is one clear app screen
+        run: |
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-b27-home-$attempt"
+            file="/tmp/b27-home-$attempt.html"
+            rm -rf "$profile" "$file"
+            if ! timeout --signal=TERM --kill-after=5s 40s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=1640,900 \
+              --virtual-time-budget=16000 --dump-dom \
+              'http://127.0.0.1:4173/?uxSmoke=lesson8&debug=fr&b27Smoke=home' >"$file"; then
+              continue
+            fi
+            ok=1
+            grep -q 'data-b27-smoke-done="1"' "$file" || ok=0
+            grep -q 'data-b27-home-ready="1"' "$file" || ok=0
+            grep -q 'data-b27-home-primary="1"' "$file" || ok=0
+            grep -q 'data-b27-home-primary-buttons="1"' "$file" || ok=0
+            grep -q 'data-b27-home-quick-actions="2"' "$file" || ok=0
+            grep -q 'data-b27-home-legacy-visible="0"' "$file" || ok=0
+            grep -q 'data-b27-home-overflow="0"' "$file" || ok=0
+            height=$(grep -o 'data-b27-home-height="[0-9]*"' "$file" | head -1 | cut -d'"' -f2)
+            echo "desktop home height=${height:-0}px"
+            [ "${height:-0}" -le 900 ] || ok=0
+            if [ "$ok" = 1 ]; then passed=1; break; fi
+          done
+          test "$passed" = 1
+
+      - name: Chrome desktop — real app round-trip
+        run: |
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-b27-flow-$attempt"
+            file="/tmp/b27-flow-$attempt.html"
+            rm -rf "$profile" "$file"
+            if ! timeout --signal=TERM --kill-after=5s 60s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=1640,900 \
+              --virtual-time-budget=36000 --dump-dom \
+              'http://127.0.0.1:4173/?uxSmoke=lesson8&debug=fr&b27Smoke=flow' >"$file"; then
+              continue
+            fi
+            ok=1
+            grep -q 'data-b27-smoke-done="1"' "$file" || ok=0
+            grep -q 'data-b27-flow-phase="complete"' "$file" || ok=0
+            grep -q 'data-b27-practice-visible="1"' "$file" || ok=0
+            grep -q 'data-b27-practice-actions="4"' "$file" || ok=0
+            grep -q 'data-b27-progress-visible="1"' "$file" || ok=0
+            grep -q 'data-b27-progress-legacy-visible="0"' "$file" || ok=0
+            grep -q 'data-b27-progress-lesson-rows="5"' "$file" || ok=0
+            grep -q 'data-b27-journey-visible="1"' "$file" || ok=0
+            grep -q 'data-b27-journey-stages="5"' "$file" || ok=0
+            grep -q 'data-b27-journey-a1rows="15"' "$file" || ok=0
+            grep -q 'data-b27-lesson-reached="1"' "$file" || ok=0
+            grep -q 'data-b27-flow-overflow="0"' "$file" || ok=0
+            if [ "$ok" = 1 ]; then passed=1; break; fi
+            grep -o 'data-b27-[^ >]*' "$file" | head -60 || true
+          done
+          test "$passed" = 1
+
+      - name: Chrome mobile 390x844 — app flow stays single-column and usable
+        run: |
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-b27-mobile-$attempt"
+            file="/tmp/b27-mobile-$attempt.html"
+            rm -rf "$profile" "$file"
+            if ! timeout --signal=TERM --kill-after=5s 60s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=390,844 \
+              --virtual-time-budget=36000 --dump-dom \
+              'http://127.0.0.1:4173/?uxSmoke=lesson8&b27Smoke=flow' >"$file"; then
+              continue
+            fi
+            ok=1
+            grep -q 'data-b27-flow-phase="complete"' "$file" || ok=0
+            grep -q 'data-b27-practice-actions="4"' "$file" || ok=0
+            grep -q 'data-b27-journey-stages="5"' "$file" || ok=0
+            grep -q 'data-b27-journey-a1rows="15"' "$file" || ok=0
+            grep -q 'data-b27-lesson-reached="1"' "$file" || ok=0
+            grep -q 'data-b27-flow-overflow="0"' "$file" || ok=0
+            if [ "$ok" = 1 ]; then passed=1; break; fi
+          done
+          test "$passed" = 1
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-b27-server.pid ]; then kill "$(cat /tmp/ft-b27-server.pid)" || true; fi
