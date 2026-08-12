@@ -42,30 +42,29 @@
 36. **Une intention active peut prendre l’écran et masquer temporairement le contexte non nécessaire.** Le retour doit restaurer exactement la vue précédente.
 37. **L’animation ne possède jamais l’état métier.** Un fade peut continuer visuellement après que la transition fonctionnelle est déjà validée.
 38. `prefers-reduced-motion` doit conserver le même flux fonctionnel sans animation.
+39. **Un wrapper large ne prouve pas qu’un écran est utilisable.** Les tests Focus mesurent les vraies cartes visibles, leur largeur et leur hauteur.
+40. **Une famille active n’est prête que si son vrai contenu moteur est rendu.** Une toolbar sans carte visible est un échec, pas un état acceptable.
 
 ---
 
-# Baseline production — v1.19.8 / Build 26.8
+# Baseline production — v1.19.9 / Build 26.9
 
-**Progress Focus Flow — ✅ PROD / CLOS**
+**Progress Focus Content Reliability — ✅ PROD / CLOS**
 
-- runtime : `1084e1d71a7aebbf6d7dcea9dfa0cabb44f6cbe1` ;
-- PR runtime **#56** ;
-- PR : **14/14 workflows fonctionnels SUCCESS** ;
-- `main` : **14/14 workflows fonctionnels SUCCESS** ;
-- GitHub Pages : **#112 SUCCESS** ;
-- vue Progress normale compacte ;
-- famille Détails active = focus pleine surface ;
-- `Voir tout le parcours` = focus Curriculum pleine surface ;
-- retour Détails et retour Curriculum explicites ;
-- round-trip réel restauré à **5 lignes compactes** ;
-- desktop 1640×900 : surface Focus mesurée **920 px**, aucun overflow horizontal ;
-- mobile 390×844 : focus une colonne, aucun overflow horizontal ;
-- shell focalisé peut utiliser jusqu’à **1420 px** sur grand desktop ;
-- `prefers-reduced-motion` supporté ;
-- containment Build 26.6 intact ;
-- anti-prolifération Build 26.6 intacte : **12 → 12** ;
-- géométrie Build 26.7 intacte ;
+- runtime : `0b31eedb78daebd58dd9bdcb0a472d56250c8fff` ;
+- PR runtime **#58** ;
+- head PR certifié : `0fcb28038ef5bab5d138948c6d63b8fd963b2aab` ;
+- PR : **15/15 workflows fonctionnels SUCCESS** ;
+- `main` : **15/15 workflows fonctionnels SUCCESS** après rerun inchangé du seul runner 26.3 initialement rouge ;
+- GitHub Pages : **#114 SUCCESS** ;
+- chaque famille Focus possède au moins une vraie carte moteur visible ;
+- panel desktop de certification : **918 px** ;
+- famille à une carte : la carte occupe **918 px** ;
+- familles multi-cartes : grille 2 colonnes autour de **452 px** par carte sur le viewport de certification ;
+- mobile 390×844 : vraie carte visible, une colonne, aucun overflow horizontal ;
+- Build 26.8 Focus Flow / round-trip intact ;
+- Build 26.7 geometry intacte ;
+- Build 26.6 containment / anti-prolifération intact ;
 - curriculum **40 / 241** ;
 - Scenario **36 / 108** ;
 - Listening **0.88 / 0.65** ;
@@ -77,64 +76,59 @@ Baseline historique protégée : **v1.17.0 — Build 24 — Real Life French II*
 
 ---
 
-# Build 26.8 — critères clôturés
+# Build 26.9 — critères clôturés
 
-## 1. Focus Détails
+## 1. Retour terrain
 
-- [x] clic sur une famille réellement observé ;
-- [x] learner flow masqué pendant le focus ;
-- [x] grille de familles masquée ;
-- [x] famille choisie visible seule ;
-- [x] toolbar de retour explicite ;
-- [x] surface grand desktop >= 900 px ;
-- [x] cartes en 2 colonnes lorsque l’espace le permet ;
-- [x] 1 colonne sur écran étroit/mobile ;
-- [x] aucun overflow horizontal ;
-- [x] containment 26.6 conservé.
+- [x] vidéo réelle analysée ;
+- [x] demi-largeur d’une famille à carte unique identifiée ;
+- [x] état `toolbar visible + vrai contenu vide` identifié ;
+- [x] cause classée comme synchronisation/présentation Focus, pas données pédagogiques absentes.
 
-## 2. Focus Curriculum
+## 2. Fiabilité du Focus Détails
 
-- [x] `Voir tout le parcours` masque Résumé + Détails ;
-- [x] Curriculum utilise toute la surface ;
-- [x] 5 étapes horizontales sur grand desktop ;
-- [x] leçons en 2 colonnes sur grand desktop ;
-- [x] responsive 2/1 colonnes ;
-- [x] `Retour au résumé` explicite ;
-- [x] jamais 40 leçons visibles simultanément.
+- [x] `ProgressDetailsDashboard` reste propriétaire de `activeKey` ;
+- [x] aucun reparenting des cartes Memory/Mastery/Listening/Scenario ;
+- [x] état `activeKey → hidden` réconcilié de façon idempotente ;
+- [x] contenu considéré prêt seulement après vraie mesure d’une carte visible ;
+- [x] retries de stabilisation bornés ;
+- [x] carte unique span toute la grille Focus ;
+- [x] aucun overflow horizontal.
 
-## 3. Round-trip humain
+## 3. Tribunal desktop multi-familles
 
-Chrome exécute :
+Chrome `1640×900` exécute :
 
 ```text
-compact
-→ Memory focus
-→ retour
-→ Curriculum focus
-→ retour
+Mémoire → retour
+Maîtrise → retour
+Compréhension orale → retour
+Français réel → retour
+A1 & rythme → retour
 ```
 
-Critères :
+Preuves :
 
-- [x] aucun focus actif à la fin ;
-- [x] aucune famille active ;
-- [x] curriculum compact restauré à **5 lignes** ;
-- [x] transitions idempotentes sous MutationObserver ;
-- [x] sorties pilotées par les API propriétaires du dashboard/curriculum ;
-- [x] état logique découplé de la fin cosmétique du fade.
+- [x] Mémoire : 3 cartes, panneau 918 px, cartes 452 px ;
+- [x] Maîtrise : 2 cartes, panneau 918 px, cartes 452 px ;
+- [x] Compréhension orale : 1 carte, 918 px ;
+- [x] Français réel : 1 carte, 918 px ;
+- [x] A1 & rythme : 4 cartes, panneau 918 px, cartes 452 px ;
+- [x] toutes les familles ont une hauteur rendue non nulle.
 
-## 4. Responsive / accessibilité mouvement
+## 4. Mobile
 
-- [x] desktop large utilise davantage l’écran ;
-- [x] mobile 390×844 sans overflow horizontal ;
-- [x] toolbar compacte mobile ;
-- [x] `prefers-reduced-motion` supprime l’animation sans changer le flux.
+- [x] Chrome 390×844 ;
+- [x] vraie carte Memory visible ;
+- [x] largeur réelle >= seuil mobile ;
+- [x] une colonne ;
+- [x] aucun overflow horizontal.
 
-## 5. Régressions historiques protégées
+## 5. Baselines historiques protégées
 
-- [x] Build 26.6 containment / anti-photocopieuse ;
-- [x] Build 26.6 curriculum 5 étapes ;
+- [x] Build 26.8 Focus Flow + Curriculum Focus + round-trip 5 lignes ;
 - [x] Build 26.7 wide/compact geometry ;
+- [x] Build 26.6 containment / 12 → 12 ;
 - [x] Build 26.5 Conversation Exit ;
 - [x] Build 26.4 single-scroll ;
 - [x] Build 26.3 interactions ;
@@ -143,17 +137,33 @@ Critères :
 - [x] learner l8 historique ;
 - [x] voix / logo / favicon byte-identiques.
 
+## 6. CI / release
+
+- [x] workflow dédié Build 26.9 ;
+- [x] workflow 26.8 rendu version-forward sans supprimer ses Chrome ;
+- [x] PR #58 : **15/15 SUCCESS** ;
+- [x] merge exact du head `0fcb2803…` ;
+- [x] runtime `0b31eedb…` ;
+- [x] premier passage main du smoke 26.3 : seul rouge, destination Lesson non atteinte dans son délai historique ;
+- [x] même job **inchangé** rerun → Today + Progress desktop + Progress mobile SUCCESS ;
+- [x] `main` final : **15/15 fonctionnels SUCCESS** ;
+- [x] GitHub Pages **#114 SUCCESS**.
+
 ---
 
 # Baselines conservées
 
+## Build 26.8 — Progress Focus Flow
+
+Toujours canonique pour : une intention prend l’écran, fade réversible, retour explicite, focus Curriculum, `prefers-reduced-motion` et round-trip vers 5 lignes compactes.
+
 ## Build 26.7 — Progress Open-Details Geometry
 
-Toujours sous Chrome : deux colonnes utilisables sur desktop large, pile lisible sur desktop compact. Build 26.8 supersède seulement la **présentation quand un focus est actif**.
+Toujours canonique pour la géométrie de la vue normale lorsque Détails est simplement ouvert.
 
 ## Build 26.6 — Progress Dashboard Containment + Humanized Curriculum
 
-Toujours canonique pour la propriété DOM et la cardinalité : **12 → 12** après quiescence, cartes moteur uniques, 5 étapes curriculum.
+Toujours canonique pour la propriété DOM, la cardinalité **12 → 12** et le curriculum en 5 étapes.
 
 ## Build 26.5 → 26.2
 
@@ -211,6 +221,7 @@ Voice Replay + Details Dashboard Build 26.1
 Progress Dashboard Containment Build 26.6
 Progress Open-Details Geometry Build 26.7
 Progress Focus Flow Build 26.8
+Progress Focus Content Reliability Build 26.9
 ```
 
 Compatibilité interne conservée malgré le branding Tyffany : `LucieVoice`, `luc-*`, `lucie-*`.
