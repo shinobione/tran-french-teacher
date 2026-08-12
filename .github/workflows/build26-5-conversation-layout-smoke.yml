@@ -12,13 +12,6 @@ permissions:
 jobs:
   conversation-layout:
     runs-on: ubuntu-latest
-    env:
-      CHROME_STABLE_FLAGS: >-
-        --headless=new --no-sandbox --disable-gpu
-        --disable-background-networking --disable-component-update
-        --disable-default-apps --disable-extensions --disable-sync
-        --metrics-recording-only --no-first-run
-        --disable-features=OptimizationGuideModelDownloading,OptimizationHints,AutofillServerCommunication,MediaRouter,Translate
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -32,6 +25,7 @@ jobs:
           node --check build26-5-ux.js
           node --check build-meta.js
           node --check sw.js
+          node --check .github/scripts/b265-cdp-smoke.mjs
           grep -q 'build26-5-ux.css?v=1.19.5-b26.5' index.html
           grep -q 'build26-5-ux.js?v=1.19.5-b26.5' index.html
           grep -q 'progression-ux.js?v=1.19.5-b26.5' index.html
@@ -61,24 +55,18 @@ jobs:
           echo $! >/tmp/ft-b265-server.pid
           sleep 1
           google-chrome --version
+          node -e "if (typeof WebSocket !== 'function' || typeof fetch !== 'function') process.exit(1)"
 
       - name: Chrome desktop — Changer de pratique exits guided mode and layout is one column
         run: |
           passed=0
-          for attempt in 1 2 3; do
-            profile="/tmp/ft-b265-conversation-profile-$attempt"
+          for attempt in 1 2; do
             file="/tmp/b265-conversation-$attempt.html"
-            rm -rf "$profile" "$file"
-            if ! timeout --signal=TERM --kill-after=5s 40s \
-              google-chrome $CHROME_STABLE_FLAGS \
-              --user-data-dir="$profile" --window-size=1280,900 \
-              --virtual-time-budget=24000 --dump-dom \
-              'http://127.0.0.1:4173/?uxSmoke=lesson8&debug=fr&b265Smoke=conversation' >"$file"; then
-              echo "Conversation Chrome attempt $attempt timed out or exited non-zero"
-              continue
-            fi
-            if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then continue; fi
-            if grep -q 'app-shell screen-conversation' "$file" \
+            rm -f "$file"
+            if node .github/scripts/b265-cdp-smoke.mjs \
+              'http://127.0.0.1:4173/?uxSmoke=lesson8&debug=fr&b265Smoke=conversation' \
+              1280 900 "$file" 'data-b265-conversation-click-back="1"' \
+              && grep -q 'app-shell screen-conversation' "$file" \
               && grep -q 'data-b265-conversation-single-column="1"' "$file" \
               && grep -q 'data-b265-conversation-guided-visible="1"' "$file" \
               && grep -q 'data-b265-conversation-back-present="1"' "$file" \
@@ -90,32 +78,20 @@ jobs:
               passed=1
               break
             fi
-            echo "Conversation attempt $attempt missing markers"
-            grep -o 'data-b265-[^ >]*' "$file" | head -30 || true
-            grep -o 'data-session-practice-mode="[^"]*"' "$file" | head -5 || true
+            echo "Conversation CDP attempt $attempt failed"
           done
-          if [ "$passed" -ne 1 ]; then
-            echo 'Build 26.5 Conversation exit/layout smoke failed after 3 bounded attempts'
-            exit 1
-          fi
+          test "$passed" -eq 1
 
       - name: Chrome desktop — Progress columns remain compact with long Mastery details
         run: |
           passed=0
-          for attempt in 1 2 3; do
-            profile="/tmp/ft-b265-progress-profile-$attempt"
+          for attempt in 1 2; do
             file="/tmp/b265-progress-$attempt.html"
-            rm -rf "$profile" "$file"
-            if ! timeout --signal=TERM --kill-after=5s 40s \
-              google-chrome $CHROME_STABLE_FLAGS \
-              --user-data-dir="$profile" --window-size=1280,900 \
-              --virtual-time-budget=24000 --dump-dom \
-              'http://127.0.0.1:4173/?uxSmoke=lesson8&b265Smoke=progress' >"$file"; then
-              echo "Progress Chrome attempt $attempt timed out or exited non-zero"
-              continue
-            fi
-            if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then continue; fi
-            if grep -q 'app-shell screen-progress' "$file" \
+            rm -f "$file"
+            if node .github/scripts/b265-cdp-smoke.mjs \
+              'http://127.0.0.1:4173/?uxSmoke=lesson8&b265Smoke=progress' \
+              1280 900 "$file" 'data-b265-progress-side-by-side="1"' \
+              && grep -q 'app-shell screen-progress' "$file" \
               && grep -q 'data-b265-progress-composition="independent-columns"' "$file" \
               && grep -q 'data-b265-progress-details-direct="1"' "$file" \
               && grep -q 'data-b265-progress-curriculum-left="1"' "$file" \
@@ -129,31 +105,20 @@ jobs:
               passed=1
               break
             fi
-            echo "Progress attempt $attempt missing markers"
-            grep -o 'data-b265-[^ >]*' "$file" | head -30 || true
+            echo "Progress CDP attempt $attempt failed"
           done
-          if [ "$passed" -ne 1 ]; then
-            echo 'Build 26.5 Progress independent-column smoke failed after 3 bounded attempts'
-            exit 1
-          fi
+          test "$passed" -eq 1
 
       - name: Chrome mobile — Progress order stays summary, curriculum, collapsed Details
         run: |
           passed=0
-          for attempt in 1 2 3; do
-            profile="/tmp/ft-b265-mobile-profile-$attempt"
+          for attempt in 1 2; do
             file="/tmp/b265-mobile-$attempt.html"
-            rm -rf "$profile" "$file"
-            if ! timeout --signal=TERM --kill-after=5s 40s \
-              google-chrome $CHROME_STABLE_FLAGS \
-              --user-data-dir="$profile" --window-size=390,844 \
-              --virtual-time-budget=22000 --dump-dom \
-              'http://127.0.0.1:4173/?uxSmoke=lesson8&b265Smoke=progress-mobile' >"$file"; then
-              echo "Mobile Chrome attempt $attempt timed out or exited non-zero"
-              continue
-            fi
-            if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then continue; fi
-            if grep -q 'app-shell screen-progress' "$file" \
+            rm -f "$file"
+            if node .github/scripts/b265-cdp-smoke.mjs \
+              'http://127.0.0.1:4173/?uxSmoke=lesson8&b265Smoke=progress-mobile' \
+              390 844 "$file" 'data-b265-progress-mobile-details-closed="1"' \
+              && grep -q 'app-shell screen-progress' "$file" \
               && grep -q 'data-b265-progress-composition="independent-columns"' "$file" \
               && grep -q 'data-b265-progress-details-direct="1"' "$file" \
               && grep -q 'data-b265-progress-curriculum-left="1"' "$file" \
@@ -164,13 +129,9 @@ jobs:
               passed=1
               break
             fi
-            echo "Mobile attempt $attempt missing markers"
-            grep -o 'data-b265-[^ >]*' "$file" | head -30 || true
+            echo "Mobile CDP attempt $attempt failed"
           done
-          if [ "$passed" -ne 1 ]; then
-            echo 'Build 26.5 mobile Progress ordering smoke failed after 3 bounded attempts'
-            exit 1
-          fi
+          test "$passed" -eq 1
 
       - name: Stop static server
         if: always()
