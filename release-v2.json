@@ -2,7 +2,7 @@
   "format": "french-tranquille-release-contract",
   "version": "2.0.0",
   "architectureBuild": 30,
-  "status": "candidate",
+  "status": "freeze",
   "product": {
     "curriculumLessons": 40,
     "curriculumItems": 241,
