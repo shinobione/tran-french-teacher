@@ -22,15 +22,20 @@
   async function waitForServiceWorker(api) {
     if (!('serviceWorker' in navigator)) return false;
     const started = performance.now();
-    let ready = null;
-    try {
-      ready = await Promise.race([
-        api?.ensureServiceWorker?.(),
-        wait(6000).then(() => null)
-      ]);
-    } catch {}
+    try { api?.ensureServiceWorker?.(); } catch {}
+
+    while (performance.now() - started < 9000) {
+      if (root.dataset.b29SwReady === '1') {
+        root.dataset.b29AuditSwWaitMs = String(Math.round(performance.now() - started));
+        return true;
+      }
+      if (root.dataset.b29SwError) break;
+      await wait(200);
+    }
+
+    const ready = root.dataset.b29SwReady === '1';
     root.dataset.b29AuditSwWaitMs = String(Math.round(performance.now() - started));
-    return !!ready && root.dataset.b29SwReady === '1';
+    return ready;
   }
 
   async function run() {
