@@ -1,6 +1,6 @@
 # French Trân’quille — ARCHITECTURE
 
-## Vue générale — production Build 30
+## Vue générale — V2.0.0 / Architecture Build 30
 
 ```text
 iPhone / Safari / PWA
@@ -8,48 +8,80 @@ iPhone / Safari / PWA
 Build 29 — iPhone / PWA / Accessibility
 safe areas / touch / a11y / VisualViewport / offline
         ↓
-Build 28 Recovery Engine
+Build 28 — Recovery Engine
 validation / last-good / snapshots / rollback
         ↓
 Legacy Core + Curriculum
+40 leçons / 241 éléments
         ↓
 Memory / Error / Scenario / Listening / Mastery
+Scenario 36 / 108 · Listening 0.88 / 0.65
         ↓
-Build 27 App Shell
+Build 27 — App Shell
 Aujourd’hui / Pratiquer / Progrès
         ↓
-Build 30 Runtime Contracts + Runtime Bridge
+Build 30 — Runtime Contracts + Runtime Bridge
 frontière stable / read-only / ownership / routing
         ↓
-Build 29.2 Speaking Loop Variety & Clarity
-contexte → modèle Tyffany → prise locale → Ma voix → recap varié
+Build 29.2 — Speaking Loop
+Tyffany → prise locale → Ma voix → recap contextualisé
+        ↓
+V2 Release Contract
+release-v2.json + tribunal v2-release-freeze
 ```
 
 PWA statique GitHub Pages, sans backend obligatoire ni API payante.
 
-Production certifiée : **v1.23.0 / Build 30**, PR #71, head certifié `ffa3ddf7a16dcbc32474701cfaf2f961e86d348c`, runtime `5a8369df9df536f41521acefb528da71efb168a8`, **21/21 workflows fonctionnels SUCCESS** sur PR et runtime `main`, **Pages #129 SUCCESS**, soit **22/22 SUCCESS Pages incluse** sur le runtime.
+# Baseline V2 certifiée
 
-Un ancien Chrome Real Life III a échoué une fois sur le head PR à la leçon 35. Le même job, rerun sans changement de code, a repassé les leçons 20 / 35 / 40 : aucun patch produit n’a été ajouté pour masquer le flake.
+```text
+Version produit        2.0.0
+Architecture           Build 30
+Curriculum             40 / 241
+Scenario               36 / 108
+Listening              0.88 / 0.65
+Speaking Loop          max 2 / leçon
+Stores durables        6
+Coût récurrent         0 €
+```
+
+## Chaîne de certification
+
+- PR runtime V2 **#73**, head `c221fa9600d23dd83b87225cc4accce01e83cfe6` : **22/22 fonctionnels SUCCESS** ;
+- runtime applicatif `5f2c486b3e455220ebd903f25ee766ff2430e4a5` ; Pages **#131 SUCCESS** ;
+- PR CI-only **#74**, head `0fbd3b8e8124b3beaf7d6086d8a837580abb2cb3` : **22/22 fonctionnels SUCCESS** ;
+- baseline finale de certification `6e0f5cde97cfba0572efccc6344a8bd6cbe7a315` : **23/23 SUCCESS**, Pages **#132 SUCCESS**.
+
+PR #74 ne change qu’un workflow GitHub Actions : mêmes quatre assertions Progression UX, mais Chrome isolé, borné par timeout et retries. Le code PWA servi reste celui du runtime V2.
 
 ---
 
-# Principe Build 30 : strangler boundary
+# Release Contract
 
-Le cœur historique `app.js` transporte encore une grande partie de l’état, du rendu et du curriculum initial. Les Builds 17→29 ont ajouté autour de lui des moteurs spécialisés solides.
+Fichier : `release-v2.json`
 
-Build 30 **ne réécrit pas ce noyau**. Il rend d’abord ses frontières explicites afin qu’un futur remplacement soit comparatif et incrémental :
+Le contrat machine contient :
 
-```text
-ancien runtime stable
-       ↓
-contrats explicites
-       ↓
-façade stable
-       ↓
-extractions futures derrière la façade
-```
+- version `2.0.0` ;
+- Architecture Build `30` ;
+- cardinalités produit ;
+- six stores durables ;
+- hashes des sanctuaires ;
+- couches protégées ;
+- gate terrain exact-first-attempt encore ouvert.
 
-`app.js` est resté byte-identique pendant Build 30 et sert encore de témoin de référence.
+Workflow : `.github/workflows/v2-release-freeze.yml`.
+
+Il certifie :
+
+- Release Contract ↔ Runtime Contracts ↔ Recovery ;
+- backup V2 à six stores ;
+- version Options ;
+- navigation réelle ;
+- ancienne utilisatrice ;
+- stores inchangés avant/après round-trip ;
+- sanctuaires ;
+- zéro overflow horizontal.
 
 ---
 
@@ -57,13 +89,7 @@ extractions futures derrière la façade
 
 Module : `runtime-contracts.js`
 
-Exposition :
-
-```text
-window.FrenchTranquilleRuntimeContracts
-```
-
-Le module est gelé avec `Object.freeze` et ne possède aucun chemin d’écriture durable.
+Exposition : `window.FrenchTranquilleRuntimeContracts`.
 
 ## Stores canoniques
 
@@ -76,7 +102,7 @@ listening   french-tranquille:listening:v1
 milestones  french-tranquille:milestones:v1
 ```
 
-## Snapshots Recovery connus
+## Snapshots Recovery
 
 ```text
 french-tranquille:recovery:last-good:v1
@@ -87,16 +113,6 @@ french-tranquille:recovery:quarantine:v1
 french-tranquille:safety:pre-build22:v1
 ```
 
-## Invariants produit
-
-```text
-curriculum             40 leçons / 241 éléments
-Scenario               36 situations / 108 tours
-Listening normal       0.88
-Listening lent final   0.65
-Speaking Loop          max 2 moments / leçon
-```
-
 ## Routes stables
 
 ```text
@@ -105,41 +121,16 @@ practice  → practice
 progress  → progress
 ```
 
-## Ownership map
+## Ownership
 
 ```text
-legacyCore
-  └─ FrenchTranquilleCurriculum
-
-recovery
-  └─ FrenchTranquilleRecovery
-
-voice
-  ├─ LucieVoice
-  ├─ FrenchTranquilleFreeVoice
-  └─ FrenchTranquilleVoiceReplay
-
-learning
-  ├─ FrenchTranquilleMemory
-  ├─ FrenchTranquilleErrors
-  ├─ FrenchTranquilleMastery
-  ├─ FrenchTranquilleMasteryStage3
-  ├─ FrenchTranquilleDailyCoach
-  └─ FrenchTranquilleLanguage
-
-practice
-  ├─ FrenchTranquilleListening
-  ├─ FrenchTranquilleScenarios
-  └─ Real Life data / UX / coach
-
-presentation
-  ├─ UX historiques
-  ├─ Progress / Session / Details layers
-  └─ FrenchTranquilleBuild27Shell
-
-release
-  ├─ FrenchTranquilleBuildMeta
-  └─ FrenchTranquilleSpeakingLoop
+legacyCore   → Curriculum
+recovery     → Recovery
+voice        → LucieVoice / FreeVoice / VoiceReplay
+learning     → Memory / Error / Mastery / DailyCoach / Language
+practice     → Listening / Scenario / Real Life
+presentation → UX historiques + Build 27 App Shell
+release      → BuildMeta / SpeakingLoop
 ```
 
 Les noms internes `Lucie*`, `luc-*`, `lucie-*` restent volontairement compatibles malgré le branding visible **Tyffany**.
@@ -150,13 +141,7 @@ Les noms internes `Lucie*`, `luc-*`, `lucie-*` restent volontairement compatible
 
 Module : `runtime-bridge.js`
 
-Exposition :
-
-```text
-window.FrenchTranquilleRuntime
-```
-
-API :
+Exposition : `window.FrenchTranquilleRuntime`.
 
 ```text
 snapshot()
@@ -166,183 +151,79 @@ openLesson(id)
 lastSnapshot()
 ```
 
-## `snapshot()`
+Le bridge est read-only vis-à-vis des stores durables : **aucun `localStorage.setItem`**.
 
-Retourne une photographie structurelle read-only :
-
-- curriculum chargé ;
-- nombre de leçons / items ;
-- learner présent/valide ;
-- progression de leçon ;
-- présence/validité des six stores ;
-- APIs globales présentes et propriétaire attendu ;
-- écran courant ;
-- état de la navigation.
-
-Le bridge ne contient **aucun `localStorage.setItem`**.
-
-## `route()`
-
-La façade masque la plomberie DOM historique :
-
-- `practice` utilise l’API Build 27 quand elle existe ;
-- `today` / `progress` utilisent les surfaces learner stables ;
-- le détail des boutons legacy n’est plus un contrat que les futures couches doivent connaître.
-
-## `openLesson()`
-
-Ouvre une leçon via la meilleure surface existante sans imposer aux futurs modules la structure exacte du curriculum DOM.
+Le cœur historique `app.js` reste le témoin de référence ; Build 30 a posé une **strangler boundary** plutôt qu’une réécriture big-bang.
 
 ---
 
-# Ordre logique de boot
+# Recovery
 
-```text
-Recovery
-  ↓
-Legacy Core
-  ↓
-Curriculum extensions
-  ↓
-Pedagogy engines
-  ↓
-Presentation / App Shell
-  ↓
-iPhone / PWA
-  ↓
-Runtime boundary / Release layer
-  ↓
-Speaking Loop
-```
+Build 28 agit avant le runtime susceptible d’initialiser un état neuf.
 
-Ordre concret actuel simplifié :
+Fonctions protégées :
 
-```text
-index.html
-  ↓
-data-recovery-core.js
-  ↓
-data-recovery.js
-  ↓
-progress-safety.js
-  ↓
-app.js + curriculum
-  ↓
-Memory / Error / Scenario / Listening / Mastery / autres moteurs
-  ↓
-Build 27 App Shell
-  ↓
-Build 29 iPhone/PWA layer
-  ↓
-build-meta.js
-      ├─ runtime-contracts.js
-      ├─ runtime-bridge.js
-      └─ speaking-loop-content.js
-```
+- backup V2 six stores ;
+- snapshots pré-restore / pré-migration / pré-reset ;
+- last-good ;
+- quarantaine ;
+- restore transactionnel ;
+- rollback ;
+- compatibilité backup V1 sans effacement des stores modernes.
 
-Recovery continue donc d’agir avant le runtime susceptible d’initialiser un état neuf.
+Le tribunal V2 vérifie que `backupObject()` annonce **2.0.0 / Build 30** et six stores.
 
 ---
 
-# Tribunal Build 30
+# App Shell / iPhone
 
-Le workflow `.github/workflows/build30-architecture-hardening.yml` protège :
+Build 27 :
 
-## Statique
+- Aujourd’hui ;
+- Pratiquer ;
+- Progrès ;
+- cockpit détaillé réservé DEBUG FR.
 
-- syntaxe des nouveaux modules ;
-- version `1.23.0 / 30` ;
-- six stores et invariants canoniques ;
-- zéro écriture depuis Contracts / Bridge ;
-- précache PWA des nouvelles frontières.
+Build 29 :
 
-## Sanctuaires byte-identiques
-
-```text
-app.js
-voice-ios.js
-free-voice.js
-assets/LOGO.png
-assets/Favicon.png
-```
-
-## Chrome desktop 1440×900 + mobile 390×844
-
-Le test fait réellement :
-
-```text
-boot
-→ snapshot runtime
-→ Progrès
-→ Aujourd’hui
-→ Pratiquer
-→ fermeture du hub pratique
-→ snapshot runtime
-```
-
-Puis exige :
-
-- **40 / 241** ;
-- owners uniques ;
-- stores uniques ;
-- learner key canonique ;
-- Recovery / App Shell / Speaking Loop prêts ;
-- learner brut **strictement inchangé** ;
-- un seul onglet actif ;
-- zéro overflow horizontal.
-
-Les tribunaux historiques restent actifs en parallèle. Build 30 ne remplace donc pas Recovery, App Shell, iPhone, Speaking, Listening, Scenario ou Progress CI : il ajoute un contrat transversal.
+- safe areas ;
+- targets tactiles ≥44 px ;
+- focus visible ;
+- `aria-current` ;
+- `VisualViewport` ;
+- reduced motion ;
+- boot offline ;
+- matrice 320×568 / 390×844 / 430×932.
 
 ---
 
-# Build 29.2 — Speaking Loop Variety & Clarity
+# Speaking Loop / voix
 
-Le contrat reste inchangé sous Build 30 :
+Build 29.2 reste gelé sous V2 :
 
 ```text
-teach items + thème de leçon
-        ↓
-1 cible orale principale
-
-challenge
-        ↓
-compréhension / choix
-
-écran de fin
-        ↓
-planificateur contextualisé
-        ↓
-1 recap oral distinct
+enseignement
+→ cible orale utile
+→ Nghe / Écouter Tyffany
+→ seconde prise locale volontaire
+→ Ma voix
+→ recap oral contextualisé et distinct
 ```
 
 Bài 7 canonique :
 
 ```text
-challenge : « dix euros » → 10 euros
-recap oral : « Combien ça coûte ? »
+compréhension : « dix euros » → 10 euros
+production : « Combien ça coûte ? »
 ```
 
-Le bouton modèle natif reste :
-
-```text
-VI       🔊 Nghe Tyffany
-DEBUG FR 🔊 Écouter Tyffany
-```
-
-Après prise :
-
-```text
-VI       ↻ Ghi âm lại
-DEBUG FR ↻ Enregistrer à nouveau
-```
-
-Audio : local, volontaire, ≤9 s, jamais uploadé ni persisté. Aucun faux score de prononciation.
+Aucun faux score phonétique. Audio local ≤9 s, sans upload ni persistance durable.
 
 ---
 
-# Gate exact-premier-essai — toujours ouvert
+# Gate terrain exact-premier-essai
 
-Build 26.1 Free Voice reste séparé :
+Toujours séparé :
 
 ```text
 reconnaissance
@@ -351,54 +232,43 @@ reconnaissance
 → reconnaissance suivante toujours normale
 ```
 
-Tant que ce gate réel iPhone n’est pas validé, aucune capture automatique parallèle du premier essai SpeechRecognition.
-
-Ce gate ne bloque pas la stabilisation V2 du produit existant ; il bloque uniquement l’évolution future vers l’enregistrement automatique du premier essai exact.
+Ce gate ne remet pas V2 en cause ; il bloque uniquement une future capture automatique du premier essai en parallèle de SpeechRecognition.
 
 ---
 
-# Build 29 — iPhone / PWA / Accessibility
+# CI V2
 
-Safe areas, touch ≥44 px, focus-visible, `aria-current`, progressbar/live regions, `VisualViewport`, standalone, reduced-motion, contraste, matrice **320×568 / 390×844 / 430×932** et boot offline restent sous CI.
+Le produit possède désormais **22 workflows fonctionnels** plus Pages.
 
-# Build 28 — Data & Recovery
+La vieille dette Progression UX a été corrigée côté CI uniquement : chaque Chrome est maintenant :
 
-Backup V2 six stores, restore transactionnel, rollback, migration V1 sûre, quarantaine, `last-good` et snapshots restent en vigueur.
+- isolé par `--user-data-dir` ;
+- protégé contre le background throttling ;
+- borné par `timeout` / `kill-after` ;
+- retenté au maximum trois fois ;
+- soumis aux mêmes assertions fonctionnelles qu’avant.
 
-# Build 27 — App Shell
+---
 
-- Aujourd’hui : prochaine leçon / Continuer / Réviser / Écouter ;
-- Pratiquer : Parler / Écouter / Réviser / Dans la vraie vie ;
-- Progrès : position A0→A1 / prochaine leçon / 5 leçons / parcours complet ;
-- cockpit moteur historique : DEBUG FR seulement.
+# Baseline historique Real Life protégée
 
-# Listening
+`real-life-data-2.js` reste le témoin **v1.17.0 — Build 24 — Real Life French II** : **28 situations / 84 tours** avant Pack III.
 
-```text
-normal request 0.88 → effectif 0.88
-slow request   0.68 → bridge 0.65 → effectif 0.65
-```
+Production V2 : **36 situations / 108 tours**.
 
-# Real Life French
+---
 
-Production : **36 situations / 108 tours**.
-
-Baseline historique protégée : `real-life-data-2.js` = **v1.17.0 — Build 24 — Real Life French II**, avec **28 situations / 84 tours** avant Pack III.
-
-# Sanctuaires
+# Sanctuaires V2
 
 ```text
-app.js
-voice-ios.js
-free-voice.js
-assets/LOGO.png
-assets/Favicon.png
+app.js                  600f094266c9f0c4c7b57efdbf61129909ebd9cb
+voice-ios.js            38e97aa3ef62dd6dcda224901b435f0973618679
+free-voice.js           b4c19b1936c788ee017eac9ba14e5a62c159e8d5
+assets/LOGO.png         64eaa6ad9781c6a9075d4f68615fc44344c4e21c
+assets/Favicon.png      c358672368a960bf7617e5532aff3e3319cddb3e
 francais-avec-luc:learner:v1
 ```
 
-Baselines produit : curriculum **40/241**, Scenario **36/108**, Listening **0.88/0.65**, Build 27 App Shell, Build 28 Recovery, Build 29 iPhone/PWA/A11y, Build 29.2 Speaking Loop, Build 30 Runtime Contracts/Bridge.
+## Après V2
 
-## Suite
-
-1. gate terrain iPhone Voice Replay en parallèle ;
-2. **V2.0.0 Freeze / Release** : geler et certifier la baseline existante, sans nouveau moteur.
+Architecture en **freeze/maintenance**. Aucun Build 31 n’est prévu sans besoin terrain ou nouvelle roadmap explicite.
