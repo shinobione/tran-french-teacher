@@ -69,92 +69,86 @@
 63. **Le cœur historique reste témoin de référence tant que son remplacement n’a pas une preuve comparative navigateur.**
 64. **Les routes principales possèdent une façade stable indépendante des détails DOM historiques.**
 65. **Un hardening d’architecture ne doit pas modifier les données learner pour prouver qu’il fonctionne.**
+66. **Une release majeure peut être un freeze : elle n’a pas besoin d’ajouter une feature pour être utile.**
+67. **Une baseline de release doit exister sous forme de contrat machine-readable et sous forme documentaire.**
+68. **Une release ne passe pas si son propre tribunal peut rester bloqué indéfiniment.**
+69. **Les tests Chrome critiques sont bornés, isolés et gardent leurs assertions fonctionnelles.**
+70. **Après un freeze, aucune V2.x/V3 ne démarre sans nouveau problème utilisateur ou roadmap explicite.**
 
 ---
 
-# Baseline production — v1.23.0 / Build 30
+# ✅ V2.0.0 — Freeze / Release — PROD / CLOS
 
-## Architecture Hardening — ✅ PROD / CLOS
+Objectif atteint : **certifier ce qui existe comme release cohérente, sans ajouter de moteur.**
 
-- PR runtime **#71** ; head certifié `ffa3ddf7a16dcbc32474701cfaf2f961e86d348c` ;
-- runtime `5a8369df9df536f41521acefb528da71efb168a8` ;
-- PR : **21/21 workflows fonctionnels SUCCESS** ;
-- un ancien Chrome Real Life III a échoué une fois à la leçon 35 puis a repassé **inchangé** les leçons 20 / 35 / 40 ; aucune rustine runtime n’a été ajoutée ;
-- runtime `main` : **21/21 workflows fonctionnels SUCCESS** ;
-- GitHub Pages runtime **#129 SUCCESS** sur le SHA exact ;
-- total runtime `main` : **22/22 SUCCESS Pages incluse** ;
-- curriculum **40 / 241** ; Scenario **36 / 108** ; Listening **0.88 / 0.65** ; coût 0 €.
+## Baseline gelée
 
-### Frontière Architecture
+- [x] curriculum **40 / 241** ;
+- [x] Scenario **36 / 108** ;
+- [x] Listening **0.88 / 0.65** ;
+- [x] Speaking Loop **max 2 moments / leçon** ;
+- [x] six stores durables Recovery ;
+- [x] coût récurrent **0 €** ;
+- [x] Architecture **Build 30** ;
+- [x] version visible **v2.0.0 • Build 30** ;
+- [x] contrat machine `release-v2.json`.
 
-- [x] `runtime-contracts.js` centralise stores, snapshots, invariants, routes, propriétaires, phases de boot et sanctuaires ;
-- [x] contrats gelés / lecture seule ;
-- [x] `runtime-bridge.js` fournit `snapshot`, `refresh`, `route` et `openLesson` ;
-- [x] aucune écriture `localStorage.setItem` depuis le contrat ou le bridge ;
-- [x] owners APIs explicites ;
-- [x] six stores durables explicites ;
-- [x] ordre de boot logique documenté ;
-- [x] nouvelles frontières précachées par la PWA.
+## Certification
 
-### Tribunal comparatif
+- [x] PR runtime V2 **#73**, head `c221fa9600d23dd83b87225cc4accce01e83cfe6` : **22/22 fonctionnels SUCCESS** ;
+- [x] runtime applicatif `5f2c486b3e455220ebd903f25ee766ff2430e4a5` ;
+- [x] GitHub Pages runtime **#131 SUCCESS** ;
+- [x] Recovery / backup / restore / rollback sous tribunaux historiques ;
+- [x] App Shell et navigation learner certifiés ;
+- [x] iPhone/PWA/offline/a11y certifiés ;
+- [x] Speaking Loop / Tyffany / variété / auto-écoute locale certifiés ;
+- [x] Runtime Contracts / Runtime Bridge Build 30 certifiés ;
+- [x] round-trip ancienne utilisatrice : **7 terminées / l8=4 / 40 acquis** ;
+- [x] stores durables byte-identiques avant/après le tribunal V2 ;
+- [x] matrice desktop + mobile ;
+- [x] zéro migration/renommage des stores ;
+- [x] sanctuaires hashés.
 
-- [x] `app.js` byte-identique ;
-- [x] `voice-ios.js` / `free-voice.js` byte-identiques ;
-- [x] logo / favicon byte-identiques ;
-- [x] Chrome desktop **1440×900** ;
-- [x] Chrome mobile **390×844** ;
-- [x] runtime boundary prête ;
-- [x] 40 leçons / 241 éléments ;
-- [x] Recovery / Build 27 Shell / Speaking Loop présents ;
-- [x] navigation réelle `Progrès → Aujourd’hui → Pratiquer` via le bridge ;
-- [x] learner raw JSON **strictement identique avant/après** ;
-- [x] un seul onglet actif ;
-- [x] zéro overflow horizontal.
+## Stabilisation finale du tribunal
 
-### Ce que Build 30 n’a volontairement PAS fait
+Sur le runtime mergé, l’ancien workflow Build 25 Progression UX a reproduit un **Chrome headless non borné** alors qu’il avait passé sur la PR V2. Aucune régression produit n’était observée.
 
-- [x] aucune migration de learner ;
-- [x] aucun renommage des clés historiques ;
-- [x] aucun changement voix / Safari ;
-- [x] aucun nouveau curriculum ;
-- [x] aucune refonte visible ;
-- [x] aucune réécriture big-bang de `app.js`.
-
----
-
-# Build 26.1 — gate terrain iPhone toujours ouvert
-
-- [ ] réponse Free Voice reconnue → seconde prise locale → lecture correcte → réponse vocale suivante toujours reconnue normalement.
-
-Tant que ce gate n’est pas validé, **pas d’enregistrement automatique du premier essai exact** pendant la reconnaissance Safari.
-
-Ce gate terrain reste **parallèle** à la release V2 ; il protège uniquement l’éventuelle évolution vers l’enregistrement automatique du premier essai.
-
----
-
-# V2.0.0 — Freeze / Release — PROCHAIN JALON
-
-Objectif : **ne pas ajouter de moteur**. Certifier ce qui existe comme release cohérente.
-
-## Scope
-
-- [ ] geler la baseline produit `40 / 241`, Scenario `36 / 108`, Listening `0.88 / 0.65` ;
-- [ ] certifier Recovery / backup / restore / rollback ;
-- [ ] certifier App Shell et navigation learner ;
-- [ ] certifier iPhone/PWA/offline/a11y ;
-- [ ] certifier Speaking Loop / variété / Tyffany / auto-écoute locale ;
-- [ ] certifier Runtime Contracts / Runtime Bridge Build 30 ;
-- [ ] effectuer un round-trip ancien utilisateur ;
-- [ ] effectuer une matrice navigateur desktop + mobile ;
-- [ ] vérifier zéro migration/écriture inattendue au boot ;
-- [ ] synchroniser README / ROADMAP / CHANGELOG / ARCHITECTURE ;
-- [ ] tag/release seulement après tribunal final.
+- [x] PR CI-only **#74** : un seul YAML ;
+- [x] mêmes quatre scénarios et mêmes assertions Progression ;
+- [x] profils Chrome isolés ;
+- [x] timeout + kill-after ;
+- [x] retries bornés ;
+- [x] head #74 `0fbd3b8e8124b3beaf7d6086d8a837580abb2cb3` : **22/22 fonctionnels SUCCESS** ;
+- [x] baseline finale `main` `6e0f5cde97cfba0572efccc6344a8bd6cbe7a315` : **23/23 SUCCESS**, Pages comprise ;
+- [x] GitHub Pages **#132 SUCCESS**.
 
 ## Definition of Done V2
 
-La release est :
-
 > **cohérente, sauvegardable, restaurable, utilisable sans connaître l’architecture, testée sur les parcours principaux et documentée avec une baseline reproductible.**
+
+**Atteint.**
+
+---
+
+# 📱 Gate terrain iPhone — parallèle / encore ouvert
+
+- [ ] réponse Free Voice reconnue → seconde prise locale → lecture correcte → réponse vocale suivante toujours reconnue normalement.
+
+Ce gate ne remet pas V2 en cause. Il bloque seulement une évolution future vers **l’enregistrement automatique du premier essai exact** pendant SpeechRecognition.
+
+---
+
+# Après V2 — observation / maintenance
+
+Aucun Build 31 n’est pré-engagé.
+
+Ordre canonique :
+
+1. [ ] laisser Trân utiliser la V2 normalement ;
+2. [ ] collecter uniquement des problèmes ou besoins terrain observables ;
+3. [ ] valider le gate iPhone Voice Replay quand possible ;
+4. [ ] corriger seulement crash, perte de données, blocage critique ou régression prouvée pendant le freeze ;
+5. [ ] ouvrir une future roadmap V2.x/V3 seulement à partir d’un besoin utilisateur clair.
 
 ---
 
@@ -177,6 +171,7 @@ french-tranquille:recovery:pre-migration:v1
 french-tranquille:recovery:pre-reset:v1
 french-tranquille:recovery:quarantine:v1
 french-tranquille:safety:pre-build22:v1
+app.js
 voice-ios.js
 free-voice.js
 assets/LOGO.png
