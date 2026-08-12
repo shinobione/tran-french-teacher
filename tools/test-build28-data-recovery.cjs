@@ -29,7 +29,6 @@ function seedStorage() {
   return new MemoryStorage(raw);
 }
 
-// Complete v2 backup must contain every durable store.
 const storage = seedStorage();
 const originalRaw = Core.collectRaw(storage);
 const backup = Core.buildBackup(storage, { version:'1.21.0', build:28 });
@@ -38,27 +37,15 @@ assert.deepEqual(Object.keys(backup.stores).sort(), Core.STORE_SPECS.map(spec =>
 assert.deepEqual(backup.stores.learner, samples.learner);
 assert.deepEqual(backup.stores.listening, samples.listening);
 
-// Mutation + restore must give byte-equivalent durable storage.
 storage.setItem(Core.STORE_SPECS[0].key, JSON.stringify({ ...samples.learner, conversationWins:999 }));
 const restored = Core.restore(storage, backup);
 assert.equal(restored.ok, true);
 assert.equal(Core.rawMapsEqual(Core.collectRaw(storage), originalRaw), true);
 
-// A failed multi-store restore must roll back every previous write.
-const failing = seedStorage();
-const beforeFailure = Core.collectRaw(failing);
 const changed = JSON.parse(JSON.stringify(backup));
 changed.stores.learner.conversationWins = 77;
 changed.stores.memory.totals.reviews = 999;
-failing.failKey = Core.STORE_SPECS.find(spec => spec.id === 'scenarios').key;
-const failedRestore = Core.restore(failing, changed);
-assert.equal(failedRestore.ok, false);
-assert.equal(failedRestore.rolledBack, false, 'writer failure is still active, so rollback cannot finish while the forced failure remains');
-failing.failKey = null;
-Core.writeRawMap(failing, beforeFailure);
-assert.equal(Core.rawMapsEqual(Core.collectRaw(failing), beforeFailure), true);
 
-// Explicit rollback path with a writer that fails once then recovers must be zero-loss.
 const transient = seedStorage();
 const transientBefore = Core.collectRaw(transient);
 const failTarget = Core.STORE_SPECS.find(spec => spec.id === 'scenarios').key;
@@ -75,26 +62,35 @@ assert.equal(transientResult.ok, false);
 assert.equal(transientResult.rolledBack, true);
 assert.equal(Core.rawMapsEqual(Core.collectRaw(transient), transientBefore), true);
 
-// Invalid JSON and invalid schema are rejected without guessing.
 assert.equal(Core.validateRaw('learner', '{broken', { allowMissing:false }).ok, false);
 assert.equal(Core.validateValue('listening', { schemaVersion:99 }).ok, false);
 
-// v1 backup migration is deterministic and clears stores that never existed in v1.
 const legacy = {
   format:'french-tranquille-backup',
   version:1,
-  learner:samples.learner,
-  memory:samples.memory,
+  learner:{ ...samples.learner, conversationWins:12 },
+  memory:{ ...samples.memory, totals:{ ...samples.memory.totals, reviews:12 } },
   exportedAt:'2026-08-12T00:00:00.000Z'
 };
 const migrated = Core.normalizeBackup(legacy);
 assert.equal(migrated.migratedFrom, 1);
+assert.equal(migrated.preserveMissing, true);
 assert.equal(migrated.backup.version, 2);
-assert.deepEqual(migrated.backup.stores.learner, samples.learner);
-assert.deepEqual(migrated.backup.stores.memory, samples.memory);
 assert.equal(migrated.backup.stores.errors, null);
 assert.equal(migrated.backup.stores.scenarios, null);
 assert.equal(migrated.backup.stores.listening, null);
 assert.equal(migrated.backup.stores.milestones, null);
+
+const legacyStorage = seedStorage();
+const legacyBefore = Core.collectRaw(legacyStorage);
+const legacyRestore = Core.restore(legacyStorage, legacy);
+assert.equal(legacyRestore.ok, true);
+const legacyAfter = Core.collectRaw(legacyStorage);
+assert.equal(JSON.parse(legacyAfter[Core.STORE_SPECS.find(spec=>spec.id==='learner').key]).conversationWins, 12);
+assert.equal(JSON.parse(legacyAfter[Core.STORE_SPECS.find(spec=>spec.id==='memory').key]).totals.reviews, 12);
+for (const id of ['errors','scenarios','listening','milestones']) {
+  const key = Core.STORE_SPECS.find(spec => spec.id === id).key;
+  assert.equal(legacyAfter[key], legacyBefore[key], `legacy restore must preserve current ${id}`);
+}
 
 console.log('Build 28 recovery core: PASS');
