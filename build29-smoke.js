@@ -19,10 +19,25 @@
     return audit;
   }
 
+  async function waitForServiceWorker(api) {
+    if (!('serviceWorker' in navigator)) return false;
+    const started = performance.now();
+    let ready = null;
+    try {
+      ready = await Promise.race([
+        api?.ensureServiceWorker?.(),
+        wait(6000).then(() => null)
+      ]);
+    } catch {}
+    root.dataset.b29AuditSwWaitMs = String(Math.round(performance.now() - started));
+    return !!ready && root.dataset.b29SwReady === '1';
+  }
+
   async function run() {
     await wait(700);
     const api = window.FrenchTranquilleBuild29;
     if (!api) fail('Build29 API missing');
+    const serviceWorkerReady = api ? await waitForServiceWorker(api) : false;
     const audit = await settledAudit(api);
 
     root.dataset.b29AuditHomeVisible = audit.homeVisible ? '1' : '0';
@@ -31,10 +46,12 @@
     root.dataset.b29AuditUnnamed = String(audit.unnamed ?? -1);
     root.dataset.b29AuditCurrentTabs = String(audit.currentTabs ?? -1);
     root.dataset.b29AuditOverflow = String(audit.horizontalOverflow ?? -1);
+    root.dataset.b29AuditSwReady = serviceWorkerReady ? '1' : '0';
 
     if (!root.classList.contains('b29-iphone-ready')) fail('b29 root class missing');
     if (root.dataset.b29Ready !== '1') fail('b29 ready marker missing');
     if (!audit.homeVisible) fail('learner home is not visible after bounded settle');
+    if ('serviceWorker' in navigator && !serviceWorkerReady) fail(`service worker is not ready${root.dataset.b29SwError ? `: ${root.dataset.b29SwError}` : ''}`);
     if (!window.visualViewport) fail('visualViewport unavailable');
     if (!getComputedStyle(root).getPropertyValue('--b29-vv-height').trim()) fail('visualViewport CSS variable missing');
 
