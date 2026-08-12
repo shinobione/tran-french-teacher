@@ -13,25 +13,56 @@
   root.dataset.b29Ready = '1';
   root.dataset.b29SwSupported = 'serviceWorker' in navigator ? '1' : '0';
 
+  function syncServiceWorkerController() {
+    if (!('serviceWorker' in navigator)) return false;
+    const controlled = !!navigator.serviceWorker.controller;
+    root.dataset.b29SwController = controlled ? '1' : '0';
+    if (controlled) {
+      root.dataset.b29SwRegistered = '1';
+      root.dataset.b29SwReady = '1';
+      root.removeAttribute('data-b29-sw-error');
+    }
+    return controlled;
+  }
+
   let serviceWorkerPromise = null;
   async function ensureServiceWorker() {
     if (!('serviceWorker' in navigator)) return null;
+
+    if (syncServiceWorkerController()) {
+      try {
+        const existing = await navigator.serviceWorker.getRegistration('./');
+        if (existing) {
+          root.dataset.b29SwRegistered = '1';
+          root.dataset.b29SwReady = '1';
+          root.dataset.b29SwScope = existing.scope || '';
+          existing.update().catch(() => {});
+          return existing;
+        }
+      } catch {}
+      return navigator.serviceWorker.controller;
+    }
+
     if (!serviceWorkerPromise) {
       serviceWorkerPromise = navigator.serviceWorker.register(SW_URL, {
         scope: './',
         updateViaCache: 'none'
       }).then(async registration => {
         root.dataset.b29SwRegistered = '1';
+        root.dataset.b29SwScope = registration.scope || '';
         const ready = await navigator.serviceWorker.ready;
         root.dataset.b29SwReady = '1';
         root.dataset.b29SwScope = ready.scope || registration.scope || '';
         root.removeAttribute('data-b29-sw-error');
+        syncServiceWorkerController();
         return ready;
       }).catch(error => {
-        root.dataset.b29SwRegistered = '0';
-        root.dataset.b29SwReady = '0';
-        root.dataset.b29SwError = String(error?.message || error || 'service worker registration failed');
-        return null;
+        if (!syncServiceWorkerController()) {
+          root.dataset.b29SwRegistered = '0';
+          root.dataset.b29SwReady = '0';
+          root.dataset.b29SwError = String(error?.message || error || 'service worker registration failed');
+        }
+        return navigator.serviceWorker.controller || null;
       });
     }
     return serviceWorkerPromise;
@@ -140,6 +171,7 @@
   }
 
   function audit() {
+    syncServiceWorkerController();
     const homeVisible = visible(document.querySelector('.b27-home'));
     const shellButtons = [...document.querySelectorAll('.b27-page button:not(:disabled),.b27-overlay button:not(:disabled),.ux-bottom-nav button:not(:disabled)')].filter(visible);
     const tooSmall = shellButtons.filter(button => {
@@ -163,7 +195,8 @@
       visualViewport: !!window.visualViewport,
       serviceWorkerSupported: root.dataset.b29SwSupported === '1',
       serviceWorkerRegistered: root.dataset.b29SwRegistered === '1',
-      serviceWorkerReady: root.dataset.b29SwReady === '1'
+      serviceWorkerReady: root.dataset.b29SwReady === '1',
+      serviceWorkerControlled: root.dataset.b29SwController === '1'
     };
   }
 
@@ -194,11 +227,13 @@
   window.addEventListener('resize', syncViewport, { passive:true });
   window.addEventListener('orientationchange', () => setTimeout(syncViewport, 80), { passive:true });
   window.matchMedia?.('(display-mode: standalone)')?.addEventListener?.('change', syncStandalone);
+  navigator.serviceWorker?.addEventListener?.('controllerchange', syncServiceWorkerController);
 
   new MutationObserver(schedulePatch).observe(document.body, { subtree:true, childList:true, attributes:true, attributeFilter:['class','hidden','aria-expanded'] });
 
   syncStandalone();
   syncViewport();
+  syncServiceWorkerController();
   patchA11y();
   setTimeout(patchA11y, 250);
   setTimeout(patchA11y, 900);
@@ -206,10 +241,11 @@
   window.FrenchTranquilleBuild29 = Object.freeze({
     version: VERSION,
     build: BUILD,
-    refresh() { syncStandalone(); syncViewport(); patchA11y(); return audit(); },
+    refresh() { syncStandalone(); syncViewport(); syncServiceWorkerController(); patchA11y(); return audit(); },
     audit,
     standalone: standaloneState,
-    ensureServiceWorker
+    ensureServiceWorker,
+    syncServiceWorkerController
   });
 
   ensureServiceWorker();
