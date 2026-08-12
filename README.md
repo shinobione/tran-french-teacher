@@ -18,6 +18,10 @@ PWA de français pensée pour **Trân**, avec priorité à l’oral, au françai
 
 Baselines inchangées : curriculum **40 leçons / 241 éléments**, Scenario **36 situations / 108 tours**, Listening **0.88 normal / 0.65 lent**, coût **0 €**.
 
+### Baseline historique qualité conservée
+
+La CI protège toujours explicitement **v1.17.0 — Build 24 — Real Life French II** : **28 situations / 84 tours** avant Pack III, avec `real-life-data-2.js` comme référence historique. Build 30 n’efface donc pas les contrats plus anciens sous prétexte d’introduire une nouvelle frontière.
+
 ## 🏗️ Build 30 — Architecture Hardening
 
 Build 30 ne réécrit pas brutalement le vieux cœur `app.js`. Il pose une **frontière architecturale explicite et testée** autour du runtime existant afin de préparer V2 sans mettre en danger les données réelles de Trân.
