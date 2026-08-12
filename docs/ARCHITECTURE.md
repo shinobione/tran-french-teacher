@@ -1,6 +1,6 @@
 # French Trân’quille — ARCHITECTURE
 
-## Vue générale — production Build 29.2
+## Vue générale — production Build 30
 
 ```text
 iPhone / Safari / PWA
@@ -11,10 +11,15 @@ safe areas / touch / a11y / VisualViewport / offline
 Build 28 Recovery Engine
 validation / last-good / snapshots / rollback
         ↓
-Build 27 App Shell Reset
+Legacy Core + Curriculum
+        ↓
+Memory / Error / Scenario / Listening / Mastery
+        ↓
+Build 27 App Shell
 Aujourd’hui / Pratiquer / Progrès
         ↓
-Curriculum + Memory + moteurs pédagogiques
+Build 30 Runtime Contracts + Runtime Bridge
+frontière stable / read-only / ownership / routing
         ↓
 Build 29.2 Speaking Loop Variety & Clarity
 contexte → modèle Tyffany → prise locale → Ma voix → recap varié
@@ -22,11 +27,195 @@ contexte → modèle Tyffany → prise locale → Ma voix → recap varié
 
 PWA statique GitHub Pages, sans backend obligatoire ni API payante.
 
-Production certifiée : **v1.22.2 / Build 29.2**, PR #68, head certifié `947896ff8eed75aa805be63cc24821b1c2247980`, runtime `b6031cd8fa6756eee39496cd62a164b8400d15af`, **20/20 workflows fonctionnels SUCCESS** sur PR et `main`, **Pages #126 SUCCESS**, soit **21/21 SUCCESS Pages incluse** sur le runtime.
+Production certifiée : **v1.23.0 / Build 30**, PR #71, head certifié `ffa3ddf7a16dcbc32474701cfaf2f961e86d348c`, runtime `5a8369df9df536f41521acefb528da71efb168a8`, **21/21 workflows fonctionnels SUCCESS** sur PR et runtime `main`, **Pages #129 SUCCESS**, soit **22/22 SUCCESS Pages incluse** sur le runtime.
 
-L’ancien smoke Build 26.8 a reproduit son flake historique `curriculum-clicked`; il a été rerun sans changement de produit. Ses deux contrôles Focus dédiés restaient à 920 px et le round-trip/mobile ont fini par passer inchangés.
+Un ancien Chrome Real Life III a échoué une fois sur le head PR à la leçon 35. Le même job, rerun sans changement de code, a repassé les leçons 20 / 35 / 40 : aucun patch produit n’a été ajouté pour masquer le flake.
 
-## Ordre de boot
+---
+
+# Principe Build 30 : strangler boundary
+
+Le cœur historique `app.js` transporte encore une grande partie de l’état, du rendu et du curriculum initial. Les Builds 17→29 ont ajouté autour de lui des moteurs spécialisés solides.
+
+Build 30 **ne réécrit pas ce noyau**. Il rend d’abord ses frontières explicites afin qu’un futur remplacement soit comparatif et incrémental :
+
+```text
+ancien runtime stable
+       ↓
+contrats explicites
+       ↓
+façade stable
+       ↓
+extractions futures derrière la façade
+```
+
+`app.js` est resté byte-identique pendant Build 30 et sert encore de témoin de référence.
+
+---
+
+# Runtime Contracts
+
+Module : `runtime-contracts.js`
+
+Exposition :
+
+```text
+window.FrenchTranquilleRuntimeContracts
+```
+
+Le module est gelé avec `Object.freeze` et ne possède aucun chemin d’écriture durable.
+
+## Stores canoniques
+
+```text
+learner     francais-avec-luc:learner:v1
+memory      french-tranquille:learning-memory:v1
+errors      french-tranquille:error-intelligence:v1
+scenarios   french-tranquille:scenarios:v1
+listening   french-tranquille:listening:v1
+milestones  french-tranquille:milestones:v1
+```
+
+## Snapshots Recovery connus
+
+```text
+french-tranquille:recovery:last-good:v1
+french-tranquille:recovery:pre-restore:v1
+french-tranquille:recovery:pre-migration:v1
+french-tranquille:recovery:pre-reset:v1
+french-tranquille:recovery:quarantine:v1
+french-tranquille:safety:pre-build22:v1
+```
+
+## Invariants produit
+
+```text
+curriculum             40 leçons / 241 éléments
+Scenario               36 situations / 108 tours
+Listening normal       0.88
+Listening lent final   0.65
+Speaking Loop          max 2 moments / leçon
+```
+
+## Routes stables
+
+```text
+today     → home
+practice  → practice
+progress  → progress
+```
+
+## Ownership map
+
+```text
+legacyCore
+  └─ FrenchTranquilleCurriculum
+
+recovery
+  └─ FrenchTranquilleRecovery
+
+voice
+  ├─ LucieVoice
+  ├─ FrenchTranquilleFreeVoice
+  └─ FrenchTranquilleVoiceReplay
+
+learning
+  ├─ FrenchTranquilleMemory
+  ├─ FrenchTranquilleErrors
+  ├─ FrenchTranquilleMastery
+  ├─ FrenchTranquilleMasteryStage3
+  ├─ FrenchTranquilleDailyCoach
+  └─ FrenchTranquilleLanguage
+
+practice
+  ├─ FrenchTranquilleListening
+  ├─ FrenchTranquilleScenarios
+  └─ Real Life data / UX / coach
+
+presentation
+  ├─ UX historiques
+  ├─ Progress / Session / Details layers
+  └─ FrenchTranquilleBuild27Shell
+
+release
+  ├─ FrenchTranquilleBuildMeta
+  └─ FrenchTranquilleSpeakingLoop
+```
+
+Les noms internes `Lucie*`, `luc-*`, `lucie-*` restent volontairement compatibles malgré le branding visible **Tyffany**.
+
+---
+
+# Runtime Bridge
+
+Module : `runtime-bridge.js`
+
+Exposition :
+
+```text
+window.FrenchTranquilleRuntime
+```
+
+API :
+
+```text
+snapshot()
+refresh()
+route('today' | 'practice' | 'progress')
+openLesson(id)
+lastSnapshot()
+```
+
+## `snapshot()`
+
+Retourne une photographie structurelle read-only :
+
+- curriculum chargé ;
+- nombre de leçons / items ;
+- learner présent/valide ;
+- progression de leçon ;
+- présence/validité des six stores ;
+- APIs globales présentes et propriétaire attendu ;
+- écran courant ;
+- état de la navigation.
+
+Le bridge ne contient **aucun `localStorage.setItem`**.
+
+## `route()`
+
+La façade masque la plomberie DOM historique :
+
+- `practice` utilise l’API Build 27 quand elle existe ;
+- `today` / `progress` utilisent les surfaces learner stables ;
+- le détail des boutons legacy n’est plus un contrat que les futures couches doivent connaître.
+
+## `openLesson()`
+
+Ouvre une leçon via la meilleure surface existante sans imposer aux futurs modules la structure exacte du curriculum DOM.
+
+---
+
+# Ordre logique de boot
+
+```text
+Recovery
+  ↓
+Legacy Core
+  ↓
+Curriculum extensions
+  ↓
+Pedagogy engines
+  ↓
+Presentation / App Shell
+  ↓
+iPhone / PWA
+  ↓
+Runtime boundary / Release layer
+  ↓
+Speaking Loop
+```
+
+Ordre concret actuel simplifié :
 
 ```text
 index.html
@@ -46,42 +235,69 @@ Build 27 App Shell
 Build 29 iPhone/PWA layer
   ↓
 build-meta.js
-  ↓
-speaking-loop-content.js
+      ├─ runtime-contracts.js
+      ├─ runtime-bridge.js
+      └─ speaking-loop-content.js
 ```
 
-Recovery agit avant `app.js`. Speaking Loop ne possède ni la progression ni Learning Memory : il les **consulte** pour choisir un moment oral cohérent, sans écrire de donnée durable.
+Recovery continue donc d’agir avant le runtime susceptible d’initialiser un état neuf.
 
 ---
 
-# Build 29.2 — Speaking Loop Variety & Clarity — PROD
+# Tribunal Build 30
 
-Modules concernés :
+Le workflow `.github/workflows/build30-architecture-hardening.yml` protège :
 
-```text
-speaking-loop-content.js
-speaking-loop-content.css
-speaking-loop-smoke.js
-speaking-loop-variety-smoke.js
-build-meta.js
-sw.js
-.github/workflows/build29-1-speaking-loop-smoke.yml
-.github/workflows/build29-2-speaking-variety-smoke.yml
-```
+## Statique
 
-## Séparer compréhension et production
+- syntaxe des nouveaux modules ;
+- version `1.23.0 / 30` ;
+- six stores et invariants canoniques ;
+- zéro écriture depuis Contracts / Bridge ;
+- précache PWA des nouvelles frontières.
 
-29.1 utilisait directement :
+## Sanctuaires byte-identiques
 
 ```text
-lesson.challenge.answer
-        ↓
-Speaking Loop final
+app.js
+voice-ios.js
+free-voice.js
+assets/LOGO.png
+assets/Favicon.png
 ```
 
-Cette association était trop naïve : une bonne réponse de reconnaissance peut être une cible orale médiocre.
+## Chrome desktop 1440×900 + mobile 390×844
 
-29.2 devient :
+Le test fait réellement :
+
+```text
+boot
+→ snapshot runtime
+→ Progrès
+→ Aujourd’hui
+→ Pratiquer
+→ fermeture du hub pratique
+→ snapshot runtime
+```
+
+Puis exige :
+
+- **40 / 241** ;
+- owners uniques ;
+- stores uniques ;
+- learner key canonique ;
+- Recovery / App Shell / Speaking Loop prêts ;
+- learner brut **strictement inchangé** ;
+- un seul onglet actif ;
+- zéro overflow horizontal.
+
+Les tribunaux historiques restent actifs en parallèle. Build 30 ne remplace donc pas Recovery, App Shell, iPhone, Speaking, Listening, Scenario ou Progress CI : il ajoute un contrat transversal.
+
+---
+
+# Build 29.2 — Speaking Loop Variety & Clarity
+
+Le contrat reste inchangé sous Build 30 :
 
 ```text
 teach items + thème de leçon
@@ -90,7 +306,7 @@ teach items + thème de leçon
 
 challenge
         ↓
-reste un exercice de compréhension / choix
+compréhension / choix
 
 écran de fin
         ↓
@@ -99,127 +315,28 @@ planificateur contextualisé
 1 recap oral distinct
 ```
 
-Exemple Bài 7 :
+Bài 7 canonique :
 
 ```text
 challenge : « dix euros » → 10 euros
-recap oral avec acquis antérieurs : « Combien ça coûte ? »
+recap oral : « Combien ça coûte ? »
 ```
 
-`10 euros` n’est pas supprimé du curriculum : il garde son rôle de compréhension, mais n’est plus automatiquement recyclé comme production orale.
-
-## Planificateur oral
-
-Le plan est calculé localement et reste borné à **2 moments maximum**.
-
-### Candidats
-
-1. éléments de la leçon actuelle ;
-2. réponse du challenge seulement si sa qualité orale le permet ;
-3. acquis déjà connus de leçons antérieures **uniquement avec recouvrement contextuel**.
-
-### Score
-
-Le score favorise :
-
-- phrase/question de longueur utile ;
-- forme directement prononçable ;
-- mots/thème liés à la leçon actuelle ;
-- proximité dans le parcours ;
-- entrée Learning Memory `fragile`, puis `due`, puis `learning`.
-
-Il défavorise :
-
-- nombre seul ou `10 euros`-like comme production ;
-- unité isolée (`euros`) ;
-- cible identique au premier moment ;
-- phrase présente dans la fenêtre récente anti-répétition ;
-- acquis solide lorsqu’une cible plus utile existe.
-
-Memory est appelée via :
-
-```text
-window.FrenchTranquilleMemory.summary()
-```
-
-Aucune méthode d’écriture Memory n’est invoquée. Le module n’effectue aucun `localStorage.setItem`.
-
-## Anti-répétition
-
-Une fenêtre mémoire **éphémère** garde jusqu’à six phrases récemment proposées. Elle n’est pas persistée et disparaît avec le runtime.
-
-Le plan reste stable à l’intérieur d’une leçon pour éviter qu’un MutationObserver change la phrase sous les yeux de Trân. En quittant puis revisitant la leçon, une nouvelle planification peut exploiter la fenêtre récente et varier.
-
-## Propriété du bouton modèle
-
-Sur une étape `teach`, l’exercice possède déjà :
-
-```text
-button.listen[data-speak]
-```
-
-29.2 le rend explicite :
+Le bouton modèle natif reste :
 
 ```text
 VI       🔊 Nghe Tyffany
 DEBUG FR 🔊 Écouter Tyffany
 ```
 
-avec `title` / `aria-label` expliquant que Tyffany lit la phrase modèle. Le Speaking Loop **ne duplique plus ce contrôle**.
-
-Sur le `recap` final, aucun bouton audio natif n’existe : la carte fournit alors un seul bouton modèle Tyffany.
-
-## Auto-écoute locale
-
-```text
-clic explicite
-→ getUserMedia(audio)
-→ MediaRecorder
-→ max 9 s
-→ Blob / Object URL
-→ lecture locale
-→ destruction au changement de moment/page
-```
-
-Libellés après enregistrement :
+Après prise :
 
 ```text
 VI       ↻ Ghi âm lại
 DEBUG FR ↻ Enregistrer à nouveau
 ```
 
-Pas d’upload, pas de backup, pas de store durable, pas de faux score de prononciation.
-
-Le retour terrain confirme que **la propre voix est bien réécoutable après la prise**. Cela ne ferme pas le gate distinct de coexistence avec la reconnaissance Free Voice suivante.
-
----
-
-# Tribunal Build 29.2
-
-Le workflow vérifie en vrai Chrome :
-
-- **40 leçons** couvertes ;
-- deux cibles distinctes / max 2 ;
-- Bài 7 : recap != `10 euros` ;
-- Bài 7 : récupération contextuelle `Combien ça coûte ?` avec acquis antérieurs ;
-- deuxième plan avec historique récent → rotation ;
-- bouton natif `Écouter Tyffany` / `Nghe Tyffany` ;
-- zéro bouton Tyffany dupliqué sur le teach ;
-- un bouton modèle au recap ;
-- aucune ancienne carte Speaking Loop `challenge` ;
-- zéro faux score de prononciation ;
-- mobile `390×844`, target ≥44 px, zéro overflow.
-
-Le workflow 29.1 reste actif en mode version-forward afin de protéger le contrat historique de deux moments oraux sans figer l’ancien détail d’implémentation.
-
-Preuves release :
-
-```text
-PR #68 head 947896ff...     20/20 fonctionnels SUCCESS
-main b6031cd8...            20/20 fonctionnels SUCCESS
-Pages #126                  SUCCESS
-main total                  21/21 SUCCESS Pages incluse
-```
+Audio : local, volontaire, ≤9 s, jamais uploadé ni persisté. Aucun faux score de prononciation.
 
 ---
 
@@ -236,6 +353,8 @@ reconnaissance
 
 Tant que ce gate réel iPhone n’est pas validé, aucune capture automatique parallèle du premier essai SpeechRecognition.
 
+Ce gate ne bloque pas la stabilisation V2 du produit existant ; il bloque uniquement l’évolution future vers l’enregistrement automatique du premier essai exact.
+
 ---
 
 # Build 29 — iPhone / PWA / Accessibility
@@ -244,18 +363,7 @@ Safe areas, touch ≥44 px, focus-visible, `aria-current`, progressbar/live regi
 
 # Build 28 — Data & Recovery
 
-Stores durables :
-
-```text
-learner     francais-avec-luc:learner:v1
-memory      french-tranquille:learning-memory:v1
-errors      french-tranquille:error-intelligence:v1
-scenarios   french-tranquille:scenarios:v1
-listening   french-tranquille:listening:v1
-milestones  french-tranquille:milestones:v1
-```
-
-Backup V2, restore transactionnel, rollback, migration V1 sûre, quarantaine, `last-good` et snapshots restent en vigueur.
+Backup V2 six stores, restore transactionnel, rollback, migration V1 sûre, quarantaine, `last-good` et snapshots restent en vigueur.
 
 # Build 27 — App Shell
 
@@ -280,6 +388,7 @@ Baseline historique protégée : `real-life-data-2.js` = **v1.17.0 — Build 24 
 # Sanctuaires
 
 ```text
+app.js
 voice-ios.js
 free-voice.js
 assets/LOGO.png
@@ -287,10 +396,9 @@ assets/Favicon.png
 francais-avec-luc:learner:v1
 ```
 
-Baselines produit : curriculum **40/241**, Scenario **36/108**, Listening **0.88/0.65**, Build 27 App Shell, Build 28 Recovery, Build 29 iPhone/PWA/A11y, Build 29.2 Speaking Loop.
+Baselines produit : curriculum **40/241**, Scenario **36/108**, Listening **0.88/0.65**, Build 27 App Shell, Build 28 Recovery, Build 29 iPhone/PWA/A11y, Build 29.2 Speaking Loop, Build 30 Runtime Contracts/Bridge.
 
 ## Suite
 
-1. gate terrain iPhone Voice Replay ;
-2. Build 30 Architecture Hardening ;
-3. V2.0.0 Freeze / Release.
+1. gate terrain iPhone Voice Replay en parallèle ;
+2. **V2.0.0 Freeze / Release** : geler et certifier la baseline existante, sans nouveau moteur.
