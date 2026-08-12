@@ -1,207 +1,140 @@
 # French Trân’quille
 
-PWA de français pensée pour **Trân**, avec priorité à l’oral, au français utile dans la vraie vie et à une interface simple sur iPhone.
+PWA de français pensée pour **Trân**, vietnamienne débutante, avec priorité à l’oral, au français utile dans la vraie vie et à une interface simple sur iPhone.
 
 ## Version production
 
-- **v1.21.0**
-- **Build 28 — Data & Recovery Hardening**
-- statut : **✅ PROD / CLOS — réécoute iPhone Build 26.1 à valider terrain**
-- commit runtime production : `ed09159a6246fe3c1892cb0ff8d03a4beffb7428`
-- PR runtime : **#62**
-- head PR certifié : `dc060ea5304b0526010bd8ac158b70c363525325`
-- tribunal PR : **17/17 workflows SUCCESS**
-- tribunal `main` : **17/17 workflows fonctionnels SUCCESS**
-- GitHub Pages runtime : **#118 SUCCESS**
-- total runtime `main` : **18/18 SUCCESS Pages incluse**
+- **v1.22.0**
+- **Build 29 — iPhone / PWA / Accessibility Hardening**
+- statut : **✅ PROD / CLOS — validations WebKit terrain encore ouvertes**
+- runtime production final : `ff788fd86e1754b15e8003b2f63c9673708480d0`
+- PR runtime : **#64** — head certifié `27c67ee7b47b9f9a015e6c0072640e0e573de52d`
+- merge runtime initial : `1c01648d89dfb3bd9236b9ad93fbade4e21102fa`
+- PR hotfix CI/SW isolation : **#65** — head certifié `3e11e6124654b88e6932f292ed7acb1df31b0039`
+- tribunal `main` final : **19/19 workflows SUCCESS**
+- GitHub Pages : **#121 SUCCESS** sur `ff788fd…`
 - curriculum : **40 leçons / 241 éléments**
 - Scenario : **36 situations / 108 tours**
 - Listening : **0.88 normal / 0.65 lent**
 - coût : **0 €**
 
-## 🔐 Build 28 — coffre de données et récupération
+👉 **https://shinobione.github.io/tran-french-teacher/**
 
-Après le Build 27 App Shell Reset, le prochain risque prioritaire n’était plus visuel : c’était la possibilité qu’un futur changement, un import ancien ou un `localStorage` corrompu abîme silencieusement la progression réelle de Trân.
+## 📱 Build 29 — vraie PWA iPhone
 
-Build 28 ajoute donc une couche Recovery chargée **avant `app.js`**.
+Build 29 a découvert une dette historique importante : le repo possédait bien `sw.js`, un manifest et une stratégie de cache, mais **aucun runtime n’enregistrait réellement le Service Worker**.
 
-Principe canonique :
-
-> **Une donnée invalide, une restauration ratée ou une migration ancienne ne doit jamais se transformer silencieusement en progression neuve.**
-
-### Six stores durables protégés
-
-Le coffre V2 connaît explicitement :
-
-1. `francais-avec-luc:learner:v1` — progression canonique ;
-2. `french-tranquille:learning-memory:v1` — mémoire / répétition espacée ;
-3. `french-tranquille:error-intelligence:v1` — erreurs observables ;
-4. `french-tranquille:scenarios:v1` — situations réelles ;
-5. `french-tranquille:listening:v1` — compréhension orale ;
-6. `french-tranquille:milestones:v1` — jalons.
-
-Les réglages voix restent volontairement locaux à l’appareil : un `voiceURI` iPhone n’est pas une donnée pédagogique portable.
-
-### Backup V2 complet
-
-L’ancien export historique sauvegardait essentiellement learner + Learning Memory.
-
-Le format V2 exporte désormais les **six stores** après validation de schéma :
+Build 29 ajoute donc explicitement l’enregistrement top-level :
 
 ```text
-french-tranquille-backup
-version: 2
-stores:
-  learner
-  memory
-  errors
-  scenarios
-  listening
-  milestones
+French Trân’quille top-level
+        ↓
+navigator.serviceWorker.register(...)
+        ↓
+install : precache + skipWaiting attendu
+        ↓
+activate : purge anciens caches + clients.claim attendu
+        ↓
+fetch : réseau puis cache / fallback offline
 ```
 
-### Restore transactionnel
+Le Worker n’est pas lancé dans les anciens harnesses `*Smoke` ni dans les iframes de test. Le vrai `b29Audit` et l’application normale utilisent bien le Worker réel.
 
-Avant un import :
+### Preuve offline dure
+
+Le tribunal Build 29 fait réellement :
 
 ```text
-snapshot pre-restore
-→ snapshot pre-migration si backup ancien
-→ validation
-→ écriture des six stores
-→ relecture + validation
-→ comparaison exacte
-→ rollback automatique si échec
+profil Chrome persistant
+→ warm boot online
+→ second boot online
+→ arrêt physique du serveur HTTP
+→ nouvelle navigation vers la même URL
+→ Home French Trân’quille complète depuis Worker/cache
 ```
 
-Une panne au milieu d’une restauration ne doit donc jamais laisser un mélange incohérent de stores.
+Le test refuse `ERR_CONNECTION_REFUSED`, les boot errors et tout état incomplet. Ce n’est donc plus seulement « un fichier `sw.js` existe » : le démarrage sans serveur est prouvé.
 
-### Migration backup V1 sûre
+## ♿ iPhone / accessibilité
 
-Un ancien backup V1 ne connaissait que learner + Memory. Build 28 restaure ces données **sans supprimer** Error / Scenario / Listening / Milestones déjà présents sur l’appareil.
+La couche `build29-iphone-a11y.*` ajoute sans toucher à `app.js` :
 
-### Corruption : quarantaine + last-good
+- safe areas top/right/bottom/left et Home Indicator ;
+- `viewport-fit=cover` ;
+- `visualViewport` pour la hauteur visible et le clavier virtuel ;
+- cibles tactiles apprenantes **≥ 44 × 44 px** ;
+- champs ≥ 16 px pour éviter le zoom iOS au focus ;
+- focus clavier visible avec `:focus-visible` ;
+- onglet courant via `aria-current="page"` ;
+- progressions avec sémantique `progressbar` ;
+- feedbacks utiles en `aria-live="polite"` ;
+- support `prefers-reduced-motion` et `prefers-contrast: more` ;
+- textes longs sans dérive horizontale ;
+- zoom utilisateur conservé ;
+- Apple Touch Icon dédiée réellement câblée ;
+- manifest stable `id/start_url/scope = ./`, `display=standalone`.
 
-Au démarrage :
+Chrome réel certifie **390×844**, **320×568**, **430×932**, reduced-motion et le redémarrage offline.
 
-- JSON invalide ou schéma invalide → quarantaine ;
-- restauration depuis `last-good` lorsqu’il existe ;
-- sinon fallback possible vers le snapshot historique Build 22 ;
-- si aucun fallback valide n’existe, seul le store fautif est retiré et la donnée brute reste conservée en quarantaine.
-
-Pendant l’utilisation, une écriture invalide sur un store critique est bloquée avant d’écraser la dernière version saine.
-
-Snapshots Recovery :
+Mesures exigées :
 
 ```text
-french-tranquille:recovery:last-good:v1
-french-tranquille:recovery:pre-restore:v1
-french-tranquille:recovery:pre-migration:v1
-french-tranquille:recovery:pre-reset:v1
-french-tranquille:recovery:quarantine:v1
+cibles trop petites = 0
+boutons sans nom accessible = 0
+onglet courant visible = 1
+overflow horizontal = 0
 ```
 
-Le filet historique `french-tranquille:safety:pre-build22:v1` reste conservé.
+## 🔐 Build 28 reste dessous
 
-### Reset cohérent
+Build 29 ne remplace pas le coffre de données. Build 28 reste chargé avant `app.js` et protège les six stores durables :
 
-Le reset learner est désormais atomique :
+1. `francais-avec-luc:learner:v1`
+2. `french-tranquille:learning-memory:v1`
+3. `french-tranquille:error-intelligence:v1`
+4. `french-tranquille:scenarios:v1`
+5. `french-tranquille:listening:v1`
+6. `french-tranquille:milestones:v1`
 
-```text
-snapshot pre-reset
-→ learner
-→ Memory
-→ Error
-→ Scenario
-→ Listening
-→ Milestones
-→ supprimés ensemble
-```
+Backup V2, restore transactionnel, rollback, `last-good`, quarantaine et reset atomique restent sous leur tribunal Build 28.
 
-Le snapshot pré-reset reste disponible pour récupération/diagnostic.
+## 🧭 Façade Build 27 toujours intacte
 
-## ✅ Preuves Build 28
+Trân voit toujours seulement :
 
-Le tribunal Node et Chrome prouve réellement :
+- **Aujourd’hui** — prochaine leçon, `Continuer`, `Réviser`, `Écouter` ;
+- **Pratiquer** — Parler, Écouter, Réviser, Dans la vraie vie ;
+- **Progrès** — position A0 → A1, prochaine étape, cinq leçons utiles, parcours complet par étapes.
 
-- backup V2 = six stores ;
-- mutation → restore → état durable exact ;
-- panne simulée en plein restore → rollback exact ;
-- JSON et schémas invalides rejetés ;
-- migration V1 conserve les stores modernes ;
-- tentative d’écriture learner corrompue bloquée ;
-- corruption injectée **avant `app.js`** réparée depuis `last-good` ;
-- reset des six stores + récupération du profil historique ;
-- ancien profil synthétique : **7 leçons terminées + `l8=4`** récupérés ;
-- Home Build 27 mobile `390×844` toujours intacte.
-
-La PR #62 head `dc060ea…` a passé **17/17 workflows**. Après merge, le runtime `ed09159a…` a passé **17/17 workflows fonctionnels sur `main`**, puis **GitHub Pages #118 SUCCESS**, soit **18/18 SUCCESS Pages incluse**.
-
-## 🧭 App Shell Build 27 toujours intact
-
-La façade apprenante reste :
-
-### Aujourd’hui
-- prochaine leçon ;
-- CTA principal `Continuer` ;
-- raccourcis `Réviser` / `Écouter` ;
-- durée discrète.
-
-### Pratiquer
-- 🎙️ Parler ;
-- 🎧 Écouter ;
-- ↻ Réviser ;
-- ♥ Dans la vraie vie.
-
-### Progrès
-- position A0 → A1 ;
-- prochaine leçon ;
-- étape actuelle ;
-- cinq leçons utiles ;
-- parcours complet en 5 étapes.
-
-Memory / Mastery / Listening / Scenario / Error Intelligence restent des moteurs, pas des catégories que Trân doit piloter. Le cockpit historique reste en DEBUG FR.
+Memory / Mastery / Listening / Scenario / Error Intelligence restent des moteurs, pas des menus techniques à piloter.
 
 ## 🛡️ Sanctuaires
 
-Byte-identiques pendant Build 28 :
+Toujours byte-identiques pendant Build 29 :
 
 - `voice-ios.js` ;
 - `free-voice.js` ;
 - `assets/LOGO.png` ;
 - `assets/Favicon.png`.
 
-Baselines conservées :
+Aucune clé durable n’a été renommée et aucune migration apprenante n’a été ajoutée par Build 29.
 
-- curriculum **40 / 241** ;
-- Scenario production **36 / 108** ;
-- Listening **0.88 / 0.65** ;
-- App Shell Build 27 ;
-- containment Build 26.6 ;
-- geometry Build 26.7 ;
-- Focus Flow Build 26.8 ;
-- Content Reliability Build 26.9.
+## 🎙️ Gates terrain encore ouverts
 
-Baseline historique protégée : **v1.17.0 — Build 24 — Real Life French II**, Scenario **28 situations / 84 tours** avant Pack III ; `real-life-data-2.js` reste canonique.
+Chrome ne remplace pas un vrai iPhone Safari/WebKit. Restent à observer sur l’appareil réel :
 
-## 🎙️ Gate terrain toujours ouvert
+- encoche / Dynamic Island et Home Indicator ;
+- clavier iOS réel ;
+- VoiceOver ;
+- installation « Sur l’écran d’accueil » et reprise standalone ;
+- **Build 26.1** : réponse reconnue → seconde prise locale → réécoute → réponse vocale suivante toujours reconnue normalement.
 
-Build 26.1 reste actif :
-
-```text
-réponse reconnue
-→ seconde prise locale
-→ réécoute correcte
-→ réponse vocale suivante toujours reconnue normalement
-```
-
-Cette coexistence doit encore être confirmée sur le vrai iPhone avant d’enregistrer automatiquement le premier essai exact.
+La voix/reconnaissance ne doit pas être modifiée sans preuve terrain.
 
 ## Suite
 
-1. **Gate terrain iPhone Build 26.1**.
-2. **Build 29 — iPhone / PWA / Accessibility Hardening**.
-3. **Build 30 — Architecture Hardening**.
-4. **V2.0.0 — Freeze / Release**.
+1. **Gate terrain iPhone / VoiceOver / Build 26.1**.
+2. **Build 30 — Architecture Hardening**.
+3. **V2.0.0 — Freeze / Release**.
 
-Voir `ROADMAP.md`, `CHANGELOG.md`, `docs/ARCHITECTURE.md`, `docs/BUILD-27-APP-SHELL-RESET.md` et `docs/BUILD-28-DATA-RECOVERY.md`.
+Voir `ROADMAP.md`, `CHANGELOG.md`, `docs/ARCHITECTURE.md`, `docs/BUILD-28-DATA-RECOVERY.md` et `docs/BUILD-29-IPHONE-PWA-A11Y.md`.
