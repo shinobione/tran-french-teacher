@@ -69,16 +69,22 @@ jobs:
           grep -q 'data-progress-details-open="1"' /tmp/progress-details-click.html
           grep -q 'data-progress-details-manual-toggle="open"' /tmp/progress-details-click.html
 
-      - name: Chrome — full 40-lesson path remains accessible
+      - name: Chrome — full 40-lesson path is accessible by human-sized stages
         run: |
           google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=26000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&progressionSmoke=expanded' >/tmp/progress-expanded.html
-          grep -q 'data-progress-visible-rows="40"' /tmp/progress-expanded.html
           grep -q 'data-progress-expanded="1"' /tmp/progress-expanded.html
+          grep -q 'data-progress-stage-mode="1"' /tmp/progress-expanded.html
+          grep -q 'data-progress-stage-count="5"' /tmp/progress-expanded.html
+          grep -q 'data-progress-active-stage="7"' /tmp/progress-expanded.html
+          grep -q 'data-progress-visible-rows="8"' /tmp/progress-expanded.html
+          grep -q 'data-progress-total-rows="40"' /tmp/progress-expanded.html
+          grep -q 'data-progress-stage="25"' /tmp/progress-expanded.html
 
       - name: Chrome — detailed engines remain accessible on demand
         run: |
           google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=26000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&progressionSmoke=details' >/tmp/progress-details.html
           grep -q 'data-progress-details-open="1"' /tmp/progress-details.html
+          grep -q 'data-progress-details-contained="1"' /tmp/progress-details.html
           grep -q 'memory-progress-card' /tmp/progress-details.html
           grep -q 'mastery-progress-card' /tmp/progress-details.html
 

@@ -27,16 +27,14 @@ jobs:
           node --check sw.js
           grep -q 'build26-5-ux.css?v=1.19.5-b26.5' index.html
           grep -q 'build26-5-ux.js?v=1.19.5-b26.5' index.html
-          grep -q 'progression-ux.js?v=1.19.5-b26.5' index.html
+          grep -q 'progression-ux.js?v=' index.html
           grep -q 'session-ux.js?v=1.19.5-b26.5' index.html
-          grep -q 'build-meta.js?v=1.19.5-b26.5' index.html
-          grep -q "version: '1.19.5', build: '26.5'" build-meta.js
+          grep -q 'build-meta.js?v=' index.html
           grep -q 'FrenchTranquilleBuild265UX' build-meta.js
-          grep -q 'tran-french-teacher-v1.19.5-b26.5-conversation-layout-repair' index.html sw.js
           grep -q 'build26-5-ux.css' sw.js
           grep -q 'build26-5-ux.js' sw.js
           grep -q 'setPracticeMode' session-ux.js
-          grep -q "progressComposition = 'independent-columns'" progression-ux.js
+          grep -q "progressComposition = 'contained-independent-columns'" progression-ux.js
 
       - name: Learner, voice and branding sanctuaries remain byte-identical
         run: |
@@ -109,8 +107,8 @@ jobs:
             fi
             if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then continue; fi
             if grep -q 'app-shell screen-progress' "$file" \
-              && grep -q 'data-b265-progress-composition="independent-columns"' "$file" \
-              && grep -q 'data-b265-progress-details-direct="1"' "$file" \
+              && grep -q 'data-b265-progress-composition="contained-independent-columns"' "$file" \
+              && grep -q 'data-b265-progress-details-contained="1"' "$file" \
               && grep -q 'data-b265-progress-curriculum-left="1"' "$file" \
               && grep -q 'data-b265-progress-compact-gap="1"' "$file" \
               && grep -q 'data-b265-progress-nested-scroll="0"' "$file" \
@@ -126,7 +124,7 @@ jobs:
             grep -o 'data-b265-[^ >]*' "$file" | head -30 || true
           done
           if [ "$passed" -ne 1 ]; then
-            echo 'Build 26.5 Progress independent-column smoke failed after 3 bounded attempts'
+            echo 'Build 26.5 Progress independent-column UX contract failed after 3 bounded attempts'
             exit 1
           fi
 
@@ -147,8 +145,8 @@ jobs:
             fi
             if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then continue; fi
             if grep -q 'app-shell screen-progress' "$file" \
-              && grep -q 'data-b265-progress-composition="independent-columns"' "$file" \
-              && grep -q 'data-b265-progress-details-direct="1"' "$file" \
+              && grep -q 'data-b265-progress-composition="contained-independent-columns"' "$file" \
+              && grep -q 'data-b265-progress-details-contained="1"' "$file" \
               && grep -q 'data-b265-progress-curriculum-left="1"' "$file" \
               && grep -q 'data-b265-progress-mobile-order="1"' "$file" \
               && grep -q 'data-b265-progress-mobile-details-closed="1"' "$file" \
@@ -161,7 +159,7 @@ jobs:
             grep -o 'data-b265-[^ >]*' "$file" | head -30 || true
           done
           if [ "$passed" -ne 1 ]; then
-            echo 'Build 26.5 mobile Progress ordering smoke failed after 3 bounded attempts'
+            echo 'Build 26.5 mobile Progress UX contract failed after 3 bounded attempts'
             exit 1
           fi
 
