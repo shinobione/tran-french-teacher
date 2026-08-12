@@ -1,158 +1,230 @@
 # Build 26.8 — Progress Focus Flow
 
-**Version candidate : v1.19.8**  
+**Version : v1.19.8**  
 **Build : 26.8**  
-**État : CANDIDAT — PR → CI → main → Pages requis avant PROD**
+**État : ✅ PROD / CLOS**  
+**PR runtime : #56**  
+**Runtime production : `1084e1d71a7aebbf6d7dcea9dfa0cabb44f6cbe1`**  
+**GitHub Pages : #112 SUCCESS**
 
 ## Retour terrain
 
-La vidéo réelle du 12 août 2026 montre que Build 26.7 a réparé la géométrie mais pas encore la longueur cognitive de `Parcours`.
+Une vidéo réelle du 12 août 2026 a montré que Build 26.7 avait réparé la géométrie mais pas encore la longueur cognitive de `Parcours`.
 
-Le problème n'est plus une colonne écrasée. Il reste un comportement de type « parchemin » : lorsque l'utilisateur ouvre une famille de `Détails d’apprentissage`, le Résumé, le Curriculum, les six tuiles du dashboard, la famille active et ses cartes restent tous présents dans le même document.
+Le problème n’était plus une colonne écrasée. Le document restait trop long :
 
-Même correctement dimensionné, cet empilement oblige à scroller longtemps et sous-utilise un grand écran.
+```text
+Résumé
++ Curriculum
++ six tuiles Détails
++ famille active
++ cartes moteur de cette famille
+```
 
-## Intention UX
+Même correctement dimensionné, cet empilement produisait encore une sensation de « parchemin » et sous-utilisait les grands écrans.
 
-Build 26.8 introduit un principe simple :
+## Principe livré
 
-> une intention active possède l'écran ; le contexte non nécessaire disparaît temporairement puis revient à la sortie.
+> **Une intention active possède l’écran ; le contexte non nécessaire disparaît temporairement puis revient à la sortie.**
 
-La transition reste une couche de présentation. Les nœuds Memory / Mastery / Listening / Scenario ne sont jamais clonés ni déplacés hors de la frontière DOM historique restaurée en 26.6.
+Build 26.8 est une couche d’état/presentation. Il ne crée aucun moteur pédagogique et ne déplace aucune carte historique hors de la frontière DOM restaurée en Build 26.6.
 
 ## Vue normale
 
-`Parcours` conserve :
+`Parcours` reste compact :
 
-- le Résumé ;
-- le curriculum compact autour de la position actuelle ;
-- `Détails d’apprentissage` et ses familles ;
-- les protections de cardinalité et de géométrie 26.6 / 26.7.
+- Résumé ;
+- curriculum 5 lignes autour de la position actuelle ;
+- `Détails d’apprentissage` et ses familles.
 
 ## Focus Détails
 
-Clic sur une famille (`Mémoire`, `Maîtrise`, `Compréhension orale`, `Français réel`, `A1 & rythme`, `Autres`) :
+Clic sur une famille :
 
-1. fade-out court de la composition actuelle ;
-2. le flux Résumé + Curriculum est masqué ;
-3. la grille des familles est masquée ;
-4. la famille choisie occupe toute la surface Progress ;
-5. les cartes utilisent deux colonnes sur grand desktop et une seule colonne sur écran plus étroit ;
-6. un contrôle explicite `Retour aux détails` referme la famille ;
-7. fade-in de la vue précédente.
+```text
+compact
+→ fade-out court
+→ learner flow masqué
+→ grille des familles masquée
+→ famille choisie pleine surface
+→ Retour aux détails
+→ compact restauré
+```
 
-Le panneau `Details` reste à sa place dans `.progress-ux-composition`. Le containment 26.6 n'est jamais violé.
+Sur grand desktop : cartes détaillées en deux colonnes lorsque possible et shell focalisé jusqu’à 1420 px.
+
+Sur écran plus étroit/mobile : une seule colonne.
+
+Le panneau `.progress-ux-details` reste dans `.progress-ux-composition` : containment 26.6 intact.
 
 ## Focus Curriculum
 
-`Voir tout le parcours` devient un vrai changement de contexte :
+`Voir tout le parcours` devient une vraie vue focalisée :
 
-1. Résumé et Détails disparaissent ;
-2. le Curriculum prend toute la largeur ;
-3. les 5 étapes deviennent une rangée sur grand desktop ;
-4. les leçons de l'étape active utilisent deux colonnes sur grand desktop ;
-5. mobile reste une seule colonne ;
-6. `Retour au résumé` restaure la vue compacte 5 lignes.
+```text
+Résumé + Details masqués
+→ Curriculum pleine surface
+→ 5 étapes
+→ leçons de l’étape active
+→ Retour au résumé
+→ compact 5 lignes restauré
+```
+
+Grand desktop : 5 étapes horizontales et leçons en 2 colonnes. Responsive : 2 puis 1 colonne.
 
 Les 40 leçons restent accessibles mais jamais affichées simultanément.
 
-## Utilisation de l'espace
+## Sorties propres
 
-La largeur historique globale de l'application reste inchangée hors focus.
+Le chantier a révélé qu’un faux clic sur un contrôle caché était trop fragile sous les `MutationObserver` historiques.
 
-Uniquement pendant un focus Progress, `.app-shell` peut s'étendre jusqu'à 1420 px afin qu'un écran desktop large ne conserve pas une colonne centrale inutilement étroite.
+Les sorties finales utilisent donc les API propriétaires :
 
-## Mouvement
+```text
+Details
+→ FrenchTranquilleProgressDetailsDashboard.close()
+→ decorate()
 
-Transition cible : environ 145 ms fade / léger déplacement vertical. Le changement de layout intervient entre les deux phases afin d'éviter le flash d'un DOM recomposé.
+Curriculum
+→ FrenchTranquilleProgressionUX.setCurriculumExpanded(false)
+→ decorate()
+```
 
-`prefers-reduced-motion: reduce` désactive les animations et conserve exactement le même contrat fonctionnel.
+Chaque état reste ainsi piloté par son propriétaire.
 
-## Responsive
+## Transitions idempotentes
 
-- grand desktop : focus pleine largeur, détails 2 colonnes, curriculum 5 étapes horizontales + leçons 2 colonnes ;
-- desktop / tablette : détails 1 colonne, étapes 2 colonnes ;
-- iPhone / mobile <= 860 px : une seule colonne, toolbar compacte, aucun overflow horizontal.
+Les observers peuvent produire plusieurs mutations pendant un même changement visuel.
 
-## Tribunal Build 26.8
+Build 26.8 refuse de redémarrer une transition déjà en route vers la même destination. Cela empêche une rafale de mutations de repousser indéfiniment le timer de transition.
 
-Le workflow dédié vérifie en vrai Chrome :
+Autre règle importante :
 
-### Focus Détails desktop 1640×900
+```text
+fade-out
+→ applyFocus()
+→ état logique terminé
+→ fade-in cosmétique
+```
 
-- famille Memory réellement ouverte ;
-- `data-b268-focus=details` ;
+La fin du fade n’est donc jamais nécessaire pour permettre l’interaction suivante.
+
+`prefers-reduced-motion: reduce` retire les animations et conserve exactement le même contrat fonctionnel.
+
+## Tribunal Chrome
+
+Le workflow `.github/workflows/build26-8-progress-focus-smoke.yml` couvre :
+
+### 1. Details focus — 1640×900
+
+- Memory réellement ouverte ;
 - learner flow masqué ;
-- grille de familles masquée ;
+- grille familles masquée ;
 - panneau actif visible ;
 - toolbar retour visible ;
-- surface focus >= 900 px ;
+- containment intact ;
 - aucun overflow horizontal ;
-- containment 26.6 intact.
+- surface Focus mesurée **920 px** dans le viewport de CI.
 
-### Focus Curriculum desktop 1640×900
+### 2. Curriculum focus — 1640×900
 
-- curriculum réellement développé ;
+- Curriculum réellement développé ;
 - Overview masqué ;
 - Details masqué ;
-- Curriculum visible ;
 - toolbar retour visible ;
-- surface focus >= 900 px ;
+- containment intact ;
 - aucun overflow horizontal ;
-- containment intact.
+- surface Focus mesurée **920 px**.
 
-### Round-trip
+### 3. Round-trip
 
-Chrome exécute :
+Chrome exécute réellement :
 
 ```text
 vue compacte
 → Memory focus
-→ retour
+→ Retour aux détails
 → Curriculum focus
-→ retour
+→ Retour au résumé
 ```
 
 Puis exige :
 
-- aucun focus actif ;
-- aucune famille active ;
-- curriculum compact restauré à 5 lignes.
+```text
+focus actif       = aucun
+famille active    = aucune
+lesson rows       = 5
+```
 
-### Mobile 390×844
+### 4. Mobile 390×844
 
-Focus Details :
-
-- toolbar visible ;
-- surface >= 320 px ;
+- Details focus ;
+- une seule colonne responsive ;
+- toolbar retour visible ;
+- largeur utile au-dessus du seuil contractuel ;
 - aucun overflow horizontal ;
 - containment intact.
 
+## Régressions protégées
+
+Build 26.8 conserve :
+
+- Build 26.6 containment / cardinalité stable **12 → 12** ;
+- Build 26.6 curriculum en cinq étapes ;
+- Build 26.7 garde géométrique wide/compact ;
+- Build 26.5 Conversation Exit ;
+- Build 26.4 single-scroll ;
+- Build 26.3 interactions ;
+- Build 26.2 Listening effectif **0.88 / 0.65** ;
+- Build 26.1 Voice Replay ;
+- curriculum **40 / 241** ;
+- Scenario **36 / 108**.
+
 ## Sanctuaires
 
-Build 26.8 ne modifie pas :
-
-- `voice-ios.js` ;
-- `free-voice.js` ;
-- `assets/LOGO.png` ;
-- `assets/Favicon.png` ;
-- `francais-avec-luc:learner:v1` ;
-- Learning Memory / Scenario / Listening ;
-- curriculum **40 / 241** ;
-- Scenario **36 / 108** ;
-- Listening **0.88 / 0.65** ;
-- containment anti-duplication Build 26.6 ;
-- géométrie open-Details Build 26.7 ;
-- parcours humanisé en cinq étapes.
-
-## Clôture attendue
+Aucun changement sur :
 
 ```text
-branche
-→ PR runtime
-→ tous les workflows fonctionnels verts
-→ merge exact du head
-→ tous les workflows main verts
-→ GitHub Pages SUCCESS
-→ docs PROD / CLOS
+francais-avec-luc:learner:v1
+Learning Memory state
+Scenario state
+Listening state
+voice-ios.js
+free-voice.js
+assets/LOGO.png
+assets/Favicon.png
 ```
+
+Aucune migration learner/Memory/Scenario/Listening.
+
+## Certification
+
+Candidat final PR #56 :
+
+```text
+head c919262076e80296d38861cb986c9c42a1ded7a8
+14/14 workflows fonctionnels SUCCESS
+```
+
+Après squash merge :
+
+```text
+main 1084e1d71a7aebbf6d7dcea9dfa0cabb44f6cbe1
+14/14 workflows fonctionnels SUCCESS
+GitHub Pages #112 SUCCESS
+0 failure
+0 in-progress après certification
+```
+
+## Gate restant
+
+Le gate terrain réel de Build 26.1 reste volontairement ouvert :
+
+```text
+réponse vocale reconnue
+→ seconde prise locale
+→ réécoute
+→ réponse vocale suivante toujours reconnue normalement
+```
+
+Ce gate est indépendant du Focus Flow.

@@ -15,164 +15,155 @@
 9. Chrome réel avant merge important ; même tribunal sur `main`.
 10. README / CHANGELOG / ROADMAP / ARCHITECTURE synchronisés.
 11. Un nouveau moteur n’obtient pas automatiquement une nouvelle entrée de navigation.
-12. Toute surface tappable donne un retour visuel immédiat sur mobile.
-13. `Aujourd’hui / Pratiquer / Parcours` gardent des nœuds persistants et exactement un état actif.
+12. Toute surface tappable donne un retour visuel immédiat.
+13. `Aujourd’hui / Pratiquer / Parcours` gardent des nœuds persistants et un état déterministe.
 14. Progressive disclosure : tous les moteurs et compteurs ne sont pas visibles par défaut.
 15. Chaque activité possède un objectif, une progression, une fin et une sortie évidente.
 16. Pas de tunnel pédagogique infini par défaut.
 17. Succès visible et agréable, sans gamification agressive.
 18. Pendant une vraie session de Trân : pas de polish runtime/cache sauf incident critique.
 19. Une fonction d’auto-écoute ne doit jamais dégrader la reconnaissance vocale validée.
-20. Les détails pédagogiques peuvent être riches, mais ils doivent être groupés par intention et jamais affichés comme un dump vertical.
+20. Les détails pédagogiques peuvent être riches, mais jamais affichés comme un dump vertical permanent.
 21. Un mode `Lent` doit être **effectivement plus lent dans la couche voix finale**.
 22. Les surfaces repliables critiques ont un contrat de clic navigateur réel.
 23. **Un contrôle visible ne doit pas être remplacé entre `pointerdown` et `click`.**
-24. Les tests d’interaction vérifient la **destination réelle**, pas seulement la présence du bouton.
+24. Les tests d’interaction vérifient la destination réelle.
 25. **Une page ne doit pas imposer deux scrolls verticaux concurrents sans nécessité forte.**
 26. Un renommage produit ne justifie pas une migration technique risquée.
 27. **Un mode visible doit toujours avoir une sortie déterministe.**
-28. **Un seul mode actif ne doit pas hériter d’une grille conçue pour plusieurs modes simultanés.**
+28. **Un seul mode actif ne doit pas hériter d’une grille conçue pour plusieurs modes.**
 29. **L’indépendance visuelle ne justifie pas de casser une frontière de propriété DOM.**
-30. Les anciens workflows CI protègent les **contrats**, pas les query-strings historiques d’un fichier qui peut légitimement évoluer.
+30. Les anciens workflows CI protègent les contrats, pas les versions historiques globales.
 31. **Une cardinalité DOM doit rester bornée dans le temps.**
 32. **Tout le curriculum doit rester accessible sans être affiché simultanément.**
-33. Pour un contrôle critique de disclosure, l’état visuel doit être déterministe dans le même geste utilisateur.
-34. **Un panneau secondaire ouvert ne doit jamais écraser la largeur de la tâche principale.** Les layouts responsive importants sont protégés par des mesures de géométrie réelles, pas seulement par des sélecteurs CSS.
-35. **Quand deux colonnes deviennent trop étroites, on empile.** Une pile lisible est préférable à deux colonnes théoriquement présentes mais inutilisables.
+33. Un disclosure critique devient cohérent dans le même geste utilisateur.
+34. **Un panneau secondaire ouvert ne doit jamais écraser la largeur de la tâche principale.**
+35. **Quand deux colonnes deviennent trop étroites, on empile.**
+36. **Une intention active peut prendre l’écran et masquer temporairement le contexte non nécessaire.** Le retour doit restaurer exactement la vue précédente.
+37. **L’animation ne possède jamais l’état métier.** Un fade peut continuer visuellement après que la transition fonctionnelle est déjà validée.
+38. `prefers-reduced-motion` doit conserver le même flux fonctionnel sans animation.
 
 ---
 
-# Baseline production — v1.19.7 / Build 26.7
+# Baseline production — v1.19.8 / Build 26.8
 
-**Progress Open-Details Geometry — ✅ PROD / CLOS**
+**Progress Focus Flow — ✅ PROD / CLOS**
 
-- commit runtime : `eaa4b9f8688a90de85a3f853dc29e59d0b8ac650` ;
-- PR runtime **#54** ;
-- PR : **13 workflows fonctionnels / 13 SUCCESS** ;
-- `main` : **13 workflows fonctionnels / 13 SUCCESS** ;
-- GitHub Pages : **#110 SUCCESS** ;
-- ouverture `Détails d’apprentissage` ne compresse plus le parcours ;
-- desktop large 1640×900 : flow **452 px**, Details **452 px**, ligne de leçon min **410 px** ;
-- desktop compact 980×900 : pile verticale, flow **906 px**, ligne de leçon min **864 px** ;
-- overflow horizontal = 0 sur les deux profils ;
-- dashboard ouvert = 2 tuiles par ligne sur desktop large ;
-- containment 26.6 conservé ;
-- anti-prolifération 26.6 conservée : **12 → 12** ;
-- curriculum humanisé 26.6 conservé : **5 étapes**, jamais 40 lignes simultanées ;
-- single-scroll conservé ;
-- mobile `<=860px` inchangé ;
-- Conversation Exit Build 26.5 conservé ;
-- Listening **0.88 / 0.65** ;
-- Scenario **36 / 108** ;
+- runtime : `1084e1d71a7aebbf6d7dcea9dfa0cabb44f6cbe1` ;
+- PR runtime **#56** ;
+- PR : **14/14 workflows fonctionnels SUCCESS** ;
+- `main` : **14/14 workflows fonctionnels SUCCESS** ;
+- GitHub Pages : **#112 SUCCESS** ;
+- vue Progress normale compacte ;
+- famille Détails active = focus pleine surface ;
+- `Voir tout le parcours` = focus Curriculum pleine surface ;
+- retour Détails et retour Curriculum explicites ;
+- round-trip réel restauré à **5 lignes compactes** ;
+- desktop 1640×900 : surface Focus mesurée **920 px**, aucun overflow horizontal ;
+- mobile 390×844 : focus une colonne, aucun overflow horizontal ;
+- shell focalisé peut utiliser jusqu’à **1420 px** sur grand desktop ;
+- `prefers-reduced-motion` supporté ;
+- containment Build 26.6 intact ;
+- anti-prolifération Build 26.6 intacte : **12 → 12** ;
+- géométrie Build 26.7 intacte ;
 - curriculum **40 / 241** ;
+- Scenario **36 / 108** ;
+- Listening **0.88 / 0.65** ;
 - aucune migration learner/Memory/Scenario/Listening ;
-- `voice-ios.js`, `free-voice.js`, logo, favicon sanctuarisés ;
+- voix, logo et favicon sanctuarisés ;
 - coût 0 €.
 
 Baseline historique protégée : **v1.17.0 — Build 24 — Real Life French II**, Scenario **28 situations / 84 tours** avant Pack III.
 
 ---
 
-# Build 26.7 — critères clôturés
+# Build 26.8 — critères clôturés
 
-## 1. Retour terrain
+## 1. Focus Détails
 
-Vidéo réelle : Détails fermé = Progress lisible ; Détails ouvert = colonne apprenante écrasée, texte vertical, grand vide inutile.
+- [x] clic sur une famille réellement observé ;
+- [x] learner flow masqué pendant le focus ;
+- [x] grille de familles masquée ;
+- [x] famille choisie visible seule ;
+- [x] toolbar de retour explicite ;
+- [x] surface grand desktop >= 900 px ;
+- [x] cartes en 2 colonnes lorsque l’espace le permet ;
+- [x] 1 colonne sur écran étroit/mobile ;
+- [x] aucun overflow horizontal ;
+- [x] containment 26.6 conservé.
 
-Cause : le track Details de Build 26.6 gardait `minmax(440px,1.06fr)` tandis que le learner flow pouvait descendre à zéro.
+## 2. Focus Curriculum
 
-## 2. Desktop large
+- [x] `Voir tout le parcours` masque Résumé + Détails ;
+- [x] Curriculum utilise toute la surface ;
+- [x] 5 étapes horizontales sur grand desktop ;
+- [x] leçons en 2 colonnes sur grand desktop ;
+- [x] responsive 2/1 colonnes ;
+- [x] `Retour au résumé` explicite ;
+- [x] jamais 40 leçons visibles simultanément.
 
-- [x] containment DOM 26.6 inchangé ;
-- [x] Détails ouvert → `minmax(0,1fr) minmax(0,1fr)` ;
-- [x] dashboard ouvert → 2 tuiles par ligne ;
-- [x] Chrome 1640×900 ouvre réellement Détails ;
-- [x] flow réel = **452 px** ;
-- [x] Details réel = **452 px** ;
-- [x] ligne de leçon min = **410 px** ;
-- [x] côte à côte ;
-- [x] overflow horizontal = 0.
+## 3. Round-trip humain
 
-## 3. Desktop compact / tablette paysage
+Chrome exécute :
 
-- [x] 861–1040 px : Détails passe sous le learner flow ;
-- [x] Chrome 980×900 ouvre réellement Détails ;
-- [x] flow réel = **906 px** ;
-- [x] ligne de leçon min = **864 px** ;
-- [x] pile verticale confirmée ;
-- [x] overflow horizontal = 0.
+```text
+compact
+→ Memory focus
+→ retour
+→ Curriculum focus
+→ retour
+```
 
-## 4. Régressions protégées
+Critères :
+
+- [x] aucun focus actif à la fin ;
+- [x] aucune famille active ;
+- [x] curriculum compact restauré à **5 lignes** ;
+- [x] transitions idempotentes sous MutationObserver ;
+- [x] sorties pilotées par les API propriétaires du dashboard/curriculum ;
+- [x] état logique découplé de la fin cosmétique du fade.
+
+## 4. Responsive / accessibilité mouvement
+
+- [x] desktop large utilise davantage l’écran ;
+- [x] mobile 390×844 sans overflow horizontal ;
+- [x] toolbar compacte mobile ;
+- [x] `prefers-reduced-motion` supprime l’animation sans changer le flux.
+
+## 5. Régressions historiques protégées
 
 - [x] Build 26.6 containment / anti-photocopieuse ;
 - [x] Build 26.6 curriculum 5 étapes ;
-- [x] Build 26.4 single-scroll ;
+- [x] Build 26.7 wide/compact geometry ;
 - [x] Build 26.5 Conversation Exit ;
-- [x] mobile 26.6 ;
+- [x] Build 26.4 single-scroll ;
+- [x] Build 26.3 interactions ;
+- [x] Build 26.2 Listening 0.88 / 0.65 ;
+- [x] Build 26.1 Voice Replay ;
 - [x] learner l8 historique ;
-- [x] voix / logo / favicon byte-identiques ;
-- [x] curriculum 40/241 ;
-- [x] Scenario 36/108 ;
-- [x] Listening 0.88/0.65.
-
-## 5. CI / release
-
-- [x] workflow dédié Build 26.7 ;
-- [x] workflow 26.6 rendu version-forward sans supprimer ses Chrome ;
-- [x] PR #54 : **13/13 SUCCESS** ;
-- [x] merge exact du head validé ;
-- [x] runtime `eaa4b9f8688a90de85a3f853dc29e59d0b8ac650` ;
-- [x] `main` : **13/13 SUCCESS** ;
-- [x] GitHub Pages **#110 SUCCESS**.
+- [x] voix / logo / favicon byte-identiques.
 
 ---
 
-# Build 26.6 — baseline conservée
+# Baselines conservées
 
-## Dashboard Containment
+## Build 26.7 — Progress Open-Details Geometry
 
-- [x] Details descendant de la frontière historique ;
-- [x] cardinalité stable après quiescence : **12 → 12** ;
-- [x] `Autres détails` borné ;
-- [x] cartes moteur uniques ;
-- [x] Overview/Curriculum hors Details ;
-- [x] aucune migration.
+Toujours sous Chrome : deux colonnes utilisables sur desktop large, pile lisible sur desktop compact. Build 26.8 supersède seulement la **présentation quand un focus est actif**.
 
-## Curriculum Humanization
+## Build 26.6 — Progress Dashboard Containment + Humanized Curriculum
 
-- [x] vue normale = 5 leçons ;
-- [x] 5 étapes ;
-- [x] l8 = 8 lignes dans son étape ;
-- [x] A1 Core = 15 lignes ;
-- [x] 40 leçons accessibles ;
-- [x] jamais 40 visibles simultanément ;
-- [x] vrais clics Chrome.
+Toujours canonique pour la propriété DOM et la cardinalité : **12 → 12** après quiescence, cartes moteur uniques, 5 étapes curriculum.
 
-Build 26.7 **supersède uniquement la géométrie ouverte desktop** de 26.6. Sa frontière DOM, son anti-prolifération et son parcours par étapes restent la baseline.
+## Build 26.5 → 26.2
 
-# Build 26.5 — baseline conservée / structure Progress supersédée
+Conversation Exit, single-scroll, interactions stables, clic Détails déterministe et Listening **0.88 / 0.65** restent actifs.
 
-Conversation Exit, une colonne active et Tyffany/label séparés restent valides. La structure `Details` frère direct de `.progress-layout` reste supersédée par 26.6.
+## Build 26.1 — gate terrain iPhone
 
-# Build 26.4 — baseline conservée
-
-Single-scroll Progress et branding Tyffany restent actifs.
-
-# Build 26.3 — baseline conservée
-
-Today conserve ses contrôles stables et ses vraies destinations.
-
-# Build 26.2 — baseline conservée
-
-Clic Détails déterministe et Listening effectif **0.88 normal / 0.65 lent**.
-
-# Build 26.1 — baseline conservée / gate terrain iPhone
-
-Voice Self-Playback reste livré mais le gate réel iPhone est toujours ouvert :
+Voice Self-Playback reste livré. Gate encore ouvert :
 
 - [ ] réponse reconnue → seconde prise locale → lecture correcte → réponse vocale suivante toujours reconnue normalement.
-
-La capture simultanée exacte du premier essai reste hors scope tant que cette coexistence n’est pas prouvée.
 
 ---
 
@@ -219,6 +210,7 @@ Real Life III Build 26
 Voice Replay + Details Dashboard Build 26.1
 Progress Dashboard Containment Build 26.6
 Progress Open-Details Geometry Build 26.7
+Progress Focus Flow Build 26.8
 ```
 
 Compatibilité interne conservée malgré le branding Tyffany : `LucieVoice`, `luc-*`, `lucie-*`.
