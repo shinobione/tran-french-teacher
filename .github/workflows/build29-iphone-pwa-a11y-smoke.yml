@@ -98,6 +98,7 @@ jobs:
               grep -q 'data-b29-audit-unnamed="0"' "$file" || ok=0
               grep -q 'data-b29-audit-current-tabs="1"' "$file" || ok=0
               grep -q 'data-b29-audit-overflow="0"' "$file" || ok=0
+              grep -q 'data-b29-sw-registered="1"' "$file" || ok=0
               grep -q 'aria-current="page"' "$file" || ok=0
               if [ "$reduced" = 1 ]; then grep -q 'data-b29-smoke-reduced="1"' "$file" || ok=0; fi
               if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then ok=0; fi
@@ -139,10 +140,12 @@ jobs:
           }
 
           assert_online() {
-            file="$1"; label="$2"
+            file="$1"; label="$2"; require_ready="$3"
             ok=1
             grep -q 'data-b29-smoke="passed"' "$file" || ok=0
             grep -q 'data-b29-audit-home-visible="1"' "$file" || ok=0
+            grep -q 'data-b29-sw-registered="1"' "$file" || ok=0
+            if [ "$require_ready" = 1 ]; then grep -q 'data-b29-sw-ready="1"' "$file" || ok=0; fi
             if [ "$ok" != 1 ]; then
               echo "=== ${label} Build29 markers ==="
               grep -o 'data-b29-[^ >]*' "$file" | head -60 || true
@@ -151,12 +154,12 @@ jobs:
             fi
           }
 
-          # First navigation installs the worker; second navigation gives it control.
+          # First navigation registers/installs the worker; the second persistent-profile navigation must see it active.
           run_browser 'http://127.0.0.1:4173/?uxSmoke=lesson8&b29Audit=warm1' "$online1" 22000
-          assert_online "$online1" warm1
+          assert_online "$online1" warm1 0
 
           run_browser 'http://127.0.0.1:4173/?uxSmoke=lesson8&b29Audit=warm2' "$online2" 22000
-          assert_online "$online2" warm2
+          assert_online "$online2" warm2 1
 
           kill "$(cat /tmp/ft-b29-server.pid)" || true
           rm -f /tmp/ft-b29-server.pid
@@ -168,6 +171,7 @@ jobs:
           grep -q 'data-b29-ready="1"' "$offline" || offline_ok=0
           grep -q 'data-b29-audit-home-visible="1"' "$offline" || offline_ok=0
           grep -q 'data-b29-audit-overflow="0"' "$offline" || offline_ok=0
+          grep -q 'data-b29-sw-ready="1"' "$offline" || offline_ok=0
           if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$offline"; then offline_ok=0; fi
           if [ "$offline_ok" != 1 ]; then
             echo '=== OFFLINE Build29 markers ==='
