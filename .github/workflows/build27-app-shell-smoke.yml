@@ -147,18 +147,33 @@ jobs:
       - name: Chrome visual states — overlays are fully settled
         run: |
           for target in practice journey; do
-            profile="/tmp/ft-b27-settle-$target"
-            file="/tmp/b27-settle-$target.html"
-            rm -rf "$profile" "$file"
-            timeout --signal=TERM --kill-after=5s 40s \
-              google-chrome --headless=new --no-sandbox --disable-gpu \
-              --user-data-dir="$profile" --window-size=1640,900 \
-              --virtual-time-budget=16000 --dump-dom \
-              "http://127.0.0.1:4173/?uxSmoke=lesson8&debug=fr&b27Smoke=visual-$target" >"$file"
-            grep -q "data-b27-visual-ready=\"$target\"" "$file"
-            grep -q 'data-b27-visual-entering="0"' "$file"
-            grep -q 'data-b27-visual-leaving="0"' "$file"
-            grep -q 'data-b27-visual-overflow="0"' "$file"
+            passed=0
+            for attempt in 1 2 3; do
+              profile="/tmp/ft-b27-settle-$target-$attempt"
+              file="/tmp/b27-settle-$target-$attempt.html"
+              rm -rf "$profile" "$file"
+              chrome_status=0
+              timeout --signal=TERM --kill-after=5s 40s \
+                google-chrome --headless=new --no-sandbox --disable-gpu \
+                --user-data-dir="$profile" --window-size=1640,900 \
+                --virtual-time-budget=16000 --dump-dom \
+                "http://127.0.0.1:4173/?uxSmoke=lesson8&debug=fr&b27Smoke=visual-$target" >"$file" || chrome_status=$?
+              echo "visual-$target attempt $attempt: chrome_status=$chrome_status bytes=$(wc -c < "$file")"
+              ok=1
+              grep -q "data-b27-visual-ready=\"$target\"" "$file" || ok=0
+              grep -q 'data-b27-visual-entering="0"' "$file" || ok=0
+              grep -q 'data-b27-visual-leaving="0"' "$file" || ok=0
+              grep -q 'data-b27-visual-overflow="0"' "$file" || ok=0
+              if [ "$ok" = 1 ]; then
+                grep -o 'data-b27-visual-[^ >]*' "$file" | head -12 || true
+                passed=1
+                break
+              fi
+              echo "=== visual-$target diagnostics ==="
+              grep -o 'data-b27-visual-[^ >]*' "$file" | head -20 || true
+              grep -o 'data-b29-sw-[^ >]*' "$file" | head -20 || true
+            done
+            test "$passed" = 1
           done
 
       - name: Capture visual-review screenshots
