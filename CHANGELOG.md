@@ -4,7 +4,9 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ## [Unreleased]
 
-### v1.22.2 — Build 29.2 — Speaking Loop Variety & Clarity — CANDIDAT
+---
+
+## [1.22.2] — Build 29.2 — Speaking Loop Variety & Clarity — 2026-08-12
 
 - remplace le libellé ambigu `Refaire` par **`Ghi âm lại`** côté Trân et **`Enregistrer à nouveau`** en DEBUG FR ;
 - renomme le bouton audio natif des étapes en **`Nghe Tyffany` / `Écouter Tyffany`** et explique brièvement qu’il fournit le modèle français ;
@@ -14,13 +16,18 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 - ajoute un planificateur oral contextualisé : qualité de phrase, thème de la leçon, acquis connus, proximité de contenu, Learning Memory en lecture seule et fenêtre anti-répétition ;
 - les acquis `fragile` / `due` peuvent remonter seulement lorsqu’ils restent sémantiquement pertinents pour la leçon ;
 - nombres et unités isolés sont fortement défavorisés comme cibles de production ;
-- régression explicite Bài 7 : **`10 euros` reste une réponse de compréhension, mais ne doit plus être la cible orale finale** ; avec le contexte appris antérieurement, le rappel attendu est `Combien ça coûte ?` ;
-- ajoute un smoke Chrome 29.2 desktop + `390×844` qui vérifie variété, anti-répétition, absence du bouton modèle dupliqué, labels Tyffany, cible tactile ≥44 px, zéro overflow et absence de faux score de prononciation ;
+- régression Bài 7 verrouillée : **`10 euros` reste une réponse de compréhension mais n’est plus la cible orale finale** ; avec le contexte appris antérieurement, le rappel est `Combien ça coûte ?` ;
+- le tribunal vérifie aussi qu’une nouvelle planification évite les cibles récentes lorsqu’une alternative cohérente existe ;
+- ajoute un smoke Chrome 29.2 desktop + `390×844` : variété, anti-répétition, absence du bouton modèle dupliqué, labels Tyffany, cible tactile ≥44 px, zéro overflow et aucun faux score de prononciation ;
 - le workflow historique Build 29.1 devient version-forward tout en gardant son contrat de deux moments oraux ;
 - **2 moments maximum / 40 leçons / 241 éléments** inchangés ; Scenario **36/108** et Listening **0.88/0.65** inchangés ;
 - `voice-ios.js`, `free-voice.js`, learner, logo et favicon restent sanctuarisés ;
 - aucune écriture durable depuis le planificateur oral ; audio local ≤9 s, sans upload ;
-- gate terrain Build 26.1 toujours ouvert pour `reconnaissance → seconde prise → lecture → reconnaissance suivante`.
+- retour terrain : la lecture de la propre voix après enregistrement fonctionne ; le gate plus large `reconnaissance → seconde prise → lecture → reconnaissance suivante` reste ouvert ;
+- PR runtime **#68**, head certifié `947896ff8eed75aa805be63cc24821b1c2247980` : **20/20 workflows fonctionnels SUCCESS** après rerun inchangé du flake historique Build 26.8 ;
+- runtime production `b6031cd8fa6756eee39496cd62a164b8400d15af` ;
+- `main` : **20/20 workflows fonctionnels SUCCESS** après passage inchangé du même vieux smoke 26.8 ;
+- GitHub Pages **#126 SUCCESS** sur le SHA runtime exact ; total runtime `main` **21/21 SUCCESS Pages incluse**.
 
 ---
 
