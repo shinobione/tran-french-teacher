@@ -17,18 +17,33 @@
     {key:'other',icon:'⋯',vi:'Khác',fr:'Autres détails',hintVi:'Các chỉ báo bổ sung.',hintFr:'Indicateurs complémentaires.'}
   ];
   const META = Object.fromEntries(GROUPS.map(group => [group.key,group]));
+  const VALID_KEYS = new Set(GROUPS.map(group => group.key));
 
   let activeKey = smokeGroup && META[smokeGroup] ? smokeGroup : null;
   let scheduled = false;
 
   function classify(card) {
+    const owned = card.dataset.progressDetailFamily;
+    if (VALID_KEYS.has(owned)) return owned;
+
+    // Prefer stable structural classes. Text is only a compatibility fallback.
+    if (card.matches('.memory-progress-card,.error-intelligence-card') || card.querySelector('.learned-list')) return 'memory';
+    if (card.matches('.mastery-progress-card,.stage3-mastery-card,.mastery-stage3-card')) return 'mastery';
+    if (card.matches('.listening-progress-card,.listening-card')) return 'listening';
+    if (card.matches('.scenario-progress-card,.real-life-progress-card')) return 'real-life';
+    if (card.matches('.stage2-progress-card,.stage3-progress-card,.language-ratio-card,.daily-coach-card')) return 'path';
+
     const value = `${card.className || ''} ${card.querySelector('h2')?.textContent || ''}`.toLocaleLowerCase();
-    if (/memory|error|erreur|mémoire|memoire/.test(value)) return 'memory';
+    if (/memory|error|erreur|mémoire|memoire|éléments appris|elements appris|điều đã học/.test(value)) return 'memory';
     if (/mastery|maîtr|maitr/.test(value)) return 'mastery';
     if (/listening|écoute|ecoute|oral/.test(value)) return 'listening';
     if (/scenario|real-life|situation|français réel|francais reel/.test(value)) return 'real-life';
     if (/stage2|stage3|a1|language|ratio|daily|coach|rythme|adaptive|adapt/.test(value)) return 'path';
     return 'other';
+  }
+
+  function isForbidden(card) {
+    return card.matches('.progress-ux-overview,.progress-ux-curriculum,.curriculum-card');
   }
 
   function ensureDashboard(body) {
@@ -57,16 +72,30 @@
   }
 
   function moveCards(body,dashboard) {
+    const flow = body.closest('.progress-ux-composition')?.querySelector(':scope > .progress-ux-left-flow');
     const directCards = [...body.children].filter(child => child.classList?.contains('card'));
+
     directCards.forEach(card => {
+      // Defensive recovery: summary/curriculum cards can never belong to Details.
+      if (isForbidden(card)) {
+        if (flow) flow.appendChild(card);
+        return;
+      }
       const key = classify(card);
+      card.dataset.progressDetailFamily = key;
       ensurePanel(dashboard,key).querySelector('.progress-detail-panel-cards').appendChild(card);
     });
 
+    // Once a card has an owner, DOM/text mutations must not reclassify it.
     dashboard.querySelectorAll('.progress-detail-panel-cards > .card').forEach(card => {
-      const expected = classify(card);
+      if (isForbidden(card)) {
+        if (flow) flow.appendChild(card);
+        return;
+      }
       const current = card.closest('[data-progress-detail-panel]')?.dataset.progressDetailPanel;
-      if (current !== expected) ensurePanel(dashboard,expected).querySelector('.progress-detail-panel-cards').appendChild(card);
+      const key = VALID_KEYS.has(card.dataset.progressDetailFamily) ? card.dataset.progressDetailFamily : classify(card);
+      card.dataset.progressDetailFamily = key;
+      if (current !== key) ensurePanel(dashboard,key).querySelector('.progress-detail-panel-cards').appendChild(card);
     });
   }
 
@@ -107,16 +136,22 @@
     return `${count} ${T('thẻ','carte'+(count>1?'s':''))}`;
   }
 
+  function stateOf(dashboard) {
+    const counts = Object.fromEntries(GROUPS.map(group => [group.key, cardCount(dashboard,group.key)]));
+    return { counts, total: Object.values(counts).reduce((sum,value) => sum + value,0), active: activeKey };
+  }
+
   function renderDashboard(details,dashboard) {
     const available = GROUPS.filter(group => cardCount(dashboard,group.key) > 0);
     if (activeKey && !available.some(group => group.key === activeKey)) activeKey = null;
-    const signature = available.map(group => `${group.key}:${cardCount(dashboard,group.key)}:${metric(group.key,cardCount(dashboard,group.key))}`).join('|') + `#${activeKey || ''}#${isDebug()?1:0}`;
+    const state = stateOf(dashboard);
+    const signature = available.map(group => `${group.key}:${state.counts[group.key]}:${metric(group.key,state.counts[group.key])}`).join('|') + `#${activeKey || ''}#${isDebug()?1:0}`;
     if (dashboard.dataset.signature === signature) return;
     dashboard.dataset.signature = signature;
 
     const grid = dashboard.querySelector('.progress-detail-grid');
     grid.innerHTML = available.map(group => {
-      const count = cardCount(dashboard,group.key);
+      const count = state.counts[group.key];
       const active = activeKey === group.key;
       return `<button type="button" role="listitem" class="progress-detail-tile ${active?'active':''}" data-progress-detail-open="${group.key}" aria-expanded="${active?'true':'false'}"><span class="progress-detail-icon">${group.icon}</span><span class="progress-detail-tile-copy"><strong>${esc(T(group.vi,group.fr))}</strong><small>${esc(T(group.hintVi,group.hintFr))}</small></span><b>${esc(metric(group.key,count))}</b><i aria-hidden="true">${active?'⌃':'⌄'}</i></button>`;
     }).join('');
@@ -125,14 +160,18 @@
       const panel = dashboard.querySelector(`[data-progress-detail-panel="${group.key}"]`);
       if (!panel) return;
       const shouldShow = activeKey === group.key && cardCount(dashboard,group.key) > 0;
-      if (panel.hidden === shouldShow) panel.hidden = !shouldShow;
+      panel.hidden = !shouldShow;
     });
 
     details.dataset.progressDetailDashboard = '1';
     details.dataset.progressDetailGroups = String(available.length);
     details.dataset.progressDetailActive = activeKey || '';
+    details.dataset.progressDetailTotalCards = String(state.total);
+    details.dataset.progressDetailOtherCards = String(state.counts.other || 0);
     document.documentElement.dataset.detailsDashboardGroups = String(available.length);
     document.documentElement.dataset.detailsDashboardActive = activeKey || '';
+    document.documentElement.dataset.detailsDashboardTotalCards = String(state.total);
+    document.documentElement.dataset.detailsDashboardOtherCards = String(state.counts.other || 0);
   }
 
   function decorate() {
@@ -179,10 +218,14 @@
   schedule();
 
   window.FrenchTranquilleProgressDetailsDashboard = {
-    version:'1.19.1',
-    build:'26.1',
+    version:'1.19.6',
+    build:'26.6',
     decorate,
     active:()=>activeKey,
+    state(){
+      const dashboard = document.querySelector('.progress-detail-dashboard');
+      return dashboard ? stateOf(dashboard) : { counts:{}, total:0, active:activeKey };
+    },
     open(key){ if (META[key]) { activeKey=key; schedule(); } },
     close(){ activeKey=null; schedule(); }
   };
