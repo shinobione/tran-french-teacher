@@ -1,0 +1,175 @@
+name: Build 29 iPhone PWA accessibility smoke
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  iphone-pwa-a11y:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax, manifest and wiring
+        run: |
+          node --check build29-iphone-a11y.js
+          node --check build29-smoke.js
+          node --check build-meta.js
+          node --check sw.js
+          grep -q 'viewport-fit=cover' index.html
+          grep -q 'assets/apple-touch-icon.png?v=1.22.0-b29' index.html
+          grep -q 'build29-iphone-a11y.css?v=1.22.0-b29' index.html
+          grep -q 'build29-iphone-a11y.js?v=1.22.0-b29' index.html
+          grep -q 'build29-smoke.js?v=1.22.0-b29' index.html
+          grep -q 'build-meta.js?v=1.22.0-b29' index.html
+          grep -q "version: '1.22.0', build: '29'" build-meta.js
+          grep -q 'tran-french-teacher-v1.22.0-b29-iphone-pwa-a11y' index.html sw.js
+          grep -q 'build29-iphone-a11y.css' sw.js
+          grep -q 'build29-iphone-a11y.js' sw.js
+          grep -q 'build29-smoke.js' sw.js
+          grep -q 'assets/apple-touch-icon.png' sw.js
+          python3 - <<'PY'
+          import json
+          m=json.load(open('manifest.webmanifest',encoding='utf-8'))
+          assert m['id']=='./'
+          assert m['start_url']=='./'
+          assert m['scope']=='./'
+          assert m['display']=='standalone'
+          assert m['orientation']=='any'
+          assert m['lang']=='vi'
+          assert m.get('prefer_related_applications') is False
+          assert len(m['icons']) >= 2
+          print('manifest contract OK')
+          PY
+
+      - name: Data, voice and branding sanctuaries remain intact
+        run: |
+          test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
+          test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+          grep -q "francais-avec-luc:learner:v1" data-recovery-core.js
+          grep -q "french-tranquille:learning-memory:v1" data-recovery-core.js
+          grep -q "french-tranquille:error-intelligence:v1" data-recovery-core.js
+          grep -q "french-tranquille:scenarios:v1" data-recovery-core.js
+          grep -q "french-tranquille:listening:v1" data-recovery-core.js
+          grep -q "french-tranquille:milestones:v1" data-recovery-core.js
+          grep -q 'normal: 0.88' build-meta.js
+          grep -q 'slow: 0.65' build-meta.js
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-b29-http.log 2>&1 &
+          echo $! >/tmp/ft-b29-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome iPhone 390x844 — touch, semantics and safe viewport
+        run: |
+          profile=/tmp/ft-b29-390
+          file=/tmp/b29-390.html
+          rm -rf "$profile" "$file"
+          timeout --signal=TERM --kill-after=5s 50s \
+            google-chrome --headless=new --no-sandbox --disable-gpu \
+            --user-data-dir="$profile" --window-size=390,844 \
+            --virtual-time-budget=22000 --dump-dom \
+            'http://127.0.0.1:4173/?uxSmoke=lesson8&b29Smoke=mobile' >"$file"
+          grep -q 'data-b29-smoke="passed"' "$file"
+          grep -q 'data-b29-ready="1"' "$file"
+          grep -q 'screen-home' "$file"
+          grep -q 'b27-home' "$file"
+          grep -q 'aria-current="page"' "$file"
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then cat "$file"; exit 1; fi
+
+      - name: Chrome compact iPhone 320x568 — no horizontal drift
+        run: |
+          profile=/tmp/ft-b29-320
+          file=/tmp/b29-320.html
+          rm -rf "$profile" "$file"
+          timeout --signal=TERM --kill-after=5s 50s \
+            google-chrome --headless=new --no-sandbox --disable-gpu \
+            --user-data-dir="$profile" --window-size=320,568 \
+            --virtual-time-budget=22000 --dump-dom \
+            'http://127.0.0.1:4173/?uxSmoke=lesson8&b29Smoke=compact' >"$file"
+          grep -q 'data-b29-smoke="passed"' "$file"
+          grep -q 'data-b29-smoke-viewport="320x568"' "$file"
+          grep -q 'screen-home' "$file"
+
+      - name: Chrome large iPhone 430x932 — no horizontal drift
+        run: |
+          profile=/tmp/ft-b29-430
+          file=/tmp/b29-430.html
+          rm -rf "$profile" "$file"
+          timeout --signal=TERM --kill-after=5s 50s \
+            google-chrome --headless=new --no-sandbox --disable-gpu \
+            --user-data-dir="$profile" --window-size=430,932 \
+            --virtual-time-budget=22000 --dump-dom \
+            'http://127.0.0.1:4173/?uxSmoke=lesson8&b29Smoke=large' >"$file"
+          grep -q 'data-b29-smoke="passed"' "$file"
+          grep -q 'data-b29-smoke-viewport="430x932"' "$file"
+          grep -q 'screen-home' "$file"
+
+      - name: Chrome reduced motion — same functional shell
+        run: |
+          profile=/tmp/ft-b29-reduced
+          file=/tmp/b29-reduced.html
+          rm -rf "$profile" "$file"
+          timeout --signal=TERM --kill-after=5s 50s \
+            google-chrome --headless=new --no-sandbox --disable-gpu \
+            --force-prefers-reduced-motion \
+            --user-data-dir="$profile" --window-size=390,844 \
+            --virtual-time-budget=22000 --dump-dom \
+            'http://127.0.0.1:4173/?uxSmoke=lesson8&b29Smoke=reduced' >"$file"
+          grep -q 'data-b29-smoke="passed"' "$file"
+          grep -q 'data-b29-smoke-reduced="1"' "$file"
+          grep -q 'screen-home' "$file"
+
+      - name: PWA offline — warm install then boot without network server
+        run: |
+          profile=/tmp/ft-b29-offline
+          online1=/tmp/b29-online1.html
+          online2=/tmp/b29-online2.html
+          offline=/tmp/b29-offline.html
+          rm -rf "$profile" "$online1" "$online2" "$offline"
+
+          # First navigation installs the worker; second navigation gives it control.
+          timeout --signal=TERM --kill-after=5s 50s \
+            google-chrome --headless=new --no-sandbox --disable-gpu \
+            --user-data-dir="$profile" --window-size=390,844 \
+            --virtual-time-budget=22000 --dump-dom \
+            'http://127.0.0.1:4173/?uxSmoke=lesson8&b29Smoke=warm1' >"$online1"
+          grep -q 'data-b29-smoke="passed"' "$online1"
+
+          timeout --signal=TERM --kill-after=5s 50s \
+            google-chrome --headless=new --no-sandbox --disable-gpu \
+            --user-data-dir="$profile" --window-size=390,844 \
+            --virtual-time-budget=22000 --dump-dom \
+            'http://127.0.0.1:4173/?uxSmoke=lesson8&b29Smoke=warm2' >"$online2"
+          grep -q 'data-b29-smoke="passed"' "$online2"
+
+          kill "$(cat /tmp/ft-b29-server.pid)" || true
+          rm -f /tmp/ft-b29-server.pid
+          sleep 1
+
+          timeout --signal=TERM --kill-after=5s 55s \
+            google-chrome --headless=new --no-sandbox --disable-gpu \
+            --user-data-dir="$profile" --window-size=390,844 \
+            --virtual-time-budget=24000 --dump-dom \
+            'http://127.0.0.1:4173/?uxSmoke=lesson8&b29Smoke=offline' >"$offline"
+          grep -q 'data-b29-smoke="passed"' "$offline"
+          grep -q 'data-b29-ready="1"' "$offline"
+          grep -q 'screen-home' "$offline"
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$offline"; then cat "$offline"; exit 1; fi
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-b29-server.pid ]; then kill "$(cat /tmp/ft-b29-server.pid)" || true; fi
