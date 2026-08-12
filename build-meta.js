@@ -61,6 +61,31 @@ function installListeningRateBridge() {
 }
 installListeningRateBridge();
 
+function installBuild27TabStateBridge() {
+  const root = document.documentElement;
+  if (!window.FrenchTranquilleBuild27Shell || root.__frenchTranquilleBuild27TabState) return;
+
+  const sync = () => {
+    if (!root.classList.contains('b27-app-shell')) return;
+    if (root.classList.contains('b27-practice-open')) {
+      document.querySelectorAll('.ux-bottom-nav [data-ux-nav]').forEach(button => {
+        button.classList.toggle('active', button.dataset.uxNav === 'practice');
+      });
+      return;
+    }
+    window.FrenchTranquilleUX?.refresh?.();
+  };
+
+  new MutationObserver(mutations => {
+    if (mutations.some(mutation => mutation.type === 'attributes' && mutation.attributeName === 'class')) sync();
+  }).observe(root, { attributes:true, attributeFilter:['class'] });
+
+  root.__frenchTranquilleBuild27TabState = true;
+  queueMicrotask(sync);
+  window.FrenchTranquilleBuild27TabState = { version:META.version, build:META.build, refresh:sync };
+}
+installBuild27TabStateBridge();
+
 function patchDiagnostics() {
   document.querySelectorAll('.diagnostics > div').forEach(row => {
     const label = row.querySelector('span')?.textContent?.trim()?.toLocaleLowerCase();
