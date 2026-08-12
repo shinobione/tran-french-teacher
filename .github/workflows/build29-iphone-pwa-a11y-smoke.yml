@@ -107,10 +107,8 @@ jobs:
               grep -q 'aria-current="page"' "$file" || ok=0
               if [ "$reduced" = 1 ]; then grep -q 'data-b29-smoke-reduced="1"' "$file" || ok=0; fi
               if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then ok=0; fi
-              if [ "$ok" = 1 ]; then
-                passed=1
-                break
-              fi
+              if [ "$ok" = 1 ]; then passed=1; break; fi
+              echo "=== Build 29 ${label} markers ==="
               grep -o 'data-b29-[^ >]*' "$file" | head -50 || true
             done
             test "$passed" = 1
@@ -127,37 +125,64 @@ jobs:
           online2=/tmp/b29-online2.html
           offline=/tmp/b29-offline.html
           rm -rf "$profile" "$online1" "$online2" "$offline"
+
           run_browser() {
             target="$1"; file="$2"; budget="$3"
+            chrome_status=0
             timeout --signal=TERM --kill-after=5s 55s \
               google-chrome --headless=new --no-sandbox --disable-gpu \
               --user-data-dir="$profile" --window-size=390,844 \
-              --virtual-time-budget="$budget" --dump-dom "$target" >"$file" || true
+              --virtual-time-budget="$budget" --dump-dom "$target" >"$file" || chrome_status=$?
+            echo "Build29 offline phase: chrome_status=${chrome_status} bytes=$(wc -c < "$file")"
           }
+
           assert_warm() {
-            file="$1"
-            grep -q 'data-b29-smoke="passed"' "$file"
-            grep -q 'data-b29-audit-home-visible="1"' "$file"
-            grep -q 'data-b29-sw-registered="1"' "$file"
+            file="$1"; label="$2"
+            ok=1
+            grep -q 'data-b29-smoke="passed"' "$file" || ok=0
+            grep -q 'data-b29-audit-home-visible="1"' "$file" || ok=0
+            grep -q 'data-b29-sw-registered="1"' "$file" || ok=0
+            if [ "$ok" != 1 ]; then
+              echo "=== ${label} Build29 markers ==="
+              grep -o 'data-b29-[^ >]*' "$file" | head -70 || true
+              grep -o '<pre id="b29-smoke-failures"[^>]*>[^<]*' "$file" || true
+              return 1
+            fi
           }
+
           run_browser 'http://127.0.0.1:4173/?uxSmoke=lesson8&b29Audit=warm1' "$online1" 22000
-          assert_warm "$online1"
+          assert_warm "$online1" warm1
           run_browser 'http://127.0.0.1:4173/?uxSmoke=lesson8&b29Audit=warm2' "$online2" 22000
-          assert_warm "$online2"
+          assert_warm "$online2" warm2
+
           kill "$(cat /tmp/ft-b29-server.pid)" || true
           rm -f /tmp/ft-b29-server.pid
           sleep 1
+
           run_browser 'http://127.0.0.1:4173/?uxSmoke=lesson8&b29Audit=offline' "$offline" 24000
-          grep -q 'data-b29-smoke="passed"' "$offline"
-          grep -q 'data-b29-ready="1"' "$offline"
-          grep -q 'data-b29-audit-home-visible="1"' "$offline"
-          grep -q 'data-b29-audit-too-small="0"' "$offline"
-          grep -q 'data-b29-audit-unnamed="0"' "$offline"
-          grep -q 'data-b29-audit-current-tabs="1"' "$offline"
-          grep -q 'data-b29-audit-overflow="0"' "$offline"
-          grep -q 'data-b29-sw-registered="1"' "$offline"
-          ! grep -q 'ERR_CONNECTION_REFUSED' "$offline"
-          ! grep -E -q 'id="app"[^>]*><div class="boot-status error' "$offline"
+          offline_ok=1
+          grep -q 'data-b29-smoke="passed"' "$offline" || offline_ok=0
+          grep -q 'data-b29-ready="1"' "$offline" || offline_ok=0
+          grep -q 'data-b29-audit-home-visible="1"' "$offline" || offline_ok=0
+          grep -q 'data-b29-audit-too-small="0"' "$offline" || offline_ok=0
+          grep -q 'data-b29-audit-unnamed="0"' "$offline" || offline_ok=0
+          grep -q 'data-b29-audit-current-tabs="1"' "$offline" || offline_ok=0
+          grep -q 'data-b29-audit-overflow="0"' "$offline" || offline_ok=0
+          grep -q 'data-b29-sw-registered="1"' "$offline" || offline_ok=0
+          if grep -q 'ERR_CONNECTION_REFUSED' "$offline"; then offline_ok=0; fi
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$offline"; then offline_ok=0; fi
+          if [ "$offline_ok" != 1 ]; then
+            echo '=== OFFLINE Build29 markers ==='
+            grep -o 'data-b29-[^ >]*' "$offline" | head -90 || true
+            echo '=== OFFLINE Build29 failure payload ==='
+            grep -o '<pre id="b29-smoke-failures"[^>]*>[^<]*' "$offline" || true
+            echo '=== OFFLINE Speaking Loop markers ==='
+            grep -o 'data-speaking-loop-[^ >]*' "$offline" | head -40 || true
+            echo '=== OFFLINE DOM head ==='
+            head -c 1200 "$offline" || true
+            echo
+            exit 1
+          fi
 
       - name: Stop static server
         if: always()
