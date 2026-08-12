@@ -118,9 +118,6 @@
       if (mobile) nodes.details.open = false;
       else nodes.details.open = true;
 
-      // Start the anti-proliferation clock only after all legitimate engines
-      // have finished their first injection. The old runaway never reaches
-      // five identical consecutive snapshots.
       waitForSettledDashboard(nodes, initial => {
         document.documentElement.dataset.b266DashboardInitial = String(initial.total);
         document.documentElement.dataset.b266DashboardOtherInitial = String(initial.other);
@@ -150,7 +147,13 @@
       waitForSettledDashboard(nodes, initial => {
         const toggle = nodes.curriculum.querySelector('[data-progress-toggle-all]');
         if (!toggle) return;
+        document.documentElement.dataset.b266ToggleFound = '1';
+        document.documentElement.dataset.b266ToggleBefore = nodes.curriculum.dataset.progressExpanded || '';
         toggle.click();
+        document.documentElement.dataset.b266ToggleAfterSync = nodes.curriculum.dataset.progressExpanded || '';
+        setTimeout(() => {
+          document.documentElement.dataset.b266ToggleAfter200 = nodes.curriculum.dataset.progressExpanded || '';
+        }, 200);
         waitFor(() => {
           const card = document.querySelector('.screen-progress .progress-ux-curriculum[data-progress-stage-mode="1"]');
           const visible = Number(card?.dataset.progressVisibleRows || 0);
@@ -163,6 +166,7 @@
           document.documentElement.dataset.b266CurriculumNoWall = stageState.visible < 40 ? '1' : '0';
           const stage25 = stageState.card.querySelector('[data-progress-stage="25"]');
           if (!stage25) return;
+          document.documentElement.dataset.b266Stage25Found = '1';
           stage25.click();
           waitFor(() => {
             const card = document.querySelector('.screen-progress .progress-ux-curriculum');
@@ -181,8 +185,11 @@
     });
   }
 
-  // Version-forward compatibility for the Build 26.5 geometry tribunal. 26.6
-  // preserves its user-visible contract with a nested ownership boundary.
+  document.addEventListener('click', event => {
+    if (event.target.closest?.('[data-progress-toggle-all]')) document.documentElement.dataset.b266ToggleClickObserved = '1';
+    if (event.target.closest?.('[data-progress-stage]')) document.documentElement.dataset.b266StageClickObserved = event.target.closest('[data-progress-stage]').dataset.progressStage || '';
+  }, true);
+
   function legacy265Compat(mobile = false) {
     navigateProgress(nodes => {
       if (!mobile) {
