@@ -4,134 +4,119 @@ PWA de français pensée pour **Trân**, avec priorité à l’oral, au françai
 
 ## Version production
 
-- **v1.19.7**
-- **Build 26.7 — Progress Open-Details Geometry**
+- **v1.19.8**
+- **Build 26.8 — Progress Focus Flow**
 - statut : **✅ PROD / réécoute iPhone à valider terrain**
-- commit runtime production : `eaa4b9f8688a90de85a3f853dc29e59d0b8ac650`
-- PR runtime : **#54**
-- GitHub Pages runtime : **#110 SUCCESS**
-- tribunal runtime : **13 workflows fonctionnels / 13 SUCCESS + Pages SUCCESS**
+- commit runtime production : `1084e1d71a7aebbf6d7dcea9dfa0cabb44f6cbe1`
+- PR runtime : **#56**
+- GitHub Pages runtime : **#112 SUCCESS**
+- tribunal runtime : **14 workflows fonctionnels / 14 SUCCESS + Pages SUCCESS**
 - calibration Listening : **0.88 normal / 0.65 lent**
 - curriculum : **40 leçons / 241 éléments**
 - Scenario : **36 situations / 108 tours**
 - coût : **0 €**
 
-## 🧯 Build 26.7 — ouvrir Détails ne transforme plus le parcours en code-barres
+## 🧭 Build 26.8 — une intention prend l’écran
 
-Une nouvelle vidéo terrain du 12 août 2026 a révélé une régression géométrique distincte du bug de prolifération corrigé en Build 26.6.
+Build 26.7 avait réparé la géométrie de `Parcours`, mais le retour terrain montrait encore un écran trop long : Résumé, Curriculum, tuiles Détails, famille active et cartes moteur restaient tous présents dans le même document.
 
-Comportement observé :
+Build 26.8 remplace ce comportement « parchemin » par un **Focus Flow réversible**.
 
-```text
-Détails fermé
-→ Progress lisible
+### Vue normale
 
-Détails ouvert
-→ colonne apprenante écrasée
-→ textes presque lettre par lettre
-→ lignes de leçon transformées en bandes verticales
-→ grand vide inutile sous le dashboard
-```
-
-### Cause
-
-Build 26.6 avait correctement restauré la frontière DOM historique nécessaire aux moteurs Memory/Mastery/Stage, mais sa grille desktop conservait :
-
-```css
-grid-template-columns:minmax(0,.94fr) minmax(440px,1.06fr);
-```
-
-La colonne Details avait donc un minimum fixe de **440 px**, tandis que la colonne apprenante pouvait théoriquement descendre jusqu’à zéro. À l’ouverture du dashboard, son contenu intrinsèque pouvait protéger la droite et sacrifier le parcours gauche.
-
-### Correction 26.7
-
-La composition DOM 26.6 reste strictement conservée :
+`Parcours` reste compact :
 
 ```text
-progress-layout
-└── progress-ux-composition
-    ├── progress-ux-left-flow
-    │   ├── Résumé
-    │   └── Curriculum
-    └── Détails d’apprentissage
+Résumé
++ curriculum autour de la position actuelle
++ Détails d’apprentissage repliables
 ```
 
-Sur desktop large, lorsque Détails est ouvert :
+### Clic sur une famille Détails
 
-```css
-grid-template-columns:minmax(0,1fr) minmax(0,1fr);
-```
-
-Les deux côtés sont réellement shrinkables et aucun plancher fixe ne peut voler la largeur de l’autre. Le dashboard ouvert passe à **2 tuiles par ligne** pour rester confortable.
-
-Entre **861 et 1040 px**, on ne tente plus de faire rentrer deux colonnes coûte que coûte :
+Un clic sur `Mémoire`, `Maîtrise`, `Compréhension orale`, `Français réel`, `A1 & rythme` ou `Autres détails` déclenche :
 
 ```text
-Résumé + Curriculum
-↓
-Détails
+vue compacte
+→ fade-out court
+→ le contexte inutile disparaît
+→ la famille choisie prend toute la surface Progress
+→ Retour aux détails
+→ fade-in de la vue précédente
 ```
 
-Une pile large et lisible vaut mieux que deux colonnes microscopiques.
+Sur grand desktop, la surface Focus peut utiliser jusqu’à **1420 px** de shell et les cartes détaillées passent en deux colonnes. Sur écran plus étroit et sur iPhone, elles repassent proprement en une colonne.
 
-Mobile `<= 860 px` conserve le comportement Build 26.6.
+### `Voir tout le parcours`
 
-### Preuves Chrome réelles
-
-Le nouveau workflow ouvre réellement `Parcours → Détails` et mesure les rectangles rendus.
-
-**Viewport 1640×900 :**
+Ce bouton devient lui aussi un vrai changement de contexte :
 
 ```text
-composition        920 px
-parcours gauche    452 px
-Détails            452 px
-ligne de leçon min 410 px
-dashboard          2 colonnes
-côte à côte        oui
-overflow horizontal 0
-containment 26.6   oui
+Résumé + Détails disparaissent
+→ Curriculum pleine largeur
+→ 5 étapes visibles
+→ leçons de l’étape active
+→ Retour au résumé
+→ vue compacte restaurée à 5 lignes
 ```
 
-**Viewport 980×900 :**
+Les **40 leçons restent accessibles**, mais ne sont jamais affichées simultanément.
+
+### Mouvement
+
+Les transitions utilisent un fade / léger déplacement court. `prefers-reduced-motion: reduce` supprime l’animation sans modifier le comportement fonctionnel.
+
+Le mouvement est purement cosmétique : l’état logique est validé indépendamment de la fin du fade, afin qu’un clic rapide ne puisse pas laisser l’interface entre deux vues.
+
+## ✅ Preuves navigateur Build 26.8
+
+Le tribunal Chrome ne vérifie pas seulement des classes CSS.
+
+Il exécute réellement :
 
 ```text
-Détails empilé sous le parcours
-parcours gauche    906 px
-ligne de leçon min 864 px
-overflow horizontal 0
-containment 26.6   oui
+vue compacte
+→ Memory focus
+→ retour
+→ Curriculum focus
+→ retour
+→ 5 lignes compactes restaurées
 ```
 
-Le build devient rouge si l’ouverture de Détails recommence à écraser la largeur apprenante.
+Sur desktop `1640×900`, les deux surfaces Focus mesurent **920 px** dans le viewport de test et n’ont aucun overflow horizontal.
 
-## ✅ Build 26.6 reste intact : anti-photocopieuse + curriculum humain
+Le workflow vérifie aussi un focus Détails en viewport mobile `390×844` : une seule colonne, toolbar retour visible, largeur utile au-dessus du seuil mobile et aucun overflow horizontal.
 
-Build 26.7 ne remplace pas l’architecture de 26.6 ; il la rend géométriquement sûre.
+## 🛡️ Build 26.6 et 26.7 restent des contrats actifs
 
-Le contrat anti-prolifération reste sous test permanent :
+Build 26.8 ne remplace pas leurs protections.
+
+### Build 26.6 — containment / anti-photocopieuse
 
 ```text
-Dashboard stabilisé : 12 cartes
-3 secondes plus tard : 12 cartes
-Autres détails : 1
-cartes moteur principales : uniques
-Résumé/Curriculum dans Details : 0
+Dashboard après quiescence : 12 cartes
+3 secondes plus tard       : 12 cartes
+Autres détails             : borné
+cartes moteur              : uniques
 ```
 
-Et les **40 leçons** restent accessibles sans être affichées simultanément :
+Les cartes Memory / Mastery / Listening / Scenario restent dans la frontière DOM historique où leurs moteurs savent les retrouver. Build 26.8 **ne clone ni ne reparent** ces cartes.
 
-1. **Survie A0** — leçons 1–7 ;
-2. **Vie quotidienne** — leçons 8–15 ;
-3. **Fondations A1** — leçons 16–20 ;
-4. **Premiers échanges** — leçons 21–25 ;
-5. **A1 Core** — leçons 26–40.
+### Build 26.7 — géométrie de sécurité
 
-Vue normale : **5 lignes**. À la position synthétique l8, la vue complète affiche **8 leçons** dans l’étape courante. A1 Core en affiche **15**. Jamais 40 simultanément.
+Le garde-fou qui empêchait Détails d’écraser le parcours reste actif et version-forward. Les tests wide/compact continuent à mesurer la géométrie réelle.
 
-## 🧠 Détails d’apprentissage
+## 🧠 Curriculum et Détails
 
-Le dashboard reste groupé par intention :
+Curriculum : **40 leçons / 241 éléments**, organisé en cinq étapes :
+
+1. Survie A0 — 1–7 ;
+2. Vie quotidienne — 8–15 ;
+3. Fondations A1 — 16–20 ;
+4. Premiers échanges — 21–25 ;
+5. A1 Core — 26–40.
+
+Détails d’apprentissage :
 
 ```text
 🧠 Mémoire & révisions
@@ -142,24 +127,13 @@ Le dashboard reste groupé par intention :
 ⋯ Autres détails
 ```
 
-Une seule famille détaillée s’ouvre à la fois. Les cartes historiques ne sont pas clonées et restent dans la frontière DOM où leurs moteurs savent les retrouver.
-
-## 👩‍🏫 Tyffany
-
-**Tyffany** reste le nom visible de la professeure. Les identifiants techniques historiques (`LucieVoice`, `luc-*`, `lucie-*`) et la clé learner restent volontairement inchangés pour éviter toute migration risquée.
+Une seule famille détaillée possède l’écran à la fois.
 
 ## 🎙️ Réécouter sa propre voix — gate terrain toujours ouvert
 
-Build 26.1 reste actif. Après une réponse vocale reconnue, Trân peut faire une **seconde prise locale volontaire** pour s’écouter :
+Build 26.1 reste actif. Après une réponse vocale reconnue, Trân peut faire une **seconde prise locale volontaire** pour s’écouter.
 
-```text
-🎧 Écoute-toi
-[ 🎙️ M’enregistrer pour me réécouter ]
-          ↓
-[ ▶ Réécouter ma voix ]   [ ↻ Refaire ]
-```
-
-Contrat : aucune capture simultanée du premier essai, aucun upload, aucune persistance audio, piste micro stoppée, capture max 9 secondes, aucun événement Memory/Error/Mastery/Session créé par l’auto-écoute.
+Contrat : aucun upload, aucune persistance audio, capture locale bornée, et aucun événement pédagogique créé par l’auto-écoute.
 
 Gate réel iPhone restant :
 
@@ -170,56 +144,47 @@ réponse reconnue
 → réponse vocale suivante toujours reconnue normalement
 ```
 
-La capture exacte du premier essai reste hors scope tant que cette coexistence n’est pas prouvée.
+La capture automatique exacte du premier essai reste hors scope tant que cette coexistence n’est pas prouvée sur le vrai iPhone.
 
-## 🛡️ Baselines conservées
+## 👩‍🏫 Tyffany et compatibilité
+
+**Tyffany** reste le nom visible de la professeure. Les identifiants techniques historiques (`LucieVoice`, `luc-*`, `lucie-*`) restent volontairement inchangés.
+
+Sanctuaires :
 
 - learner : `francais-avec-luc:learner:v1` ;
-- curriculum : **40 leçons / 241 éléments** ;
-- Scenario : **36 situations / 108 tours** ;
-- Listening : **0.88 / 0.65** ;
+- Learning Memory / Scenario / Listening existants ;
+- `voice-ios.js` ;
+- `free-voice.js` ;
+- logo et favicon ;
 - Progression UX Build 25 ;
 - Session UX Build 25.2 ;
 - Real Life French III Build 26 ;
 - Voice Replay + Details Dashboard Build 26.1 ;
-- Click + Listening Rate Build 26.2 ;
-- Interaction Stability Build 26.3 ;
-- Single-scroll + Tyffany Build 26.4 ;
-- Conversation Exit Build 26.5 ;
-- Progress Dashboard Containment + Humanized Curriculum Build 26.6 ;
-- logo, favicon, `voice-ios.js`, `free-voice.js` sanctuarisés ;
-- aucune migration learner/Memory/Scenario/Listening dans Build 26.7.
+- Progress Dashboard Containment Build 26.6 ;
+- Progress Open-Details Geometry Build 26.7 ;
+- aucune migration learner/Memory/Scenario/Listening dans Build 26.8.
 
 ### Baseline historique protégée
 
-Le contrat **v1.17.0 — Build 24 — Real Life French II** reste explicitement protégé : avant Real Life III, Scenario comptait **28 situations / 84 tours**. Le marqueur historique `real-life-data-2.js` reste conservé dans `docs/ARCHITECTURE.md`.
+Le contrat **v1.17.0 — Build 24 — Real Life French II** reste explicitement conservé : avant Real Life III, Scenario comptait **28 situations / 84 tours**.
 
-## CI / production Build 26.7
+## CI / production
 
-PR #54 : **13/13 workflows fonctionnels SUCCESS**.
+PR runtime **#56** : **14/14 workflows fonctionnels SUCCESS**.
 
-Le tribunal 26.7 ajoute aux anciens contrats :
+Production runtime `1084e1d71a7aebbf6d7dcea9dfa0cabb44f6cbe1` :
 
-- ouverture réelle de Détails ;
-- largeur gauche/droite mesurée en pixels ;
-- largeur minimale des lignes de leçon ;
-- absence d’overflow horizontal ;
-- dashboard 2 colonnes en desktop large ;
-- fallback empilé en desktop compact ;
-- containment anti-duplication 26.6 obligatoire.
-
-Production `main` sur `eaa4b9f8688a90de85a3f853dc29e59d0b8ac650` :
-
-- **13/13 workflows fonctionnels SUCCESS** ;
-- **GitHub Pages #110 SUCCESS** ;
-- aucun workflow en échec, en cours ou en attente après certification.
+- **14/14 workflows fonctionnels SUCCESS** ;
+- **GitHub Pages #112 SUCCESS** ;
+- aucun workflow en échec ou en cours après certification.
 
 ## Suite
 
-1. **Gate terrain iPhone Build 26.1** : auto-écoute puis reconnaissance suivante.
+1. **Gate terrain iPhone Build 26.1** — auto-écoute puis reconnaissance suivante.
 2. **Build 27 — Data & Recovery Hardening**.
 3. **Build 28 — iPhone / PWA / Accessibility Hardening**.
 4. **Build 29 — Architecture Hardening**.
 5. **V2.0.0 — Freeze / Release**.
 
-Voir `ROADMAP.md`, `CHANGELOG.md`, `docs/ARCHITECTURE.md`, `docs/BUILD-26-6-PROGRESS-DASHBOARD-CONTAINMENT.md` et `docs/BUILD-26-7-PROGRESS-OPEN-GEOMETRY.md`.
+Voir `ROADMAP.md`, `CHANGELOG.md`, `docs/ARCHITECTURE.md`, `docs/BUILD-26-6-PROGRESS-DASHBOARD-CONTAINMENT.md`, `docs/BUILD-26-7-PROGRESS-OPEN-GEOMETRY.md` et `docs/BUILD-26-8-PROGRESS-FOCUS-FLOW.md`.
