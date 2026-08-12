@@ -118,10 +118,9 @@
       if (mobile) nodes.details.open = false;
       else nodes.details.open = true;
 
-      // Do not start the anti-proliferation clock while normal engines are still
-      // injecting their first legitimate cards. The historical 26.5 runaway
-      // never reaches five identical consecutive snapshots, while a healthy
-      // dashboard settles and then must remain bit-for-bit stable.
+      // Start the anti-proliferation clock only after all legitimate engines
+      // have finished their first injection. The old runaway never reaches
+      // five identical consecutive snapshots.
       waitForSettledDashboard(nodes, initial => {
         document.documentElement.dataset.b266DashboardInitial = String(initial.total);
         document.documentElement.dataset.b266DashboardOtherInitial = String(initial.other);
@@ -138,33 +137,46 @@
           document.documentElement.dataset.b266DashboardBounded = final.total <= 24 ? '1' : '0';
           document.documentElement.dataset.b266DashboardOtherBounded = final.other <= 2 ? '1' : '0';
           document.documentElement.dataset.b266EngineCardsUnique = [final.memoryCards,final.masteryCards,final.stage2Cards,final.stage3Cards].every(value => value <= 1) ? '1' : '0';
+          document.documentElement.dataset.b266ContainmentComplete = '1';
+          if (mobile) document.documentElement.dataset.b266MobileDetailsClosed = nodes.details.open ? '0' : '1';
+        }, 3000);
+      });
+    });
+  }
 
-          window.FrenchTranquilleProgressionUX?.setCurriculumExpanded?.(true);
+  function smokeCurriculumInteraction() {
+    navigateProgress(nodes => {
+      recordContainment(nodes);
+      waitForSettledDashboard(nodes, initial => {
+        const toggle = nodes.curriculum.querySelector('[data-progress-toggle-all]');
+        if (!toggle) return;
+        toggle.click();
+        waitFor(() => {
+          const card = document.querySelector('.screen-progress .progress-ux-curriculum[data-progress-stage-mode="1"]');
+          const visible = Number(card?.dataset.progressVisibleRows || 0);
+          const total = Number(card?.dataset.progressTotalRows || 0);
+          const stageCount = Number(card?.dataset.progressStageCount || 0);
+          return card && visible > 0 && total === 40 && stageCount === 5 ? { card, visible } : null;
+        }, stageState => {
+          document.documentElement.dataset.b266CurriculumStageMode = '1';
+          document.documentElement.dataset.b266CurriculumInitialStageRows = String(stageState.visible);
+          document.documentElement.dataset.b266CurriculumNoWall = stageState.visible < 40 ? '1' : '0';
+          const stage25 = stageState.card.querySelector('[data-progress-stage="25"]');
+          if (!stage25) return;
+          stage25.click();
           waitFor(() => {
-            const card = document.querySelector('.screen-progress .progress-ux-curriculum[data-progress-stage-mode="1"]');
-            const visible = Number(card?.dataset.progressVisibleRows || 0);
-            const total = Number(card?.dataset.progressTotalRows || 0);
-            const stageCount = Number(card?.dataset.progressStageCount || 0);
-            return card && visible > 0 && total === 40 && stageCount === 5 ? { card, visible } : null;
-          }, stageState => {
-            document.documentElement.dataset.b266CurriculumStageMode = '1';
-            document.documentElement.dataset.b266CurriculumInitialStageRows = String(stageState.visible);
-            document.documentElement.dataset.b266CurriculumNoWall = stageState.visible < 40 ? '1' : '0';
-            window.FrenchTranquilleProgressionUX?.setCurriculumStage?.(25);
-            waitFor(() => {
-              const card = document.querySelector('.screen-progress .progress-ux-curriculum');
-              return card?.dataset.progressActiveStage === '25' && Number(card.dataset.progressVisibleRows) === 15 ? card : null;
-            }, card => {
-              document.documentElement.dataset.b266CurriculumA1CoreRows = card.dataset.progressVisibleRows;
-              document.documentElement.dataset.b266CurriculumAllAccessible = card.dataset.progressTotalRows === '40' ? '1' : '0';
+            const card = document.querySelector('.screen-progress .progress-ux-curriculum');
+            return card?.dataset.progressActiveStage === '25' && Number(card.dataset.progressVisibleRows) === 15 ? card : null;
+          }, card => {
+            document.documentElement.dataset.b266CurriculumA1CoreRows = card.dataset.progressVisibleRows;
+            document.documentElement.dataset.b266CurriculumAllAccessible = card.dataset.progressTotalRows === '40' ? '1' : '0';
+            setTimeout(() => {
               const afterStages = dashboardSnapshot(nodes);
               document.documentElement.dataset.b266DashboardStableAfterCurriculum = afterStages && afterStages.total === initial.total && afterStages.signature === initial.signature ? '1' : '0';
-              if (mobile) {
-                document.documentElement.dataset.b266MobileDetailsClosed = nodes.details.open ? '0' : '1';
-              }
-            });
+              document.documentElement.dataset.b266CurriculumInteractionComplete = '1';
+            }, 700);
           });
-        }, 3000);
+        });
       });
     });
   }
@@ -186,6 +198,7 @@
 
   if (smoke === 'progress') setTimeout(() => smokeProgressContainment(false), 160);
   if (smoke === 'progress-mobile') setTimeout(() => smokeProgressContainment(true), 160);
+  if (smoke === 'curriculum') setTimeout(smokeCurriculumInteraction, 160);
   if (legacySmoke === 'progress') setTimeout(() => legacy265Compat(false), 180);
   if (legacySmoke === 'progress-mobile') setTimeout(() => legacy265Compat(true), 180);
 
