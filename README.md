@@ -2,150 +2,107 @@
 
 PWA de français pensée pour **Trân**, avec priorité à l’oral, au français utile dans la vraie vie et à une interface simple sur iPhone.
 
-## Version production
+## État actuel
 
-- **v1.21.0**
-- **Build 28 — Data & Recovery Hardening**
-- statut : **✅ PROD / CLOS — réécoute iPhone Build 26.1 à valider terrain**
-- commit runtime production : `ed09159a6246fe3c1892cb0ff8d03a4beffb7428`
-- PR runtime : **#62**
-- head PR certifié : `dc060ea5304b0526010bd8ac158b70c363525325`
-- tribunal PR : **17/17 workflows SUCCESS**
-- tribunal `main` : **17/17 workflows fonctionnels SUCCESS**
-- GitHub Pages runtime : **#118 SUCCESS**
-- total runtime `main` : **18/18 SUCCESS Pages incluse**
-- curriculum : **40 leçons / 241 éléments**
-- Scenario : **36 situations / 108 tours**
-- Listening : **0.88 normal / 0.65 lent**
-- coût : **0 €**
+### Production certifiée
 
-## 🔐 Build 28 — coffre de données et récupération
+- **v1.22.0**
+- **Build 29 — iPhone / PWA / Accessibility Hardening**
+- statut : **✅ PROD / CLOS**
+- runtime production : `1c01648d89dfb3bd9236b9ad93fbade4e21102fa`
+- PR runtime : **#64**
+- head PR certifié : `27c67ee7b47b9f9a015e6c0072640e0e573de52d`
+- tribunal `main` : **19/19 SUCCESS** après rerun inchangé du seul ancien smoke Build 27 visuel
+- GitHub Pages : **#120 SUCCESS** sur le runtime exact
 
-Après le Build 27 App Shell Reset, le prochain risque prioritaire n’était plus visuel : c’était la possibilité qu’un futur changement, un import ancien ou un `localStorage` corrompu abîme silencieusement la progression réelle de Trân.
+### Candidat en cours
 
-Build 28 ajoute donc une couche Recovery chargée **avant `app.js`**.
+- **v1.22.1**
+- **Build 29.1 — Speaking Loop Content**
+- statut : **🧪 CANDIDAT / NON MERGÉ**
+- PR : **#66**
 
-Principe canonique :
+Baselines produit inchangées :
 
-> **Une donnée invalide, une restauration ratée ou une migration ancienne ne doit jamais se transformer silencieusement en progression neuve.**
+- curriculum : **40 leçons / 241 éléments** ;
+- Scenario : **36 situations / 108 tours** ;
+- Listening : **0.88 normal / 0.65 lent** ;
+- coût : **0 €**.
 
-### Six stores durables protégés
+## 📱 Build 29 — iPhone / PWA / Accessibility
 
-Le coffre V2 connaît explicitement :
+Build 29 durcit la façade Build 27 pour le vrai usage iPhone :
 
-1. `francais-avec-luc:learner:v1` — progression canonique ;
-2. `french-tranquille:learning-memory:v1` — mémoire / répétition espacée ;
-3. `french-tranquille:error-intelligence:v1` — erreurs observables ;
-4. `french-tranquille:scenarios:v1` — situations réelles ;
-5. `french-tranquille:listening:v1` — compréhension orale ;
-6. `french-tranquille:milestones:v1` — jalons.
+- `viewport-fit=cover` et safe areas ;
+- cibles tactiles coarse-pointer d’au moins 44 px ;
+- focus clavier visible ;
+- `aria-current`, progressbar et régions live ;
+- gestion `VisualViewport` pour clavier iOS ;
+- standalone/PWA ;
+- textes longs, petits écrans et paysage compact ;
+- `prefers-reduced-motion` ;
+- `prefers-contrast` ;
+- manifest/install/offline vérifiés ;
+- matrice Chrome 320×568, 390×844 et 430×932 ;
+- boot offline après chauffe du Service Worker.
 
-Les réglages voix restent volontairement locaux à l’appareil : un `voiceURI` iPhone n’est pas une donnée pédagogique portable.
+La PR #65 a exploré une isolation supplémentaire des anciens smoke harnesses du Service Worker. Elle n’a pas stabilisé le vieux contrôle visuel Build 27 et a donc été **fermée sans merge**. Aucun runtime de #65 n’est en production.
 
-### Backup V2 complet
+## 🎙️ Build 29.1 — Speaking Loop Content
 
-L’ancien export historique sauvegardait essentiellement learner + Learning Memory.
+L’objectif est de transformer la demande de Trân — **pouvoir se réécouter** — en vraie mécanique pédagogique intégrée aux leçons, sans la transformer en réglage technique.
 
-Le format V2 exporte désormais les **six stores** après validation de schéma :
+Chaque leçon reçoit au maximum **deux moments oraux** :
 
-```text
-french-tranquille-backup
-version: 2
-stores:
-  learner
-  memory
-  errors
-  scenarios
-  listening
-  milestones
-```
+1. une phrase utile de la leçon ;
+2. après réussite de la situation finale, la réponse naturelle de cette situation.
 
-### Restore transactionnel
-
-Avant un import :
+Flux candidat :
 
 ```text
-snapshot pre-restore
-→ snapshot pre-migration si backup ancien
-→ validation
-→ écriture des six stores
-→ relecture + validation
-→ comparaison exacte
-→ rollback automatique si échec
+🔊 Tyffany
+→ Trân répète / dit la phrase
+→ 🎙️ seconde prise locale volontaire
+→ ▶ Ma voix
+→ 🔊 Tyffany
+→ ↻ Refaire si elle veut
+→ Continuer reste toujours disponible
 ```
 
-Une panne au milieu d’une restauration ne doit donc jamais laisser un mélange incohérent de stores.
+Principes :
 
-### Migration backup V1 sûre
+- **40/40 leçons couvertes** par le sélecteur de contenu ;
+- **2 moments maximum** par leçon ;
+- aucun faux score de prononciation ;
+- l’app invite seulement à comparer rythme et sons ;
+- `getUserMedia` uniquement après clic explicite ;
+- prise locale limitée à 9 secondes ;
+- aucun upload ;
+- aucun stockage dans learner/Memory/backup ;
+- Blob temporaire détruit au changement d’étape/page ;
+- Tyffany utilise toujours la chaîne vocale existante.
 
-Un ancien backup V1 ne connaissait que learner + Memory. Build 28 restaure ces données **sans supprimer** Error / Scenario / Listening / Milestones déjà présents sur l’appareil.
+Le nouveau tribunal Chrome ouvre une **vraie Leçon 1**, traverse ses étapes et quiz, exige le moment Speaking Loop de contenu, réussit la situation finale puis exige le second moment. Sur `390×844`, il vérifie aussi zéro overflow et une cible tactile d’au moins 44 px.
 
-### Corruption : quarantaine + last-good
+## 🔐 Build 28 — Data & Recovery toujours sous le shell
 
-Au démarrage :
+Les six stores durables restent protégés :
 
-- JSON invalide ou schéma invalide → quarantaine ;
-- restauration depuis `last-good` lorsqu’il existe ;
-- sinon fallback possible vers le snapshot historique Build 22 ;
-- si aucun fallback valide n’existe, seul le store fautif est retiré et la donnée brute reste conservée en quarantaine.
+1. `francais-avec-luc:learner:v1` ;
+2. `french-tranquille:learning-memory:v1` ;
+3. `french-tranquille:error-intelligence:v1` ;
+4. `french-tranquille:scenarios:v1` ;
+5. `french-tranquille:listening:v1` ;
+6. `french-tranquille:milestones:v1`.
 
-Pendant l’utilisation, une écriture invalide sur un store critique est bloquée avant d’écraser la dernière version saine.
+Build 28 conserve backup V2, restore transactionnel, rollback, migration V1 sûre, quarantaine, `last-good`, snapshots pré-restore/pré-migration/pré-reset et le filet historique Build 22.
 
-Snapshots Recovery :
-
-```text
-french-tranquille:recovery:last-good:v1
-french-tranquille:recovery:pre-restore:v1
-french-tranquille:recovery:pre-migration:v1
-french-tranquille:recovery:pre-reset:v1
-french-tranquille:recovery:quarantine:v1
-```
-
-Le filet historique `french-tranquille:safety:pre-build22:v1` reste conservé.
-
-### Reset cohérent
-
-Le reset learner est désormais atomique :
-
-```text
-snapshot pre-reset
-→ learner
-→ Memory
-→ Error
-→ Scenario
-→ Listening
-→ Milestones
-→ supprimés ensemble
-```
-
-Le snapshot pré-reset reste disponible pour récupération/diagnostic.
-
-## ✅ Preuves Build 28
-
-Le tribunal Node et Chrome prouve réellement :
-
-- backup V2 = six stores ;
-- mutation → restore → état durable exact ;
-- panne simulée en plein restore → rollback exact ;
-- JSON et schémas invalides rejetés ;
-- migration V1 conserve les stores modernes ;
-- tentative d’écriture learner corrompue bloquée ;
-- corruption injectée **avant `app.js`** réparée depuis `last-good` ;
-- reset des six stores + récupération du profil historique ;
-- ancien profil synthétique : **7 leçons terminées + `l8=4`** récupérés ;
-- Home Build 27 mobile `390×844` toujours intacte.
-
-La PR #62 head `dc060ea…` a passé **17/17 workflows**. Après merge, le runtime `ed09159a…` a passé **17/17 workflows fonctionnels sur `main`**, puis **GitHub Pages #118 SUCCESS**, soit **18/18 SUCCESS Pages incluse**.
-
-## 🧭 App Shell Build 27 toujours intact
-
-La façade apprenante reste :
+## 🧭 App Shell Build 27
 
 ### Aujourd’hui
 - prochaine leçon ;
 - CTA principal `Continuer` ;
-- raccourcis `Réviser` / `Écouter` ;
-- durée discrète.
+- raccourcis `Réviser` / `Écouter`.
 
 ### Pratiquer
 - 🎙️ Parler ;
@@ -158,50 +115,43 @@ La façade apprenante reste :
 - prochaine leçon ;
 - étape actuelle ;
 - cinq leçons utiles ;
-- parcours complet en 5 étapes.
+- parcours complet en cinq étapes.
 
-Memory / Mastery / Listening / Scenario / Error Intelligence restent des moteurs, pas des catégories que Trân doit piloter. Le cockpit historique reste en DEBUG FR.
+Memory / Mastery / Listening / Scenario / Error Intelligence restent des moteurs sous le capot. Le cockpit historique reste accessible en DEBUG FR.
 
 ## 🛡️ Sanctuaires
 
-Byte-identiques pendant Build 28 :
+Doivent rester byte-identiques pendant Build 29.1 :
 
-- `voice-ios.js` ;
-- `free-voice.js` ;
-- `assets/LOGO.png` ;
-- `assets/Favicon.png`.
+- `voice-ios.js` — `38e97aa3ef62dd6dcda224901b435f0973618679` ;
+- `free-voice.js` — `b4c19b1936c788ee017eac9ba14e5a62c159e8d5` ;
+- `assets/LOGO.png` — `64eaa6ad9781c6a9075d4f68615fc44344c4e21c` ;
+- `assets/Favicon.png` — `c358672368a960bf7617e5532aff3e3319cddb3e`.
 
-Baselines conservées :
+Le learner historique reste **`francais-avec-luc:learner:v1`**.
 
-- curriculum **40 / 241** ;
-- Scenario production **36 / 108** ;
-- Listening **0.88 / 0.65** ;
-- App Shell Build 27 ;
-- containment Build 26.6 ;
-- geometry Build 26.7 ;
-- Focus Flow Build 26.8 ;
-- Content Reliability Build 26.9.
+### Baseline historique qualité
 
-Baseline historique protégée : **v1.17.0 — Build 24 — Real Life French II**, Scenario **28 situations / 84 tours** avant Pack III ; `real-life-data-2.js` reste canonique.
+La CI conserve explicitement : **v1.17.0 — Build 24 — Real Life French II**, avec **28 situations / 84 tours** avant Pack III et le fichier canonique `real-life-data-2.js`.
 
-## 🎙️ Gate terrain toujours ouvert
+## 🎧 Gate terrain iPhone toujours ouvert
 
-Build 26.1 reste actif :
+Build 26.1 reste actif et distinct du nouveau Speaking Loop :
 
 ```text
-réponse reconnue
+réponse Free Voice reconnue
 → seconde prise locale
 → réécoute correcte
 → réponse vocale suivante toujours reconnue normalement
 ```
 
-Cette coexistence doit encore être confirmée sur le vrai iPhone avant d’enregistrer automatiquement le premier essai exact.
+Tant que ce flux n’est pas confirmé sur le vrai iPhone, **l’enregistrement automatique du premier essai exact reste interdit**. Build 29.1 ajoute l’auto-écoute aux leçons, mais ne lance pas MediaRecorder en parallèle de la reconnaissance Safari.
 
 ## Suite
 
-1. **Gate terrain iPhone Build 26.1**.
-2. **Build 29 — iPhone / PWA / Accessibility Hardening**.
+1. **Build 29.1 — Speaking Loop Content** : candidat actuel.
+2. **Gate terrain iPhone Build 26.1** : reconnaissance → réécoute → reconnaissance suivante.
 3. **Build 30 — Architecture Hardening**.
 4. **V2.0.0 — Freeze / Release**.
 
-Voir `ROADMAP.md`, `CHANGELOG.md`, `docs/ARCHITECTURE.md`, `docs/BUILD-27-APP-SHELL-RESET.md` et `docs/BUILD-28-DATA-RECOVERY.md`.
+Voir `ROADMAP.md`, `CHANGELOG.md`, `docs/ARCHITECTURE.md`, `docs/BUILD-29-IPHONE-PWA-A11Y.md` et `docs/BUILD-29-1-SPEAKING-LOOP-CONTENT.md`.
