@@ -1,0 +1,146 @@
+name: Build 31 Learner Intelligence Core
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  learner-intelligence:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Static learner-model contracts
+        run: |
+          node --check learner-intelligence.js
+          node --check learner-intelligence-smoke.js
+          node --check build31-loader.js
+          node --check settings-legal.js
+          node --check build-meta.js
+          node --check sw.js
+          grep -Fq "const VERSION = '2.1.0'" learner-intelligence.js
+          grep -Fq 'const BUILD = 31' learner-intelligence.js
+          grep -Fq "const META = { version: '2.1.0', build: '31'" build-meta.js
+          grep -Fq './build31-loader.js?v=2.1.0-b31' settings-legal.js
+          grep -Fq "const B31='2.1.0-b31'" sw.js
+          grep -Fq 'learner-intelligence.css?v=${B31}' sw.js
+          grep -Fq 'learner-intelligence.js?v=${B31}' sw.js
+          grep -Fq 'learner-intelligence-smoke.js?v=${B31}' sw.js
+          grep -Fq "return 'recognition'" learner-intelligence.js
+          ! grep -q 'localStorage.setItem' learner-intelligence.js
+          ! grep -q 'localStorage.setItem' build31-loader.js
+          python3 - <<'PY'
+          import json
+          r=json.load(open('release-v2.json',encoding='utf-8'))
+          assert r['version']=='2.0.0' and r['architectureBuild']==30 and r['status']=='freeze'
+          assert len(r['durableStores'])==6
+          print('Frozen V2 release contract unchanged under Build 31')
+          PY
+
+      - name: Frozen core, iPhone voice and branding sanctuaries stay byte-identical
+        run: |
+          test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+          test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
+          test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-b31-http.log 2>&1 &
+          echo $! >/tmp/ft-b31-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome desktop — clean learner gets a deterministic first step
+        run: |
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-b31-clean-$attempt"
+            file="/tmp/b31-clean-$attempt.html"
+            rm -rf "$profile" "$file"
+            timeout --signal=TERM --kill-after=5s 70s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --disable-background-timer-throttling --disable-renderer-backgrounding \
+              --user-data-dir="$profile" --window-size=1440,900 \
+              --virtual-time-budget=42000 --dump-dom \
+              'http://127.0.0.1:4173/?debug=fr&b31Audit=clean' >"$file" || true
+            ok=1
+            for marker in \
+              'data-b31-complete="1"' \
+              'data-b31-ready="1"' \
+              'data-b31-version="2.1.0"' \
+              'data-b31-build="31"' \
+              'data-b31-meta-version="2.1.0"' \
+              'data-b31-meta-build="31"' \
+              'data-b31-lessons="40"' \
+              'data-b31-items="241"' \
+              'data-b31-bands="5"' \
+              'data-b31-band-lessons="40"' \
+              'data-b31-band-items="241"' \
+              'data-b31-recommendation="lesson"' \
+              'data-b31-recommendation-lesson="l1"' \
+              'data-b31-voice-neutral="1"' \
+              'data-b31-progress-card="1"' \
+              'data-b31-details-collapsed="1"' \
+              'data-b31-stores-unchanged="1"' \
+              'data-b31-horizontal-overflow="0"'; do
+              grep -q "$marker" "$file" || ok=0
+            done
+            grep -Fq 'Plan d’apprentissage intelligent' "$file" || ok=0
+            if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then ok=0; fi
+            if [ "$ok" = 1 ]; then passed=1; break; fi
+            echo '=== Build 31 clean markers ==='
+            grep -o 'data-b31-[^ >]*' "$file" | head -100 || true
+          done
+          test "$passed" = 1
+
+      - name: Chrome mobile 390x844 — Trân lesson-8 profile stays exact and gets lesson 8
+        run: |
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-b31-old-$attempt"
+            file="/tmp/b31-old-$attempt.html"
+            rm -rf "$profile" "$file"
+            timeout --signal=TERM --kill-after=5s 70s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --disable-background-timer-throttling --disable-renderer-backgrounding \
+              --user-data-dir="$profile" --window-size=390,844 \
+              --virtual-time-budget=44000 --dump-dom \
+              'http://127.0.0.1:4173/?uxSmoke=lesson8&b31Audit=old-user' >"$file" || true
+            ok=1
+            for marker in \
+              'data-b31-complete="1"' \
+              'data-b31-ready="1"' \
+              'data-b31-recommendation="lesson"' \
+              'data-b31-recommendation-lesson="l8"' \
+              'data-b31-old-user-completed="7"' \
+              'data-b31-old-user-known="40"' \
+              'data-b31-old-user-l8="4"' \
+              'data-b31-voice-neutral="1"' \
+              'data-b31-progress-card="1"' \
+              'data-b31-details-collapsed="1"' \
+              'data-b31-stores-unchanged="1"' \
+              'data-b31-horizontal-overflow="0"'; do
+              grep -q "$marker" "$file" || ok=0
+            done
+            grep -Fq 'Kế hoạch học thông minh' "$file" || ok=0
+            if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then ok=0; fi
+            if [ "$ok" = 1 ]; then passed=1; break; fi
+            echo '=== Build 31 old-user markers ==='
+            grep -o 'data-b31-[^ >]*' "$file" | head -100 || true
+          done
+          test "$passed" = 1
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-b31-server.pid ]; then kill "$(cat /tmp/ft-b31-server.pid)" || true; fi
