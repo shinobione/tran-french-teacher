@@ -37,7 +37,6 @@ jobs:
 
       - name: Learner, voice and branding sanctuaries remain byte-identical
         run: |
-          test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6d7e69f86f9aee390e003be" 2>/dev/null || true
           test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
           test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
           test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
@@ -139,6 +138,23 @@ jobs:
           done
           test "$passed" = 1
 
+      - name: Chrome visual states — overlays are fully settled
+        run: |
+          for target in practice journey; do
+            profile="/tmp/ft-b27-settle-$target"
+            file="/tmp/b27-settle-$target.html"
+            rm -rf "$profile" "$file"
+            timeout --signal=TERM --kill-after=5s 40s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=1640,900 \
+              --virtual-time-budget=16000 --dump-dom \
+              "http://127.0.0.1:4173/?uxSmoke=lesson8&debug=fr&b27Smoke=visual-$target" >"$file"
+            grep -q "data-b27-visual-ready=\"$target\"" "$file"
+            grep -q 'data-b27-visual-entering="0"' "$file"
+            grep -q 'data-b27-visual-leaving="0"' "$file"
+            grep -q 'data-b27-visual-overflow="0"' "$file"
+          done
+
       - name: Capture visual-review screenshots
         run: |
           mkdir -p artifacts
@@ -148,7 +164,7 @@ jobs:
             rm -rf "$profile"
             timeout --signal=TERM --kill-after=5s 35s \
               google-chrome --headless=new --no-sandbox --disable-gpu --hide-scrollbars \
-              --user-data-dir="$profile" --window-size="$size" --virtual-time-budget=12000 \
+              --user-data-dir="$profile" --window-size="$size" --virtual-time-budget=16000 \
               --screenshot="artifacts/$name.png" "$url"
             test -s "artifacts/$name.png"
           }
