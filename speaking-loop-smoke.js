@@ -33,17 +33,13 @@
       const target = lesson.items.find(item => question.includes(item.fr));
       expected = target?.vi || '';
     }
-    const option = [...quiz.querySelectorAll('[data-choice]')].find(button => text(button) === expected);
-    if (!option && lesson.challenge?.answer) {
-      const challenge = [...quiz.querySelectorAll('[data-choice]')].find(button => text(button) === lesson.challenge.answer);
-      challenge?.click();
-      return Boolean(challenge);
-    }
+    let option = [...quiz.querySelectorAll('[data-choice]')].find(button => text(button) === expected);
+    if (!option && lesson.challenge?.answer) option = [...quiz.querySelectorAll('[data-choice]')].find(button => text(button) === lesson.challenge.answer);
     option?.click();
     return Boolean(option);
   }
 
-  async function advanceUntil(kind, lesson, maxMoves=18) {
+  async function advanceUntil(kind, lesson, maxMoves=24) {
     for (let move=0; move<maxMoves; move++) {
       window.FrenchTranquilleSpeakingLoop?.refresh?.();
       const panel = document.querySelector(`.screen-lesson .speaking-loop-card[data-speaking-loop="${kind}"]`);
@@ -92,24 +88,24 @@
       return;
     }
     const teachRect = teach.getBoundingClientRect();
-    const teachButtons = [...teach.querySelectorAll('button')].filter(visible);
+    const nativeModel = teach.parentElement?.querySelector('.french-block .listen[data-speak]');
+    const teachTargets = [nativeModel, ...teach.querySelectorAll('button')].filter(visible);
     root.dataset.b291TeachReady = '1';
     root.dataset.b291TeachPhrase = teach.dataset.speakingLoopPhrase || '';
-    root.dataset.b291TeachButtons = String(teachButtons.length);
     root.dataset.b291TeachWidth = String(Math.round(teachRect.width));
-    root.dataset.b291TeachMinTarget = String(Math.round(Math.min(...teachButtons.map(button => button.getBoundingClientRect().height))));
+    root.dataset.b291TeachMinTarget = teachTargets.length ? String(Math.round(Math.min(...teachTargets.map(button => button.getBoundingClientRect().height)))) : '0';
 
-    const challenge = await advanceUntil('challenge', lesson, 22);
-    if (!challenge) {
-      root.dataset.b291SmokeError = 'challenge';
+    const final = await advanceUntil('recap', lesson, 26);
+    if (!final) {
+      root.dataset.b291SmokeError = 'final';
       return;
     }
-    const challengeRect = challenge.getBoundingClientRect();
-    root.dataset.b291ChallengeReady = '1';
-    root.dataset.b291ChallengePhrase = challenge.dataset.speakingLoopPhrase || '';
-    root.dataset.b291ChallengeWidth = String(Math.round(challengeRect.width));
+    const finalRect = final.getBoundingClientRect();
+    root.dataset.b291FinalReady = '1';
+    root.dataset.b291FinalPhrase = final.dataset.speakingLoopPhrase || '';
+    root.dataset.b291FinalWidth = String(Math.round(finalRect.width));
     root.dataset.b291HorizontalOverflow = String(Math.max(0, Math.ceil(document.documentElement.scrollWidth - document.documentElement.clientWidth)));
-    root.dataset.b291NoPronunciationScore = /prononciation\s*[:=]\s*\d|\d+\s*%/i.test(text(teach)+text(challenge)) ? '0' : '1';
+    root.dataset.b291NoPronunciationScore = /prononciation\s*[:=]\s*\d|\d+\s*%/i.test(text(teach)+text(final)) ? '0' : '1';
     root.dataset.b291SmokeComplete = '1';
   }
 
