@@ -1,9 +1,9 @@
-import './runtime-contracts.js?v=1.23.0-b30';
-import './runtime-bridge.js?v=1.23.0-b30';
+import './runtime-contracts.js?v=2.0.0-b30';
+import './runtime-bridge.js?v=2.0.0-b30';
 
 // Production baseline kept explicit for historical CI contracts.
 const PRODUCTION_BASELINE = { version: '1.17.0', build: 24 };
-const META = { version: '1.23.0', build: '30', baseline: PRODUCTION_BASELINE };
+const META = { version: '2.0.0', build: '30', baseline: PRODUCTION_BASELINE };
 
 window.FrenchTranquilleBuildMeta = META;
 
@@ -41,8 +41,14 @@ function installSpeakingLoopAssets() {
     }
     if (params.has('b30Audit') && !document.querySelector('script[data-build30-architecture-smoke]')) {
       const smoke = document.createElement('script');
-      smoke.src = './build30-architecture-smoke.js?v=1.23.0-b30';
+      smoke.src = './build30-architecture-smoke.js?v=2.0.0-b30';
       smoke.dataset.build30ArchitectureSmoke = '1';
+      document.body.appendChild(smoke);
+    }
+    if (params.has('v2Audit') && !document.querySelector('script[data-v2-release-smoke]')) {
+      const smoke = document.createElement('script');
+      smoke.src = './v2-release-smoke.js?v=2.0.0';
+      smoke.dataset.v2ReleaseSmoke = '1';
       document.body.appendChild(smoke);
     }
   });
