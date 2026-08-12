@@ -4,141 +4,185 @@ PWA de français pensée pour **Trân**, avec priorité à l’oral, au françai
 
 ## Version production
 
-- **v1.20.0**
-- **Build 27 — App Shell Reset**
-- statut : **✅ PROD / réécoute iPhone à valider terrain**
-- commit runtime production : `beeb9ce8ba081ed0298edbcc339dca41600e4d09`
-- PR runtime : **#60**
-- head PR certifié : `dba27d35b59b78bb63b1bf930c5f47b119feff36`
-- tribunal PR : **16/16 workflows fonctionnels SUCCESS**
-- tribunal `main` : **16/16 fonctionnels SUCCESS + Pages SUCCESS** ; le seul premier rouge historique Build 26.8 a repassé le même job inchangé
-- GitHub Pages runtime : **#116 SUCCESS**
+- **v1.21.0**
+- **Build 28 — Data & Recovery Hardening**
+- statut : **✅ PROD / CLOS — réécoute iPhone Build 26.1 à valider terrain**
+- commit runtime production : `ed09159a6246fe3c1892cb0ff8d03a4beffb7428`
+- PR runtime : **#62**
+- head PR certifié : `dc060ea5304b0526010bd8ac158b70c363525325`
+- tribunal PR : **17/17 workflows SUCCESS**
+- tribunal `main` : **17/17 workflows fonctionnels SUCCESS**
+- GitHub Pages runtime : **#118 SUCCESS**
+- total runtime `main` : **18/18 SUCCESS Pages incluse**
 - curriculum : **40 leçons / 241 éléments**
 - Scenario : **36 situations / 108 tours**
 - Listening : **0.88 normal / 0.65 lent**
 - coût : **0 €**
 
-## 🧭 Build 27 — une vraie façade d’app
+## 🔐 Build 28 — coffre de données et récupération
 
-Le retour terrain après Builds 26.6 → 26.9 a montré que `Parcours` était devenu techniquement fiable mais restait trop proche d’un dashboard de moteurs pédagogiques.
+Après le Build 27 App Shell Reset, le prochain risque prioritaire n’était plus visuel : c’était la possibilité qu’un futur changement, un import ancien ou un `localStorage` corrompu abîme silencieusement la progression réelle de Trân.
 
-Build 27 arrête donc de polir le cockpit et sépare enfin clairement :
-
-```text
-moteurs pédagogiques historiques
-        ↓
-restent propriétaires des données
-        ↓
-Build 27 App Shell
-        ↓
-interface simple pour Trân
-```
+Build 28 ajoute donc une couche Recovery chargée **avant `app.js`**.
 
 Principe canonique :
 
-> **La complexité appartient aux moteurs. Trân voit seulement ce qu’elle doit faire maintenant.**
+> **Une donnée invalide, une restauration ratée ou une migration ancienne ne doit jamais se transformer silencieusement en progression neuve.**
 
-### Aujourd’hui
+### Six stores durables protégés
 
-La Home affiche uniquement :
+Le coffre V2 connaît explicitement :
 
-- prochaine leçon ;
-- un CTA principal `Continuer` ;
-- deux raccourcis : `Réviser` / `Écouter` ;
-- un rappel discret de durée.
+1. `francais-avec-luc:learner:v1` — progression canonique ;
+2. `french-tranquille:learning-memory:v1` — mémoire / répétition espacée ;
+3. `french-tranquille:error-intelligence:v1` — erreurs observables ;
+4. `french-tranquille:scenarios:v1` — situations réelles ;
+5. `french-tranquille:listening:v1` — compréhension orale ;
+6. `french-tranquille:milestones:v1` — jalons.
 
-L’ancien dashboard Home continue d’exister sous le capot pour les moteurs mais n’est plus une interface apprenante.
+Les réglages voix restent volontairement locaux à l’appareil : un `voiceURI` iPhone n’est pas une donnée pédagogique portable.
 
-### Pratiquer
+### Backup V2 complet
 
-Le bouton central ouvre une vraie page dédiée avec quatre intentions :
+L’ancien export historique sauvegardait essentiellement learner + Learning Memory.
+
+Le format V2 exporte désormais les **six stores** après validation de schéma :
 
 ```text
-🎙️ Parler
-🎧 Écouter
-↻ Réviser
-♥ Dans la vraie vie
+french-tranquille-backup
+version: 2
+stores:
+  learner
+  memory
+  errors
+  scenarios
+  listening
+  milestones
 ```
 
-Une intention = un écran. `Dans la vraie vie` réutilise le vrai Scenario Engine et privilégie les situations personnelles Jerry déjà débloquées.
+### Restore transactionnel
+
+Avant un import :
+
+```text
+snapshot pre-restore
+→ snapshot pre-migration si backup ancien
+→ validation
+→ écriture des six stores
+→ relecture + validation
+→ comparaison exacte
+→ rollback automatique si échec
+```
+
+Une panne au milieu d’une restauration ne doit donc jamais laisser un mélange incohérent de stores.
+
+### Migration backup V1 sûre
+
+Un ancien backup V1 ne connaissait que learner + Memory. Build 28 restaure ces données **sans supprimer** Error / Scenario / Listening / Milestones déjà présents sur l’appareil.
+
+### Corruption : quarantaine + last-good
+
+Au démarrage :
+
+- JSON invalide ou schéma invalide → quarantaine ;
+- restauration depuis `last-good` lorsqu’il existe ;
+- sinon fallback possible vers le snapshot historique Build 22 ;
+- si aucun fallback valide n’existe, seul le store fautif est retiré et la donnée brute reste conservée en quarantaine.
+
+Pendant l’utilisation, une écriture invalide sur un store critique est bloquée avant d’écraser la dernière version saine.
+
+Snapshots Recovery :
+
+```text
+french-tranquille:recovery:last-good:v1
+french-tranquille:recovery:pre-restore:v1
+french-tranquille:recovery:pre-migration:v1
+french-tranquille:recovery:pre-reset:v1
+french-tranquille:recovery:quarantine:v1
+```
+
+Le filet historique `french-tranquille:safety:pre-build22:v1` reste conservé.
+
+### Reset cohérent
+
+Le reset learner est désormais atomique :
+
+```text
+snapshot pre-reset
+→ learner
+→ Memory
+→ Error
+→ Scenario
+→ Listening
+→ Milestones
+→ supprimés ensemble
+```
+
+Le snapshot pré-reset reste disponible pour récupération/diagnostic.
+
+## ✅ Preuves Build 28
+
+Le tribunal Node et Chrome prouve réellement :
+
+- backup V2 = six stores ;
+- mutation → restore → état durable exact ;
+- panne simulée en plein restore → rollback exact ;
+- JSON et schémas invalides rejetés ;
+- migration V1 conserve les stores modernes ;
+- tentative d’écriture learner corrompue bloquée ;
+- corruption injectée **avant `app.js`** réparée depuis `last-good` ;
+- reset des six stores + récupération du profil historique ;
+- ancien profil synthétique : **7 leçons terminées + `l8=4`** récupérés ;
+- Home Build 27 mobile `390×844` toujours intacte.
+
+La PR #62 head `dc060ea…` a passé **17/17 workflows**. Après merge, le runtime `ed09159a…` a passé **17/17 workflows fonctionnels sur `main`**, puis **GitHub Pages #118 SUCCESS**, soit **18/18 SUCCESS Pages incluse**.
+
+## 🧭 App Shell Build 27 toujours intact
+
+La façade apprenante reste :
+
+### Aujourd’hui
+- prochaine leçon ;
+- CTA principal `Continuer` ;
+- raccourcis `Réviser` / `Écouter` ;
+- durée discrète.
+
+### Pratiquer
+- 🎙️ Parler ;
+- 🎧 Écouter ;
+- ↻ Réviser ;
+- ♥ Dans la vraie vie.
 
 ### Progrès
-
-L’écran normal montre seulement :
-
 - position A0 → A1 ;
 - prochaine leçon ;
 - étape actuelle ;
-- cinq leçons utiles autour de la position ;
-- `Voir tout le parcours`.
+- cinq leçons utiles ;
+- parcours complet en 5 étapes.
 
-Memory / Mastery / Listening / Scenario / Error Intelligence restent des moteurs, **pas des catégories que Trân doit piloter**. Le cockpit historique reste accessible en DEBUG FR uniquement.
+Memory / Mastery / Listening / Scenario / Error Intelligence restent des moteurs, pas des catégories que Trân doit piloter. Le cockpit historique reste en DEBUG FR.
 
-### Parcours complet
+## 🛡️ Sanctuaires
 
-Vue dédiée avec cinq étapes :
+Byte-identiques pendant Build 28 :
 
-1. Survie A0 — 1–7 ;
-2. Vie quotidienne — 8–15 ;
-3. Fondations A1 — 16–20 ;
-4. Premiers échanges — 21–25 ;
-5. A1 Core — 26–40.
-
-Une seule étape expose ses leçons. A1 Core = **15 leçons**, jamais 40 lignes simultanément.
-
-## ✅ Preuves navigateur Build 27
-
-Chrome exécute réellement :
-
-```text
-Home
-→ Pratiquer
-→ retour
-→ Progrès
-→ Parcours complet
-→ A1 Core
-→ retour
-→ vraie Leçon
-```
-
-Contrats :
-
-- desktop `1640×900` et mobile `390×844` ;
-- Home : **1** carte leçon principale + **2** raccourcis ;
-- Home desktop : **672 px** de hauteur sur viewport 900 px ;
-- Practice : **4** actions ;
-- Progress : **5** leçons utiles ;
-- Journey : **5** étapes ;
-- A1 Core : **15** leçons ;
-- arrivée réelle dans une leçon ;
-- zéro overflow horizontal.
-
-Le nav-smoke fait aussi de vrais `pointerdown → pointerup → click` et exige : feedback tactile, tap echo, nœuds de tab bar persistants, **une seule tab active**, page Practice sans chevauchement de la tab bar et destinations réelles.
-
-Le CI capture également Home desktop, Practice desktop, Progress desktop, Journey desktop et Home mobile. La revue visuelle de la release confirme une composition app-like et un Journey sans ghost de l’écran précédent.
-
-## 🛡️ Cerveaux et données conservés
-
-Build 27 ne réécrit pas `app.js`, ne reparent pas Memory/Mastery/Listening/Scenario et ne crée aucune migration learner.
-
-Les anciens workflows 26.x gardent leurs vraies surfaces historiques : Build 27 se désactive automatiquement sur leurs URLs `...Smoke`.
-
-Sanctuaires :
-
-- learner : `francais-avec-luc:learner:v1` ;
-- Learning Memory / Scenario / Listening ;
 - `voice-ios.js` ;
 - `free-voice.js` ;
 - `assets/LOGO.png` ;
-- `assets/Favicon.png` ;
+- `assets/Favicon.png`.
+
+Baselines conservées :
+
+- curriculum **40 / 241** ;
+- Scenario production **36 / 108** ;
+- Listening **0.88 / 0.65** ;
+- App Shell Build 27 ;
 - containment Build 26.6 ;
 - geometry Build 26.7 ;
 - Focus Flow Build 26.8 ;
 - Content Reliability Build 26.9.
 
-### Baseline historique protégée
-
-Le contrat **v1.17.0 — Build 24 — Real Life French II** reste explicitement conservé : Scenario comptait alors **28 situations / 84 tours** avant Pack III. `real-life-data-2.js` reste un marqueur historique canonique.
+Baseline historique protégée : **v1.17.0 — Build 24 — Real Life French II**, Scenario **28 situations / 84 tours** avant Pack III ; `real-life-data-2.js` reste canonique.
 
 ## 🎙️ Gate terrain toujours ouvert
 
@@ -151,14 +195,13 @@ réponse reconnue
 → réponse vocale suivante toujours reconnue normalement
 ```
 
-La coexistence doit encore être confirmée sur le vrai iPhone avant d’enregistrer automatiquement le premier essai exact.
+Cette coexistence doit encore être confirmée sur le vrai iPhone avant d’enregistrer automatiquement le premier essai exact.
 
 ## Suite
 
 1. **Gate terrain iPhone Build 26.1**.
-2. **Build 28 — Data & Recovery Hardening**.
-3. **Build 29 — iPhone / PWA / Accessibility Hardening**.
-4. **Build 30 — Architecture Hardening**.
-5. **V2.0.0 — Freeze / Release**.
+2. **Build 29 — iPhone / PWA / Accessibility Hardening**.
+3. **Build 30 — Architecture Hardening**.
+4. **V2.0.0 — Freeze / Release**.
 
-Voir `ROADMAP.md`, `CHANGELOG.md`, `docs/ARCHITECTURE.md` et `docs/BUILD-27-APP-SHELL-RESET.md`.
+Voir `ROADMAP.md`, `CHANGELOG.md`, `docs/ARCHITECTURE.md`, `docs/BUILD-27-APP-SHELL-RESET.md` et `docs/BUILD-28-DATA-RECOVERY.md`.
