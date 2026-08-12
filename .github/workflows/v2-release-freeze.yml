@@ -1,0 +1,190 @@
+name: V2.0.0 Freeze release tribunal
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  v2-freeze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Release contract, syntax and immutable product baseline
+        run: |
+          node --check runtime-contracts.js
+          node --check runtime-bridge.js
+          node --check v2-release-smoke.js
+          node --check build-meta.js
+          node --check sw.js
+          python3 - <<'PY'
+          import json
+          r=json.load(open('release-v2.json',encoding='utf-8'))
+          assert r['format']=='french-tranquille-release-contract'
+          assert r['version']=='2.0.0'
+          assert r['architectureBuild']==30
+          assert r['status']=='freeze'
+          p=r['product']
+          assert p['curriculumLessons']==40 and p['curriculumItems']==241
+          assert p['scenarioSituations']==36 and p['scenarioTurns']==108
+          assert p['listeningNormal']==0.88 and p['listeningSlow']==0.65
+          assert p['maxSpeakingMomentsPerLesson']==2
+          assert p['recurringCostEuro']==0
+          assert len(r['durableStores'])==6 and len(set(r['durableStores']))==6
+          assert r['fieldGates']['exactFirstAttemptVoiceCapture']=='pending-real-iphone'
+          print('V2 release contract OK')
+          PY
+          grep -q "const VERSION = '2.0.0'" runtime-contracts.js
+          grep -q 'const BUILD = 30' runtime-contracts.js
+          grep -q "const META = { version: '2.0.0', build: '30'" build-meta.js
+          grep -q "runtime-contracts.js?v=2.0.0-b30" build-meta.js runtime-bridge.js
+          grep -q "runtime-bridge.js?v=2.0.0-b30" build-meta.js
+          grep -q "v2-release-smoke.js?v=2.0.0" build-meta.js
+          grep -q "const B30='2.0.0-b30'" sw.js
+          grep -q "const V2='2.0.0'" sw.js
+          grep -q 'release-v2.json' sw.js
+          grep -q 'v2-release-smoke.js' sw.js
+          ! grep -q 'localStorage.setItem' runtime-contracts.js
+          ! grep -q 'localStorage.setItem' runtime-bridge.js
+
+      - name: Sanctuary hashes match the V2 release contract
+        run: |
+          python3 - <<'PY'
+          import json,subprocess
+          r=json.load(open('release-v2.json',encoding='utf-8'))
+          for path,expected in r['sanctuaryHashes'].items():
+              actual=subprocess.check_output(['git','hash-object',path],text=True).strip()
+              assert actual==expected, f'{path}: {actual} != {expected}'
+          print('V2 sanctuary hashes OK')
+          PY
+          test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+          test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
+          test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
+
+      - name: Recovery and release stores agree
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const core=require('./data-recovery-core.js');
+          const release=JSON.parse(fs.readFileSync('release-v2.json','utf8'));
+          const contract=fs.readFileSync('runtime-contracts.js','utf8');
+          const keys=core.STORE_SPECS.map(s=>s.key);
+          if(keys.length!==6||new Set(keys).size!==6) throw new Error('Recovery durable store cardinality changed');
+          for(const key of release.durableStores){
+            if(!keys.includes(key)) throw new Error(`Release store missing from Recovery: ${key}`);
+            if(!contract.includes(`'${key}'`)) throw new Error(`Release store missing from Runtime Contracts: ${key}`);
+          }
+          console.log('Recovery / Runtime Contracts / release-v2 store agreement OK');
+          NODE
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-v2-http.log 2>&1 &
+          echo $! >/tmp/ft-v2-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome desktop — clean V2 release shell, backup and version
+        run: |
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-v2-clean-$attempt"
+            file="/tmp/v2-clean-$attempt.html"
+            rm -rf "$profile" "$file"
+            timeout --signal=TERM --kill-after=5s 70s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --disable-background-timer-throttling --disable-renderer-backgrounding \
+              --user-data-dir="$profile" --window-size=1440,900 \
+              --virtual-time-budget=40000 --dump-dom \
+              'http://127.0.0.1:4173/?debug=fr&v2Audit=clean' >"$file" || true
+            ok=1
+            for marker in \
+              'data-v2-complete="1"' \
+              'data-v2-ready="1"' \
+              'data-v2-version="2.0.0"' \
+              'data-v2-build="30"' \
+              'data-v2-contract-version="2.0.0"' \
+              'data-v2-release-format="1"' \
+              'data-v2-release-version="2.0.0"' \
+              'data-v2-release-build="30"' \
+              'data-v2-lessons="40"' \
+              'data-v2-items="241"' \
+              'data-v2-scenarios="36"' \
+              'data-v2-scenario-turns="108"' \
+              'data-v2-listening-normal="0.88"' \
+              'data-v2-listening-slow="0.65"' \
+              'data-v2-speaking-max="2"' \
+              'data-v2-durable-stores="6"' \
+              'data-v2-recovery-specs="6"' \
+              'data-v2-backup-version="2"' \
+              'data-v2-backup-stores="6"' \
+              'data-v2-backup-app-version="2.0.0"' \
+              'data-v2-backup-app-build="30"' \
+              'data-v2-store-agreement="1"' \
+              'data-v2-missing-required="0"' \
+              'data-v2-progress-route="1"' \
+              'data-v2-today-route="1"' \
+              'data-v2-practice-route="1"' \
+              'data-v2-options-version="v2.0.0 • Build 30"' \
+              'data-v2-stores-unchanged="1"' \
+              'data-v2-horizontal-overflow="0"'; do
+              grep -q "$marker" "$file" || ok=0
+            done
+            if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then ok=0; fi
+            if [ "$ok" = 1 ]; then passed=1; break; fi
+            echo '=== V2 clean markers ==='
+            grep -o 'data-v2-[^ >]*' "$file" | head -100 || true
+          done
+          test "$passed" = 1
+
+      - name: Chrome mobile — old learner round-trip remains exact
+        run: |
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-v2-old-$attempt"
+            file="/tmp/v2-old-$attempt.html"
+            rm -rf "$profile" "$file"
+            timeout --signal=TERM --kill-after=5s 70s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --disable-background-timer-throttling --disable-renderer-backgrounding \
+              --user-data-dir="$profile" --window-size=390,844 \
+              --virtual-time-budget=42000 --dump-dom \
+              'http://127.0.0.1:4173/?debug=fr&uxSmoke=lesson8&v2Audit=old-user' >"$file" || true
+            ok=1
+            for marker in \
+              'data-v2-complete="1"' \
+              'data-v2-ready="1"' \
+              'data-v2-version="2.0.0"' \
+              'data-v2-old-user-completed="7"' \
+              'data-v2-old-user-l8="4"' \
+              'data-v2-old-user-known="40"' \
+              'data-v2-stores-unchanged="1"' \
+              'data-v2-horizontal-overflow="0"' \
+              'data-v2-backup-version="2"' \
+              'data-v2-store-agreement="1"'; do
+              grep -q "$marker" "$file" || ok=0
+            done
+            if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then ok=0; fi
+            if [ "$ok" = 1 ]; then passed=1; break; fi
+            echo '=== V2 old-user markers ==='
+            grep -o 'data-v2-[^ >]*' "$file" | head -100 || true
+            grep -o 'data-ux-smoke-[^ >]*' "$file" | head -60 || true
+          done
+          test "$passed" = 1
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-v2-server.pid ]; then kill "$(cat /tmp/ft-v2-server.pid)" || true; fi
