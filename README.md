@@ -6,26 +6,21 @@ PWA de français pensée pour **Trân**, avec priorité à l’oral, au françai
 
 ### Production certifiée
 
-- **v1.22.1 — Build 29.1 / Speaking Loop Content**
-- statut : **✅ PROD / CLOS**
-- runtime production : `b2fde53792c38d1e6283d8779bbcedfac36f9502`
-- PR runtime : **#66**
-- head PR certifié : `df730d60a8434819cb19f116eb0dc66c3718b5f4`
-- tribunal PR : **19/19 workflows fonctionnels SUCCESS**
-- tribunal `main` : **19/19 workflows fonctionnels SUCCESS**
-- GitHub Pages runtime : **#122 SUCCESS**
-- total runtime `main` : **20/20 SUCCESS Pages incluse**
-
-### Candidat en cours
-
 - **v1.22.2 — Build 29.2 / Speaking Loop Variety & Clarity**
-- statut : **🧪 CANDIDAT / NON MERGÉ**
+- statut : **✅ PROD / CLOS**
+- runtime production : `b6031cd8fa6756eee39496cd62a164b8400d15af`
+- PR runtime : **#68**
+- head PR certifié : `947896ff8eed75aa805be63cc24821b1c2247980`
+- tribunal PR : **20/20 workflows fonctionnels SUCCESS** ; l’ancien Build 26.8 a nécessité un rerun inchangé de son flake Chrome `curriculum-clicked`
+- tribunal `main` : **20/20 workflows fonctionnels SUCCESS** ; même ancien flake 26.8 confirmé puis passé sans changement runtime
+- GitHub Pages runtime : **#126 SUCCESS** sur le SHA exact
+- total runtime `main` : **21/21 SUCCESS Pages incluse**
 
 Baselines inchangées : curriculum **40 leçons / 241 éléments**, Scenario **36 situations / 108 tours**, Listening **0.88 normal / 0.65 lent**, coût **0 €**.
 
 ## 🎙️ Build 29.2 — Variety & Clarity
 
-Le retour terrain après Build 29.1 a révélé trois défauts très concrets :
+Le retour terrain après Build 29.1 a révélé trois défauts concrets :
 
 1. `Refaire` ne disait pas clairement ce qui allait être refait ;
 2. le bouton Tyffany du Speaking Loop doublonnait le bouton audio déjà présent dans l’exercice ;
@@ -72,13 +67,22 @@ Rappel oral :               « Combien ça coûte ? »
 La sélection ne repose pas sur un randomizer. Elle combine :
 
 - pertinence avec le thème et la leçon actuelle ;
-- qualité orale de la cible (phrase/question utile plutôt qu’un nombre ou une unité isolée) ;
+- qualité orale de la cible — phrase/question utile plutôt qu’un nombre ou une unité isolée ;
 - acquis déjà connus lorsque leur lien avec le contexte est réel ;
 - Learning Memory en **lecture seule** : fragile/dû peut remonter, mais seulement si l’acquis reste contextuellement pertinent ;
 - fenêtre récente anti-répétition ;
-- deux cibles distinctes par leçon.
+- deux cibles distinctes par leçon ;
+- **2 moments maximum**.
 
 Le planificateur n’écrit dans aucun store durable. La progression, Memory, Recovery et backups restent propriétaires de leurs données.
+
+Le nouveau tribunal Chrome verrouille explicitement Bài 7 : `10 euros` reste le challenge de compréhension, le rappel oral devient `Combien ça coûte ?`, puis une seconde planification doit éviter les deux cibles récentes lorsqu’une alternative cohérente existe.
+
+## 🎧 Retour terrain audio
+
+La réécoute de **sa propre voix après enregistrement fonctionne bien** dans le nouveau flux local. Le gate Build 26.1 reste néanmoins ouvert pour le point différent et plus sensible : vérifier sur le vrai iPhone que **la reconnaissance Free Voice suivante** reste normale après `reconnaissance → seconde prise → lecture`.
+
+Aucun enregistrement automatique du premier essai exact n’est donc activé pendant SpeechRecognition.
 
 ## 🛡️ Sanctuaires
 
@@ -96,28 +100,14 @@ Audio de réécoute : local, volontaire, ≤9 s, sans upload ni persistance.
 
 Les contrats existants restent actifs : safe areas, cibles tactiles ≥44 px, offline PWA, Recovery six stores, restore transactionnel, App Shell `Aujourd’hui / Pratiquer / Progrès` et cockpit technique réservé au DEBUG FR.
 
-## 🎧 Gate terrain iPhone toujours ouvert
-
-Build 26.1 reste distinct :
-
-```text
-réponse Free Voice reconnue
-→ seconde prise locale
-→ réécoute correcte
-→ réponse vocale suivante toujours reconnue normalement
-```
-
-Tant que ce flux n’est pas confirmé sur le vrai iPhone, **aucun enregistrement automatique du premier essai exact** pendant SpeechRecognition.
-
 ### Baseline historique qualité
 
 La CI conserve explicitement **v1.17.0 — Build 24 — Real Life French II**, **28 situations / 84 tours** avant Pack III et `real-life-data-2.js`.
 
 ## Suite
 
-1. **Build 29.2 — Speaking Loop Variety & Clarity** : candidat actuel.
-2. Gate terrain iPhone Build 26.1.
-3. **Build 30 — Architecture Hardening**.
-4. **V2.0.0 — Freeze / Release**.
+1. Gate terrain iPhone Build 26.1 : reconnaissance → seconde prise → lecture → reconnaissance suivante.
+2. **Build 30 — Architecture Hardening**.
+3. **V2.0.0 — Freeze / Release**.
 
 Voir `ROADMAP.md`, `CHANGELOG.md`, `docs/ARCHITECTURE.md`, `docs/BUILD-29-1-SPEAKING-LOOP-CONTENT.md` et `docs/BUILD-29-2-SPEAKING-VARIETY-CLARITY.md`.
