@@ -1,6 +1,6 @@
 // Production baseline kept explicit for historical CI contracts.
 const PRODUCTION_BASELINE = { version: '1.17.0', build: 24 };
-const META = { version: '1.21.0', build: '28', baseline: PRODUCTION_BASELINE };
+const META = { version: '1.22.0', build: '29', baseline: PRODUCTION_BASELINE };
 
 window.FrenchTranquilleBuildMeta = META;
 
