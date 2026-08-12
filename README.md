@@ -4,70 +4,67 @@ PWA de français pensée pour **Trân**, avec priorité à l’oral, au françai
 
 ## État actuel
 
-# ✅ V2.0.0 — Freeze / Release — PROD / CLOS
+# ✅ V2.1.0 — Build 31 · Learner Intelligence Core — PROD
 
-French Trân’quille V2 gèle la baseline construite jusqu’à **Architecture Build 30**. Ce jalon n’ajoute ni nouveau moteur, ni nouveau curriculum, ni nouvelle navigation : il certifie le produit existant comme release reproductible, sauvegardable, restaurable et testée.
+French Trân’quille a repris son évolution au-dessus de la baseline V2 gelée. **Architecture Build 30 reste le socle figé 2.0.0**, tandis que le produit courant passe à **v2.1.0 • Build 31**.
 
-### Baseline V2 gelée
+Build 31 n’ajoute pas encore de nouvelles leçons : il unifie d’abord le modèle apprenant sur les **40 leçons / 241 éléments** existants afin que la prochaine extension de contenu repose sur des preuves plutôt que sur un simple compteur de leçons.
 
+### Baseline produit actuelle
+
+- version visible : **v2.1.0 • Build 31** ;
+- architecture gelée : **Runtime Contracts / Runtime Bridge 2.0.0 • Build 30** ;
 - curriculum : **40 leçons / 241 éléments** ;
 - Scenario : **36 situations / 108 tours** ;
 - Listening : **0.88 normal / 0.65 lent** ;
 - Speaking Loop : **2 moments maximum par leçon** ;
-- stores durables Recovery : **6** ;
-- coût récurrent : **0 €** ;
-- architecture : **Build 30** ;
-- version visible dans Options : **v2.0.0 • Build 30**.
+- stores durables Recovery : **6**, inchangés ;
+- coût récurrent : **0 €**.
 
-### Preuves de release
+## 🧠 Build 31 — Learner Intelligence Core
 
-- PR runtime V2 **#73** ; head certifié `c221fa9600d23dd83b87225cc4accce01e83cfe6` ; **22/22 workflows fonctionnels SUCCESS** ;
-- runtime applicatif V2 mergé : `5f2c486b3e455220ebd903f25ee766ff2430e4a5` ; **GitHub Pages #131 SUCCESS** sur ce SHA ;
-- l’ancien workflow Progression UX a ensuite révélé un Chrome non borné sur `main` malgré son passage sur la PR ;
-- PR CI-only **#74** : **un seul YAML GitHub Actions**, mêmes assertions, Chrome isolé + timeout + retries bornés ; head `0fbd3b8e8124b3beaf7d6086d8a837580abb2cb3` ; **22/22 fonctionnels SUCCESS** ;
-- baseline finale de certification : `6e0f5cde97cfba0572efccc6344a8bd6cbe7a315` ; **23/23 workflows SUCCESS**, dont **GitHub Pages #132 SUCCESS**.
+Nouveau module `learner-intelligence.js`, exposé via `window.FrenchTranquilleLearnerIntelligence`.
 
-Le commit `6e0f5cde…` ne change aucune ligne de PWA par rapport au runtime V2 : il stabilise uniquement son tribunal Progression UX.
+Il lit sans migrer ni remplacer les moteurs existants :
 
-## 🔐 Contrat de release
+- progression des leçons ;
+- acquis connus ;
+- Learning Memory : statut, échéance, rétention observable ;
+- Error Intelligence : récence, répétition, récupération ;
+- diversité des contextes où un acquis a été rencontré.
 
-`release-v2.json` décrit la baseline machine-readable : version, Architecture Build, cardinalités produit, six stores durables, hashes des sanctuaires et gate terrain restant.
+Il construit cinq bandes cohérentes :
 
-Le tribunal `.github/workflows/v2-release-freeze.yml` vérifie notamment :
+```text
+1–7    Survival A0
+8–15   Daily A0
+16–20  Foundations A1
+21–25  First Exchanges A1
+26–40  A1 Core
+```
 
-- concordance Release Contract ↔ Runtime Contracts ↔ Recovery ;
-- backup V2 à six stores ;
-- Options `v2.0.0 • Build 30` ;
-- navigation réelle `Progrès → Aujourd’hui → Pratiquer` ;
-- ancienne utilisatrice synthétique conservée à **7 leçons terminées / l8=4 / 40 acquis** ;
-- stores durables strictement inchangés pendant le round-trip ;
-- zéro overflow horizontal ;
-- hashes sanctuaires exacts.
+Le modèle produit :
 
-## 🏗️ Architecture gelée
+- un **indice interne d’apprentissage** ;
+- un **degré de confiance séparé** ;
+- une estimation interne `A0 / A0+ / Pré-A1 / A1- / A1` ;
+- une seule priorité suivante déterministe : révision, prochaine leçon, pratique ou entretien.
 
-V2 conserve les couches suivantes :
+Ce niveau est un **outil interne d’adaptation**, jamais une certification CECRL.
 
-- **Build 27 — App Shell** : Aujourd’hui / Pratiquer / Progrès ;
-- **Build 28 — Data & Recovery** : backup V2, snapshots, restore transactionnel, rollback, quarantaine ;
-- **Build 29 — iPhone / PWA / Accessibility** : safe areas, touch ≥44 px, a11y, offline ;
-- **Build 29.2 — Speaking Loop Variety & Clarity** : Tyffany, auto-écoute locale, anti-répétition, compréhension ≠ production ;
-- **Build 30 — Architecture Hardening** : Runtime Contracts, Runtime Bridge, ownership et routes stables.
+### Interface
 
-## 🎙️ Audio / Speaking Loop
+Une carte compacte apparaît dans **Progrès** : niveau interne, score, confiance et priorité suivante. Le détail des cinq bandes reste replié par défaut pour conserver le principe de progressive disclosure.
 
-Le comportement reste celui validé avant le freeze :
+Aucun nouvel onglet de navigation et aucun cockpit moteur dans l’interface apprenante.
 
-- `🔊 Nghe Tyffany` / `🔊 Écouter Tyffany` ;
-- `↻ Ghi âm lại` / `↻ Enregistrer à nouveau` ;
-- compréhension ≠ production orale ;
-- planificateur contextualisé et anti-répétition ;
-- aucun faux score de prononciation ;
-- prise locale volontaire ≤9 s, jamais uploadée ni persistée dans la progression.
+## 🎙️ Voix : gate iPhone toujours indépendant
 
-## 📱 Gate terrain iPhone encore ouvert
+Build 31 ne touche ni `voice-ios.js`, ni `free-voice.js`, ni Voice Replay, ni SpeechRecognition.
 
-La V2 est gelée avec le comportement sûr actuel. Le seul gate terrain restant concerne une éventuelle évolution future :
+Une non-reconnaissance vocale est explicitement classée comme **signal du système de reconnaissance**, jamais comme mesure de qualité de prononciation. Aucun faux score phonétique n’est introduit.
+
+Le gate terrain parallèle reste :
 
 ```text
 reconnaissance Free Voice
@@ -76,9 +73,53 @@ reconnaissance Free Voice
 → reconnaissance suivante toujours normale
 ```
 
-Tant que ce test réel iPhone n’est pas confirmé, **aucune capture automatique du premier essai exact** n’est ajoutée en parallèle de SpeechRecognition.
+Il bloque uniquement une future **capture automatique du premier essai exact** pendant SpeechRecognition. Il ne bloque pas les builds de contenu, niveau, intelligence ou mémoire qui restent indépendants de cette capture.
 
-## 🛡️ Sanctuaires V2
+## 🔐 Données / Recovery
+
+Build 31 est **read-only vis-à-vis des stores durables** :
+
+- aucun nouveau store ;
+- aucune migration ;
+- aucun `localStorage.setItem` dans Learner Intelligence ou son loader ;
+- les six stores V2 restent les seuls stores pédagogiques Recovery ;
+- le smoke navigateur exige les six valeurs brutes byte-identiques avant/après le calcul et le rendu Build31.
+
+Stores canoniques :
+
+```text
+francais-avec-luc:learner:v1
+french-tranquille:learning-memory:v1
+french-tranquille:error-intelligence:v1
+french-tranquille:scenarios:v1
+french-tranquille:listening:v1
+french-tranquille:milestones:v1
+```
+
+## 🧊 Baseline V2 toujours gelée
+
+`release-v2.json` reste volontairement **2.0.0 / Architecture Build 30**. Les workflows V2 et Build30 ont été rendus version-forward sans affaiblir leurs assertions historiques : ils vérifient désormais qu’une V2.x courante reste compatible avec le socle gelé.
+
+Le contrat continue de protéger :
+
+- cardinalités 40/241, Scenario 36/108, Listening 0.88/0.65, Speaking max 2 ;
+- six stores Recovery ;
+- routes `Aujourd’hui / Pratiquer / Progrès` ;
+- ancienne utilisatrice synthétique **7 leçons terminées / l8=4 / 40 acquis** ;
+- sanctuaires exacts ;
+- absence d’écriture durable pendant les round-trips.
+
+## ✅ Certification Build 31
+
+- PR runtime **#77** ; head certifié `eed097ca3d261f2f4dd60db930a11670511f33a1` ; **24/24 workflows fonctionnels SUCCESS** ;
+- runtime mergé : `e2b2c6293f35495fa8bbffd2e6b684fba897df88` ;
+- `main` runtime : **25/25 SUCCESS**, Pages comprise ;
+- GitHub Pages **#135 SUCCESS** sur le SHA runtime exact ;
+- smoke Build31 desktop : profil neuf → **leçon 1** ;
+- smoke Build31 mobile 390×844 : ancien profil → **leçon 8**, état exact 7 / l8=4 / 40 ;
+- V2 Freeze Compatibility, Build30 Architecture, Build29 iPhone/PWA, Recovery, Speaking et anciens parcours restent verts.
+
+## 🛡️ Sanctuaires
 
 - `app.js` — `600f094266c9f0c4c7b57efdbf61129909ebd9cb` ;
 - `voice-ios.js` — `38e97aa3ef62dd6dcda224901b435f0973618679` ;
@@ -89,15 +130,13 @@ Tant que ce test réel iPhone n’est pas confirmé, **aucune capture automatiqu
 
 ## Baseline historique qualité conservée
 
-La CI protège toujours explicitement **v1.17.0 — Build 24 — Real Life French II** : **28 situations / 84 tours** avant Pack III, avec `real-life-data-2.js` comme référence historique. Une release V2 ne gomme donc pas les contrats qui ont servi à construire le produit.
+La CI protège toujours explicitement **v1.17.0 — Build 24 — Real Life French II** : **28 situations / 84 tours** avant Pack III, avec `real-life-data-2.js` comme référence historique.
 
-## Suite
+## Suite canonique
 
-V2 marque un **point de freeze**, pas le départ automatique d’une nouvelle usine à gaz. La suite canonique est maintenant :
+1. **Build 32 — Content Map & Practical A1 Expansion** : audit des capacités couvertes 1–40 puis extension des leçons **41+** vers le français pratique A1, sans gonfler le curriculum au hasard ;
+2. enrichir Scenario / Listening seulement quand une nouvelle capacité nécessite une vraie réutilisation ;
+3. **Memory v2** ensuite : richer evidence par modalité/contexte, uniquement avec plan de migration Recovery transactionnel ;
+4. gate iPhone exact-first-attempt toujours parallèle et non bloquant pour ces travaux.
 
-1. usage réel / observation ;
-2. gate terrain iPhone Voice Replay ;
-3. maintenance et correctifs critiques si nécessaires ;
-4. toute future V2.x/V3 repartira d’une roadmap explicite, pas d’un empilement opportuniste.
-
-Voir `ROADMAP.md`, `CHANGELOG.md`, `docs/ARCHITECTURE.md` et `docs/V2-RELEASE.md`.
+Voir `ROADMAP.md`, `CHANGELOG.md`, `docs/ARCHITECTURE.md`, `docs/BUILD-31-LEARNER-INTELLIGENCE.md` et `docs/V2-RELEASE.md`.
