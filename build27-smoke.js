@@ -15,6 +15,19 @@
     }
     return null;
   };
+  const waitForShellApi = async (method, timeout = 6000) => {
+    const start = performance.now();
+    while (performance.now() - start < timeout) {
+      const shell = window.FrenchTranquilleBuild27Shell;
+      if (typeof shell?.[method] === 'function') {
+        html.dataset.b27VisualShellWaitMs = String(Math.round(performance.now() - start));
+        return shell;
+      }
+      await sleep(40);
+    }
+    html.dataset.b27VisualShellWaitMs = String(Math.round(performance.now() - start));
+    return null;
+  };
   const waitGone = async (selector, timeout = 3000) => {
     const start = performance.now();
     while (performance.now() - start < timeout) {
@@ -94,8 +107,12 @@
       if (!await openProgressState()) return;
     } else if (target === 'journey') {
       if (!await openProgressState()) return;
-      const shell = window.FrenchTranquilleBuild27Shell;
-      if (!shell?.openJourney) return;
+      const shell = await waitForShellApi('openJourney', 6000);
+      if (!shell) {
+        html.dataset.b27VisualShellReady = '0';
+        return;
+      }
+      html.dataset.b27VisualShellReady = '1';
       shell.openJourney();
       if (!await waitFor('.b27-journey-page', 5000)) return;
     } else {
