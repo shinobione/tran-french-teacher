@@ -5,6 +5,13 @@
   const STYLE_ID = 'ft-settings-legal-style';
   const DEBUG_KEY = 'tran-french-teacher:debug-fr:v1';
 
+  if (!document.querySelector('script[data-build31-loader]')) {
+    const loader = document.createElement('script');
+    loader.src = './build31-loader.js?v=2.1.0-b31';
+    loader.dataset.build31Loader = '1';
+    document.body.appendChild(loader);
+  }
+
   const COPY = {
     vi: {
       title: 'Thông tin, quyền riêng tư & bản quyền',
