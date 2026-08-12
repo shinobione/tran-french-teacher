@@ -1,7 +1,7 @@
 (() => {
   'use strict';
   const params = new URLSearchParams(location.search);
-  if (!params.has('b29Smoke')) return;
+  if (!params.has('b29Audit')) return;
 
   const root = document.documentElement;
   const failures = [];
