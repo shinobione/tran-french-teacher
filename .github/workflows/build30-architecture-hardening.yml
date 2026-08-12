@@ -30,9 +30,9 @@ jobs:
           grep -q "version: '1.23.0', build: 30" build-meta.js
           grep -q "import './runtime-contracts.js?v=1.23.0-b30'" build-meta.js
           grep -q "import './runtime-bridge.js?v=1.23.0-b30'" build-meta.js
-          grep -q 'runtime-contracts.js?v=${B30}' sw.js
-          grep -q 'runtime-bridge.js?v=${B30}' sw.js
-          grep -q 'build30-architecture-smoke.js?v=${B30}' sw.js
+          grep -Fq 'runtime-contracts.js?v=${B30}' sw.js
+          grep -Fq 'runtime-bridge.js?v=${B30}' sw.js
+          grep -Fq 'build30-architecture-smoke.js?v=${B30}' sw.js
           grep -q "learner: 'francais-avec-luc:learner:v1'" runtime-contracts.js
           grep -q 'lessons: 40' runtime-contracts.js
           grep -q 'items: 241' runtime-contracts.js
