@@ -74,11 +74,15 @@
       if (!await openProgressState()) return;
       if (!await click('[data-b27-open-journey]')) return;
       if (!await waitFor('.b27-journey-page')) return;
-      await sleep(120);
     } else {
       if (!await waitFor('.b27-home')) return;
-      await sleep(120);
     }
+
+    // Visual artifacts must represent the settled UI, not an arbitrary fade frame.
+    await sleep(650);
+    const overlay = document.querySelector('.b27-overlay');
+    html.dataset.b27VisualEntering = overlay?.classList.contains('b27-entering') ? '1' : '0';
+    html.dataset.b27VisualLeaving = overlay?.classList.contains('b27-leaving') ? '1' : '0';
     html.dataset.b27VisualReady = target;
     markGeometry('b27Visual');
   }
