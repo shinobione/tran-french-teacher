@@ -118,9 +118,6 @@
       return;
     }
 
-    // DOM observers can fire many times while the same destination is already
-    // animating. Never restart the same transition: doing so starves its timer
-    // and can leave the UI permanently between two focus states.
     if (transitionRunning && next === pendingFocusMode) {
       setBodyFocus(focusMode, screenVisible(n.screen));
       updateDetailsTitle(n);
@@ -188,11 +185,33 @@
     });
   }
 
+  function closeDetailsFocus(n) {
+    const api = window.FrenchTranquilleProgressDetailsDashboard;
+    api?.close?.();
+    api?.decorate?.();
+    transitionTo(n, null);
+    schedule();
+  }
+
+  function closeCurriculumFocus(n) {
+    const api = window.FrenchTranquilleProgressionUX;
+    api?.setCurriculumExpanded?.(false);
+    api?.decorate?.();
+    transitionTo(n, null);
+    schedule();
+  }
+
   function resetDeepState() {
     const n = nodes();
     if (!n) return;
-    if (n.details.dataset.progressDetailActive) window.FrenchTranquilleProgressDetailsDashboard?.close?.();
-    if (n.curriculum.dataset.progressExpanded === '1') n.curriculum.querySelector('[data-progress-toggle-all]')?.click();
+    if (n.details.dataset.progressDetailActive) {
+      window.FrenchTranquilleProgressDetailsDashboard?.close?.();
+      window.FrenchTranquilleProgressDetailsDashboard?.decorate?.();
+    }
+    if (n.curriculum.dataset.progressExpanded === '1') {
+      window.FrenchTranquilleProgressionUX?.setCurriculumExpanded?.(false);
+      window.FrenchTranquilleProgressionUX?.decorate?.();
+    }
     transitionToken += 1;
     transitionRunning = false;
     pendingFocusMode = null;
@@ -206,13 +225,11 @@
     if (back) {
       event.preventDefault();
       event.stopPropagation();
+      const n = nodes();
+      if (!n) return;
       const kind = back.dataset.b268FocusBack;
-      if (kind === 'details') window.FrenchTranquilleProgressDetailsDashboard?.close?.();
-      if (kind === 'curriculum') {
-        const n = nodes();
-        if (n?.curriculum.dataset.progressExpanded === '1') n.curriculum.querySelector('[data-progress-toggle-all]')?.click();
-      }
-      schedule();
+      if (kind === 'details') closeDetailsFocus(n);
+      if (kind === 'curriculum') closeCurriculumFocus(n);
       return;
     }
 
@@ -314,20 +331,20 @@
         markRoundtrip('memory-ready');
         tile.click();
         markRoundtrip('memory-clicked');
-        waitFor(() => n.layout.dataset.b268Focus === 'details', () => {
+        waitFor(() => n.layout.dataset.b268Focus === 'details' && !transitionRunning, () => {
           markRoundtrip('details-focused');
           n.body.querySelector('[data-b268-focus-back="details"]')?.click();
           markRoundtrip('details-back-clicked');
-          waitFor(() => !n.layout.dataset.b268Focus && !n.details.dataset.progressDetailActive, () => {
+          waitFor(() => !n.layout.dataset.b268Focus && !n.details.dataset.progressDetailActive && !transitionRunning, () => {
             markRoundtrip('details-returned');
             const toggle = n.curriculum.querySelector('[data-progress-toggle-all]');
             toggle?.click();
             markRoundtrip('curriculum-clicked');
-            waitFor(() => n.layout.dataset.b268Focus === 'curriculum', () => {
+            waitFor(() => n.layout.dataset.b268Focus === 'curriculum' && n.curriculum.dataset.progressExpanded === '1' && !transitionRunning, () => {
               markRoundtrip('curriculum-focused');
               n.flow.querySelector('[data-b268-focus-back="curriculum"]')?.click();
               markRoundtrip('curriculum-back-clicked');
-              waitFor(() => !n.layout.dataset.b268Focus && n.curriculum.dataset.progressExpanded !== '1', () => {
+              waitFor(() => !n.layout.dataset.b268Focus && n.curriculum.dataset.progressExpanded !== '1' && !transitionRunning, () => {
                 markRoundtrip('curriculum-returned');
                 const visibleRows = [...n.curriculum.querySelectorAll('.lesson-row')].filter(row => getComputedStyle(row).display !== 'none').length;
                 document.documentElement.dataset.b268RoundtripCompactRows = String(visibleRows);
