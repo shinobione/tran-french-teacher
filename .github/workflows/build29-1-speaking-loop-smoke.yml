@@ -24,7 +24,13 @@ jobs:
           node --check speaking-loop-smoke.js
           node --check build-meta.js
           node --check sw.js
-          grep -Eq "version: '1\\.22\\.[1-9][0-9]*', build: '29\\.[1-9][0-9]*'" build-meta.js
+          node - <<'NODE'
+          const fs=require('fs');
+          const text=fs.readFileSync('build-meta.js','utf8');
+          const match=text.match(/const META = \{ version: '([^']+)', build: '([^']+)'/);
+          if(!match || Number(match[2]) < 29.1) throw new Error('Build 29.1 contract cannot run on a pre-29.1 build');
+          console.log(`release metadata ${match[1]} / ${match[2]} keeps Build 29.1 contract`);
+          NODE
           grep -Eq 'speaking-loop-content.css\?v=1\.22\.[1-9][0-9]*-b29\.[1-9][0-9]*' build-meta.js sw.js
           grep -Eq 'speaking-loop-content.js\?v=1\.22\.[1-9][0-9]*-b29\.[1-9][0-9]*' build-meta.js sw.js
           grep -q 'maxMoments: 2' speaking-loop-content.js
