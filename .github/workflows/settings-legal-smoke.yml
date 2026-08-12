@@ -1,0 +1,122 @@
+name: Post-V2 Settings legal and privacy smoke
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  settings-legal-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Static contracts
+        run: |
+          node --check settings-legal.js
+          grep -Fq './settings-legal.js?v=2.0.0-postv2-legal' index.html
+          grep -Fq "Tous droits réservés" settings-legal.js
+          grep -Fq "Mọi quyền được bảo lưu" settings-legal.js
+          grep -Fq "reconnaissance vocale" settings-legal.js
+          grep -Fq "Nhận dạng giọng nói" settings-legal.js
+
+      - name: Frozen V2 sanctuaries remain byte-identical
+        run: |
+          test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+          test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
+          test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
+
+      - name: Build browser harness
+        run: |
+          cat > settings-legal-smoke.html <<'HTML'
+          <!doctype html>
+          <html><head><meta charset="utf-8"><title>Settings legal smoke</title></head><body>
+          <script>
+          (() => {
+            const mode = new URLSearchParams(location.search).get('mode') || 'normal';
+            const frame = document.createElement('iframe');
+            frame.src = mode === 'debug' ? './index.html?debug=fr' : './index.html';
+            frame.style.width = '390px';
+            frame.style.height = '844px';
+            document.body.appendChild(frame);
+            let finished = false;
+            const finish = (status, detail='') => {
+              if (finished) return;
+              finished = true;
+              document.documentElement.dataset.legalSmoke = status;
+              document.documentElement.dataset.legalMode = mode;
+              document.documentElement.dataset.legalDetail = detail;
+            };
+            frame.addEventListener('load', () => setTimeout(() => {
+              try {
+                const d = frame.contentDocument;
+                const gear = d.querySelector('[data-go="settings"]');
+                if (!gear) return finish('fail','gear-missing');
+                gear.click();
+                setTimeout(() => {
+                  try {
+                    const fatal = d.querySelector('#app .boot-status.error');
+                    if (fatal) return finish('fail','fatal-card');
+                    const shell = d.querySelector('#app .app-shell.screen-settings');
+                    const card = d.querySelector('#ft-settings-legal');
+                    const locale = card?.dataset.ftLegalLocale;
+                    const text = card?.textContent || '';
+                    const link = card?.querySelector('a[href="https://github.com/shinobione/tran-french-teacher"]');
+                    const expectedLocale = mode === 'debug' ? 'fr' : 'vi';
+                    const expectedText = mode === 'debug' ? 'Confidentialité & données' : 'Quyền riêng tư & dữ liệu';
+                    if (!shell) return finish('fail','settings-shell-missing');
+                    if (!card) return finish('fail','legal-card-missing');
+                    if (locale !== expectedLocale) return finish('fail',`locale-${locale}`);
+                    if (!text.includes(expectedText)) return finish('fail','privacy-copy-missing');
+                    if (!text.includes('2026 ShinoBiWan')) return finish('fail','copyright-missing');
+                    if (!link || link.rel !== 'noopener noreferrer') return finish('fail','source-link-missing');
+                    if (d.documentElement.scrollWidth > d.documentElement.clientWidth + 1) return finish('fail','horizontal-overflow');
+                    document.documentElement.dataset.legalLocale = locale;
+                    document.documentElement.dataset.legalCopyright = '1';
+                    document.documentElement.dataset.legalOverflow = '0';
+                    finish('ok','settings-legal-visible');
+                  } catch (error) { finish('fail', error?.message || String(error)); }
+                }, 1500);
+              } catch (error) { finish('fail', error?.message || String(error)); }
+            }, 1400));
+            setTimeout(() => finish('fail','timeout'), 8000);
+          })();
+          </script></body></html>
+          HTML
+
+      - name: Start static test server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-legal-http.log 2>&1 &
+          echo $! >/tmp/ft-legal-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — Vietnamese learner Settings legal panel
+        run: |
+          timeout 35s google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=15000 --dump-dom 'http://127.0.0.1:4173/settings-legal-smoke.html?mode=normal' >/tmp/legal-normal.html
+          grep -q 'data-legal-smoke="ok"' /tmp/legal-normal.html || { cat /tmp/legal-normal.html; exit 1; }
+          grep -q 'data-legal-locale="vi"' /tmp/legal-normal.html
+          grep -q 'data-legal-copyright="1"' /tmp/legal-normal.html
+          grep -q 'data-legal-overflow="0"' /tmp/legal-normal.html
+
+      - name: Chrome — DEBUG FR Settings legal panel
+        run: |
+          timeout 35s google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=16000 --dump-dom 'http://127.0.0.1:4173/settings-legal-smoke.html?mode=debug' >/tmp/legal-debug.html
+          grep -q 'data-legal-smoke="ok"' /tmp/legal-debug.html || { cat /tmp/legal-debug.html; exit 1; }
+          grep -q 'data-legal-locale="fr"' /tmp/legal-debug.html
+          grep -q 'data-legal-copyright="1"' /tmp/legal-debug.html
+          grep -q 'data-legal-overflow="0"' /tmp/legal-debug.html
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-legal-server.pid ]; then kill "$(cat /tmp/ft-legal-server.pid)" || true; fi
