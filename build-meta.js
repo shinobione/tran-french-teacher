@@ -85,25 +85,40 @@ function installBuild27ShellBridges() {
     setTimeout(settle, 48);
   };
 
+  const alignOverlayToNav = (overlay, nav) => {
+    if (!(overlay instanceof HTMLElement) || !(nav instanceof HTMLElement)) return;
+    const overlayRect = overlay.getBoundingClientRect();
+    const navTop = nav.getBoundingClientRect().top;
+    const currentBottom = Number.parseFloat(getComputedStyle(overlay).bottom) || 0;
+    const delta = overlayRect.bottom - navTop;
+    if (Math.abs(delta) > 0.5) {
+      overlay.style.bottom = `${Math.max(0, currentBottom + delta)}px`;
+    }
+    const correctedGap = Math.round(overlay.getBoundingClientRect().bottom - nav.getBoundingClientRect().top);
+    root.dataset.b27OverlayGap = String(correctedGap);
+    root.dataset.b27OverlayBottom = String(Math.round(Number.parseFloat(getComputedStyle(overlay).bottom) || 0));
+  };
+
   const syncOverlayGeometry = () => {
-    const overlays = document.querySelectorAll('.b27-overlay');
+    const overlays = [...document.querySelectorAll('.b27-overlay')];
     if (!overlays.length) return;
     const compact = matchMedia('(max-width:819px)').matches;
     const nav = document.querySelector('.ux-bottom-nav');
     if (!compact || !nav) {
-      overlays.forEach(overlay => overlay.style.removeProperty('bottom'));
+      overlays.forEach(overlay => {
+        overlay.style.removeProperty('bottom');
+        settleOverlay(overlay);
+      });
       return;
     }
-    const navTop = nav.getBoundingClientRect().top;
-    // Fixed-position geometry follows the layout viewport. Inside an iframe,
-    // window.innerHeight can be smaller than documentElement.clientHeight.
-    const layoutHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
-    const bottom = Math.max(0, Math.ceil(layoutHeight - navTop));
+
     overlays.forEach(overlay => {
-      overlay.style.bottom = `${bottom}px`;
+      // Measure the surfaces themselves instead of inferring a viewport height.
+      // This stays correct in Safari, iframes, safe-area layouts and headless Chrome.
+      alignOverlayToNav(overlay, nav);
       settleOverlay(overlay);
+      requestAnimationFrame(() => alignOverlayToNav(overlay, nav));
     });
-    root.dataset.b27OverlayBottom = String(bottom);
   };
 
   const sync = () => {
