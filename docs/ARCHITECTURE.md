@@ -7,11 +7,15 @@ iPhone / Safari / PWA
         ↓
 UX Shell simple
         ↓
-Progression UX + Session UX + Build 26.3 Interaction layer
+Progression UX + Session UX
         ↓
-Build 26.4 single-scroll + Tyffany compatibility layer
+Build 26.3 Interaction layer
         ↓
-Build 26.5 Conversation exit + independent Progress columns
+Build 26.4 single-scroll + Tyffany
+        ↓
+Build 26.5 Conversation exit
+        ↓
+Build 26.6 Progress containment + staged curriculum
         ↓
 Details Dashboard + Voice Replay
         ↓
@@ -22,13 +26,13 @@ localStorage + Web APIs navigateur
 
 PWA statique GitHub Pages, sans backend obligatoire ni API payante.
 
-## Principe produit
-
-La complexité appartient aux moteurs ; Trân voit d’abord l’information utile pour décider quoi faire.
+Principe produit : **la complexité appartient aux moteurs ; Trân voit d’abord l’information utile pour décider quoi faire.**
 
 ---
 
-# Runtime production — v1.19.5 Build 26.5
+# Runtime production — v1.19.6 Build 26.6
+
+Runtime principal :
 
 ```text
 progress-safety.js
@@ -66,6 +70,7 @@ progress-details-dashboard.js
 build26-3-ux.js
 build26-4-ux.js
 build26-5-ux.js
+build26-6-ux.js
 build-meta.js
 ```
 
@@ -79,213 +84,190 @@ progress-details-dashboard.css
 build26-3-ux.css
 build26-4-ux.css
 build26-5-ux.css
+build26-6-ux.css
 ```
 
-Production runtime : `2cd29f20faa8db850f92c343074809cc91b42c76` — PR #49 — **11/11 workflows fonctionnels SUCCESS** — Pages **#106 SUCCESS**.
+Production runtime : `7bb48979f21db0cf1cc94d7a9e03e225f2e1cc7a` — PR #52 — **12/12 workflows fonctionnels SUCCESS** — Pages **#108 SUCCESS**.
 
 ---
 
-# Build 26.5 — Conversation : sortie déterministe
+# Build 26.6 — frontière de propriété Progress
 
-## Problème terrain
+## Régression terrain
 
-La surface `Changer de pratique` pouvait recevoir son feedback visuel sans réellement quitter la pratique guidée.
+Après Build 26.5, le compteur `Autres détails` pouvait augmenter continuellement sans interaction jusqu’à plusieurs centaines de cartes.
 
-Le handler n’était pas absent : Session UX possédait déjà un listener global en capture. Mais Conversation reste une surface recomposée par plusieurs couches et `MutationObserver`. Dépendre uniquement d’un délégué global alors que le nœud visible peut être recréé reste fragile.
+Plusieurs moteurs historiques créent leur carte Progress avec une logique de ce type :
 
-## Contrat 26.5
+```js
+const column = document.querySelector('.screen-progress .progress-layout > div:first-child');
+if (!column || column.querySelector('.memory-progress-card')) return;
+```
 
-`session-ux.js` possède maintenant une transition explicite :
+La première colonne n’est donc pas seulement un choix visuel : elle sert historiquement de **frontière de propriété DOM**.
+
+Build 26.5 avait rendu `Détails` frère direct de cette colonne :
 
 ```text
-setPracticeMode('scenario' | 'voice' | 'guided')
-        ↓
-practiceMode synchronisé
-        ↓
-decoratePractice()
-        ↓
-un seul mode visible
+progress-layout
+├── colonne gauche
+└── Details
 ```
 
-Le retour :
+Une carte déplacée dans Details quittait alors la frontière recherchée par son moteur :
 
 ```text
-Changer de pratique
-        ↓ pointerup OU click
-setPracticeMode(null)
-        ↓
-decoratePractice()
-        ↓
-practice hub
+moteur ne trouve plus sa carte
+→ crée une nouvelle carte
+→ Progression la déplace dans Details
+→ moteur ne la trouve toujours pas
+→ boucle MutationObserver
 ```
 
-`build26-5-ux.js` lie aussi directement chaque contrôle visible `[data-session-practice-back]` :
+## Composition 26.6
 
-```text
-MutationObserver
-   ↓ nouveau bouton retour
-bind pointerup + click une seule fois
-   ↓
-FrenchTranquilleSessionUX.returnToPracticeHub()
-```
-
-Le dataset `data-b265-back-bound` empêche les doubles bindings.
-
-Cette couche ne crée aucune donnée apprenante et ne modifie aucun moteur de reconnaissance vocale.
-
----
-
-# Build 26.5 — Conversation : un mode actif = une colonne
-
-Build 14 avait conçu :
-
-```text
-Free Voice | Pratique guidée
-```
-
-C’était cohérent lorsque les deux surfaces existaient ensemble.
-
-Build 25.2 introduit ensuite un hub et un seul mode actif à la fois, mais la vieille grille continuait à forcer :
-
-```css
-#free-voice-card  → colonne 1
-.conversation-card → colonne 2
-```
-
-Avec Free Voice caché :
-
-```text
-bouton retour | grand vide | carte guidée
-```
-
-Build 26.5 ajoute la règle tardive :
-
-```css
-.screen-conversation .narrow.session-practice-active-mode {
-  display:grid;
-  grid-template-columns:minmax(0,1fr);
-}
-```
-
-Le hub et chaque mode actif utilisent une colonne centrée `min(820px, 100%)`. Le bouton retour et la carte active partagent la même colonne.
-
-Le nom produit et le label du mode sont aussi séparés visuellement :
-
-```text
-Tyffany
-Pratique guidée
-```
-
-et non `TyffanyPratique guidée`.
-
----
-
-# Build 26.5 — Progress : colonnes structurellement indépendantes
-
-## Avant 26.5
-
-Build 26.3 avait construit visuellement :
-
-```text
-Résumé      | Details
-Curriculum  | Details
-```
-
-avec l’implémentation historique :
-
-```css
-.progress-layout > div:first-child { display: contents; }
-```
-
-Le panneau `Details` couvrait donc les deux lignes de la grille.
-
-Build 26.4 a ensuite correctement retiré son scroll interne :
-
-```css
-max-height:none;
-overflow:visible;
-```
-
-Mais un groupe très haut comme Mastery pouvait alors contribuer à la hauteur intrinsèque des deux lignes et créer un énorme espace entre le Résumé et le Curriculum à gauche.
-
-## Après 26.5
-
-La composition devient :
+Build 26.6 conserve la frontière historique tout en gardant l’indépendance visuelle :
 
 ```text
 .progress-layout
-├── div historique = colonne gauche
-│   ├── .progress-ux-overview
-│   └── .progress-ux-curriculum
-└── .progress-ux-details
+└── .progress-ux-composition        ← div:first-child historique
+    ├── .progress-ux-left-flow
+    │   ├── .progress-ux-overview
+    │   └── .progress-ux-curriculum
+    └── .progress-ux-details
 ```
 
 Desktop :
 
 ```text
+.progress-ux-composition
 ┌──────────────────────────┬─────────────────────────────┐
-│ left wrapper             │ details                     │
-│  ├─ overview             │ dashboard                   │
-│  └─ curriculum           │ groupe actif                │
+│ progress-ux-left-flow    │ progress-ux-details        │
+│  ├─ overview             │ dashboard                  │
+│  └─ curriculum           │ groupe actif               │
 └──────────────────────────┴─────────────────────────────┘
 ```
 
-Le wrapper gauche redevient un vrai grid container local :
-
-```css
-.progress-layout > div:first-child {
-  display:grid;
-  grid-template-columns:minmax(0,1fr);
-  gap:16px;
-}
-```
-
-Le panneau droit est un enfant direct de `.progress-layout`.
-
 Conséquences :
 
-- la hauteur de Details n’influence plus le gap Overview → Curriculum ;
-- le Chrome 26.5 exige un gap réel **0–48 px** même avec Mastery ouvert ;
-- aucun clone de carte ;
-- aucun déplacement de donnée ;
-- Build 26.4 single-scroll reste intact.
+- Memory / Mastery / Error / Stage 2 / Stage 3 retrouvent leurs cartes existantes ;
+- la droite reste visuellement indépendante de la hauteur du flux gauche ;
+- Overview → Curriculum reste compact ;
+- Build 26.4 single-scroll reste intact ;
+- aucune migration ou réécriture des moteurs historiques.
 
-### Mobile
+### Contrat temporel
+
+Le smoke 26.6 attend cinq mesures consécutives identiques avant de considérer le dashboard à quiescence. Il observe ensuite encore la page.
+
+Profil synthétique l8 certifié :
 
 ```text
-colonne gauche
-  ├─ Overview
-  └─ Curriculum compact 5/40
-↓
-Details replié
+initial après quiescence = 12 cartes
+3 secondes plus tard     = 12 cartes
+Autres détails           = 1
+forbidden cards          = 0
+engine cards uniques     = oui
 ```
 
-Le test Chrome 390×844 vérifie l’ordre réel des rectangles et l’état fermé de Details.
+Le vieux comportement de prolifération ne peut pas atteindre ce contrat.
 
 ---
 
-# Build 26.4 — propriété du scroll conservée
+# Learning Details Dashboard — Build 26.1 + containment 26.6
 
-Build 26.3 avait initialement :
+Familles :
 
-```css
-position: sticky;
-max-height: calc(100vh - 36px);
-overflow: auto;
+```text
+🧠 memory    → Learning Memory + Error + Éléments appris
+🎯 mastery   → Mastery + A1 Mastery
+🎧 listening → Listening
+🎭 real-life → Scenario / Real Life
+🧩 path      → Stage2 / Stage3 / Adaptive / Daily / A1
+⋯ other      → futur contenu non classifié
 ```
 
-Build 26.4 impose :
+Build 26.6 ajoute :
 
-```css
-position: relative;
-top: auto;
-max-height: none;
-overflow: visible;
-overscroll-behavior: auto;
-scrollbar-gutter: auto;
+- `data-progress-detail-family` comme propriété stable ;
+- classification structurelle prioritaire ;
+- une carte déjà possédée n’est plus reclassée à cause d’un changement de texte ;
+- Overview / Curriculum sont interdits dans Details ;
+- récupération défensive vers `progress-ux-left-flow` si une carte interdite y entre ;
+- API `state()` exposant les comptes par famille pour le tribunal temporel.
+
+Les cartes ne sont jamais clonées : les vrais nœuds historiques continuent d’être alimentés par leurs moteurs.
+
+---
+
+# Curriculum Progress — Build 25 + Humanization 26.6
+
+Vue normale : **5 lignes** autour de la leçon courante.
+
+La vue complète ne signifie plus `40 lignes simultanées`. Elle expose cinq étapes :
+
+```text
+1. Survie A0          1–7
+2. Vie quotidienne    8–15
+3. Fondations A1      16–20
+4. Premiers échanges  21–25
+5. A1 Core            26–40
 ```
 
-Contrat toujours valide en Build 26.5 :
+Une seule étape affiche ses `.lesson-row` à la fois.
+
+Contrats Chrome :
+
+```text
+profil l8 → étape courante = 8 lignes
+clic A1 Core → 15 lignes
+progressTotalRows = 40
+progressStageCount = 5
+```
+
+Les changements d’étape sont flushés dans le même geste utilisateur afin de ne pas dépendre d’un futur `requestAnimationFrame` pour devenir visuellement cohérents.
+
+---
+
+# Build 26.5 — Conversation Exit conservé
+
+`session-ux.js` possède la transition explicite :
+
+```text
+setPracticeMode('scenario' | 'voice' | 'guided')
+        ↓
+un seul mode visible
+
+Changer de pratique
+        ↓ pointerup OU click
+setPracticeMode(null)
+        ↓
+practice hub
+```
+
+`build26-5-ux.js` lie directement le contrôle `[data-session-practice-back]` et évite les doubles bindings.
+
+Conversation active reste une seule colonne centrée. `Tyffany` et `Pratique guidée` restent séparés visuellement.
+
+### Progress 26.5 : ce qui est supersédé
+
+L’intention 26.5 reste valide : Overview/Curriculum ne doivent pas être étirés par un Details très haut.
+
+En revanche, l’implémentation historique :
+
+```text
+progress-layout
+├── left
+└── Details direct sibling
+```
+
+est **supersédée par Build 26.6**, car elle cassait la frontière de propriété des moteurs. L’indépendance visuelle est désormais assurée dans `.progress-ux-composition`.
+
+---
+
+# Build 26.4 — single-scroll + Tyffany
+
+Contrat toujours valide :
 
 ```text
 overflow-y = visible
@@ -295,13 +277,7 @@ page scrollable = 1
 single scroll = 1
 ```
 
-La page reste l’unique propriétaire du scroll vertical.
-
----
-
-# Build 26.4 — branding Tyffany sans migration
-
-Le nom initial `Lucie` reste présent dans des identifiants historiques :
+Tyffany est le nom visible. Les identifiants historiques restent volontairement compatibles :
 
 ```text
 LucieVoice
@@ -311,67 +287,15 @@ tran-french-teacher:luc-pitch:v1
 lucie-* ids/classes
 ```
 
-Ils sont conservés. `build26-4-ux.js` normalise uniquement le branding visible :
-
-```text
-Lucie visible → Tyffany visible
-FrenchTranquilleCurriculum.tutor = "Tyffany"
-FrenchTranquilleTeacher.name = "Tyffany"
-```
-
-Attributs textuels sûrs : `aria-label`, `title`, `alt`, `placeholder`, `data-speak`.
-
-`voice-ios.js` reste byte-identique ; la couche 26.4 normalise uniquement l’ancien nom dans le texte envoyé à `speechSynthesis.speak`.
+`voice-ios.js` reste byte-identique.
 
 ---
 
-# Build 26.3 — Interaction Stability conservée
+# Build 26.3 — Interaction Stability
 
-Today reste orchestré par `build26-3-ux.js` :
+Today reste orchestré par `build26-3-ux.js` avec nœuds stables, routage explicite et rendu idempotent.
 
-```text
-DailyCoach.plan()
-      ↓
-Build26.3 surface stable
-      ├── 2 actions principales
-      ├── proxy Listening caché
-      └── extras hors zone legacy
-```
-
-Nœuds stables, vrai bouton disclosure, routage explicite, rendu idempotent, aucune écriture learner/Memory/Scenario/Listening.
-
-L’intention visuelle 2 colonnes de Progress reste protégée, mais **l’implémentation `display:contents` est supersédée par Build 26.5**.
-
----
-
-# Progression UX — Build 25 + 26.2 + 26.5
-
-`progression-ux.js` reste propriétaire :
-
-- résumé ;
-- curriculum compact ;
-- frontière `<details>` ;
-- toggle explicite Build 26.2 ;
-- composition DOM indépendante Build 26.5.
-
-Le curriculum reste 5/40 par défaut et 40/40 accessible.
-
----
-
-# Learning Details Dashboard — Build 26.1
-
-Toujours actif dans `.progress-ux-details` :
-
-```text
-🧠 memory    → Learning Memory + Error
-🎯 mastery   → Mastery + A1 Mastery
-🎧 listening → Listening
-🎭 real-life → Scenario / Real Life
-🧩 path      → Stage2 / Stage3 / Adaptive / Daily / A1
-⋯ other      → futur contenu non classifié
-```
-
-Aucune carte n’est clonée. Les vrais nœuds historiques restent descendants de `.progress-layout` et continuent d’être mis à jour par leurs moteurs.
+L’intention visuelle 2 colonnes Progress reste valide ; l’ancienne implémentation `display:contents` est historique.
 
 ---
 
@@ -386,7 +310,7 @@ slow request   0.68 → bridge 0.65 → effectif 0.65
 
 ---
 
-# Session UX — Build 25.2 + 26.5
+# Session UX — Build 25.2
 
 Sessions bornées :
 
@@ -394,8 +318,6 @@ Sessions bornées :
 - Révision : jusqu’à 5 éléments prioritaires ;
 - Scenario : 1 situation ;
 - vocal guidé : objectif borné.
-
-Build 26.5 ne change pas ces objectifs ; il fiabilise le changement de mode et la sortie Conversation.
 
 ---
 
@@ -451,12 +373,12 @@ french-tranquille:learning-memory:v1
 french-tranquille:safety:pre-build22:v1
 ```
 
-Curriculum : **40 leçons / 241 éléments**.
+Curriculum : **40 leçons / 241 éléments**.  
 Scenario : **36 situations / 108 tours**.
 
-Build 26.5 ne crée aucune clé learner et ne migre aucun état.
+Build 26.6 ne crée aucune clé learner et ne migre aucun état.
 
-# Voice / branding — sanctuaires
+## Voice / branding — sanctuaires
 
 ```text
 voice-ios.js
@@ -465,46 +387,38 @@ assets/LOGO.png
 assets/Favicon.png
 ```
 
-Tyffany est le nom produit visible ; les identifiants historiques internes restent compatibles.
-
 ---
 
-# CI Build 26.5 — production
+# CI Build 26.6 — production
 
-Le tribunal fonctionnel comporte désormais **11 workflows**.
+Le tribunal fonctionnel comporte **12 workflows**.
 
-Le nouveau workflow 26.5 vérifie en Chrome :
+Le workflow dédié 26.6 vérifie :
 
-1. Guided Practice visible seul ;
-2. bouton retour et carte active sur la même colonne ;
-3. `pointerup` retourne au hub ;
-4. `.click()` retourne au hub ;
-5. Details enfant direct de Progress ;
-6. Curriculum enfant de la colonne gauche ;
-7. gap Overview→Curriculum **0–48 px** avec Mastery long ;
-8. desktop côte à côte ;
-9. nested scroll = 0 ;
-10. page scrollable ;
-11. profil l8 = 7 terminées / 40 acquis ;
-12. mobile Overview→Curriculum→Details ;
-13. mobile Details fermé ;
-14. mobile curriculum 5/40.
+1. syntaxe / wiring / cache v1.19.6 ;
+2. sanctuaires byte-identiques ;
+3. Details dans la frontière historique ;
+4. Overview/Curriculum hors Details ;
+5. quiescence puis cardinalité stable ;
+6. bornage `Autres détails` ;
+7. unicité des cartes moteur ;
+8. vrai clic `Voir tout le parcours` ;
+9. 5 étapes ;
+10. vrai clic A1 Core ;
+11. 40 leçons accessibles, 15 max dans A1 Core ;
+12. dashboard stable après navigation ;
+13. mobile 5/40 + Details replié.
 
-CI durable :
-
-- Session UX et Progression UX ne figent plus le query-string exact du fichier propriétaire ;
-- Build 26.4 protège son propre layer + ses comportements sans imposer la version globale ;
-- Build 26.3 protège Today et l’intention 2 colonnes sans imposer `display:contents` ;
-- Build 26.1 lance ses Chrome dans des profils isolés avec retries et timeout borné.
+Les workflows historiques Build 25, 26.1, 26.3, 26.4 et 26.5 sont version-forward lorsqu’un fichier propriétaire évolue mais continuent à protéger leurs comportements.
 
 Preuves runtime :
 
 ```text
-PR #49                     11/11 SUCCESS
-main 2cd29f20...            11/11 SUCCESS
-GitHub Pages #106           SUCCESS
+PR #52 / head b43eca2c...     12/12 SUCCESS
+main 7bb48979...              12/12 SUCCESS
+GitHub Pages #108             SUCCESS
 ```
 
 # Dette / gate terrain
 
-Build 26.5 est **PROD / CLOS**. Le gate iPhone de l’auto-écoute Build 26.1 reste ouvert. `app.js` reste monolithique par choix de sécurité ; son extraction est réservée à Architecture Hardening.
+Build 26.6 est **PROD / CLOS**. Le gate iPhone de l’auto-écoute Build 26.1 reste ouvert. `app.js` reste monolithique par choix de sécurité ; son extraction est réservée à Architecture Hardening.
