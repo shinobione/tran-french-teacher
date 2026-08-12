@@ -65,6 +65,8 @@ function installBuild27ShellBridges() {
   const root = document.documentElement;
   if (!window.FrenchTranquilleBuild27Shell || root.__frenchTranquilleBuild27ShellBridges) return;
 
+  const shellRefresh = () => window.FrenchTranquilleBuild27Shell?.refresh?.();
+
   const syncTabState = () => {
     if (!root.classList.contains('b27-app-shell')) return;
     if (root.classList.contains('b27-practice-open')) {
@@ -125,6 +127,17 @@ function installBuild27ShellBridges() {
     syncTabState();
     syncOverlayGeometry();
   };
+
+  // The historical tab bus owns the actual screen change. Once its click has
+  // bubbled through, rebuild the learner façade immediately instead of waiting
+  // for a later MutationObserver turn.
+  window.addEventListener('click', event => {
+    const nav = event.target?.closest?.('.ux-bottom-nav [data-ux-nav]');
+    if (!nav || nav.dataset.uxNav === 'practice') return;
+    queueMicrotask(shellRefresh);
+    requestAnimationFrame(shellRefresh);
+    setTimeout(shellRefresh, 48);
+  });
 
   new MutationObserver(mutations => {
     if (mutations.some(mutation => mutation.type === 'attributes' && mutation.attributeName === 'class')) syncTabState();
