@@ -106,7 +106,10 @@
     } else if (target === 'progress') {
       if (!await openProgressState()) return;
     } else if (target === 'journey') {
-      if (!await openProgressState()) return;
+      // The real Progress → Journey click path is already certified by flowContract.
+      // For visual review, open the overlay directly through Build 27's public API
+      // from a stable Home state so no second navigation timing can interfere.
+      if (!await waitFor('.b27-home', 6000)) return;
       const shell = await waitForShellApi('openJourney', 6000);
       if (!shell) {
         html.dataset.b27VisualShellReady = '0';
@@ -119,9 +122,6 @@
       if (!await waitFor('.b27-home')) return;
     }
 
-    // User navigation is already certified by flowContract. Visual states use the
-    // public Build 27 shell API where available so screenshots measure a stable
-    // target rather than a second copy of interaction timing.
     await sleep(80);
     const overlay = await waitOverlaySettled(3000);
     html.dataset.b27VisualEntering = overlay?.classList.contains('b27-entering') ? '1' : '0';
