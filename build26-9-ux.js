@@ -206,11 +206,11 @@
 
   function recordGroup(key,metric) {
     const html = document.documentElement;
-    html.dataset[`b269${key.replace(/-([a-z])/g,(_,c)=>c.toUpperCase())}Ready`] = metric.ready ? '1' : '0';
-    html.dataset[`b269${key.replace(/-([a-z])/g,(_,c)=>c.toUpperCase())}Cards`] = String(metric.visibleCards.length);
-    html.dataset[`b269${key.replace(/-([a-z])/g,(_,c)=>c.toUpperCase())}PanelWidth`] = String(metric.panelWidth);
-    html.dataset[`b269${key.replace(/-([a-z])/g,(_,c)=>c.toUpperCase())}CardWidth`] = String(metric.maxCardWidth);
-    html.dataset[`b269${key.replace(/-([a-z])/g,(_,c)=>c.toUpperCase())}PanelHeight`] = String(metric.panelHeight);
+    html.setAttribute(`data-b269-${key}-ready`, metric.ready ? '1' : '0');
+    html.setAttribute(`data-b269-${key}-cards`, String(metric.visibleCards.length));
+    html.setAttribute(`data-b269-${key}-panel-width`, String(metric.panelWidth));
+    html.setAttribute(`data-b269-${key}-card-width`, String(metric.maxCardWidth));
+    html.setAttribute(`data-b269-${key}-panel-height`, String(metric.panelHeight));
   }
 
   function openAndValidate(n,key,done) {
