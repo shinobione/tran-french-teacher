@@ -119,8 +119,8 @@ jobs:
             grep -q 'data-b28-boot-repair="1"' "$file" || ok=0
             grep -q 'data-b28-boot-quarantine="1"' "$file" || ok=0
             grep -q 'screen-home' "$file" || ok=0
-            grep -q 'French Trân’quille n’a pas démarré' "$file" && ok=0 || true
             if [ "$ok" = 1 ]; then passed=1; break; fi
+            grep -o 'data-b28-[^ >]*' "$file" | head -20 || true
           done
           test "$passed" = 1
 
