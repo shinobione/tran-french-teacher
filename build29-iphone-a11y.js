@@ -5,7 +5,11 @@
   const VERSION = '1.22.0';
   const BUILD = '29';
   const SW_URL = './sw.js?v=1.22.0-b29';
+  const params = new URLSearchParams(location.search);
   const TOP_LEVEL = window.top === window.self;
+  const OWN_AUDIT = params.has('b29Audit');
+  const LEGACY_SMOKE = [...params.keys()].some(key => /smoke/i.test(key));
+  const SW_CONTEXT = TOP_LEVEL && (!LEGACY_SMOKE || OWN_AUDIT);
   const DEBUG_KEY = 'tran-french-teacher:debug-fr:v1';
   const isDebug = () => localStorage.getItem(DEBUG_KEY) === '1';
   const T = (vi, fr) => isDebug() ? fr : vi;
@@ -14,9 +18,10 @@
   root.dataset.b29Ready = '1';
   root.dataset.b29SwSupported = 'serviceWorker' in navigator ? '1' : '0';
   root.dataset.b29SwTopLevel = TOP_LEVEL ? '1' : '0';
+  root.dataset.b29SwContext = SW_CONTEXT ? '1' : '0';
 
   function syncServiceWorkerController() {
-    if (!TOP_LEVEL || !('serviceWorker' in navigator)) return false;
+    if (!SW_CONTEXT || !('serviceWorker' in navigator)) return false;
     const controlled = !!navigator.serviceWorker.controller;
     root.dataset.b29SwController = controlled ? '1' : '0';
     if (controlled) {
@@ -29,8 +34,9 @@
 
   let serviceWorkerPromise = null;
   async function ensureServiceWorker() {
-    if (!TOP_LEVEL) {
-      root.dataset.b29SwEmbedded = '1';
+    if (!SW_CONTEXT) {
+      root.dataset.b29SwEmbedded = TOP_LEVEL ? '0' : '1';
+      root.dataset.b29SwTestIsolated = LEGACY_SMOKE && !OWN_AUDIT ? '1' : '0';
       return null;
     }
     if (!('serviceWorker' in navigator)) return null;
@@ -203,7 +209,8 @@
       serviceWorkerRegistered: root.dataset.b29SwRegistered === '1',
       serviceWorkerReady: root.dataset.b29SwReady === '1',
       serviceWorkerControlled: root.dataset.b29SwController === '1',
-      serviceWorkerTopLevel: TOP_LEVEL
+      serviceWorkerTopLevel: TOP_LEVEL,
+      serviceWorkerContext: SW_CONTEXT
     };
   }
 
@@ -255,5 +262,5 @@
     syncServiceWorkerController
   });
 
-  if (TOP_LEVEL) ensureServiceWorker();
+  if (SW_CONTEXT) ensureServiceWorker();
 })();
