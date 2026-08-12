@@ -42,17 +42,53 @@
     markGeometry('b27Home');
   }
 
+  async function openPracticeState() {
+    if (!await waitFor('.b27-home')) return false;
+    if (!await click('.ux-bottom-nav [data-ux-nav="practice"]')) return false;
+    const practice = await waitFor('.b27-practice-page');
+    if (!practice) return false;
+    await sleep(120);
+    html.dataset.b27PracticeVisible = visible(practice) ? '1' : '0';
+    html.dataset.b27PracticeActions = String(practice.querySelectorAll('.b27-practice-action').length);
+    return true;
+  }
+
+  async function openProgressState() {
+    if (!await waitFor('.b27-home')) return false;
+    if (!await click('.ux-bottom-nav [data-ux-nav="progress"]')) return false;
+    const progress = await waitFor('.b27-progress-page');
+    if (!progress) return false;
+    await sleep(120);
+    html.dataset.b27ProgressVisible = visible(progress) ? '1' : '0';
+    html.dataset.b27ProgressLegacyVisible = String([...document.querySelectorAll('.screen-progress .progress-layout')].filter(visible).length);
+    html.dataset.b27ProgressLessonRows = String(progress.querySelectorAll('.b27-mini-lessons .b27-lesson-row').length);
+    return true;
+  }
+
+  async function visualState(target) {
+    if (target === 'practice') {
+      if (!await openPracticeState()) return;
+    } else if (target === 'progress') {
+      if (!await openProgressState()) return;
+    } else if (target === 'journey') {
+      if (!await openProgressState()) return;
+      if (!await click('[data-b27-open-journey]')) return;
+      if (!await waitFor('.b27-journey-page')) return;
+      await sleep(120);
+    } else {
+      if (!await waitFor('.b27-home')) return;
+      await sleep(120);
+    }
+    html.dataset.b27VisualReady = target;
+    markGeometry('b27Visual');
+  }
+
   async function flowContract() {
     const home = await waitFor('.b27-home');
     if (!home) return;
     html.dataset.b27FlowPhase = 'home';
 
-    if (!await click('.ux-bottom-nav [data-ux-nav="practice"]')) return;
-    const practice = await waitFor('.b27-practice-page');
-    if (!practice) return;
-    await sleep(80);
-    html.dataset.b27PracticeVisible = visible(practice) ? '1' : '0';
-    html.dataset.b27PracticeActions = String(practice.querySelectorAll('.b27-practice-action').length);
+    if (!await openPracticeState()) return;
     html.dataset.b27FlowPhase = 'practice';
 
     if (!await click('[data-b27-close-practice]')) return;
@@ -96,6 +132,7 @@
     try {
       if (mode === 'home') await homeContract();
       else if (mode === 'flow') await flowContract();
+      else if (mode.startsWith('visual-')) await visualState(mode.slice(7));
       html.dataset.b27SmokeDone = '1';
     } catch (error) {
       html.dataset.b27SmokeError = String(error?.message || error);
