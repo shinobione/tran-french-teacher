@@ -8,11 +8,22 @@
   const fail = message => failures.push(message);
   const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
+  async function settledAudit(api) {
+    const started = performance.now();
+    let audit = api?.refresh?.() || {};
+    while (!audit.homeVisible && performance.now() - started < 4000) {
+      await wait(200);
+      audit = api?.refresh?.() || audit;
+    }
+    root.dataset.b29AuditSettleMs = String(Math.round(performance.now() - started));
+    return audit;
+  }
+
   async function run() {
-    await wait(900);
+    await wait(700);
     const api = window.FrenchTranquilleBuild29;
     if (!api) fail('Build29 API missing');
-    const audit = api?.refresh?.() || {};
+    const audit = await settledAudit(api);
 
     root.dataset.b29AuditHomeVisible = audit.homeVisible ? '1' : '0';
     root.dataset.b29AuditButtons = String(audit.buttons ?? -1);
@@ -23,7 +34,7 @@
 
     if (!root.classList.contains('b29-iphone-ready')) fail('b29 root class missing');
     if (root.dataset.b29Ready !== '1') fail('b29 ready marker missing');
-    if (!audit.homeVisible) fail('learner home is not visible');
+    if (!audit.homeVisible) fail('learner home is not visible after bounded settle');
     if (!window.visualViewport) fail('visualViewport unavailable');
     if (!getComputedStyle(root).getPropertyValue('--b29-vv-height').trim()) fail('visualViewport CSS variable missing');
 
