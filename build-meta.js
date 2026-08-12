@@ -1,8 +1,38 @@
 // Production baseline kept explicit for historical CI contracts.
 const PRODUCTION_BASELINE = { version: '1.17.0', build: 24 };
-const META = { version: '1.22.0', build: '29', baseline: PRODUCTION_BASELINE };
+const META = { version: '1.22.1', build: '29.1', baseline: PRODUCTION_BASELINE };
 
 window.FrenchTranquilleBuildMeta = META;
+
+function installSpeakingLoopAssets() {
+  if (!document.querySelector('link[data-speaking-loop-style]')) {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = './speaking-loop-content.css?v=1.22.1-b29.1';
+    link.dataset.speakingLoopStyle = '1';
+    document.head.appendChild(link);
+  }
+  if (document.querySelector('script[data-speaking-loop-script]')) return;
+  const script = document.createElement('script');
+  script.src = './speaking-loop-content.js?v=1.22.1-b29.1';
+  script.dataset.speakingLoopScript = '1';
+  script.addEventListener('load', () => {
+    const api = window.FrenchTranquilleSpeakingLoop;
+    if (api && typeof api === 'object') {
+      api.version = META.version;
+      api.build = META.build;
+      api.refresh?.();
+    }
+    if (new URLSearchParams(location.search).has('b291Smoke') && !document.querySelector('script[data-speaking-loop-smoke]')) {
+      const smoke = document.createElement('script');
+      smoke.src = './speaking-loop-smoke.js?v=1.22.1-b29.1';
+      smoke.dataset.speakingLoopSmoke = '1';
+      document.body.appendChild(smoke);
+    }
+  });
+  document.body.appendChild(script);
+}
+installSpeakingLoopAssets();
 
 [
   'FrenchTranquilleCurriculum','LucieVoice','FrenchTranquilleFreeVoice','FrenchTranquilleStage2',

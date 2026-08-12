@@ -30,7 +30,12 @@ jobs:
           grep -q 'build29-iphone-a11y.js?v=1.22.0-b29' index.html
           grep -q 'build29-smoke.js?v=1.22.0-b29' index.html
           grep -q 'build-meta.js?v=1.22.0-b29' index.html
-          grep -q "version: '1.22.0', build: '29'" build-meta.js
+          node - <<'NODE'
+          const fs=require('fs');
+          const text=fs.readFileSync('build-meta.js','utf8');
+          const match=text.match(/const META = \{ version: '[^']+', build: '([^']+)'/);
+          if(!match || Number(match[1]) < 29) throw new Error('Build 29 contract cannot run on a pre-29 build');
+          NODE
           grep -q 'tran-french-teacher-v1.22.0-b29-iphone-pwa-a11y' index.html sw.js
           grep -q 'build29-iphone-a11y.css' sw.js
           grep -q 'build29-iphone-a11y.js' sw.js
@@ -102,20 +107,12 @@ jobs:
               grep -q 'aria-current="page"' "$file" || ok=0
               if [ "$reduced" = 1 ]; then grep -q 'data-b29-smoke-reduced="1"' "$file" || ok=0; fi
               if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then ok=0; fi
-              if [ "$ok" = 1 ]; then
-                grep -o 'data-b29-audit-[^ >]*' "$file" | head -12 || true
-                grep -o 'data-b29-smoke-viewport="[^"]*"' "$file" | head -1 || true
-                passed=1
-                break
-              fi
-              echo '=== Build 29 diagnostic markers ==='
+              if [ "$ok" = 1 ]; then passed=1; break; fi
+              echo "=== Build 29 ${label} markers ==="
               grep -o 'data-b29-[^ >]*' "$file" | head -50 || true
-              echo '=== Build 29 failure payload ==='
-              grep -o '<pre id="b29-smoke-failures"[^>]*>[^<]*' "$file" || true
             done
             test "$passed" = 1
           }
-
           run_case reference 390 844 0
           run_case compact 320 568 0
           run_case large 430 932 0
@@ -153,12 +150,8 @@ jobs:
             fi
           }
 
-          # Warm the same browser profile twice. Chromium headless does not expose
-          # navigator.serviceWorker.controller consistently between independent
-          # --dump-dom processes, so controller=1 is not used as the gate here.
           run_browser 'http://127.0.0.1:4173/?uxSmoke=lesson8&b29Audit=warm1' "$online1" 22000
           assert_warm "$online1" warm1
-
           run_browser 'http://127.0.0.1:4173/?uxSmoke=lesson8&b29Audit=warm2' "$online2" 22000
           assert_warm "$online2" warm2
 
@@ -166,8 +159,6 @@ jobs:
           rm -f /tmp/ft-b29-server.pid
           sleep 1
 
-          # Canonical offline proof: the origin server is physically unavailable.
-          # A complete learner Home can only be served by the installed Worker/cache.
           run_browser 'http://127.0.0.1:4173/?uxSmoke=lesson8&b29Audit=offline' "$offline" 24000
           offline_ok=1
           grep -q 'data-b29-smoke="passed"' "$offline" || offline_ok=0
@@ -185,8 +176,10 @@ jobs:
             grep -o 'data-b29-[^ >]*' "$offline" | head -90 || true
             echo '=== OFFLINE Build29 failure payload ==='
             grep -o '<pre id="b29-smoke-failures"[^>]*>[^<]*' "$offline" || true
+            echo '=== OFFLINE Speaking Loop markers ==='
+            grep -o 'data-speaking-loop-[^ >]*' "$offline" | head -40 || true
             echo '=== OFFLINE DOM head ==='
-            head -c 800 "$offline" || true
+            head -c 1200 "$offline" || true
             echo
             exit 1
           fi

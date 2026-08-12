@@ -31,7 +31,7 @@ jobs:
           node - <<'NODE'
           const fs=require('fs');
           const text=fs.readFileSync('build-meta.js','utf8');
-          const match=text.match(/const META = \{ version: '[^']+', build: '(\d+)'/);
+          const match=text.match(/const META = \{ version: '[^']+', build: '([0-9]+(?:\.[0-9]+)?)'/);
           if(!match || Number(match[1]) < 27) throw new Error('Build 27 shell contract cannot run on a pre-27 build');
           NODE
           grep -q 'FrenchTranquilleBuild27Shell' build-meta.js
