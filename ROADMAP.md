@@ -24,7 +24,7 @@
 18. Pendant une vraie session de Trân : pas de polish runtime/cache sauf incident critique.
 19. Une fonction d’auto-écoute ne doit jamais dégrader la reconnaissance vocale validée.
 20. Les détails pédagogiques peuvent être riches, mais jamais affichés comme un dump vertical permanent.
-21. Un mode `Lent` doit être **effectivement plus lent dans la couche voix finale**.
+21. Un mode `Lent` doit être effectivement plus lent dans la couche voix finale.
 22. Les surfaces critiques ont un contrat de clic navigateur réel.
 23. **Un contrôle visible ne doit pas être remplacé entre `pointerdown` et `click`.**
 24. Les tests d’interaction vérifient la destination réelle.
@@ -56,103 +56,104 @@
 50. **Les données corrompues sont mises en quarantaine avant d’être écartées.**
 51. **Le Recovery Engine doit agir avant le runtime susceptible d’initialiser un état neuf.**
 52. **Les réglages dépendants de l’appareil ne deviennent pas automatiquement des données pédagogiques portables.**
+53. **L’auto-écoute est un outil pédagogique ponctuel, jamais une obligation à chaque mot.**
+54. **Pas de score de prononciation si le produit ne possède pas une vraie mesure phonétique.**
+55. **Le modèle vocal et l’enregistrement local doivent rester séparés de la progression durable.**
 
 ---
 
-# Baseline production — v1.21.0 / Build 28
+# Baseline production — v1.22.0 / Build 29
 
-## Data & Recovery Hardening — ✅ PROD / CLOS
+## iPhone / PWA / Accessibility Hardening — ✅ PROD / CLOS
 
-- runtime : `ed09159a6246fe3c1892cb0ff8d03a4beffb7428` ;
-- PR runtime : **#62** ;
-- head PR certifié : `dc060ea5304b0526010bd8ac158b70c363525325` ;
-- PR : **17/17 workflows SUCCESS** ;
-- `main` : **17/17 workflows fonctionnels SUCCESS** ;
-- GitHub Pages : **#118 SUCCESS** ;
-- total runtime `main` : **18/18 SUCCESS Pages incluse** ;
+- runtime : `1c01648d89dfb3bd9236b9ad93fbade4e21102fa` ;
+- PR runtime : **#64** ;
+- head PR certifié : `27c67ee7b47b9f9a015e6c0072640e0e573de52d` ;
+- `main` : **19/19 SUCCESS** après rerun inchangé du seul ancien contrôle Build 27 visuel ;
+- GitHub Pages : **#120 SUCCESS** ;
 - curriculum **40 / 241** ;
 - Scenario **36 / 108** ;
 - Listening **0.88 / 0.65** ;
 - coût 0 €.
 
-### Coffre V2
+### iPhone / PWA
 
-- [x] registre explicite de six stores durables ;
-- [x] learner ;
-- [x] Learning Memory ;
-- [x] Error Intelligence ;
-- [x] Scenario ;
-- [x] Listening ;
-- [x] Milestones ;
-- [x] réglages voix laissés locaux à l’appareil.
+- [x] safe areas / `viewport-fit=cover` ;
+- [x] cibles tactiles coarse-pointer ≥44 px ;
+- [x] focus clavier visible ;
+- [x] `aria-current` / progressbar / live regions ;
+- [x] `VisualViewport` pour clavier virtuel ;
+- [x] mode standalone détecté ;
+- [x] petits/grands viewports ;
+- [x] paysage compact ;
+- [x] textes longs / overflow ;
+- [x] reduced motion ;
+- [x] contraste renforcé ;
+- [x] manifest PWA ;
+- [x] boot offline après chauffe Service Worker ;
+- [x] matrice Chrome 320×568 / 390×844 / 430×932.
 
-### Backup / restore
+### Expérience #65
 
-- [x] format `french-tranquille-backup` version 2 ;
-- [x] export des six stores ;
-- [x] validation avant export/import ;
-- [x] snapshot `pre-restore` ;
-- [x] snapshot `pre-migration` ;
-- [x] restore transactionnel ;
-- [x] vérification exacte après écriture ;
-- [x] rollback automatique sur erreur ;
-- [x] backup V1 migré sans effacer les stores modernes absents du vieux format.
+- [x] isolation Service Worker des anciens smoke harnesses explorée ;
+- [x] expérience jugée inutile : vieux contrôle visuel Build 27 toujours instable ;
+- [x] PR #65 **fermée sans merge** ;
+- [x] aucun runtime #65 en production.
 
-### Corruption / récupération
+---
 
-- [x] Recovery Engine avant `app.js` ;
-- [x] JSON invalide détecté ;
-- [x] schéma invalide détecté ;
-- [x] écriture invalide bloquée en runtime ;
-- [x] quarantaine bornée ;
-- [x] snapshot `last-good` ;
-- [x] fallback snapshot historique Build 22 ;
-- [x] seul le store irrécupérable est écarté si aucun fallback valide n’existe.
+# v1.22.1 — Build 29.1 — Speaking Loop Content
 
-### Reset
+**Candidat actuel — PR #66.**
 
-- [x] snapshot `pre-reset` ;
-- [x] les six stores durables sont supprimés ensemble ;
-- [x] snapshot pré-reset conservé ;
-- [x] restore après reset testé sur ancien profil synthétique.
+Objectif : intégrer la réécoute demandée par Trân directement dans le contenu des leçons, sans casser la voix ni la reconnaissance existantes.
 
-### Tribunal Build 28
+### Contrat pédagogique
 
-Node :
+- [x] sélectionner une phrase utile par leçon depuis le curriculum réel ;
+- [x] ajouter un second moment après réussite de la situation finale ;
+- [x] **2 moments maximum par leçon** ;
+- [x] couvrir les **40 leçons** sans modifier la baseline 40/241 ;
+- [x] modèle vocal Tyffany ;
+- [x] seconde prise locale volontaire ;
+- [x] lecture de sa propre voix ;
+- [x] possibilité de réécouter Tyffany et de refaire ;
+- [x] `Continuer` reste disponible ;
+- [x] aucun score de prononciation inventé.
 
-- [x] backup complet ;
-- [x] round-trip exact ;
-- [x] panne simulée pendant restore ;
-- [x] rollback exact ;
-- [x] invalid JSON/schema ;
-- [x] migration V1 préservant les stores modernes.
+### Sécurité
 
-Chrome réel :
-
-- [x] tentative d’écriture learner cassée bloquée ;
-- [x] original conservé ;
-- [x] quarantaine créée ;
-- [x] backup complet + restore ;
-- [x] reset atomique ;
-- [x] profil historique **7 leçons + `l8=4`** récupéré ;
-- [x] corruption injectée avant `app.js` réparée depuis `last-good` ;
-- [x] Home Build 27 mobile `390×844` intacte.
-
-### Sanctuaires / baselines
-
+- [x] `getUserMedia` seulement après clic explicite ;
+- [x] enregistrement local ≤9 s ;
+- [x] aucun upload ;
+- [x] aucune persistance learner/Memory/backup ;
+- [x] nettoyage Blob au changement d’étape/page ;
 - [x] `voice-ios.js` byte-identique ;
 - [x] `free-voice.js` byte-identique ;
-- [x] logo byte-identique ;
-- [x] favicon byte-identique ;
-- [x] Build 27 App Shell intact ;
-- [x] Build 26.9 Content Reliability ;
-- [x] Build 26.8 round-trip ;
-- [x] Build 26.7 geometry ;
-- [x] Build 26.6 containment / **12 → 12** ;
-- [x] Session / Listening / Options / nav ;
-- [x] learner historique.
+- [x] logo / favicon byte-identiques.
 
-Baseline historique protégée : **v1.17.0 — Build 24 — Real Life French II**, Scenario **28 situations / 84 tours** avant Pack III. `real-life-data-2.js` reste un marqueur canonique.
+### Tribunal candidat
+
+- [x] vraie Leçon 1 ouverte dans Chrome ;
+- [x] Speaking Loop de contenu visible ;
+- [x] quiz réels traversés ;
+- [x] situation finale réussie ;
+- [x] Speaking Loop final visible ;
+- [x] mobile `390×844` ;
+- [x] overflow horizontal = 0 ;
+- [x] cible tactile ≥44 px ;
+- [x] Build 29 PWA/offline toujours testé ;
+- [x] Build 28 Recovery toujours testé ;
+- [x] Voice Replay 26.1 toujours testé.
+
+### Avant merge
+
+- [ ] tous les workflows historiques + 29.1 verts sur le même head ;
+- [ ] docs candidat synchronisés ;
+- [ ] merge PR #66 ;
+- [ ] tribunal `main` ;
+- [ ] GitHub Pages sur le SHA runtime ;
+- [ ] clôture docs-only PROD/CLOS.
 
 ---
 
@@ -160,40 +161,7 @@ Baseline historique protégée : **v1.17.0 — Build 24 — Real Life French II*
 
 - [ ] réponse reconnue → seconde prise locale → lecture correcte → réponse vocale suivante toujours reconnue normalement.
 
-Ce gate reste indépendant du Build 28 : aucune modification de `voice-ios.js` ou `free-voice.js`.
-
----
-
-# v1.22.0 — Build 29 — iPhone / PWA / Accessibility Hardening
-
-**Prochain gros chantier.**
-
-Objectif : certifier French Trân’quille comme vraie PWA iPhone utilisable confortablement, sans modifier les moteurs pédagogiques inutilement.
-
-Axes prévus :
-
-- safe areas iPhone / encoche / barre Home ;
-- tailles tactiles ;
-- contraste et lisibilité ;
-- zoom / tailles de police / texte dynamique lorsque possible ;
-- `prefers-reduced-motion` déjà présent → audit complet ;
-- clavier / focus / labels accessibles ;
-- installation PWA / lancement standalone ;
-- offline réel après installation ;
-- rotation / petits et grands iPhone ;
-- comportement du clavier virtuel ;
-- tab bar et overlays avec viewport Safari réel ;
-- tests navigateur mobile renforcés ;
-- validation terrain iPhone quand nécessaire.
-
-Critères avant clôture :
-
-- [ ] aucune donnée Build 28 perdue ;
-- [ ] App Shell Build 27 intact ;
-- [ ] voice sanctuaries intactes sauf changement terrain explicitement justifié ;
-- [ ] audit accessibility documenté ;
-- [ ] PWA install/offline documentés et testés ;
-- [ ] Chrome mobile + vrais retours iPhone quand un comportement WebKit est en jeu.
+Ce gate reste indépendant de 29.1. Tant qu’il n’est pas validé, **pas d’enregistrement automatique du premier essai exact** pendant Free Voice.
 
 ---
 
@@ -207,15 +175,34 @@ Priorités :
 - clarifier propriétaires DOM / state / routing ;
 - isoler davantage les moteurs ;
 - conserver les six stores Build 28 et leurs migrations ;
+- conserver l’App Shell Build 27, le hardening iPhone Build 29 et le Speaking Loop ;
 - comparaison avant/après par smokes reproductibles.
 
 ---
 
 # V2.0.0 — Freeze / Release
 
-Release cohérente, sauvegardable, restaurable, testée et documentée. Aucun nouveau moteur nécessaire pour justifier V2 : le jalon est la **fiabilité globale du produit**.
+Release cohérente, sauvegardable, restaurable, testée et documentée. Aucun nouveau moteur n’est requis pour justifier V2 : le jalon est la **fiabilité globale du produit**.
 
 ---
+
+# Baselines historiques protégées
+
+**v1.17.0 — Build 24 — Real Life French II** : **28 situations / 84 tours** avant Pack III ; `real-life-data-2.js` reste canonique.
+
+Builds structurants conservés :
+
+```text
+Build 26.1 Voice Replay + Details Dashboard
+Build 26.6 Progress Dashboard Containment
+Build 26.7 Progress Geometry
+Build 26.8 Progress Focus Flow
+Build 26.9 Progress Focus Content Reliability
+Build 27 App Shell Reset
+Build 28 Data & Recovery
+Build 29 iPhone / PWA / Accessibility
+Build 29.1 Speaking Loop Content — candidat
+```
 
 # Sanctuaires
 
@@ -236,17 +223,6 @@ voice-ios.js
 free-voice.js
 assets/LOGO.png
 assets/Favicon.png
-bottom navigation compatibility bus
-Progression UX Build 25
-Session UX Build 25.2
-Real Life III Build 26
-Voice Replay + Details Dashboard Build 26.1
-Progress Dashboard Containment Build 26.6
-Progress Open-Details Geometry Build 26.7
-Progress Focus Flow Build 26.8
-Progress Focus Content Reliability Build 26.9
-App Shell Build 27
-Data & Recovery Build 28
 ```
 
 Compatibilité interne conservée malgré le branding Tyffany : `LucieVoice`, `luc-*`, `lucie-*`.
