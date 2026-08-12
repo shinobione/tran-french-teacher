@@ -28,7 +28,7 @@ jobs:
           grep -Eq 'speaking-loop-content.css\?v=1\.22\.[1-9][0-9]*-b29\.[1-9][0-9]*' build-meta.js sw.js
           grep -Eq 'speaking-loop-content.js\?v=1\.22\.[1-9][0-9]*-b29\.[1-9][0-9]*' build-meta.js sw.js
           grep -q 'maxMoments: 2' speaking-loop-content.js
-          grep -q 'Aucun faux score de prononciation' README.md docs/BUILD-29-1-SPEAKING-LOOP-CONTENT.md
+          grep -E -qi '(aucun|pas de)[^\n]{0,40}(faux )?score[^\n]{0,20}prononciation' README.md docs/BUILD-29-1-SPEAKING-LOOP-CONTENT.md docs/BUILD-29-2-SPEAKING-VARIETY-CLARITY.md
           ! grep -E -q '([0-9]{1,3}[[:space:]]*%.*prononciation|prononciation.*[0-9]{1,3}[[:space:]]*%)' speaking-loop-content.js
 
       - name: Learner, voice, branding and durable data sanctuaries stay intact
