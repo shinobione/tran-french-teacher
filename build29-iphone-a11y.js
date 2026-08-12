@@ -5,6 +5,7 @@
   const VERSION = '1.22.0';
   const BUILD = '29';
   const SW_URL = './sw.js?v=1.22.0-b29';
+  const TOP_LEVEL = window.top === window.self;
   const DEBUG_KEY = 'tran-french-teacher:debug-fr:v1';
   const isDebug = () => localStorage.getItem(DEBUG_KEY) === '1';
   const T = (vi, fr) => isDebug() ? fr : vi;
@@ -12,9 +13,10 @@
   root.classList.add('b29-iphone-ready');
   root.dataset.b29Ready = '1';
   root.dataset.b29SwSupported = 'serviceWorker' in navigator ? '1' : '0';
+  root.dataset.b29SwTopLevel = TOP_LEVEL ? '1' : '0';
 
   function syncServiceWorkerController() {
-    if (!('serviceWorker' in navigator)) return false;
+    if (!TOP_LEVEL || !('serviceWorker' in navigator)) return false;
     const controlled = !!navigator.serviceWorker.controller;
     root.dataset.b29SwController = controlled ? '1' : '0';
     if (controlled) {
@@ -27,6 +29,10 @@
 
   let serviceWorkerPromise = null;
   async function ensureServiceWorker() {
+    if (!TOP_LEVEL) {
+      root.dataset.b29SwEmbedded = '1';
+      return null;
+    }
     if (!('serviceWorker' in navigator)) return null;
 
     if (syncServiceWorkerController()) {
@@ -196,7 +202,8 @@
       serviceWorkerSupported: root.dataset.b29SwSupported === '1',
       serviceWorkerRegistered: root.dataset.b29SwRegistered === '1',
       serviceWorkerReady: root.dataset.b29SwReady === '1',
-      serviceWorkerControlled: root.dataset.b29SwController === '1'
+      serviceWorkerControlled: root.dataset.b29SwController === '1',
+      serviceWorkerTopLevel: TOP_LEVEL
     };
   }
 
@@ -248,5 +255,5 @@
     syncServiceWorkerController
   });
 
-  ensureServiceWorker();
+  if (TOP_LEVEL) ensureServiceWorker();
 })();
