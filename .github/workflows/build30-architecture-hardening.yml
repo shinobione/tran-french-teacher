@@ -25,11 +25,22 @@ jobs:
           node --check build30-architecture-smoke.js
           node --check build-meta.js
           node --check sw.js
-          grep -q "const VERSION = '1.23.0'" runtime-contracts.js
-          grep -q 'const BUILD = 30' runtime-contracts.js
-          grep -q "version: '1.23.0', build: '30'" build-meta.js
-          grep -q "import './runtime-contracts.js?v=1.23.0-b30'" build-meta.js
-          grep -q "import './runtime-bridge.js?v=1.23.0-b30'" build-meta.js
+          node - <<'NODE'
+          const fs=require('fs');
+          const contracts=fs.readFileSync('runtime-contracts.js','utf8');
+          const meta=fs.readFileSync('build-meta.js','utf8');
+          const bridge=fs.readFileSync('runtime-bridge.js','utf8');
+          const cv=contracts.match(/const VERSION = '([^']+)'/);
+          const cb=contracts.match(/const BUILD = ([0-9.]+);/);
+          const mm=meta.match(/const META = \{ version: '([^']+)', build: '([^']+)'/);
+          if(!cv||!cb||!mm) throw new Error('release metadata parse failed');
+          if(Number(cb[1]) !== 30 || Number(mm[2]) !== 30) throw new Error('Build 30 architecture contract moved');
+          if(cv[1] !== mm[1]) throw new Error(`contract/meta version mismatch ${cv[1]} != ${mm[1]}`);
+          if(!meta.includes(`runtime-contracts.js?v=${cv[1]}-b30`)) throw new Error('build-meta contract import mismatch');
+          if(!meta.includes(`runtime-bridge.js?v=${cv[1]}-b30`)) throw new Error('build-meta bridge import mismatch');
+          if(!bridge.includes(`runtime-contracts.js?v=${cv[1]}-b30`)) throw new Error('bridge contract import mismatch');
+          console.log(`Build 30 architecture contract active under release ${cv[1]}`);
+          NODE
           grep -Fq 'runtime-contracts.js?v=${B30}' sw.js
           grep -Fq 'runtime-bridge.js?v=${B30}' sw.js
           grep -Fq 'build30-architecture-smoke.js?v=${B30}' sw.js
@@ -75,7 +86,6 @@ jobs:
             for marker in \
               'data-b30-complete="1"' \
               'data-b30-runtime-ready="1"' \
-              'data-b30-version="1.23.0-30"' \
               'data-b30-lessons="40"' \
               'data-b30-items="241"' \
               'data-b30-missing-required="0"' \
@@ -94,6 +104,7 @@ jobs:
               'data-b30-horizontal-overflow="0"'; do
               grep -q "$marker" "$file" || ok=0
             done
+            grep -Eq 'data-b30-version="[^\"]+-30"' "$file" || ok=0
             if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then ok=0; fi
             if [ "$ok" = 1 ]; then passed=1; break; fi
             echo '=== Build 30 desktop markers ==='
@@ -120,6 +131,7 @@ jobs:
             grep -q 'data-b30-learner-unchanged="1"' "$file" || ok=0
             grep -q 'data-b30-horizontal-overflow="0"' "$file" || ok=0
             grep -q 'data-b30-nav-single-active="1"' "$file" || ok=0
+            grep -Eq 'data-b30-version="[^\"]+-30"' "$file" || ok=0
             if [ "$ok" = 1 ]; then passed=1; break; fi
             echo '=== Build 30 mobile markers ==='
             grep -o 'data-b30-[^ >]*' "$file" | head -80 || true
