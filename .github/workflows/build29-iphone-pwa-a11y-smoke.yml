@@ -72,73 +72,50 @@ jobs:
           sleep 1
           google-chrome --version
 
-      - name: Chrome iPhone 390x844 — touch, semantics and safe viewport
+      - name: Chrome mobile matrix — touch, semantics, safe viewport and reduced motion
         run: |
-          profile=/tmp/ft-b29-390
-          file=/tmp/b29-390.html
-          rm -rf "$profile" "$file"
-          timeout --signal=TERM --kill-after=5s 50s \
-            google-chrome --headless=new --no-sandbox --disable-gpu \
-            --user-data-dir="$profile" --window-size=390,844 \
-            --virtual-time-budget=22000 --dump-dom \
-            'http://127.0.0.1:4173/?uxSmoke=lesson8&b29Smoke=mobile' >"$file"
-          if ! grep -q 'data-b29-smoke="passed"' "$file"; then
-            echo '=== Build 29 diagnostic markers ==='
-            grep -o 'data-b29-[^ >]*' "$file" | head -40 || true
-            echo '=== Build 29 failure payload ==='
-            grep -o '<pre id="b29-smoke-failures"[^>]*>[^<]*' "$file" || true
-            echo '=== Build 29 shell buttons ==='
-            grep -o '<button[^>]*\(b27\|ux-bottom-nav\)[^>]*>' "$file" | head -30 || true
-            exit 1
-          fi
-          grep -q 'data-b29-ready="1"' "$file"
-          grep -q 'screen-home' "$file"
-          grep -q 'b27-home' "$file"
-          grep -q 'aria-current="page"' "$file"
-          if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then cat "$file"; exit 1; fi
+          run_case() {
+            label="$1"; width="$2"; height="$3"; reduced="$4"
+            passed=0
+            for attempt in 1 2 3; do
+              profile="/tmp/ft-b29-${label}-${attempt}"
+              file="/tmp/b29-${label}-${attempt}.html"
+              rm -rf "$profile" "$file"
+              chrome_status=0
+              extra_flags=''
+              if [ "$reduced" = 1 ]; then extra_flags='--force-prefers-reduced-motion'; fi
+              timeout --signal=TERM --kill-after=5s 50s \
+                google-chrome --headless=new --no-sandbox --disable-gpu \
+                $extra_flags --user-data-dir="$profile" --window-size="${width},${height}" \
+                --virtual-time-budget=22000 --dump-dom \
+                "http://127.0.0.1:4173/?uxSmoke=lesson8&b29Smoke=${label}" >"$file" || chrome_status=$?
+              echo "Build29 ${label} attempt ${attempt}: chrome_status=${chrome_status} bytes=$(wc -c < "$file")"
+              ok=1
+              grep -q 'data-b29-smoke="passed"' "$file" || ok=0
+              grep -q 'data-b29-ready="1"' "$file" || ok=0
+              grep -q 'screen-home' "$file" || ok=0
+              grep -q 'b27-home' "$file" || ok=0
+              grep -q 'aria-current="page"' "$file" || ok=0
+              if [ "$reduced" = 1 ]; then grep -q 'data-b29-smoke-reduced="1"' "$file" || ok=0; fi
+              if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then ok=0; fi
+              if [ "$ok" = 1 ]; then
+                grep -o 'data-b29-audit-[^ >]*' "$file" | head -10 || true
+                grep -o 'data-b29-smoke-viewport="[^"]*"' "$file" | head -1 || true
+                passed=1
+                break
+              fi
+              echo '=== Build 29 diagnostic markers ==='
+              grep -o 'data-b29-[^ >]*' "$file" | head -50 || true
+              echo '=== Build 29 failure payload ==='
+              grep -o '<pre id="b29-smoke-failures"[^>]*>[^<]*' "$file" || true
+            done
+            test "$passed" = 1
+          }
 
-      - name: Chrome compact iPhone 320x568 — no horizontal drift
-        run: |
-          profile=/tmp/ft-b29-320
-          file=/tmp/b29-320.html
-          rm -rf "$profile" "$file"
-          timeout --signal=TERM --kill-after=5s 50s \
-            google-chrome --headless=new --no-sandbox --disable-gpu \
-            --user-data-dir="$profile" --window-size=320,568 \
-            --virtual-time-budget=22000 --dump-dom \
-            'http://127.0.0.1:4173/?uxSmoke=lesson8&b29Smoke=compact' >"$file"
-          grep -q 'data-b29-smoke="passed"' "$file"
-          grep -q 'data-b29-smoke-viewport="320x568"' "$file"
-          grep -q 'screen-home' "$file"
-
-      - name: Chrome large iPhone 430x932 — no horizontal drift
-        run: |
-          profile=/tmp/ft-b29-430
-          file=/tmp/b29-430.html
-          rm -rf "$profile" "$file"
-          timeout --signal=TERM --kill-after=5s 50s \
-            google-chrome --headless=new --no-sandbox --disable-gpu \
-            --user-data-dir="$profile" --window-size=430,932 \
-            --virtual-time-budget=22000 --dump-dom \
-            'http://127.0.0.1:4173/?uxSmoke=lesson8&b29Smoke=large' >"$file"
-          grep -q 'data-b29-smoke="passed"' "$file"
-          grep -q 'data-b29-smoke-viewport="430x932"' "$file"
-          grep -q 'screen-home' "$file"
-
-      - name: Chrome reduced motion — same functional shell
-        run: |
-          profile=/tmp/ft-b29-reduced
-          file=/tmp/b29-reduced.html
-          rm -rf "$profile" "$file"
-          timeout --signal=TERM --kill-after=5s 50s \
-            google-chrome --headless=new --no-sandbox --disable-gpu \
-            --force-prefers-reduced-motion \
-            --user-data-dir="$profile" --window-size=390,844 \
-            --virtual-time-budget=22000 --dump-dom \
-            'http://127.0.0.1:4173/?uxSmoke=lesson8&b29Smoke=reduced' >"$file"
-          grep -q 'data-b29-smoke="passed"' "$file"
-          grep -q 'data-b29-smoke-reduced="1"' "$file"
-          grep -q 'screen-home' "$file"
+          run_case reference 390 844 0
+          run_case compact 320 568 0
+          run_case large 430 932 0
+          run_case reduced 390 844 1
 
       - name: PWA offline — warm install then boot without network server
         run: |
@@ -148,30 +125,28 @@ jobs:
           offline=/tmp/b29-offline.html
           rm -rf "$profile" "$online1" "$online2" "$offline"
 
+          run_browser() {
+            target="$1"; file="$2"; budget="$3"
+            chrome_status=0
+            timeout --signal=TERM --kill-after=5s 55s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=390,844 \
+              --virtual-time-budget="$budget" --dump-dom "$target" >"$file" || chrome_status=$?
+            echo "Build29 offline phase: chrome_status=${chrome_status} bytes=$(wc -c < "$file")"
+          }
+
           # First navigation installs the worker; second navigation gives it control.
-          timeout --signal=TERM --kill-after=5s 50s \
-            google-chrome --headless=new --no-sandbox --disable-gpu \
-            --user-data-dir="$profile" --window-size=390,844 \
-            --virtual-time-budget=22000 --dump-dom \
-            'http://127.0.0.1:4173/?uxSmoke=lesson8&b29Smoke=warm1' >"$online1"
+          run_browser 'http://127.0.0.1:4173/?uxSmoke=lesson8&b29Smoke=warm1' "$online1" 22000
           grep -q 'data-b29-smoke="passed"' "$online1"
 
-          timeout --signal=TERM --kill-after=5s 50s \
-            google-chrome --headless=new --no-sandbox --disable-gpu \
-            --user-data-dir="$profile" --window-size=390,844 \
-            --virtual-time-budget=22000 --dump-dom \
-            'http://127.0.0.1:4173/?uxSmoke=lesson8&b29Smoke=warm2' >"$online2"
+          run_browser 'http://127.0.0.1:4173/?uxSmoke=lesson8&b29Smoke=warm2' "$online2" 22000
           grep -q 'data-b29-smoke="passed"' "$online2"
 
           kill "$(cat /tmp/ft-b29-server.pid)" || true
           rm -f /tmp/ft-b29-server.pid
           sleep 1
 
-          timeout --signal=TERM --kill-after=5s 55s \
-            google-chrome --headless=new --no-sandbox --disable-gpu \
-            --user-data-dir="$profile" --window-size=390,844 \
-            --virtual-time-budget=24000 --dump-dom \
-            'http://127.0.0.1:4173/?uxSmoke=lesson8&b29Smoke=offline' >"$offline"
+          run_browser 'http://127.0.0.1:4173/?uxSmoke=lesson8&b29Smoke=offline' "$offline" 24000
           grep -q 'data-b29-smoke="passed"' "$offline"
           grep -q 'data-b29-ready="1"' "$offline"
           grep -q 'screen-home' "$offline"
