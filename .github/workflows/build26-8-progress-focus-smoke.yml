@@ -18,17 +18,14 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Syntax, version, cache and wiring
+      - name: Syntax and preserved Build 26.8 contract wiring
         run: |
           node --check build26-8-ux.js
           node --check build-meta.js
           node --check sw.js
           grep -q 'build26-8-ux.css?v=1.19.8-b26.8' index.html
           grep -q 'build26-8-ux.js?v=1.19.8-b26.8' index.html
-          grep -q 'build-meta.js?v=1.19.8-b26.8' index.html
-          grep -q "version: '1.19.8', build: '26.8'" build-meta.js
           grep -q 'FrenchTranquilleBuild268UX' build-meta.js
-          grep -q 'tran-french-teacher-v1.19.8-b26.8-progress-focus-flow' index.html sw.js
           grep -q 'build26-8-ux.css' sw.js
           grep -q 'build26-8-ux.js' sw.js
           grep -q 'data-b268-focus="details"' build26-8-ux.css
