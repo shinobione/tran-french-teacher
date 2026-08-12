@@ -9,15 +9,17 @@ UX Shell simple
         ↓
 Progression UX + Session UX
         ↓
-Build 26.3 Interaction layer
+Build 26.3 interactions stables
         ↓
 Build 26.4 single-scroll + Tyffany
         ↓
-Build 26.5 Conversation exit
+Build 26.5 Conversation Exit
         ↓
-Build 26.6 Progress containment + staged curriculum
+Build 26.6 Progress containment + curriculum par étapes
         ↓
-Build 26.7 open-Details geometry guard
+Build 26.7 garde géométrique open-Details
+        ↓
+Build 26.8 Progress Focus Flow
         ↓
 Details Dashboard + Voice Replay
         ↓
@@ -28,11 +30,11 @@ localStorage + Web APIs navigateur
 
 PWA statique GitHub Pages, sans backend obligatoire ni API payante.
 
-Principe produit : **la complexité appartient aux moteurs ; Trân voit d’abord l’information utile pour décider quoi faire.**
+Principe produit : **la complexité appartient aux moteurs ; l’utilisatrice voit seulement le contexte nécessaire à l’action en cours.**
 
 ---
 
-# Runtime production — v1.19.7 Build 26.7
+# Runtime production — v1.19.8 Build 26.8
 
 Runtime principal :
 
@@ -74,139 +76,185 @@ build26-4-ux.js
 build26-5-ux.js
 build26-6-ux.js
 build26-7-ux.js
+build26-8-ux.js
 build-meta.js
 ```
 
-CSS additif pertinent :
+CSS additif Progress :
 
 ```text
 progression-ux.css
-session-ux.css
-voice-replay.css
 progress-details-dashboard.css
 build26-3-ux.css
 build26-4-ux.css
 build26-5-ux.css
 build26-6-ux.css
 build26-7-ux.css
+build26-8-ux.css
 ```
 
-Production runtime : `eaa4b9f8688a90de85a3f853dc29e59d0b8ac650` — PR #54 — **13/13 workflows fonctionnels SUCCESS** — Pages **#110 SUCCESS**.
+Production runtime : `1084e1d71a7aebbf6d7dcea9dfa0cabb44f6cbe1` — PR #56 — **14/14 workflows fonctionnels SUCCESS** — Pages **#112 SUCCESS**.
 
 ---
 
-# Build 26.7 — contrat de géométrie quand Details est ouvert
+# Build 26.8 — Progress Focus Flow
 
-## Régression terrain
+## Problème terrain
 
-Après Build 26.6, la frontière de propriété DOM était saine, mais une vidéo terrain a montré :
+Build 26.7 garantissait des colonnes lisibles, mais une famille Details ouverte laissait encore trop de contexte dans le document :
 
 ```text
-Details fermé → Progress lisible
-Details ouvert → learner flow écrasé
-                → texte quasi vertical
-                → cartes de leçon très étroites
+Résumé
++ Curriculum
++ grille des familles
++ famille active
++ cartes moteur
 ```
 
-La cause n’était pas un déplacement DOM ni une nouvelle duplication. Elle était purement géométrique.
+La page restait donc longue même si sa géométrie était saine.
 
-## Cause CSS
+## Contrat d’état
 
-La composition 26.6 utilisait :
+Build 26.8 ajoute une couche de présentation qui observe les **états propriétaires existants** :
 
-```css
-grid-template-columns:minmax(0,.94fr) minmax(440px,1.06fr);
+```text
+progressDetailActive != vide
+→ focus = details
+
+curriculumExpanded == 1
+→ focus = curriculum
+
+sinon
+→ focus = overview
 ```
 
-Le learner flow pouvait donc rétrécir jusqu’à zéro alors que Details gardait un plancher de 440 px. L’ouverture du dashboard augmentait la pression intrinsèque sur le track droit.
+Le focus n’est pas un nouveau moteur pédagogique et ne crée aucune donnée learner.
 
-## Correction
-
-La structure 26.6 ne change pas :
+### Focus Details
 
 ```text
 .progress-layout
-└── .progress-ux-composition        ← frontière historique
-    ├── .progress-ux-left-flow
-    │   ├── .progress-ux-overview
-    │   └── .progress-ux-curriculum
-    └── .progress-ux-details
+└── .progress-ux-composition        ← frontière DOM conservée
+    ├── .progress-ux-left-flow      ← display:none pendant focus
+    └── .progress-ux-details        ← pleine surface
+        └── dashboard
+            ├── grille familles     ← masquée
+            └── panneau actif       ← visible pleine surface
 ```
 
-Lorsque Details est ouvert sur desktop large :
+Les nœuds Memory / Mastery / Listening / Scenario restent exactement dans le même ancêtre. **Aucun reparenting Build 26.8.**
+
+### Focus Curriculum
+
+```text
+.progress-layout
+└── .progress-ux-composition
+    ├── .progress-ux-left-flow      ← pleine surface
+    │   ├── Overview               ← masqué
+    │   └── Curriculum             ← visible
+    └── Details                    ← masqué
+```
+
+Le curriculum conserve le modèle Build 26.6 : cinq étapes, une seule étape ouverte.
+
+## Sorties pilotées par les propriétaires
+
+Les boutons Retour ne simulent pas de clic sur un contrôle caché.
+
+```text
+Retour Details
+→ FrenchTranquilleProgressDetailsDashboard.close()
+→ decorate()
+
+Retour Curriculum
+→ FrenchTranquilleProgressionUX.setCurriculumExpanded(false)
+→ decorate()
+```
+
+Cela réduit les races entre couches `MutationObserver` et garde un seul propriétaire de chaque état métier.
+
+## Transition logique vs animation
+
+La transition visuelle est courte : fade / léger déplacement.
+
+Architecture importante :
+
+```text
+fade-out
+→ applyFocus(nouveau mode)
+→ état logique considéré terminé
+→ fade-in cosmétique
+```
+
+L’animation ne garde donc pas un verrou fonctionnel jusqu’à son dernier frame. Une nouvelle interaction peut être traitée même si le fade finit encore visuellement.
+
+Les demandes répétées vers la même destination sont idempotentes : un `MutationObserver` ne peut plus redémarrer indéfiniment le même timer.
+
+`prefers-reduced-motion: reduce` retire le mouvement, pas le modèle d’état.
+
+## Utilisation responsive de l’espace
+
+Hors focus, shell historique inchangé.
+
+Pendant un focus Progress :
 
 ```css
-grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+.app-shell { width:min(1420px,100%); }
 ```
 
-Les deux tracks peuvent donc se contracter équitablement sans qu’un minimum arbitraire force le parcours à céder toute sa largeur.
+Grand desktop :
 
-Les nœuds principaux reçoivent aussi `min-width:0` de façon explicite pour que les règles d’intrinsic sizing Grid ne réintroduisent pas un minimum inattendu.
+- panneau Détails actif : 2 colonnes de cartes ;
+- Curriculum : 5 étapes horizontales + leçons 2 colonnes.
 
-Dashboard ouvert :
+Responsive :
 
-```css
-grid-template-columns:repeat(2,minmax(0,1fr));
-```
+- <=1100 px : Détails 1 colonne, étapes Curriculum 2 colonnes ;
+- <=860 px : focus mobile 1 colonne ;
+- aucun overflow horizontal contractuel.
 
-## Fallback 861–1040 px
+## Tribunal 26.8
 
-Deux colonnes restent possibles techniquement mais ne sont plus considérées humaines à cette largeur lorsque Details est ouvert.
+Chrome réel vérifie quatre scénarios :
 
-La grille devient :
+1. Details focus desktop 1640×900 ;
+2. Curriculum focus desktop 1640×900 ;
+3. round-trip complet ;
+4. Details focus mobile 390×844.
+
+Round-trip contractuel :
 
 ```text
-progress-ux-left-flow
-↓
-progress-ux-details
+compact
+→ Memory focus
+→ Retour aux détails
+→ Curriculum focus
+→ Retour au résumé
+→ compact = 5 lesson rows
 ```
 
-Mobile `<=860px` reste sous le contrat responsive historique.
-
-## Preuves de géométrie
-
-Le workflow 26.7 ne vérifie pas seulement des propriétés CSS ; il ouvre vraiment Details et mesure `getBoundingClientRect()`.
-
-### 1640×900
-
-```text
-composition          = 920 px
-left flow            = 452 px
-Details              = 452 px
-Overview             = 452 px
-Curriculum           = 452 px
-min lesson row       = 410 px
-dashboard columns    = 2
-side by side         = 1
-horizontal overflow  = 0
-containment 26.6     = 1
-```
-
-### 980×900
-
-```text
-left flow            = 906 px
-min lesson row       = 864 px
-vertical stack       = 1
-horizontal overflow  = 0
-containment 26.6     = 1
-```
-
-Le test échoue si le learner flow ou une ligne de leçon repasse sous les seuils contractuels.
+Sur le viewport desktop de CI, Details focus et Curriculum focus mesurent **920 px** et l’overflow horizontal vaut 0.
 
 ---
 
-# Build 26.6 — frontière de propriété Progress conservée
+# Build 26.7 — garde géométrique toujours actif
 
-Plusieurs moteurs historiques créent leur carte Progress dans :
+Build 26.7 reste responsable de la géométrie sûre quand Details est simplement ouvert dans la vue normale.
 
-```js
-document.querySelector('.screen-progress .progress-layout > div:first-child')
+Contrats historiques :
+
+```text
+1640×900 → flow 452 px / Details 452 px / lesson row min 410 px
+980×900  → pile verticale / flow 906 px / lesson row min 864 px
 ```
 
-Cette première colonne est donc historiquement une **frontière de propriété DOM**, pas seulement un wrapper visuel.
+Build 26.8 supersède seulement la présentation **quand une intention Focus est active**. Le workflow 26.7 est version-forward et garde ses mesures Chrome.
 
-Composition canonique depuis 26.6 :
+---
+
+# Build 26.6 — frontière de propriété DOM
+
+Composition canonique :
 
 ```text
 .progress-layout
@@ -217,29 +265,22 @@ Composition canonique depuis 26.6 :
     └── .progress-ux-details
 ```
 
-Conséquences :
+Cette structure reste essentielle parce que plusieurs moteurs historiques recherchent leur carte dans le premier descendant de `.progress-layout`.
 
-- Memory / Mastery / Error / Stage retrouvent leurs cartes ;
-- aucun moteur ne recrée sa carte parce qu’elle a quitté sa frontière ;
-- Overview/Curriculum restent hors Details ;
-- Build 26.4 single-scroll reste intact ;
-- aucune migration de données.
-
-Contrat temporel certifié :
+Contrat anti-prolifération :
 
 ```text
-initial après quiescence = 12 cartes
-3 secondes plus tard     = 12 cartes
-Autres détails           = 1
-forbidden cards          = 0
-engine cards uniques     = oui
+après quiescence = 12 cartes
+3 secondes après = 12 cartes
+engine cards      = uniques
+forbidden cards   = 0
 ```
 
-Build 26.7 modifie uniquement **la géométrie ouverte**, jamais cette propriété DOM.
+Build 26.8 ne modifie jamais cette propriété DOM.
 
 ---
 
-# Learning Details Dashboard — Build 26.1 + containment 26.6 + geometry 26.7
+# Learning Details Dashboard
 
 Familles :
 
@@ -249,23 +290,18 @@ Familles :
 🎧 listening → Listening
 🎭 real-life → Scenario / Real Life
 🧩 path      → Stage2 / Stage3 / Adaptive / Daily / A1
-⋯ other      → futur contenu non classifié
+⋯ other      → contenu non classifié
 ```
 
-Contrats :
-
-- `data-progress-detail-family` = propriété stable ;
-- Overview / Curriculum interdits dans Details ;
-- cartes réelles déplacées, jamais clonées ;
-- une seule famille détaillée ouverte à la fois ;
-- 3 tuiles par ligne dans son format historique, **2 quand Details est ouvert sur desktop 26.7** ;
-- aucune famille ne peut imposer une largeur qui écrase le learner flow.
+`data-progress-detail-family` reste stable. Une seule famille est active. Les cartes sont les vraies cartes historiques, jamais des clones décoratifs.
 
 ---
 
-# Curriculum Progress — Build 25 + Humanization 26.6
+# Curriculum Progress
 
-Vue normale : **5 lignes** autour de la leçon courante.
+Curriculum : **40 leçons / 241 éléments**.
+
+Vue compacte : **5 lesson rows** autour de la position actuelle.
 
 Vue complète :
 
@@ -277,98 +313,39 @@ Vue complète :
 5. A1 Core            26–40
 ```
 
-Une seule étape expose ses leçons.
-
-Contrats Chrome :
-
-```text
-profil l8 → étape courante = 8 lignes
-clic A1 Core → 15 lignes
-progressTotalRows = 40
-progressStageCount = 5
-```
-
-Les 40 leçons restent toutes accessibles sans mur de 40 lignes.
+Une seule étape expose ses leçons. Les 40 restent accessibles sans mur de 40 lignes.
 
 ---
 
-# Build 26.5 — Conversation Exit conservé
+# Listening
 
-```text
-setPracticeMode('scenario' | 'voice' | 'guided')
-        ↓
-un seul mode visible
-
-Changer de pratique
-        ↓ pointerup OU click
-setPracticeMode(null)
-        ↓
-practice hub
-```
-
-Conversation active reste une seule colonne centrée. `Tyffany` et `Pratique guidée` restent séparés visuellement.
-
-La structure Progress 26.5 avec Details comme frère direct de la première colonne est supersédée par Build 26.6.
-
----
-
-# Build 26.4 — single-scroll + Tyffany
-
-Contrat toujours valide :
-
-```text
-overflow-y = visible
-max-height = none
-nested scroll = 0
-page scrollable = 1
-single scroll = 1
-```
-
-Tyffany est le nom visible. Les identifiants historiques restent volontairement compatibles :
-
-```text
-LucieVoice
-tran-french-teacher:luc-voice:v1
-tran-french-teacher:luc-rate:v1
-tran-french-teacher:luc-pitch:v1
-lucie-* ids/classes
-```
-
-`voice-ios.js` reste byte-identique.
-
----
-
-# Build 26.3 — Interaction Stability
-
-Today reste orchestré par `build26-3-ux.js` avec nœuds stables, routage explicite et rendu idempotent.
-
----
-
-# Listening — Build 25.1 + correction Build 26.2
+Contrat final :
 
 ```text
 normal request 0.88 → effectif 0.88
 slow request   0.68 → bridge 0.65 → effectif 0.65
 ```
 
-`voice-ios.js` accepte déjà les rates `>=0.65` et reste byte-identique.
+`voice-ios.js` reste byte-identique.
 
 ---
 
-# Session UX — Build 25.2
+# Voice Self-Playback — Build 26.1
 
-Sessions bornées :
+```text
+réponse reconnue par free-voice.js
+→ voice-replay.js
+→ seconde prise volontaire locale
+→ MediaRecorder / Blob URL / Audio
+```
 
-- Listening : 5 questions ;
-- Révision : jusqu’à 5 éléments prioritaires ;
-- Scenario : 1 situation ;
-- vocal guidé : objectif borné.
+Pas d’upload ni persistance audio. Gate réel iPhone toujours ouvert : `reconnaissance → seconde prise → lecture → reconnaissance suivante`.
 
 ---
 
-# Real Life French III — Build 26
+# Real Life French
 
-Ordre runtime :
+Ordre historique important :
 
 ```text
 scenario-data.js
@@ -379,30 +356,11 @@ scenario-host.js
 scenario-engine.js
 real-life-ux.js
 real-life-coach.js
-session-ux.js
 ```
 
 Production : **36 situations / 108 tours**.
 
-Baseline historique protégée : `real-life-data-2.js` correspond à **v1.17.0 — Build 24 — Real Life French II**, où Scenario comptait **28 situations / 84 tours** avant Pack III.
-
----
-
-# Voice Self-Playback — Build 26.1
-
-```text
-free-voice.js
-   ↓ réponse reconnue normalement
-.free-voice-result
-   ↓
-voice-replay.js
-   ↓ seconde prise volontaire locale
-MediaRecorder → Blob URL → Audio
-```
-
-Pas de capture simultanée du premier essai, pas d’upload, pas de persistance audio, pas d’événement pédagogique créé par le replay.
-
-Gate restant : test réel iPhone `reconnaissance → seconde prise → lecture → reconnaissance suivante`.
+Baseline historique protégée : `real-life-data-2.js` correspond à **v1.17.0 — Build 24 — Real Life French II**, avec **28 situations / 84 tours** avant Pack III.
 
 ---
 
@@ -418,12 +376,9 @@ french-tranquille:learning-memory:v1
 french-tranquille:safety:pre-build22:v1
 ```
 
-Curriculum : **40 leçons / 241 éléments**.  
-Scenario : **36 situations / 108 tours**.
+Build 26.8 ne crée aucune migration.
 
-Build 26.7 ne crée aucune clé learner et ne migre aucun état.
-
-## Voice / branding — sanctuaires
+Sanctuaires byte-identiques :
 
 ```text
 voice-ios.js
@@ -434,33 +389,26 @@ assets/Favicon.png
 
 ---
 
-# CI Build 26.7 — production
+# CI production Build 26.8
 
-Le tribunal fonctionnel comporte désormais **13 workflows**.
+Le tribunal fonctionnel comporte **14 workflows**.
 
-Le workflow dédié 26.7 vérifie :
+Build 26.8 ajoute :
 
-1. syntaxe / wiring / cache v1.19.7 ;
-2. sanctuaires byte-identiques ;
-3. vrai accès à Progress ;
-4. vraie ouverture de Details ;
-5. containment 26.6 toujours présent ;
-6. géométrie 1640×900 mesurée et bornée ;
-7. dashboard 2 colonnes en état ouvert ;
-8. aucune overflow horizontale ;
-9. fallback empilé à 980×900 ;
-10. largeur du learner flow et des lesson rows au-dessus des seuils humains.
+- focus Details desktop ;
+- focus Curriculum desktop ;
+- round-trip avec restauration de 5 lignes ;
+- focus mobile sans overflow ;
+- containment 26.6 obligatoire.
 
-Le workflow 26.6 est version-forward sur le meta/cache global mais garde ses trois Chrome : stabilité temporelle, curriculum par étapes et mobile.
-
-Preuves runtime :
+Preuves :
 
 ```text
-PR #54 / head 6b44b212...     13/13 SUCCESS
-main eaa4b9f8...              13/13 SUCCESS
-GitHub Pages #110             SUCCESS
+PR #56 / head c919262...     14/14 SUCCESS
+main 1084e1d7...             14/14 SUCCESS
+GitHub Pages #112             SUCCESS
 ```
 
-# Dette / gate terrain
+# Dette / suite
 
-Build 26.7 est **PROD / CLOS**. Le gate iPhone de l’auto-écoute Build 26.1 reste ouvert. `app.js` reste monolithique par choix de sécurité ; son extraction est réservée à Architecture Hardening.
+Build 26.8 est **PROD / CLOS**. Le gate iPhone Voice Replay Build 26.1 reste ouvert. Les prochains gros jalons restent Data & Recovery Hardening, iPhone/PWA/Accessibility Hardening, puis Architecture Hardening avant V2.0.0.
