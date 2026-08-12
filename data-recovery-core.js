@@ -122,10 +122,11 @@
 
   function migrateBackup(payload) {
     if (!isObject(payload) || payload.format !== FORMAT) throw new Error('invalid-backup-format');
-    if (payload.version === BACKUP_VERSION) return { backup: payload, migratedFrom: null };
+    if (payload.version === BACKUP_VERSION) return { backup: payload, migratedFrom: null, preserveMissing: false };
     if (payload.version === 1) {
       return {
         migratedFrom: 1,
+        preserveMissing: true,
         backup: {
           format: FORMAT,
           version: BACKUP_VERSION,
@@ -162,16 +163,21 @@
     });
     return {
       migratedFrom: migrated.migratedFrom,
+      preserveMissing: migrated.preserveMissing,
       backup: { ...source, format: FORMAT, version: BACKUP_VERSION, stores }
     };
   }
 
-  function planRestore(payload) {
+  function planRestore(payload, currentRaw = {}) {
     const normalized = normalizeBackup(payload);
     const targetRaw = {};
     STORE_SPECS.forEach(spec => {
       const value = normalized.backup.stores[spec.id];
-      targetRaw[spec.key] = value === null ? null : JSON.stringify(value);
+      if (normalized.preserveMissing && value === null) {
+        targetRaw[spec.key] = currentRaw?.[spec.key] ?? null;
+      } else {
+        targetRaw[spec.key] = value === null ? null : JSON.stringify(value);
+      }
     });
     return { ...normalized, targetRaw };
   }
@@ -196,8 +202,8 @@
   }
 
   function restore(storage, payload, writer = defaultWriter(storage)) {
-    const plan = planRestore(payload);
     const before = collectRaw(storage);
+    const plan = planRestore(payload, before);
     try {
       writeRawMap(storage, plan.targetRaw, writer);
       const after = collectRaw(storage);
@@ -205,7 +211,7 @@
       if (!validation.ok || !rawMapsEqual(after, plan.targetRaw)) throw new Error('restore-verification-failed');
       return { ok: true, before, after, migratedFrom: plan.migratedFrom, backup: plan.backup };
     } catch (error) {
-      try { writeRawMap(storage, before, writer); } catch {}
+      try { writeRawMap(storage, before, defaultWriter(storage)); } catch {}
       const rolledBack = rawMapsEqual(collectRaw(storage), before);
       return { ok: false, error, before, rolledBack, migratedFrom: plan.migratedFrom };
     }
