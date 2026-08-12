@@ -135,6 +135,12 @@
     setTimeout(() => {
       if (token !== transitionToken) return;
       applyFocus(n, next);
+
+      // The functional state is now committed. The remaining fade is cosmetic:
+      // do not keep interaction logic blocked until that visual cleanup ends.
+      transitionRunning = false;
+      pendingFocusMode = null;
+
       n.layout.dataset.b268Transition = 'in-start';
       void n.composition.offsetWidth;
       requestAnimationFrame(() => {
@@ -145,12 +151,10 @@
           const top = window.scrollY + target.getBoundingClientRect().top - 14;
           window.scrollTo({ top: Math.max(0, top), behavior: reduceMotion ? 'auto' : 'smooth' });
         }
+        schedule();
         setTimeout(() => {
           if (token !== transitionToken) return;
           n.composition.style.minHeight = '';
-          transitionRunning = false;
-          pendingFocusMode = null;
-          schedule();
         }, reduceMotion ? 0 : 210);
       });
     }, duration);
