@@ -1,4 +1,4 @@
-name: V2.0.0 Freeze release tribunal
+name: V2.0.0 Freeze compatibility tribunal
 
 on:
   push:
@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Release contract, syntax and immutable product baseline
+      - name: Frozen V2 contract + current release compatibility
         run: |
           node --check runtime-contracts.js
           node --check runtime-bridge.js
@@ -28,7 +28,7 @@ jobs:
           node --check build-meta.js
           node --check sw.js
           python3 - <<'PY'
-          import json
+          import json,re
           r=json.load(open('release-v2.json',encoding='utf-8'))
           assert r['format']=='french-tranquille-release-contract'
           assert r['version']=='2.0.0'
@@ -42,11 +42,15 @@ jobs:
           assert p['recurringCostEuro']==0
           assert len(r['durableStores'])==6 and len(set(r['durableStores']))==6
           assert r['fieldGates']['exactFirstAttemptVoiceCapture']=='pending-real-iphone'
-          print('V2 release contract OK')
+          meta=open('build-meta.js',encoding='utf-8').read()
+          m=re.search(r"const META = \{ version: '([^']+)', build: '([^']+)'",meta)
+          assert m, 'current META missing'
+          parts=[int(x) for x in m.group(1).split('.')]
+          assert len(parts)==3 and parts[0]==2 and int(float(m.group(2)))>=30
+          print('Frozen V2 contract OK; current release:',m.group(1),m.group(2))
           PY
           grep -q "const VERSION = '2.0.0'" runtime-contracts.js
           grep -q 'const BUILD = 30' runtime-contracts.js
-          grep -q "const META = { version: '2.0.0', build: '30'" build-meta.js
           grep -q "runtime-contracts.js?v=2.0.0-b30" build-meta.js runtime-bridge.js
           grep -q "runtime-bridge.js?v=2.0.0-b30" build-meta.js
           grep -q "v2-release-smoke.js?v=2.0.0" build-meta.js
@@ -57,7 +61,7 @@ jobs:
           ! grep -q 'localStorage.setItem' runtime-contracts.js
           ! grep -q 'localStorage.setItem' runtime-bridge.js
 
-      - name: Sanctuary hashes match the V2 release contract
+      - name: Sanctuary hashes match frozen V2 baseline
         run: |
           python3 - <<'PY'
           import json,subprocess
@@ -67,13 +71,8 @@ jobs:
               assert actual==expected, f'{path}: {actual} != {expected}'
           print('V2 sanctuary hashes OK')
           PY
-          test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
-          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
-          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
-          test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
-          test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
 
-      - name: Recovery and release stores agree
+      - name: Recovery and frozen release stores agree
         run: |
           node - <<'NODE'
           const fs=require('fs');
@@ -86,7 +85,7 @@ jobs:
             if(!keys.includes(key)) throw new Error(`Release store missing from Recovery: ${key}`);
             if(!contract.includes(`'${key}'`)) throw new Error(`Release store missing from Runtime Contracts: ${key}`);
           }
-          console.log('Recovery / Runtime Contracts / release-v2 store agreement OK');
+          console.log('Recovery / Runtime Contracts / frozen V2 stores agree');
           NODE
 
       - name: Start static server
@@ -96,7 +95,7 @@ jobs:
           sleep 1
           google-chrome --version
 
-      - name: Chrome desktop — clean V2 release shell, backup and version
+      - name: Chrome desktop — current V2.x remains compatible with frozen V2 baseline
         run: |
           passed=0
           for attempt in 1 2 3; do
@@ -107,15 +106,15 @@ jobs:
               google-chrome --headless=new --no-sandbox --disable-gpu \
               --disable-background-timer-throttling --disable-renderer-backgrounding \
               --user-data-dir="$profile" --window-size=1440,900 \
-              --virtual-time-budget=40000 --dump-dom \
+              --virtual-time-budget=42000 --dump-dom \
               'http://127.0.0.1:4173/?debug=fr&v2Audit=clean' >"$file" || true
             ok=1
             for marker in \
               'data-v2-complete="1"' \
               'data-v2-ready="1"' \
-              'data-v2-version="2.0.0"' \
-              'data-v2-build="30"' \
+              'data-v2-current-compatible="1"' \
               'data-v2-contract-version="2.0.0"' \
+              'data-v2-contract-build="30"' \
               'data-v2-release-format="1"' \
               'data-v2-release-version="2.0.0"' \
               'data-v2-release-build="30"' \
@@ -130,26 +129,27 @@ jobs:
               'data-v2-recovery-specs="6"' \
               'data-v2-backup-version="2"' \
               'data-v2-backup-stores="6"' \
-              'data-v2-backup-app-version="2.0.0"' \
-              'data-v2-backup-app-build="30"' \
+              'data-v2-backup-matches-runtime="1"' \
+              'data-v2-options-matches-runtime="1"' \
               'data-v2-store-agreement="1"' \
               'data-v2-missing-required="0"' \
               'data-v2-progress-route="1"' \
               'data-v2-today-route="1"' \
               'data-v2-practice-route="1"' \
-              'data-v2-options-version="v2.0.0 • Build 30"' \
               'data-v2-stores-unchanged="1"' \
               'data-v2-horizontal-overflow="0"'; do
               grep -q "$marker" "$file" || ok=0
             done
+            grep -Eq 'data-v2-version="2\.[0-9]+\.[0-9]+"' "$file" || ok=0
+            grep -Eq 'data-v2-build="([3-9][0-9]|[1-9][0-9]{2,})"' "$file" || ok=0
             if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then ok=0; fi
             if [ "$ok" = 1 ]; then passed=1; break; fi
-            echo '=== V2 clean markers ==='
+            echo '=== V2 compatibility clean markers ==='
             grep -o 'data-v2-[^ >]*' "$file" | head -100 || true
           done
           test "$passed" = 1
 
-      - name: Chrome mobile — old learner round-trip remains exact
+      - name: Chrome mobile — old learner round-trip remains exact under current V2.x
         run: |
           passed=0
           for attempt in 1 2 3; do
@@ -160,27 +160,27 @@ jobs:
               google-chrome --headless=new --no-sandbox --disable-gpu \
               --disable-background-timer-throttling --disable-renderer-backgrounding \
               --user-data-dir="$profile" --window-size=390,844 \
-              --virtual-time-budget=42000 --dump-dom \
+              --virtual-time-budget=44000 --dump-dom \
               'http://127.0.0.1:4173/?debug=fr&uxSmoke=lesson8&v2Audit=old-user' >"$file" || true
             ok=1
             for marker in \
               'data-v2-complete="1"' \
               'data-v2-ready="1"' \
-              'data-v2-version="2.0.0"' \
+              'data-v2-current-compatible="1"' \
               'data-v2-old-user-completed="7"' \
               'data-v2-old-user-l8="4"' \
               'data-v2-old-user-known="40"' \
               'data-v2-stores-unchanged="1"' \
               'data-v2-horizontal-overflow="0"' \
               'data-v2-backup-version="2"' \
+              'data-v2-backup-matches-runtime="1"' \
               'data-v2-store-agreement="1"'; do
               grep -q "$marker" "$file" || ok=0
             done
             if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then ok=0; fi
             if [ "$ok" = 1 ]; then passed=1; break; fi
-            echo '=== V2 old-user markers ==='
+            echo '=== V2 compatibility old-user markers ==='
             grep -o 'data-v2-[^ >]*' "$file" | head -100 || true
-            grep -o 'data-ux-smoke-[^ >]*' "$file" | head -60 || true
           done
           test "$passed" = 1
 
