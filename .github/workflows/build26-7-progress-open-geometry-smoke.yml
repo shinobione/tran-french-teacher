@@ -74,9 +74,9 @@ jobs:
               && grep -q 'data-b267-side-by-side="1"' "$file" \
               && grep -q 'data-b267-horizontal-overflow="0"' "$file" \
               && grep -q 'data-b267-dashboard-columns="2"' "$file"; then
-              flow=$(grep -o 'data-b267-flow-width="[0-9]*"' "$file" | head -1 | grep -o '[0-9]*')
-              details=$(grep -o 'data-b267-details-width="[0-9]*"' "$file" | head -1 | grep -o '[0-9]*')
-              row=$(grep -o 'data-b267-min-lesson-row-width="[0-9]*"' "$file" | head -1 | grep -o '[0-9]*')
+              flow=$(grep -o 'data-b267-flow-width="[0-9]*"' "$file" | head -1 | cut -d'"' -f2)
+              details=$(grep -o 'data-b267-details-width="[0-9]*"' "$file" | head -1 | cut -d'"' -f2)
+              row=$(grep -o 'data-b267-min-lesson-row-width="[0-9]*"' "$file" | head -1 | cut -d'"' -f2)
               echo "wide geometry: flow=$flow details=$details min-row=$row"
               if [ "${flow:-0}" -ge 420 ] && [ "${details:-0}" -ge 420 ] && [ "${row:-0}" -ge 400 ]; then
                 passed=1
@@ -113,8 +113,8 @@ jobs:
               && grep -q 'data-b267-desktop-usable="1"' "$file" \
               && grep -q 'data-b267-vertical-stack="1"' "$file" \
               && grep -q 'data-b267-horizontal-overflow="0"' "$file"; then
-              flow=$(grep -o 'data-b267-flow-width="[0-9]*"' "$file" | head -1 | grep -o '[0-9]*')
-              row=$(grep -o 'data-b267-min-lesson-row-width="[0-9]*"' "$file" | head -1 | grep -o '[0-9]*')
+              flow=$(grep -o 'data-b267-flow-width="[0-9]*"' "$file" | head -1 | cut -d'"' -f2)
+              row=$(grep -o 'data-b267-min-lesson-row-width="[0-9]*"' "$file" | head -1 | cut -d'"' -f2)
               echo "compact geometry: flow=$flow min-row=$row"
               if [ "${flow:-0}" -ge 620 ] && [ "${row:-0}" -ge 580 ]; then
                 passed=1
