@@ -30,7 +30,12 @@ jobs:
           grep -q 'build29-iphone-a11y.js?v=1.22.0-b29' index.html
           grep -q 'build29-smoke.js?v=1.22.0-b29' index.html
           grep -q 'build-meta.js?v=1.22.0-b29' index.html
-          grep -q "version: '1.22.0', build: '29'" build-meta.js
+          node - <<'NODE'
+          const fs=require('fs');
+          const text=fs.readFileSync('build-meta.js','utf8');
+          const match=text.match(/const META = \{ version: '[^']+', build: '([^']+)'/);
+          if(!match || Number(match[1]) < 29) throw new Error('Build 29 contract cannot run on a pre-29 build');
+          NODE
           grep -q 'tran-french-teacher-v1.22.0-b29-iphone-pwa-a11y' index.html sw.js
           grep -q 'build29-iphone-a11y.css' sw.js
           grep -q 'build29-iphone-a11y.js' sw.js
@@ -103,19 +108,13 @@ jobs:
               if [ "$reduced" = 1 ]; then grep -q 'data-b29-smoke-reduced="1"' "$file" || ok=0; fi
               if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then ok=0; fi
               if [ "$ok" = 1 ]; then
-                grep -o 'data-b29-audit-[^ >]*' "$file" | head -12 || true
-                grep -o 'data-b29-smoke-viewport="[^"]*"' "$file" | head -1 || true
                 passed=1
                 break
               fi
-              echo '=== Build 29 diagnostic markers ==='
               grep -o 'data-b29-[^ >]*' "$file" | head -50 || true
-              echo '=== Build 29 failure payload ==='
-              grep -o '<pre id="b29-smoke-failures"[^>]*>[^<]*' "$file" || true
             done
             test "$passed" = 1
           }
-
           run_case reference 390 844 0
           run_case compact 320 568 0
           run_case large 430 932 0
@@ -128,68 +127,37 @@ jobs:
           online2=/tmp/b29-online2.html
           offline=/tmp/b29-offline.html
           rm -rf "$profile" "$online1" "$online2" "$offline"
-
           run_browser() {
             target="$1"; file="$2"; budget="$3"
-            chrome_status=0
             timeout --signal=TERM --kill-after=5s 55s \
               google-chrome --headless=new --no-sandbox --disable-gpu \
               --user-data-dir="$profile" --window-size=390,844 \
-              --virtual-time-budget="$budget" --dump-dom "$target" >"$file" || chrome_status=$?
-            echo "Build29 offline phase: chrome_status=${chrome_status} bytes=$(wc -c < "$file")"
+              --virtual-time-budget="$budget" --dump-dom "$target" >"$file" || true
           }
-
           assert_warm() {
-            file="$1"; label="$2"
-            ok=1
-            grep -q 'data-b29-smoke="passed"' "$file" || ok=0
-            grep -q 'data-b29-audit-home-visible="1"' "$file" || ok=0
-            grep -q 'data-b29-sw-registered="1"' "$file" || ok=0
-            if [ "$ok" != 1 ]; then
-              echo "=== ${label} Build29 markers ==="
-              grep -o 'data-b29-[^ >]*' "$file" | head -70 || true
-              grep -o '<pre id="b29-smoke-failures"[^>]*>[^<]*' "$file" || true
-              return 1
-            fi
+            file="$1"
+            grep -q 'data-b29-smoke="passed"' "$file"
+            grep -q 'data-b29-audit-home-visible="1"' "$file"
+            grep -q 'data-b29-sw-registered="1"' "$file"
           }
-
-          # Warm the same browser profile twice. Chromium headless does not expose
-          # navigator.serviceWorker.controller consistently between independent
-          # --dump-dom processes, so controller=1 is not used as the gate here.
           run_browser 'http://127.0.0.1:4173/?uxSmoke=lesson8&b29Audit=warm1' "$online1" 22000
-          assert_warm "$online1" warm1
-
+          assert_warm "$online1"
           run_browser 'http://127.0.0.1:4173/?uxSmoke=lesson8&b29Audit=warm2' "$online2" 22000
-          assert_warm "$online2" warm2
-
+          assert_warm "$online2"
           kill "$(cat /tmp/ft-b29-server.pid)" || true
           rm -f /tmp/ft-b29-server.pid
           sleep 1
-
-          # Canonical offline proof: the origin server is physically unavailable.
-          # A complete learner Home can only be served by the installed Worker/cache.
           run_browser 'http://127.0.0.1:4173/?uxSmoke=lesson8&b29Audit=offline' "$offline" 24000
-          offline_ok=1
-          grep -q 'data-b29-smoke="passed"' "$offline" || offline_ok=0
-          grep -q 'data-b29-ready="1"' "$offline" || offline_ok=0
-          grep -q 'data-b29-audit-home-visible="1"' "$offline" || offline_ok=0
-          grep -q 'data-b29-audit-too-small="0"' "$offline" || offline_ok=0
-          grep -q 'data-b29-audit-unnamed="0"' "$offline" || offline_ok=0
-          grep -q 'data-b29-audit-current-tabs="1"' "$offline" || offline_ok=0
-          grep -q 'data-b29-audit-overflow="0"' "$offline" || offline_ok=0
-          grep -q 'data-b29-sw-registered="1"' "$offline" || offline_ok=0
-          if grep -q 'ERR_CONNECTION_REFUSED' "$offline"; then offline_ok=0; fi
-          if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$offline"; then offline_ok=0; fi
-          if [ "$offline_ok" != 1 ]; then
-            echo '=== OFFLINE Build29 markers ==='
-            grep -o 'data-b29-[^ >]*' "$offline" | head -90 || true
-            echo '=== OFFLINE Build29 failure payload ==='
-            grep -o '<pre id="b29-smoke-failures"[^>]*>[^<]*' "$offline" || true
-            echo '=== OFFLINE DOM head ==='
-            head -c 800 "$offline" || true
-            echo
-            exit 1
-          fi
+          grep -q 'data-b29-smoke="passed"' "$offline"
+          grep -q 'data-b29-ready="1"' "$offline"
+          grep -q 'data-b29-audit-home-visible="1"' "$offline"
+          grep -q 'data-b29-audit-too-small="0"' "$offline"
+          grep -q 'data-b29-audit-unnamed="0"' "$offline"
+          grep -q 'data-b29-audit-current-tabs="1"' "$offline"
+          grep -q 'data-b29-audit-overflow="0"' "$offline"
+          grep -q 'data-b29-sw-registered="1"' "$offline"
+          ! grep -q 'ERR_CONNECTION_REFUSED' "$offline"
+          ! grep -E -q 'id="app"[^>]*><div class="boot-status error' "$offline"
 
       - name: Stop static server
         if: always()
