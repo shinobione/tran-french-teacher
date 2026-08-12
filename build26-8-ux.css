@@ -59,17 +59,18 @@
 
 /* DETAIL FOCUS
    The historical composition remains intact. Only presentation changes: the
-   learner flow is hidden and the chosen Details family takes the full surface. */
-.screen-progress .progress-layout[data-b268-focus="details"] > .progress-ux-composition{
+   learner flow is hidden and the chosen Details family takes the full surface.
+   Selectors deliberately outrank the Build 26.7 open-details geometry guard. */
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] > .progress-ux-composition{
   display:grid!important;
   grid-template-columns:minmax(0,1fr)!important;
   grid-template-areas:"details"!important;
   gap:0!important;
 }
-.screen-progress .progress-layout[data-b268-focus="details"] .progress-ux-left-flow{
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] > .progress-ux-composition > .progress-ux-left-flow{
   display:none!important;
 }
-.screen-progress .progress-layout[data-b268-focus="details"] .progress-ux-details{
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] > .progress-ux-composition > .progress-ux-details{
   grid-area:details!important;
   width:100%!important;
   max-width:none!important;
@@ -80,37 +81,37 @@
   box-shadow:none!important;
   overflow:visible!important;
 }
-.screen-progress .progress-layout[data-b268-focus="details"] .progress-ux-details>summary{
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] .progress-ux-details>summary{
   display:none!important;
 }
-.screen-progress .progress-layout[data-b268-focus="details"] .progress-ux-details-body{
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] .progress-ux-details-body{
   padding:0!important;
 }
-.screen-progress .progress-layout[data-b268-focus="details"] .b268-focus-toolbar[data-b268-toolbar="details"]{
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] .b268-focus-toolbar[data-b268-toolbar="details"]{
   display:grid;
 }
-.screen-progress .progress-layout[data-b268-focus="details"] .progress-detail-grid{
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] .progress-detail-grid{
   display:none!important;
 }
-.screen-progress .progress-layout[data-b268-focus="details"] .progress-detail-panels{
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] .progress-detail-panels{
   margin-top:0!important;
 }
-.screen-progress .progress-layout[data-b268-focus="details"] .progress-detail-panel{
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] .progress-detail-panel{
   padding:0!important;
   border:0!important;
   border-radius:0!important;
   background:transparent!important;
 }
-.screen-progress .progress-layout[data-b268-focus="details"] .progress-detail-panel-head{
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] .progress-detail-panel-head{
   display:none!important;
 }
-.screen-progress .progress-layout[data-b268-focus="details"] .progress-detail-panel-cards{
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] .progress-detail-panel-cards{
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
   gap:14px;
   align-items:start;
 }
-.screen-progress .progress-layout[data-b268-focus="details"] .progress-detail-panel-cards>.card{
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] .progress-detail-panel-cards>.card{
   min-width:0!important;
   margin:0!important;
   padding:18px!important;
@@ -123,52 +124,52 @@
 /* CURRICULUM FOCUS
    Expanding the curriculum means exactly that: curriculum owns the surface.
    Overview and Details disappear until the explicit back action. */
-.screen-progress .progress-layout[data-b268-focus="curriculum"] > .progress-ux-composition{
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] > .progress-ux-composition{
   display:grid!important;
   grid-template-columns:minmax(0,1fr)!important;
   grid-template-areas:"flow"!important;
   gap:0!important;
 }
-.screen-progress .progress-layout[data-b268-focus="curriculum"] .progress-ux-details{
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] > .progress-ux-composition > .progress-ux-details{
   display:none!important;
 }
-.screen-progress .progress-layout[data-b268-focus="curriculum"] .progress-ux-left-flow{
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] > .progress-ux-composition > .progress-ux-left-flow{
   grid-area:flow!important;
   width:100%!important;
   max-width:none!important;
   gap:0!important;
 }
-.screen-progress .progress-layout[data-b268-focus="curriculum"] .progress-ux-overview{
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] .progress-ux-overview{
   display:none!important;
 }
-.screen-progress .progress-layout[data-b268-focus="curriculum"] .b268-curriculum-toolbar{
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] .b268-curriculum-toolbar{
   display:grid;
 }
-.screen-progress .progress-layout[data-b268-focus="curriculum"] .progress-ux-curriculum{
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] .progress-ux-curriculum{
   width:100%!important;
   max-width:none!important;
   margin:0!important;
 }
-.screen-progress .progress-layout[data-b268-focus="curriculum"] .progress-ux-stage-nav{
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] .progress-ux-stage-nav{
   grid-template-columns:repeat(5,minmax(0,1fr));
   gap:8px;
   margin:12px 0 14px;
 }
-.screen-progress .progress-layout[data-b268-focus="curriculum"] .progress-ux-stage-button{
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] .progress-ux-stage-button{
   min-height:74px;
   align-items:flex-start;
   padding:11px;
 }
-.screen-progress .progress-layout[data-b268-focus="curriculum"] .lesson-list{
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] .lesson-list{
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
   gap:9px;
 }
-.screen-progress .progress-layout[data-b268-focus="curriculum"] .lesson-row{
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] .lesson-row{
   min-width:0!important;
   margin:0!important;
 }
-.screen-progress .progress-layout[data-b268-focus="curriculum"] .progress-ux-curriculum-actions{
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] .progress-ux-curriculum-actions{
   margin-top:14px;
 }
 
@@ -180,13 +181,13 @@ body[data-b268-progress-focus="curriculum"] .app-shell{
 }
 
 @media(max-width:1100px){
-  .screen-progress .progress-layout[data-b268-focus="details"] .progress-detail-panel-cards{
+  .screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] .progress-detail-panel-cards{
     grid-template-columns:minmax(0,1fr);
   }
-  .screen-progress .progress-layout[data-b268-focus="curriculum"] .progress-ux-stage-nav{
+  .screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] .progress-ux-stage-nav{
     grid-template-columns:repeat(2,minmax(0,1fr));
   }
-  .screen-progress .progress-layout[data-b268-focus="curriculum"] .progress-ux-stage-button:last-child:nth-child(odd){
+  .screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] .progress-ux-stage-button:last-child:nth-child(odd){
     grid-column:1/-1;
   }
 }
@@ -200,21 +201,21 @@ body[data-b268-progress-focus="curriculum"] .app-shell{
   }
   .b268-focus-back{width:40px;height:40px;border-radius:12px}
   .b268-focus-badge{display:none}
-  .screen-progress .progress-layout[data-b268-focus="details"] .progress-detail-panel-cards{
+  .screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] .progress-detail-panel-cards{
     grid-template-columns:minmax(0,1fr);
     gap:10px;
   }
-  .screen-progress .progress-layout[data-b268-focus="curriculum"] .progress-ux-stage-nav{
+  .screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] .progress-ux-stage-nav{
     grid-template-columns:minmax(0,1fr);
     gap:7px;
   }
-  .screen-progress .progress-layout[data-b268-focus="curriculum"] .progress-ux-stage-button,
-  .screen-progress .progress-layout[data-b268-focus="curriculum"] .progress-ux-stage-button:last-child:nth-child(odd){
+  .screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] .progress-ux-stage-button,
+  .screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] .progress-ux-stage-button:last-child:nth-child(odd){
     grid-column:auto;
     min-height:54px;
     align-items:center;
   }
-  .screen-progress .progress-layout[data-b268-focus="curriculum"] .lesson-list{
+  .screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] .lesson-list{
     grid-template-columns:minmax(0,1fr);
   }
 }
@@ -222,7 +223,7 @@ body[data-b268-progress-focus="curriculum"] .app-shell{
 @media(max-width:520px){
   .b268-focus-toolbar{grid-template-columns:auto minmax(0,1fr);gap:9px}
   .b268-focus-toolbar>div strong{font-size:.88rem}
-  .screen-progress .progress-layout[data-b268-focus="details"] .progress-detail-panel-cards>.card{
+  .screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] .progress-detail-panel-cards>.card{
     padding:15px!important;
     border-radius:16px!important;
   }
