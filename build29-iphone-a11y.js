@@ -4,12 +4,38 @@
   const root = document.documentElement;
   const VERSION = '1.22.0';
   const BUILD = '29';
+  const SW_URL = './sw.js?v=1.22.0-b29';
   const DEBUG_KEY = 'tran-french-teacher:debug-fr:v1';
   const isDebug = () => localStorage.getItem(DEBUG_KEY) === '1';
   const T = (vi, fr) => isDebug() ? fr : vi;
 
   root.classList.add('b29-iphone-ready');
   root.dataset.b29Ready = '1';
+  root.dataset.b29SwSupported = 'serviceWorker' in navigator ? '1' : '0';
+
+  let serviceWorkerPromise = null;
+  async function ensureServiceWorker() {
+    if (!('serviceWorker' in navigator)) return null;
+    if (!serviceWorkerPromise) {
+      serviceWorkerPromise = navigator.serviceWorker.register(SW_URL, {
+        scope: './',
+        updateViaCache: 'none'
+      }).then(async registration => {
+        root.dataset.b29SwRegistered = '1';
+        const ready = await navigator.serviceWorker.ready;
+        root.dataset.b29SwReady = '1';
+        root.dataset.b29SwScope = ready.scope || registration.scope || '';
+        root.removeAttribute('data-b29-sw-error');
+        return ready;
+      }).catch(error => {
+        root.dataset.b29SwRegistered = '0';
+        root.dataset.b29SwReady = '0';
+        root.dataset.b29SwError = String(error?.message || error || 'service worker registration failed');
+        return null;
+      });
+    }
+    return serviceWorkerPromise;
+  }
 
   function standaloneState() {
     const media = !!window.matchMedia?.('(display-mode: standalone)')?.matches;
@@ -134,7 +160,10 @@
       horizontalOverflow,
       standalone: standaloneState(),
       keyboardInset: Number(root.dataset.b29KeyboardInset || 0),
-      visualViewport: !!window.visualViewport
+      visualViewport: !!window.visualViewport,
+      serviceWorkerSupported: root.dataset.b29SwSupported === '1',
+      serviceWorkerRegistered: root.dataset.b29SwRegistered === '1',
+      serviceWorkerReady: root.dataset.b29SwReady === '1'
     };
   }
 
@@ -179,6 +208,9 @@
     build: BUILD,
     refresh() { syncStandalone(); syncViewport(); patchA11y(); return audit(); },
     audit,
-    standalone: standaloneState
+    standalone: standaloneState,
+    ensureServiceWorker
   });
+
+  ensureServiceWorker();
 })();
