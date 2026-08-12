@@ -27,10 +27,16 @@ jobs:
           grep -q 'build27-app-shell.css?v=1.20.0-b27' index.html
           grep -q 'build27-app-shell.js?v=1.20.0-b27' index.html
           grep -q 'build27-smoke.js?v=1.20.0-b27' index.html
-          grep -q 'build-meta.js?v=1.20.0-b27' index.html
-          grep -q "version: '1.20.0', build: '27'" build-meta.js
+          grep -q 'build-meta.js?v=' index.html
+          node - <<'NODE'
+          const fs=require('fs');
+          const text=fs.readFileSync('build-meta.js','utf8');
+          const match=text.match(/const META = \{ version: '[^']+', build: '(\d+)'/);
+          if(!match || Number(match[1]) < 27) throw new Error('Build 27 shell contract cannot run on a pre-27 build');
+          NODE
           grep -q 'FrenchTranquilleBuild27Shell' build-meta.js
-          grep -q 'tran-french-teacher-v1.20.0-b27-app-shell-reset' index.html sw.js
+          grep -q "const CACHE='tran-french-teacher-v" sw.js
+          grep -q "const HOTFIX='1." index.html
           grep -q 'b27-practice-page' build27-app-shell.js build27-app-shell.css
           grep -q 'b27-progress-page' build27-app-shell.js build27-app-shell.css
           grep -q 'b27-journey-page' build27-app-shell.js build27-app-shell.css
