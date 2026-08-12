@@ -2,7 +2,15 @@
 
 ## Statut
 
-**v1.23.0 — Build 30 — CANDIDAT**
+**v1.23.0 — Build 30 — ✅ PROD / CLOS**
+
+- PR runtime : **#71**
+- head PR certifié : `ffa3ddf7a16dcbc32474701cfaf2f961e86d348c`
+- runtime `main` : `5a8369df9df536f41521acefb528da71efb168a8`
+- PR : **21/21 workflows fonctionnels SUCCESS**
+- runtime `main` : **21/21 workflows fonctionnels SUCCESS**
+- GitHub Pages : **#129 SUCCESS** sur le SHA runtime exact
+- total runtime `main` : **22/22 SUCCESS Pages incluse**
 
 Ce build ne cherche pas à ajouter une fonction visible. Il transforme l’architecture implicite accumulée depuis Build 11 en **contrats explicites et testables**, sans réécrire le cœur historique pendant qu’il porte de vraies données apprenantes.
 
@@ -10,7 +18,7 @@ Ce build ne cherche pas à ajouter une fonction visible. Il transforme l’archi
 
 Le produit moderne repose encore sur un noyau `app.js` historique, complété progressivement par Curriculum Stage 2/3, Learning Memory, Scenario, Listening, Recovery, App Shell, iPhone/PWA et Speaking Loop.
 
-Le comportement est solide parce que les tribunaux sont nombreux, mais plusieurs dépendances restent implicites :
+Le comportement est solide parce que les tribunaux sont nombreux, mais plusieurs dépendances restaient implicites :
 
 - quel module possède quel état ;
 - quels stores sont durables ;
@@ -19,7 +27,7 @@ Le comportement est solide parce que les tribunaux sont nombreux, mais plusieurs
 - quel ordre de boot est nécessaire ;
 - quels invariants produit doivent rester stables pendant un futur découpage du monolithe.
 
-Une réécriture directe de `app.js` serait donc inutilement risquée.
+Une réécriture directe de `app.js` aurait donc été inutilement risquée.
 
 ## Stratégie Build 30
 
@@ -31,9 +39,9 @@ Build 30 adopte un **strangler refactor** :
 4. fournir une façade read-only pour observer le runtime ;
 5. fournir des routes stables qui utilisent les surfaces modernes quand elles existent ;
 6. certifier en vrai Chrome que cette frontière pilote l’application sans modifier la progression ;
-7. rendre les prochains extractions/remplacements possibles module par module au lieu d’un big-bang.
+7. rendre les prochaines extractions/remplacements possibles module par module au lieu d’un big-bang.
 
-## Nouveau `runtime-contracts.js`
+## `runtime-contracts.js`
 
 Ce module contient uniquement des constantes et fonctions pures :
 
@@ -48,7 +56,7 @@ Ce module contient uniquement des constantes et fonctions pures :
 
 Le contrat est gelé avec `Object.freeze` et **n’écrit dans aucun store**.
 
-## Nouveau `runtime-bridge.js`
+## `runtime-bridge.js`
 
 La façade `window.FrenchTranquilleRuntime` fournit :
 
@@ -56,6 +64,7 @@ La façade `window.FrenchTranquilleRuntime` fournit :
 - `refresh()` : resynchronisation des marqueurs diagnostiques ;
 - `route('today'|'practice'|'progress')` : point d’entrée stable pour les écrans principaux ;
 - `openLesson(id)` : ouverture via la meilleure surface existante ;
+- `lastSnapshot()` : dernière photographie structurelle ;
 - exposition du contrat Architecture.
 
 Le bridge ne contient **aucun `localStorage.setItem`**.
@@ -91,7 +100,9 @@ Presentation / App Shell
   ↓
 iPhone / PWA
   ↓
-Release layer / Speaking Loop
+Runtime boundary / Release layer
+  ↓
+Speaking Loop
 ```
 
 ## Tribunal Build 30
@@ -108,11 +119,11 @@ Le nouveau workflow certifie :
 
 ### Sanctuaires byte-identiques
 
-- `app.js` ;
-- `voice-ios.js` ;
-- `free-voice.js` ;
-- `assets/LOGO.png` ;
-- `assets/Favicon.png`.
+- `app.js` — `600f094266c9f0c4c7b57efdbf61129909ebd9cb` ;
+- `voice-ios.js` — `38e97aa3ef62dd6dcda224901b435f0973618679` ;
+- `free-voice.js` — `b4c19b1936c788ee017eac9ba14e5a62c159e8d5` ;
+- `assets/LOGO.png` — `64eaa6ad9781c6a9075d4f68615fc44344c4e21c` ;
+- `assets/Favicon.png` — `c358672368a960bf7617e5532aff3e3319cddb3e`.
 
 ### Chrome desktop + mobile
 
@@ -128,6 +139,32 @@ Le nouveau workflow certifie :
 - aucun overflow horizontal.
 
 Les anciens workflows continuent en parallèle à protéger Recovery, App Shell, iPhone/offline, Speaking Loop, Listening, Scenario et les régressions historiques.
+
+## Incident CI observé
+
+Un vieux smoke **Real Life French III** a échoué une première fois dans Chrome headless sur l’étape leçon 35, après avoir déjà validé la leçon 20.
+
+Aucun fichier Real Life n’avait été modifié. Le **même job a été rerun sans changement de code** et a ensuite validé :
+
+```text
+leçon 20 ✅
+leçon 35 ✅
+leçon 40 ✅
+```
+
+Il est donc classé comme flake historique Chrome et **aucune rustine runtime** n’a été ajoutée pour obtenir du vert.
+
+## Release metadata version-forward
+
+Les workflows Build 29.1 / 29.2 protégeaient correctement leurs comportements mais certains parseurs lisaient encore un numéro global Build 29.x exact.
+
+Build 30 a uniquement rendu cette lecture version-forward afin que :
+
+- Build 29.1 continue de protéger deux moments oraux ;
+- Build 29.2 continue de protéger Bài 7, Tyffany, l’anti-répétition et les cibles tactiles ;
+- une nouvelle version globale ne fasse pas échouer artificiellement un contrat historique toujours valide.
+
+Aucune assertion pédagogique ou interactionnelle n’a été supprimée.
 
 ## Hors scope volontaire
 
@@ -155,17 +192,19 @@ reconnaissance Free Voice
 
 Aucun enregistrement automatique du premier essai exact n’est ajouté par Architecture Hardening.
 
-## Critère de clôture
+## Preuves de clôture
 
-Build 30 ne devient **PROD / CLOS** qu’après :
+```text
+PR #71 head ffa3ddf7...       21/21 fonctionnels SUCCESS
+main runtime 5a8369df...      21/21 fonctionnels SUCCESS
+Pages #129                    SUCCESS
+main runtime total            22/22 SUCCESS Pages incluse
+```
 
-1. tribunal Build 30 vert sur le head exact de PR ;
-2. tous les contrats historiques applicables verts ;
-3. merge runtime ;
-4. même tribunal sur `main` ;
-5. GitHub Pages SUCCESS sur le runtime ;
-6. clôture README / ROADMAP / CHANGELOG / ARCHITECTURE / présent dossier.
+Le runtime Build 30 a donc été validé sur la PR exacte, mergé, retesté sur `main` puis réellement servi par GitHub Pages avant la clôture documentaire.
 
 ## Suite
 
-Après Build 30 : **V2.0.0 — Freeze / Release**. Le but du freeze est de certifier ce qui existe, pas d’introduire un nouveau moteur.
+Après Build 30 : **V2.0.0 — Freeze / Release**.
+
+Le but du freeze est de certifier ce qui existe, pas d’introduire un nouveau moteur. Le gate terrain iPhone reste parallèle et ne devra pas être transformé en capture automatique du premier essai sans validation réelle.

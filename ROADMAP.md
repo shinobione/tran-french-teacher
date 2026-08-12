@@ -64,63 +64,61 @@
 58. **Un acquis dû/fragile n’est réinjecté dans une leçon que s’il reste pertinent pour son contexte.**
 59. **Une fonction déjà présente dans l’exercice ne doit pas être dupliquée dans une couche pédagogique ajoutée.**
 60. **Un libellé d’action doit dire ce que l’action va réellement faire.**
+61. **Un refactor d’architecture commence par rendre les frontières explicites avant de déplacer le code.**
+62. **Une nouvelle frontière runtime ne devient jamais propriétaire silencieusement d’un store existant.**
+63. **Le cœur historique reste témoin de référence tant que son remplacement n’a pas une preuve comparative navigateur.**
+64. **Les routes principales possèdent une façade stable indépendante des détails DOM historiques.**
+65. **Un hardening d’architecture ne doit pas modifier les données learner pour prouver qu’il fonctionne.**
 
 ---
 
-# Baseline production — v1.22.2 / Build 29.2
+# Baseline production — v1.23.0 / Build 30
 
-## Speaking Loop Variety & Clarity — ✅ PROD / CLOS
+## Architecture Hardening — ✅ PROD / CLOS
 
-- PR runtime **#68** ; head certifié `947896ff8eed75aa805be63cc24821b1c2247980` ;
-- runtime `b6031cd8fa6756eee39496cd62a164b8400d15af` ;
-- PR : **20/20 workflows fonctionnels SUCCESS** ;
-- `main` : **20/20 workflows fonctionnels SUCCESS** ;
-- l’ancien smoke Build 26.8 a montré son flake historique `curriculum-clicked` sur PR/main et a été rerun **sans changement de code** jusqu’au passage complet ; ses tests Details/Curriculum de 920 px restaient verts ;
-- GitHub Pages **#126 SUCCESS** sur le SHA runtime exact ;
-- total runtime `main` : **21/21 SUCCESS Pages incluse** ;
+- PR runtime **#71** ; head certifié `ffa3ddf7a16dcbc32474701cfaf2f961e86d348c` ;
+- runtime `5a8369df9df536f41521acefb528da71efb168a8` ;
+- PR : **21/21 workflows fonctionnels SUCCESS** ;
+- un ancien Chrome Real Life III a échoué une fois à la leçon 35 puis a repassé **inchangé** les leçons 20 / 35 / 40 ; aucune rustine runtime n’a été ajoutée ;
+- runtime `main` : **21/21 workflows fonctionnels SUCCESS** ;
+- GitHub Pages runtime **#129 SUCCESS** sur le SHA exact ;
+- total runtime `main` : **22/22 SUCCESS Pages incluse** ;
 - curriculum **40 / 241** ; Scenario **36 / 108** ; Listening **0.88 / 0.65** ; coût 0 €.
 
-### Clarté UI
+### Frontière Architecture
 
-- [x] `↻ Ghi âm lại` côté Trân ;
-- [x] `↻ Enregistrer à nouveau` en DEBUG FR ;
-- [x] bouton audio natif `🔊 Nghe Tyffany` / `🔊 Écouter Tyffany` ;
-- [x] courte explication indiquant que Tyffany fournit le modèle ;
-- [x] zéro bouton Tyffany dupliqué lorsque l’exercice possède déjà son playback ;
-- [x] un seul bouton modèle au recap final, où aucun playback natif n’existe.
+- [x] `runtime-contracts.js` centralise stores, snapshots, invariants, routes, propriétaires, phases de boot et sanctuaires ;
+- [x] contrats gelés / lecture seule ;
+- [x] `runtime-bridge.js` fournit `snapshot`, `refresh`, `route` et `openLesson` ;
+- [x] aucune écriture `localStorage.setItem` depuis le contrat ou le bridge ;
+- [x] owners APIs explicites ;
+- [x] six stores durables explicites ;
+- [x] ordre de boot logique documenté ;
+- [x] nouvelles frontières précachées par la PWA.
 
-### Contrat pédagogique
+### Tribunal comparatif
 
-- [x] challenge de compréhension séparé de la cible de production orale ;
-- [x] deuxième moment déplacé sur la fin de leçon sous forme de `recap` ;
-- [x] deux cibles distinctes par leçon ;
-- [x] nombres/unités isolés fortement défavorisés comme cibles orales ;
-- [x] réutilisation d’un acquis déjà connu uniquement si le contexte correspond ;
-- [x] Learning Memory consultée en lecture seule pour favoriser fragile/dû/learning ;
-- [x] fenêtre récente anti-répétition ;
-- [x] aucun `localStorage.setItem` depuis le planificateur oral ;
-- [x] toujours **2 moments maximum**.
+- [x] `app.js` byte-identique ;
+- [x] `voice-ios.js` / `free-voice.js` byte-identiques ;
+- [x] logo / favicon byte-identiques ;
+- [x] Chrome desktop **1440×900** ;
+- [x] Chrome mobile **390×844** ;
+- [x] runtime boundary prête ;
+- [x] 40 leçons / 241 éléments ;
+- [x] Recovery / Build 27 Shell / Speaking Loop présents ;
+- [x] navigation réelle `Progrès → Aujourd’hui → Pratiquer` via le bridge ;
+- [x] learner raw JSON **strictement identique avant/après** ;
+- [x] un seul onglet actif ;
+- [x] zéro overflow horizontal.
 
-### Régression Bài 7 verrouillée
+### Ce que Build 30 n’a volontairement PAS fait
 
-Le challenge canonique reste :
-
-```text
-« dix euros » → 10 euros
-```
-
-Mais la cible orale finale attendue, avec les acquis précédents, est :
-
-```text
-Combien ça coûte ?
-```
-
-Le tribunal 29.2 prouve également qu’une seconde planification avec les deux cibles récentes choisit une autre alternative cohérente.
-
-### Terrain audio
-
-- [x] la lecture de **sa propre voix** après enregistrement fonctionne dans le flux local ;
-- [ ] gate Free Voice complet sur vrai iPhone : reconnaissance → seconde prise → lecture → **reconnaissance suivante** toujours normale.
+- [x] aucune migration de learner ;
+- [x] aucun renommage des clés historiques ;
+- [x] aucun changement voix / Safari ;
+- [x] aucun nouveau curriculum ;
+- [x] aucune refonte visible ;
+- [x] aucune réécriture big-bang de `app.js`.
 
 ---
 
@@ -130,15 +128,35 @@ Le tribunal 29.2 prouve également qu’une seconde planification avec les deux 
 
 Tant que ce gate n’est pas validé, **pas d’enregistrement automatique du premier essai exact** pendant la reconnaissance Safari.
 
+Ce gate terrain reste **parallèle** à la release V2 ; il protège uniquement l’éventuelle évolution vers l’enregistrement automatique du premier essai.
+
 ---
 
-# v1.23.0 — Build 30 — Architecture Hardening
+# V2.0.0 — Freeze / Release — PROCHAIN JALON
 
-Après le retour terrain : réduire le monolithe historique sans changer le comportement, clarifier propriétaires DOM/state/routing, conserver Recovery, App Shell, iPhone hardening et Speaking Loop, avec snapshots comparatifs.
+Objectif : **ne pas ajouter de moteur**. Certifier ce qui existe comme release cohérente.
 
-# V2.0.0 — Freeze / Release
+## Scope
 
-Release cohérente, sauvegardable, restaurable, testée et documentée.
+- [ ] geler la baseline produit `40 / 241`, Scenario `36 / 108`, Listening `0.88 / 0.65` ;
+- [ ] certifier Recovery / backup / restore / rollback ;
+- [ ] certifier App Shell et navigation learner ;
+- [ ] certifier iPhone/PWA/offline/a11y ;
+- [ ] certifier Speaking Loop / variété / Tyffany / auto-écoute locale ;
+- [ ] certifier Runtime Contracts / Runtime Bridge Build 30 ;
+- [ ] effectuer un round-trip ancien utilisateur ;
+- [ ] effectuer une matrice navigateur desktop + mobile ;
+- [ ] vérifier zéro migration/écriture inattendue au boot ;
+- [ ] synchroniser README / ROADMAP / CHANGELOG / ARCHITECTURE ;
+- [ ] tag/release seulement après tribunal final.
+
+## Definition of Done V2
+
+La release est :
+
+> **cohérente, sauvegardable, restaurable, utilisable sans connaître l’architecture, testée sur les parcours principaux et documentée avec une baseline reproductible.**
+
+---
 
 ## Baseline historique protégée
 
