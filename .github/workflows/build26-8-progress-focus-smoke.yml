@@ -114,15 +114,25 @@ jobs:
 
       - name: Chrome desktop — focus roundtrip restores compact human view
         run: |
+          # This historical smoke drives several requestAnimationFrame-backed UI
+          # transitions in one dump-dom session. Chrome 150 intermittently parks
+          # compositor/timer work after the curriculum click in headless runners,
+          # while the dedicated Details/Curriculum tests above stay green. Keep
+          # every business assertion unchanged; only prevent headless background
+          # throttling so the same interaction sequence can settle deterministically.
           passed=0
           for attempt in 1 2 3; do
             profile="/tmp/ft-b268-roundtrip-$attempt"
             file="/tmp/b268-roundtrip-$attempt.html"
             rm -rf "$profile" "$file"
-            if ! timeout --signal=TERM --kill-after=5s 52s \
+            if ! timeout --signal=TERM --kill-after=5s 64s \
               google-chrome --headless=new --no-sandbox --disable-gpu \
+              --disable-background-timer-throttling \
+              --disable-backgrounding-occluded-windows \
+              --disable-renderer-backgrounding \
+              --run-all-compositor-stages-before-draw \
               --user-data-dir="$profile" --window-size=1640,900 \
-              --virtual-time-budget=38000 --dump-dom \
+              --virtual-time-budget=48000 --dump-dom \
               'http://127.0.0.1:4173/?uxSmoke=lesson8&debug=fr&b268Smoke=roundtrip' >"$file"; then
               echo "Build 26.8 roundtrip attempt $attempt timed out or exited non-zero"
               continue
