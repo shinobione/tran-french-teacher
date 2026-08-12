@@ -1,0 +1,240 @@
+/* French Trân'quille — v1.19.8 Build 26.8
+   Progress Focus Flow: keep DOM ownership intact, but let one human intention own
+   the viewport at a time. No reparenting of Memory/Mastery/Listening cards. */
+
+.screen-progress .progress-ux-composition{
+  transition:opacity .16s ease,transform .16s ease,filter .16s ease;
+}
+.screen-progress .progress-layout[data-b268-transition="out"] > .progress-ux-composition,
+.screen-progress .progress-layout[data-b268-transition="in-start"] > .progress-ux-composition{
+  opacity:0;
+  transform:translateY(6px);
+  filter:blur(1.5px);
+}
+
+.b268-focus-toolbar{
+  display:none;
+  min-height:64px;
+  grid-template-columns:auto minmax(0,1fr) auto;
+  align-items:center;
+  gap:12px;
+  margin:0 0 14px;
+  padding:10px 12px;
+  border:1px solid rgba(159,247,209,.14);
+  border-radius:17px;
+  background:linear-gradient(135deg,rgba(159,247,209,.07),rgba(201,167,255,.055));
+  box-shadow:0 12px 28px rgba(0,0,0,.12);
+}
+.b268-focus-toolbar>div{min-width:0}
+.b268-focus-toolbar small,.b268-focus-toolbar strong{display:block}
+.b268-focus-toolbar small{font-size:.62rem;letter-spacing:.1em;color:#8fcfb9}
+.b268-focus-toolbar strong{margin-top:3px;font-size:.95rem;line-height:1.25;color:#eef5f9}
+.b268-focus-back{
+  width:42px;
+  height:42px;
+  border:1px solid rgba(180,199,224,.14);
+  border-radius:13px;
+  background:rgba(10,22,37,.84);
+  color:#eaf2f7;
+  font-size:1.55rem;
+  line-height:1;
+  cursor:pointer;
+  transition:transform .12s ease,border-color .16s ease,background .16s ease;
+}
+.b268-focus-back:hover{border-color:rgba(159,247,209,.26);background:rgba(16,34,51,.96)}
+.b268-focus-back:active{transform:scale(.965)}
+.b268-focus-badge{
+  min-width:42px;
+  min-height:30px;
+  display:grid;
+  place-items:center;
+  padding:4px 9px;
+  border-radius:999px;
+  border:1px solid rgba(201,167,255,.15);
+  background:rgba(201,167,255,.07);
+  color:#cdb8ef;
+  font-size:.67rem;
+  font-weight:800;
+}
+
+/* DETAIL FOCUS
+   The historical composition remains intact. Only presentation changes: the
+   learner flow is hidden and the chosen Details family takes the full surface.
+   Selectors deliberately outrank the Build 26.7 open-details geometry guard. */
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] > .progress-ux-composition{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-template-areas:"details"!important;
+  gap:0!important;
+}
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] > .progress-ux-composition > .progress-ux-left-flow{
+  display:none!important;
+}
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] > .progress-ux-composition > .progress-ux-details{
+  grid-area:details!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  margin:0!important;
+  border-color:transparent!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+}
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] .progress-ux-details>summary{
+  display:none!important;
+}
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] .progress-ux-details-body{
+  padding:0!important;
+}
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] .b268-focus-toolbar[data-b268-toolbar="details"]{
+  display:grid;
+}
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] .progress-detail-grid{
+  display:none!important;
+}
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] .progress-detail-panels{
+  margin-top:0!important;
+}
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] .progress-detail-panel{
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+}
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] .progress-detail-panel-head{
+  display:none!important;
+}
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] .progress-detail-panel-cards{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+  align-items:start;
+}
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] .progress-detail-panel-cards>.card{
+  min-width:0!important;
+  margin:0!important;
+  padding:18px!important;
+  border:1px solid rgba(180,199,224,.11)!important;
+  border-radius:18px!important;
+  background:linear-gradient(180deg,rgba(20,35,54,.92),rgba(11,23,38,.94))!important;
+  box-shadow:0 14px 36px rgba(0,0,0,.15)!important;
+}
+
+/* CURRICULUM FOCUS
+   Expanding the curriculum means exactly that: curriculum owns the surface.
+   Overview and Details disappear until the explicit back action. */
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] > .progress-ux-composition{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-template-areas:"flow"!important;
+  gap:0!important;
+}
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] > .progress-ux-composition > .progress-ux-details{
+  display:none!important;
+}
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] > .progress-ux-composition > .progress-ux-left-flow{
+  grid-area:flow!important;
+  width:100%!important;
+  max-width:none!important;
+  gap:0!important;
+}
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] .progress-ux-overview{
+  display:none!important;
+}
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] .b268-curriculum-toolbar{
+  display:grid;
+}
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] .progress-ux-curriculum{
+  width:100%!important;
+  max-width:none!important;
+  margin:0!important;
+}
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] .progress-ux-stage-nav{
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:8px;
+  margin:12px 0 14px;
+}
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] .progress-ux-stage-button{
+  min-height:74px;
+  align-items:flex-start;
+  padding:11px;
+}
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] .lesson-list{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:9px;
+}
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] .lesson-row{
+  min-width:0!important;
+  margin:0!important;
+}
+.screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] .progress-ux-curriculum-actions{
+  margin-top:14px;
+}
+
+/* Use more of a large display only while a focused Progress surface is active.
+   Other app screens keep their historical 1180px shell. */
+body[data-b268-progress-focus="details"] .app-shell,
+body[data-b268-progress-focus="curriculum"] .app-shell{
+  width:min(1420px,100%);
+}
+
+@media(max-width:1100px){
+  .screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] .progress-detail-panel-cards{
+    grid-template-columns:minmax(0,1fr);
+  }
+  .screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] .progress-ux-stage-nav{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] .progress-ux-stage-button:last-child:nth-child(odd){
+    grid-column:1/-1;
+  }
+}
+
+@media(max-width:860px){
+  .b268-focus-toolbar{
+    min-height:60px;
+    margin-bottom:11px;
+    padding:8px 9px;
+    border-radius:15px;
+  }
+  .b268-focus-back{width:40px;height:40px;border-radius:12px}
+  .b268-focus-badge{display:none}
+  .screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] .progress-detail-panel-cards{
+    grid-template-columns:minmax(0,1fr);
+    gap:10px;
+  }
+  .screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] .progress-ux-stage-nav{
+    grid-template-columns:minmax(0,1fr);
+    gap:7px;
+  }
+  .screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] .progress-ux-stage-button,
+  .screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] .progress-ux-stage-button:last-child:nth-child(odd){
+    grid-column:auto;
+    min-height:54px;
+    align-items:center;
+  }
+  .screen-progress .progress-layout.progress-ux-ready[data-b268-focus="curriculum"] .lesson-list{
+    grid-template-columns:minmax(0,1fr);
+  }
+}
+
+@media(max-width:520px){
+  .b268-focus-toolbar{grid-template-columns:auto minmax(0,1fr);gap:9px}
+  .b268-focus-toolbar>div strong{font-size:.88rem}
+  .screen-progress .progress-layout.progress-ux-ready[data-b268-focus="details"] .progress-detail-panel-cards>.card{
+    padding:15px!important;
+    border-radius:16px!important;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .screen-progress .progress-ux-composition,
+  .b268-focus-back{transition:none!important}
+  .screen-progress .progress-layout[data-b268-transition] > .progress-ux-composition{
+    opacity:1!important;
+    transform:none!important;
+    filter:none!important;
+  }
+}
