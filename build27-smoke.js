@@ -15,6 +15,15 @@
     }
     return null;
   };
+  const waitGone = async (selector, timeout = 3000) => {
+    const start = performance.now();
+    while (performance.now() - start < timeout) {
+      const node = document.querySelector(selector);
+      if (!node || !visible(node)) return true;
+      await sleep(35);
+    }
+    return false;
+  };
   const click = async selector => {
     const node = await waitFor(selector);
     if (!node) return false;
@@ -56,7 +65,7 @@
   async function openProgressState() {
     if (!await waitFor('.b27-home')) return false;
     if (!await click('.ux-bottom-nav [data-ux-nav="progress"]')) return false;
-    const progress = await waitFor('.b27-progress-page');
+    const progress = await waitFor('.b27-progress-page', 10000);
     if (!progress) return false;
     await sleep(120);
     html.dataset.b27ProgressVisible = visible(progress) ? '1' : '0';
@@ -96,9 +105,22 @@
     html.dataset.b27FlowPhase = 'practice';
 
     if (!await click('[data-b27-close-practice]')) return;
-    await sleep(170);
-    if (!await click('.ux-bottom-nav [data-ux-nav="progress"]')) return;
-    const progress = await waitFor('.b27-progress-page');
+    html.dataset.b27FlowPhase = 'practice-back-clicked';
+    const practiceGone = await waitGone('.b27-practice-page', 4000);
+    html.dataset.b27PracticeClosed = practiceGone ? '1' : '0';
+    if (!practiceGone) return;
+    html.dataset.b27FlowPhase = 'practice-closed';
+
+    const progressNav = await waitFor('.ux-bottom-nav [data-ux-nav="progress"]', 5000);
+    html.dataset.b27ProgressNavReady = progressNav ? '1' : '0';
+    if (!progressNav) return;
+    progressNav.click();
+    html.dataset.b27FlowPhase = 'progress-clicked';
+
+    // The historical navigation owns the screen; the Build 27 bridge refreshes
+    // the façade in the same gesture. Wait for the real learner page, not a timer.
+    const progress = await waitFor('.b27-progress-page', 10000);
+    html.dataset.b27ProgressPageReady = progress ? '1' : '0';
     if (!progress) return;
     await sleep(80);
     html.dataset.b27ProgressVisible = visible(progress) ? '1' : '0';
@@ -121,10 +143,13 @@
     html.dataset.b27JourneyA1Rows = String(document.querySelectorAll('.b27-journey-page .b27-stage-lessons .b27-lesson-row').length);
 
     if (!await click('[data-b27-close-journey]')) return;
-    await sleep(170);
-    const openLesson = document.querySelector('.b27-progress-page [data-b27-open-lesson]');
-    openLesson?.click();
-    const lesson = await waitFor('.screen-lesson');
+    const journeyGone = await waitGone('.b27-journey-page', 4000);
+    html.dataset.b27JourneyClosed = journeyGone ? '1' : '0';
+    if (!journeyGone) return;
+    const openLesson = await waitFor('.b27-progress-page [data-b27-open-lesson]', 5000);
+    if (!openLesson) return;
+    openLesson.click();
+    const lesson = await waitFor('.screen-lesson', 10000);
     if (!lesson) return;
     await sleep(80);
     html.dataset.b27LessonReached = '1';
