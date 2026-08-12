@@ -1,0 +1,149 @@
+/* French Trân’quille — v1.22.0 Build 29 — iPhone / PWA / Accessibility Hardening
+   Presentation and device ergonomics only. No pedagogy, learner data or voice logic. */
+
+:root{
+  --b29-safe-top:env(safe-area-inset-top,0px);
+  --b29-safe-right:env(safe-area-inset-right,0px);
+  --b29-safe-bottom:env(safe-area-inset-bottom,0px);
+  --b29-safe-left:env(safe-area-inset-left,0px);
+  --b29-vv-height:100dvh;
+  --b29-vv-offset-top:0px;
+  --b29-keyboard-inset:0px;
+  --b29-focus:#b9ffe9;
+}
+
+html.b29-iphone-ready{
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+  color-scheme:dark;
+  scroll-padding-top:calc(16px + var(--b29-safe-top));
+  scroll-padding-bottom:calc(92px + var(--b29-safe-bottom));
+}
+
+html.b29-iphone-ready body{
+  min-height:100dvh;
+  min-height:-webkit-fill-available;
+  overscroll-behavior-y:none;
+}
+
+/* Keep iOS from zooming text fields while preserving user pinch zoom globally. */
+.b29-iphone-ready input,
+.b29-iphone-ready textarea,
+.b29-iphone-ready select{
+  font-size:max(16px,1em);
+}
+
+/* Native-feeling touch targets on the learner surface. */
+@media (pointer:coarse), (max-width:760px){
+  .b29-iphone-ready button:not(.b27-debug-toggle),
+  .b29-iphone-ready [role="button"]{
+    min-width:44px;
+    min-height:44px;
+    touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
+  }
+
+  .b29-iphone-ready .b27-page{
+    padding-top:calc(14px + var(--b29-safe-top));
+    padding-right:max(13px,var(--b29-safe-right));
+    padding-left:max(13px,var(--b29-safe-left));
+    padding-bottom:calc(116px + var(--b29-safe-bottom));
+  }
+
+  .b29-iphone-ready .b27-overlay-inner{
+    padding-top:calc(18px + var(--b29-safe-top));
+    padding-right:max(14px,var(--b29-safe-right));
+    padding-left:max(14px,var(--b29-safe-left));
+    padding-bottom:calc(30px + var(--b29-safe-bottom));
+  }
+
+  .b29-iphone-ready .ux-bottom-nav{
+    padding-right:max(10px,var(--b29-safe-right));
+    padding-bottom:max(var(--b29-safe-bottom),7px);
+    padding-left:max(10px,var(--b29-safe-left));
+  }
+
+  .b29-iphone-ready .ux-bottom-nav button{
+    min-height:56px;
+  }
+}
+
+/* Visible keyboard focus without changing pointer aesthetics. */
+.b29-iphone-ready :where(button,a,input,textarea,select,[tabindex]):focus-visible{
+  outline:3px solid var(--b29-focus)!important;
+  outline-offset:3px!important;
+  box-shadow:0 0 0 6px rgba(185,255,233,.12)!important;
+}
+
+.b29-iphone-ready :where(input,textarea,select):focus-visible{
+  border-color:rgba(185,255,233,.7)!important;
+}
+
+/* Give VoiceOver/keyboard users a stable current-tab cue beyond color alone. */
+.b29-iphone-ready .ux-bottom-nav button[aria-current="page"]{
+  border:1px solid rgba(143,227,208,.2)!important;
+}
+
+/* Never let long translated content generate horizontal page drift. */
+.b29-iphone-ready .b27-page,
+.b29-iphone-ready .b27-overlay,
+.b29-iphone-ready .b27-overlay-inner,
+.b29-iphone-ready .b27-primary-card,
+.b29-iphone-ready .b27-level-card,
+.b29-iphone-ready .b27-current-card,
+.b29-iphone-ready .b27-stage-card,
+.b29-iphone-ready .b27-practice-action,
+.b29-iphone-ready .b27-lesson-row{
+  min-width:0;
+  max-width:100%;
+}
+
+.b29-iphone-ready :where(.b27-brandline,.b27-lesson-copy,.b27-practice-action>span:nth-child(2),.b27-quick-card>span:nth-child(2)){
+  min-width:0;
+}
+
+.b29-iphone-ready :where(.b27-brandline span,.b27-lesson-copy strong,.b27-lesson-copy small,.b27-practice-action strong,.b27-practice-action small,.b27-quick-card strong,.b27-quick-card small){
+  overflow-wrap:anywhere;
+}
+
+/* visualViewport-backed keyboard mode. Do not move the business UI; keep focused controls visible. */
+.b29-iphone-ready.b29-keyboard-open{
+  scroll-padding-bottom:calc(var(--b29-keyboard-inset) + 24px);
+}
+
+.b29-iphone-ready.b29-keyboard-open .ux-bottom-nav{
+  opacity:.18;
+  pointer-events:none;
+}
+
+/* Compact landscape / short iPhone viewport: preserve the task before decoration. */
+@media (max-height:560px) and (orientation:landscape){
+  .b29-iphone-ready .b27-header{margin-bottom:14px}
+  .b29-iphone-ready .b27-page-title{margin-top:8px}
+  .b29-iphone-ready .b27-practice-intro{margin:10px 2px 14px}
+  .b29-iphone-ready .b27-primary-card,
+  .b29-iphone-ready .b27-level-card,
+  .b29-iphone-ready .b27-current-card,
+  .b29-iphone-ready .b27-stage-card{padding:16px}
+}
+
+/* Stronger separation when the OS asks for more contrast. */
+@media (prefers-contrast:more){
+  .b29-iphone-ready{
+    --b27-line:rgba(238,244,255,.3);
+    --b27-muted:#c8d0df;
+  }
+  .b29-iphone-ready :where(.b27-primary-card,.b27-level-card,.b27-current-card,.b27-stage-card,.b27-quick-card,.b27-practice-action,.b27-lesson-row,.ux-bottom-nav){
+    border-color:rgba(238,244,255,.3)!important;
+  }
+}
+
+/* Build 29 never requires motion for state. */
+@media (prefers-reduced-motion:reduce){
+  .b29-iphone-ready *,
+  .b29-iphone-ready *::before,
+  .b29-iphone-ready *::after{
+    scroll-behavior:auto!important;
+  }
+  .b29-iphone-ready .ux-tap-echo{display:none!important}
+}
