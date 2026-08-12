@@ -1,6 +1,9 @@
+import './runtime-contracts.js?v=1.23.0-b30';
+import './runtime-bridge.js?v=1.23.0-b30';
+
 // Production baseline kept explicit for historical CI contracts.
 const PRODUCTION_BASELINE = { version: '1.17.0', build: 24 };
-const META = { version: '1.22.2', build: '29.2', baseline: PRODUCTION_BASELINE };
+const META = { version: '1.23.0', build: 30, baseline: PRODUCTION_BASELINE };
 
 window.FrenchTranquilleBuildMeta = META;
 
@@ -36,6 +39,12 @@ function installSpeakingLoopAssets() {
       smoke.dataset.speakingLoopVarietySmoke = '1';
       document.body.appendChild(smoke);
     }
+    if (params.has('b30Audit') && !document.querySelector('script[data-build30-architecture-smoke]')) {
+      const smoke = document.createElement('script');
+      smoke.src = './build30-architecture-smoke.js?v=1.23.0-b30';
+      smoke.dataset.build30ArchitectureSmoke = '1';
+      document.body.appendChild(smoke);
+    }
   });
   document.body.appendChild(script);
 }
@@ -53,10 +62,10 @@ installSpeakingLoopAssets();
   'FrenchTranquilleProgressDetailsDashboard','FrenchTranquilleBuild263UX','FrenchTranquilleBuild264UX',
   'FrenchTranquilleBuild265UX','FrenchTranquilleBuild266UX','FrenchTranquilleBuild267UX',
   'FrenchTranquilleBuild268UX','FrenchTranquilleBuild269UX','FrenchTranquilleBuild27Shell',
-  'FrenchTranquilleRecovery'
+  'FrenchTranquilleRecovery','FrenchTranquilleRuntimeContracts','FrenchTranquilleRuntime'
 ].forEach(name => {
   const api = window[name];
-  if (api && typeof api === 'object') {
+  if (api && typeof api === 'object' && !Object.isFrozen(api)) {
     api.version = META.version;
     api.build = META.build;
   }
