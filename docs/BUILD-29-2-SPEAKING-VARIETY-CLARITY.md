@@ -2,7 +2,17 @@
 
 ## État
 
-**v1.22.2 — Build 29.2 — CANDIDAT / NON MERGÉ**
+**v1.22.2 — Build 29.2 — ✅ PROD / CLOS**
+
+- PR runtime : **#68** ;
+- head PR certifié : `947896ff8eed75aa805be63cc24821b1c2247980` ;
+- runtime production : `b6031cd8fa6756eee39496cd62a164b8400d15af` ;
+- tribunal PR : **20/20 workflows fonctionnels SUCCESS** ;
+- tribunal `main` : **20/20 workflows fonctionnels SUCCESS** ;
+- GitHub Pages : **#126 SUCCESS** sur le runtime exact ;
+- total runtime : **21/21 SUCCESS Pages incluse**.
+
+L’ancien workflow Build 26.8 a reproduit son flake Chrome historique `curriculum-clicked` ; ses contrôles Focus dédiés restaient verts à 920 px et le même job a fini par passer entièrement après rerun **sans aucun changement du runtime 29.2**.
 
 Objectif : rendre les moments d’auto-écoute plus explicites et pédagogiquement variés après les premiers retours réels sur Build 29.1.
 
@@ -12,7 +22,7 @@ Objectif : rendre les moments d’auto-écoute plus explicites et pédagogiqueme
 2. la carte Speaking Loop possédait un bouton Tyffany alors que l’étape de leçon possédait déjà son bouton audio ;
 3. une réponse de compréhension comme `10 euros` pouvait être recyclée comme cible orale répétée, mélangeant reconnaissance et production.
 
-## UX cible
+## UX livrée
 
 ### Enregistrement
 
@@ -30,7 +40,7 @@ DEBUG FR  🔊 Écouter Tyffany
 
 Le bouton natif reçoit aussi un `title` et un `aria-label` qui expliquent que Tyffany lit la phrase modèle en français.
 
-Lorsque ce bouton existe, la carte Speaking Loop ne crée aucun bouton modèle supplémentaire.
+Lorsque ce bouton existe, la carte Speaking Loop ne crée aucun bouton modèle supplémentaire. Au recap final, où aucun playback natif n’existe, la carte fournit un seul bouton Tyffany.
 
 ## Deux intentions différentes
 
@@ -46,9 +56,9 @@ Combien est-ce ?
 
 ### Production orale
 
-Le Speaking Loop cherche une phrase utile à produire. La cible finale est donc calculée séparément et apparaît au bilan de la leçon.
+Le Speaking Loop cherche une phrase utile à produire. La cible finale est calculée séparément et apparaît au bilan de la leçon.
 
-Pour Bài 7, avec les acquis antérieurs disponibles, le contrat attendu est :
+Pour Bài 7, avec les acquis antérieurs disponibles, le contrat livré est :
 
 ```text
 Compréhension : 10 euros
@@ -97,8 +107,6 @@ Quand la leçon est quittée, son plan peut être recalculé lors d’une procha
 
 ## Audio
 
-Inchangé par rapport à 29.1 :
-
 ```text
 clic explicite
 → getUserMedia
@@ -113,6 +121,8 @@ clic explicite
 - aucun backup audio ;
 - aucun faux score de prononciation ;
 - Blob détruit au changement de moment/page.
+
+Le retour terrain confirme que **la propre voix est bien audible après l’enregistrement**. Le gate différent `reconnaissance Free Voice → seconde prise → lecture → reconnaissance suivante` reste à confirmer sur le vrai iPhone.
 
 `voice-ios.js` et `free-voice.js` restent byte-identiques.
 
@@ -166,7 +176,3 @@ clic explicite
 ## Baseline historique
 
 **v1.17.0 — Build 24 — Real Life French II** : **28 situations / 84 tours** avant Pack III ; `real-life-data-2.js` reste canonique.
-
-## Critère de merge
-
-Ne pas merger tant que le nouveau tribunal 29.2, Build 29.1 version-forward, Build 29 PWA/offline, Build 28 Recovery, Build 27 App Shell, Build 26.1 Voice Replay et tous les anciens contrats fonctionnels ne sont pas verts sur le même head.
