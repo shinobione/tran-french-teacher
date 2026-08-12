@@ -76,6 +76,15 @@ function installBuild27ShellBridges() {
     window.FrenchTranquilleUX?.refresh?.();
   };
 
+  const settleOverlay = overlay => {
+    if (!(overlay instanceof HTMLElement)) return;
+    const settle = () => overlay.isConnected && overlay.classList.remove('b27-entering');
+    requestAnimationFrame(settle);
+    // Cosmetic motion never owns state: a skipped frame cannot leave an
+    // otherwise-ready page semi-transparent indefinitely.
+    setTimeout(settle, 48);
+  };
+
   const syncOverlayGeometry = () => {
     const overlays = document.querySelectorAll('.b27-overlay');
     if (!overlays.length) return;
@@ -86,8 +95,14 @@ function installBuild27ShellBridges() {
       return;
     }
     const navTop = nav.getBoundingClientRect().top;
-    const bottom = Math.max(0, Math.ceil(window.innerHeight - navTop));
-    overlays.forEach(overlay => { overlay.style.bottom = `${bottom}px`; });
+    // Fixed-position geometry follows the layout viewport. Inside an iframe,
+    // window.innerHeight can be smaller than documentElement.clientHeight.
+    const layoutHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+    const bottom = Math.max(0, Math.ceil(layoutHeight - navTop));
+    overlays.forEach(overlay => {
+      overlay.style.bottom = `${bottom}px`;
+      settleOverlay(overlay);
+    });
     root.dataset.b27OverlayBottom = String(bottom);
   };
 
@@ -99,7 +114,12 @@ function installBuild27ShellBridges() {
   new MutationObserver(mutations => {
     if (mutations.some(mutation => mutation.type === 'attributes' && mutation.attributeName === 'class')) syncTabState();
   }).observe(root, { attributes:true, attributeFilter:['class'] });
-  new MutationObserver(syncOverlayGeometry).observe(document.body, { childList:true });
+  new MutationObserver(mutations => {
+    mutations.forEach(mutation => mutation.addedNodes.forEach(node => {
+      if (node instanceof HTMLElement && node.classList.contains('b27-overlay')) settleOverlay(node);
+    }));
+    syncOverlayGeometry();
+  }).observe(document.body, { childList:true });
   window.addEventListener('resize', syncOverlayGeometry, { passive:true });
   window.addEventListener('orientationchange', syncOverlayGeometry, { passive:true });
 
