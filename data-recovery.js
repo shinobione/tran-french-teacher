@@ -12,13 +12,14 @@
   const PRE_MIGRATION_KEY = 'french-tranquille:recovery:pre-migration:v1';
   const PRE_RESET_KEY = 'french-tranquille:recovery:pre-reset:v1';
   const QUARANTINE_KEY = 'french-tranquille:recovery:quarantine:v1';
+  const LEGACY_SAFETY_KEY = 'french-tranquille:safety:pre-build22:v1';
   const SNAPSHOT_FORMAT = 'french-tranquille-recovery-snapshot';
   const MAX_QUARANTINE = 8;
   const MAX_QUARANTINE_RAW = 100000;
+  const params = new URLSearchParams(location.search);
 
   const nativeSetItem = Storage.prototype.setItem;
   const nativeRemoveItem = Storage.prototype.removeItem;
-  const nativeClear = Storage.prototype.clear;
   const isDebug = () => localStorage.getItem(DEBUG_KEY) === '1';
   const T = (vi, fr) => isDebug() ? fr : vi;
   const nowIso = () => new Date().toISOString();
@@ -78,6 +79,12 @@
     return validation.ok ? snap : null;
   }
 
+  function legacySafetyValues() {
+    const legacy = readMeta(LEGACY_SAFETY_KEY);
+    if (!legacy || legacy.format !== 'french-tranquille-safety-snapshot' || !legacy.values) return null;
+    return legacy.values;
+  }
+
   function saveLastGood(reason = 'runtime') {
     const values = Core.collectRaw(localStorage);
     const validation = Core.validateRawMap(values, { allowMissing: true });
@@ -111,6 +118,7 @@
 
   function repairCorruptionAtBoot() {
     const lastGood = validSnapshot(LAST_GOOD_KEY);
+    const legacyValues = legacySafetyValues();
     Core.STORE_SPECS.forEach(spec => {
       const raw = localStorage.getItem(spec.key);
       if (raw === null) return;
@@ -118,11 +126,14 @@
       if (validation.ok) return;
 
       quarantine(spec.key, raw, validation.reason, 'boot');
-      const fallback = lastGood?.values?.[spec.key] ?? null;
-      const fallbackValidation = Core.validateRaw(spec, fallback, { allowMissing: true });
-      if (fallback !== null && fallbackValidation.ok) {
-        nativeSetItem.call(localStorage, spec.key, fallback);
-        runtimeStatus.repairedAtBoot.push({ key: spec.key, action: 'restored-last-good' });
+      const candidates = [
+        { action: 'restored-last-good', raw: lastGood?.values?.[spec.key] ?? null },
+        { action: 'restored-build22-safety', raw: legacyValues?.[spec.key] ?? null }
+      ];
+      const fallback = candidates.find(candidate => candidate.raw !== null && Core.validateRaw(spec, candidate.raw, { allowMissing: false }).ok);
+      if (fallback) {
+        nativeSetItem.call(localStorage, spec.key, fallback.raw);
+        runtimeStatus.repairedAtBoot.push({ key: spec.key, action: fallback.action });
       } else {
         nativeRemoveItem.call(localStorage, spec.key);
         runtimeStatus.repairedAtBoot.push({ key: spec.key, action: 'quarantined-and-cleared' });
@@ -131,7 +142,21 @@
     saveLastGood(runtimeStatus.repairedAtBoot.length ? 'boot-repair' : 'boot-valid');
   }
 
+  let bootSmokeExpectedLearner = null;
+  if (params.get('b28BootSmoke') === 'corrupt') {
+    bootSmokeExpectedLearner = localStorage.getItem('francais-avec-luc:learner:v1');
+    if (bootSmokeExpectedLearner) {
+      saveLastGood('boot-smoke-seed');
+      nativeSetItem.call(localStorage, 'francais-avec-luc:learner:v1', '{broken-json');
+    }
+  }
+
   repairCorruptionAtBoot();
+
+  if (params.get('b28BootSmoke') === 'corrupt') {
+    document.documentElement.dataset.b28BootRepair = bootSmokeExpectedLearner && localStorage.getItem('francais-avec-luc:learner:v1') === bootSmokeExpectedLearner ? '1' : '0';
+    document.documentElement.dataset.b28BootQuarantine = runtimeStatus.repairedAtBoot.some(entry => entry.key === 'francais-avec-luc:learner:v1') ? '1' : '0';
+  }
 
   Storage.prototype.setItem = function (key, value) {
     if (this === localStorage) {
@@ -157,6 +182,7 @@
       snapshot(PRE_RESET_KEY, 'pre-reset');
       Core.STORE_SPECS.forEach(spec => nativeRemoveItem.call(localStorage, spec.key));
       saveLastGood('reset-all');
+      if (!params.has('b28Smoke')) setTimeout(() => location.reload(), 0);
       return;
     }
     const result = nativeRemoveItem.call(this, key);
@@ -309,7 +335,8 @@
       preRestore: PRE_RESTORE_KEY,
       preMigration: PRE_MIGRATION_KEY,
       preReset: PRE_RESET_KEY,
-      quarantine: QUARANTINE_KEY
+      quarantine: QUARANTINE_KEY,
+      legacySafety: LEGACY_SAFETY_KEY
     },
     backupObject,
     downloadBackup,
