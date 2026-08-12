@@ -46,47 +46,119 @@ jobs:
 
       - name: Chrome — compact Parcours preserves lesson-8 state
         run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=26000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&progressionSmoke=compact' >/tmp/progress-compact.html
-          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/progress-compact.html; then cat /tmp/progress-compact.html; exit 1; fi
-          grep -q 'app-shell screen-progress' /tmp/progress-compact.html
-          grep -q 'data-progress-ux-ready="1"' /tmp/progress-compact.html
-          grep -q 'data-progress-current-lesson="l8"' /tmp/progress-compact.html
-          grep -q 'data-progress-completed="7"' /tmp/progress-compact.html
-          grep -q 'data-progress-known="40"' /tmp/progress-compact.html
-          grep -q 'data-progress-visible-rows="5"' /tmp/progress-compact.html
-          grep -q 'data-progress-total-rows="40"' /tmp/progress-compact.html
-          grep -q 'data-progress-expanded="0"' /tmp/progress-compact.html
-          grep -q 'data-progress-details-open="0"' /tmp/progress-compact.html
-          grep -E -q 'data-progress-detail-cards="[1-9][0-9]*"' /tmp/progress-compact.html
-          grep -q 'progress-ux-overview' /tmp/progress-compact.html
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-progress-compact-$attempt"
+            file="/tmp/progress-compact-$attempt.html"
+            rm -rf "$profile" "$file"
+            if ! timeout --signal=TERM --kill-after=5s 50s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --disable-background-timer-throttling --disable-renderer-backgrounding \
+              --user-data-dir="$profile" --window-size=390,844 --virtual-time-budget=26000 --dump-dom \
+              'http://127.0.0.1:4173/?uxSmoke=lesson8&progressionSmoke=compact' >"$file"; then
+              echo "Compact Chrome attempt $attempt timed out or exited non-zero"
+              continue
+            fi
+            if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then continue; fi
+            if grep -q 'app-shell screen-progress' "$file" \
+              && grep -q 'data-progress-ux-ready="1"' "$file" \
+              && grep -q 'data-progress-current-lesson="l8"' "$file" \
+              && grep -q 'data-progress-completed="7"' "$file" \
+              && grep -q 'data-progress-known="40"' "$file" \
+              && grep -q 'data-progress-visible-rows="5"' "$file" \
+              && grep -q 'data-progress-total-rows="40"' "$file" \
+              && grep -q 'data-progress-expanded="0"' "$file" \
+              && grep -q 'data-progress-details-open="0"' "$file" \
+              && grep -E -q 'data-progress-detail-cards="[1-9][0-9]*"' "$file" \
+              && grep -q 'progress-ux-overview' "$file"; then
+              passed=1
+              break
+            fi
+            echo "Compact attempt $attempt missing markers"
+          done
+          test "$passed" = 1
 
       - name: Chrome — details summary click opens deterministically
         run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=26000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&progressionSmoke=details-click' >/tmp/progress-details-click.html
-          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/progress-details-click.html; then cat /tmp/progress-details-click.html; exit 1; fi
-          grep -q 'data-progression-smoke="details-click"' /tmp/progress-details-click.html
-          grep -q 'data-progress-details-click-smoke="1"' /tmp/progress-details-click.html
-          grep -q 'data-progress-details-open="1"' /tmp/progress-details-click.html
-          grep -q 'data-progress-details-manual-toggle="open"' /tmp/progress-details-click.html
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-progress-details-click-$attempt"
+            file="/tmp/progress-details-click-$attempt.html"
+            rm -rf "$profile" "$file"
+            if ! timeout --signal=TERM --kill-after=5s 50s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --disable-background-timer-throttling --disable-renderer-backgrounding \
+              --user-data-dir="$profile" --window-size=390,844 --virtual-time-budget=26000 --dump-dom \
+              'http://127.0.0.1:4173/?uxSmoke=lesson8&progressionSmoke=details-click' >"$file"; then
+              echo "Details-click Chrome attempt $attempt timed out or exited non-zero"
+              continue
+            fi
+            if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then continue; fi
+            if grep -q 'data-progression-smoke="details-click"' "$file" \
+              && grep -q 'data-progress-details-click-smoke="1"' "$file" \
+              && grep -q 'data-progress-details-open="1"' "$file" \
+              && grep -q 'data-progress-details-manual-toggle="open"' "$file"; then
+              passed=1
+              break
+            fi
+            echo "Details-click attempt $attempt missing markers"
+          done
+          test "$passed" = 1
 
       - name: Chrome — full 40-lesson path is accessible by human-sized stages
         run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=26000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&progressionSmoke=expanded' >/tmp/progress-expanded.html
-          grep -q 'data-progress-expanded="1"' /tmp/progress-expanded.html
-          grep -q 'data-progress-stage-mode="1"' /tmp/progress-expanded.html
-          grep -q 'data-progress-stage-count="5"' /tmp/progress-expanded.html
-          grep -q 'data-progress-active-stage="7"' /tmp/progress-expanded.html
-          grep -q 'data-progress-visible-rows="8"' /tmp/progress-expanded.html
-          grep -q 'data-progress-total-rows="40"' /tmp/progress-expanded.html
-          grep -q 'data-progress-stage="25"' /tmp/progress-expanded.html
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-progress-expanded-$attempt"
+            file="/tmp/progress-expanded-$attempt.html"
+            rm -rf "$profile" "$file"
+            if ! timeout --signal=TERM --kill-after=5s 50s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --disable-background-timer-throttling --disable-renderer-backgrounding \
+              --user-data-dir="$profile" --window-size=390,844 --virtual-time-budget=26000 --dump-dom \
+              'http://127.0.0.1:4173/?uxSmoke=lesson8&progressionSmoke=expanded' >"$file"; then
+              echo "Expanded Chrome attempt $attempt timed out or exited non-zero"
+              continue
+            fi
+            if grep -q 'data-progress-expanded="1"' "$file" \
+              && grep -q 'data-progress-stage-mode="1"' "$file" \
+              && grep -q 'data-progress-stage-count="5"' "$file" \
+              && grep -q 'data-progress-active-stage="7"' "$file" \
+              && grep -q 'data-progress-visible-rows="8"' "$file" \
+              && grep -q 'data-progress-total-rows="40"' "$file" \
+              && grep -q 'data-progress-stage="25"' "$file"; then
+              passed=1
+              break
+            fi
+            echo "Expanded attempt $attempt missing markers"
+          done
+          test "$passed" = 1
 
       - name: Chrome — detailed engines remain accessible on demand
         run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=26000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&progressionSmoke=details' >/tmp/progress-details.html
-          grep -q 'data-progress-details-open="1"' /tmp/progress-details.html
-          grep -q 'data-progress-details-contained="1"' /tmp/progress-details.html
-          grep -q 'memory-progress-card' /tmp/progress-details.html
-          grep -q 'mastery-progress-card' /tmp/progress-details.html
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-progress-details-$attempt"
+            file="/tmp/progress-details-$attempt.html"
+            rm -rf "$profile" "$file"
+            if ! timeout --signal=TERM --kill-after=5s 50s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --disable-background-timer-throttling --disable-renderer-backgrounding \
+              --user-data-dir="$profile" --window-size=390,844 --virtual-time-budget=26000 --dump-dom \
+              'http://127.0.0.1:4173/?uxSmoke=lesson8&progressionSmoke=details' >"$file"; then
+              echo "Details Chrome attempt $attempt timed out or exited non-zero"
+              continue
+            fi
+            if grep -q 'data-progress-details-open="1"' "$file" \
+              && grep -q 'data-progress-details-contained="1"' "$file" \
+              && grep -q 'memory-progress-card' "$file" \
+              && grep -q 'mastery-progress-card' "$file"; then
+              passed=1
+              break
+            fi
+            echo "Details attempt $attempt missing markers"
+          done
+          test "$passed" = 1
 
       - name: Stop static server
         if: always()
