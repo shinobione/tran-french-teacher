@@ -148,12 +148,7 @@
         const toggle = nodes.curriculum.querySelector('[data-progress-toggle-all]');
         if (!toggle) return;
         document.documentElement.dataset.b266ToggleFound = '1';
-        document.documentElement.dataset.b266ToggleBefore = nodes.curriculum.dataset.progressExpanded || '';
         toggle.click();
-        document.documentElement.dataset.b266ToggleAfterSync = nodes.curriculum.dataset.progressExpanded || '';
-        setTimeout(() => {
-          document.documentElement.dataset.b266ToggleAfter200 = nodes.curriculum.dataset.progressExpanded || '';
-        }, 200);
         waitFor(() => {
           const card = document.querySelector('.screen-progress .progress-ux-curriculum[data-progress-stage-mode="1"]');
           const visible = Number(card?.dataset.progressVisibleRows || 0);
@@ -185,9 +180,29 @@
     });
   }
 
+  // Build 26.6 interaction hardening. Progression already receives these clicks
+  // and updates its internal state. We immediately restate the desired state
+  // from the pre-click DOM and flush decorate() synchronously so the visual
+  // transition never depends on a future animation frame (important on iOS and
+  // deterministic in headless Chrome).
   document.addEventListener('click', event => {
-    if (event.target.closest?.('[data-progress-toggle-all]')) document.documentElement.dataset.b266ToggleClickObserved = '1';
-    if (event.target.closest?.('[data-progress-stage]')) document.documentElement.dataset.b266StageClickObserved = event.target.closest('[data-progress-stage]').dataset.progressStage || '';
+    const toggle = event.target.closest?.('[data-progress-toggle-all]');
+    if (toggle) {
+      const card = toggle.closest('.progress-ux-curriculum');
+      const nextExpanded = card?.dataset.progressExpanded !== '1';
+      window.FrenchTranquilleProgressionUX?.setCurriculumExpanded?.(nextExpanded);
+      window.FrenchTranquilleProgressionUX?.decorate?.();
+      if (smoke) document.documentElement.dataset.b266ToggleClickObserved = '1';
+      return;
+    }
+
+    const stage = event.target.closest?.('[data-progress-stage]');
+    if (stage) {
+      const start = Number(stage.dataset.progressStage);
+      window.FrenchTranquilleProgressionUX?.setCurriculumStage?.(start);
+      window.FrenchTranquilleProgressionUX?.decorate?.();
+      if (smoke) document.documentElement.dataset.b266StageClickObserved = stage.dataset.progressStage || '';
+    }
   }, true);
 
   function legacy265Compat(mobile = false) {
