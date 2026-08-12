@@ -21,6 +21,8 @@ Build 26.7 garde géométrique open-Details
         ↓
 Build 26.8 Progress Focus Flow
         ↓
+Build 26.9 Focus Content Reliability
+        ↓
 Details Dashboard + Voice Replay
         ↓
 moteurs pédagogiques locaux
@@ -34,7 +36,7 @@ Principe produit : **la complexité appartient aux moteurs ; l’utilisatrice vo
 
 ---
 
-# Runtime production — v1.19.8 Build 26.8
+# Runtime production — v1.19.9 Build 26.9
 
 Runtime principal :
 
@@ -77,6 +79,7 @@ build26-5-ux.js
 build26-6-ux.js
 build26-7-ux.js
 build26-8-ux.js
+build26-9-ux.js
 build-meta.js
 ```
 
@@ -91,31 +94,116 @@ build26-5-ux.css
 build26-6-ux.css
 build26-7-ux.css
 build26-8-ux.css
+build26-9-ux.css
 ```
 
-Production runtime : `1084e1d71a7aebbf6d7dcea9dfa0cabb44f6cbe1` — PR #56 — **14/14 workflows fonctionnels SUCCESS** — Pages **#112 SUCCESS**.
+Production runtime : `0b31eedb78daebd58dd9bdcb0a472d56250c8fff` — PR #58 — **15/15 workflows fonctionnels SUCCESS** — Pages **#114 SUCCESS**.
 
 ---
 
-# Build 26.8 — Progress Focus Flow
+# Build 26.9 — Focus Content Reliability
 
-## Problème terrain
+## Problème révélé par la vidéo terrain
 
-Build 26.7 garantissait des colonnes lisibles, mais une famille Details ouverte laissait encore trop de contexte dans le document :
+Build 26.8 mesurait correctement la surface du wrapper Focus, mais pas encore suffisamment ses **vrais enfants moteurs**.
+
+Deux états pouvaient donc passer sous le radar :
 
 ```text
-Résumé
-+ Curriculum
-+ grille des familles
-+ famille active
-+ cartes moteur
+wrapper Focus ≈ 920 px
++ carte unique ≈ demi-largeur
 ```
 
-La page restait donc longue même si sa géométrie était saine.
+ou :
 
-## Contrat d’état
+```text
+toolbar famille visible
++ famille active logique correcte
++ vraie carte moteur visuellement absente
+```
 
-Build 26.8 ajoute une couche de présentation qui observe les **états propriétaires existants** :
+Un resize/re-render pouvait ensuite faire réapparaître le contenu, ce qui confirmait que les données n’étaient pas perdues.
+
+## Propriété d’état
+
+`progress-details-dashboard.js` reste le propriétaire canonique de :
+
+```text
+activeKey = memory | mastery | listening | real-life | path | other | ''
+```
+
+Build 26.9 **ne crée pas un deuxième état métier**. Il observe le propriétaire et rend sa conséquence visuelle déterministe :
+
+```text
+activeKey
+→ panel correspondant hidden=false
+→ autres panels hidden=true
+→ mesure du panel
+→ mesure des vraies .card visibles
+→ content-ready seulement si contenu réel rendu
+```
+
+Aucune carte Memory / Mastery / Listening / Scenario n’est reparentée par Build 26.9.
+
+## Mesure de contenu réel
+
+Le marqueur interne `data-b269-content-ready="1"` exige notamment :
+
+- panneau actif réellement visible ;
+- au moins une vraie `.card` visible ;
+- largeur du panneau non nulle ;
+- hauteur du panneau non nulle ;
+- largeur de carte au-dessus du seuil utile ;
+- une carte unique utilise réellement la surface au lieu de rester dans un seul track d’une grille 2 colonnes.
+
+Les retries de stabilisation sont **bornés**. Ils ne modifient aucun état learner et ne fabriquent aucune carte.
+
+## Géométrie Focus 26.9
+
+Sur le viewport Chrome `1640×900` certifié :
+
+```text
+Memory      3 cartes  panel 918 px  carte max 452 px
+Mastery     2 cartes  panel 918 px  carte max 452 px
+Listening   1 carte   panel 918 px  carte     918 px
+Real Life   1 carte   panel 918 px  carte     918 px
+Path/A1     4 cartes  panel 918 px  carte max 452 px
+```
+
+Le CSS 26.9 garde donc une grille efficace pour les familles multi-cartes, mais force une carte unique à `grid-column: 1 / -1`.
+
+À `<=1100 px`, les cartes Focus passent en une colonne.
+
+## Tribunal 26.9
+
+Le workflow dédié fait de vrais clics successifs :
+
+```text
+Mémoire → retour
+Maîtrise → retour
+Compréhension orale → retour
+Français réel → retour
+A1 & rythme → retour
+```
+
+Il exige pour chaque famille :
+
+- focus Details actif ;
+- famille propriétaire cohérente ;
+- >= 1 vraie carte visible ;
+- panneau >= 850 px sur desktop de certification ;
+- hauteur réelle > 0 ;
+- carte réelle >= 300 px ;
+- si une seule carte : >= 700 px ;
+- overflow horizontal = 0.
+
+Un Chrome mobile `390×844` vérifie séparément une vraie carte Memory visible, une colonne et aucun overflow horizontal.
+
+---
+
+# Build 26.8 — Progress Focus Flow conservé
+
+Le modèle d’état 26.8 reste canonique :
 
 ```text
 progressDetailActive != vide
@@ -128,38 +216,30 @@ sinon
 → focus = overview
 ```
 
-Le focus n’est pas un nouveau moteur pédagogique et ne crée aucune donnée learner.
-
 ### Focus Details
 
 ```text
 .progress-layout
 └── .progress-ux-composition        ← frontière DOM conservée
-    ├── .progress-ux-left-flow      ← display:none pendant focus
-    └── .progress-ux-details        ← pleine surface
+    ├── .progress-ux-left-flow      ← masqué pendant focus
+    └── .progress-ux-details        ← surface Focus
         └── dashboard
             ├── grille familles     ← masquée
-            └── panneau actif       ← visible pleine surface
+            └── panneau actif       ← visible
 ```
-
-Les nœuds Memory / Mastery / Listening / Scenario restent exactement dans le même ancêtre. **Aucun reparenting Build 26.8.**
 
 ### Focus Curriculum
 
 ```text
 .progress-layout
 └── .progress-ux-composition
-    ├── .progress-ux-left-flow      ← pleine surface
+    ├── .progress-ux-left-flow
     │   ├── Overview               ← masqué
-    │   └── Curriculum             ← visible
+    │   └── Curriculum             ← visible pleine surface
     └── Details                    ← masqué
 ```
 
-Le curriculum conserve le modèle Build 26.6 : cinq étapes, une seule étape ouverte.
-
-## Sorties pilotées par les propriétaires
-
-Les boutons Retour ne simulent pas de clic sur un contrôle caché.
+Sorties propriétaires :
 
 ```text
 Retour Details
@@ -171,84 +251,22 @@ Retour Curriculum
 → decorate()
 ```
 
-Cela réduit les races entre couches `MutationObserver` et garde un seul propriétaire de chaque état métier.
+Le round-trip `compact → Memory → retour → Curriculum → retour → 5 lesson rows` reste sous Chrome.
 
-## Transition logique vs animation
-
-La transition visuelle est courte : fade / léger déplacement.
-
-Architecture importante :
-
-```text
-fade-out
-→ applyFocus(nouveau mode)
-→ état logique considéré terminé
-→ fade-in cosmétique
-```
-
-L’animation ne garde donc pas un verrou fonctionnel jusqu’à son dernier frame. Une nouvelle interaction peut être traitée même si le fade finit encore visuellement.
-
-Les demandes répétées vers la même destination sont idempotentes : un `MutationObserver` ne peut plus redémarrer indéfiniment le même timer.
-
-`prefers-reduced-motion: reduce` retire le mouvement, pas le modèle d’état.
-
-## Utilisation responsive de l’espace
-
-Hors focus, shell historique inchangé.
-
-Pendant un focus Progress :
-
-```css
-.app-shell { width:min(1420px,100%); }
-```
-
-Grand desktop :
-
-- panneau Détails actif : 2 colonnes de cartes ;
-- Curriculum : 5 étapes horizontales + leçons 2 colonnes.
-
-Responsive :
-
-- <=1100 px : Détails 1 colonne, étapes Curriculum 2 colonnes ;
-- <=860 px : focus mobile 1 colonne ;
-- aucun overflow horizontal contractuel.
-
-## Tribunal 26.8
-
-Chrome réel vérifie quatre scénarios :
-
-1. Details focus desktop 1640×900 ;
-2. Curriculum focus desktop 1640×900 ;
-3. round-trip complet ;
-4. Details focus mobile 390×844.
-
-Round-trip contractuel :
-
-```text
-compact
-→ Memory focus
-→ Retour aux détails
-→ Curriculum focus
-→ Retour au résumé
-→ compact = 5 lesson rows
-```
-
-Sur le viewport desktop de CI, Details focus et Curriculum focus mesurent **920 px** et l’overflow horizontal vaut 0.
+L’animation reste cosmétique : l’état logique est appliqué avant la fin du fade. `prefers-reduced-motion` retire le mouvement sans modifier le flux.
 
 ---
 
 # Build 26.7 — garde géométrique toujours actif
 
-Build 26.7 reste responsable de la géométrie sûre quand Details est simplement ouvert dans la vue normale.
-
-Contrats historiques :
+Build 26.7 reste responsable de la géométrie sûre lorsque Détails est simplement ouvert dans la vue normale :
 
 ```text
 1640×900 → flow 452 px / Details 452 px / lesson row min 410 px
 980×900  → pile verticale / flow 906 px / lesson row min 864 px
 ```
 
-Build 26.8 supersède seulement la présentation **quand une intention Focus est active**. Le workflow 26.7 est version-forward et garde ses mesures Chrome.
+Build 26.8/26.9 supersèdent seulement la présentation pendant un Focus actif.
 
 ---
 
@@ -265,7 +283,7 @@ Composition canonique :
     └── .progress-ux-details
 ```
 
-Cette structure reste essentielle parce que plusieurs moteurs historiques recherchent leur carte dans le premier descendant de `.progress-layout`.
+Cette structure reste une **frontière de propriété**, pas seulement un choix visuel.
 
 Contrat anti-prolifération :
 
@@ -276,7 +294,7 @@ engine cards      = uniques
 forbidden cards   = 0
 ```
 
-Build 26.8 ne modifie jamais cette propriété DOM.
+Build 26.9 ne modifie pas cette propriété DOM.
 
 ---
 
@@ -360,7 +378,7 @@ real-life-coach.js
 
 Production : **36 situations / 108 tours**.
 
-Baseline historique protégée : `real-life-data-2.js` correspond à **v1.17.0 — Build 24 — Real Life French II**, avec **28 situations / 84 tours** avant Pack III.
+Baseline historique protégée : `real-life-data-2.js` correspond à **v1.17.0 — Build 24 — Real Life French II**, où Scenario comptait **28 situations / 84 tours** avant Pack III.
 
 ---
 
@@ -376,7 +394,7 @@ french-tranquille:learning-memory:v1
 french-tranquille:safety:pre-build22:v1
 ```
 
-Build 26.8 ne crée aucune migration.
+Build 26.9 ne crée aucune migration.
 
 Sanctuaires byte-identiques :
 
@@ -389,26 +407,22 @@ assets/Favicon.png
 
 ---
 
-# CI production Build 26.8
+# CI production Build 26.9
 
-Le tribunal fonctionnel comporte **14 workflows**.
+Le tribunal fonctionnel comporte **15 workflows**.
 
-Build 26.8 ajoute :
-
-- focus Details desktop ;
-- focus Curriculum desktop ;
-- round-trip avec restauration de 5 lignes ;
-- focus mobile sans overflow ;
-- containment 26.6 obligatoire.
+Build 26.9 ajoute la mesure du **vrai contenu rendu** de plusieurs familles, tout en conservant les anciens tribunaux 26.6, 26.7 et 26.8.
 
 Preuves :
 
 ```text
-PR #56 / head c919262...     14/14 SUCCESS
-main 1084e1d7...             14/14 SUCCESS
-GitHub Pages #112             SUCCESS
+PR #58 / head 0fcb2803...     15/15 SUCCESS
+main 0b31eedb...             15/15 SUCCESS
+GitHub Pages #114             SUCCESS
 ```
+
+Sur le premier passage `main`, le smoke historique Build 26.3 a manqué uniquement sa destination Lesson dans sa fenêtre de temps. Le **même job, sans modification**, a été rerun et a passé Today + Progress desktop + Progress mobile. Aucun autre tribunal n’a échoué.
 
 # Dette / suite
 
-Build 26.8 est **PROD / CLOS**. Le gate iPhone Voice Replay Build 26.1 reste ouvert. Les prochains gros jalons restent Data & Recovery Hardening, iPhone/PWA/Accessibility Hardening, puis Architecture Hardening avant V2.0.0.
+Build 26.9 est **PROD / CLOS**. Le gate iPhone Voice Replay Build 26.1 reste ouvert. Les prochains gros jalons restent Data & Recovery Hardening, iPhone/PWA/Accessibility Hardening, puis Architecture Hardening avant V2.0.0.
