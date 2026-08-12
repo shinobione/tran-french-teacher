@@ -61,11 +61,11 @@ function installListeningRateBridge() {
 }
 installListeningRateBridge();
 
-function installBuild27TabStateBridge() {
+function installBuild27ShellBridges() {
   const root = document.documentElement;
-  if (!window.FrenchTranquilleBuild27Shell || root.__frenchTranquilleBuild27TabState) return;
+  if (!window.FrenchTranquilleBuild27Shell || root.__frenchTranquilleBuild27ShellBridges) return;
 
-  const sync = () => {
+  const syncTabState = () => {
     if (!root.classList.contains('b27-app-shell')) return;
     if (root.classList.contains('b27-practice-open')) {
       document.querySelectorAll('.ux-bottom-nav [data-ux-nav]').forEach(button => {
@@ -76,15 +76,38 @@ function installBuild27TabStateBridge() {
     window.FrenchTranquilleUX?.refresh?.();
   };
 
-  new MutationObserver(mutations => {
-    if (mutations.some(mutation => mutation.type === 'attributes' && mutation.attributeName === 'class')) sync();
-  }).observe(root, { attributes:true, attributeFilter:['class'] });
+  const syncOverlayGeometry = () => {
+    const overlays = document.querySelectorAll('.b27-overlay');
+    if (!overlays.length) return;
+    const compact = matchMedia('(max-width:819px)').matches;
+    const nav = document.querySelector('.ux-bottom-nav');
+    if (!compact || !nav) {
+      overlays.forEach(overlay => overlay.style.removeProperty('bottom'));
+      return;
+    }
+    const navTop = nav.getBoundingClientRect().top;
+    const bottom = Math.max(0, Math.ceil(window.innerHeight - navTop));
+    overlays.forEach(overlay => { overlay.style.bottom = `${bottom}px`; });
+    root.dataset.b27OverlayBottom = String(bottom);
+  };
 
-  root.__frenchTranquilleBuild27TabState = true;
+  const sync = () => {
+    syncTabState();
+    syncOverlayGeometry();
+  };
+
+  new MutationObserver(mutations => {
+    if (mutations.some(mutation => mutation.type === 'attributes' && mutation.attributeName === 'class')) syncTabState();
+  }).observe(root, { attributes:true, attributeFilter:['class'] });
+  new MutationObserver(syncOverlayGeometry).observe(document.body, { childList:true });
+  window.addEventListener('resize', syncOverlayGeometry, { passive:true });
+  window.addEventListener('orientationchange', syncOverlayGeometry, { passive:true });
+
+  root.__frenchTranquilleBuild27ShellBridges = true;
   queueMicrotask(sync);
-  window.FrenchTranquilleBuild27TabState = { version:META.version, build:META.build, refresh:sync };
+  window.FrenchTranquilleBuild27ShellBridges = { version:META.version, build:META.build, refresh:sync };
 }
-installBuild27TabStateBridge();
+installBuild27ShellBridges();
 
 function patchDiagnostics() {
   document.querySelectorAll('.diagnostics > div').forEach(row => {
