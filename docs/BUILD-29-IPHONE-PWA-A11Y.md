@@ -2,9 +2,20 @@
 
 ## État
 
-**v1.22.0 — Build 29 — CANDIDAT / NON MERGÉ**
+**v1.22.0 — Build 29 — ✅ PROD / CLOS**
 
-Objectif : certifier French Trân’quille comme PWA iPhone confortable et robuste sans modifier les moteurs pédagogiques, les données apprenantes ni les sanctuaires vocaux.
+Objectif atteint : French Trân’quille possède désormais une couche iPhone/accessibilité certifiée et une **vraie PWA offline**, sans modifier les moteurs pédagogiques, les données apprenantes ni les sanctuaires vocaux.
+
+## Production
+
+- PR runtime : **#64**
+- head #64 certifié : `27c67ee7b47b9f9a015e6c0072640e0e573de52d`
+- merge #64 : `1c01648d89dfb3bd9236b9ad93fbade4e21102fa`
+- PR hotfix harness/SW isolation : **#65**
+- head #65 certifié : `3e11e6124654b88e6932f292ed7acb1df31b0039`
+- runtime production final : `ff788fd86e1754b15e8003b2f63c9673708480d0`
+- `main` final runtime : **19/19 workflows SUCCESS**
+- GitHub Pages : **#121 SUCCESS** sur `ff788fd…`
 
 ## Baseline protégée
 
@@ -23,26 +34,95 @@ Sanctuaires byte-identiques :
 - `assets/LOGO.png` ;
 - `assets/Favicon.png`.
 
-Aucune clé durable n’est renommée.
+Aucune clé durable n’a été renommée.
 
-## Couche Build 29
+## Découverte majeure : le Worker n’était jamais enregistré
 
-Build 29 ajoute une couche de présentation/device séparée :
+Avant Build 29, le repo contenait déjà :
 
-- `build29-iphone-a11y.css` ;
-- `build29-iphone-a11y.js` ;
-- `build29-smoke.js` ;
-- workflow `build29-iphone-pwa-a11y-smoke.yml`.
+- `sw.js` ;
+- un manifest ;
+- une liste de precache ;
+- une stratégie réseau/cache.
 
-`app.js` n’est pas modifié.
+Mais aucune page runtime ne faisait réellement :
+
+```js
+navigator.serviceWorker.register(...)
+```
+
+Le projet avait donc les pièces d’une PWA sans cycle de vie Service Worker garanti.
+
+Build 29 ajoute l’enregistrement explicite depuis l’application **top-level** et le certifie.
+
+## Service Worker lifecycle-safe
+
+Le Worker Build 29 attend désormais réellement :
+
+### Install
+
+```text
+cache.addAll(CORE)
+→ skipWaiting()
+→ fin install
+```
+
+### Activate
+
+```text
+liste des caches
+→ suppression anciens caches
+→ clients.claim()
+→ fin activate
+```
+
+### Fetch
+
+```text
+réseau disponible
+→ réponse réseau
+→ copie cache via event.waitUntil
+
+réseau indisponible
+→ cache exact
+→ fallback index.html
+```
+
+Cache canonique :
+
+```text
+tran-french-teacher-v1.22.0-b29-iphone-pwa-a11y
+```
+
+## Isolation des anciens harnesses
+
+Rendre le Worker réel a révélé une dette CI : certains vieux smoke-tests Chrome top-level pouvaient enregistrer le Worker et garder Chrome vivant ou modifier le timing de leurs captures.
+
+PR #65 sépare les contextes :
+
+```text
+app normale top-level       → Worker OUI
+b29Audit                    → Worker OUI
+anciens paramètres *Smoke   → Worker NON
+iframe de test              → Worker NON
+```
+
+Le vrai comportement PWA n’est donc plus pollué par les anciens harnesses, et inversement.
+
+Build 27 a aussi été rendu plus déterministe :
+
+- le vrai `flow` continue à tester l’interaction utilisateur complète ;
+- les vues visuelles utilisent l’API publique Build 27 pour construire l’état à capturer ;
+- les transitions sont attendues avec une borne, pas une photo prise à un délai fixe arbitraire.
 
 ## Safe areas / viewport iOS
 
-Le projet possédait déjà `viewport-fit=cover` et quelques usages de `env(safe-area-inset-*)`. Build 29 généralise et certifie le contrat sur la façade Build 27 :
+Build 29 généralise et certifie :
 
+- `viewport-fit=cover` ;
 - top safe area ;
 - left/right safe areas ;
-- Home indicator / bottom safe area ;
+- Home Indicator / bottom safe area ;
 - overlays ;
 - tab bar ;
 - petits et grands viewports ;
@@ -50,14 +130,14 @@ Le projet possédait déjà `viewport-fit=cover` et quelques usages de `env(safe
 
 ## Clavier virtuel / VisualViewport
 
-Build 29 consomme `visualViewport` lorsqu’il existe :
+La couche consomme `visualViewport` lorsqu’il existe :
 
 - hauteur visible ;
 - offset vertical ;
-- estimation du clavier virtuel ;
+- estimation du clavier ;
 - `scroll-padding-bottom` dynamique ;
-- recentrage du contrôle éditable au focus ;
-- tab bar rendue non-interactive pendant l’ouverture clavier pour éviter un tap accidentel derrière le clavier.
+- recentrage du champ éditable ;
+- tab bar non interactive pendant l’ouverture clavier pour éviter le tap accidentel derrière le clavier.
 
 Aucun état pédagogique ne dépend de cette géométrie.
 
@@ -65,20 +145,21 @@ Aucun état pédagogique ne dépend de cette géométrie.
 
 Sur la façade apprenante :
 
-- cibles tactiles visibles >= **44 × 44 px** sur coarse pointer/mobile ;
+- targets visibles **≥ 44 × 44 px** sur coarse pointer/mobile ;
+- champs ≥16 px pour éviter le zoom iOS au focus ;
 - focus clavier visible via `:focus-visible` ;
-- tab bar annotée avec `aria-current="page"` ;
+- tab bar avec `aria-current="page"` ;
 - boutons icône nommés ;
-- progressions exposées comme `role="progressbar"` avec valeur ;
-- feedbacks utiles en `aria-live="polite"` ;
-- `prefers-reduced-motion` conserve le même flux sans dépendre de l’animation ;
-- `prefers-contrast: more` renforce les séparations lorsque demandé ;
-- textes longs autorisés à se replier sans créer d’overflow horizontal ;
-- aucun `maximum-scale=1` / `user-scalable=no` : le zoom utilisateur reste disponible.
+- progressions `role="progressbar"` avec valeur ;
+- feedbacks utiles `aria-live="polite"` ;
+- `prefers-reduced-motion` sans perte fonctionnelle ;
+- `prefers-contrast: more` ;
+- longs textes sans overflow horizontal ;
+- aucun blocage du zoom utilisateur.
 
 ## PWA / installation
 
-Le manifest devient explicitement stable :
+Manifest canonique :
 
 ```text
 id: ./
@@ -89,46 +170,47 @@ orientation: any
 lang: vi
 ```
 
-L’icône Apple dédiée existante `assets/apple-touch-icon.png` est enfin utilisée par `index.html` au lieu du favicon générique.
+L’icône Apple dédiée `assets/apple-touch-icon.png` est réellement utilisée par `index.html`.
 
-Le Service Worker reçoit une nouvelle identité de cache Build 29 et précache la couche Build 29, le manifest et l’Apple Touch Icon.
+## Preuve offline dure
 
-## Offline
+Le tribunal Build 29 ne se contente pas de regarder un cache ou une registration :
 
-Le tribunal Build 29 :
+1. profil Chrome persistant ;
+2. warm boot online ;
+3. second warm boot online ;
+4. **arrêt physique du serveur HTTP** ;
+5. nouvelle navigation vers `127.0.0.1:4173` ;
+6. exigence d’une Home apprenante complète ;
+7. refus de `ERR_CONNECTION_REFUSED` et des boot errors.
 
-1. ouvre la PWA avec un profil Chrome persistant ;
-2. réouvre une seconde fois pour que le Service Worker contrôle la page ;
-3. coupe le serveur HTTP ;
-4. relance la même PWA avec le même profil ;
-5. exige que la Home et le smoke Build 29 redémarrent depuis le cache sans écran de boot erreur.
-
-Ce test ne remplace pas WebKit réel, mais valide le contrat PWA/offline statique.
+Avec le serveur mort, seule la PWA installée et son cache peuvent servir le runtime. Ce scénario est passé avant merge et sur le runtime final.
 
 ## Tribunal mobile
 
 Chrome réel vérifie :
 
-- **390 × 844** — cible mobile de référence ;
-- **320 × 568** — petit viewport ;
-- **430 × 932** — grand iPhone logique ;
+- **390 × 844** ;
+- **320 × 568** ;
+- **430 × 932** ;
 - `prefers-reduced-motion` forcé ;
-- boot offline après warm install.
+- offline serveur mort.
 
-Le smoke mesure le contenu réellement visible :
+Mesures :
 
-- cibles trop petites = 0 ;
-- boutons sans nom accessible = 0 ;
-- tabs `aria-current` visibles = exactement 1 ;
-- overflow horizontal = 0 ;
-- manifest PWA valide ;
-- Build 27 Home toujours rendue.
+```text
+cibles trop petites = 0
+boutons sans nom accessible = 0
+onglets aria-current visibles = 1
+overflow horizontal = 0
+Home Build 27 visible = 1
+```
 
 ## Build 28 reste un contrat
 
-Le workflow Build 28 est seulement rendu **version-forward** pour ses assertions de numéro/cache. Ses tests fonctionnels restent inchangés :
+Le workflow Recovery a uniquement été rendu version-forward pour les identités globales version/cache. Ses preuves fonctionnelles restent intactes :
 
-- corrupt write bloquée ;
+- écriture corrompue bloquée ;
 - backup/restore ;
 - migration V1 ;
 - reset atomique ;
@@ -137,28 +219,21 @@ Le workflow Build 28 est seulement rendu **version-forward** pour ses assertions
 - ancien profil ;
 - Home Build 27 mobile.
 
-Build 29 ne diminue donc pas le tribunal Recovery.
-
 ## Validation terrain encore nécessaire
 
-Chrome ne peut pas certifier les comportements propres à Safari/WebKit :
+Chrome ne certifie pas WebKit réel. Restent à observer sur le vrai iPhone :
 
-- encoche / Dynamic Island réelle ;
-- Home indicator réel ;
-- clavier iOS réel ;
+- encoche / Dynamic Island ;
+- Home Indicator ;
+- clavier iOS ;
 - VoiceOver ;
 - installation « Sur l’écran d’accueil » ;
 - reprise standalone après extinction ;
 - gate Build 26.1 de réécoute vocale.
 
-Ces points doivent être observés sur le vrai iPhone quand ils sont matériels. Ils ne justifient pas de modifier les sanctuaires vocaux sans preuve terrain.
+Ces gates ne justifient aucune modification des sanctuaires vocaux sans preuve terrain.
 
-## Critère de merge
+## Suite
 
-**Ne pas merger** tant que :
-
-- le nouveau tribunal Build 29 n’est pas vert ;
-- Build 28 Recovery n’est pas vert ;
-- Build 27 App Shell n’est pas vert ;
-- les anciens contrats fonctionnels ne sont pas verts ou expliqués comme flake historique puis rerun inchangé ;
-- aucune donnée/voix/branding sanctuarisé n’a bougé.
+- **Build 30 — Architecture Hardening** ;
+- puis **V2.0.0 — Freeze / Release**.
