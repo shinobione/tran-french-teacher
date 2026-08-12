@@ -1,0 +1,64 @@
+/* French Trân'quille — v1.19.7 Build 26.7
+   Progress open-details geometry hotfix.
+
+   Build 26.6 correctly restored the historical DOM ownership boundary, but its
+   desktop right track kept a 440px minimum. When the Details dashboard opened,
+   intrinsic content could make that track dominate the nested grid and squeeze
+   the learner flow into an unusable vertical strip.
+
+   Keep the 26.6 containment architecture. Only harden desktop geometry.
+ */
+
+@media(min-width:861px){
+  /* Closed Details keeps the compact two-column composition from 26.6. */
+  .screen-progress .progress-layout.progress-ux-ready > .progress-ux-composition{
+    min-width:0!important;
+  }
+
+  /* Once Details is open, both tracks become genuinely shrinkable peers.
+     No fixed 440px floor is allowed to steal width from Trân's curriculum. */
+  .screen-progress .progress-layout.progress-ux-ready[data-progress-details-open="1"] > .progress-ux-composition{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+    grid-template-areas:"flow details"!important;
+  }
+
+  .screen-progress .progress-layout.progress-ux-ready > .progress-ux-composition > .progress-ux-left-flow,
+  .screen-progress .progress-layout.progress-ux-ready > .progress-ux-composition > .progress-ux-details{
+    min-width:0!important;
+    width:auto!important;
+    max-width:none!important;
+  }
+
+  /* The six dashboard families stay readable in the narrower open-details
+     column instead of forcing a three-column intrinsic width on the grid. */
+  .screen-progress .progress-ux-details[open] .progress-detail-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+
+  .screen-progress .progress-ux-left-flow .progress-ux-overview,
+  .screen-progress .progress-ux-left-flow .progress-ux-curriculum,
+  .screen-progress .progress-ux-left-flow .lesson-list,
+  .screen-progress .progress-ux-left-flow .lesson-row{
+    min-width:0!important;
+    width:100%!important;
+    max-width:none!important;
+  }
+
+  .screen-progress .progress-ux-left-flow .lesson-row-copy{
+    min-width:0!important;
+  }
+}
+
+/* At intermediate desktop/tablet landscape widths, two full working columns
+   are not humane. Details drops below the learner flow rather than compressing
+   either side. iPhone/mobile rules from 26.6 remain unchanged. */
+@media(min-width:861px) and (max-width:1040px){
+  .screen-progress .progress-layout.progress-ux-ready[data-progress-details-open="1"] > .progress-ux-composition{
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:"flow" "details"!important;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .screen-progress .progress-ux-details[open] .progress-detail-tile{transition:none!important}
+}
