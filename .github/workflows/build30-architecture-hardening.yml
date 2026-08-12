@@ -27,7 +27,7 @@ jobs:
           node --check sw.js
           grep -q "const VERSION = '1.23.0'" runtime-contracts.js
           grep -q 'const BUILD = 30' runtime-contracts.js
-          grep -q "version: '1.23.0', build: 30" build-meta.js
+          grep -q "version: '1.23.0', build: '30'" build-meta.js
           grep -q "import './runtime-contracts.js?v=1.23.0-b30'" build-meta.js
           grep -q "import './runtime-bridge.js?v=1.23.0-b30'" build-meta.js
           grep -Fq 'runtime-contracts.js?v=${B30}' sw.js
