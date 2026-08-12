@@ -6,6 +6,31 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ---
 
+## [1.23.0] — Build 30 — Architecture Hardening — 2026-08-13
+
+- introduit `runtime-contracts.js`, frontière gelée et read-only pour les six stores durables, snapshots Recovery, invariants produit, routes, propriétaires d’APIs, phases de boot et sanctuaires ;
+- introduit `runtime-bridge.js` avec `snapshot()`, `refresh()`, `route('today'|'practice'|'progress')` et `openLesson(id)` ;
+- le bridge observe l’état structurel sans reprendre la propriété de Curriculum, Recovery, Memory, Scenario, Listening ou App Shell ;
+- **aucun `localStorage.setItem`** dans `runtime-contracts.js` ou `runtime-bridge.js` ;
+- ajoute `build30-architecture-smoke.js` et son workflow dédié ;
+- le tribunal Chrome desktop **1440×900** et mobile **390×844** pilote réellement `Progrès → Aujourd’hui → Pratiquer` via la nouvelle façade ;
+- le tribunal exige **40 leçons / 241 éléments**, owners/stores uniques, Recovery / Build 27 Shell / Speaking Loop présents, un seul onglet actif et zéro overflow horizontal ;
+- surtout : le **JSON learner brut doit être strictement identique avant/après** le round-trip Architecture ;
+- `app.js` reste byte-identique : Build 30 adopte un **strangler refactor**, pas une réécriture big-bang du noyau historique ;
+- `voice-ios.js`, `free-voice.js`, logo et favicon restent byte-identiques ;
+- aucune migration de données, aucun changement de reconnaissance Safari, aucun changement pédagogique visible et aucun nouveau curriculum ;
+- les workflows Build 29.1 / 29.2 ont uniquement été rendus version-forward pour accepter la release globale Build 30 tout en conservant leurs assertions fonctionnelles ;
+- un ancien Chrome Real Life III a échoué une fois sur la leçon 35 ; le même job a été rerun **sans changement de code** et a repassé les leçons 20 / 35 / 40 ;
+- PR runtime **#71**, head certifié `ffa3ddf7a16dcbc32474701cfaf2f961e86d348c` : **21/21 workflows fonctionnels SUCCESS** ;
+- runtime production `5a8369df9df536f41521acefb528da71efb168a8` ;
+- runtime `main` : **21/21 workflows fonctionnels SUCCESS** ;
+- GitHub Pages **#129 SUCCESS** sur le SHA runtime exact ; total runtime `main` **22/22 SUCCESS Pages incluse** ;
+- baseline produit inchangée : curriculum **40/241**, Scenario **36/108**, Listening **0.88/0.65**, coût **0 €** ;
+- le gate terrain Build 26.1 `reconnaissance → seconde prise → lecture → reconnaissance suivante` reste ouvert en parallèle ;
+- prochaine étape canonique : **V2.0.0 — Freeze / Release**.
+
+---
+
 ## [1.22.2] — Build 29.2 — Speaking Loop Variety & Clarity — 2026-08-12
 
 - remplace le libellé ambigu `Refaire` par **`Ghi âm lại`** côté Trân et **`Enregistrer à nouveau`** en DEBUG FR ;
