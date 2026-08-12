@@ -16,7 +16,7 @@
 10. README / CHANGELOG / ROADMAP / ARCHITECTURE synchronisés.
 11. Un nouveau moteur n’obtient pas automatiquement une nouvelle entrée de navigation.
 12. Toute surface tappable donne un retour visuel immédiat.
-13. `Aujourd’hui / Pratiquer / Parcours` gardent des nœuds persistants et un état déterministe.
+13. `Aujourd’hui / Pratiquer / Progrès` gardent des nœuds persistants et un état déterministe.
 14. Progressive disclosure : tous les moteurs et compteurs ne sont pas visibles par défaut.
 15. Chaque activité possède un objectif, une progression, une fin et une sortie évidente.
 16. Pas de tunnel pédagogique infini par défaut.
@@ -44,23 +44,30 @@
 38. `prefers-reduced-motion` doit conserver le même flux fonctionnel sans animation.
 39. **Un wrapper large ne prouve pas qu’un écran est utilisable.** Les tests mesurent le contenu réel.
 40. **Une famille active n’est prête que si son vrai contenu moteur est rendu.**
-41. **L’interface apprenante n’est pas le cockpit des moteurs.** Memory, Mastery, Error, Listening et Scenario peuvent piloter le produit sans devenir des catégories que Trân doit comprendre.
-42. **Une page = une intention principale.** Les détails secondaires doivent aider cette intention ou disparaître.
+41. **L’interface apprenante n’est pas le cockpit des moteurs.**
+42. **Une page = une intention principale.**
 43. **Desktop agrandit une app ; il ne transforme pas l’app en dashboard SaaS.**
 44. **La tab bar possède un seul état actif à la fois**, visuellement et sémantiquement.
-45. **Une page plein écran ne chevauche jamais la tab bar persistante.** La géométrie réelle prime sur une constante CSS approximative.
+45. **Une page plein écran ne chevauche jamais la tab bar persistante.**
 
 ---
 
-# Candidat — v1.20.0 / Build 27
+# Baseline production — v1.20.0 / Build 27
 
-## App Shell Reset — 🟡 PR #60
+## App Shell Reset — ✅ PROD / CLOS
 
-### Intention
-
-Arrêter de polir le dashboard `Parcours` et reconstruire la **façade apprenante** autour de ce que Trân veut faire : continuer, pratiquer, voir ses progrès.
-
-Les moteurs historiques restent propriétaires des données et des décisions. Build 27 est une façade/router additive.
+- runtime : `beeb9ce8ba081ed0298edbcc339dca41600e4d09` ;
+- PR runtime : **#60** ;
+- head PR certifié : `dba27d35b59b78bb63b1bf930c5f47b119feff36` ;
+- PR : **16/16 workflows fonctionnels SUCCESS** ;
+- `main` : **16/16 fonctionnels SUCCESS** après rerun inchangé du seul premier flake historique 26.8 ;
+- GitHub Pages : **#116 SUCCESS** ;
+- total runtime `main` : **17/17 SUCCESS Pages incluse** ;
+- revue visuelle CI : Home / Practice / Progress / Journey / mobile ;
+- curriculum **40 / 241** ;
+- Scenario **36 / 108** ;
+- Listening **0.88 / 0.65** ;
+- coût 0 €.
 
 ### Aujourd’hui
 
@@ -77,9 +84,9 @@ Les moteurs historiques restent propriétaires des données et des décisions. B
 - [x] 4 intentions : Parler / Écouter / Réviser / Dans la vraie vie ;
 - [x] priorité aux situations personnelles Jerry quand disponibles ;
 - [x] bouton retour explicite ;
-- [x] tab `Pratiquer` unique active pendant la page ;
-- [x] page alignée exactement au-dessus de la tab bar, sans chevauchement ;
-- [x] feedback pointer + tap echo sous Chrome mobile.
+- [x] tab `Pratiquer` unique active ;
+- [x] page alignée exactement au-dessus de la tab bar ;
+- [x] feedback pointer + tap echo mobile.
 
 ### Progrès
 
@@ -87,32 +94,29 @@ Les moteurs historiques restent propriétaires des données et des décisions. B
 - [x] prochaine leçon ;
 - [x] étape actuelle ;
 - [x] 5 leçons utiles autour de la position ;
-- [x] aucun cockpit Memory/Mastery/Listening/Scenario visible dans l’UX normale ;
-- [x] cockpit historique disponible uniquement en DEBUG FR ;
-- [x] accès à une vue `Parcours complet` dédiée.
+- [x] aucun cockpit Memory/Mastery/Listening/Scenario dans l’UX normale ;
+- [x] cockpit historique uniquement en DEBUG FR ;
+- [x] accès au Parcours complet dédié.
 
 ### Parcours complet
 
 - [x] 5 étapes ;
 - [x] une seule étape expose ses leçons ;
 - [x] A1 Core = 15 leçons ;
-- [x] desktop 2 colonnes lorsque l’espace le permet ;
+- [x] desktop multi-colonnes lorsque utile ;
 - [x] mobile 1 colonne ;
-- [x] transition settled avant revue visuelle ;
-- [x] aucun ghost de Progrès sous la vue Journey.
+- [x] aucun ghost de Progrès après transition.
 
 ### Navigation / mouvement
 
-- [x] bottom nav historique conservée comme bus compatible ;
+- [x] bottom nav historique conservée comme bus ;
 - [x] nœuds persistants ;
 - [x] une seule tab active ;
 - [x] `prefers-reduced-motion` ;
 - [x] fade / translate court ;
-- [x] l’animation ne bloque pas la destination.
+- [x] animation découplée de la destination.
 
 ### Tribunal Build 27
-
-Le nouveau Chrome exécute :
 
 ```text
 Home
@@ -133,12 +137,12 @@ Home
 - [x] A1 Core 15 lignes ;
 - [x] vraie leçon atteinte ;
 - [x] zéro overflow horizontal ;
-- [x] captures visuelles Home / Practice / Progress / Journey / Home mobile ;
-- [x] captures Practice/Journey hors état `entering/leaving`.
+- [x] captures visuelles hors transition ;
+- [x] nav physique réelle.
 
-### Baselines historiques
+### Baselines historiques préservées
 
-- [x] Build 26.9 vrai contenu Focus ;
+- [x] Build 26.9 Content Reliability ;
 - [x] Build 26.8 round-trip ;
 - [x] Build 26.7 geometry ;
 - [x] Build 26.6 containment / **12 → 12** ;
@@ -150,64 +154,19 @@ Home
 - [x] learner historique ;
 - [x] voix / logo / favicon byte-identiques.
 
-### Release
-
-- [x] runtime candidat visuellement revu ;
-- [x] runtime head avant docs candidat `7c5978cea9d4c1e9bb4b3b0e8ce75a151df3ea2e` : **16/16 SUCCESS** ;
-- [ ] docs candidat synchronisés puis **même tribunal 16/16** sur le nouveau head ;
-- [ ] merge exact PR #60 ;
-- [ ] `main` : tous les fonctionnels SUCCESS ;
-- [ ] GitHub Pages SUCCESS sur le runtime mergé ;
-- [ ] docs PROD / CLOS.
-
----
-
-# Baseline production actuelle — v1.19.9 / Build 26.9
-
-**Progress Focus Content Reliability — ✅ PROD / CLOS**
-
-- runtime : `0b31eedb78daebd58dd9bdcb0a472d56250c8fff` ;
-- PR #58 ;
-- **15/15 fonctionnels SUCCESS** après rerun inchangé du seul ancien smoke 26.3 initialement flakey ;
-- GitHub Pages **#114 SUCCESS** ;
-- curriculum **40 / 241** ;
-- Scenario **36 / 108** ;
-- Listening **0.88 / 0.65** ;
-- coût 0 €.
-
 Baseline historique protégée : **v1.17.0 — Build 24 — Real Life French II**, Scenario **28 situations / 84 tours** avant Pack III. `real-life-data-2.js` reste un marqueur canonique.
 
 ---
 
-# Baselines conservées sous Build 27
-
-## Build 26.9 — Progress Focus Content Reliability
-
-Toujours canonique pour la fiabilité du contenu moteur réel dans le cockpit historique DEBUG.
-
-## Build 26.8 — Progress Focus Flow
-
-Toujours canonique pour les sorties/focus historiques et leur round-trip.
-
-## Build 26.7 — Progress Open-Details Geometry
-
-Toujours canonique pour la géométrie historique de Détails.
-
-## Build 26.6 — Progress Dashboard Containment
-
-Toujours canonique pour la propriété DOM, la cardinalité **12 → 12** et l’absence de photocopieuse infinie.
-
-## Build 26.1 — gate terrain iPhone
-
-Voice Self-Playback reste livré. Gate encore ouvert :
+# Build 26.1 — gate terrain iPhone toujours ouvert
 
 - [ ] réponse reconnue → seconde prise locale → lecture correcte → réponse vocale suivante toujours reconnue normalement.
 
 ---
 
-# Après Build 27
+# v1.21.0 — Build 28 — Data & Recovery Hardening
 
-## v1.21.0 — Build 28 — Data & Recovery Hardening
+**Prochain gros chantier après le gate terrain / validation visuelle réelle du shell.**
 
 - sauvegarde/restauration cohérente ;
 - migrations versionnées ;
@@ -216,15 +175,15 @@ Voice Self-Playback reste livré. Gate encore ouvert :
 - tests zéro-perte ;
 - rollback documenté.
 
-## v1.22.0 — Build 29 — iPhone / PWA / Accessibility Hardening
+# v1.22.0 — Build 29 — iPhone / PWA / Accessibility Hardening
 
 Safe areas, tactile, contraste, tailles, offline/install et vrais tests iPhone.
 
-## v1.23.0 — Build 30 — Architecture Hardening
+# v1.23.0 — Build 30 — Architecture Hardening
 
 Découpage du noyau uniquement avec snapshots comparatifs ; pas de grande réécriture cosmétique du cœur.
 
-## V2.0.0 — Freeze / Release
+# V2.0.0 — Freeze / Release
 
 Release cohérente, sauvegardable, testée et documentée.
 
