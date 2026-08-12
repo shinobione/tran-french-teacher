@@ -4,7 +4,37 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ## [Unreleased]
 
-- aucun nouveau build engagé après le freeze V2 ; priorité à l’usage réel, au gate iPhone et aux correctifs prouvés.
+- prochaine intention : **V2.2.0 / Build 32 — Content Map & Practical A1 Expansion** ; audit des capacités 1–40 puis leçons 41+ guidées par des besoins communicatifs ;
+- Memory Evidence v2 reste planifiée séparément car elle exigera une stratégie de migration Recovery ;
+- gate terrain iPhone exact-first-attempt toujours parallèle et non bloquant pour contenu/niveaux/mémoire hors capture vocale.
+
+---
+
+# [2.1.0] — Build 31 — Learner Intelligence Core — 2026-08-13
+
+- reprend explicitement l’évolution post-freeze à partir d’un besoin utilisateur clair, sans attendre le gate terrain iPhone ;
+- version produit visible passée à **v2.1.0 • Build 31** ;
+- conserve l’Architecture Runtime gelée **2.0.0 / Build 30** et `release-v2.json` comme baseline historique 2.0.0 / 30 ;
+- ajoute `learner-intelligence.js`, couche read-only au-dessus de progression, Learning Memory et Error Intelligence ;
+- unifie le curriculum existant en cinq bandes : 1–7 Survival A0, 8–15 Daily A0, 16–20 Foundations A1, 21–25 First Exchanges A1, 26–40 A1 Core ;
+- calcule un indice interne, une **confiance séparée**, une estimation `A0 / A0+ / Pré-A1 / A1- / A1` et une recommandation suivante déterministe ;
+- la recommandation privilégie un acquis réellement fragile/dû lorsque les preuves le justifient, sinon la prochaine leçon incomplète, puis la pratique/entretien ;
+- ajoute une carte compacte Learner Intelligence dans **Progrès**, avec raisonnement détaillé replié par défaut ;
+- aucun nouvel onglet de navigation ;
+- ajoute une ligne diagnostique dans Options sans transformer l’interface apprenante en cockpit ;
+- **aucun nouveau store durable**, aucune migration et aucun `localStorage.setItem` dans Learner Intelligence / loader ;
+- les six stores V2 restent les seuls stores Recovery et doivent rester byte-identiques pendant le tribunal Build31 ;
+- une source `voice-*` ou `voice-unrecognized` est explicitement classée **recognition**, jamais score de prononciation ;
+- `voice-ios.js`, `free-voice.js`, Voice Replay et SpeechRecognition restent inchangés ;
+- ajoute `build31-loader.js`, `learner-intelligence.css`, `learner-intelligence-smoke.js` et `.github/workflows/build31-learner-intelligence.yml` ;
+- PWA : précache additif des assets Build31, identité de cache Build29 volontairement conservée ;
+- le tribunal V2 devient **Freeze Compatibility** : baseline 2.0/30 toujours exacte, mais une V2.x plus récente peut évoluer au-dessus si backup/options/runtime restent concordants ;
+- le tribunal Build30 protège désormais explicitement la frontière Architecture 2.0/30 sous un produit V2.x plus récent ;
+- profil propre Chrome : recommandation **leçon 1** ; profil ancien mobile 390×844 : état exact **7 terminées / l8=4 / 40 acquis**, recommandation **leçon 8** ;
+- PR runtime **#77**, head `eed097ca3d261f2f4dd60db930a11670511f33a1` : **24/24 workflows fonctionnels SUCCESS** ;
+- runtime `main` `e2b2c6293f35495fa8bbffd2e6b684fba897df88` : **25/25 workflows SUCCESS**, Pages comprise ;
+- GitHub Pages **#135 SUCCESS** sur le SHA runtime exact ;
+- prochaine étape canonique : **Build 32 — Content Map & Practical A1 Expansion**.
 
 ---
 
@@ -21,11 +51,9 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 - aucune migration ni renommage des six stores durables ;
 - PR runtime V2 **#73**, head `c221fa9600d23dd83b87225cc4accce01e83cfe6` : **22/22 workflows fonctionnels SUCCESS** ;
 - runtime applicatif V2 `5f2c486b3e455220ebd903f25ee766ff2430e4a5` ; **GitHub Pages #131 SUCCESS** ;
-- après merge runtime, l’ancien workflow Build 25 Progression UX a reproduit un Chrome headless non borné malgré son passage sur la PR ; aucune régression PWA n’était impliquée ;
-- PR CI-only **#74**, head `0fbd3b8e8124b3beaf7d6086d8a837580abb2cb3` : un seul YAML, mêmes assertions, Chrome isolé + timeout + retries ; **22/22 fonctionnels SUCCESS** ;
+- PR CI-only **#74**, head `0fbd3b8e8124b3beaf7d6086d8a837580abb2cb3` : même contrat Progression, Chrome isolé + timeout + retries ; **22/22 fonctionnels SUCCESS** ;
 - baseline finale de certification `6e0f5cde97cfba0572efccc6344a8bd6cbe7a315` : **23/23 workflows SUCCESS**, dont **Pages #132 SUCCESS** ;
-- le gate terrain `reconnaissance → seconde prise → lecture → reconnaissance suivante` reste ouvert uniquement pour une future capture automatique du premier essai exact ;
-- après V2, aucun Build 31 n’est pré-engagé : observation/maintenance d’abord.
+- après V2, aucune évolution n’était pré-engagée sans nouveau besoin explicite.
 
 ---
 
