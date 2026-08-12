@@ -58,6 +58,32 @@
     };
   }
 
+  function waitForSettledDashboard(nodes, done, attempts = 90, delay = 180) {
+    let count = 0;
+    let stableSamples = 0;
+    let lastKey = '';
+    const tick = () => {
+      const snapshot = dashboardSnapshot(nodes);
+      if (snapshot) {
+        const key = `${snapshot.total}|${snapshot.other}|${snapshot.forbidden}|${snapshot.signature}`;
+        if (key === lastKey) stableSamples += 1;
+        else {
+          lastKey = key;
+          stableSamples = 1;
+        }
+        document.documentElement.dataset.b266DashboardSettleSamples = String(stableSamples);
+        if (stableSamples >= 5) {
+          document.documentElement.dataset.b266DashboardSettled = '1';
+          done(snapshot);
+          return;
+        }
+      }
+      count += 1;
+      if (count < attempts) setTimeout(tick, delay);
+    };
+    tick();
+  }
+
   function recordContainment(nodes) {
     document.documentElement.dataset.b266DetailsContained = nodes.details.parentElement === nodes.column ? '1' : '0';
     document.documentElement.dataset.b266LeftFlow = nodes.overview.parentElement === nodes.flow && nodes.curriculum.parentElement === nodes.flow ? '1' : '0';
@@ -92,7 +118,11 @@
       if (mobile) nodes.details.open = false;
       else nodes.details.open = true;
 
-      waitFor(() => dashboardSnapshot(nodes), initial => {
+      // Do not start the anti-proliferation clock while normal engines are still
+      // injecting their first legitimate cards. The historical 26.5 runaway
+      // never reaches five identical consecutive snapshots, while a healthy
+      // dashboard settles and then must remain bit-for-bit stable.
+      waitForSettledDashboard(nodes, initial => {
         document.documentElement.dataset.b266DashboardInitial = String(initial.total);
         document.documentElement.dataset.b266DashboardOtherInitial = String(initial.other);
         document.documentElement.dataset.b266DashboardForbiddenInitial = String(initial.forbidden);
@@ -106,6 +136,7 @@
           document.documentElement.dataset.b266DashboardForbiddenFinal = String(final.forbidden);
           document.documentElement.dataset.b266DashboardStable = final.total === initial.total && final.signature === initial.signature ? '1' : '0';
           document.documentElement.dataset.b266DashboardBounded = final.total <= 24 ? '1' : '0';
+          document.documentElement.dataset.b266DashboardOtherBounded = final.other <= 2 ? '1' : '0';
           document.documentElement.dataset.b266EngineCardsUnique = [final.memoryCards,final.masteryCards,final.stage2Cards,final.stage3Cards].every(value => value <= 1) ? '1' : '0';
 
           window.FrenchTranquilleProgressionUX?.setCurriculumExpanded?.(true);
@@ -127,13 +158,13 @@
               document.documentElement.dataset.b266CurriculumA1CoreRows = card.dataset.progressVisibleRows;
               document.documentElement.dataset.b266CurriculumAllAccessible = card.dataset.progressTotalRows === '40' ? '1' : '0';
               const afterStages = dashboardSnapshot(nodes);
-              document.documentElement.dataset.b266DashboardStableAfterCurriculum = afterStages && afterStages.total === initial.total ? '1' : '0';
+              document.documentElement.dataset.b266DashboardStableAfterCurriculum = afterStages && afterStages.total === initial.total && afterStages.signature === initial.signature ? '1' : '0';
               if (mobile) {
                 document.documentElement.dataset.b266MobileDetailsClosed = nodes.details.open ? '0' : '1';
               }
             });
           });
-        }, 2600);
+        }, 3000);
       });
     });
   }
