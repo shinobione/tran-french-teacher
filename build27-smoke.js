@@ -15,6 +15,19 @@
     }
     return null;
   };
+  const waitForShellApi = async (method, timeout = 6000) => {
+    const start = performance.now();
+    while (performance.now() - start < timeout) {
+      const shell = window.FrenchTranquilleBuild27Shell;
+      if (typeof shell?.[method] === 'function') {
+        html.dataset.b27VisualShellWaitMs = String(Math.round(performance.now() - start));
+        return shell;
+      }
+      await sleep(40);
+    }
+    html.dataset.b27VisualShellWaitMs = String(Math.round(performance.now() - start));
+    return null;
+  };
   const waitGone = async (selector, timeout = 3000) => {
     const start = performance.now();
     while (performance.now() - start < timeout) {
@@ -93,15 +106,22 @@
     } else if (target === 'progress') {
       if (!await openProgressState()) return;
     } else if (target === 'journey') {
-      if (!await openProgressState()) return;
-      if (!await click('[data-b27-open-journey]')) return;
-      if (!await waitFor('.b27-journey-page')) return;
+      // The real Progress → Journey click path is already certified by flowContract.
+      // For visual review, open the overlay directly through Build 27's public API
+      // from a stable Home state so no second navigation timing can interfere.
+      if (!await waitFor('.b27-home', 6000)) return;
+      const shell = await waitForShellApi('openJourney', 6000);
+      if (!shell) {
+        html.dataset.b27VisualShellReady = '0';
+        return;
+      }
+      html.dataset.b27VisualShellReady = '1';
+      shell.openJourney();
+      if (!await waitFor('.b27-journey-page', 5000)) return;
     } else {
       if (!await waitFor('.b27-home')) return;
     }
 
-    // Visual artifacts must represent a genuinely settled UI. Wait for the
-    // transition classes to disappear, but keep a hard bound so stuck states fail.
     await sleep(80);
     const overlay = await waitOverlaySettled(3000);
     html.dataset.b27VisualEntering = overlay?.classList.contains('b27-entering') ? '1' : '0';
@@ -131,8 +151,6 @@
     progressNav.click();
     html.dataset.b27FlowPhase = 'progress-clicked';
 
-    // The historical navigation owns the screen; the Build 27 bridge refreshes
-    // the façade in the same gesture. Wait for the real learner page, not a timer.
     const progress = await waitFor('.b27-progress-page', 10000);
     html.dataset.b27ProgressPageReady = progress ? '1' : '0';
     if (!progress) return;
