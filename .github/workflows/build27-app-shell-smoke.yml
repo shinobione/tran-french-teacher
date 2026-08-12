@@ -105,7 +105,7 @@ jobs:
             grep -q 'data-b27-progress-lesson-rows="5"' "$file" || ok=0
             grep -q 'data-b27-journey-visible="1"' "$file" || ok=0
             grep -q 'data-b27-journey-stages="5"' "$file" || ok=0
-            grep -q 'data-b27-journey-a1rows="15"' "$file" || ok=0
+            grep -q 'data-b27-journey-a1-rows="15"' "$file" || ok=0
             grep -q 'data-b27-lesson-reached="1"' "$file" || ok=0
             grep -q 'data-b27-flow-overflow="0"' "$file" || ok=0
             if [ "$ok" = 1 ]; then passed=1; break; fi
@@ -131,7 +131,7 @@ jobs:
             grep -q 'data-b27-flow-phase="complete"' "$file" || ok=0
             grep -q 'data-b27-practice-actions="4"' "$file" || ok=0
             grep -q 'data-b27-journey-stages="5"' "$file" || ok=0
-            grep -q 'data-b27-journey-a1rows="15"' "$file" || ok=0
+            grep -q 'data-b27-journey-a1-rows="15"' "$file" || ok=0
             grep -q 'data-b27-lesson-reached="1"' "$file" || ok=0
             grep -q 'data-b27-flow-overflow="0"' "$file" || ok=0
             if [ "$ok" = 1 ]; then passed=1; break; fi
