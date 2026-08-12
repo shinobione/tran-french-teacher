@@ -88,13 +88,15 @@ jobs:
                 google-chrome --headless=new --no-sandbox --disable-gpu \
                 $extra_flags --user-data-dir="$profile" --window-size="${width},${height}" \
                 --virtual-time-budget=22000 --dump-dom \
-                "http://127.0.0.1:4173/?uxSmoke=lesson8&b29Smoke=${label}" >"$file" || chrome_status=$?
+                "http://127.0.0.1:4173/?uxSmoke=lesson8&b27Smoke=home&b29Smoke=${label}" >"$file" || chrome_status=$?
               echo "Build29 ${label} attempt ${attempt}: chrome_status=${chrome_status} bytes=$(wc -c < "$file")"
               ok=1
               grep -q 'data-b29-smoke="passed"' "$file" || ok=0
               grep -q 'data-b29-ready="1"' "$file" || ok=0
-              grep -q 'screen-home' "$file" || ok=0
-              grep -q 'b27-home' "$file" || ok=0
+              grep -q 'data-b27-home-ready="1"' "$file" || ok=0
+              grep -q 'data-b27-home-overflow="0"' "$file" || ok=0
+              grep -q 'data-b27-home-primary-buttons="1"' "$file" || ok=0
+              grep -q 'data-b27-home-quick-actions="2"' "$file" || ok=0
               grep -q 'aria-current="page"' "$file" || ok=0
               if [ "$reduced" = 1 ]; then grep -q 'data-b29-smoke-reduced="1"' "$file" || ok=0; fi
               if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then ok=0; fi
@@ -106,6 +108,8 @@ jobs:
               fi
               echo '=== Build 29 diagnostic markers ==='
               grep -o 'data-b29-[^ >]*' "$file" | head -50 || true
+              echo '=== Build 27 diagnostic markers ==='
+              grep -o 'data-b27-home-[^ >]*' "$file" | head -20 || true
               echo '=== Build 29 failure payload ==='
               grep -o '<pre id="b29-smoke-failures"[^>]*>[^<]*' "$file" || true
             done
@@ -136,20 +140,23 @@ jobs:
           }
 
           # First navigation installs the worker; second navigation gives it control.
-          run_browser 'http://127.0.0.1:4173/?uxSmoke=lesson8&b29Smoke=warm1' "$online1" 22000
+          run_browser 'http://127.0.0.1:4173/?uxSmoke=lesson8&b27Smoke=home&b29Smoke=warm1' "$online1" 22000
           grep -q 'data-b29-smoke="passed"' "$online1"
+          grep -q 'data-b27-home-ready="1"' "$online1"
 
-          run_browser 'http://127.0.0.1:4173/?uxSmoke=lesson8&b29Smoke=warm2' "$online2" 22000
+          run_browser 'http://127.0.0.1:4173/?uxSmoke=lesson8&b27Smoke=home&b29Smoke=warm2' "$online2" 22000
           grep -q 'data-b29-smoke="passed"' "$online2"
+          grep -q 'data-b27-home-ready="1"' "$online2"
 
           kill "$(cat /tmp/ft-b29-server.pid)" || true
           rm -f /tmp/ft-b29-server.pid
           sleep 1
 
-          run_browser 'http://127.0.0.1:4173/?uxSmoke=lesson8&b29Smoke=offline' "$offline" 24000
+          run_browser 'http://127.0.0.1:4173/?uxSmoke=lesson8&b27Smoke=home&b29Smoke=offline' "$offline" 24000
           grep -q 'data-b29-smoke="passed"' "$offline"
           grep -q 'data-b29-ready="1"' "$offline"
-          grep -q 'screen-home' "$offline"
+          grep -q 'data-b27-home-ready="1"' "$offline"
+          grep -q 'data-b27-home-overflow="0"' "$offline"
           if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$offline"; then cat "$offline"; exit 1; fi
 
       - name: Stop static server
