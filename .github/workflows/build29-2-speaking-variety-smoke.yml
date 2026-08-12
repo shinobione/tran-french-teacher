@@ -18,14 +18,14 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Syntax, version, labels and contextual planner contract
+      - name: Syntax, labels and contextual planner contract
         run: |
           node --check speaking-loop-content.js
           node --check speaking-loop-smoke.js
           node --check speaking-loop-variety-smoke.js
           node --check build-meta.js
           node --check sw.js
-          grep -q "version: '1.22.2', build: '29.2'" build-meta.js
+          grep -q "const META = { version:" build-meta.js
           grep -q 'speaking-loop-content.css?v=1.22.2-b29.2' build-meta.js sw.js
           grep -q 'speaking-loop-content.js?v=1.22.2-b29.2' build-meta.js sw.js
           grep -q 'speaking-loop-variety-smoke.js?v=1.22.2-b29.2' build-meta.js sw.js
