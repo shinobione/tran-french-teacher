@@ -14,6 +14,7 @@
     if (!api) fail('Build29 API missing');
     const audit = api?.refresh?.() || {};
 
+    root.dataset.b29AuditHomeVisible = audit.homeVisible ? '1' : '0';
     root.dataset.b29AuditButtons = String(audit.buttons ?? -1);
     root.dataset.b29AuditTooSmall = String(audit.tooSmall ?? -1);
     root.dataset.b29AuditUnnamed = String(audit.unnamed ?? -1);
@@ -22,6 +23,7 @@
 
     if (!root.classList.contains('b29-iphone-ready')) fail('b29 root class missing');
     if (root.dataset.b29Ready !== '1') fail('b29 ready marker missing');
+    if (!audit.homeVisible) fail('learner home is not visible');
     if (!window.visualViewport) fail('visualViewport unavailable');
     if (!getComputedStyle(root).getPropertyValue('--b29-vv-height').trim()) fail('visualViewport CSS variable missing');
 
