@@ -1,4 +1,4 @@
-const VERSION = '1.23.0';
+const VERSION = '2.0.0';
 const BUILD = 30;
 
 const STORES = Object.freeze({
