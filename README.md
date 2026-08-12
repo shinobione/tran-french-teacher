@@ -2,92 +2,57 @@
 
 PWA de français pensée pour **Trân**, avec priorité à l’oral, au français utile dans la vraie vie et à une interface simple sur iPhone.
 
-## Version production
+## Candidat en cours — v1.20.0 / Build 27
 
-- **v1.19.9**
-- **Build 26.9 — Progress Focus Content Reliability**
-- statut : **✅ PROD / réécoute iPhone à valider terrain**
-- commit runtime production : `0b31eedb78daebd58dd9bdcb0a472d56250c8fff`
-- PR runtime : **#58**
-- GitHub Pages runtime : **#114 SUCCESS**
-- tribunal runtime : **15 workflows fonctionnels / 15 SUCCESS + Pages SUCCESS**
-- calibration Listening : **0.88 normal / 0.65 lent**
-- curriculum : **40 leçons / 241 éléments**
-- Scenario : **36 situations / 108 tours**
-- coût : **0 €**
+**App Shell Reset — 🟡 CANDIDAT PR #60 — NE PAS CONFONDRE AVEC LA PROD**
 
-## 🧭 Build 26.9 — le focus doit contenir du vrai contenu
+Build 27 change volontairement de niveau : après plusieurs builds passés à rendre le dashboard `Parcours` techniquement fiable, le retour terrain a confirmé que la façade restait trop proche d’un outil de diagnostic et pas assez d’une vraie application d’apprentissage.
 
-La vidéo terrain du 12 août 2026 a montré une faiblesse que Build 26.8 ne testait pas assez loin : le **wrapper** du Focus pouvait mesurer environ 920 px tout en affichant une vraie carte trop étroite, ou même une toolbar de famille avec un contenu moteur temporairement invisible.
+La règle devient :
 
-Build 26.9 ne change pas la pédagogie et ne déplace pas les moteurs. Il rend la conséquence visuelle de l’état actif déterministe :
+> **La complexité appartient aux moteurs. Trân voit seulement ce qu’elle doit faire maintenant.**
 
-```text
-famille active
-→ panneau correspondant visible
-→ au moins une vraie carte moteur rendue
-→ largeur/hauteur réelles mesurées
-→ seulement alors le contenu est considéré prêt
-```
+Le runtime pédagogique historique reste en place. Build 27 ajoute une façade mobile-first qui réutilise ses vrais états et ses vraies destinations sans migrer les données.
 
-Une famille qui ne contient qu’une seule carte utilise désormais toute la largeur du focus au lieu de laisser une demi-page vide.
+### Aujourd’hui
 
-## ✅ Preuves navigateur 26.9
+Une seule action principale : **continuer la prochaine leçon**.
 
-Le nouveau Chrome desktop `1640×900` ouvre successivement, avec de vrais clics :
+Deux raccourcis seulement :
+
+- Réviser ;
+- Écouter.
+
+Le moteur Daily / Memory continue de travailler dessous, mais son cockpit n’est plus affiché comme interface apprenante.
+
+### Pratiquer
+
+Le bouton central ouvre une vraie page d’application avec quatre intentions :
 
 ```text
-Mémoire → retour
-Maîtrise → retour
-Compréhension orale → retour
-Français réel → retour
-A1 & rythme → retour
+🎙️ Parler
+🎧 Écouter
+↻ Réviser
+♥ Dans la vraie vie
 ```
 
-Mesures certifiées sur le candidat puis sur le même runtime :
+Une intention → un écran. Pas une grille de moteurs qui se déplie dans un dashboard.
 
-- Mémoire : **3 cartes**, panneau **918 px**, cartes jusqu’à **452 px** ;
-- Maîtrise : **2 cartes**, panneau **918 px**, cartes **452 px** ;
-- Compréhension orale : **1 carte**, **918 px pleine largeur** ;
-- Français réel : **1 carte**, **918 px pleine largeur** ;
-- A1 & rythme : **4 cartes**, panneau **918 px**, cartes **452 px** ;
-- mobile `390×844` : vraies cartes visibles, une colonne, aucun overflow horizontal.
+### Progrès
 
-Le build échoue si une famille Focus n’a plus de vraie carte visible, si sa hauteur retombe à zéro, si une carte unique reste en demi-largeur ou si un overflow horizontal réapparaît.
+L’écran apprenant montre uniquement :
 
-## 🧠 Build 26.8 reste le Focus Flow
+- position A0 → A1 ;
+- prochaine leçon ;
+- étape actuelle ;
+- cinq leçons utiles autour de la position ;
+- accès à `Voir tout le parcours`.
 
-Build 26.9 ne remplace pas le principe livré en 26.8 :
+Memory / Mastery / Listening / Scenario / Error Intelligence ne sont plus des catégories de navigation normales. En **DEBUG FR**, le cockpit historique reste disponible comme diagnostic développeur.
 
-```text
-vue compacte
-→ clic sur une famille
-→ fade court
-→ contexte inutile masqué
-→ famille active possède l’écran
-→ Retour aux détails
-→ vue compacte restaurée
-```
+### Parcours complet
 
-`Voir tout le parcours` reste un focus Curriculum séparé, avec les 5 étapes et un retour explicite. Le round-trip Chrome `compact → Memory → retour → Curriculum → retour → 5 lignes` reste sous test permanent.
-
-## 🛡️ Baselines encore actives
-
-### Build 26.6 — containment / anti-photocopieuse
-
-Les cartes Memory / Mastery / Listening / Scenario restent dans leur frontière DOM historique. Le contrat temporel reste **12 cartes → 12 cartes** après quiescence, sans recréation infinie.
-
-### Build 26.7 — géométrie
-
-Détails ouvert dans la vue normale conserve une géométrie humaine : deux colonnes réellement shrinkables sur grand desktop et pile verticale lorsque la largeur devient insuffisante.
-
-### Build 26.8 — focus / sortie / mouvement
-
-Une intention active masque le contexte inutile, les sorties utilisent les API propriétaires, l’état logique ne dépend pas de la fin du fade et `prefers-reduced-motion` garde le même flux sans animation.
-
-## 🗺️ Curriculum et Détails
-
-Curriculum : **40 leçons / 241 éléments**, organisé en cinq étapes :
+Vue dédiée avec cinq étapes :
 
 1. Survie A0 — 1–7 ;
 2. Vie quotidienne — 8–15 ;
@@ -95,22 +60,85 @@ Curriculum : **40 leçons / 241 éléments**, organisé en cinq étapes :
 4. Premiers échanges — 21–25 ;
 5. A1 Core — 26–40.
 
-Détails d’apprentissage :
+Une seule étape expose ses leçons. Les 40 restent accessibles sans devenir un parchemin permanent.
+
+## ✅ Validation candidat Build 27
+
+Le premier candidat complet a passé **16/16 workflows fonctionnels** sur le head runtime `7c5978cea9d4c1e9bb4b3b0e8ce75a151df3ea2e` avant synchronisation des docs candidat.
+
+Le nouveau tribunal Chrome vérifie réellement :
 
 ```text
-🧠 Mémoire & révisions
-🎯 Maîtrise
-🎧 Compréhension orale
-🎭 Français réel
-🧩 A1 & rythme
-⋯ Autres détails
+Home
+→ Pratiquer
+→ retour
+→ Progrès
+→ Parcours complet
+→ A1 Core
+→ retour
+→ vraie leçon
 ```
 
-Une seule famille détaillée possède l’écran à la fois.
+Sur desktop `1640×900` :
+
+- Home = une seule carte leçon principale ;
+- exactement deux raccourcis ;
+- ancien dashboard Home invisible ;
+- Home mesurée **672 px** de haut sur le viewport de 900 px ;
+- Practice = 4 actions ;
+- Progress = 5 lignes de leçons utiles ;
+- Journey = 5 étapes ;
+- A1 Core = 15 leçons ;
+- aucun overflow horizontal.
+
+Le même flux est testé en `390×844`.
+
+Le nav-smoke fait en plus de vrais `pointerdown → pointerup → click` et exige : feedback tactile, tap echo, nœuds de tab bar persistants, **une seule tab active**, page Practice alignée exactement au-dessus de la tab bar, retour Home/Progress et arrivée dans une vraie leçon.
+
+### Revue visuelle automatique
+
+GitHub Actions capture cinq screenshots du vrai candidat : Home desktop, Practice desktop, Progress desktop, Journey desktop et Home mobile.
+
+La dernière revue avant docs candidat confirme :
+
+- Home desktop et mobile : composition app-like, sans cockpit ;
+- Practice : quatre choix clairs ;
+- Progress : progression + prochaine étape + parcours uniquement ;
+- Journey : vue dédiée sans ghost de l’écran précédent ;
+- overlays `Practice/Journey` totalement sortis du fade avant capture.
+
+## 🛡️ Architecture : façade neuve, cerveaux conservés
+
+Build 27 **ne réécrit pas `app.js`** et ne déplace pas les cartes pédagogiques historiques.
+
+```text
+moteurs / DOM historiques
+        ↓
+restent propriétaires des données
+        ↓
+build27-app-shell.js / .css
+        ↓
+façade apprenante mobile-first
+```
+
+Les anciens workflows 26.x continuent de tester leurs propres surfaces historiques : Build 27 se désactive automatiquement sur leurs URLs `...Smoke`. Le nouveau tribunal Build 27 teste séparément la nouvelle façade.
+
+## Production actuelle tant que PR #60 n’est pas mergée
+
+- **v1.19.9 — Build 26.9 / Progress Focus Content Reliability** ;
+- runtime production : `0b31eedb78daebd58dd9bdcb0a472d56250c8fff` ;
+- PR runtime : **#58** ;
+- GitHub Pages runtime : **#114 SUCCESS** ;
+- curriculum : **40 leçons / 241 éléments** ;
+- Scenario : **36 situations / 108 tours** ;
+- Listening : **0.88 normal / 0.65 lent** ;
+- coût : **0 €**.
+
+Build 27 ne devient PROD qu’après : PR exacte verte avec docs candidat → merge exact → mêmes checks sur `main` → GitHub Pages SUCCESS → clôture docs PROD.
 
 ## 🎙️ Réécouter sa propre voix — gate terrain toujours ouvert
 
-Build 26.1 reste actif. Après une réponse reconnue, Trân peut faire une **seconde prise locale volontaire** pour s’écouter. Aucun upload ni persistance audio.
+Build 26.1 reste actif. Après une réponse reconnue, Trân peut faire une seconde prise locale volontaire pour s’écouter, sans upload ni persistance audio.
 
 Gate réel iPhone restant :
 
@@ -120,8 +148,6 @@ réponse reconnue
 → réécoute correcte
 → réponse vocale suivante toujours reconnue normalement
 ```
-
-La capture automatique exacte du premier essai reste hors scope tant que cette coexistence n’est pas prouvée sur le vrai iPhone.
 
 ## 👩‍🏫 Tyffany et sanctuaires
 
@@ -133,38 +159,27 @@ Sanctuaires :
 - Learning Memory / Scenario / Listening ;
 - `voice-ios.js` ;
 - `free-voice.js` ;
-- logo et favicon ;
-- Progression UX Build 25 ;
-- Session UX Build 25.2 ;
-- Real Life French III Build 26 ;
-- Voice Replay + Details Dashboard Build 26.1 ;
+- `assets/LOGO.png` ;
+- `assets/Favicon.png` ;
+- curriculum **40 / 241** ;
+- Scenario **36 / 108** ;
+- Listening **0.88 / 0.65** ;
 - Progress Dashboard Containment Build 26.6 ;
 - Progress Open-Details Geometry Build 26.7 ;
 - Progress Focus Flow Build 26.8 ;
 - Progress Focus Content Reliability Build 26.9 ;
-- aucune migration learner/Memory/Scenario/Listening dans Build 26.9.
+- aucune migration learner/Memory/Scenario/Listening dans Build 27.
 
 ### Baseline historique protégée
 
-Le contrat **v1.17.0 — Build 24 — Real Life French II** reste explicitement conservé : avant Real Life III, Scenario comptait **28 situations / 84 tours**. Le marqueur `real-life-data-2.js` reste documenté dans `docs/ARCHITECTURE.md`.
+Le contrat **v1.17.0 — Build 24 — Real Life French II** reste explicitement conservé : avant Real Life III, Scenario comptait **28 situations / 84 tours**. Le fichier `real-life-data-2.js` reste un marqueur historique canonique.
 
-## CI / production
-
-PR runtime **#58** : **15/15 workflows fonctionnels SUCCESS** sur le head certifié `0fcb28038ef5bab5d138948c6d63b8fd963b2aab`.
-
-Production runtime `0b31eedb78daebd58dd9bdcb0a472d56250c8fff` :
-
-- **15/15 workflows fonctionnels SUCCESS** ;
-- un premier passage du smoke historique Build 26.3 a raté sa destination Lesson sur un runner Chrome 151 ; le **même job inchangé** a été relancé et a passé Today + Progress desktop + Progress mobile ;
-- **GitHub Pages #114 SUCCESS** sur le même SHA ;
-- aucun workflow en échec ou en cours après certification.
-
-## Suite
+## Suite après Build 27
 
 1. **Gate terrain iPhone Build 26.1** — auto-écoute puis reconnaissance suivante.
-2. **Build 27 — Data & Recovery Hardening**.
-3. **Build 28 — iPhone / PWA / Accessibility Hardening**.
-4. **Build 29 — Architecture Hardening**.
+2. **Build 28 — Data & Recovery Hardening**.
+3. **Build 29 — iPhone / PWA / Accessibility Hardening**.
+4. **Build 30 — Architecture Hardening**.
 5. **V2.0.0 — Freeze / Release**.
 
-Voir `ROADMAP.md`, `CHANGELOG.md`, `docs/ARCHITECTURE.md`, `docs/BUILD-26-6-PROGRESS-DASHBOARD-CONTAINMENT.md`, `docs/BUILD-26-7-PROGRESS-OPEN-GEOMETRY.md`, `docs/BUILD-26-8-PROGRESS-FOCUS-FLOW.md` et `docs/BUILD-26-9-PROGRESS-FOCUS-CONTENT.md`.
+Voir `ROADMAP.md`, `CHANGELOG.md`, `docs/ARCHITECTURE.md` et `docs/BUILD-27-APP-SHELL-RESET.md`.

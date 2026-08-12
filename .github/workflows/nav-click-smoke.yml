@@ -63,6 +63,8 @@ jobs:
                 if(!d.querySelector('link[href*="interaction-ux.css"]'))throw new Error('interaction-css-missing');
                 if(!d.querySelector('link[href*="mobile-polish.css"]'))throw new Error('mobile-polish-css-missing');
                 if(!w.FrenchTranquilleInteraction)throw new Error('interaction-runtime-missing');
+                const build27=Boolean(w.FrenchTranquilleBuild27Shell);
+                root.dataset.navShell=build27?'b27':'legacy';
 
                 const homeRef=d.querySelector('[data-ux-nav="home"]');
                 const practiceRef=d.querySelector('[data-ux-nav="practice"]');
@@ -75,35 +77,42 @@ jobs:
                 physicalPress(d,'[data-ux-nav="practice"]','Practice');
                 if(root.dataset.navPracticePressed!=='true')throw new Error('practice-no-pointer-feedback');
                 if(root.dataset.navPracticeEcho!=='true')throw new Error('practice-no-persistent-echo');
-                await wait(300);
-                const practice=d.querySelector('.ux-practice-overlay');
+                await wait(320);
+                const practice=d.querySelector(build27?'.b27-practice-page':'.ux-practice-overlay');
                 if(!practice)throw new Error('practice-did-not-open');
                 if(d.querySelector('[data-ux-nav="home"]')!==homeRef||d.querySelector('[data-ux-nav="practice"]')!==practiceRef||d.querySelector('[data-ux-nav="progress"]')!==progressRef)throw new Error('nav-replaced-opening-practice');
                 oneActive(d,'practice');
                 const nav=d.querySelector('.ux-bottom-nav');
                 const pr=practice.getBoundingClientRect(),nr=nav.getBoundingClientRect();
                 if(Math.abs(pr.bottom-nr.top)>6)throw new Error(`practice-not-full-tab:${Math.round(pr.bottom)}:${Math.round(nr.top)}`);
-                if(getComputedStyle(d.querySelector('.ux-close')).display!=='none')throw new Error('practice-still-modal-close');
+                if(build27){
+                  if(!d.querySelector('.b27-practice-page [data-b27-close-practice]'))throw new Error('b27-practice-back-missing');
+                  if(d.querySelectorAll('.b27-practice-page .b27-practice-action').length!==4)throw new Error('b27-practice-action-count');
+                }else{
+                  if(getComputedStyle(d.querySelector('.ux-close')).display!=='none')throw new Error('practice-still-modal-close');
+                }
 
                 physicalPress(d,'[data-ux-nav="progress"]','Progress');
                 if(root.dataset.navProgressPressed!=='true'||root.dataset.navProgressEcho!=='true')throw new Error('progress-no-feedback');
-                await wait(380);
+                await wait(400);
                 if(!d.querySelector('.app-shell.screen-progress'))throw new Error('progress-did-not-open');
+                if(build27&&!d.querySelector('.b27-progress-page'))throw new Error('b27-progress-page-missing');
                 if(d.querySelector('[data-ux-nav="home"]')!==homeRef||d.querySelector('[data-ux-nav="practice"]')!==practiceRef||d.querySelector('[data-ux-nav="progress"]')!==progressRef)throw new Error('nav-replaced-on-progress');
                 oneActive(d,'progress');
 
                 physicalPress(d,'[data-ux-nav="home"]','Home');
                 if(root.dataset.navHomePressed!=='true'||root.dataset.navHomeEcho!=='true')throw new Error('home-no-feedback');
-                await wait(380);
+                await wait(400);
                 if(!d.querySelector('.app-shell.screen-home'))throw new Error('home-did-not-return');
+                if(build27&&!d.querySelector('.b27-home'))throw new Error('b27-home-missing');
                 if(d.querySelector('[data-ux-nav="home"]')!==homeRef||d.querySelector('[data-ux-nav="practice"]')!==practiceRef||d.querySelector('[data-ux-nav="progress"]')!==progressRef)throw new Error('nav-replaced-on-home');
                 oneActive(d,'home');
                 root.dataset.navNodesPersist='true';
 
-                const lessonButton=d.querySelector('.screen-home .lesson-card .primary');
+                const lessonButton=d.querySelector(build27?'.b27-home [data-b27-open-lesson]':'.screen-home .lesson-card .primary');
                 if(!lessonButton)throw new Error('lesson-button-missing');
                 lessonButton.click();
-                await wait(420);
+                await wait(500);
                 const topbar=d.querySelector('.screen-lesson .topbar');
                 if(!topbar)throw new Error('lesson-topbar-missing');
                 const cs=getComputedStyle(topbar);
@@ -117,7 +126,7 @@ jobs:
                 finish('ok','persistent-nav-feedback-and-clean-lesson-header-ok');
               }catch(e){finish('fail',e?.message||String(e))}
             },1900));
-            setTimeout(()=>finish('fail','timeout'),11000);
+            setTimeout(()=>finish('fail','timeout'),12000);
           })();
           </script></body></html>
           HTML
@@ -131,7 +140,7 @@ jobs:
 
       - name: Chrome — persistent mobile feedback and clean lesson header
         run: |
-          timeout 38s google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=19000 --dump-dom 'http://127.0.0.1:4173/nav-click-smoke.html' >/tmp/nav.html
+          timeout 40s google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=20000 --dump-dom 'http://127.0.0.1:4173/nav-click-smoke.html' >/tmp/nav.html
           grep -q 'data-nav-smoke="ok"' /tmp/nav.html || { cat /tmp/nav.html; exit 1; }
           grep -q 'data-nav-practice-pressed="true"' /tmp/nav.html
           grep -q 'data-nav-practice-echo="true"' /tmp/nav.html
