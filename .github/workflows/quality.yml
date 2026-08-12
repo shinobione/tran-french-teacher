@@ -155,7 +155,9 @@ jobs:
 
       - name: Chrome — Listening hidden then reveal
         run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=22000 --dump-dom 'http://127.0.0.1:4173/?listeningSmoke=1' >/tmp/listening.html
+          # Build 28 rejects partial learner objects. Seed the historical valid lesson-8
+          # learner profile first, then let the Listening smoke add its test vocabulary.
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=22000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&listeningSmoke=1' >/tmp/listening.html
           if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/listening.html; then cat /tmp/listening.html; exit 1; fi
           grep -q 'data-listening-smoke-hidden="1"' /tmp/listening.html
           grep -q 'data-listening-smoke-revealed="1"' /tmp/listening.html
