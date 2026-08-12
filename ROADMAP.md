@@ -26,180 +26,150 @@
 20. Les détails pédagogiques peuvent être riches, mais ils doivent être groupés par intention et jamais affichés comme un dump vertical.
 21. Un mode `Lent` doit être **effectivement plus lent dans la couche voix finale**.
 22. Les surfaces repliables critiques ont un contrat de clic navigateur réel.
-23. **Un contrôle visible ne doit pas être remplacé entre `pointerdown` et `click`.** Les couches DOM récentes doivent être idempotentes et ne pas se disputer les mêmes nœuds.
+23. **Un contrôle visible ne doit pas être remplacé entre `pointerdown` et `click`.**
 24. Les tests d’interaction vérifient la **destination réelle**, pas seulement la présence du bouton.
-25. **Une page ne doit pas imposer deux scrolls verticaux concurrents sans nécessité forte.** Sur Progress desktop, le document est le propriétaire du scroll.
-26. Un renommage produit ne justifie pas une migration technique risquée : les identifiants historiques peuvent rester internes si l’UI visible est cohérente.
-27. **Un mode visible doit toujours avoir une sortie déterministe.** Touch/pointer et click/clavier doivent rejoindre la même destination.
+25. **Une page ne doit pas imposer deux scrolls verticaux concurrents sans nécessité forte.**
+26. Un renommage produit ne justifie pas une migration technique risquée.
+27. **Un mode visible doit toujours avoir une sortie déterministe.**
 28. **Un seul mode actif ne doit pas hériter d’une grille conçue pour plusieurs modes simultanés.**
-29. **Deux colonnes visuelles doivent être structurellement indépendantes lorsque leur hauteur peut diverger fortement.** Un long détail à droite ne doit pas créer un trou dans le parcours gauche.
-30. Les anciens workflows CI protègent les **contrats**, pas les numéros de query-string historiques d’un fichier qui peut légitimement évoluer.
+29. **L’indépendance visuelle ne justifie pas de casser une frontière de propriété DOM.** Les moteurs historiques doivent continuer à retrouver les nœuds qu’ils possèdent.
+30. Les anciens workflows CI protègent les **contrats**, pas les query-strings historiques d’un fichier qui peut légitimement évoluer.
+31. **Une cardinalité DOM doit rester bornée dans le temps.** Un `MutationObserver` ne doit jamais transformer un écran stable en générateur de cartes.
+32. **Tout le curriculum doit rester accessible sans être affiché simultanément.** Le parcours complet utilise des étapes et une seule tranche ouverte à la fois.
+33. Pour un contrôle critique de disclosure, l’état visuel doit être déterministe dans le même geste utilisateur, sans dépendre d’un futur frame pour devenir cohérent.
 
 ---
 
-# Baseline production — v1.19.5 / Build 26.5
+# Baseline production — v1.19.6 / Build 26.6
 
-**Conversation Exit + Layout Repair — ✅ PROD / CLOS**
+**Progress Dashboard Containment + Humanized Curriculum — ✅ PROD / CLOS**
 
-- commit runtime production : `2cd29f20faa8db850f92c343074809cc91b42c76` ;
-- PR runtime **#49** ;
-- PR : **11 workflows fonctionnels / 11 SUCCESS** ;
-- `main` runtime : **11 workflows fonctionnels / 11 SUCCESS** ;
-- GitHub Pages runtime : **#106 SUCCESS** ;
-- Conversation : `Changer de pratique` retourne au hub par pointer/tactile **et** click/clavier ;
-- Conversation desktop : un seul mode actif = une seule colonne de travail centrée ;
-- Progress desktop : Résumé + Curriculum dans une colonne gauche indépendante, Details à droite ;
-- gap Résumé → Curriculum vérifié entre **0 et 48 px** même avec `Maîtrise` long ;
-- Build 26.4 single-scroll conservé : **aucun scroll imbriqué**, document propriétaire du scroll ;
-- mobile : Résumé → Curriculum compact **5/40** → Détails repliés ;
-- Tyffany reste le nom visible de la professeure ;
-- Progression UX Build 25 intact ;
-- Listening : **0.88 normal / 0.65 lent effectif** ;
-- Session UX Build 25.2 intact ;
-- Real Life French III Build 26 : **36 situations / 108 tours** ;
-- Voice Replay + Details Dashboard Build 26.1 intact ;
-- curriculum : **40 leçons / 241 éléments** ;
-- `voice-ios.js` / `free-voice.js` / logo / favicon sanctuarisés ;
-- aucune migration de données apprenantes ;
+- commit runtime : `7bb48979f21db0cf1cc94d7a9e03e225f2e1cc7a` ;
+- PR runtime **#52** ;
+- PR : **12 workflows fonctionnels / 12 SUCCESS** ;
+- `main` : **12 workflows fonctionnels / 12 SUCCESS** ;
+- GitHub Pages : **#108 SUCCESS** ;
+- dashboard terrain runaway supprimé ;
+- profil synthétique l8 : dashboard stabilisé **12 → 12** après observation, `Autres détails = 1` ;
+- cartes moteur principales uniques, Overview/Curriculum interdits dans Details ;
+- Progress desktop : deux colonnes visuelles conservées à l’intérieur de la frontière DOM historique ;
+- single-scroll conservé ;
+- curriculum compact : **5/40** ;
+- parcours complet : **5 étapes**, une seule tranche de leçons visible ;
+- position l8 : **8 leçons** dans l’étape courante ;
+- A1 Core : **15 leçons** ;
+- les **40** restent accessibles sans mur de 40 lignes ;
+- `Voir tout le parcours` et changement d’étape couverts par de vrais clics Chrome ;
+- Conversation Exit Build 26.5 conservé ;
+- Listening **0.88 / 0.65** ;
+- Scenario **36 / 108** ;
+- curriculum **40 / 241** ;
+- aucune migration learner/Memory/Scenario/Listening ;
+- `voice-ios.js`, `free-voice.js`, logo, favicon sanctuarisés ;
 - coût 0 €.
 
 Baseline historique protégée : **v1.17.0 — Build 24 — Real Life French II**, Scenario **28 situations / 84 tours** avant Pack III.
 
 ---
 
-# Build 26.5 — critères clôturés
+# Build 26.6 — critères clôturés
 
-## Conversation Exit
+## 1. Dashboard Containment
 
-Retour terrain : `Changer de pratique` recevait le feedback visuel mais pouvait rester inerte et enfermer Conversation en pratique guidée.
+Retour terrain : `Autres détails` augmentait sans interaction jusqu’à plusieurs centaines de cartes.
 
-Cause : le handler global existait déjà, mais la surface Conversation reste composée par plusieurs couches à base de mutations DOM. Dépendre uniquement d’un événement global pendant cette recomposition était trop fragile.
+Cause : Build 26.5 avait déplacé `Détails` hors de l’ancêtre historique dans lequel les moteurs recherchent leur propre carte. Ils la recréaient donc à chaque passage observer.
 
-Correction :
-
-- [x] `setPracticeMode(mode)` devient la transition explicite/synchrone ;
-- [x] `setPracticeMode(null)` reconstruit immédiatement le hub ;
-- [x] binding direct du contrôle visible ;
-- [x] `pointerup` couvert ;
-- [x] `click` couvert ;
-- [x] Chrome exige la destination `hub` après les deux chemins ;
-- [x] aucun changement de donnée learner/Memory/Scenario/Listening.
-
-## Conversation Layout
-
-Cause : vieille grille Build 14 conçue pour `Free Voice | Guided Practice`, alors que Build 25.2 n’affiche plus qu’un mode actif.
-
-Critères :
-
-- [x] hub de pratique = une colonne ;
-- [x] mode actif = une colonne centrée ;
-- [x] bouton retour et carte active alignés dans la même colonne ;
-- [x] plus de grand vide entre le retour et la carte ;
-- [x] `Tyffany` et `Pratique guidée` ne sont plus collés visuellement ;
-- [x] mobile reste naturellement en une colonne.
-
-## Progress — colonnes indépendantes
-
-Avant 26.5 :
+Après 26.6 :
 
 ```text
-Résumé      | Details
-Curriculum  | Details
-```
-
-`Details` couvrait deux lignes. Après suppression correcte de son scroll interne en 26.4, une grande hauteur à droite pouvait étirer ces lignes et pousser le Curriculum gauche très loin vers le bas.
-
-Après 26.5 :
-
-```text
-.progress-layout
-├── colonne gauche
-│   ├── Overview
-│   └── Curriculum
-└── Details
+progress-layout
+└── progress-ux-composition  ← frontière historique
+    ├── progress-ux-left-flow
+    │   ├── Overview
+    │   └── Curriculum
+    └── Details
 ```
 
 Critères :
 
-- [x] Details = enfant direct de `.progress-layout` ;
-- [x] Curriculum = enfant de la colonne gauche ;
-- [x] Overview + Curriculum possèdent leur propre flux vertical compact ;
-- [x] Chrome ouvre réellement `Maîtrise` ;
-- [x] gap Overview → Curriculum compris entre **0 et 48 px** ;
-- [x] gauche et droite côte à côte sur desktop ;
-- [x] nested scroll = 0 ;
-- [x] page scrollable = 1 ;
-- [x] profil l8 conserve 7 leçons terminées / 40 acquis ;
-- [x] mobile : Overview → Curriculum → Details ;
-- [x] mobile : Details replié ;
-- [x] mobile : curriculum **5 / 40**.
+- [x] Details reste descendant de la frontière historique ;
+- [x] rendu desktop toujours gauche / droite ;
+- [x] Overview et Curriculum restent hors Details ;
+- [x] chaque carte Dashboard a une famille stable ;
+- [x] `Éléments appris` appartient à Mémoire ;
+- [x] cardinalité attend la quiescence avant mesure ;
+- [x] cardinalité stable dans le temps : **12 → 12** sur profil synthétique ;
+- [x] `Autres détails` borné ;
+- [x] cartes moteur principales uniques ;
+- [x] aucun nested scroll ;
+- [x] aucune migration.
 
-## CI / release
+## 2. Curriculum Humanization
 
-- [x] workflow dédié Build 26.5 ;
-- [x] Session UX historique rendu durable vis-à-vis des versions propriétaires ;
-- [x] Progression UX historique rendu durable ;
-- [x] Build 26.4 continue de protéger Tyffany + single-scroll sans figer le build global ;
-- [x] Build 26.3 protège son intention structurelle/Today sans imposer éternellement `display:contents` ;
-- [x] Build 26.1 Chrome isolé + retries bornés + timeouts ;
-- [x] PR #49 : **11/11 SUCCESS** ;
+- [x] vue normale = 5 leçons autour de la position actuelle ;
+- [x] `Voir tout le parcours` ne montre plus 40 lignes ;
+- [x] 5 étapes : Survie A0 / Vie quotidienne / Fondations A1 / Premiers échanges / A1 Core ;
+- [x] l’étape actuelle s’ouvre par défaut ;
+- [x] une seule étape expose ses leçons ;
+- [x] à l8 : 8 lignes ;
+- [x] A1 Core : 15 lignes ;
+- [x] les 40 leçons restent toutes accessibles ;
+- [x] vrai clic Chrome sur `Voir tout` ;
+- [x] vrai clic Chrome sur `A1 Core` ;
+- [x] transition flushée de façon déterministe ;
+- [x] dashboard reste stable pendant la navigation des étapes.
+
+## 3. Régressions historiques protégées
+
+- [x] Build 25 Progression UX ;
+- [x] Build 25.2 Session UX ;
+- [x] Build 26 Real Life III ;
+- [x] Build 26.1 Voice Replay + Details Dashboard ;
+- [x] Build 26.2 Listening 0.88 / 0.65 ;
+- [x] Build 26.3 interactions ;
+- [x] Build 26.4 single-scroll + Tyffany ;
+- [x] Build 26.5 `Changer de pratique` pointer + click ;
+- [x] mobile Résumé → Curriculum compact → Détails repliés.
+
+## 4. CI / release
+
+- [x] workflow dédié Build 26.6 ;
+- [x] anti-prolifération temporelle ;
+- [x] navigation réelle par étapes ;
+- [x] PR #52 : **12/12 SUCCESS** ;
 - [x] merge exact du head validé ;
-- [x] commit runtime `2cd29f20faa8db850f92c343074809cc91b42c76` ;
-- [x] `main` : **11/11 SUCCESS** ;
-- [x] GitHub Pages **#106 SUCCESS**.
+- [x] runtime `7bb48979f21db0cf1cc94d7a9e03e225f2e1cc7a` ;
+- [x] `main` : **12/12 SUCCESS** ;
+- [x] GitHub Pages **#108 SUCCESS**.
 
 ---
 
+# Build 26.5 — baseline conservée / implémentation Progress partiellement supersédée
+
+Toujours valides : Conversation Exit, une colonne active, Tyffany/label séparés, gap Overview→Curriculum compact, deux colonnes visuelles, mobile et single-scroll.
+
+**Supersédé en 26.6 :** `Details` n’est plus enfant direct de `.progress-layout`. Cette structure cassait la frontière de propriété des moteurs. L’indépendance visuelle est désormais fournie par une grille imbriquée dans l’ancêtre historique.
+
 # Build 26.4 — baseline conservée
 
-## Single-scroll Progress
-
-- [x] `max-height:none` ;
-- [x] `overflow:visible` ;
-- [x] aucun nested scroll ;
-- [x] page propriétaire du scroll ;
-- [x] Tyffany visible ;
-- [x] `voice-ios.js` / `free-voice.js` byte-identiques ;
-- [x] identifiants `LucieVoice`, `luc-*`, `lucie-*` conservés comme compatibilité ;
-- [x] clé learner `francais-avec-luc:learner:v1` conservée.
-
-Build 26.5 **supersède uniquement la composition de grille** héritée de 26.3 : la politique single-scroll de 26.4 reste intacte.
+Single-scroll Progress et branding Tyffany restent actifs.
 
 # Build 26.3 — baseline conservée
 
-Today conserve ses contrôles stables et ses vraies destinations. Le layout 2 colonnes reste l’intention produit, mais l’implémentation historique `display: contents` est désormais **supersédée par Build 26.5** pour rendre les colonnes réellement indépendantes.
+Today conserve ses contrôles stables et ses vraies destinations. L’intention 2 colonnes reste valide.
 
 # Build 26.2 — baseline conservée
 
-- clic `Détails d’apprentissage` déterministe ;
-- Listening effectif : **0.88 normal / 0.65 lent** ;
-- `voice-ios.js` / `free-voice.js` byte-identiques ;
-- aucune migration.
+Clic Détails déterministe et Listening effectif **0.88 normal / 0.65 lent**.
 
 # Build 26.1 — baseline conservée / gate terrain iPhone
 
-## Voice Self-Playback
+Voice Self-Playback reste livré mais le gate réel iPhone est toujours ouvert :
 
-Après une réponse reconnue, Free Voice propose une **seconde prise locale volontaire** destinée à l’auto-écoute. Aucun upload, aucune persistance, aucun effet sur Memory/Error/Mastery/Session, capture max 9 secondes, pistes micro stoppées.
-
-### Gate terrain restant
-
-- [ ] **test réel sur l’iPhone de Trân :** réponse reconnue → seconde prise locale → lecture correcte → réponse vocale suivante toujours reconnue normalement.
+- [ ] réponse reconnue → seconde prise locale → lecture correcte → réponse vocale suivante toujours reconnue normalement.
 
 La capture simultanée exacte du premier essai reste hors scope tant que cette coexistence n’est pas prouvée.
-
-## Learning Details Dashboard
-
-Familles conservées :
-
-```text
-🧠 Mémoire & révisions
-🎯 Maîtrise
-🎧 Compréhension orale
-🎭 Français réel
-🧩 A1 & rythme
-⋯ Autres détails
-```
 
 ---
 
@@ -244,8 +214,7 @@ Progression UX Build 25
 Session UX Build 25.2
 Real Life III Build 26
 Voice Replay + Details Dashboard Build 26.1
-Click + Listening Rate Build 26.2
-Single-scroll + Tyffany Build 26.4
+Progress Dashboard Containment Build 26.6
 ```
 
 Compatibilité interne conservée malgré le branding Tyffany : `LucieVoice`, `luc-*`, `lucie-*`.
