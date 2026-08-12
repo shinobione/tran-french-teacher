@@ -1,6 +1,6 @@
 # French Trân’quille — ARCHITECTURE
 
-## Vue générale — production Build 29 + candidat 29.1
+## Vue générale — production v1.22.1 / Build 29.1
 
 ```text
 iPhone / Safari / PWA
@@ -16,7 +16,7 @@ façade apprenante mobile-first
         ↓
 Aujourd’hui / Pratiquer / Progrès / Parcours complet
         ↓
-Build 29.1 Speaking Loop Content — candidat
+Build 29.1 Speaking Loop Content
 Tyffany → prise locale → Ma voix → comparer / refaire
         ↓
 compatibility bus + moteurs historiques
@@ -35,13 +35,9 @@ Principes :
 - **l’audio de réécoute reste local et éphémère** ;
 - **aucun score de prononciation n’est inventé à partir d’une simple transcription ou d’une auto-écoute**.
 
-Production : **v1.22.0 / Build 29**, runtime `1c01648d89dfb3bd9236b9ad93fbade4e21102fa`, PR #64, Pages #120 SUCCESS.
+Production : **v1.22.1 / Build 29.1**, runtime `b2fde53792c38d1e6283d8779bbcedfac36f9502`, PR #66, Pages #122 SUCCESS.
 
-Candidat : **v1.22.1 / Build 29.1**, PR #66.
-
----
-
-# Ordre de boot
+## Ordre de boot
 
 ```text
 index.html
@@ -62,45 +58,14 @@ Build 29 iPhone/PWA layer
   ↓
 build-meta.js
   ↓
-Speaking Loop 29.1 chargé dynamiquement — candidat
+Speaking Loop 29.1 chargé dynamiquement
 ```
 
-Recovery agit donc avant `app.js`. Build 29 reste une couche device/accessibility autour du shell. Build 29.1 n’est pas propriétaire de la progression : il décore uniquement les moments de leçon qui répondent à son contrat.
+Recovery agit avant `app.js`. Build 29 reste une couche device/accessibility. Build 29.1 n’est pas propriétaire de la progression : il décore uniquement les moments de leçon qui répondent à son contrat.
 
 ---
 
-# Build 29 — iPhone / PWA / Accessibility — PROD
-
-Modules :
-
-```text
-build29-iphone-a11y.css
-build29-iphone-a11y.js
-build29-smoke.js
-manifest.webmanifest
-sw.js
-```
-
-Responsabilités :
-
-- safe areas et `viewport-fit=cover` ;
-- cibles coarse-pointer ≥44 px ;
-- focus-visible ;
-- sémantique active `aria-current` ;
-- progressbar/live regions ;
-- `VisualViewport` / clavier virtuel ;
-- standalone ;
-- reduced motion / contraste ;
-- petits, grands et paysage ;
-- manifest/install/offline.
-
-Tribunal : `320×568`, `390×844`, `430×932`, reduced-motion et boot offline réel après chauffe du Service Worker.
-
-PR #65 a testé une isolation supplémentaire des anciens smoke harnesses du Service Worker. Elle a été **fermée sans merge** : aucun changement #65 ne fait partie de la production.
-
----
-
-# Build 29.1 — Speaking Loop Content — CANDIDAT
+# Build 29.1 — Speaking Loop Content — PROD
 
 Modules :
 
@@ -129,7 +94,7 @@ lesson.challenge.answer
 Speaking Loop final
 ```
 
-Contrat :
+Contrat certifié :
 
 ```text
 40 leçons couvertes
@@ -140,15 +105,13 @@ Aucune leçon ni aucun item canonique n’est créé ou modifié.
 
 ## Audio modèle
 
-Le bouton Tyffany crée un `SpeechSynthesisUtterance` `fr-FR`.
-
-La chaîne vocale historique reste propriétaire de la voix :
+Le bouton Tyffany crée un `SpeechSynthesisUtterance` `fr-FR`. La chaîne historique garde la propriété de la voix :
 
 ```text
 speaking-loop-content.js
   ↓ SpeechSynthesisUtterance
 voice-ios.js
-  ↓ choix voiceURI / rate / pitch existants
+  ↓ voiceURI / rate / pitch existants
 speechSynthesis
 ```
 
@@ -176,11 +139,22 @@ Audio local
 - suppression au changement de moment/page ;
 - codecs préférés : `audio/mp4`, puis WebM/Opus, puis WebM.
 
-Le Speaking Loop ne lance pas SpeechRecognition. Il évite donc volontairement de démarrer MediaRecorder en parallèle de la reconnaissance Safari.
+Le Speaking Loop ne lance pas SpeechRecognition et ne démarre donc pas MediaRecorder en parallèle de la reconnaissance Safari.
 
-## Gate exact-premier-essai
+### Preuves production
 
-La fonction Build 26.1 existe toujours séparément dans Free Voice :
+```text
+PR #66 head df730d60...        19/19 fonctionnels SUCCESS
+main b2fde537...                19/19 fonctionnels SUCCESS
+Pages #122                     SUCCESS
+main total                     20/20 SUCCESS Pages incluse
+```
+
+---
+
+# Gate exact-premier-essai — toujours ouvert
+
+La fonction Build 26.1 existe séparément dans Free Voice :
 
 ```text
 réponse reconnue
@@ -188,7 +162,7 @@ réponse reconnue
 → réécoute
 ```
 
-Gate terrain toujours ouvert :
+Gate terrain :
 
 ```text
 reconnaissance
@@ -198,6 +172,16 @@ reconnaissance
 ```
 
 Tant que ce gate réel iPhone n’est pas validé, Build 29.1 **n’enregistre pas automatiquement le premier essai reconnu**.
+
+---
+
+# Build 29 — iPhone / PWA / Accessibility
+
+Responsabilités : safe areas, touch ≥44 px, focus-visible, `aria-current`, progressbar/live regions, `VisualViewport`, standalone, reduced-motion, contraste, petits/grands écrans et offline.
+
+Matrice certifiée : **320×568 / 390×844 / 430×932** + boot offline après chauffe du Service Worker.
+
+PR #65 d’isolation supplémentaire des smokes : **fermée sans merge**.
 
 ---
 
@@ -216,46 +200,26 @@ milestones  french-tranquille:milestones:v1
 
 Backup V2, restore transactionnel, rollback, migration V1 préservant les stores modernes, quarantaine, `last-good`, snapshots `pre-restore`, `pre-migration`, `pre-reset` et fallback Build 22 restent en vigueur.
 
-Les réglages voix et les blobs d’auto-écoute ne font pas partie des données pédagogiques portables.
+Les réglages voix et blobs d’auto-écoute ne font pas partie des données pédagogiques portables.
 
 ---
 
 # Build 27 — App Shell
 
 ### Aujourd’hui
-
-```text
-prochaine leçon
-[ Continuer ]
-Réviser    Écouter
-```
+`prochaine leçon → Continuer → Réviser / Écouter`
 
 ### Pratiquer
-
-```text
-Parler
-Écouter
-Réviser
-Dans la vraie vie
-```
+`Parler / Écouter / Réviser / Dans la vraie vie`
 
 ### Progrès
-
-```text
-position A0 → A1
-prochaine leçon
-étape actuelle
-5 leçons autour de la position
-Voir tout le parcours
-```
+`position A0→A1 / prochaine leçon / étape / 5 leçons / parcours complet`
 
 Cockpit moteur historique = DEBUG FR seulement.
 
 ---
 
 # Runtime pédagogique historique
-
-Les moteurs restent propriétaires de leur logique :
 
 ```text
 progress-safety.js
@@ -299,9 +263,8 @@ build26-8-ux.js
 build26-9-ux.js
 build27-app-shell.js
 build29-iphone-a11y.js
+speaking-loop-content.js
 ```
-
-Build 29.1 s’ajoute comme couche de contenu de leçon ; il ne remplace aucun moteur ci-dessus.
 
 ---
 
@@ -341,17 +304,15 @@ Listening 0.88 / 0.65
 Build 27 App Shell
 Build 28 Data & Recovery
 Build 29 iPhone/PWA/A11y
+Build 29.1 Speaking Loop Content
 Build 26.6 containment
 Build 26.7 geometry
 Build 26.8 Focus Flow
 Build 26.9 Content Reliability
 ```
 
----
+## Suite
 
-# Suite
-
-1. Build 29.1 Speaking Loop Content — candidat ;
-2. gate terrain iPhone Voice Replay ;
-3. Build 30 Architecture Hardening ;
-4. V2.0.0 Freeze / Release.
+1. gate terrain iPhone Voice Replay ;
+2. Build 30 Architecture Hardening ;
+3. V2.0.0 Freeze / Release.

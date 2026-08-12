@@ -58,66 +58,36 @@
 52. **Les réglages dépendants de l’appareil ne deviennent pas automatiquement des données pédagogiques portables.**
 53. **L’auto-écoute est un outil pédagogique ponctuel, jamais une obligation à chaque mot.**
 54. **Pas de score de prononciation si le produit ne possède pas une vraie mesure phonétique.**
-55. **Le modèle vocal et l’enregistrement local doivent rester séparés de la progression durable.**
+55. **Le modèle vocal et l’enregistrement local restent séparés de la progression durable.**
 
 ---
 
-# Baseline production — v1.22.0 / Build 29
+# Baseline production — v1.22.1 / Build 29.1
 
-## iPhone / PWA / Accessibility Hardening — ✅ PROD / CLOS
+## Speaking Loop Content — ✅ PROD / CLOS
 
-- runtime : `1c01648d89dfb3bd9236b9ad93fbade4e21102fa` ;
-- PR runtime : **#64** ;
-- head PR certifié : `27c67ee7b47b9f9a015e6c0072640e0e573de52d` ;
-- `main` : **19/19 SUCCESS** après rerun inchangé du seul ancien contrôle Build 27 visuel ;
-- GitHub Pages : **#120 SUCCESS** ;
+- PR runtime : **#66** ;
+- head PR certifié : `df730d60a8434819cb19f116eb0dc66c3718b5f4` ;
+- PR : **19/19 workflows fonctionnels SUCCESS** ;
+- runtime : `b2fde53792c38d1e6283d8779bbcedfac36f9502` ;
+- `main` : **19/19 workflows fonctionnels SUCCESS** ;
+- GitHub Pages : **#122 SUCCESS** ;
+- total runtime `main` : **20/20 SUCCESS Pages incluse** ;
 - curriculum **40 / 241** ;
 - Scenario **36 / 108** ;
 - Listening **0.88 / 0.65** ;
 - coût 0 €.
 
-### iPhone / PWA
-
-- [x] safe areas / `viewport-fit=cover` ;
-- [x] cibles tactiles coarse-pointer ≥44 px ;
-- [x] focus clavier visible ;
-- [x] `aria-current` / progressbar / live regions ;
-- [x] `VisualViewport` pour clavier virtuel ;
-- [x] mode standalone détecté ;
-- [x] petits/grands viewports ;
-- [x] paysage compact ;
-- [x] textes longs / overflow ;
-- [x] reduced motion ;
-- [x] contraste renforcé ;
-- [x] manifest PWA ;
-- [x] boot offline après chauffe Service Worker ;
-- [x] matrice Chrome 320×568 / 390×844 / 430×932.
-
-### Expérience #65
-
-- [x] isolation Service Worker des anciens smoke harnesses explorée ;
-- [x] expérience jugée inutile : vieux contrôle visuel Build 27 toujours instable ;
-- [x] PR #65 **fermée sans merge** ;
-- [x] aucun runtime #65 en production.
-
----
-
-# v1.22.1 — Build 29.1 — Speaking Loop Content
-
-**Candidat actuel — PR #66.**
-
-Objectif : intégrer la réécoute demandée par Trân directement dans le contenu des leçons, sans casser la voix ni la reconnaissance existantes.
-
 ### Contrat pédagogique
 
-- [x] sélectionner une phrase utile par leçon depuis le curriculum réel ;
-- [x] ajouter un second moment après réussite de la situation finale ;
+- [x] une phrase utile sélectionnée par leçon ;
+- [x] second moment oral après réussite de la situation finale ;
 - [x] **2 moments maximum par leçon** ;
-- [x] couvrir les **40 leçons** sans modifier la baseline 40/241 ;
+- [x] **40/40 leçons couvertes** ;
 - [x] modèle vocal Tyffany ;
 - [x] seconde prise locale volontaire ;
-- [x] lecture de sa propre voix ;
-- [x] possibilité de réécouter Tyffany et de refaire ;
+- [x] lecture `Ma voix` ;
+- [x] réécoute Tyffany / refaire ;
 - [x] `Continuer` reste disponible ;
 - [x] aucun score de prononciation inventé.
 
@@ -127,62 +97,65 @@ Objectif : intégrer la réécoute demandée par Trân directement dans le conte
 - [x] enregistrement local ≤9 s ;
 - [x] aucun upload ;
 - [x] aucune persistance learner/Memory/backup ;
-- [x] nettoyage Blob au changement d’étape/page ;
+- [x] nettoyage Blob au changement de moment/page ;
 - [x] `voice-ios.js` byte-identique ;
 - [x] `free-voice.js` byte-identique ;
 - [x] logo / favicon byte-identiques.
 
-### Tribunal candidat
+### Tribunal
 
-- [x] vraie Leçon 1 ouverte dans Chrome ;
+- [x] vraie Leçon 1 ouverte ;
 - [x] Speaking Loop de contenu visible ;
-- [x] quiz réels traversés ;
+- [x] quiz traversés ;
 - [x] situation finale réussie ;
-- [x] Speaking Loop final visible ;
+- [x] second Speaking Loop visible ;
 - [x] mobile `390×844` ;
 - [x] overflow horizontal = 0 ;
 - [x] cible tactile ≥44 px ;
-- [x] Build 29 PWA/offline toujours testé ;
-- [x] Build 28 Recovery toujours testé ;
-- [x] Voice Replay 26.1 toujours testé.
+- [x] Build 29 PWA/offline vert ;
+- [x] Build 28 Recovery vert ;
+- [x] Voice Replay 26.1 vert ;
+- [x] Build 27 App Shell vert ;
+- [x] quality et marqueurs historiques verts.
 
-### Avant merge
+---
 
-- [ ] tous les workflows historiques + 29.1 verts sur le même head ;
-- [ ] docs candidat synchronisés ;
-- [ ] merge PR #66 ;
-- [ ] tribunal `main` ;
-- [ ] GitHub Pages sur le SHA runtime ;
-- [ ] clôture docs-only PROD/CLOS.
+# Build 29 — iPhone / PWA / Accessibility — ✅ PROD / CLOS
+
+- runtime historique : `1c01648d89dfb3bd9236b9ad93fbade4e21102fa` ;
+- PR #64 ; Pages #120 ;
+- safe areas, touch ≥44 px, a11y, VisualViewport, standalone, reduced-motion, contraste ;
+- matrice Chrome 320×568 / 390×844 / 430×932 ;
+- boot offline après chauffe Service Worker.
+
+PR #65 : expérience SW **fermée sans merge**.
 
 ---
 
 # Build 26.1 — gate terrain iPhone toujours ouvert
 
-- [ ] réponse reconnue → seconde prise locale → lecture correcte → réponse vocale suivante toujours reconnue normalement.
+- [ ] réponse Free Voice reconnue → seconde prise locale → lecture correcte → réponse vocale suivante toujours reconnue normalement.
 
-Ce gate reste indépendant de 29.1. Tant qu’il n’est pas validé, **pas d’enregistrement automatique du premier essai exact** pendant Free Voice.
+Ce gate reste indépendant de Build 29.1. Tant qu’il n’est pas validé, **pas d’enregistrement automatique du premier essai exact** pendant la reconnaissance Safari.
 
 ---
 
 # v1.23.0 — Build 30 — Architecture Hardening
 
-Découpage du noyau uniquement avec snapshots comparatifs ; pas de grande réécriture cosmétique du cœur.
-
-Priorités :
+Prochain gros chantier après le test terrain :
 
 - réduire le monolithe historique sans modifier le comportement ;
 - clarifier propriétaires DOM / state / routing ;
 - isoler davantage les moteurs ;
 - conserver les six stores Build 28 et leurs migrations ;
-- conserver l’App Shell Build 27, le hardening iPhone Build 29 et le Speaking Loop ;
-- comparaison avant/après par smokes reproductibles.
+- conserver App Shell 27, hardening iPhone 29 et Speaking Loop 29.1 ;
+- snapshots comparatifs avant/après.
 
 ---
 
 # V2.0.0 — Freeze / Release
 
-Release cohérente, sauvegardable, restaurable, testée et documentée. Aucun nouveau moteur n’est requis pour justifier V2 : le jalon est la **fiabilité globale du produit**.
+Release cohérente, sauvegardable, restaurable, testée et documentée. Le jalon est la **fiabilité globale du produit**, pas l’ajout d’un nouveau moteur.
 
 ---
 
@@ -201,7 +174,7 @@ Build 26.9 Progress Focus Content Reliability
 Build 27 App Shell Reset
 Build 28 Data & Recovery
 Build 29 iPhone / PWA / Accessibility
-Build 29.1 Speaking Loop Content — candidat
+Build 29.1 Speaking Loop Content
 ```
 
 # Sanctuaires
