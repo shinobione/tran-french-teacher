@@ -2,19 +2,28 @@
 
 ## État
 
-**v1.22.0 — Build 29 — CANDIDAT / NON MERGÉ**
+**v1.22.0 — Build 29 — ✅ PROD / CLOS**
 
 Objectif : certifier French Trân’quille comme PWA iPhone confortable et robuste sans modifier les moteurs pédagogiques, les données apprenantes ni les sanctuaires vocaux.
 
+### Preuves production
+
+- PR runtime : **#64** ;
+- head PR certifié : `27c67ee7b47b9f9a015e6c0072640e0e573de52d` ;
+- runtime production : `1c01648d89dfb3bd9236b9ad93fbade4e21102fa` ;
+- `main` final runtime : **19/19 workflows SUCCESS** après rerun inchangé du seul ancien contrôle visuel Build 27 initialement rouge ;
+- GitHub Pages **#120 SUCCESS** sur ce SHA ;
+- PR expérimentale #65 : **fermée sans merge**.
+
 ## Baseline protégée
 
-- Build 28 Data & Recovery : six stores durables + restore transactionnel + quarantaine + `last-good` ;
-- Build 27 App Shell : `Aujourd’hui / Pratiquer / Progrès` ;
-- curriculum : **40 leçons / 241 éléments** ;
-- Scenario : **36 situations / 108 tours** ;
-- Listening : **0.88 normal / 0.65 lent** ;
-- coût : **0 €** ;
-- gate terrain Build 26.1 réécoute iPhone : toujours séparé et ouvert.
+- Build 28 Data & Recovery ;
+- Build 27 App Shell ;
+- curriculum **40 leçons / 241 éléments** ;
+- Scenario **36 situations / 108 tours** ;
+- Listening **0.88 normal / 0.65 lent** ;
+- coût **0 €** ;
+- gate terrain Build 26.1 réécoute iPhone toujours séparé et ouvert.
 
 Sanctuaires byte-identiques :
 
@@ -23,62 +32,60 @@ Sanctuaires byte-identiques :
 - `assets/LOGO.png` ;
 - `assets/Favicon.png`.
 
-Aucune clé durable n’est renommée.
+Aucune clé durable n’a été renommée.
 
 ## Couche Build 29
 
-Build 29 ajoute une couche de présentation/device séparée :
+```text
+build29-iphone-a11y.css
+build29-iphone-a11y.js
+build29-smoke.js
+.github/workflows/build29-iphone-pwa-a11y-smoke.yml
+```
 
-- `build29-iphone-a11y.css` ;
-- `build29-iphone-a11y.js` ;
-- `build29-smoke.js` ;
-- workflow `build29-iphone-pwa-a11y-smoke.yml`.
-
-`app.js` n’est pas modifié.
+`app.js` n’est pas réécrit.
 
 ## Safe areas / viewport iOS
 
-Le projet possédait déjà `viewport-fit=cover` et quelques usages de `env(safe-area-inset-*)`. Build 29 généralise et certifie le contrat sur la façade Build 27 :
+Build 29 généralise et certifie :
 
-- top safe area ;
-- left/right safe areas ;
-- Home indicator / bottom safe area ;
+- `viewport-fit=cover` ;
+- safe area top/left/right/bottom ;
+- Home indicator ;
 - overlays ;
 - tab bar ;
 - petits et grands viewports ;
-- paysage à faible hauteur.
+- paysage compact.
 
 ## Clavier virtuel / VisualViewport
 
-Build 29 consomme `visualViewport` lorsqu’il existe :
+Lorsque `visualViewport` existe :
 
 - hauteur visible ;
 - offset vertical ;
-- estimation du clavier virtuel ;
+- estimation du clavier ;
 - `scroll-padding-bottom` dynamique ;
-- recentrage du contrôle éditable au focus ;
-- tab bar rendue non-interactive pendant l’ouverture clavier pour éviter un tap accidentel derrière le clavier.
+- recentrage du contrôle éditable ;
+- tab bar non interactive pendant l’ouverture du clavier pour éviter les taps derrière celui-ci.
 
 Aucun état pédagogique ne dépend de cette géométrie.
 
 ## Accessibilité interactionnelle
 
-Sur la façade apprenante :
-
-- cibles tactiles visibles >= **44 × 44 px** sur coarse pointer/mobile ;
-- focus clavier visible via `:focus-visible` ;
-- tab bar annotée avec `aria-current="page"` ;
+- cibles tactiles visibles ≥ **44 × 44 px** sur coarse pointer/mobile ;
+- focus clavier via `:focus-visible` ;
+- `aria-current="page"` ;
 - boutons icône nommés ;
-- progressions exposées comme `role="progressbar"` avec valeur ;
-- feedbacks utiles en `aria-live="polite"` ;
-- `prefers-reduced-motion` conserve le même flux sans dépendre de l’animation ;
-- `prefers-contrast: more` renforce les séparations lorsque demandé ;
-- textes longs autorisés à se replier sans créer d’overflow horizontal ;
-- aucun `maximum-scale=1` / `user-scalable=no` : le zoom utilisateur reste disponible.
+- progressions `role="progressbar"` ;
+- feedbacks utiles `aria-live="polite"` ;
+- `prefers-reduced-motion` ;
+- `prefers-contrast: more` ;
+- textes longs sans overflow horizontal ;
+- zoom utilisateur conservé.
 
 ## PWA / installation
 
-Le manifest devient explicitement stable :
+Manifest canonique :
 
 ```text
 id: ./
@@ -89,44 +96,42 @@ orientation: any
 lang: vi
 ```
 
-L’icône Apple dédiée existante `assets/apple-touch-icon.png` est enfin utilisée par `index.html` au lieu du favicon générique.
-
-Le Service Worker reçoit une nouvelle identité de cache Build 29 et précache la couche Build 29, le manifest et l’Apple Touch Icon.
+L’Apple Touch Icon dédiée est utilisée. Le Service Worker précache le shell, la couche Build 29, le manifest et les assets nécessaires.
 
 ## Offline
 
-Le tribunal Build 29 :
+Le tribunal :
 
 1. ouvre la PWA avec un profil Chrome persistant ;
-2. réouvre une seconde fois pour que le Service Worker contrôle la page ;
+2. réouvre pour laisser le Service Worker contrôler ;
 3. coupe le serveur HTTP ;
-4. relance la même PWA avec le même profil ;
-5. exige que la Home et le smoke Build 29 redémarrent depuis le cache sans écran de boot erreur.
+4. redémarre la PWA avec le même profil ;
+5. exige Home + smoke Build 29 sans boot error.
 
-Ce test ne remplace pas WebKit réel, mais valide le contrat PWA/offline statique.
+Cette vérification a passé sur le runtime production.
 
-## Tribunal mobile
+## Matrice mobile certifiée
 
-Chrome réel vérifie :
-
-- **390 × 844** — cible mobile de référence ;
-- **320 × 568** — petit viewport ;
-- **430 × 932** — grand iPhone logique ;
-- `prefers-reduced-motion` forcé ;
+- **390 × 844** ;
+- **320 × 568** ;
+- **430 × 932** ;
+- reduced-motion forcé ;
 - boot offline après warm install.
 
-Le smoke mesure le contenu réellement visible :
+Contrats :
 
-- cibles trop petites = 0 ;
-- boutons sans nom accessible = 0 ;
-- tabs `aria-current` visibles = exactement 1 ;
-- overflow horizontal = 0 ;
-- manifest PWA valide ;
-- Build 27 Home toujours rendue.
+```text
+cibles trop petites = 0
+boutons sans nom = 0
+aria-current visible = 1
+overflow horizontal = 0
+manifest valide
+Home Build 27 rendue
+```
 
-## Build 28 reste un contrat
+## Recovery reste un gate
 
-Le workflow Build 28 est seulement rendu **version-forward** pour ses assertions de numéro/cache. Ses tests fonctionnels restent inchangés :
+Build 28 continue de tester :
 
 - corrupt write bloquée ;
 - backup/restore ;
@@ -137,28 +142,26 @@ Le workflow Build 28 est seulement rendu **version-forward** pour ses assertions
 - ancien profil ;
 - Home Build 27 mobile.
 
-Build 29 ne diminue donc pas le tribunal Recovery.
+## PR #65 — expérience non mergée
+
+Une mini-PR a testé l’idée d’éviter l’enregistrement Service Worker sur les anciennes URLs `*Smoke`. Elle n’a pas supprimé le flake visuel Build 27 qu’elle visait. Le même Build 29 `main` original a ensuite passé ce vieux contrôle en rerun inchangé.
+
+Conclusion : **#65 fermée sans merge**. La production Build 29 reste `1c01648d…`.
 
 ## Validation terrain encore nécessaire
 
-Chrome ne peut pas certifier les comportements propres à Safari/WebKit :
+Chrome ne certifie pas :
 
 - encoche / Dynamic Island réelle ;
 - Home indicator réel ;
 - clavier iOS réel ;
-- VoiceOver ;
+- VoiceOver réel ;
 - installation « Sur l’écran d’accueil » ;
 - reprise standalone après extinction ;
 - gate Build 26.1 de réécoute vocale.
 
-Ces points doivent être observés sur le vrai iPhone quand ils sont matériels. Ils ne justifient pas de modifier les sanctuaires vocaux sans preuve terrain.
+Ces points restent des observations terrain et ne justifient pas de modifier les sanctuaires vocaux sans preuve.
 
-## Critère de merge
+## Suite
 
-**Ne pas merger** tant que :
-
-- le nouveau tribunal Build 29 n’est pas vert ;
-- Build 28 Recovery n’est pas vert ;
-- Build 27 App Shell n’est pas vert ;
-- les anciens contrats fonctionnels ne sont pas verts ou expliqués comme flake historique puis rerun inchangé ;
-- aucune donnée/voix/branding sanctuarisé n’a bougé.
+Build 29 est fermé. Le candidat suivant est **v1.22.1 — Build 29.1 Speaking Loop Content**, qui réutilise cette base iPhone/PWA pour intégrer l’auto-écoute au contenu des leçons.
