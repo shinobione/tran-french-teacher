@@ -6,6 +6,29 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ---
 
+## [1.19.7] — Build 26.7 — Progress Open-Details Geometry — 2026-08-12
+
+- corrige une nouvelle régression terrain de `Parcours` : ouvrir `Détails d’apprentissage` pouvait écraser la colonne apprenante jusqu’à rendre titres et lignes de leçon presque verticaux ;
+- cause confirmée : la grille imbriquée Build 26.6 gardait un track droit `minmax(440px,1.06fr)` tandis que le learner flow pouvait descendre à zéro ; le contenu intrinsèque de Details pouvait donc protéger la droite et sacrifier la gauche ;
+- conserve intégralement la frontière DOM anti-duplication de Build 26.6 ;
+- sur desktop large, Détails ouvert utilise désormais `minmax(0,1fr) minmax(0,1fr)` ;
+- le dashboard ouvert passe à **2 tuiles par ligne** afin de ne pas imposer une largeur intrinsèque excessive ;
+- entre 861 et 1040 px, Détails passe sous Overview/Curriculum au lieu de compresser deux colonnes ;
+- mobile <=860 px reste inchangé ;
+- ajoute un smoke Chrome dédié qui ouvre réellement Détails et mesure la géométrie rendue ;
+- preuve 1640×900 : composition 920 px, flow **452 px**, Details **452 px**, ligne de leçon min **410 px**, overflow horizontal 0 ;
+- preuve 980×900 : pile verticale, flow **906 px**, ligne de leçon min **864 px**, overflow horizontal 0 ;
+- conserve Build 26.6 anti-prolifération **12 → 12**, 5 étapes curriculum et jamais 40 leçons visibles simultanément ;
+- rend le workflow Build 26.6 version-forward uniquement sur son meta/cache global, sans supprimer ses tests navigateur ;
+- conserve curriculum **40/241**, Scenario **36/108**, Listening **0.88/0.65** ;
+- `voice-ios.js`, `free-voice.js`, logo et favicon restent byte-identiques ;
+- aucune migration learner/Memory/Scenario/Listening ;
+- PR runtime **#54** ; head validé `6b44b212bd1c859be18629e4726d55d3e5da0241` ; **13/13 workflows fonctionnels SUCCESS** sur PR ;
+- commit runtime production `eaa4b9f8688a90de85a3f853dc29e59d0b8ac650` ; **13/13 workflows fonctionnels SUCCESS** sur `main` ;
+- GitHub Pages runtime **#110 SUCCESS**.
+
+---
+
 ## [1.19.6] — Build 26.6 — Progress Dashboard Containment + Humanized Curriculum — 2026-08-12
 
 - corrige une régression terrain active de `Parcours` où `Autres détails` pouvait augmenter continuellement sans interaction jusqu’à plusieurs centaines de cartes ;
@@ -20,13 +43,12 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 - à l8, le parcours complet affiche 8 leçons de l’étape courante ; A1 Core en affiche 15 ; jamais 40 simultanément ;
 - couvre par vrais clics Chrome `Voir tout le parcours` puis `A1 Core` ;
 - rend la recomposition de ces disclosures déterministe dans le même geste utilisateur ;
-- rend les contrats Build 25 / 26.1 / 26.5 version-forward là où leur implémentation propriétaire évolue ;
 - conserve Conversation Exit Build 26.5, Tyffany, mobile compact, curriculum **40/241**, Scenario **36/108**, Listening **0.88/0.65** ;
 - `voice-ios.js`, `free-voice.js`, logo et favicon restent byte-identiques ;
 - aucune migration learner/Memory/Scenario/Listening ;
-- PR runtime **#52** ; head validé `b43eca2cb06c0272e13b1794dfecf26d7abec322` ; **12/12 workflows fonctionnels SUCCESS** sur PR ;
-- commit runtime production `7bb48979f21db0cf1cc94d7a9e03e225f2e1cc7a` ; **12/12 workflows fonctionnels SUCCESS** sur `main` ;
-- GitHub Pages runtime **#108 SUCCESS**.
+- PR runtime **#52** ; commit runtime production `7bb48979f21db0cf1cc94d7a9e03e225f2e1cc7a` ; **12/12 workflows fonctionnels SUCCESS** sur `main` ;
+- GitHub Pages runtime **#108 SUCCESS** ;
+- sa géométrie ouverte desktop est ensuite **supersédée par Build 26.7**, sans remettre en cause containment ni curriculum humanisé.
 
 ---
 
@@ -39,9 +61,7 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 - répare le canyon vertical Progress en séparant visuellement Overview/Curriculum de Details ;
 - conserve single-scroll et mobile 5/40 ;
 - PR #49 ; runtime `2cd29f20faa8db850f92c343074809cc91b42c76` ; **11/11 SUCCESS** ; Pages #106 ;
-- la structure DOM `Details` comme frère direct de la première colonne est **supersédée par Build 26.6** car elle cassait la frontière de propriété des moteurs ; l’intention visuelle 2 colonnes reste conservée.
-
----
+- la structure DOM `Details` comme frère direct de la première colonne est **supersédée par Build 26.6**.
 
 ## [1.19.4] — Build 26.4 — Single-scroll Progress + Tyffany — 2026-08-12
 
