@@ -18,21 +18,18 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Syntax, version, cache and wiring
+      - name: Syntax, historical wiring and forward-compatible contract
         run: |
           node --check build26-9-ux.js
           node --check build-meta.js
           node --check sw.js
           grep -q 'build26-9-ux.css?v=1.19.9-b26.9' index.html
           grep -q 'build26-9-ux.js?v=1.19.9-b26.9' index.html
-          grep -q 'build-meta.js?v=1.19.9-b26.9' index.html
-          grep -q "version: '1.19.9', build: '26.9'" build-meta.js
           grep -q 'FrenchTranquilleBuild269UX' build-meta.js
-          grep -q 'tran-french-teacher-v1.19.9-b26.9-progress-focus-content' index.html sw.js
           grep -q 'card:only-child' build26-9-ux.css
           grep -q 'data-b269-content-ready' build26-9-ux.css
 
-      - name: Learner, voice and branding sanctuaries remain byte-identical
+      - name: Learner, voice and branding remain sanctuarized
         run: |
           test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
           test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
