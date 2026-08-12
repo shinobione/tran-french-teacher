@@ -1,0 +1,148 @@
+name: Build 26.6 Progress dashboard containment smoke
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  progress-containment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax, version, cache and wiring
+        run: |
+          node --check progression-ux.js
+          node --check progress-details-dashboard.js
+          node --check build26-6-ux.js
+          node --check build-meta.js
+          node --check sw.js
+          grep -q 'build26-6-ux.css?v=1.19.6-b26.6' index.html
+          grep -q 'build26-6-ux.js?v=1.19.6-b26.6' index.html
+          grep -q 'progression-ux.js?v=1.19.6-b26.6' index.html
+          grep -q 'progress-details-dashboard.js?v=1.19.6-b26.6' index.html
+          grep -q 'build-meta.js?v=1.19.6-b26.6' index.html
+          grep -q "version: '1.19.6', build: '26.6'" build-meta.js
+          grep -q 'FrenchTranquilleBuild266UX' build-meta.js
+          grep -q 'tran-french-teacher-v1.19.6-b26.6-progress-dashboard-containment' index.html sw.js
+          grep -q 'build26-6-ux.css' sw.js
+          grep -q 'build26-6-ux.js' sw.js
+          grep -q "progressComposition = 'contained-independent-columns'" progression-ux.js
+          grep -q 'progressDetailFamily' progress-details-dashboard.js
+
+      - name: Learner, voice and branding sanctuaries remain byte-identical
+        run: |
+          test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
+          test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+          grep -q "francais-avec-luc:learner:v1" app.js
+          grep -q 'normal: 0.88' build-meta.js
+          grep -q 'slow: 0.65' build-meta.js
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-b266-http.log 2>&1 &
+          echo $! >/tmp/ft-b266-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome desktop — dashboard stays bounded and curriculum uses stages
+        run: |
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-b266-desktop-profile-$attempt"
+            file="/tmp/b266-desktop-$attempt.html"
+            rm -rf "$profile" "$file"
+            if ! timeout --signal=TERM --kill-after=5s 48s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=1280,900 \
+              --virtual-time-budget=36000 --dump-dom \
+              'http://127.0.0.1:4173/?uxSmoke=lesson8&debug=fr&b266Smoke=progress' >"$file"; then
+              echo "Build 26.6 desktop attempt $attempt timed out or exited non-zero"
+              continue
+            fi
+            if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then continue; fi
+            if grep -q 'app-shell screen-progress' "$file" \
+              && grep -q 'data-b266-details-contained="1"' "$file" \
+              && grep -q 'data-b266-left-flow="1"' "$file" \
+              && grep -q 'data-b266-overview-outside-details="1"' "$file" \
+              && grep -q 'data-b266-curriculum-outside-details="1"' "$file" \
+              && grep -q 'data-b266-dashboard-stable="1"' "$file" \
+              && grep -q 'data-b266-dashboard-bounded="1"' "$file" \
+              && grep -q 'data-b266-engine-cards-unique="1"' "$file" \
+              && grep -q 'data-b266-dashboard-forbidden-final="0"' "$file" \
+              && grep -q 'data-b266-curriculum-stage-mode="1"' "$file" \
+              && grep -q 'data-b266-curriculum-no-wall="1"' "$file" \
+              && grep -q 'data-b266-curriculum-a1-core-rows="15"' "$file" \
+              && grep -q 'data-b266-curriculum-all-accessible="1"' "$file" \
+              && grep -q 'data-b266-dashboard-stable-after-curriculum="1"' "$file" \
+              && grep -q 'data-progress-current-lesson="l8"' "$file" \
+              && grep -q 'data-progress-completed="7"' "$file" \
+              && grep -q 'data-progress-known="40"' "$file" \
+              && grep -q 'data-progress-total-rows="40"' "$file"; then
+              passed=1
+              break
+            fi
+            echo "Build 26.6 desktop attempt $attempt missing markers"
+            grep -o 'data-b266-[^ >]*' "$file" | head -50 || true
+            grep -o 'data-progress-[^ >]*' "$file" | head -30 || true
+          done
+          if [ "$passed" -ne 1 ]; then
+            echo 'Build 26.6 desktop containment/humanization smoke failed after 3 bounded attempts'
+            exit 1
+          fi
+
+      - name: Chrome mobile — compact order and containment survive stage navigation
+        run: |
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-b266-mobile-profile-$attempt"
+            file="/tmp/b266-mobile-$attempt.html"
+            rm -rf "$profile" "$file"
+            if ! timeout --signal=TERM --kill-after=5s 48s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=390,844 \
+              --virtual-time-budget=36000 --dump-dom \
+              'http://127.0.0.1:4173/?uxSmoke=lesson8&b266Smoke=progress-mobile' >"$file"; then
+              echo "Build 26.6 mobile attempt $attempt timed out or exited non-zero"
+              continue
+            fi
+            if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then continue; fi
+            if grep -q 'app-shell screen-progress' "$file" \
+              && grep -q 'data-b266-details-contained="1"' "$file" \
+              && grep -q 'data-b266-left-flow="1"' "$file" \
+              && grep -q 'data-b266-dashboard-stable="1"' "$file" \
+              && grep -q 'data-b266-dashboard-bounded="1"' "$file" \
+              && grep -q 'data-b266-engine-cards-unique="1"' "$file" \
+              && grep -q 'data-b266-dashboard-forbidden-final="0"' "$file" \
+              && grep -q 'data-b266-curriculum-stage-mode="1"' "$file" \
+              && grep -q 'data-b266-curriculum-no-wall="1"' "$file" \
+              && grep -q 'data-b266-curriculum-a1-core-rows="15"' "$file" \
+              && grep -q 'data-b266-curriculum-all-accessible="1"' "$file" \
+              && grep -q 'data-b266-dashboard-stable-after-curriculum="1"' "$file" \
+              && grep -q 'data-b266-mobile-details-closed="1"' "$file" \
+              && grep -q 'data-progress-total-rows="40"' "$file"; then
+              passed=1
+              break
+            fi
+            echo "Build 26.6 mobile attempt $attempt missing markers"
+            grep -o 'data-b266-[^ >]*' "$file" | head -50 || true
+          done
+          if [ "$passed" -ne 1 ]; then
+            echo 'Build 26.6 mobile containment/humanization smoke failed after 3 bounded attempts'
+            exit 1
+          fi
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-b266-server.pid ]; then kill "$(cat /tmp/ft-b266-server.pid)" || true; fi
