@@ -2,7 +2,7 @@ name: Field navigation V3 — visible ownership
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, agent/fix-global-settings-navigation]
 
 permissions:
   contents: read
@@ -12,6 +12,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: P0 static contracts
+        run: |
+          node --check field-navigation-runtime.js
+          node --check stage2-boot.js
+          node --check theme-controller.js
+          grep -q 'ensurePracticeSettings' field-navigation-runtime.js
+          grep -q '2.3.4-b34.4' stage2-boot.js
+          grep -q 'safe-area-inset-left' premium-nav-geometry-hotfix.css
+          grep -q 'safe-area-inset-right' premium-nav-geometry-hotfix.css
+          grep -q 'safe-area-inset-bottom' premium-nav-geometry-hotfix.css
+          grep -q 'translate3d(-50%,0,0)' premium-nav-geometry-hotfix.css
+          grep -q 'z-index:10020' premium-nav-geometry-hotfix.css
+          grep -q '2.3.4-p0nav1' premium-theme-polish.css
+          grep -q '2.3.4-p0nav1' theme-controller.js
+      - name: Sanctuaries remain exact
+        run: |
+          test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+          test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
+          test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
       - name: Start static server
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-nav-v3-http.log 2>&1 &
@@ -24,6 +45,12 @@ jobs:
             --virtual-time-budget=36000 --dump-dom \
             'http://127.0.0.1:4173/field-navigation-v2-smoke.html' >/tmp/field-nav-v3.html
           grep -q 'data-field-navigation-v2-smoke="ok"' /tmp/field-nav-v3.html || { cat /tmp/field-nav-v3.html; exit 1; }
+      - name: Chrome — P0 global path and geometry tribunal
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu \
+            --virtual-time-budget=34000 --dump-dom \
+            'http://127.0.0.1:4173/p0-navigation-tribunal.html' >/tmp/p0-navigation-tribunal.html
+          grep -q 'data-p0-navigation-tribunal="ok"' /tmp/p0-navigation-tribunal.html || { cat /tmp/p0-navigation-tribunal.html; exit 1; }
       - name: Stop static server
         if: always()
         run: |
