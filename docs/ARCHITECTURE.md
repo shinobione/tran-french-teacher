@@ -6,39 +6,31 @@
 iPhone / Safari / PWA
         ↓
 Build 29 — iPhone / PWA / Accessibility
-safe areas / touch / a11y / VisualViewport / offline
         ↓
 Build 28 — Recovery Engine
-validation / last-good / snapshots / rollback
         ↓
-Legacy Curriculum
-40 leçons / 241 éléments historiques
+Legacy Curriculum 40 / 241
         ↓
-Build 32 — Stage 4 successeur
-+12 leçons / +72 éléments
-= 52 leçons / 313 éléments
+Build 32 — Stage 4
+52 leçons / 313 items
         ↓
 Memory / Error / Mastery
         ↓
-Scenario + Real Life IV / Listening II
-44 situations / 132 tours · Listening 0.88 / 0.65
+Scenario 44 / 132 + Listening 0.88 / 0.65
         ↓
 Build 27 — App Shell
 Aujourd’hui / Pratiquer / Progrès
         ↓
 Build 30 — Runtime Contracts + Runtime Bridge
-frontière stable / ownership / routes
         ↓
 Build 29.2 — Speaking Loop
-Tyffany → prise locale → Ma voix
-52/52 · max 2 / leçon
+52/52 · max 2
         ↓
 Post-Build32 Field Reliability
-Listening pre-close + MediaRecorder audio-only compat
+Listening pre-close + audio-only MediaRecorder compat
         ↓
-Build 34 — Foundations Pilot
-F01–F04 · genre / articles / singulier-pluriel
-non-persistent / contextuel
+Build 34 — Foundations Pilot F01–F04
+non-persistent
         ↓
 Learner Intelligence 2.2
 7 bandes / 52 / 313
@@ -48,7 +40,7 @@ Produit courant V2.3.0 / Build 34
 
 La PWA reste statique sur GitHub Pages, sans backend obligatoire ni API payante.
 
-# Vérités séparées
+## Vérités séparées
 
 ```text
 Produit courant          2.3.0 / Build 34
@@ -59,18 +51,18 @@ Curriculum courant       52 / 313
 Scenario courant         44 / 132
 Listening                0.88 / 0.65
 Speaking Loop            52/52 · max 2
-Fondations runtime       F01–F04 pilot, non-persistent
+Fondations               F01–F04 pilot
 Stores durables          6
 Coût récurrent           0 €
 ```
 
-La baseline V2 ne change pas quand le produit V2.x grandit. `release-v2.json`, Runtime Contracts et Runtime Bridge restent des témoins historiques 2.0.0 / Build30.
+Une baseline gelée décrit un instant certifié. Le produit courant peut grandir sans falsifier cette photographie.
 
 ---
 
-# Curriculum — cœur historique + Stage 4
+# Curriculum — historique + successeur
 
-Le cœur historique reste :
+Le cœur historique :
 
 ```text
 app.js
@@ -85,42 +77,50 @@ Stage 4 (`curriculum-stage4.js`) ajoute :
 41–46  Autonomie A1
 47–52  Interaction A1
 → +12 leçons / +72 items
-→ produit courant 52 / 313
+→ 52 / 313
 ```
 
 Les 40 premiers lesson IDs et 241 premiers item IDs restent dans le même ordre.
 
-Build 32 ajoute aussi :
+Build32 ajoute aussi :
 
 ```text
-real-life-data-4.js      → Scenario 44 / 132
-listening-data-2.js      → 4 contrastes + 8 mini-dialogues
-learner-intelligence-v2.js → 7 bandes / 52 / 313
-build32-shell-extension.js → étapes 41–52
+real-life-data-4.js          → Pack IV
+listening-data-2.js          → Listening II
+learner-intelligence-v2.js   → 7 bandes
+build32-shell-extension.js   → étapes 41–52
 ```
 
-Aucun de ces modules n’ajoute de store durable.
+Aucun nouveau store durable.
+
+## Témoin historique Real Life II
+
+La CI protège explicitement :
+
+```text
+v1.17.0 — Build 24 — Real Life French II
+real-life-data-2.js
+28 situations / 84 tours avant Pack III
+```
+
+Ce témoin ne décrit pas le Scenario courant 44/132 ; il garantit que l’histoire du produit reste rejouable.
 
 ---
 
-# Build 33 — Audit des Fondations
+# Build 33 — Foundations Audit
 
-Document canonique : `docs/BUILD-33-FOUNDATIONS-AUDIT.md`.
+Document : `docs/BUILD-33-FOUNDATIONS-AUDIT.md`.
 
-L’audit sépare **présence d’une forme** et **enseignement transférable de son mécanisme**.
-
-Classification :
+Classification des 313 items :
 
 ```text
-1–15   88 items   formes surtout implicites
+1–15   88 items   structures surtout implicites
 16–25  60 items   règles contextuelles
 26–40  93 items   structures A1 contextuelles
 41–52  72 items   structures Build32
 ```
 
-Les leçons 16+ enseignent déjà beaucoup de conjugaison utile : `être`, `avoir`, `vouloir/pouvoir`, sujets, futur proche, passé récent, passé composé, possessifs, `devoir`, `on`.
-
-Le premier déficit structurel prioritaire se trouve plus tôt : **genre + articles + nombre**.
+Conclusion : la conjugaison utile existe déjà largement à partir de l16. Le premier déficit transférable prioritaire est **genre + articles + nombre**.
 
 ---
 
@@ -128,7 +128,7 @@ Le premier déficit structurel prioritaire se trouve plus tôt : **genre + artic
 
 Module : `foundations-pilot.js`.
 
-Exposition :
+API :
 
 ```text
 window.FrenchTranquilleFoundationsPilot
@@ -138,7 +138,7 @@ persistent false
 concepts F01,F02,F03,F04
 ```
 
-## Scope
+Scope :
 
 ```text
 F01  genre du nom
@@ -147,40 +147,29 @@ F03  le / la / l’ / les
 F04  singulier / pluriel
 ```
 
-Le module est chargé par `build32-loader.js` **uniquement dans le runtime courant**. Les routes historiques `b32Audit`, `b31Audit`, `b30Audit` et `v2Audit` ne doivent pas recevoir la couche Fondations.
+Le module est chargé par `build32-loader.js` seulement dans le runtime courant. Les routes historiques `b32Audit`, `b31Audit`, `b30Audit`, `v2Audit` restent hors pilote.
 
-## UX
-
-Dans la zone leçons 8–13 :
+UX :
 
 ```text
-🧩 Nền tảng nhỏ / Petite base utile
-→ overlay focus
-→ règle courte surtout VI
-→ exemples existants
+leçons 8–13
+→ 🧩 Nền tảng nhỏ / Petite base utile
+→ explication VI-heavy
+→ la gare / un billet / une table / les toilettes
 → 4 mini-checks
+→ la pharmacie → les pharmacies
 → retour à la leçon
 ```
 
-Exemples actuels :
-
-```text
-la gare
-un billet
-une table
-les toilettes
-la pharmacie → les pharmacies
-```
-
-Le pilote ne crée pas d’onglet principal et ne renumérote aucune leçon.
+Aucun onglet Grammaire, aucune leçon 53+, aucune migration.
 
 ## Data ownership
 
-Fondations Pilot ne possède **aucun store**.
+Fondations Pilot ne possède **aucun store** et ne doit contenir aucun `localStorage.setItem`.
 
-Il ne doit contenir aucun `localStorage.setItem`. Ses réponses existent uniquement dans l’UI courante. Une bonne réponse n’est pas persistée comme « maîtrise ».
+Une réponse correcte reste éphémère. Elle ne devient pas automatiquement une preuve de maîtrise.
 
-Memory Evidence v2 décidera plus tard comment représenter :
+Memory Evidence v2 devra plus tard distinguer :
 
 ```text
 phrase memorized
@@ -189,62 +178,48 @@ construction
 transfer
 ```
 
-après validation terrain du pilote.
-
 ---
 
 # Field Reliability post-Build32
 
-Deux shims additifs ont été livrés via PR #82 sans modifier les sanctuaires.
+Deux shims additifs ont été livrés via PR #82.
 
 ## `navigation-field-hotfix.js`
 
-### Problème
+Listening possède un overlay `body` et un état `listening-open`. Le bug terrain venait du routage du shell sous cet overlay sans fermeture préalable.
 
-Listening est un overlay attaché au `body` et possède un état `listening-open`. La bottom nav pouvait changer la route du shell sous cet overlay sans le fermer.
-
-### Contrat
-
-Sur geste vers `.ux-bottom-nav [data-ux-nav]` :
+Contrat :
 
 ```text
-si Listening est ouvert
-→ FrenchTranquilleListening.close()
-→ puis handlers historiques de navigation
+geste bottom-nav
+→ si Listening ouvert : FrenchTranquilleListening.close()
+→ routage historique ensuite
 ```
 
-Le shim intervient en capture sur pointer/mouse/clavier afin de fermer l’overlay **avant** le routage existant.
-
-Il ne possède aucun store et ne change aucune route canonique.
+Le shim intervient en capture pointer/mouse/clavier. Aucun store, aucune route canonique modifiée.
 
 ## `mediarecorder-ios-compat.js`
 
-### Problème
+Speaking Loop / Voice Replay n’affichent `Ma voix` qu’après un Blob audio non vide.
 
-Speaking Loop et Voice Replay créent le bouton `Ma voix` seulement après réception de données audio non vides et création d’un Blob URL.
-
-Le code historique du Speaking Loop appelait :
+Le Speaking Loop appelait historiquement :
 
 ```text
 MediaRecorder.start(120)
 ```
 
-Le retour terrain a montré qu’une prise pouvait atteindre l’état `Dừng ghi âm` puis ne jamais produire le playback attendu.
-
-### Contrat
-
-Le shim enveloppe `MediaRecorder.prototype.start` :
+Le shim applique :
 
 ```text
-si recorder audio-only + timeslice positif
+audio-only + timeslice positif
 → native start() sans timeslice
 sinon
 → appel original inchangé
 ```
 
-Objectif : laisser Safari/iOS finaliser une courte prise audio en un chunk complet au `stop()`.
+Objectif : laisser Safari/iOS finaliser une courte prise au `stop()`.
 
-Le shim ne touche pas :
+Il ne touche pas :
 
 ```text
 SpeechRecognition
@@ -255,11 +230,7 @@ Memory
 Recovery
 ```
 
-La prise reste temporaire et locale.
-
-### Field gates
-
-Le code livré ne suffit pas à clore le comportement iPhone :
+Field gates encore réels :
 
 ```text
 Listening → Home en un tap
@@ -267,45 +238,38 @@ Bài 11/12 → record → stop → Ma voix → écoute
 réécoute → reconnaissance suivante normale
 ```
 
-restent à confirmer sur le vrai appareil.
-
 ---
 
 # Speaking Loop / Voice
 
-`build-meta.js` installe `speaking-loop-content.js`.
-
-Contrat pédagogique :
+Contrat :
 
 ```text
-Tyffany parle
-→ Trân peut enregistrer une prise locale
+Tyffany
+→ prise locale volontaire
 → Blob URL local
 → Ma voix
-→ comparaison volontaire
+→ comparaison
 ```
 
 - 52/52 leçons ;
-- max 2 moments / leçon ;
-- audio non uploadé et non sauvegardé ;
+- max 2 moments ;
+- audio temporaire, non uploadé, non sauvegardé ;
 - pas de score de prononciation ;
-- compréhension ≠ production ;
-- cible orale variée/contextuelle.
+- compréhension ≠ production.
 
-Sanctuaires voix :
+Sanctuaires :
 
 ```text
 voice-ios.js  38e97aa3ef62dd6dcda224901b435f0973618679
 free-voice.js b4c19b1936c788ee017eac9ba14e5a62c159e8d5
 ```
 
-Les noms internes `LucieVoice`, `luc-*`, `lucie-*` restent des compatibilités techniques malgré le nom visible Tyffany.
+Les noms techniques `LucieVoice`, `luc-*`, `lucie-*` restent des compatibilités internes malgré Tyffany visible.
 
 ---
 
 # Learner Intelligence 2.2
-
-Module : `learner-intelligence-v2.js`.
 
 Bandes :
 
@@ -319,13 +283,11 @@ Bandes :
 47–52  Interaction A1
 ```
 
-Le modèle observe progression + Learning Memory + Error Intelligence. Il sépare niveau interne et confiance.
+Le modèle observe progression + Learning Memory + Error Intelligence, sépare niveau interne et confiance et reste read-only sur les stores.
 
-`A1+` est une étiquette interne seulement.
+`A1+` reste interne. `voice-*` = reconnaissance, jamais prononciation.
 
-`voice-*` / non-reconnaissance reste `recognition`, jamais prononciation.
-
-Build34 ne modifie pas ce modèle et ne lui injecte encore aucune preuve conceptuelle durable.
+Build34 ne lui injecte aucune preuve grammaticale durable.
 
 ---
 
@@ -333,7 +295,7 @@ Build34 ne modifie pas ce modèle et ne lui injecte encore aucune preuve concept
 
 Version : **2.0.0 / Build30**.
 
-Stores canoniques :
+Stores :
 
 ```text
 learner     francais-avec-luc:learner:v1
@@ -344,7 +306,7 @@ listening   french-tranquille:listening:v1
 milestones  french-tranquille:milestones:v1
 ```
 
-Snapshots Recovery :
+Recovery :
 
 ```text
 french-tranquille:recovery:last-good:v1
@@ -368,7 +330,7 @@ Ownership :
 ```text
 legacyCore     → curriculum historique
 content        → Stage 4 / Real Life / Listening additions
-foundations    → pilote ephemeral F01–F04, aucun store
+foundations    → F01–F04 pilot éphémère, aucun store
 recovery       → Recovery
 voice          → LucieVoice / FreeVoice / VoiceReplay / Speaking Loop
 learning       → Memory / Error / Mastery / DailyCoach / Language / Learner Intelligence
@@ -379,9 +341,9 @@ architecture   → Runtime Contracts / Runtime Bridge
 
 ---
 
-# Build 35+ — prochaine frontière
+# Build 35+ — frontière suivante
 
-Build 35 Memory Evidence v2 doit pouvoir distinguer :
+Memory Evidence v2 devra distinguer :
 
 ```text
 retrieval
@@ -397,14 +359,12 @@ repetition
 recovery
 ```
 
-mais ne possède encore aucun droit d’écrire un nouveau schéma.
-
-Avant adoption :
+Aucun nouveau schéma durable avant :
 
 ```text
 pre-migration snapshot
 → validation
-→ transform déterministe
+→ transformation déterministe
 → write transactionnel
 → reread
 → compare
@@ -415,11 +375,11 @@ pre-migration snapshot
 → vrais navigateurs
 ```
 
-Build36 est l’adoption candidate conditionnelle. Build37 industrialise les Fondations seulement après retour réel F01–F04. Build38 ajoute transfert, Build39 Learner Intelligence 3, Build40 audit A1 avant A2.
+Build36 = adoption candidate conditionnelle. Build37 = Foundations Core après retour F01–F04. Build38 = Transfer. Build39 = Learner Intelligence 3. Build40 = audit A1 avant A2.
 
 ---
 
-# Baselines / certification
+# Certification / baselines
 
 ```text
 V2 Freeze      2.0.0 / Build30 / 40 / 241
@@ -432,7 +392,7 @@ Speaking       52/52 · max 2
 Stores         6
 ```
 
-Field hotfix runtime : `93f513f719f176c9c059eee7458e31026e602e7f`, Pages #139.
+Field hotfix : `93f513f719f176c9c059eee7458e31026e602e7f`, Pages #139.
 
 Build34 runtime : `259e07c9ed208fe0a7e91998827406b4fdc0bc33`, **26/26 SUCCESS**, Pages #140.
 
