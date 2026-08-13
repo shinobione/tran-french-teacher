@@ -60,7 +60,7 @@
 54. **Pas de score de prononciation si le produit ne possède pas une vraie mesure phonétique.**
 55. **Le modèle vocal et l’enregistrement local restent séparés de la progression durable.**
 56. **Une cible de compréhension ne devient pas automatiquement une cible de production orale.**
-57. **La répétition orale doit être espacée et variée ; pas de même cible servie en boucle quand une alternative cohérente existe.**
+57. **La répétition orale doit être espacée et variée.**
 58. **Un acquis dû/fragile n’est réinjecté dans une leçon que s’il reste pertinent pour son contexte.**
 59. **Une fonction déjà présente dans l’exercice ne doit pas être dupliquée dans une couche pédagogique ajoutée.**
 60. **Un libellé d’action doit dire ce que l’action va réellement faire.**
@@ -69,8 +69,8 @@
 63. **Le cœur historique reste témoin de référence tant que son remplacement n’a pas une preuve comparative navigateur.**
 64. **Les routes principales possèdent une façade stable indépendante des détails DOM historiques.**
 65. **Un hardening d’architecture ne doit pas modifier les données learner pour prouver qu’il fonctionne.**
-66. **Une release majeure peut être un freeze : elle n’a pas besoin d’ajouter une feature pour être utile.**
-67. **Une baseline de release doit exister sous forme de contrat machine-readable et sous forme documentaire.**
+66. **Une release majeure peut être un freeze.**
+67. **Une baseline de release doit exister sous forme machine-readable et documentaire.**
 68. **Une release ne passe pas si son propre tribunal peut rester bloqué indéfiniment.**
 69. **Les tests Chrome critiques sont bornés, isolés et gardent leurs assertions fonctionnelles.**
 70. **Après un freeze, aucune V2.x/V3 ne démarre sans nouveau problème utilisateur ou roadmap explicite.**
@@ -79,101 +79,115 @@
 73. **Un modèle apprenant peut lire plusieurs stores, mais n’en devient pas propriétaire par commodité.**
 74. **Une extension de curriculum répond à des capacités manquantes, pas à un objectif arbitraire de nombre de leçons.**
 75. **Toute Memory v2 qui change le schéma durable passe par Recovery, migration transactionnelle et ancien-utilisateur avant adoption.**
+76. **Une baseline gelée et un produit successeur sont deux faits distincts : faire évoluer le second ne réécrit pas la première.**
+77. **Une extension de contenu conserve l’ordre et les IDs historiques avant d’ajouter de nouveaux éléments.**
+78. **Un nouvel acquis important doit être réutilisable en pratique réelle, écoute ou rappel ; une carte isolée n’est pas une progression.**
+79. **Une migration de mémoire n’est pas un refactor de structure : elle exige snapshot, validation, rollback, compat backups et preuve ancien-utilisateur.**
 
 ---
 
-# ✅ V2.1.0 — Build 31 · Learner Intelligence Core — PROD / CLOS
+# ✅ V2.2.0 — Build 32 · Practical A1 Expansion — PROD / CLOS
 
-Objectif : **unifier le cerveau apprenant avant d’étendre le curriculum**.
+Objectif atteint : **étendre ce que Trân sait réellement faire en français tout en conservant les preuves historiques et les données existantes**.
 
-## Livré
+## Audit + curriculum
 
-- [x] modèle read-only sur progression + Learning Memory + Error Intelligence ;
-- [x] cinq bandes cohérentes couvrant exactement **40 leçons / 241 éléments** ;
-- [x] indice interne + confiance séparée ;
-- [x] estimation interne `A0 / A0+ / Pré-A1 / A1- / A1` ;
-- [x] recommandation unique : review / lesson / practice / maintain ;
-- [x] carte compacte dans **Progrès**, détails repliés par défaut ;
-- [x] aucun nouvel onglet ;
-- [x] aucun nouveau store, aucune migration, aucune écriture durable Build31 ;
-- [x] `voice-unrecognized` reste un signal **recognition**, jamais une note phonétique ;
-- [x] version produit **v2.1.0 • Build 31** ;
-- [x] Architecture Runtime toujours gelée **2.0.0 • Build 30** ;
-- [x] `release-v2.json` reste la baseline gelée 2.0.0 / 30 ;
-- [x] PWA précache Build31 additif, identité de cache validée inchangée.
+- [x] audit des capacités 1–40 avant ajout ;
+- [x] baseline historique **40 leçons / 241 éléments** rejouable ;
+- [x] Stage 4 ajouté à la suite : **12 leçons / 72 éléments** ;
+- [x] produit courant : **52 leçons / 313 éléments** ;
+- [x] 313 IDs uniques ;
+- [x] ordre des 40 premières leçons et 241 premiers acquis inchangé ;
+- [x] nouvelle étape **Autonomie A1 — 41–46** ;
+- [x] nouvelle étape **Interaction A1 — 47–52**.
+
+Capacités ajoutées : clarification/reformulation, quantités, comparaison/choix, invitations/refus, rendez-vous médical, pharmacie, travail/consignes, panne/logement, perturbations transport, récit ordonné, avis simple et `on` oral.
+
+## Réutilisation
+
+- [x] Real Life Pack IV : **8 situations / 24 tours** ;
+- [x] Scenario courant : **44 / 132** ;
+- [x] zéro ID de preuve invalide dans Pack IV ;
+- [x] Listening II : **4 contrastes + 8 mini-dialogues** ;
+- [x] zéro ID invalide Listening II ;
+- [x] Speaking Loop étendu dynamiquement à **52/52**, toujours max 2 moments / leçon ;
+- [x] vitesses Listening finales **0.88 / 0.65** inchangées.
+
+## Learner Intelligence 2.2
+
+- [x] **7 bandes / 52 leçons / 313 éléments** ;
+- [x] Autonomie A1 et Interaction A1 intégrées au raisonnement ;
+- [x] `A1+` autorisé uniquement comme étiquette adaptative interne ;
+- [x] niveau et confiance toujours séparés ;
+- [x] `voice-*` reste classé `recognition`, jamais score phonétique ;
+- [x] modèle read-only vis-à-vis des stores durables.
+
+## Compatibilité / données
+
+- [x] aucun nouveau store ;
+- [x] aucune migration ;
+- [x] ancien profil exact : **7 terminées / l8=4 / 40 acquis → prochaine l8** ;
+- [x] profil ayant terminé l1–l40 → **prochaine l41** ;
+- [x] six stores byte-identiques pendant les audits ;
+- [x] Build31 rejouable en **2.1 / 31 / 40–241 / 5 bandes** ;
+- [x] `release-v2.json` reste **2.0.0 / Architecture Build30 / 40–241** ;
+- [x] tribunal V2 exige que le produit courant soit un superset compatible ;
+- [x] sanctuaires voix/core/branding exacts.
 
 ## Certification
 
-- [x] PR runtime **#77**, head `eed097ca3d261f2f4dd60db930a11670511f33a1` : **24/24 fonctionnels SUCCESS** ;
-- [x] runtime `main` `e2b2c6293f35495fa8bbffd2e6b684fba897df88` : **25/25 SUCCESS Pages comprise** ;
-- [x] GitHub Pages **#135 SUCCESS** sur ce SHA ;
-- [x] clean learner → recommandation **leçon 1** ;
-- [x] ancien profil → **7 terminées / l8=4 / 40 acquis** et recommandation **leçon 8** ;
-- [x] stores durables byte-identiques avant/après ;
-- [x] Chrome desktop + mobile 390×844 ;
-- [x] V2 Freeze Compatibility et Build30 Architecture verts ;
-- [x] voix/iPhone sanctuarisés et inchangés.
+- [x] PR runtime **#79**, head `b64539e8f463bde8cabc05cd606f3132b01e2da8` : **25/25 fonctionnels SUCCESS** ;
+- [x] runtime `main` **`269cb0b476ea131cfbe086a87bcc4364ec39c342`** : **26/26 SUCCESS, Pages comprise** ;
+- [x] GitHub Pages **#137 SUCCESS** sur ce SHA exact ;
+- [x] Chrome desktop : 52/313, 7 étapes, 6 leçons Autonomie + 6 Interaction ;
+- [x] Chrome mobile 390×844 : ancien profil intact, zéro overflow horizontal ;
+- [x] V2 Freeze Compatibility, Build31, Build30, Recovery, iPhone/PWA, Speaking et anciens parcours tous verts.
+
+**Definition of Done Build 32 : atteinte.**
 
 ---
 
-# ▶️ V2.2.0 — Build 32 · Content Map & Practical A1 Expansion — NEXT
+# 🧠 Build 33 — Memory Evidence v2 / Migration Readiness — PLANNED
 
-Objectif : **étendre ce que Trân sait réellement faire en français**, pas simplement augmenter le nombre de cartes.
+Objectif : **concevoir une mémoire plus riche sans modifier le stockage durable tant qu’une migration réversible n’est pas prouvée.**
 
-## 32.1 — Audit de capacités 1–40
+Build 33 est d’abord un chantier de modèle + migration readiness, pas une excuse pour créer un septième store pendant la nuit.
 
-- [ ] cartographier chaque leçon existante par intention communicative : demander, refuser, expliquer, clarifier, raconter, comparer, résoudre un problème, etc. ;
-- [ ] identifier les trous A1 pratiques après la leçon 40 ;
-- [ ] détecter les doublons de vocabulaire ou structures avant d’ajouter du contenu ;
-- [ ] conserver le vietnamien comme soutien adaptatif, pas comme béquille fixe ;
-- [ ] lister les capacités qui ont besoin de Scenario/Listening plutôt que d’une leçon isolée.
+## 33.1 — Modèle de preuves
 
-## 32.2 — Leçons 41+
+- [ ] définir les dimensions utiles : `retrieval`, `listening`, `scenario`, `text`, `recognition`, assistance, récence, répétition et récupération ;
+- [ ] distinguer exposition, réussite assistée, rappel autonome et réutilisation contextuelle ;
+- [ ] définir comment la confiance Learner Intelligence utilise ces preuves sans surpondérer un seul canal ;
+- [ ] conserver la neutralité voix : reconnaissance ≠ phonétique.
 
-Candidats prioritaires à valider par l’audit :
+## 33.2 — Schéma candidat
 
-- [ ] expliquer un problème simple et demander de l’aide ;
-- [ ] prendre / déplacer / annuler un rendez-vous ;
-- [ ] logement : panne, voisinage, propriétaire, livraison ;
-- [ ] santé quotidienne : symptômes simples, pharmacie, rendez-vous ;
-- [ ] transport : retard, correspondance, billet, direction ;
-- [ ] travail quotidien : horaires, consignes, incompréhension, demande de répétition ;
-- [ ] raconter brièvement hier / un événement récent ;
-- [ ] parler d’un projet proche et d’une préférence ;
-- [ ] gérer prix, quantité, comparaison et choix avec plus d’autonomie ;
-- [ ] conversation sociale : inviter, accepter/refuser poliment, proposer une alternative.
+- [ ] documenter le schéma Memory Evidence v2 ;
+- [ ] décider objectivement entre migration in-place et nouveau store ;
+- [ ] définir bornes d’historique / taille locale ;
+- [ ] définir compat lecture avec l’ancien schéma ;
+- [ ] vérifier backup V1/V2 et exports existants.
 
-Critère : chaque nouvelle leçon doit apporter **une capacité de communication identifiable** et réutilisable dans au moins un autre moteur.
+## 33.3 — Recovery / migration readiness
 
-## 32.3 — Réutilisation
+Avant toute écriture du nouveau schéma :
 
-- [ ] nouveaux items branchés sur Learning Memory existante sans migration ;
-- [ ] nouveaux items compatibles Learner Intelligence ;
-- [ ] Scenario/Listening enrichis seulement si la capacité gagne réellement à être réutilisée en contexte ;
-- [ ] Speaking Loop reste max 2 moments / leçon ;
-- [ ] aucun changement du pipeline exact-first-attempt iPhone.
+1. [ ] snapshot `pre-migration` ;
+2. [ ] validation complète de la source ;
+3. [ ] transformation déterministe ;
+4. [ ] écriture transactionnelle ;
+5. [ ] relecture/vérification ;
+6. [ ] rollback intégral si un invariant échoue ;
+7. [ ] quarantaine des données invalides ;
+8. [ ] ancien-utilisateur `l8=4` inchangé ;
+9. [ ] vieux backups ne détruisent aucune preuve moderne ;
+10. [ ] comparaison avant/après sur vrais navigateurs.
 
-## Definition of Done Build 32
+## Definition of Done Build 33
 
-> **Le curriculum couvre davantage de situations A1 utiles, chaque ajout a une raison communicative, et l’ancien profil reste intact.**
+> **Le nouveau modèle de preuve et sa migration sont spécifiés, simulables et réversibles ; aucun nouveau schéma durable n’est adopté tant que ce contrat n’est pas démontré.**
 
----
-
-# ⏭️ V2.3.x — Memory Evidence v2 — APRÈS CONTENT MAP
-
-Pas de migration précipitée.
-
-Objectif envisagé : conserver davantage de preuves par **modalité et contexte** (retrieval, listening, scenario, text, recognition), afin que la confiance du modèle reflète mieux la réutilisation réelle.
-
-Avant tout code :
-
-1. [ ] définir le schéma v2 ;
-2. [ ] décider migration in-place ou nouveau store ;
-3. [ ] snapshot Recovery pré-migration ;
-4. [ ] migration transactionnelle + rollback ;
-5. [ ] compat vieux backups ;
-6. [ ] smoke ancien utilisateur ;
-7. [ ] seulement ensuite brancher Learner Intelligence sur les nouvelles preuves.
+Une éventuelle migration runtime deviendra un build séparé **uniquement si Build 33 ferme tous ces critères**.
 
 ---
 
@@ -181,7 +195,21 @@ Avant tout code :
 
 - [ ] réponse Free Voice reconnue → seconde prise locale → lecture correcte → réponse vocale suivante toujours reconnue normalement.
 
-Ce gate ne bloque **ni Build 32 Content**, ni l’audit de niveaux, ni le travail futur de mémoire. Il bloque uniquement une évolution vers **l’enregistrement automatique du premier essai exact** pendant SpeechRecognition.
+Ce gate ne bloque ni Build 32, ni le design Memory v2. Il bloque uniquement une future évolution vers **l’enregistrement automatique du premier essai exact** pendant SpeechRecognition.
+
+---
+
+# ✅ V2.1.0 — Build 31 · Learner Intelligence Core — PROD / CLOS
+
+- [x] modèle read-only progression + Memory + Error ;
+- [x] cinq bandes historiques couvrant **40/241** ;
+- [x] score interne + confiance séparée ;
+- [x] recommandation déterministe ;
+- [x] PR #77 : 24/24 fonctionnels ;
+- [x] runtime `e2b2c6293f35495fa8bbffd2e6b684fba897df88` : 25/25 Pages comprise ;
+- [x] Pages #135 ;
+- [x] ancien profil l8 exact ;
+- [x] aucun store/migration.
 
 ---
 
@@ -198,7 +226,7 @@ La baseline machine `release-v2.json` reste volontairement :
 - Architecture **Build 30** ;
 - release `2.0.0`.
 
-La V2.1 évolue **au-dessus** de cette architecture sans réécrire la baseline historique.
+Le produit courant évolue **au-dessus** de cette photographie sans la réécrire.
 
 ---
 
