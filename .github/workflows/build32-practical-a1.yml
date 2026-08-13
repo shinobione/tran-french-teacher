@@ -113,9 +113,9 @@ jobs:
           passed=0
           for attempt in 1 2 3; do
             profile="/tmp/ft-b32-stage4-$attempt"; file="/tmp/b32-stage4-$attempt.html"; rm -rf "$profile" "$file"
-            timeout --signal=TERM --kill-after=5s 80s google-chrome --headless=new --no-sandbox --disable-gpu --disable-background-timer-throttling --disable-renderer-backgrounding --user-data-dir="$profile" --window-size=1280,900 --virtual-time-budget=52000 --dump-dom 'http://127.0.0.1:4173/?realLifeSmoke=lesson40&uxSmoke=stage4&b32Audit=stage4' >"$file" || true
+            timeout --signal=TERM --kill-after=5s 80s google-chrome --headless=new --no-sandbox --disable-gpu --disable-background-timer-throttling --disable-renderer-backgrounding --user-data-dir="$profile" --window-size=1280,900 --virtual-time-budget=52000 --dump-dom 'http://127.0.0.1:4173/?realLifeSmoke=lesson40&b32Audit=stage4' >"$file" || true
             ok=1
-            for marker in 'data-b32-complete="1"' 'data-b32-recommendation-lesson="l41"' 'data-b32-completed40="40"' 'data-b32-progress-denominator="52"' 'data-b32-journey-tabs="7"' 'data-b32-stores-unchanged="1"' 'data-b32-horizontal-overflow="0"'; do grep -q "$marker" "$file" || ok=0; done
+            for marker in 'data-b32-complete="1"' 'data-b32-ready="1"' 'data-b32-lessons="52"' 'data-b32-items="313"' 'data-b32-recommendation-lesson="l41"' 'data-b32-completed40="40"' 'data-b32-stores-unchanged="1"' 'data-b32-horizontal-overflow="0"'; do grep -q "$marker" "$file" || ok=0; done
             if [ "$ok" = 1 ]; then passed=1; break; fi
             echo '=== Build32 stage4 markers ==='; grep -o 'data-b32-[^ >]*' "$file" | head -120 || true
           done
