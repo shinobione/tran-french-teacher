@@ -3,29 +3,36 @@
 'use strict';
 const KEY='french-tranquille:appearance-theme:v1';
 const IDS=['original','aurora','sunset','jade'];
+const LABELS={original:'Original',aurora:'Aurora Bleu/Rose',sunset:'Sunset Orange/Violet',jade:'Nocturne Jade/Or'};
+const COLORS={original:'#171026',aurora:'#050b22',sunset:'#1a0825',jade:'#04130f'};
 const valid=id=>IDS.includes(id)?id:'original';
 const current=()=>valid(localStorage.getItem(KEY)||'original');
-function apply(id){
- const theme=valid(id);
- document.documentElement.dataset.theme=theme;
- localStorage.setItem(KEY,theme);
- return theme;
+
+function ensureStyle(){
+ if(!document.querySelector('link[data-premium-theme-polish]')){
+  const l=document.createElement('link');l.rel='stylesheet';l.href='./premium-theme-polish.css?v=2.3.2-theme2';l.dataset.premiumThemePolish='1';document.head.appendChild(l);
+ }
+ if(!document.querySelector('style[data-modern-home-brand-fix]')){
+  const s=document.createElement('style');s.dataset.modernHomeBrandFix='1';s.textContent='.ft-modern-home-brand::before{display:none!important}';document.head.appendChild(s);
+ }
 }
-function mountBrand(){
- const home=document.querySelector('.b27-home');
- if(!home||home.querySelector('.ft-modern-home-logo'))return;
- home.classList.add('ft-modern-home-brand');
- const img=document.createElement('img');
- img.className='ft-modern-home-logo';
- img.src='./assets/HomeLogo.png?v=2.3.1-theme1';
- img.alt='French Trân’quille';
- img.decoding='async';
- home.prepend(img);
+function sync(theme){
+ document.querySelectorAll('[data-theme-option]').forEach(b=>{const v=b.dataset.themeOption===theme?'true':'false';if(b.getAttribute('aria-pressed')!==v)b.setAttribute('aria-pressed',v)});
+ document.querySelectorAll('[data-theme-current]').forEach(n=>{const v=LABELS[theme];if(n.textContent!==v)n.textContent=v});
+ const m=document.querySelector('meta[name="theme-color"]');if(m&&m.content!==COLORS[theme])m.content=COLORS[theme];
 }
-const style=document.createElement('style');
-style.textContent='.ft-modern-home-brand::before{display:none!important}.ft-modern-home-logo{display:block;width:min(430px,92vw);height:auto;max-height:260px;object-fit:contain;margin:0 auto 12px;filter:drop-shadow(0 16px 34px rgba(35,0,70,.28))}@media(max-width:520px){.ft-modern-home-logo{width:min(340px,94vw);margin-bottom:8px}}';
-document.head.appendChild(style);
-document.documentElement.dataset.theme=current();
-const app=document.getElementById('app');if(app)new MutationObserver(mountBrand).observe(app,{childList:true,subtree:true});mountBrand();
-window.FrenchTranquilleThemes=Object.freeze({version:'1.0.0',key:KEY,themes:IDS,current,apply,mountBrand});
+function apply(id){const t=valid(id);document.documentElement.dataset.theme=t;if(localStorage.getItem(KEY)!==t)localStorage.setItem(KEY,t);sync(t);return t}
+function brand(){
+ const h=document.querySelector('.b27-home');if(!h)return;h.classList.add('ft-modern-home-brand');
+ let img=h.querySelector(':scope>.ft-modern-home-logo');if(!img){img=document.createElement('img');img.className='ft-modern-home-logo';img.src='./assets/HomeLogo.png?v=2.3.2-theme2';img.alt='French Trân’quille';img.decoding='async'}
+ const head=h.querySelector(':scope>.b27-header');if(head){if(head.nextElementSibling!==img)head.insertAdjacentElement('afterend',img)}else if(h.firstElementChild!==img)h.prepend(img);
+}
+function picker(){
+ const host=document.querySelector('.screen-settings .narrow'),tpl=document.getElementById('ft-theme-settings');if(!host||!tpl)return;
+ let p=host.querySelector(':scope>.ft-theme-settings-inline');if(!p){p=tpl.cloneNode(true);p.removeAttribute('id');p.classList.add('ft-theme-settings-inline');p.open=true;const v=p.querySelector('summary>span:last-child');if(v)v.dataset.themeCurrent='1';host.prepend(p)}
+ sync(current());
+}
+function mount(){brand();picker();sync(current())}
+ensureStyle();document.documentElement.dataset.theme=current();const app=document.getElementById('app');if(app)new MutationObserver(mount).observe(app,{childList:true,subtree:true});mount();
+window.FrenchTranquilleThemes=Object.freeze({version:'1.1.1',key:KEY,themes:IDS,current,apply,mountBrand:brand,mountSettingsPicker:picker,mount});
 })();
