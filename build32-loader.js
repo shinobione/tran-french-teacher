@@ -31,11 +31,13 @@
     root.dataset.build32Loading = '1';
     loadStyle(`./curriculum-stage4.css?v=${VERSION}`, 'build32Stage4Style');
     await loadScript(`./curriculum-stage4.js?v=${VERSION}`, 'build32Stage4');
+    await loadScript(`./build32-shell-extension.js?v=${VERSION}`, 'build32Shell');
     await loadScript(`./real-life-data-4.js?v=${VERSION}`, 'build32RealLife4');
     await loadScript(`./listening-data-2.js?v=${VERSION}`, 'build32Listening2');
     await loadScript(`./learner-intelligence-v2.js?v=${VERSION}`, 'build32Intelligence');
 
     window.FrenchTranquilleBuild27Shell?.refresh?.();
+    window.FrenchTranquilleBuild32Shell?.refresh?.();
     window.FrenchTranquilleDailyCoach?.refresh?.();
     window.FrenchTranquilleRealLifeUX?.refresh?.();
     window.FrenchTranquilleLearnerIntelligence?.refresh?.();
@@ -43,9 +45,7 @@
     root.dataset.build32Ready = '1';
 
     const params = new URLSearchParams(location.search);
-    if (params.has('b32Audit')) {
-      await loadScript(`./build32-smoke.js?v=${VERSION}`, 'build32Smoke');
-    }
+    if (params.has('b32Audit')) await loadScript(`./build32-smoke.js?v=${VERSION}`, 'build32Smoke');
   }
 
   boot().catch(error => {
