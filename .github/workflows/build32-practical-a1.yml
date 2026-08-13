@@ -1,0 +1,127 @@
+name: Build 32 Practical A1 Expansion
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  practical-a1:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax and immutable-layer contracts
+        run: |
+          for f in curriculum-stage4.js build32-loader.js build32-shell-extension.js real-life-data-4.js listening-data-2.js learner-intelligence-v2.js build32-smoke.js build31-loader.js build-meta.js v2-release-smoke.js sw.js; do node --check "$f"; done
+          test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+          test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
+          test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
+          grep -Fq "const CURRENT_META = { version: '2.2.0', build: '32'" build-meta.js
+          grep -Fq "const B32='2.2.0-b32'" sw.js
+          grep -Fq "./build32-loader.js?v=2.2.0-b32" build31-loader.js
+          ! grep -q 'localStorage.setItem' curriculum-stage4.js
+          ! grep -q 'localStorage.setItem' learner-intelligence-v2.js
+          ! grep -q 'localStorage.setItem' build32-shell-extension.js
+          python3 - <<'PY'
+          import json
+          r=json.load(open('release-v2.json',encoding='utf-8'))
+          assert r['version']=='2.0.0' and r['architectureBuild']==30 and r['status']=='freeze'
+          assert r['product']['curriculumLessons']==40 and r['product']['curriculumItems']==241
+          assert len(r['durableStores'])==6
+          print('V2 frozen contract remains 40/241 with six stores')
+          PY
+
+      - name: Node — historical core remains exact, successor becomes 52/313
+        run: |
+          node <<'NODE'
+          const store=new Map();
+          global.localStorage={getItem:k=>store.has(k)?store.get(k):null,setItem:(k,v)=>store.set(k,String(v)),removeItem:k=>store.delete(k)};
+          const app={innerHTML:''};
+          global.window=global;
+          global.document={querySelector:s=>s==='#app'?app:null,querySelectorAll:()=>[],getElementById:id=>id==='app'?app:null,addEventListener:()=>{},createElement:()=>({className:'',dataset:{},innerHTML:'',appendChild(){},prepend(){},remove(){},querySelector(){return null},querySelectorAll(){return[]}})};
+          global.navigator={};global.confirm=()=>false;global.requestAnimationFrame=fn=>fn();global.queueMicrotask=fn=>fn();global.MutationObserver=class{observe(){}};global.window.addEventListener=()=>{};global.window.scrollTo=()=>{};
+          require('./app.js');require('./curriculum-stage2.js');require('./curriculum-stage3.js');
+          const c=global.FrenchTranquilleCurriculum;
+          if(c.lessons.length!==40||c.items.length!==241)throw new Error(`Historical core moved: ${c.lessons.length}/${c.items.length}`);
+          const historicalLessonIds=c.lessons.map(x=>x.id).join('|');
+          const historicalItemIds=c.items.map(x=>x.id).join('|');
+          require('./curriculum-stage4.js');
+          if(c.lessons.length!==52||c.items.length!==313)throw new Error(`Current curriculum mismatch: ${c.lessons.length}/${c.items.length}`);
+          if(c.stage4.length!==12||c.stage4Items.length!==72)throw new Error('Stage4 must be 12/72');
+          if(c.lessons.slice(0,40).map(x=>x.id).join('|')!==historicalLessonIds)throw new Error('Historical lesson order changed');
+          if(c.items.slice(0,241).map(x=>x.id).join('|')!==historicalItemIds)throw new Error('Historical item order changed');
+          if(new Set(c.items.map(x=>x.id)).size!==313)throw new Error('Duplicate current item IDs');
+          if(c.stage4[0].id!=='l41'||c.stage4.at(-1).id!=='l52')throw new Error('Stage4 lesson boundary mismatch');
+          require('./scenario-data.js');require('./real-life-data.js');require('./real-life-data-2.js');require('./real-life-data-3.js');require('./real-life-data-4.js');
+          const scenarios=global.FrenchTranquilleScenarioData.scenarios;
+          if(scenarios.length!==44||scenarios.reduce((n,s)=>n+s.turns.length,0)!==132)throw new Error('Scenario successor must be 44/132');
+          const p4=global.FrenchTranquilleRealLife4;
+          if(p4.scenarios.length!==8||p4.scenarios.reduce((n,s)=>n+s.turns.length,0)!==24||p4.invalidItems.length)throw new Error('Pack IV contract failed');
+          require('./listening-data.js');require('./listening-data-2.js');
+          const l2=global.FrenchTranquilleListeningData2;
+          if(l2.contrasts.length!==4||l2.dialogues.length!==8||l2.invalidItems.length)throw new Error('Listening II contract failed');
+          console.log('Build32 data contracts OK: 40/241 preserved → 52/313; Scenario 44/132; Listening II 4+8');
+          NODE
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-b32-http.log 2>&1 &
+          echo $! >/tmp/ft-b32-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome desktop — clean learner gets 52/313 and lesson 1
+        run: |
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-b32-clean-$attempt"; file="/tmp/b32-clean-$attempt.html"; rm -rf "$profile" "$file"
+            timeout --signal=TERM --kill-after=5s 80s google-chrome --headless=new --no-sandbox --disable-gpu --disable-background-timer-throttling --disable-renderer-backgrounding --user-data-dir="$profile" --window-size=1440,900 --virtual-time-budget=50000 --dump-dom 'http://127.0.0.1:4173/?debug=fr&b32Audit=clean' >"$file" || true
+            ok=1
+            for marker in 'data-b32-complete="1"' 'data-b32-ready="1"' 'data-b32-version="2.2.0"' 'data-b32-build="32"' 'data-b32-lessons="52"' 'data-b32-items="313"' 'data-b32-historic-lessons="40"' 'data-b32-historic-items="241"' 'data-b32-stage4-lessons="12"' 'data-b32-stage4-items="72"' 'data-b32-unique-items="313"' 'data-b32-bands="7"' 'data-b32-band-lessons="52"' 'data-b32-band-items="313"' 'data-b32-recommendation-lesson="l1"' 'data-b32-scenarios="44"' 'data-b32-scenario-turns="132"' 'data-b32-pack4-scenarios="8"' 'data-b32-pack4-turns="24"' 'data-b32-pack4-invalid-items="0"' 'data-b32-listening-contrasts="4"' 'data-b32-listening-dialogues="8"' 'data-b32-listening-invalid-items="0"' 'data-b32-speaking-lessons="52"' 'data-b32-speaking-covered="52"' 'data-b32-speaking-max="2"' 'data-b32-voice-neutral="1"' 'data-b32-progress-denominator="52"' 'data-b32-journey-tabs="7"' 'data-b32-autonomy-rows="6"' 'data-b32-interaction-rows="6"' 'data-b32-stores-unchanged="1"' 'data-b32-horizontal-overflow="0"'; do grep -q "$marker" "$file" || ok=0; done
+            if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then ok=0; fi
+            if [ "$ok" = 1 ]; then passed=1; break; fi
+            echo '=== Build32 clean markers ==='; grep -o 'data-b32-[^ >]*' "$file" | head -120 || true
+          done
+          test "$passed" = 1
+
+      - name: Chrome mobile 390x844 — old lesson-8 learner stays exact
+        run: |
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-b32-old-$attempt"; file="/tmp/b32-old-$attempt.html"; rm -rf "$profile" "$file"
+            timeout --signal=TERM --kill-after=5s 80s google-chrome --headless=new --no-sandbox --disable-gpu --disable-background-timer-throttling --disable-renderer-backgrounding --user-data-dir="$profile" --window-size=390,844 --virtual-time-budget=52000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&b32Audit=old-user' >"$file" || true
+            ok=1
+            for marker in 'data-b32-complete="1"' 'data-b32-recommendation-lesson="l8"' 'data-b32-old-user-completed="7"' 'data-b32-old-user-known="40"' 'data-b32-old-user-l8="4"' 'data-b32-lessons="52"' 'data-b32-items="313"' 'data-b32-stores-unchanged="1"' 'data-b32-horizontal-overflow="0"'; do grep -q "$marker" "$file" || ok=0; done
+            if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then ok=0; fi
+            if [ "$ok" = 1 ]; then passed=1; break; fi
+            echo '=== Build32 old-user markers ==='; grep -o 'data-b32-[^ >]*' "$file" | head -120 || true
+          done
+          test "$passed" = 1
+
+      - name: Chrome desktop — completed historical curriculum continues at lesson 41
+        run: |
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-b32-stage4-$attempt"; file="/tmp/b32-stage4-$attempt.html"; rm -rf "$profile" "$file"
+            timeout --signal=TERM --kill-after=5s 80s google-chrome --headless=new --no-sandbox --disable-gpu --disable-background-timer-throttling --disable-renderer-backgrounding --user-data-dir="$profile" --window-size=1280,900 --virtual-time-budget=52000 --dump-dom 'http://127.0.0.1:4173/?realLifeSmoke=lesson40&b32Audit=stage4' >"$file" || true
+            ok=1
+            for marker in 'data-b32-complete="1"' 'data-b32-ready="1"' 'data-b32-lessons="52"' 'data-b32-items="313"' 'data-b32-recommendation-lesson="l41"' 'data-b32-completed40="40"' 'data-b32-stores-unchanged="1"' 'data-b32-horizontal-overflow="0"'; do grep -q "$marker" "$file" || ok=0; done
+            if [ "$ok" = 1 ]; then passed=1; break; fi
+            echo '=== Build32 stage4 markers ==='; grep -o 'data-b32-[^ >]*' "$file" | head -120 || true
+          done
+          test "$passed" = 1
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-b32-server.pid ]; then kill "$(cat /tmp/ft-b32-server.pid)" || true; fi

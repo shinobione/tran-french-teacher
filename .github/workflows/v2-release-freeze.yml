@@ -43,11 +43,11 @@ jobs:
           assert len(r['durableStores'])==6 and len(set(r['durableStores']))==6
           assert r['fieldGates']['exactFirstAttemptVoiceCapture']=='pending-real-iphone'
           meta=open('build-meta.js',encoding='utf-8').read()
-          m=re.search(r"const META = \{ version: '([^']+)', build: '([^']+)'",meta)
-          assert m, 'current META missing'
+          m=re.search(r"const CURRENT_META = \{ version: '([^']+)', build: '([^']+)'",meta)
+          assert m, 'current successor META missing'
           parts=[int(x) for x in m.group(1).split('.')]
           assert len(parts)==3 and parts[0]==2 and int(float(m.group(2)))>=30
-          print('Frozen V2 contract OK; current release:',m.group(1),m.group(2))
+          print('Frozen V2 contract OK; current successor:',m.group(1),m.group(2))
           PY
           grep -q "const VERSION = '2.0.0'" runtime-contracts.js
           grep -q 'const BUILD = 30' runtime-contracts.js
@@ -102,17 +102,18 @@ jobs:
             profile="/tmp/ft-v2-clean-$attempt"
             file="/tmp/v2-clean-$attempt.html"
             rm -rf "$profile" "$file"
-            timeout --signal=TERM --kill-after=5s 70s \
+            timeout --signal=TERM --kill-after=5s 75s \
               google-chrome --headless=new --no-sandbox --disable-gpu \
               --disable-background-timer-throttling --disable-renderer-backgrounding \
               --user-data-dir="$profile" --window-size=1440,900 \
-              --virtual-time-budget=42000 --dump-dom \
+              --virtual-time-budget=48000 --dump-dom \
               'http://127.0.0.1:4173/?debug=fr&v2Audit=clean' >"$file" || true
             ok=1
             for marker in \
               'data-v2-complete="1"' \
               'data-v2-ready="1"' \
               'data-v2-current-compatible="1"' \
+              'data-v2-current-superset="1"' \
               'data-v2-contract-version="2.0.0"' \
               'data-v2-contract-build="30"' \
               'data-v2-release-format="1"' \
@@ -145,7 +146,7 @@ jobs:
             if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then ok=0; fi
             if [ "$ok" = 1 ]; then passed=1; break; fi
             echo '=== V2 compatibility clean markers ==='
-            grep -o 'data-v2-[^ >]*' "$file" | head -100 || true
+            grep -o 'data-v2-[^ >]*' "$file" | head -120 || true
           done
           test "$passed" = 1
 
@@ -156,17 +157,18 @@ jobs:
             profile="/tmp/ft-v2-old-$attempt"
             file="/tmp/v2-old-$attempt.html"
             rm -rf "$profile" "$file"
-            timeout --signal=TERM --kill-after=5s 70s \
+            timeout --signal=TERM --kill-after=5s 75s \
               google-chrome --headless=new --no-sandbox --disable-gpu \
               --disable-background-timer-throttling --disable-renderer-backgrounding \
               --user-data-dir="$profile" --window-size=390,844 \
-              --virtual-time-budget=44000 --dump-dom \
+              --virtual-time-budget=50000 --dump-dom \
               'http://127.0.0.1:4173/?debug=fr&uxSmoke=lesson8&v2Audit=old-user' >"$file" || true
             ok=1
             for marker in \
               'data-v2-complete="1"' \
               'data-v2-ready="1"' \
               'data-v2-current-compatible="1"' \
+              'data-v2-current-superset="1"' \
               'data-v2-old-user-completed="7"' \
               'data-v2-old-user-l8="4"' \
               'data-v2-old-user-known="40"' \
@@ -180,7 +182,7 @@ jobs:
             if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then ok=0; fi
             if [ "$ok" = 1 ]; then passed=1; break; fi
             echo '=== V2 compatibility old-user markers ==='
-            grep -o 'data-v2-[^ >]*' "$file" | head -100 || true
+            grep -o 'data-v2-[^ >]*' "$file" | head -120 || true
           done
           test "$passed" = 1
 

@@ -2,90 +2,111 @@
 
 PWA de français pensée pour **Trân**, avec priorité à l’oral, au français utile dans la vraie vie et à une interface simple sur iPhone.
 
-## État actuel
+## État de cette branche
 
-# ✅ V2.1.0 — Build 31 · Learner Intelligence Core — PROD
+# 🚧 V2.2.0 — Build 32 · Practical A1 Expansion — CANDIDAT
 
-French Trân’quille a repris son évolution au-dessus de la baseline V2 gelée. **Architecture Build 30 reste le socle figé 2.0.0**, tandis que le produit courant passe à **v2.1.0 • Build 31**.
+La production `main` certifiée avant cette branche reste **v2.1.0 • Build 31**. Cette branche prépare son successeur **v2.2.0 • Build 32** ; elle ne devient PROD qu’après PR entièrement verte, merge du head exact, validation du `main` exact et GitHub Pages sur ce même SHA.
 
-Build 31 n’ajoute pas encore de nouvelles leçons : il unifie d’abord le modèle apprenant sur les **40 leçons / 241 éléments** existants afin que la prochaine extension de contenu repose sur des preuves plutôt que sur un simple compteur de leçons.
+Build 32 part d’un audit du curriculum existant plutôt que d’ajouter des leçons au hasard. Les 40 leçons historiques couvrent déjà la survie, la vie quotidienne, les transports de base, les achats, le logement, le téléphone, le présent, le futur proche, le passé récent/composé, l’administration et les émotions.
 
-### Baseline produit actuelle
+Le candidat ajoute donc surtout ce qui manque pour **gagner en autonomie et interagir réellement**.
 
-- version visible : **v2.1.0 • Build 31** ;
-- architecture gelée : **Runtime Contracts / Runtime Bridge 2.0.0 • Build 30** ;
-- curriculum : **40 leçons / 241 éléments** ;
-- Scenario : **36 situations / 108 tours** ;
-- Listening : **0.88 normal / 0.65 lent** ;
-- Speaking Loop : **2 moments maximum par leçon** ;
+### Candidat produit
+
+- version cible : **v2.2.0 • Build 32** ;
+- architecture gelée dessous : **Runtime Contracts / Runtime Bridge 2.0.0 • Build 30** ;
+- baseline V2 historique : **40 leçons / 241 éléments** ;
+- curriculum courant candidat : **52 leçons / 313 éléments** ;
+- Stage 4 : **12 leçons / 72 éléments** ;
+- Scenario candidat : **44 situations / 132 tours** ;
+- Real Life Pack IV : **8 situations / 24 tours** ;
+- Listening II : **4 nouveaux contrastes + 8 mini-dialogues** ;
+- Listening final : **0.88 normal / 0.65 lent**, inchangé ;
+- Speaking Loop : **2 moments maximum par leçon**, couverture attendue **52/52** ;
 - stores durables Recovery : **6**, inchangés ;
 - coût récurrent : **0 €**.
 
-## 🧠 Build 31 — Learner Intelligence Core
+## 📚 Build 32 — Practical A1
 
-Nouveau module `learner-intelligence.js`, exposé via `window.FrenchTranquilleLearnerIntelligence`.
-
-Il lit sans migrer ni remplacer les moteurs existants :
-
-- progression des leçons ;
-- acquis connus ;
-- Learning Memory : statut, échéance, rétention observable ;
-- Error Intelligence : récence, répétition, récupération ;
-- diversité des contextes où un acquis a été rencontré.
-
-Il construit cinq bandes cohérentes :
+Deux nouvelles étapes complètent le parcours :
 
 ```text
-1–7    Survival A0
-8–15   Daily A0
-16–20  Foundations A1
-21–25  First Exchanges A1
+41–46  Autonomie A1
+47–52  Interaction A1
+```
+
+### Autonomie A1
+
+- clarifier et demander de reformuler ;
+- quantités et emballages ;
+- comparer et choisir ;
+- proposer, inviter, accepter/refuser poliment ;
+- santé et rendez-vous médical ;
+- médicaments et pharmacie.
+
+### Interaction A1
+
+- travail et consignes ;
+- signaler une panne / demander une intervention ;
+- retard, annulation et correspondance ;
+- raconter un petit événement dans l’ordre ;
+- donner son avis simplement ;
+- comprendre et utiliser le très courant **`on`** du français oral.
+
+Les 40 premières leçons et les 241 premiers IDs d’acquis restent dans le même ordre. Stage 4 s’ajoute à la suite ; il ne remplace pas le curriculum historique.
+
+## 🎭 Réutilisation réelle
+
+`real-life-data-4.js` ajoute 8 situations liées directement aux nouvelles capacités : guichet incompris, choix en magasin, invitation avec Jerry, rendez-vous médical, consigne au travail, réparation dans l’appartement, train perturbé et plan naturel avec `on`.
+
+Chaque tour reste déterministe et local. Aucun pseudo-LLM JavaScript ne décide si une phrase « semble bonne ».
+
+## 🎧 Listening II
+
+`listening-data-2.js` réutilise les nouveaux acquis dans 4 contrastes et 8 dialogues. Les références doivent toutes pointer vers de vrais IDs du curriculum.
+
+La couche voix validée reste inchangée : **0.88 / 0.65** arrive toujours jusqu’à la dernière couche vocale.
+
+## 🧠 Learner Intelligence 2.2
+
+Le modèle courant candidat raisonne sur **7 bandes / 52 leçons / 313 éléments** :
+
+```text
+1–7    Survie A0
+8–15   Vie quotidienne A0
+16–20  Fondations A1
+21–25  Premiers échanges A1
 26–40  A1 Core
+41–46  Autonomie A1
+47–52  Interaction A1
 ```
 
-Le modèle produit :
+Il conserve :
 
-- un **indice interne d’apprentissage** ;
-- un **degré de confiance séparé** ;
-- une estimation interne `A0 / A0+ / Pré-A1 / A1- / A1` ;
-- une seule priorité suivante déterministe : révision, prochaine leçon, pratique ou entretien.
+- indice interne séparé de la confiance ;
+- priorité déterministe révision / prochaine leçon / pratique ;
+- prise en compte Memory + Error + diversité de réutilisation ;
+- neutralité de la reconnaissance vocale.
 
-Ce niveau est un **outil interne d’adaptation**, jamais une certification CECRL.
+`A1+` peut apparaître comme **étiquette interne d’adaptation uniquement**. Ce n’est jamais une certification CECRL.
 
-### Interface
+## 🧊 Baselines historiques rejouables
 
-Une carte compacte apparaît dans **Progrès** : niveau interne, score, confiance et priorité suivante. Le détail des cinq bandes reste replié par défaut pour conserver le principe de progressive disclosure.
+Build 32 ne réécrit pas les anciens tribunaux :
 
-Aucun nouvel onglet de navigation et aucun cockpit moteur dans l’interface apprenante.
+- Build 31 peut toujours rejouer exactement son learner model **2.1 / 31 sur 40/241** ;
+- Build 30 et les anciens `*Smoke` restent capables de tester leur runtime historique ;
+- `release-v2.json` reste volontairement **2.0.0 / Architecture Build 30 / 40–241** ;
+- le tribunal V2 distingue maintenant le contrat gelé du produit V2.x courant et exige que le courant reste un **superset compatible**.
 
-## 🎙️ Voix : gate iPhone toujours indépendant
-
-Build 31 ne touche ni `voice-ios.js`, ni `free-voice.js`, ni Voice Replay, ni SpeechRecognition.
-
-Une non-reconnaissance vocale est explicitement classée comme **signal du système de reconnaissance**, jamais comme mesure de qualité de prononciation. Aucun faux score phonétique n’est introduit.
-
-Le gate terrain parallèle reste :
-
-```text
-reconnaissance Free Voice
-→ seconde prise locale
-→ lecture
-→ reconnaissance suivante toujours normale
-```
-
-Il bloque uniquement une future **capture automatique du premier essai exact** pendant SpeechRecognition. Il ne bloque pas les builds de contenu, niveau, intelligence ou mémoire qui restent indépendants de cette capture.
+La CI protège toujours explicitement **v1.17.0 — Build 24 — Real Life French II** : **28 situations / 84 tours** avant Pack III, avec `real-life-data-2.js` comme référence historique.
 
 ## 🔐 Données / Recovery
 
-Build 31 est **read-only vis-à-vis des stores durables** :
+Build 32 ne crée aucun store et n’effectue aucune migration.
 
-- aucun nouveau store ;
-- aucune migration ;
-- aucun `localStorage.setItem` dans Learner Intelligence ou son loader ;
-- les six stores V2 restent les seuls stores pédagogiques Recovery ;
-- le smoke navigateur exige les six valeurs brutes byte-identiques avant/après le calcul et le rendu Build31.
-
-Stores canoniques :
+Stores canoniques inchangés :
 
 ```text
 francais-avec-luc:learner:v1
@@ -96,28 +117,22 @@ french-tranquille:listening:v1
 french-tranquille:milestones:v1
 ```
 
-## 🧊 Baseline V2 toujours gelée
+Une ancienne utilisatrice à **7 leçons terminées / `l8=4` / 40 acquis** doit rester exactement dans cet état. Une utilisatrice ayant terminé les 40 leçons historiques doit simplement recevoir **l41** comme prochaine étape.
 
-`release-v2.json` reste volontairement **2.0.0 / Architecture Build 30**. Les workflows V2 et Build30 ont été rendus version-forward sans affaiblir leurs assertions historiques : ils vérifient désormais qu’une V2.x courante reste compatible avec le socle gelé.
+## 🎙️ Voix : gate iPhone toujours parallèle
 
-Le contrat continue de protéger :
+Build 32 ne modifie ni `voice-ios.js`, ni `free-voice.js`, ni la logique de capture automatique du premier essai.
 
-- cardinalités 40/241, Scenario 36/108, Listening 0.88/0.65, Speaking max 2 ;
-- six stores Recovery ;
-- routes `Aujourd’hui / Pratiquer / Progrès` ;
-- ancienne utilisatrice synthétique **7 leçons terminées / l8=4 / 40 acquis** ;
-- sanctuaires exacts ;
-- absence d’écriture durable pendant les round-trips.
+Le gate terrain reste :
 
-## ✅ Certification Build 31
+```text
+reconnaissance Free Voice
+→ seconde prise locale
+→ lecture
+→ reconnaissance suivante toujours normale
+```
 
-- PR runtime **#77** ; head certifié `eed097ca3d261f2f4dd60db930a11670511f33a1` ; **24/24 workflows fonctionnels SUCCESS** ;
-- runtime mergé : `e2b2c6293f35495fa8bbffd2e6b684fba897df88` ;
-- `main` runtime : **25/25 SUCCESS**, Pages comprise ;
-- GitHub Pages **#135 SUCCESS** sur le SHA runtime exact ;
-- smoke Build31 desktop : profil neuf → **leçon 1** ;
-- smoke Build31 mobile 390×844 : ancien profil → **leçon 8**, état exact 7 / l8=4 / 40 ;
-- V2 Freeze Compatibility, Build30 Architecture, Build29 iPhone/PWA, Recovery, Speaking et anciens parcours restent verts.
+Il bloque uniquement une future capture automatique du premier essai exact. Il ne bloque pas ce build de contenu/intelligence.
 
 ## 🛡️ Sanctuaires
 
@@ -128,15 +143,28 @@ Le contrat continue de protéger :
 - `assets/Favicon.png` — `c358672368a960bf7617e5532aff3e3319cddb3e` ;
 - learner canonique `francais-avec-luc:learner:v1`.
 
-## Baseline historique qualité conservée
+## Tribunal candidat Build 32
 
-La CI protège toujours explicitement **v1.17.0 — Build 24 — Real Life French II** : **28 situations / 84 tours** avant Pack III, avec `real-life-data-2.js` comme référence historique.
+Le workflow dédié doit notamment prouver :
 
-## Suite canonique
+- baseline 40/241 rejouée sans Stage 4 ;
+- produit courant 52/313 ;
+- Stage 4 12/72 et IDs uniques ;
+- Scenario 44/132 + Pack IV 8/24 ;
+- Listening II 4 + 8 ;
+- Speaking Loop 52/52, max 2 ;
+- 7 bandes Learner Intelligence ;
+- ancien profil `l8=4` byte-identique ;
+- profil ayant fini l40 → l41 ;
+- parcours complet = 7 étapes ;
+- zéro overflow horizontal desktop/mobile ;
+- six stores durables inchangés ;
+- tous les sanctuaires exacts.
 
-1. **Build 32 — Content Map & Practical A1 Expansion** : audit des capacités couvertes 1–40 puis extension des leçons **41+** vers le français pratique A1, sans gonfler le curriculum au hasard ;
-2. enrichir Scenario / Listening seulement quand une nouvelle capacité nécessite une vraie réutilisation ;
-3. **Memory v2** ensuite : richer evidence par modalité/contexte, uniquement avec plan de migration Recovery transactionnel ;
-4. gate iPhone exact-first-attempt toujours parallèle et non bloquant pour ces travaux.
+## Production précédente certifiée
 
-Voir `ROADMAP.md`, `CHANGELOG.md`, `docs/ARCHITECTURE.md`, `docs/BUILD-31-LEARNER-INTELLIGENCE.md` et `docs/V2-RELEASE.md`.
+**V2.1.0 — Build 31 · Learner Intelligence Core** reste la dernière production certifiée tant que Build32 n’a pas terminé son cycle de release.
+
+Build31 avait été certifié via PR runtime **#77**, puis `main` runtime `e2b2c6293f35495fa8bbffd2e6b684fba897df88` avec **25/25 SUCCESS** Pages comprise et clôture documentaire finale `d7da5d1cce7c94dc8bb685d7019daebbff1a4296`.
+
+Voir `ROADMAP.md`, `CHANGELOG.md`, `docs/ARCHITECTURE.md`, `docs/BUILD-31-LEARNER-INTELLIGENCE.md`, `docs/BUILD-32-PRACTICAL-A1.md` et `docs/V2-RELEASE.md`.
