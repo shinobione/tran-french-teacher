@@ -3,7 +3,6 @@
 
   const VERSION = '2.2.0-b32';
   const FOUNDATIONS = '2.3.0-b34';
-  const FIELD_NAV = '2.3.1-nav3';
   const root = document.documentElement;
   const loadStyle = (href, key) => {
     if (document.querySelector(`link[data-${key}]`)) return;
@@ -53,10 +52,7 @@
     }
 
     const historical = params.has('b31Audit') || params.has('b30Audit') || params.has('v2Audit');
-    if (!historical) {
-      await loadScript(`./nav-visible-owner.js?v=${FIELD_NAV}`, 'visibleNavOwner');
-      await loadScript(`./foundations-pilot.js?v=${FOUNDATIONS}`, 'foundationsPilot');
-    }
+    if (!historical) await loadScript(`./foundations-pilot.js?v=${FOUNDATIONS}`, 'foundationsPilot');
   }
 
   boot().catch(error => {
