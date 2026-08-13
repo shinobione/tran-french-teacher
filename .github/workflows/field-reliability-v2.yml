@@ -1,0 +1,67 @@
+name: Field reliability V2 — router + lesson audio
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  field-reliability-v2:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Static contracts
+        run: |
+          node --check stage2-boot.js
+          node --check field-audio-session.js
+          ! grep -q 'mediarecorder-ios-compat' stage2-boot.js
+          ! grep -q 'navigation-field-hotfix' stage2-boot.js
+          ! grep -q 'localStorage.setItem' field-audio-session.js
+          grep -q 'event.stopImmediatePropagation' stage2-boot.js
+          grep -q 'requestData' field-audio-session.js
+          grep -q 'new Blob(s.chunks' field-audio-session.js
+          grep -q 'data-field-audio-play' field-audio-session.js
+
+      - name: Sanctuaries remain exact
+        run: |
+          test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+          test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
+          test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-field-v2-http.log 2>&1 &
+          echo $! >/tmp/ft-field-v2-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — lesson recording survives DOM rerender and creates playback
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu \
+            --use-fake-ui-for-media-stream --use-fake-device-for-media-stream \
+            --virtual-time-budget=7000 --dump-dom \
+            'http://127.0.0.1:4173/field-audio-browser-smoke.html' >/tmp/field-audio-v2.html
+          grep -q 'data-field-audio-browser-smoke="ok"' /tmp/field-audio-v2.html || { cat /tmp/field-audio-v2.html; exit 1; }
+          grep -Eq 'data-field-audio-blob-bytes="[1-9][0-9]*"' /tmp/field-audio-v2.html || { cat /tmp/field-audio-v2.html; exit 1; }
+
+      - name: Chrome — repeated Practice Listening Home Progress route transaction
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu \
+            --virtual-time-budget=28000 --dump-dom \
+            'http://127.0.0.1:4173/field-navigation-v2-smoke.html' >/tmp/field-nav-v2.html
+          grep -q 'data-field-navigation-v2-smoke="ok"' /tmp/field-nav-v2.html || { cat /tmp/field-nav-v2.html; exit 1; }
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-field-v2-server.pid ]; then kill "$(cat /tmp/ft-field-v2-server.pid)" || true; fi
