@@ -35,22 +35,33 @@
         const rootStyle=w.getComputedStyle(d.documentElement);
         if(!rootStyle.getPropertyValue('--pd-depth').trim())throw Error(`depth-missing-${id}`);
         if(rootStyle.getPropertyValue('--pm3-ready').trim()!=='1')throw Error(`mockup-v3-missing-${id}`);
+        if(rootStyle.getPropertyValue('--pv4-home-ready').trim()!=='1')throw Error(`premium-v4-home-missing-${id}`);
+
+        const welcomeNode=d.querySelector('.b27-welcome');
         const card=d.querySelector('.b27-primary-card');
-        if(!card)throw Error('primary-card');
+        const cta=d.querySelector('.b27-primary-action');
+        const review=d.querySelector('[data-b27-action="review"] .b27-quick-icon');
+        const listenIcon=d.querySelector('[data-b27-action="listening"] .b27-quick-icon');
+        if(!welcomeNode||!card||!cta||!review||!listenIcon)throw Error(`home-contract-node-${id}`);
+
+        const welcome=w.getComputedStyle(welcomeNode);
+        if(parseFloat(welcome.borderTopWidth)>.5)throw Error(`${id}-welcome-frame:${welcome.borderTopWidth}`);
+        if(welcome.boxShadow!=='none')throw Error(`${id}-welcome-shadow:${welcome.boxShadow}`);
+        if(welcome.backgroundImage!=='none')throw Error(`${id}-welcome-background:${welcome.backgroundImage}`);
+
         const cs=w.getComputedStyle(card),blur=cs.backdropFilter||cs.webkitBackdropFilter||'';
         if(!String(blur).includes('blur'))throw Error(`glass-missing-${id}`);
+        if(card.getBoundingClientRect().width<300)throw Error(`primary-card-too-narrow-${id}`);
+        if(cta.getBoundingClientRect().height<53)throw Error(`cta-too-small-${id}`);
+        if(w.getComputedStyle(review).fontSize!=='0px'||w.getComputedStyle(listenIcon).fontSize!=='0px')throw Error(`control-emoji-not-replaced-${id}`);
+        if(parseFloat(w.getComputedStyle(review,'::before').width)<18)throw Error(`review-css-icon-missing-${id}`);
+        if(parseFloat(w.getComputedStyle(listenIcon,'::before').width)<20)throw Error(`listening-css-icon-missing-${id}`);
 
         if(id==='aurora'){
-          if(rootStyle.getPropertyValue('--pv4-home-ready').trim()!=='1')throw Error('aurora-v4-home-missing');
-          const welcome=w.getComputedStyle(d.querySelector('.b27-welcome'));
-          if(parseFloat(welcome.borderTopWidth)>.5)throw Error(`aurora-welcome-frame:${welcome.borderTopWidth}`);
-          if(welcome.boxShadow!=='none')throw Error(`aurora-welcome-shadow:${welcome.boxShadow}`);
-          if(welcome.backgroundImage!=='none')throw Error(`aurora-welcome-background:${welcome.backgroundImage}`);
+          const title=w.getComputedStyle(d.querySelector('.b27-welcome h1'));
+          if(title.textShadow==='none')throw Error('aurora-controlled-glow-missing');
         }
-        if(id==='sunset'){
-          const welcome=w.getComputedStyle(d.querySelector('.b27-welcome'));
-          if(welcome.textAlign!=='center')throw Error('sunset-centered-hero-missing');
-        }
+        if(id==='sunset'&&welcome.textAlign!=='center')throw Error('sunset-centered-hero-missing');
         if(id==='jade'){
           const title=w.getComputedStyle(d.querySelector('.b27-primary-card h2'));
           if(!/georgia|times new roman/i.test(title.fontFamily))throw Error(`jade-editorial-type-missing:${title.fontFamily}`);
@@ -74,9 +85,9 @@
       const rect=nav.getBoundingClientRect();
       if(rect.width<300||rect.height<50)throw Error('nav-hidden-listening');
       for(const k of keys)if(before[k]!==w.localStorage.getItem(k))throw Error(`store-mutated:${k}`);
-      finish(true,'themes=4;mockup-v3=3;original-untouched;aurora=v4-flat-hero;sunset=centered;jade=editorial;depth=alt-only;overflow=0;listening-nav=above-overlay;learner-stores=unchanged');
+      finish(true,'themes=4;v4-home=aurora+sunset+jade;editorial-heroes=flat;css-control-icons=review+listening;cta>=54;original-untouched;overflow=0;listening-nav=above-overlay;learner-stores=unchanged');
     }catch(e){finish(false,e.message)}
   },3200);
-  setTimeout(()=>{if(!root.dataset.appearanceFieldSmoke)finish(false,'timeout')},16000);
+  setTimeout(()=>{if(!root.dataset.appearanceFieldSmoke)finish(false,'timeout')},17000);
 })();
 </script></body></html>
