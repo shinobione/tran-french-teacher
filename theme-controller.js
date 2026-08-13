@@ -10,7 +10,7 @@ const current=()=>valid(localStorage.getItem(KEY)||'original');
 
 function ensureStyle(){
  if(!document.querySelector('link[data-premium-theme-polish]')){
-  const l=document.createElement('link');l.rel='stylesheet';l.href='./premium-theme-polish.css?v=2.3.2-theme2';l.dataset.premiumThemePolish='1';document.head.appendChild(l);
+  const l=document.createElement('link');l.rel='stylesheet';l.href='./premium-theme-polish.css?v=2.3.3-mockup3';l.dataset.premiumThemePolish='1';document.head.appendChild(l);
  }
  if(!document.querySelector('style[data-modern-home-brand-fix]')){
   const s=document.createElement('style');s.dataset.modernHomeBrandFix='1';s.textContent='.ft-modern-home-brand::before{display:none!important}';document.head.appendChild(s);
@@ -34,5 +34,5 @@ function picker(){
 }
 function mount(){brand();picker();sync(current())}
 ensureStyle();document.documentElement.dataset.theme=current();const app=document.getElementById('app');if(app)new MutationObserver(mount).observe(app,{childList:true,subtree:true});mount();
-window.FrenchTranquilleThemes=Object.freeze({version:'1.1.1',key:KEY,themes:IDS,current,apply,mountBrand:brand,mountSettingsPicker:picker,mount});
+window.FrenchTranquilleThemes=Object.freeze({version:'1.2.0',key:KEY,themes:IDS,current,apply,mountBrand:brand,mountSettingsPicker:picker,mount});
 })();
