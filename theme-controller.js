@@ -9,12 +9,19 @@ const valid=id=>IDS.includes(id)?id:'original';
 const current=()=>valid(localStorage.getItem(KEY)||'original');
 
 function ensurePolish(){
- if(document.querySelector('link[data-premium-theme-polish]'))return;
- const link=document.createElement('link');
- link.rel='stylesheet';
- link.href='./premium-theme-polish.css?v=2.3.2-theme2';
- link.dataset.premiumThemePolish='1';
- document.head.appendChild(link);
+ if(!document.querySelector('link[data-premium-theme-polish]')){
+  const link=document.createElement('link');
+  link.rel='stylesheet';
+  link.href='./premium-theme-polish.css?v=2.3.2-theme2';
+  link.dataset.premiumThemePolish='1';
+  document.head.appendChild(link);
+ }
+ if(!document.querySelector('style[data-modern-home-brand-fix]')){
+  const style=document.createElement('style');
+  style.dataset.modernHomeBrandFix='1';
+  style.textContent='.ft-modern-home-brand::before{display:none!important}';
+  document.head.appendChild(style);
+ }
 }
 
 function syncUi(theme){
