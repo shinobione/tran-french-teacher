@@ -2,32 +2,28 @@
 
 PWA de français pensée pour **Trân**, avec priorité à l’oral, au français utile dans la vraie vie et à une interface simple sur iPhone.
 
-## État de cette branche
+# ✅ V2.2.0 — Build 32 · Practical A1 Expansion — PROD / CLOS
 
-# 🚧 V2.2.0 — Build 32 · Practical A1 Expansion — CANDIDAT
+French Trân’quille a étendu son curriculum sans réécrire sa baseline historique ni toucher aux sanctuaires voix/données. Le produit courant est **v2.2.0 • Build 32** au-dessus de l’Architecture Runtime gelée **2.0.0 • Build 30**.
 
-La production `main` certifiée avant cette branche reste **v2.1.0 • Build 31**. Cette branche prépare son successeur **v2.2.0 • Build 32** ; elle ne devient PROD qu’après PR entièrement verte, merge du head exact, validation du `main` exact et GitHub Pages sur ce même SHA.
+Build 32 est parti d’un audit des 40 leçons existantes. Elles couvraient déjà la survie, les directions, les transports de base, les achats, le logement, le téléphone, le présent, le futur proche, le passé récent/composé, l’administration et les émotions. L’extension vise donc surtout **l’autonomie et l’interaction A1**, pas un compteur de leçons artificiel.
 
-Build 32 part d’un audit du curriculum existant plutôt que d’ajouter des leçons au hasard. Les 40 leçons historiques couvrent déjà la survie, la vie quotidienne, les transports de base, les achats, le logement, le téléphone, le présent, le futur proche, le passé récent/composé, l’administration et les émotions.
+## Baseline produit actuelle
 
-Le candidat ajoute donc surtout ce qui manque pour **gagner en autonomie et interagir réellement**.
-
-### Candidat produit
-
-- version cible : **v2.2.0 • Build 32** ;
-- architecture gelée dessous : **Runtime Contracts / Runtime Bridge 2.0.0 • Build 30** ;
-- baseline V2 historique : **40 leçons / 241 éléments** ;
-- curriculum courant candidat : **52 leçons / 313 éléments** ;
+- version visible : **v2.2.0 • Build 32** ;
+- architecture gelée : **Runtime Contracts / Runtime Bridge 2.0.0 • Build 30** ;
+- baseline V2 historique : **40 leçons / 241 éléments** au freeze ;
+- curriculum courant : **52 leçons / 313 éléments** ;
 - Stage 4 : **12 leçons / 72 éléments** ;
-- Scenario candidat : **44 situations / 132 tours** ;
+- Scenario : **44 situations / 132 tours** ;
 - Real Life Pack IV : **8 situations / 24 tours** ;
-- Listening II : **4 nouveaux contrastes + 8 mini-dialogues** ;
-- Listening final : **0.88 normal / 0.65 lent**, inchangé ;
-- Speaking Loop : **2 moments maximum par leçon**, couverture attendue **52/52** ;
+- Listening II : **4 contrastes + 8 mini-dialogues** ;
+- Listening : **0.88 normal / 0.65 lent** ;
+- Speaking Loop : **52/52 leçons couvertes, 2 moments maximum par leçon** ;
 - stores durables Recovery : **6**, inchangés ;
 - coût récurrent : **0 €**.
 
-## 📚 Build 32 — Practical A1
+## 📚 Stage 4 — français A1 pratique
 
 Deux nouvelles étapes complètent le parcours :
 
@@ -36,41 +32,39 @@ Deux nouvelles étapes complètent le parcours :
 47–52  Interaction A1
 ```
 
-### Autonomie A1
+### Autonomie A1 — 41 à 46
 
-- clarifier et demander de reformuler ;
-- quantités et emballages ;
-- comparer et choisir ;
-- proposer, inviter, accepter/refuser poliment ;
-- santé et rendez-vous médical ;
-- médicaments et pharmacie.
+1. Clarifier & demander de reformuler
+2. Quantités & emballages
+3. Comparer & choisir
+4. Proposer, inviter & refuser poliment
+5. Santé & rendez-vous médical
+6. Médicaments & pharmacie
 
-### Interaction A1
+### Interaction A1 — 47 à 52
 
-- travail et consignes ;
-- signaler une panne / demander une intervention ;
-- retard, annulation et correspondance ;
-- raconter un petit événement dans l’ordre ;
-- donner son avis simplement ;
-- comprendre et utiliser le très courant **`on`** du français oral.
+1. Travail & consignes
+2. Signaler une panne & demander une intervention
+3. Retard, annulation & correspondance
+4. Raconter dans l’ordre
+5. Donner son avis simplement
+6. Le **`on`** du français oral
 
-Les 40 premières leçons et les 241 premiers IDs d’acquis restent dans le même ordre. Stage 4 s’ajoute à la suite ; il ne remplace pas le curriculum historique.
+Les **40 premières leçons et les 241 premiers IDs d’acquis restent dans le même ordre**. Stage 4 est ajouté à la suite ; aucun ancien acquis n’a été remplacé pour faire correspondre les chiffres.
 
-## 🎭 Réutilisation réelle
+## 🎭 Réutilisation au lieu de contenu isolé
 
-`real-life-data-4.js` ajoute 8 situations liées directement aux nouvelles capacités : guichet incompris, choix en magasin, invitation avec Jerry, rendez-vous médical, consigne au travail, réparation dans l’appartement, train perturbé et plan naturel avec `on`.
+`real-life-data-4.js` ajoute **8 situations / 24 tours** : clarification à un guichet, comparaison d’un achat, invitation avec Jerry, rendez-vous médical, consigne au travail, réparation dans l’appartement, train perturbé et petit plan naturel avec `on`.
 
-Chaque tour reste déterministe et local. Aucun pseudo-LLM JavaScript ne décide si une phrase « semble bonne ».
+Le Scenario Engine courant passe ainsi à **44 situations / 132 tours**. Chaque référence de preuve du Pack IV est validée contre un vrai ID du curriculum.
 
-## 🎧 Listening II
+`listening-data-2.js` ajoute **4 contrastes + 8 mini-dialogues** basés sur les nouveaux acquis, sans changer les vitesses finales validées **0.88 / 0.65**.
 
-`listening-data-2.js` réutilise les nouveaux acquis dans 4 contrastes et 8 dialogues. Les références doivent toutes pointer vers de vrais IDs du curriculum.
-
-La couche voix validée reste inchangée : **0.88 / 0.65** arrive toujours jusqu’à la dernière couche vocale.
+Le Speaking Loop existant lit le curriculum vivant : il s’étend sans nouveau sous-système et son tribunal confirme **52/52 leçons**, toujours **max 2 moments**.
 
 ## 🧠 Learner Intelligence 2.2
 
-Le modèle courant candidat raisonne sur **7 bandes / 52 leçons / 313 éléments** :
+Le modèle courant raisonne maintenant sur **7 bandes / 52 leçons / 313 éléments** :
 
 ```text
 1–7    Survie A0
@@ -84,29 +78,29 @@ Le modèle courant candidat raisonne sur **7 bandes / 52 leçons / 313 élément
 
 Il conserve :
 
-- indice interne séparé de la confiance ;
-- priorité déterministe révision / prochaine leçon / pratique ;
-- prise en compte Memory + Error + diversité de réutilisation ;
+- indice interne séparé de la **confiance** ;
+- lecture de progression + Learning Memory + Error Intelligence ;
+- diversité des contextes de réutilisation ;
+- priorité déterministe `review / lesson / practice / maintain` ;
 - neutralité de la reconnaissance vocale.
 
-`A1+` peut apparaître comme **étiquette interne d’adaptation uniquement**. Ce n’est jamais une certification CECRL.
+`A1+` peut apparaître comme **étiquette interne d’adaptation uniquement**. Ce n’est ni un examen ni une certification CECRL.
+
+Une non-reconnaissance vocale reste un signal du **système de reconnaissance**, jamais un score de prononciation.
 
 ## 🧊 Baselines historiques rejouables
 
-Build 32 ne réécrit pas les anciens tribunaux :
+Build 32 ne réécrit pas le passé pour rendre les tests verts :
 
-- Build 31 peut toujours rejouer exactement son learner model **2.1 / 31 sur 40/241** ;
-- Build 30 et les anciens `*Smoke` restent capables de tester leur runtime historique ;
-- `release-v2.json` reste volontairement **2.0.0 / Architecture Build 30 / 40–241** ;
-- le tribunal V2 distingue maintenant le contrat gelé du produit V2.x courant et exige que le courant reste un **superset compatible**.
-
-La CI protège toujours explicitement **v1.17.0 — Build 24 — Real Life French II** : **28 situations / 84 tours** avant Pack III, avec `real-life-data-2.js` comme référence historique.
+- `release-v2.json` reste exactement **2.0.0 / Architecture Build 30 / 40–241** ;
+- le tribunal V2 distingue maintenant cette baseline gelée du produit V2.x courant et exige que le courant reste un **superset compatible** ;
+- Build 31 peut rejouer exactement son learner model **2.1 / Build 31 sur 40/241** ;
+- Build 30 et les vieux `*Smoke` gardent leur monde historique ;
+- la CI protège toujours explicitement **v1.17.0 — Build 24 — Real Life French II** : **28 situations / 84 tours** avant Pack III, avec `real-life-data-2.js` comme témoin historique.
 
 ## 🔐 Données / Recovery
 
-Build 32 ne crée aucun store et n’effectue aucune migration.
-
-Stores canoniques inchangés :
+Build 32 n’ajoute **aucun store** et ne nécessite **aucune migration**.
 
 ```text
 francais-avec-luc:learner:v1
@@ -117,9 +111,11 @@ french-tranquille:listening:v1
 french-tranquille:milestones:v1
 ```
 
-Une ancienne utilisatrice à **7 leçons terminées / `l8=4` / 40 acquis** doit rester exactement dans cet état. Une utilisatrice ayant terminé les 40 leçons historiques doit simplement recevoir **l41** comme prochaine étape.
+Le tribunal navigateur exige ces six valeurs brutes byte-identiques avant/après le calcul Build32.
 
-## 🎙️ Voix : gate iPhone toujours parallèle
+Un ancien profil à **7 leçons terminées / `l8=4` / 40 acquis** reste exactement à cet état et reçoit toujours **l8** comme prochaine leçon. Un profil ayant terminé les 40 leçons historiques continue naturellement à **l41**.
+
+## 🎙️ Gate iPhone toujours parallèle
 
 Build 32 ne modifie ni `voice-ios.js`, ni `free-voice.js`, ni la logique de capture automatique du premier essai.
 
@@ -132,9 +128,9 @@ reconnaissance Free Voice
 → reconnaissance suivante toujours normale
 ```
 
-Il bloque uniquement une future capture automatique du premier essai exact. Il ne bloque pas ce build de contenu/intelligence.
+Il bloque uniquement une future capture automatique du premier essai exact. Il ne bloque ni contenu, ni niveau, ni travail de mémoire hors cette capture.
 
-## 🛡️ Sanctuaires
+## 🛡️ Sanctuaires exacts
 
 - `app.js` — `600f094266c9f0c4c7b57efdbf61129909ebd9cb` ;
 - `voice-ios.js` — `38e97aa3ef62dd6dcda224901b435f0973618679` ;
@@ -143,28 +139,28 @@ Il bloque uniquement une future capture automatique du premier essai exact. Il n
 - `assets/Favicon.png` — `c358672368a960bf7617e5532aff3e3319cddb3e` ;
 - learner canonique `francais-avec-luc:learner:v1`.
 
-## Tribunal candidat Build 32
+## ✅ Certification Build 32
 
-Le workflow dédié doit notamment prouver :
-
-- baseline 40/241 rejouée sans Stage 4 ;
-- produit courant 52/313 ;
-- Stage 4 12/72 et IDs uniques ;
-- Scenario 44/132 + Pack IV 8/24 ;
-- Listening II 4 + 8 ;
-- Speaking Loop 52/52, max 2 ;
-- 7 bandes Learner Intelligence ;
-- ancien profil `l8=4` byte-identique ;
-- profil ayant fini l40 → l41 ;
-- parcours complet = 7 étapes ;
-- zéro overflow horizontal desktop/mobile ;
+- PR runtime **#79**, head certifié `b64539e8f463bde8cabc05cd606f3132b01e2da8` : **25/25 workflows fonctionnels SUCCESS** ;
+- runtime mergé sur `main` : **`269cb0b476ea131cfbe086a87bcc4364ec39c342`** ;
+- exact `main` runtime : **26/26 SUCCESS**, Pages comprise ;
+- GitHub Pages **#137 SUCCESS** sur exactement ce SHA ;
+- clean learner → prochaine **leçon 1** ;
+- ancien profil mobile → **7 terminées / l8=4 / 40 acquis**, prochaine **leçon 8** ;
+- profil ayant terminé l1–l40 → prochaine **leçon 41** ;
+- parcours complet : **7 étapes**, nouvelles étapes à 6 leçons chacune ;
+- Stage 4 **12/72**, 313 IDs uniques ;
+- Scenario **44/132**, Pack IV **8/24**, zéro référence invalide ;
+- Listening II **4 + 8**, zéro référence invalide ;
+- Speaking Loop **52/52**, max 2 ;
+- V2 Freeze Compatibility, Build31 replay, Build30 Architecture, Recovery, iPhone/PWA, Speaking et tous les anciens parcours restent verts ;
 - six stores durables inchangés ;
-- tous les sanctuaires exacts.
+- zéro overflow horizontal sur les audits desktop/mobile.
 
-## Production précédente certifiée
+## Suite canonique
 
-**V2.1.0 — Build 31 · Learner Intelligence Core** reste la dernière production certifiée tant que Build32 n’a pas terminé son cycle de release.
+La prochaine intention est **Build 33 — Memory Evidence v2 / Migration Readiness**.
 
-Build31 avait été certifié via PR runtime **#77**, puis `main` runtime `e2b2c6293f35495fa8bbffd2e6b684fba897df88` avec **25/25 SUCCESS** Pages comprise et clôture documentaire finale `d7da5d1cce7c94dc8bb685d7019daebbff1a4296`.
+Ce build commencera **par le design**, pas par une migration nocturne : modalités/contextes/assistance/récence/confiance, schéma candidat, compat backups, snapshot pré-migration, validation, rollback et ancien-utilisateur. **Aucun nouveau schéma durable ni septième store ne sera adopté tant que la migration n’est pas prouvée réversible.**
 
 Voir `ROADMAP.md`, `CHANGELOG.md`, `docs/ARCHITECTURE.md`, `docs/BUILD-31-LEARNER-INTELLIGENCE.md`, `docs/BUILD-32-PRACTICAL-A1.md` et `docs/V2-RELEASE.md`.
