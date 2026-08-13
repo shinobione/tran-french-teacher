@@ -21,6 +21,13 @@ jobs:
           grep -q 'Nocturne Jade/Or' index.html
           grep -q 'html.listening-open .ux-bottom-nav' index.html
           grep -q 'assets/LOGO.png' brand.css
+          grep -q 'premium-theme-polish.css' theme-controller.js
+          grep -q "insertAdjacentElement('afterend',img)" theme-controller.js
+          grep -q 'ft-theme-settings-inline' theme-controller.js
+          grep -q 'data-theme-current' theme-controller.js
+          grep -q '#ff3faf' premium-theme-polish.css
+          grep -q '#a640ff' premium-theme-polish.css
+          grep -q '#f4c34f' premium-theme-polish.css
           ! grep -q 'francais-avec-luc:learner:v1' theme-controller.js
           ! grep -q 'french-tranquille:learning-memory:v1' theme-controller.js
       - name: Voice and learner sanctuaries remain exact
