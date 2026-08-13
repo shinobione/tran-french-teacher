@@ -22,17 +22,19 @@ jobs:
           grep -q 'html.listening-open .ux-bottom-nav' index.html
           grep -q 'assets/LOGO.png' brand.css
           grep -q 'premium-theme-polish.css' theme-controller.js
-          grep -q '2.3.5-v4home1' theme-controller.js
+          grep -q '2.3.6-v4home2' theme-controller.js
           grep -q "insertAdjacentElement('afterend',img)" theme-controller.js
           grep -q 'ft-theme-settings-inline' theme-controller.js
           grep -q 'data-theme-current' theme-controller.js
           grep -q 'premium-theme-polish-v2-base.css' premium-theme-polish.css
           grep -q 'premium-depth-pass.css' premium-theme-polish.css
           grep -q 'premium-depth-mobile-geometry.css' premium-theme-polish.css
-          grep -q 'premium-v4-home.css' premium-theme-polish.css
+          grep -q 'premium-v4-home.css?v=2.3.6-v4home2' premium-theme-polish.css
           grep -q -- '--pv4-home-ready:1' premium-v4-home.css
-          grep -q 'background:transparent' premium-v4-home.css
-          ! grep -q 'data-theme="original"' premium-v4-home.css
+          grep -q ':not(\[data-theme="original"\])' premium-v4-home.css
+          grep -q 'data-b27-action="review"' premium-v4-home.css
+          grep -q 'data-b27-action="listening"' premium-v4-home.css
+          grep -q 'desktop-not-two-column' premium-v4-home-tribunal.html
           test "$(git hash-object premium-theme-polish-v2-base.css)" = "b5578b1fae55426f06eac30e227d94cf4dfb2491"
           grep -q '#ff3faf' premium-theme-polish-v2-base.css
           grep -q '#a640ff' premium-theme-polish-v2-base.css
@@ -47,7 +49,7 @@ jobs:
           grep -q 'width:min(360px,100%)' premium-depth-mobile-geometry.css
           ! grep -q 'francais-avec-luc:learner:v1' theme-controller.js
           ! grep -q 'french-tranquille:learning-memory:v1' theme-controller.js
-          ! grep -q 'francais-avec-luc:learner:v1' premium-depth-pass.css
+          ! grep -q 'francais-avec-luc:learner:v1' premium-v4-home.css
       - name: Voice and learner sanctuaries remain exact
         run: |
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
@@ -61,8 +63,12 @@ jobs:
           sleep 1
       - name: Chrome — themes logo and Listening nav
         run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=13000 --dump-dom 'http://127.0.0.1:4173/appearance-field-smoke.html' >/tmp/appearance-field.html
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=15000 --dump-dom 'http://127.0.0.1:4173/appearance-field-smoke.html' >/tmp/appearance-field.html
           grep -q 'data-appearance-field-smoke="ok"' /tmp/appearance-field.html || { cat /tmp/appearance-field.html; exit 1; }
+      - name: Chrome — Premium V4 Home viewport tribunal
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=30000 --dump-dom 'http://127.0.0.1:4173/premium-v4-home-tribunal.html' >/tmp/premium-v4-home-tribunal.html
+          grep -q 'data-premium-v4-home-tribunal="ok"' /tmp/premium-v4-home-tribunal.html || { cat /tmp/premium-v4-home-tribunal.html; exit 1; }
       - name: Stop static server
         if: always()
         run: |
