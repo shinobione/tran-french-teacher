@@ -1,4 +1,4 @@
-name: Build 31 Learner Intelligence Core
+name: Build 31 Learner Intelligence compatibility
 
 on:
   push:
@@ -18,7 +18,7 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Static learner-model contracts
+      - name: Static Build31 replay contracts
         run: |
           node --check learner-intelligence.js
           node --check learner-intelligence-smoke.js
@@ -28,7 +28,8 @@ jobs:
           node --check sw.js
           grep -Fq "const VERSION = '2.1.0'" learner-intelligence.js
           grep -Fq 'const BUILD = 31' learner-intelligence.js
-          grep -Fq "const META = { version: '2.1.0', build: '31'" build-meta.js
+          grep -Fq "const B31_AUDIT_META = { version: '2.1.0', build: '31'" build-meta.js
+          grep -Fq "const CURRENT_META = { version: '2.2.0', build: '32'" build-meta.js
           grep -Fq './build31-loader.js?v=2.1.0-b31' settings-legal.js
           grep -Fq "const B31='2.1.0-b31'" sw.js
           grep -Fq 'learner-intelligence.css?v=${B31}' sw.js
@@ -42,7 +43,7 @@ jobs:
           r=json.load(open('release-v2.json',encoding='utf-8'))
           assert r['version']=='2.0.0' and r['architectureBuild']==30 and r['status']=='freeze'
           assert len(r['durableStores'])==6
-          print('Frozen V2 release contract unchanged under Build 31')
+          print('Frozen V2 release contract unchanged; Build31 remains replayable')
           PY
 
       - name: Frozen core, iPhone voice and branding sanctuaries stay byte-identical
@@ -60,7 +61,7 @@ jobs:
           sleep 1
           google-chrome --version
 
-      - name: Chrome desktop — clean learner gets a deterministic first step
+      - name: Chrome desktop — clean learner replays Build31 exactly
         run: |
           passed=0
           for attempt in 1 2 3; do
@@ -103,7 +104,7 @@ jobs:
           done
           test "$passed" = 1
 
-      - name: Chrome mobile 390x844 — Trân lesson-8 profile stays exact and gets lesson 8
+      - name: Chrome mobile 390x844 — old learner stays exact in Build31 replay
         run: |
           passed=0
           for attempt in 1 2 3; do
