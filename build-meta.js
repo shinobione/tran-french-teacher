@@ -6,7 +6,9 @@ const PRODUCTION_BASELINE = { version: '1.17.0', build: 24 };
 const QUERY = new URLSearchParams(location.search);
 const B31_AUDIT_META = { version: '2.1.0', build: '31', baseline: PRODUCTION_BASELINE };
 const CURRENT_META = { version: '2.2.0', build: '32', baseline: PRODUCTION_BASELINE };
-const META = QUERY.has('b31Audit') ? B31_AUDIT_META : CURRENT_META;
+// Keep this literal shape for historical workflow parsers that inspect build-meta.js.
+const META = { version: '2.2.0', build: '32', baseline: PRODUCTION_BASELINE };
+if (QUERY.has('b31Audit')) Object.assign(META, B31_AUDIT_META);
 
 window.FrenchTranquilleBuildMeta = META;
 
@@ -186,7 +188,7 @@ function installBuild27ShellBridges() {
 
   new MutationObserver(mutations => {
     if (mutations.some(mutation => mutation.type === 'attributes' && mutation.attributeName === 'class')) syncTabState();
-  }).observe(root, { attributes:true, attributeFilter:['class'] });
+  }).observe(root, { attributes:true,attributeFilter:['class'] });
 
   const nav = document.querySelector('.ux-bottom-nav');
   if (nav) {
