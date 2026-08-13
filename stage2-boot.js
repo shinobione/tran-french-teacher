@@ -26,8 +26,15 @@ if (window.FrenchTranquilleStage2 && !window.__FT_STAGE2_BOOTED__) {
     });
   }
 
-  function clearPersistentLeaving() {
-    document.querySelectorAll('.b27-page.b27-leaving').forEach(node => node.classList.remove('b27-leaving'));
+  function settleTopLevelMotion() {
+    // Build 27 animates top-level facades with temporary entering/leaving
+    // classes. Field reports proved either class can survive a route change and
+    // leave a perfectly valid Home/Progress node at opacity:0 indefinitely.
+    // A committed top-level route owns final visibility, so no transient motion
+    // marker is allowed to survive that transaction.
+    document.querySelectorAll('.b27-page.b27-entering,.b27-page.b27-leaving').forEach(node => {
+      node.classList.remove('b27-entering', 'b27-leaving');
+    });
     if (!document.querySelector('.b27-practice-page')) root.classList.remove('b27-practice-open');
     if (!document.querySelector('.b27-journey-page')) root.classList.remove('b27-journey-open');
     if (!document.querySelector('.ux-practice-overlay')) root.classList.remove('ux-practice-open');
@@ -36,10 +43,11 @@ if (window.FrenchTranquilleStage2 && !window.__FT_STAGE2_BOOTED__) {
   function scheduleVisualGuard(delay = 190) {
     clearTimeout(visualGuardTimer);
     visualGuardTimer = setTimeout(() => {
-      clearPersistentLeaving();
+      settleTopLevelMotion();
       window.FrenchTranquilleBuild27Shell?.refresh?.();
       window.FrenchTranquilleBuild32Shell?.refresh?.();
       window.FrenchTranquilleUX?.refresh?.();
+      settleTopLevelMotion();
       root.dataset.fieldRouteVisualGuard = String(Number(root.dataset.fieldRouteVisualGuard || 0) + 1);
     }, delay);
   }
@@ -55,7 +63,7 @@ if (window.FrenchTranquilleStage2 && !window.__FT_STAGE2_BOOTED__) {
     if (practiceClose) practiceClose.click();
 
     window.FrenchTranquilleBuild27Shell?.closeJourney?.();
-    clearPersistentLeaving();
+    settleTopLevelMotion();
   }
 
   function routeLegacy(id) {
@@ -70,7 +78,7 @@ if (window.FrenchTranquilleStage2 && !window.__FT_STAGE2_BOOTED__) {
     const style = getComputedStyle(node);
     const rect = node.getBoundingClientRect();
     const opacity = Number.parseFloat(style.opacity || '1');
-    return style.display !== 'none' && style.visibility !== 'hidden' && opacity > 0.05 && rect.width > 1 && rect.height > 1 && !node.classList.contains('b27-leaving');
+    return style.display !== 'none' && style.visibility !== 'hidden' && opacity > 0.05 && rect.width > 1 && rect.height > 1 && !node.classList.contains('b27-entering') && !node.classList.contains('b27-leaving');
   }
 
   function destinationNode(id) {
@@ -88,11 +96,11 @@ if (window.FrenchTranquilleStage2 && !window.__FT_STAGE2_BOOTED__) {
   }
 
   function refreshFacades() {
-    clearPersistentLeaving();
+    settleTopLevelMotion();
     window.FrenchTranquilleBuild27Shell?.refresh?.();
     window.FrenchTranquilleBuild32Shell?.refresh?.();
     window.FrenchTranquilleUX?.refresh?.();
-    clearPersistentLeaving();
+    settleTopLevelMotion();
   }
 
   function openPracticeOnStableBase(epoch) {
@@ -104,7 +112,7 @@ if (window.FrenchTranquilleStage2 && !window.__FT_STAGE2_BOOTED__) {
     refreshFacades();
     requestAnimationFrame(() => {
       if (epoch !== routeEpoch) return;
-      clearPersistentLeaving();
+      settleTopLevelMotion();
       window.FrenchTranquilleBuild27Shell?.openPractice?.();
       settleDestination('practice', epoch, 0, false);
     });
@@ -172,7 +180,7 @@ if (window.FrenchTranquilleStage2 && !window.__FT_STAGE2_BOOTED__) {
     root.dataset.fieldRouteError = '';
 
     closeTransientSurfaces();
-    clearPersistentLeaving();
+    settleTopLevelMotion();
 
     if (id === 'practice') {
       openPracticeOnStableBase(epoch);
@@ -189,9 +197,9 @@ if (window.FrenchTranquilleStage2 && !window.__FT_STAGE2_BOOTED__) {
   function guardBuild27Transition(event) {
     const target = event.target?.closest?.('[data-b27-action="listening"], [data-b27-practice-action="listening"], [data-listening-close]');
     if (!target) return;
-    // Build 27's historical transition adds b27-leaving before opening the
-    // Listening overlay. If the underlying page survives, that class must not
-    // survive with it or Home/Progress becomes an invisible DOM ghost.
+    // Build 27 can leave a persistent top-level facade with a transient motion
+    // class around Listening. The guard settles only top-level pages; overlays
+    // keep their own entrance/exit animation.
     scheduleVisualGuard(target.matches('[data-listening-close]') ? 30 : 190);
   }
 
