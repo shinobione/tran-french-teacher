@@ -2,6 +2,7 @@
   'use strict';
 
   const VERSION = '2.2.0-b32';
+  const FOUNDATIONS = '2.3.0-b34';
   const root = document.documentElement;
   const loadStyle = (href, key) => {
     if (document.querySelector(`link[data-${key}]`)) return;
@@ -45,7 +46,13 @@
     root.dataset.build32Ready = '1';
 
     const params = new URLSearchParams(location.search);
-    if (params.has('b32Audit')) await loadScript(`./build32-smoke.js?v=${VERSION}`, 'build32Smoke');
+    if (params.has('b32Audit')) {
+      await loadScript(`./build32-smoke.js?v=${VERSION}`, 'build32Smoke');
+      return;
+    }
+
+    const historical = params.has('b31Audit') || params.has('b30Audit') || params.has('v2Audit');
+    if (!historical) await loadScript(`./foundations-pilot.js?v=${FOUNDATIONS}`, 'foundationsPilot');
   }
 
   boot().catch(error => {
