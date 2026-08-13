@@ -63,7 +63,7 @@
             if(columns.length<2)throw Error(`${width}-${theme}:desktop-not-two-column`);
             if(home.getBoundingClientRect().width<1000)throw Error(`${width}-${theme}:desktop-too-narrow:${home.getBoundingClientRect().width.toFixed(1)}`);
           }
-          if(width<=430&&card.getBoundingClientRect().width<330)throw Error(`${width}-${theme}:mobile-card-too-narrow`);
+          if(width<=430&&card.getBoundingClientRect().width<vw*.86)throw Error(`${width}-${theme}:mobile-card-too-narrow:${card.getBoundingClientRect().width.toFixed(1)}/${vw}`);
         }
       }
 
