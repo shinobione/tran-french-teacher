@@ -47,14 +47,46 @@
   <link rel="stylesheet" href="./build26-9-ux.css?v=1.19.9-b26.9" />
   <link rel="stylesheet" href="./build27-app-shell.css?v=1.20.0-b27" />
   <link rel="stylesheet" href="./build29-iphone-a11y.css?v=1.22.0-b29" />
+  <link rel="stylesheet" href="./appearance-themes.css?v=1.0.0-theme1" />
   <title>French Trân’quille</title>
   <style>
     .boot-status{width:min(560px,calc(100% - 32px));margin:18vh auto 0;padding:22px;border:1px solid rgba(180,199,224,.16);border-radius:20px;background:rgba(14,26,42,.86);color:#f7f3eb;text-align:center;font-family:Inter,system-ui,sans-serif;box-shadow:0 18px 50px rgba(0,0,0,.22)}
     .boot-status strong{display:block;font-size:1.05rem;margin-bottom:8px}.boot-status small{display:block;color:#91a4bc;line-height:1.5}.boot-status.error{border-color:rgba(240,90,105,.38)}.boot-status code{display:block;margin-top:12px;padding:10px;border-radius:10px;background:#08111d;color:#ffc0c7;text-align:left;white-space:pre-wrap;word-break:break-word;font-size:.72rem}
+    html.listening-open .listening-overlay{bottom:calc(70px + env(safe-area-inset-bottom,0px));padding-bottom:18px}
+    html.listening-open .ux-bottom-nav{display:grid!important;z-index:10020}
+    html.listening-open body{padding-bottom:calc(78px + env(safe-area-inset-bottom,0px))}
+    #ft-theme-settings{display:none;position:fixed;z-index:1500;right:14px;bottom:14px;width:min(520px,calc(100% - 28px));border:1px solid var(--ux-border);border-radius:22px;background:var(--ux-panel);color:var(--ux-text);box-shadow:0 22px 70px rgba(0,0,0,.42);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);overflow:hidden}
+    body[data-ux-screen="settings"] #ft-theme-settings{display:block}
+    #ft-theme-settings summary{min-height:58px;padding:11px 15px;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;list-style:none;font-weight:850}
+    #ft-theme-settings summary::-webkit-details-marker{display:none}
+    #ft-theme-settings summary span{color:var(--ux-accent);font-size:.75rem;font-weight:750}
+    #ft-theme-settings[open] summary{border-bottom:1px solid var(--ux-border)}
+    .ft-theme-body{padding:12px;display:grid;gap:9px;max-height:min(62dvh,520px);overflow:auto}
+    .ft-theme-copy{margin:0 2px 2px;color:var(--ux-muted);font-size:.78rem;line-height:1.4}
+    .ft-theme-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+    #ft-theme-settings .theme-option{width:100%;min-height:78px}
+    #ft-theme-settings .theme-check{opacity:0}
+    html[data-theme="original"] #ft-theme-settings [data-theme-option="original"],html[data-theme="aurora"] #ft-theme-settings [data-theme-option="aurora"],html[data-theme="sunset"] #ft-theme-settings [data-theme-option="sunset"],html[data-theme="jade"] #ft-theme-settings [data-theme-option="jade"]{border-color:var(--ux-accent);background:linear-gradient(135deg,var(--ux-panel-soft),rgba(255,255,255,.035));box-shadow:inset 0 0 0 1px var(--ux-border),0 10px 28px rgba(0,0,0,.2)}
+    html[data-theme="original"] #ft-theme-settings [data-theme-option="original"] .theme-check,html[data-theme="aurora"] #ft-theme-settings [data-theme-option="aurora"] .theme-check,html[data-theme="sunset"] #ft-theme-settings [data-theme-option="sunset"] .theme-check,html[data-theme="jade"] #ft-theme-settings [data-theme-option="jade"] .theme-check{opacity:1}
+    .ft-theme-fr{display:none}.ux-debug-mode #ft-theme-settings .ft-theme-vi{display:none}.ux-debug-mode #ft-theme-settings .ft-theme-fr{display:inline}
+    @media(max-width:520px){#ft-theme-settings{right:8px;bottom:8px;width:calc(100% - 16px);border-radius:20px}.ft-theme-grid{grid-template-columns:1fr}.ft-theme-body{max-height:56dvh}}
+    @media(min-width:760px){html.listening-open .listening-overlay{bottom:98px}}
   </style>
 </head>
 <body translate="no" class="notranslate">
   <div id="app" translate="no" class="notranslate"><div class="boot-status" id="boot-status"><strong>French Trân’quille</strong><small>Đang khởi động… • Démarrage…</small></div></div>
+  <details id="ft-theme-settings">
+    <summary>🎨 <strong><span class="ft-theme-vi">Chủ đề</span><span class="ft-theme-fr">Thèmes</span></strong><span>Original + 3</span></summary>
+    <div class="ft-theme-body">
+      <p class="ft-theme-copy"><span class="ft-theme-vi">Chỉ thay đổi giao diện. Bài học, tiến độ và giọng nói không thay đổi.</span><span class="ft-theme-fr">Cosmétique uniquement : leçons, progression et voix restent intactes.</span></p>
+      <div class="ft-theme-grid">
+        <button type="button" class="theme-option" data-theme-option="original" onclick="window.FrenchTranquilleThemes?.apply('original')"><span class="theme-swatch original"></span><span class="theme-option-copy"><strong>Original</strong><small><span class="ft-theme-vi">Giao diện hiện tại</span><span class="ft-theme-fr">Thème actuel</span></small></span><span class="theme-check">✓</span></button>
+        <button type="button" class="theme-option" data-theme-option="aurora" onclick="window.FrenchTranquilleThemes?.apply('aurora')"><span class="theme-swatch aurora"></span><span class="theme-option-copy"><strong>Aurora Bleu/Rose</strong><small><span class="ft-theme-vi">Xanh đêm • cyan • hồng</span><span class="ft-theme-fr">Bleu nuit • cyan • rose</span></small></span><span class="theme-check">✓</span></button>
+        <button type="button" class="theme-option" data-theme-option="sunset" onclick="window.FrenchTranquilleThemes?.apply('sunset')"><span class="theme-swatch sunset"></span><span class="theme-option-copy"><strong>Sunset Orange/Violet</strong><small><span class="ft-theme-vi">Cam sáng • tím sâu</span><span class="ft-theme-fr">Orange solaire • violet profond</span></small></span><span class="theme-check">✓</span></button>
+        <button type="button" class="theme-option" data-theme-option="jade" onclick="window.FrenchTranquilleThemes?.apply('jade')"><span class="theme-swatch jade"></span><span class="theme-option-copy"><strong>Nocturne Jade/Or</strong><small><span class="ft-theme-vi">Ngọc đậm • vàng dịu</span><span class="ft-theme-fr">Jade profond • or doux</span></small></span><span class="theme-check">✓</span></button>
+      </div>
+    </div>
+  </details>
   <script>
     (()=>{
       const HOTFIX='1.22.0-b29-iphone-pwa-a11y';
@@ -69,6 +101,7 @@
       window.addEventListener('load',()=>setTimeout(()=>{const app=root(),boot=document.getElementById('boot-status');if(app&&boot&&app.contains(boot))fatal('Startup watchdog: app.js did not replace the boot screen within 3 seconds.')},3000));
     })();
   </script>
+  <script src="./theme-controller.js?v=1.0.0-theme1"></script>
   <script src="./data-recovery-core.js?v=1.21.0-b28"></script>
   <script src="./data-recovery.js?v=1.21.0-b28"></script>
   <script type="module" src="./progress-safety.js?v=1.17.0-b24"></script>
