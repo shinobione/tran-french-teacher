@@ -1,3 +1,4 @@
 /* Premium visual composition. Keep the validated V2 palette layer first. */
 @import url('./premium-theme-polish-v2-base.css?v=2.3.2-theme2');
 @import url('./premium-depth-pass.css?v=2.3.2-depth1');
+@import url('./premium-depth-mobile-geometry.css?v=2.3.2-depth1');
