@@ -1,0 +1,69 @@
+/* French Trân’quille — Premium Polish V4 / Home kickoff
+   Scope: Aurora Home welcome hero only. Original / Sunset / Jade untouched. */
+
+html[data-theme="aurora"]{--pv4-home-ready:1}
+
+html[data-theme="aurora"] .b27-welcome{
+  position:relative;
+  overflow:visible;
+  margin-top:2px;
+  padding:14px 2px 14px;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+}
+
+html[data-theme="aurora"] .b27-welcome::before{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  pointer-events:none;
+  left:-30px;
+  top:-36px;
+  width:min(540px,88vw);
+  height:180px;
+  border-radius:50%;
+  background:radial-gradient(ellipse at 30% 45%,rgba(56,216,255,.12),transparent 58%),radial-gradient(ellipse at 72% 38%,rgba(255,75,181,.09),transparent 62%);
+  filter:blur(22px);
+  opacity:.9;
+}
+
+html[data-theme="aurora"] .b27-welcome::after{
+  left:2px;
+  right:auto;
+  bottom:0;
+  width:min(320px,72%);
+  height:1px;
+  transform:none;
+  background:linear-gradient(90deg,#42dfff 0%,#758cff 48%,#ff4ab4 78%,transparent 100%);
+  opacity:.68;
+}
+
+html[data-theme="aurora"] .b27-welcome>span{color:#63e4ff;text-shadow:0 0 18px rgba(66,223,255,.18)}
+html[data-theme="aurora"] .b27-welcome h1{
+  max-width:760px;
+  margin:8px 0 9px;
+  font-size:clamp(2.05rem,5vw,3.15rem);
+  line-height:1;
+  letter-spacing:-.048em;
+  color:#f8fbff;
+  text-wrap:balance;
+  text-shadow:0 0 26px rgba(72,213,255,.09),0 0 30px rgba(255,70,185,.16);
+}
+html[data-theme="aurora"] .b27-welcome p{max-width:620px;color:color-mix(in srgb,var(--ft-muted) 90%,#dff8ff 10%)}
+
+@media (max-width:520px){
+  html[data-theme="aurora"] .b27-welcome{padding:10px 2px 13px}
+  html[data-theme="aurora"] .b27-welcome::before{left:-22px;top:-24px;width:110%;height:145px;filter:blur(18px)}
+  html[data-theme="aurora"] .b27-welcome::after{width:min(250px,76%)}
+  html[data-theme="aurora"] .b27-welcome h1{font-size:clamp(2rem,10.8vw,2.7rem);letter-spacing:-.05em}
+}
+
+@media (prefers-reduced-motion:reduce){
+  html[data-theme="aurora"] .b27-welcome,
+  html[data-theme="aurora"] .b27-welcome::before,
+  html[data-theme="aurora"] .b27-welcome::after{transition:none!important;animation:none!important}
+}

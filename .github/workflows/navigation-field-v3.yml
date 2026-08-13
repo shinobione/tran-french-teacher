@@ -25,7 +25,8 @@ jobs:
           grep -q 'translate3d(-50%,0,0)' premium-nav-geometry-hotfix.css
           grep -q 'z-index:10020' premium-nav-geometry-hotfix.css
           grep -q '2.3.4-p0nav1' premium-theme-polish.css
-          grep -q '2.3.4-p0nav1' theme-controller.js
+          grep -q '2.3.5-v4home1' theme-controller.js
+          grep -q 'premium-v4-home.css' premium-theme-polish.css
       - name: Sanctuaries remain exact
         run: |
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
