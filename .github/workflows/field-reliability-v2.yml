@@ -38,6 +38,24 @@ jobs:
           test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
           test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
 
+      - name: Prepare deterministic browser media fixture
+        run: |
+          python3 - <<'PY'
+          import math, struct, wave
+          rate = 16000
+          seconds = 3
+          with wave.open('/tmp/ft-field-tone.wav', 'wb') as out:
+              out.setnchannels(1)
+              out.setsampwidth(2)
+              out.setframerate(rate)
+              frames = bytearray()
+              for i in range(rate * seconds):
+                  sample = int(9000 * math.sin(2 * math.pi * 440 * i / rate))
+                  frames.extend(struct.pack('<h', sample))
+              out.writeframes(frames)
+          PY
+          test -s /tmp/ft-field-tone.wav
+
       - name: Start static server
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-field-v2-http.log 2>&1 &
@@ -49,6 +67,7 @@ jobs:
         run: |
           google-chrome --headless=new --no-sandbox --disable-gpu \
             --use-fake-ui-for-media-stream --use-fake-device-for-media-stream \
+            --use-file-for-fake-audio-capture=/tmp/ft-field-tone.wav \
             --virtual-time-budget=7000 --dump-dom \
             'http://127.0.0.1:4173/field-audio-browser-smoke.html' >/tmp/field-audio-v2.html
           grep -q 'data-field-audio-browser-smoke="ok"' /tmp/field-audio-v2.html || { cat /tmp/field-audio-v2.html; exit 1; }
