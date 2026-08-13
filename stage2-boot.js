@@ -9,6 +9,7 @@ if (window.FrenchTranquilleStage2 && !window.__FT_STAGE2_BOOTED__) {
   const enableFieldAudio = !historicalHarness || params.has('fieldAudioV2');
   let routeEpoch = 0;
   let visualGuardTimer = null;
+  let navReconcileScheduled = false;
 
   const loadFieldModule = (src, key) => {
     if (document.querySelector(`script[data-${key}]`)) return;
@@ -21,8 +22,9 @@ if (window.FrenchTranquilleStage2 && !window.__FT_STAGE2_BOOTED__) {
   function setActiveNav(id) {
     document.querySelectorAll('.ux-bottom-nav [data-ux-nav]').forEach(button => {
       const active = button.dataset.uxNav === id;
-      button.classList.toggle('active', active);
-      button.setAttribute('aria-current', active ? 'page' : 'false');
+      if (button.classList.contains('active') !== active) button.classList.toggle('active', active);
+      const aria = active ? 'page' : 'false';
+      if (button.getAttribute('aria-current') !== aria) button.setAttribute('aria-current', aria);
     });
   }
 
@@ -48,6 +50,7 @@ if (window.FrenchTranquilleStage2 && !window.__FT_STAGE2_BOOTED__) {
       window.FrenchTranquilleBuild32Shell?.refresh?.();
       window.FrenchTranquilleUX?.refresh?.();
       settleTopLevelMotion();
+      scheduleNavReconcile();
       root.dataset.fieldRouteVisualGuard = String(Number(root.dataset.fieldRouteVisualGuard || 0) + 1);
     }, delay);
   }
@@ -95,12 +98,38 @@ if (window.FrenchTranquilleStage2 && !window.__FT_STAGE2_BOOTED__) {
     return true;
   }
 
+  function visibleNavOwner() {
+    // Listening is a transient surface, not a fourth bottom-nav destination.
+    // Do not rewrite the underlying tab while it is open; the next explicit
+    // top-level tap will close Listening and establish its own destination.
+    if (isActuallyVisible(document.querySelector('.listening-overlay'))) return '';
+    if (isActuallyVisible(document.querySelector('.b27-practice-page')) || isActuallyVisible(document.querySelector('.ux-practice-overlay'))) return 'practice';
+    if (isActuallyVisible(document.querySelector('.screen-progress .b27-progress-page'))) return 'progress';
+    if (isActuallyVisible(document.querySelector('.screen-home .b27-home'))) return 'home';
+    return '';
+  }
+
+  function reconcileVisibleNav() {
+    navReconcileScheduled = false;
+    const owner = visibleNavOwner();
+    if (!owner) return;
+    setActiveNav(owner);
+    root.dataset.fieldRouteVisibleOwner = owner;
+  }
+
+  function scheduleNavReconcile() {
+    if (navReconcileScheduled || !enableFieldRouter) return;
+    navReconcileScheduled = true;
+    requestAnimationFrame(reconcileVisibleNav);
+  }
+
   function refreshFacades() {
     settleTopLevelMotion();
     window.FrenchTranquilleBuild27Shell?.refresh?.();
     window.FrenchTranquilleBuild32Shell?.refresh?.();
     window.FrenchTranquilleUX?.refresh?.();
     settleTopLevelMotion();
+    scheduleNavReconcile();
   }
 
   function openPracticeOnStableBase(epoch) {
@@ -114,6 +143,7 @@ if (window.FrenchTranquilleStage2 && !window.__FT_STAGE2_BOOTED__) {
       if (epoch !== routeEpoch) return;
       settleTopLevelMotion();
       window.FrenchTranquilleBuild27Shell?.openPractice?.();
+      scheduleNavReconcile();
       settleDestination('practice', epoch, 0, false);
     });
   }
@@ -132,6 +162,7 @@ if (window.FrenchTranquilleStage2 && !window.__FT_STAGE2_BOOTED__) {
     root.dataset.fieldRouteAttempt = String(attempt);
     if (ready) {
       setActiveNav(id);
+      scheduleNavReconcile();
       root.dataset.fieldRouteError = '';
       return;
     }
@@ -206,6 +237,14 @@ if (window.FrenchTranquilleStage2 && !window.__FT_STAGE2_BOOTED__) {
   if (enableFieldRouter) {
     window.addEventListener('click', routeVisibleNavigation, true);
     window.addEventListener('click', guardBuild27Transition, true);
+
+    // ux-shell.js independently recomputes the bottom-nav from the hidden
+    // legacy screen. Practice intentionally sits above legacy Home, so a later
+    // UX refresh used to flip the active tab back to Home while Practice was
+    // visibly open. Reconcile from the visible surface after DOM/class changes.
+    const navObserver = new MutationObserver(scheduleNavReconcile);
+    navObserver.observe(document.body, { childList:true, subtree:true, attributes:true, attributeFilter:['class','hidden'] });
+    scheduleNavReconcile();
   }
   if (enableFieldAudio) loadFieldModule('./field-audio-session.js?v=2.3.1-b34.1', 'fieldAudioSessionV2');
 
