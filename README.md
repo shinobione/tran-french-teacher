@@ -165,6 +165,16 @@ Un ancien profil **7 leçons terminées / l8=4 / 40 acquis** doit rester exactem
 - **26/26 workflows SUCCESS** sur ce SHA ;
 - GitHub Pages **#140 SUCCESS** sur exactement ce SHA.
 
+## 🧊 Témoins historiques conservés pour la CI
+
+La CI continue volontairement de protéger l’ancienne étape :
+
+- **v1.17.0 — Build 24 — Real Life French II** ;
+- **28 situations / 84 tours** avant Pack III ;
+- `real-life-data-2.js` reste le témoin canonique de ce jalon.
+
+Cette référence historique ne décrit pas le produit courant ; elle empêche les évolutions V2.x/V2.3 de réécrire le passé pour rendre les tests verts.
+
 ## Suite canonique
 
 1. **retour terrain Trân** sur les deux correctifs + pilote F01–F04 ;
