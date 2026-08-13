@@ -1,0 +1,44 @@
+name: Appearance themes + Listening nav
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  appearance-field:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Static contracts
+        run: |
+          node --check theme-controller.js
+          grep -q 'appearance-themes.css' index.html
+          grep -q 'Aurora Bleu/Rose' index.html
+          grep -q 'Sunset Orange/Violet' index.html
+          grep -q 'Nocturne Jade/Or' index.html
+          grep -q 'html.listening-open .ux-bottom-nav' index.html
+          grep -q 'assets/LOGO.png' brand.css
+          ! grep -q 'francais-avec-luc:learner:v1' theme-controller.js
+          ! grep -q 'french-tranquille:learning-memory:v1' theme-controller.js
+      - name: Voice and learner sanctuaries remain exact
+        run: |
+          test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+          test "$(git hash-object field-audio-session.js)" = "06ca40074b345d77b8fc0c46fdb73ab35ffa2cd3"
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/appearance-http.log 2>&1 &
+          echo $! >/tmp/appearance-http.pid
+          sleep 1
+      - name: Chrome — themes logo and Listening nav
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=13000 --dump-dom 'http://127.0.0.1:4173/appearance-field-smoke.html' >/tmp/appearance-field.html
+          grep -q 'data-appearance-field-smoke="ok"' /tmp/appearance-field.html || { cat /tmp/appearance-field.html; exit 1; }
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/appearance-http.pid ]; then kill "$(cat /tmp/appearance-http.pid)" || true; fi
