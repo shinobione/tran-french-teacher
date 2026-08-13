@@ -1,0 +1,1 @@
+(()=>{'use strict';window.FrenchTranquilleThemes={version:'1.0.0'};})();
