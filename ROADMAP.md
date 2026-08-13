@@ -74,59 +74,106 @@
 68. **Une release ne passe pas si son propre tribunal peut rester bloqué indéfiniment.**
 69. **Les tests Chrome critiques sont bornés, isolés et gardent leurs assertions fonctionnelles.**
 70. **Après un freeze, aucune V2.x/V3 ne démarre sans nouveau problème utilisateur ou roadmap explicite.**
+71. **Un niveau interne doit séparer compétence estimée et confiance dans cette estimation.**
+72. **Une non-reconnaissance vocale n’est jamais une preuve suffisante de mauvaise prononciation.**
+73. **Un modèle apprenant peut lire plusieurs stores, mais n’en devient pas propriétaire par commodité.**
+74. **Une extension de curriculum répond à des capacités manquantes, pas à un objectif arbitraire de nombre de leçons.**
+75. **Toute Memory v2 qui change le schéma durable passe par Recovery, migration transactionnelle et ancien-utilisateur avant adoption.**
 
 ---
 
-# ✅ V2.0.0 — Freeze / Release — PROD / CLOS
+# ✅ V2.1.0 — Build 31 · Learner Intelligence Core — PROD / CLOS
 
-Objectif atteint : **certifier ce qui existe comme release cohérente, sans ajouter de moteur.**
+Objectif : **unifier le cerveau apprenant avant d’étendre le curriculum**.
 
-## Baseline gelée
+## Livré
 
-- [x] curriculum **40 / 241** ;
-- [x] Scenario **36 / 108** ;
-- [x] Listening **0.88 / 0.65** ;
-- [x] Speaking Loop **max 2 moments / leçon** ;
-- [x] six stores durables Recovery ;
-- [x] coût récurrent **0 €** ;
-- [x] Architecture **Build 30** ;
-- [x] version visible **v2.0.0 • Build 30** ;
-- [x] contrat machine `release-v2.json`.
+- [x] modèle read-only sur progression + Learning Memory + Error Intelligence ;
+- [x] cinq bandes cohérentes couvrant exactement **40 leçons / 241 éléments** ;
+- [x] indice interne + confiance séparée ;
+- [x] estimation interne `A0 / A0+ / Pré-A1 / A1- / A1` ;
+- [x] recommandation unique : review / lesson / practice / maintain ;
+- [x] carte compacte dans **Progrès**, détails repliés par défaut ;
+- [x] aucun nouvel onglet ;
+- [x] aucun nouveau store, aucune migration, aucune écriture durable Build31 ;
+- [x] `voice-unrecognized` reste un signal **recognition**, jamais une note phonétique ;
+- [x] version produit **v2.1.0 • Build 31** ;
+- [x] Architecture Runtime toujours gelée **2.0.0 • Build 30** ;
+- [x] `release-v2.json` reste la baseline gelée 2.0.0 / 30 ;
+- [x] PWA précache Build31 additif, identité de cache validée inchangée.
 
 ## Certification
 
-- [x] PR runtime V2 **#73**, head `c221fa9600d23dd83b87225cc4accce01e83cfe6` : **22/22 fonctionnels SUCCESS** ;
-- [x] runtime applicatif `5f2c486b3e455220ebd903f25ee766ff2430e4a5` ;
-- [x] GitHub Pages runtime **#131 SUCCESS** ;
-- [x] Recovery / backup / restore / rollback sous tribunaux historiques ;
-- [x] App Shell et navigation learner certifiés ;
-- [x] iPhone/PWA/offline/a11y certifiés ;
-- [x] Speaking Loop / Tyffany / variété / auto-écoute locale certifiés ;
-- [x] Runtime Contracts / Runtime Bridge Build 30 certifiés ;
-- [x] round-trip ancienne utilisatrice : **7 terminées / l8=4 / 40 acquis** ;
-- [x] stores durables byte-identiques avant/après le tribunal V2 ;
-- [x] matrice desktop + mobile ;
-- [x] zéro migration/renommage des stores ;
-- [x] sanctuaires hashés.
+- [x] PR runtime **#77**, head `eed097ca3d261f2f4dd60db930a11670511f33a1` : **24/24 fonctionnels SUCCESS** ;
+- [x] runtime `main` `e2b2c6293f35495fa8bbffd2e6b684fba897df88` : **25/25 SUCCESS Pages comprise** ;
+- [x] GitHub Pages **#135 SUCCESS** sur ce SHA ;
+- [x] clean learner → recommandation **leçon 1** ;
+- [x] ancien profil → **7 terminées / l8=4 / 40 acquis** et recommandation **leçon 8** ;
+- [x] stores durables byte-identiques avant/après ;
+- [x] Chrome desktop + mobile 390×844 ;
+- [x] V2 Freeze Compatibility et Build30 Architecture verts ;
+- [x] voix/iPhone sanctuarisés et inchangés.
 
-## Stabilisation finale du tribunal
+---
 
-Sur le runtime mergé, l’ancien workflow Build 25 Progression UX a reproduit un **Chrome headless non borné** alors qu’il avait passé sur la PR V2. Aucune régression produit n’était observée.
+# ▶️ V2.2.0 — Build 32 · Content Map & Practical A1 Expansion — NEXT
 
-- [x] PR CI-only **#74** : un seul YAML ;
-- [x] mêmes quatre scénarios et mêmes assertions Progression ;
-- [x] profils Chrome isolés ;
-- [x] timeout + kill-after ;
-- [x] retries bornés ;
-- [x] head #74 `0fbd3b8e8124b3beaf7d6086d8a837580abb2cb3` : **22/22 fonctionnels SUCCESS** ;
-- [x] baseline finale `main` `6e0f5cde97cfba0572efccc6344a8bd6cbe7a315` : **23/23 SUCCESS**, Pages comprise ;
-- [x] GitHub Pages **#132 SUCCESS**.
+Objectif : **étendre ce que Trân sait réellement faire en français**, pas simplement augmenter le nombre de cartes.
 
-## Definition of Done V2
+## 32.1 — Audit de capacités 1–40
 
-> **cohérente, sauvegardable, restaurable, utilisable sans connaître l’architecture, testée sur les parcours principaux et documentée avec une baseline reproductible.**
+- [ ] cartographier chaque leçon existante par intention communicative : demander, refuser, expliquer, clarifier, raconter, comparer, résoudre un problème, etc. ;
+- [ ] identifier les trous A1 pratiques après la leçon 40 ;
+- [ ] détecter les doublons de vocabulaire ou structures avant d’ajouter du contenu ;
+- [ ] conserver le vietnamien comme soutien adaptatif, pas comme béquille fixe ;
+- [ ] lister les capacités qui ont besoin de Scenario/Listening plutôt que d’une leçon isolée.
 
-**Atteint.**
+## 32.2 — Leçons 41+
+
+Candidats prioritaires à valider par l’audit :
+
+- [ ] expliquer un problème simple et demander de l’aide ;
+- [ ] prendre / déplacer / annuler un rendez-vous ;
+- [ ] logement : panne, voisinage, propriétaire, livraison ;
+- [ ] santé quotidienne : symptômes simples, pharmacie, rendez-vous ;
+- [ ] transport : retard, correspondance, billet, direction ;
+- [ ] travail quotidien : horaires, consignes, incompréhension, demande de répétition ;
+- [ ] raconter brièvement hier / un événement récent ;
+- [ ] parler d’un projet proche et d’une préférence ;
+- [ ] gérer prix, quantité, comparaison et choix avec plus d’autonomie ;
+- [ ] conversation sociale : inviter, accepter/refuser poliment, proposer une alternative.
+
+Critère : chaque nouvelle leçon doit apporter **une capacité de communication identifiable** et réutilisable dans au moins un autre moteur.
+
+## 32.3 — Réutilisation
+
+- [ ] nouveaux items branchés sur Learning Memory existante sans migration ;
+- [ ] nouveaux items compatibles Learner Intelligence ;
+- [ ] Scenario/Listening enrichis seulement si la capacité gagne réellement à être réutilisée en contexte ;
+- [ ] Speaking Loop reste max 2 moments / leçon ;
+- [ ] aucun changement du pipeline exact-first-attempt iPhone.
+
+## Definition of Done Build 32
+
+> **Le curriculum couvre davantage de situations A1 utiles, chaque ajout a une raison communicative, et l’ancien profil reste intact.**
+
+---
+
+# ⏭️ V2.3.x — Memory Evidence v2 — APRÈS CONTENT MAP
+
+Pas de migration précipitée.
+
+Objectif envisagé : conserver davantage de preuves par **modalité et contexte** (retrieval, listening, scenario, text, recognition), afin que la confiance du modèle reflète mieux la réutilisation réelle.
+
+Avant tout code :
+
+1. [ ] définir le schéma v2 ;
+2. [ ] décider migration in-place ou nouveau store ;
+3. [ ] snapshot Recovery pré-migration ;
+4. [ ] migration transactionnelle + rollback ;
+5. [ ] compat vieux backups ;
+6. [ ] smoke ancien utilisateur ;
+7. [ ] seulement ensuite brancher Learner Intelligence sur les nouvelles preuves.
 
 ---
 
@@ -134,21 +181,24 @@ Sur le runtime mergé, l’ancien workflow Build 25 Progression UX a reproduit u
 
 - [ ] réponse Free Voice reconnue → seconde prise locale → lecture correcte → réponse vocale suivante toujours reconnue normalement.
 
-Ce gate ne remet pas V2 en cause. Il bloque seulement une évolution future vers **l’enregistrement automatique du premier essai exact** pendant SpeechRecognition.
+Ce gate ne bloque **ni Build 32 Content**, ni l’audit de niveaux, ni le travail futur de mémoire. Il bloque uniquement une évolution vers **l’enregistrement automatique du premier essai exact** pendant SpeechRecognition.
 
 ---
 
-# Après V2 — observation / maintenance
+# ✅ V2.0.0 — Freeze / Release — BASELINE GELÉE
 
-Aucun Build 31 n’est pré-engagé.
+La baseline machine `release-v2.json` reste volontairement :
 
-Ordre canonique :
+- curriculum **40 / 241** au moment du freeze ;
+- Scenario **36 / 108** ;
+- Listening **0.88 / 0.65** ;
+- Speaking Loop **max 2** ;
+- six stores Recovery ;
+- coût **0 €** ;
+- Architecture **Build 30** ;
+- release `2.0.0`.
 
-1. [ ] laisser Trân utiliser la V2 normalement ;
-2. [ ] collecter uniquement des problèmes ou besoins terrain observables ;
-3. [ ] valider le gate iPhone Voice Replay quand possible ;
-4. [ ] corriger seulement crash, perte de données, blocage critique ou régression prouvée pendant le freeze ;
-5. [ ] ouvrir une future roadmap V2.x/V3 seulement à partir d’un besoin utilisateur clair.
+La V2.1 évolue **au-dessus** de cette architecture sans réécrire la baseline historique.
 
 ---
 
