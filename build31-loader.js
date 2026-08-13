@@ -2,7 +2,8 @@
   'use strict';
   const VERSION = '2.1.0-b31';
   const params = new URLSearchParams(location.search);
-  const legacyAudit = params.has('b31Audit');
+  const historicalSmoke = [...params.keys()].some(key => /smoke/i.test(key)) && !params.has('v2Audit') && !params.has('b32Audit');
+  const legacyAudit = params.has('b31Audit') || params.has('b30Audit') || historicalSmoke;
 
   if (!legacyAudit) {
     if (document.querySelector('script[data-build32-loader]')) return;
@@ -30,10 +31,7 @@
     document.body.appendChild(smoke);
   };
 
-  if (window.FrenchTranquilleLearnerIntelligence) {
-    loadSmoke();
-    return;
-  }
+  if (window.FrenchTranquilleLearnerIntelligence) { loadSmoke(); return; }
   if (document.querySelector('script[data-build31-intelligence]')) return;
 
   const script = document.createElement('script');
