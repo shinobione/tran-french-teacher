@@ -1,0 +1,30 @@
+name: Field navigation V3 — visible ownership
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  navigation-field-v3:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-nav-v3-http.log 2>&1 &
+          echo $! >/tmp/ft-nav-v3-server.pid
+          sleep 1
+          google-chrome --version
+      - name: Chrome — repeated visible navigation transaction
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu \
+            --virtual-time-budget=28000 --dump-dom \
+            'http://127.0.0.1:4173/field-navigation-v2-smoke.html' >/tmp/field-nav-v3.html
+          grep -q 'data-field-navigation-v2-smoke="ok"' /tmp/field-nav-v3.html || { cat /tmp/field-nav-v3.html; exit 1; }
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-nav-v3-server.pid ]; then kill "$(cat /tmp/ft-nav-v3-server.pid)" || true; fi
