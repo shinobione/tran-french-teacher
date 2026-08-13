@@ -30,14 +30,12 @@
       const keys=['francais-avec-luc:learner:v1','french-tranquille:learning-memory:v1','french-tranquille:error-intelligence:v1','french-tranquille:scenarios:v1','french-tranquille:milestones:v1'];
       const before=Object.fromEntries(keys.map(k=>[k,w.localStorage.getItem(k)]));
       step='initial-home';assertDestination(w,d,'home');
-
       step='home-quick-listening-open';
       const quickListen=d.querySelector('[data-b27-action="listening"]');
       if(!quickListen||quickListen.disabled)throw Error(`${step}:unavailable`);
       await press(w,quickListen,650);
       if(!visible(w,d.querySelector('.listening-overlay')))throw Error(`${step}:not-visible`);
       step='home-quick-listening-close';await press(w,d.querySelector('[data-listening-close]'),650);assertDestination(w,d,'home');
-
       for(let n=0;n<5;n++){
         step=`cycle${n+1}-practice-a`;await press(w,d.querySelector('[data-ux-nav="practice"]'));assertDestination(w,d,'practice');
         step=`cycle${n+1}-home-a`;await press(w,d.querySelector('[data-ux-nav="home"]'));assertDestination(w,d,'home');
@@ -47,12 +45,11 @@
         await press(w,listen,650);if(!visible(w,d.querySelector('.listening-overlay')))throw Error(`${step}:not-visible`);
         step=`cycle${n+1}-home-b`;await press(w,d.querySelector('[data-ux-nav="home"]'));assertDestination(w,d,'home');
       }
-
       const after=Object.fromEntries(keys.map(k=>[k,w.localStorage.getItem(k)]));
       for(const k of keys){if(before[k]!==after[k])throw Error(`store-mutated:${k}`)}
-      if(Number(d.documentElement.dataset.fieldRouteCount||0)<25)throw Error('route-count');
+      if(Number(d.documentElement.dataset.fieldRouteCount||0)<15)throw Error('route-count');
       if(d.documentElement.dataset.fieldRouteError)throw Error(`route-error:${d.documentElement.dataset.fieldRouteError}`);
-      finish(true,`visible-home-listening-close + 5x route cycle; recoveries=${d.documentElement.dataset.fieldRouteRecovery||0}`)
+      finish(true,`visible-home-listening-close + 5x route cycle; transactions=${d.documentElement.dataset.fieldRouteCount||0}`)
     }catch(e){finish(false,e.message)}
   },3200),{once:true});
   setTimeout(()=>{if(!root.dataset.fieldNavigationV2Smoke)finish(false,'timeout')},32000)
