@@ -22,12 +22,17 @@ jobs:
           grep -q 'html.listening-open .ux-bottom-nav' index.html
           grep -q 'assets/LOGO.png' brand.css
           grep -q 'premium-theme-polish.css' theme-controller.js
+          grep -q '2.3.5-v4home1' theme-controller.js
           grep -q "insertAdjacentElement('afterend',img)" theme-controller.js
           grep -q 'ft-theme-settings-inline' theme-controller.js
           grep -q 'data-theme-current' theme-controller.js
           grep -q 'premium-theme-polish-v2-base.css' premium-theme-polish.css
           grep -q 'premium-depth-pass.css' premium-theme-polish.css
           grep -q 'premium-depth-mobile-geometry.css' premium-theme-polish.css
+          grep -q 'premium-v4-home.css' premium-theme-polish.css
+          grep -q -- '--pv4-home-ready:1' premium-v4-home.css
+          grep -q 'background:transparent' premium-v4-home.css
+          ! grep -q 'data-theme="original"' premium-v4-home.css
           test "$(git hash-object premium-theme-polish-v2-base.css)" = "b5578b1fae55426f06eac30e227d94cf4dfb2491"
           grep -q '#ff3faf' premium-theme-polish-v2-base.css
           grep -q '#a640ff' premium-theme-polish-v2-base.css

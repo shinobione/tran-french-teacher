@@ -2,9 +2,9 @@
 
 > **Canonical project handoff / source of truth for future work.**
 >
-> This document consolidates the current runtime state, pending field gates, Premium V4 proposals, and the pedagogical Build 35→40 sequence. Any future AI/chat/session should read this file before making roadmap or implementation decisions.
+> This document consolidates the current runtime state, field gates, Premium V4 work, and the pedagogical Build 35→40 sequence. Any future AI/chat/session should read this file before making roadmap or implementation decisions.
 >
-> Automated P0 runtime certified on `main` = `118b0e6d86f26763c52665dda2cafdf8789e5d7f` after PR #95. Product pedagogy remains **V2.3.0 · Build 34**; current reliability/product-quality work remains in the **V2.3.x / Build 34 maintenance line**.
+> P0 navigation/runtime is certified on `main`; automated runtime certification landed through PR #95 and the **real-device Safari/PWA field gate passed 1→8 on 2026-08-14 via issue #97**, against deployed `main` `a8d58274e976d70642889b6abe37ff814c7f0767`. Premium Polish V4 is therefore **UNBLOCKED / IN PROGRESS**. Product pedagogy remains **V2.3.0 · Build 34**; current visual/product-quality work remains in the **V2.3.x / Build 34 maintenance line**.
 
 ---
 
@@ -22,6 +22,7 @@
 | Frozen architecture | **2.0.0 · Build 30** |
 | Pre-P0 visual baseline | **8051e580990fa3f3a6c44aadc543cfcba9b66f3d · PR #93** |
 | Automated P0 runtime | **118b0e6d86f26763c52665dda2cafdf8789e5d7f · PR #95** |
+| P0 real-device field certification | **PASS 1→8 · issue #97 · 2026-08-14 · deployed main a8d58274e976d70642889b6abe37ff814c7f0767** |
 | Primary target | **iPhone / Safari / PWA iOS** |
 | Recurring cost | **0 €** |
 
@@ -43,7 +44,7 @@ Non-negotiable product rules continue to apply: one-tap deterministic navigation
 
 **Automated P0 status: CLOSED on `main` by PR #94 + PR #95.**
 
-**Remaining P0 gate: real-device Safari/PWA validation on Trân’s iPhone. Do not mark the field gate closed from CI alone.**
+**Real-device P0 status: CLOSED — tests 1→8 passed on the installed iPhone/Safari PWA on 2026-08-14; issue #97 closed as completed.**
 
 The field regression that triggered this phase was:
 
@@ -59,7 +60,7 @@ Root cause was the Build 27 Settings helper depending on `.screen-home`; from Pr
 
 Settings is now treated as a global navigation transaction rather than as a Home-owned action.
 
-### Automated Definition of Done
+### Definition of Done
 
 - [x] Settings opens correctly from Home.
 - [x] Settings opens correctly from Practice.
@@ -70,7 +71,7 @@ Settings is now treated as a global navigation transaction rather than as a Home
 - [x] No recovery second tap.
 - [x] Theme changes preserve the Settings screen and return context.
 - [x] App Back control is deterministic in automated navigation tests.
-- [ ] Native Safari/browser back, X and gesture behavior where exposed: certify on the real PWA/iPhone.
+- [x] Real-device return/back behavior exposed by the installed PWA certified through issue #97; browser-only gestures not exposed by the installed PWA are N/A for this gate.
 - [x] Learner data remains byte-safe.
 - [x] Protected sanctuaries remain untouched and are hash-guarded in CI.
 
@@ -108,13 +109,13 @@ PR #93 repaired the major geometry regression. PR #95 locks the following contra
 
 **Automated phase gate:** PASS — no blank screen and deterministic visible ownership on the first app gesture.
 
-**Field phase gate:** PENDING — repeat the core transactions in the installed Safari/PWA runtime before Premium V4 implementation begins.
+**Field phase gate:** PASS — issue #97, tests 1→8 on the installed iPhone/PWA, 2026-08-14.
 
 ---
 
 # 2. Premium Polish V4 — Mockup Fidelity
 
-This is the next major visual milestone after the remaining P0 real-device field certification.
+**STATUS: UNBLOCKED / IN PROGRESS after the real-device P0 PASS.** The first V4 Home refinement targets the Aurora welcome hierarchy regression tracked in issue #98.
 
 ## Source of truth
 
@@ -160,7 +161,7 @@ No component should simply scale proportionally with viewport width.
 
 ### Welcome Hero
 
-Rebuild the current `Xin chào Trân 👋` block as a true editorial card:
+Rebuild the current `Xin chào Trân 👋` block as a true editorial hero:
 
 - [ ] eyebrow `HÔM NAY`;
 - [ ] strong greeting hierarchy;
@@ -168,6 +169,8 @@ Rebuild the current `Xin chào Trân 👋` block as a true editorial card:
 - [ ] controlled depth;
 - [ ] one subtle decorative French/Paris accent;
 - [ ] theme-specific illustration treatment.
+
+**Aurora V4 correction (#98):** remove the oversized rounded/glass welcome frame that competes with the lesson card; preserve Aurora identity with controlled cyan/magenta atmosphere, a restrained accent line and typography rather than a second giant panel.
 
 Allowed motifs, used sparingly:
 
@@ -247,7 +250,8 @@ Direction:
 - clean cyan functional accents;
 - pink emphasis;
 - optional subtle Paris-night motif;
-- strong contrast.
+- strong contrast;
+- editorial greeting without a giant outlined welcome container.
 
 Avoid simply applying blue gradients everywhere.
 
@@ -415,7 +419,7 @@ Settings
 - [ ] primary CTA visible;
 - [ ] hero layout intact;
 - [ ] logo not cropped;
-- [x] iPhone safe-area CSS contracts present; real-device confirmation remains pending.
+- [x] iPhone safe-area CSS contracts present and real-device P0 confirmation passed via issue #97.
 
 Initial strategy: CI screenshots as artifacts for human review, before introducing fragile pixel-diff baselines.
 
@@ -425,22 +429,22 @@ Selective stable visual baselines may be added later.
 
 # 5. Real-device Field Validation with Trân
 
-Several existing field gates remain open and are grouped here so they are never forgotten.
+Several field gates are grouped here so they are never forgotten.
 
-## 5.1 P0 navigation certification — next required action
+## 5.1 P0 navigation certification — CLOSED
 
-On the installed Safari/PWA runtime, certify all of the following before beginning Premium V4 implementation:
+Issue #97 closed on 2026-08-14 after the user reported **1→8 OK** on the installed Safari/PWA runtime:
 
-- [ ] Home → Settings → back → Home immediately visible.
-- [ ] Progress → Settings → back → Progress immediately visible.
-- [ ] Practice → Settings → back → Practice immediately visible.
-- [ ] Change Aurora / Sunset / Jade while Settings is open → Settings remains visible → back returns to source screen.
-- [ ] Listening → one tap `Aujourd’hui` → Home immediately visible.
-- [ ] Listening overlay + bottom navigation ownership looks correct and remains tappable.
-- [ ] Bottom navigation is centered, unclipped and clear of the iPhone safe area.
-- [ ] Close and reopen the installed PWA → no stale blank surface or stale navigation state.
+- [x] Home → Settings → back → Home immediately visible.
+- [x] Progress → Settings → back → Progress immediately visible.
+- [x] Practice → Settings → back → Practice immediately visible.
+- [x] Change Aurora / Sunset / Jade while Settings is open → Settings remains visible → back returns to source screen.
+- [x] Listening → one tap `Aujourd’hui` → Home immediately visible.
+- [x] Listening overlay + bottom navigation ownership looks correct and remains tappable.
+- [x] Bottom navigation is centered, unclipped and clear of the iPhone safe area.
+- [x] Close and reopen the installed PWA → no stale blank surface or stale navigation state.
 
-Record any failure with: source screen, exact tap sequence, active theme, screenshot/video, and whether the PWA was freshly opened or already running.
+This closes the functional P0 field gate. Visual theme quality remains a separate Premium V4 concern.
 
 ## 5.2 Own-voice replay
 
@@ -507,6 +511,7 @@ The closure must record:
 - nav geometry hotfix #93;
 - Settings P0 resolution #94;
 - P0 navigation/bottom-nav hardening #95;
+- P0 field certification #97;
 - Premium Polish V4;
 - field validation results;
 - final certified runtime SHA;
@@ -808,8 +813,8 @@ Maintain throughout all future phases without stealing pedagogical build numbers
 
 ```text
 P0 Settings/navigation automated stabilization ✅
-→ P0 real-device Safari/PWA certification with Trân ⏳
-→ Premium Polish V4 / Mockup Fidelity
+→ P0 real-device Safari/PWA certification with Trân ✅
+→ Premium Polish V4 / Mockup Fidelity 🚧 IN PROGRESS
 → Micro-interactions
 → Visual QA Tribunal
 → Premium V4 real-device Trân validation
