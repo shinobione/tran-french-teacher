@@ -84,6 +84,13 @@ if (window.FrenchTranquilleStage2 && !window.__FT_STAGE2_BOOTED__) {
     return style.display !== 'none' && style.visibility !== 'hidden' && opacity > 0.05 && rect.width > 1 && rect.height > 1 && !node.classList.contains('b27-entering') && !node.classList.contains('b27-leaving');
   }
 
+  function ownsNavWhileSettling(node) {
+    if (!node?.isConnected || node.classList.contains('b27-leaving')) return false;
+    const style = getComputedStyle(node);
+    const rect = node.getBoundingClientRect();
+    return style.display !== 'none' && style.visibility !== 'hidden' && rect.width > 1 && rect.height > 1;
+  }
+
   function destinationNode(id) {
     if (id === 'home') return document.querySelector('.screen-home .b27-home');
     if (id === 'progress') return document.querySelector('.screen-progress .b27-progress-page');
@@ -103,9 +110,15 @@ if (window.FrenchTranquilleStage2 && !window.__FT_STAGE2_BOOTED__) {
     // Do not rewrite the underlying tab while it is open; the next explicit
     // top-level tap will close Listening and establish its own destination.
     if (isActuallyVisible(document.querySelector('.listening-overlay'))) return '';
-    if (isActuallyVisible(document.querySelector('.b27-practice-page')) || isActuallyVisible(document.querySelector('.ux-practice-overlay'))) return 'practice';
-    if (isActuallyVisible(document.querySelector('.screen-progress .b27-progress-page'))) return 'progress';
-    if (isActuallyVisible(document.querySelector('.screen-home .b27-home'))) return 'home';
+
+    // Nav ownership begins as soon as a destination exists and is entering.
+    // Final visual readiness remains a stricter, separate contract below.
+    const practice = document.querySelector('.b27-practice-page');
+    if (ownsNavWhileSettling(practice) || isActuallyVisible(document.querySelector('.ux-practice-overlay'))) return 'practice';
+    const progress = document.querySelector('.screen-progress .b27-progress-page');
+    if (ownsNavWhileSettling(progress)) return 'progress';
+    const home = document.querySelector('.screen-home .b27-home');
+    if (ownsNavWhileSettling(home)) return 'home';
     return '';
   }
 
@@ -143,6 +156,7 @@ if (window.FrenchTranquilleStage2 && !window.__FT_STAGE2_BOOTED__) {
       if (epoch !== routeEpoch) return;
       settleTopLevelMotion();
       window.FrenchTranquilleBuild27Shell?.openPractice?.();
+      setActiveNav('practice');
       scheduleNavReconcile();
       settleDestination('practice', epoch, 0, false);
     });
@@ -155,6 +169,7 @@ if (window.FrenchTranquilleStage2 && !window.__FT_STAGE2_BOOTED__) {
     if (id === 'practice' && !document.querySelector('.b27-practice-page')) {
       window.FrenchTranquilleBuild27Shell?.openPractice?.();
     }
+    if (id === 'practice' && ownsNavWhileSettling(document.querySelector('.b27-practice-page'))) setActiveNav('practice');
 
     const ready = destinationReady(id);
     root.dataset.fieldRouteDestination = id;
@@ -179,6 +194,7 @@ if (window.FrenchTranquilleStage2 && !window.__FT_STAGE2_BOOTED__) {
         requestAnimationFrame(() => {
           if (epoch !== routeEpoch) return;
           window.FrenchTranquilleBuild27Shell?.openPractice?.();
+          setActiveNav('practice');
           settleDestination(id, epoch, attempt + 1, true);
         });
         return;
@@ -212,6 +228,7 @@ if (window.FrenchTranquilleStage2 && !window.__FT_STAGE2_BOOTED__) {
 
     closeTransientSurfaces();
     settleTopLevelMotion();
+    setActiveNav(id);
 
     if (id === 'practice') {
       openPracticeOnStableBase(epoch);
