@@ -2,6 +2,11 @@ if (window.FrenchTranquilleStage2 && !window.__FT_STAGE2_BOOTED__) {
   window.__FT_STAGE2_BOOTED__ = true;
 
   const root = document.documentElement;
+  const params = new URLSearchParams(location.search);
+  const historicalHarness = params.has('b31Audit') || params.has('b30Audit') || params.has('v2Audit') || [...params.keys()].some(key => /smoke/i.test(key));
+  const forceFieldRouter = params.has('fieldNavV2');
+  const enableFieldRouter = !historicalHarness || forceFieldRouter;
+  const enableFieldAudio = !historicalHarness || params.has('fieldAudioV2');
 
   const loadFieldModule = (src, key) => {
     if (document.querySelector(`script[data-${key}]`)) return;
@@ -22,16 +27,13 @@ if (window.FrenchTranquilleStage2 && !window.__FT_STAGE2_BOOTED__) {
   function closeTransientSurfaces() {
     window.FrenchTranquilleListening?.close?.();
     window.FrenchTranquilleUX?.closePractice?.();
-
     const practiceClose = document.querySelector('[data-b27-close-practice]');
     if (practiceClose) practiceClose.click();
     document.querySelectorAll('.b27-practice-page').forEach(node => node.remove());
     root.classList.remove('b27-practice-open');
-
     window.FrenchTranquilleBuild27Shell?.closeJourney?.();
     document.querySelectorAll('.b27-journey-page').forEach(node => node.remove());
     root.classList.remove('b27-journey-open');
-
     document.querySelectorAll('.ux-practice-overlay').forEach(node => node.remove());
     root.classList.remove('ux-practice-open');
   }
@@ -58,12 +60,10 @@ if (window.FrenchTranquilleStage2 && !window.__FT_STAGE2_BOOTED__) {
       window.FrenchTranquilleBuild32Shell?.refresh?.();
       window.FrenchTranquilleUX?.refresh?.();
     }
-
     const ready = destinationReady(id);
     root.dataset.fieldRouteDestination = id;
     root.dataset.fieldRouteReady = ready ? '1' : '0';
     root.dataset.fieldRouteAttempt = String(attempt);
-
     if (ready) {
       setActiveNav(id);
       return;
@@ -76,24 +76,17 @@ if (window.FrenchTranquilleStage2 && !window.__FT_STAGE2_BOOTED__) {
     if (!nav) return;
     const id = nav.dataset.uxNav;
     if (!['home', 'practice', 'progress'].includes(id)) return;
-
-    // Build 27 is the sole owner of the visible three-tab navigation gesture.
-    // Prevent UX-shell/build-meta from routing the same physical click a second time.
     event.preventDefault();
     event.stopImmediatePropagation();
-
     root.dataset.fieldRouteCount = String(Number(root.dataset.fieldRouteCount || 0) + 1);
     root.dataset.fieldRouteIntent = id;
     root.dataset.fieldRouteReady = '0';
-
     closeTransientSurfaces();
-
     if (id === 'practice') {
       window.FrenchTranquilleBuild27Shell?.openPractice?.();
       settleDestination(id);
       return;
     }
-
     if (!routeLegacy(id)) {
       root.dataset.fieldRouteError = `missing-legacy-${id}`;
       return;
@@ -101,12 +94,8 @@ if (window.FrenchTranquilleStage2 && !window.__FT_STAGE2_BOOTED__) {
     settleDestination(id);
   }
 
-  // Registered before Build 27: one visible tap must produce one route transaction.
-  window.addEventListener('click', routeVisibleNavigation, true);
-
-  // Session-owned lesson recording. This supersedes the speculative global
-  // MediaRecorder prototype shim from the first field hotfix.
-  loadFieldModule('./field-audio-session.js?v=2.3.1-b34.1', 'fieldAudioSessionV2');
+  if (enableFieldRouter) window.addEventListener('click', routeVisibleNavigation, true);
+  if (enableFieldAudio) loadFieldModule('./field-audio-session.js?v=2.3.1-b34.1', 'fieldAudioSessionV2');
 
   requestAnimationFrame(() => {
     const home = document.querySelector('.bottom-nav [data-go="home"]');
