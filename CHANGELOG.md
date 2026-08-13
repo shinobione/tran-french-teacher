@@ -4,9 +4,43 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ## [Unreleased]
 
-- prochaine intention : **V2.2.0 / Build 32 — Content Map & Practical A1 Expansion** ; audit des capacités 1–40 puis leçons 41+ guidées par des besoins communicatifs ;
-- Memory Evidence v2 reste planifiée séparément car elle exigera une stratégie de migration Recovery ;
-- gate terrain iPhone exact-first-attempt toujours parallèle et non bloquant pour contenu/niveaux/mémoire hors capture vocale.
+- prochaine intention : **Build 33 — Memory Evidence v2 / Migration Readiness** ; design des preuves, du schéma et de la migration réversible avant toute modification du stockage durable ;
+- aucune migration Memory v2 ni nouveau store ne sont pré-engagés ;
+- gate terrain iPhone exact-first-attempt toujours parallèle et non bloquant pour le design contenu/niveaux/mémoire hors capture vocale.
+
+---
+
+# [2.2.0] — Build 32 — Practical A1 Expansion — 2026-08-13
+
+- fait évoluer le produit courant vers **v2.2.0 • Build 32** tout en gardant l’Architecture Runtime gelée **2.0.0 / Build 30** ;
+- part d’un audit du curriculum 1–40 au lieu d’ajouter des leçons pour gonfler un compteur ;
+- conserve le cœur historique **40 leçons / 241 éléments** rejouable et ordonné ;
+- ajoute `curriculum-stage4.js` : **12 leçons / 72 éléments** ;
+- curriculum courant : **52 leçons / 313 éléments**, avec 313 IDs uniques ;
+- ajoute deux étapes : **Autonomie A1 41–46** et **Interaction A1 47–52** ;
+- nouvelles capacités : clarification/reformulation, quantités, comparaison/choix, invitation/refus, santé/rendez-vous, pharmacie, travail/consignes, panne/logement, perturbations transport, récit ordonné, avis simple et `on` oral ;
+- ajoute `real-life-data-4.js` : **8 situations / 24 tours**, pour un Scenario courant de **44 / 132** ;
+- valide chaque référence Pack IV contre un vrai ID curriculum ;
+- ajoute `listening-data-2.js` : **4 contrastes + 8 mini-dialogues**, sans changer les vitesses finales **0.88 / 0.65** ;
+- Speaking Loop existant étendu dynamiquement à **52/52 leçons**, toujours max 2 moments / leçon ;
+- ajoute `learner-intelligence-v2.js` : **7 bandes / 52 / 313**, score/confiance séparés et priorité déterministe ;
+- `A1+` est uniquement une étiquette interne d’adaptation, jamais une certification CECRL ;
+- une non-reconnaissance `voice-*` reste un signal `recognition`, jamais un score phonétique ;
+- Learner Intelligence 2.2 reste read-only vis-à-vis des stores durables ;
+- ajoute `build32-shell-extension.js` pour présenter les deux nouvelles étapes sans réécrire le shell Build27 ;
+- ajoute `build32-loader.js` et conserve les anciens tribunaux rejouables ;
+- Build31 peut encore rejouer exactement **2.1 / Build31 / 40–241 / 5 bandes** ;
+- `release-v2.json` reste volontairement **2.0.0 / Architecture Build30 / 40–241** ;
+- le tribunal V2 distingue désormais la baseline gelée du produit V2.x courant et exige que le courant soit un **superset compatible** ;
+- aucun nouveau store durable, aucune migration ;
+- ancien profil conservé exactement **7 leçons terminées / l8=4 / 40 acquis → prochaine l8** ;
+- profil ayant terminé les 40 leçons historiques → **prochaine l41** ;
+- six stores durables byte-identiques pendant les audits Build32 ;
+- `app.js`, `voice-ios.js`, `free-voice.js`, logo et favicon restent aux hashes sanctuaires exacts ;
+- PR runtime **#79**, head `b64539e8f463bde8cabc05cd606f3132b01e2da8` : **25/25 workflows fonctionnels SUCCESS** ;
+- runtime `main` **`269cb0b476ea131cfbe086a87bcc4364ec39c342`** : **26/26 workflows SUCCESS**, Pages comprise ;
+- GitHub Pages **#137 SUCCESS** sur le SHA runtime exact ;
+- prochaine intention canonique : **Build 33 — Memory Evidence v2 / Migration Readiness**, design-first et sans changement de schéma durable tant qu’une migration réversible n’est pas démontrée.
 
 ---
 
@@ -17,67 +51,41 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 - conserve l’Architecture Runtime gelée **2.0.0 / Build 30** et `release-v2.json` comme baseline historique 2.0.0 / 30 ;
 - ajoute `learner-intelligence.js`, couche read-only au-dessus de progression, Learning Memory et Error Intelligence ;
 - unifie le curriculum existant en cinq bandes : 1–7 Survival A0, 8–15 Daily A0, 16–20 Foundations A1, 21–25 First Exchanges A1, 26–40 A1 Core ;
-- calcule un indice interne, une **confiance séparée**, une estimation `A0 / A0+ / Pré-A1 / A1- / A1` et une recommandation suivante déterministe ;
-- la recommandation privilégie un acquis réellement fragile/dû lorsque les preuves le justifient, sinon la prochaine leçon incomplète, puis la pratique/entretien ;
-- ajoute une carte compacte Learner Intelligence dans **Progrès**, avec raisonnement détaillé replié par défaut ;
-- aucun nouvel onglet de navigation ;
-- ajoute une ligne diagnostique dans Options sans transformer l’interface apprenante en cockpit ;
-- **aucun nouveau store durable**, aucune migration et aucun `localStorage.setItem` dans Learner Intelligence / loader ;
-- les six stores V2 restent les seuls stores Recovery et doivent rester byte-identiques pendant le tribunal Build31 ;
-- une source `voice-*` ou `voice-unrecognized` est explicitement classée **recognition**, jamais score de prononciation ;
-- `voice-ios.js`, `free-voice.js`, Voice Replay et SpeechRecognition restent inchangés ;
-- ajoute `build31-loader.js`, `learner-intelligence.css`, `learner-intelligence-smoke.js` et `.github/workflows/build31-learner-intelligence.yml` ;
-- PWA : précache additif des assets Build31, identité de cache Build29 volontairement conservée ;
-- le tribunal V2 devient **Freeze Compatibility** : baseline 2.0/30 toujours exacte, mais une V2.x plus récente peut évoluer au-dessus si backup/options/runtime restent concordants ;
-- le tribunal Build30 protège désormais explicitement la frontière Architecture 2.0/30 sous un produit V2.x plus récent ;
-- profil propre Chrome : recommandation **leçon 1** ; profil ancien mobile 390×844 : état exact **7 terminées / l8=4 / 40 acquis**, recommandation **leçon 8** ;
-- PR runtime **#77**, head `eed097ca3d261f2f4dd60db930a11670511f33a1` : **24/24 workflows fonctionnels SUCCESS** ;
-- runtime `main` `e2b2c6293f35495fa8bbffd2e6b684fba897df88` : **25/25 workflows SUCCESS**, Pages comprise ;
-- GitHub Pages **#135 SUCCESS** sur le SHA runtime exact ;
-- prochaine étape canonique : **Build 32 — Content Map & Practical A1 Expansion**.
+- calcule un indice interne, une confiance séparée, une estimation `A0 / A0+ / Pré-A1 / A1- / A1` et une recommandation suivante déterministe ;
+- aucun nouveau store durable, aucune migration ;
+- source `voice-*` / `voice-unrecognized` classée `recognition`, jamais prononciation ;
+- PR runtime **#77**, head `eed097ca3d261f2f4dd60db930a11670511f33a1` : **24/24 fonctionnels SUCCESS** ;
+- runtime `main` `e2b2c6293f35495fa8bbffd2e6b684fba897df88` : **25/25 SUCCESS**, Pages comprise ;
+- GitHub Pages **#135 SUCCESS**.
 
 ---
 
 # [2.0.0] — Freeze / Release — 2026-08-13
 
-- gèle French Trân’quille sur **Architecture Build 30** sans ajouter de moteur, de curriculum ou de navigation ;
-- version produit visible passée à **v2.0.0 • Build 30** ;
-- ajoute `release-v2.json`, contrat machine-readable de la baseline ;
-- baseline gelée : **40 leçons / 241 éléments**, Scenario **36 / 108**, Listening **0.88 / 0.65**, Speaking Loop **max 2**, six stores durables, coût **0 €** ;
-- ajoute `v2-release-smoke.js` et `.github/workflows/v2-release-freeze.yml` ;
-- le tribunal V2 vérifie Runtime Contracts ↔ Recovery ↔ Release Contract, backup V2 six stores, version Options, routes principales, ancienne utilisatrice et absence d’écriture durable pendant le round-trip ;
-- le profil ancien utilisateur reste exactement **7 leçons terminées / l8=4 / 40 acquis** ;
-- les sanctuaires `app.js`, `voice-ios.js`, `free-voice.js`, logo et favicon restent aux hashes gelés ;
-- aucune migration ni renommage des six stores durables ;
-- PR runtime V2 **#73**, head `c221fa9600d23dd83b87225cc4accce01e83cfe6` : **22/22 workflows fonctionnels SUCCESS** ;
-- runtime applicatif V2 `5f2c486b3e455220ebd903f25ee766ff2430e4a5` ; **GitHub Pages #131 SUCCESS** ;
-- PR CI-only **#74**, head `0fbd3b8e8124b3beaf7d6086d8a837580abb2cb3` : même contrat Progression, Chrome isolé + timeout + retries ; **22/22 fonctionnels SUCCESS** ;
-- baseline finale de certification `6e0f5cde97cfba0572efccc6344a8bd6cbe7a315` : **23/23 workflows SUCCESS**, dont **Pages #132 SUCCESS** ;
-- après V2, aucune évolution n’était pré-engagée sans nouveau besoin explicite.
+- gèle French Trân’quille sur **Architecture Build 30** ;
+- version produit visible **v2.0.0 • Build 30** ;
+- ajoute `release-v2.json`, contrat machine-readable ;
+- baseline gelée : **40 leçons / 241 éléments**, Scenario **36 / 108**, Listening **0.88 / 0.65**, Speaking Loop **max 2**, six stores, coût **0 €** ;
+- ancien utilisateur exact **7 leçons / l8=4 / 40 acquis** ;
+- sanctuaires `app.js`, `voice-ios.js`, `free-voice.js`, logo et favicon hashés ;
+- PR runtime V2 **#73** : 22/22 fonctionnels ;
+- PR CI-only **#74** : tribunal Progression borné ;
+- baseline finale de certification `6e0f5cde97cfba0572efccc6344a8bd6cbe7a315` : **23/23 SUCCESS**, Pages #132.
 
 ---
 
 ## [1.23.0] — Build 30 — Architecture Hardening — 2026-08-13
 
-- ajoute `runtime-contracts.js` : six stores, snapshots Recovery, invariants produit, ownership, routes et sanctuaires ;
-- ajoute `runtime-bridge.js` : `snapshot()`, `refresh()`, `route()` et `openLesson()` ;
+- Runtime Contracts + Runtime Bridge ; six stores, ownership et routes explicites ;
 - aucun `localStorage.setItem` dans Contracts/Bridge ;
-- `app.js` reste byte-identique ;
-- tribunal Chrome desktop/mobile avec learner brut strictement inchangé ;
-- PR #71, head `ffa3ddf7a16dcbc32474701cfaf2f961e86d348c` : **21/21 fonctionnels SUCCESS** ;
-- runtime `5a8369df9df536f41521acefb528da71efb168a8` ; Pages **#129 SUCCESS** ;
-- clôture docs #72 ; final Build30 `main` `9e48bf1038a9f1bfbe1d27e83acd94a405872c0e` ; Pages **#130 SUCCESS**.
+- `app.js` byte-identique ;
+- PR #71 : 21/21 fonctionnels ; runtime `5a8369df9df536f41521acefb528da71efb168a8` ; Pages #129 ; clôture #72 / Pages #130.
 
 ## [1.22.2] — Build 29.2 — Speaking Loop Variety & Clarity — 2026-08-12
-
-- `Ghi âm lại` / `Enregistrer à nouveau` ; `Nghe Tyffany` / `Écouter Tyffany` ;
-- compréhension ≠ production ; planificateur contextualisé + anti-répétition ;
-- Bài 7 : `10 euros` reste compréhension, recap oral `Combien ça coûte ?` ;
-- 2 moments maximum / leçon ; aucun faux score de prononciation ;
-- runtime `b6031cd8fa6756eee39496cd62a164b8400d15af` ; Pages #126.
+- Tyffany, auto-écoute locale, compréhension ≠ production, anti-répétition ; max 2 moments ; runtime `b6031cd8fa6756eee39496cd62a164b8400d15af` ; Pages #126.
 
 ## [1.22.1] — Build 29.1 — Speaking Loop Content — 2026-08-12
-- auto-écoute locale intégrée aux leçons, max 2 moments ; runtime `b2fde53792c38d1e6283d8779bbcedfac36f9502` ; Pages #122.
+- auto-écoute locale intégrée aux leçons ; runtime `b2fde53792c38d1e6283d8779bbcedfac36f9502` ; Pages #122.
 
 ## [1.22.0] — Build 29 — iPhone / PWA / Accessibility Hardening — 2026-08-12
 - safe areas, touch ≥44 px, a11y, `VisualViewport`, reduced motion et offline ; runtime `1c01648d89dfb3bd9236b9ad93fbade4e21102fa` ; Pages #120.
@@ -89,9 +97,7 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 - Aujourd’hui / Pratiquer / Progrès ; cockpit moteur réservé DEBUG FR ; runtime `beeb9ce8ba081ed0298edbcc339dca41600e4d09` ; Pages #116.
 
 ## [1.19.x] — Builds 26 → 26.9 — 2026-08-11/12
-- Real Life French III : **36 situations / 108 tours** ;
-- sessions bornées, Progression UX, auto-écoute locale, fixes de navigation/layout, single-scroll, Tyffany, containment et Focus Flow ;
-- la voix et les données apprenantes restent protégées.
+- Real Life French III : **36 situations / 108 tours** ; sessions bornées, Progression UX, auto-écoute locale, fixes navigation/layout, Tyffany, containment et Focus Flow.
 
 ## [1.18.x] — Build 25 / 25.2 — 2026-08-11
 - progressive disclosure, objectifs de session, milestones et fins explicites.
