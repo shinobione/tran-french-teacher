@@ -1,0 +1,60 @@
+/* French Trân’quille — Premium Depth Pass
+   Cosmetic only. Original is intentionally untouched. */
+html[data-theme]:not([data-theme="original"]){--pd-hi:rgba(255,255,255,.085);--pd-ring:color-mix(in srgb,var(--ft-accent2) 30%,var(--ft-border));--pd-glow:color-mix(in srgb,var(--ft-accent2) 16%,transparent);--pd-glow2:color-mix(in srgb,var(--ft-accent) 13%,transparent);--pd-depth:0 24px 70px rgba(0,0,0,.30),0 8px 24px rgba(0,0,0,.18);--pd-soft:0 16px 42px rgba(0,0,0,.22),0 4px 14px rgba(0,0,0,.12)}
+
+/* Home atmosphere */
+html[data-theme]:not([data-theme="original"]) .b27-page{position:relative;isolation:isolate}
+html[data-theme]:not([data-theme="original"]) .b27-home-grid{gap:22px}
+html[data-theme]:not([data-theme="original"]) .b27-home-main,html[data-theme]:not([data-theme="original"]) .b27-home-side{gap:16px}
+html[data-theme]:not([data-theme="original"]) .ft-modern-home-logo{filter:drop-shadow(0 22px 34px rgba(0,0,0,.30)) drop-shadow(0 0 28px var(--pd-glow2))}
+html[data-theme]:not([data-theme="original"]) .b27-welcome{position:relative;padding:4px 4px 13px}
+html[data-theme]:not([data-theme="original"]) .b27-welcome::after{content:"";position:absolute;left:2px;bottom:0;width:min(190px,44vw);height:1px;background:linear-gradient(90deg,var(--ft-accent),var(--ft-accent2),transparent);opacity:.72}
+html[data-theme]:not([data-theme="original"]) .b27-welcome h1{text-shadow:0 12px 36px rgba(0,0,0,.24),0 0 30px var(--pd-glow)}
+
+/* Layered glass cards */
+html[data-theme]:not([data-theme="original"]) :is(.b27-primary-card,.b27-level-card,.b27-current-card,.b27-stage-card){isolation:isolate;border-color:var(--pd-ring);box-shadow:var(--pd-depth),inset 0 1px 0 var(--pd-hi),inset 0 -1px 0 rgba(0,0,0,.15);backdrop-filter:blur(24px) saturate(1.15);-webkit-backdrop-filter:blur(24px) saturate(1.15)}
+html[data-theme]:not([data-theme="original"]) :is(.b27-primary-card,.b27-level-card,.b27-current-card,.b27-stage-card)::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(135deg,rgba(255,255,255,.075),transparent 28%,transparent 72%,color-mix(in srgb,var(--ft-accent2) 7%,transparent)),radial-gradient(circle at 10% 0%,color-mix(in srgb,var(--ft-accent) 10%,transparent),transparent 36%)}
+html[data-theme]:not([data-theme="original"]) .b27-primary-card{box-shadow:0 30px 86px rgba(0,0,0,.34),0 0 56px var(--pd-glow),inset 0 1px 0 rgba(255,255,255,.10),inset 0 -1px 0 rgba(0,0,0,.18)}
+html[data-theme]:not([data-theme="original"]) .b27-primary-card::after{width:310px;height:310px;right:-118px;top:-142px;opacity:.92}
+html[data-theme]:not([data-theme="original"]) .b27-primary-card h2{text-wrap:balance}
+html[data-theme]:not([data-theme="original"]) .b27-card-topline>span,html[data-theme]:not([data-theme="original"]) .b27-practice-intro>span{display:inline-flex;align-items:center;min-height:25px;padding:4px 9px;border-radius:999px;background:color-mix(in srgb,var(--ft-accent2) 9%,transparent);border:1px solid color-mix(in srgb,var(--ft-accent2) 20%,transparent);box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+
+/* Quick cards, practice, journey rows */
+html[data-theme]:not([data-theme="original"]) :is(.b27-quick-card,.b27-practice-action,.b27-lesson-row,.b27-stage-tab){position:relative;overflow:hidden;border-color:color-mix(in srgb,var(--ft-border) 66%,var(--ft-accent2) 34%);background:linear-gradient(145deg,color-mix(in srgb,var(--ft-surface) 89%,white 3%),color-mix(in srgb,var(--ft-surface-2) 91%,var(--ft-accent2) 9%));box-shadow:var(--pd-soft),inset 0 1px 0 rgba(255,255,255,.055);backdrop-filter:blur(18px) saturate(1.1);-webkit-backdrop-filter:blur(18px) saturate(1.1)}
+html[data-theme]:not([data-theme="original"]) :is(.b27-quick-card,.b27-practice-action,.b27-lesson-row,.b27-stage-tab)::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(120deg,rgba(255,255,255,.055),transparent 32%,transparent 76%,color-mix(in srgb,var(--ft-accent2) 7%,transparent))}
+html[data-theme]:not([data-theme="original"]) :is(.b27-quick-icon,.b27-practice-icon,.b27-current-title>b){border:1px solid color-mix(in srgb,var(--ft-accent) 23%,var(--ft-border));background:linear-gradient(145deg,color-mix(in srgb,var(--ft-accent) 14%,transparent),color-mix(in srgb,var(--ft-accent2) 11%,transparent));box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 8px 24px color-mix(in srgb,var(--ft-accent) 9%,transparent)}
+html[data-theme]:not([data-theme="original"]) .b27-lesson-row.is-current{border-color:color-mix(in srgb,var(--ft-accent) 45%,var(--ft-accent2));background:linear-gradient(145deg,color-mix(in srgb,var(--ft-surface) 82%,var(--ft-accent) 18%),color-mix(in srgb,var(--ft-surface-2) 87%,var(--ft-accent2) 13%));box-shadow:0 12px 34px rgba(0,0,0,.18),0 0 28px var(--pd-glow2),inset 0 1px 0 rgba(255,255,255,.06)}
+
+/* Section hierarchy */
+html[data-theme]:not([data-theme="original"]) .b27-section-title{position:relative;padding-left:14px;margin-top:4px}
+html[data-theme]:not([data-theme="original"]) .b27-section-title::before{content:"";position:absolute;left:0;top:3px;bottom:3px;width:3px;border-radius:999px;background:linear-gradient(180deg,var(--ft-accent),var(--ft-accent2));box-shadow:0 0 16px var(--pd-glow)}
+html[data-theme]:not([data-theme="original"]) .b27-section-title h2{letter-spacing:-.025em}
+html[data-theme]:not([data-theme="original"]) .b27-today-note{border:1px solid color-mix(in srgb,var(--ft-border) 72%,var(--ft-accent2) 28%);border-radius:18px;background:linear-gradient(145deg,color-mix(in srgb,var(--ft-surface) 72%,transparent),color-mix(in srgb,var(--ft-accent2) 6%,transparent));box-shadow:inset 0 1px 0 rgba(255,255,255,.045)}
+
+/* CTA polish */
+html[data-theme]:not([data-theme="original"]) :is(.b27-primary-action,.b27-secondary-action){position:relative;overflow:hidden;border-radius:19px;box-shadow:0 15px 38px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.18),inset 0 -1px 0 rgba(0,0,0,.14);transition:transform .14s cubic-bezier(.2,.8,.2,1),filter .14s ease,box-shadow .14s ease}
+html[data-theme]:not([data-theme="original"]) :is(.b27-primary-action,.b27-secondary-action)::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(112deg,rgba(255,255,255,.16),transparent 24%,transparent 66%,rgba(255,255,255,.055))}
+html[data-theme]:not([data-theme="original"]) .b27-primary-action{box-shadow:0 16px 42px color-mix(in srgb,var(--ft-accent2) 23%,rgba(0,0,0,.20)),inset 0 1px 0 rgba(255,255,255,.24),inset 0 -1px 0 rgba(0,0,0,.14)}
+html[data-theme]:not([data-theme="original"]) .b27-secondary-action{background:linear-gradient(145deg,color-mix(in srgb,var(--ft-surface) 74%,var(--ft-accent) 10%),color-mix(in srgb,var(--ft-surface-2) 82%,var(--ft-accent2) 10%));border:1px solid color-mix(in srgb,var(--ft-accent) 25%,var(--ft-border));color:var(--b27-text)}
+html[data-theme]:not([data-theme="original"]) :is(.b27-primary-action,.b27-secondary-action)>b{flex:0 0 auto;width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.16)}
+
+/* Full-screen practice/journey atmosphere */
+html[data-theme]:not([data-theme="original"]) .b27-overlay{background:radial-gradient(circle at 8% 0%,var(--pd-glow2),transparent 28rem),radial-gradient(circle at 94% 7%,var(--pd-glow),transparent 30rem),linear-gradient(160deg,var(--ft-bg-1),var(--ft-bg-2) 54%,var(--ft-bg-1))}
+html[data-theme]:not([data-theme="original"]) .b27-back{border-color:color-mix(in srgb,var(--ft-border) 60%,var(--ft-accent2) 40%);background:linear-gradient(145deg,color-mix(in srgb,var(--ft-surface) 86%,var(--ft-accent) 8%),color-mix(in srgb,var(--ft-surface-2) 90%,var(--ft-accent2) 8%));box-shadow:0 10px 28px rgba(0,0,0,.20),inset 0 1px 0 rgba(255,255,255,.06)}
+
+/* Native-app glass bottom shelf */
+html[data-theme]:not([data-theme="original"]) .ux-bottom-nav{background:linear-gradient(180deg,color-mix(in srgb,var(--ft-nav) 92%,white 2%),color-mix(in srgb,var(--ft-nav) 96%,black 4%));border-top-color:color-mix(in srgb,var(--ft-border) 62%,var(--ft-accent2) 38%);box-shadow:0 -18px 48px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,255,255,.055);backdrop-filter:blur(28px) saturate(1.22);-webkit-backdrop-filter:blur(28px) saturate(1.22)}
+html[data-theme]:not([data-theme="original"]) .ux-bottom-nav button{position:relative;overflow:hidden;transition:transform .13s ease,background .16s ease,color .16s ease}
+html[data-theme]:not([data-theme="original"]) .ux-bottom-nav button.active{border:1px solid color-mix(in srgb,var(--ft-accent2) 18%,transparent);box-shadow:0 8px 24px color-mix(in srgb,var(--ft-accent2) 10%,transparent),inset 0 1px 0 rgba(255,255,255,.055)}
+
+/* Settings cohesion */
+html[data-theme]:not([data-theme="original"]) .screen-settings :is(.card,.ux-settings-note){border-color:color-mix(in srgb,var(--ux-border) 70%,var(--ux-accent2) 30%);background:linear-gradient(145deg,color-mix(in srgb,var(--ux-panel) 94%,var(--ux-accent) 6%),color-mix(in srgb,var(--ux-panel) 91%,var(--ux-accent2) 9%));box-shadow:var(--pd-soft),inset 0 1px 0 rgba(255,255,255,.05)}
+html[data-theme]:not([data-theme="original"]) .ft-theme-settings-inline{box-shadow:0 26px 72px rgba(0,0,0,.31),0 0 42px var(--pd-glow),inset 0 1px 0 rgba(255,255,255,.07)}
+
+/* Pointer + keyboard feedback */
+html[data-theme]:not([data-theme="original"]) :is(.b27-primary-action,.b27-secondary-action,.b27-quick-card,.b27-practice-action,.b27-lesson-row,.b27-stage-tab,.b27-icon-button,.b27-back,.ux-bottom-nav button):focus-visible{outline:3px solid color-mix(in srgb,var(--ft-accent) 72%,white 28%);outline-offset:3px}
+@media(hover:hover) and (pointer:fine){html[data-theme]:not([data-theme="original"]) :is(.b27-quick-card,.b27-practice-action,.b27-stage-tab):not(:disabled):hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--ft-accent2) 50%,var(--ft-border));box-shadow:0 22px 56px rgba(0,0,0,.27),0 0 28px var(--pd-glow),inset 0 1px 0 rgba(255,255,255,.075)}html[data-theme]:not([data-theme="original"]) :is(.b27-primary-action,.b27-secondary-action):hover{transform:translateY(-1px);filter:saturate(1.08) brightness(1.035)}}
+html[data-theme]:not([data-theme="original"]) :is(.b27-primary-action,.b27-secondary-action,.b27-quick-card,.b27-practice-action,.b27-lesson-row,.b27-stage-tab):not(:disabled):active{transform:scale(.982);filter:brightness(.97)}
+
+@media(max-width:520px){html[data-theme]:not([data-theme="original"]) .b27-home-grid{gap:17px}html[data-theme]:not([data-theme="original"]) .b27-home-main,html[data-theme]:not([data-theme="original"]) .b27-home-side{gap:12px}html[data-theme]:not([data-theme="original"]) :is(.b27-primary-card,.b27-level-card,.b27-current-card,.b27-stage-card){border-radius:23px}html[data-theme]:not([data-theme="original"]) :is(.b27-quick-card,.b27-practice-action){border-radius:20px}html[data-theme]:not([data-theme="original"]) .b27-primary-card{padding:20px 17px}html[data-theme]:not([data-theme="original"]) .b27-section-title{padding-left:11px}}
+@media(prefers-reduced-motion:reduce){html[data-theme]:not([data-theme="original"]) :is(.b27-primary-action,.b27-secondary-action,.b27-quick-card,.b27-practice-action,.b27-lesson-row,.b27-stage-tab,.ux-bottom-nav button){transition:none!important}}

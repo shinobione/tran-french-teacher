@@ -1,0 +1,8 @@
+/* Premium theme narrow-screen geometry guard. Original stays untouched. */
+@media(max-width:520px){
+  html[data-theme]:not([data-theme="original"]) .ft-modern-home-logo{
+    width:min(360px,100%)!important;
+    max-width:100%!important;
+    box-sizing:border-box;
+  }
+}
