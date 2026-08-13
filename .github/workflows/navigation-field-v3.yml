@@ -25,8 +25,9 @@ jobs:
           grep -q 'translate3d(-50%,0,0)' premium-nav-geometry-hotfix.css
           grep -q 'z-index:10020' premium-nav-geometry-hotfix.css
           grep -q '2.3.4-p0nav1' premium-theme-polish.css
-          grep -q '2.3.6-v4home2' theme-controller.js
+          grep -q '2.3.7-v4progress1' theme-controller.js
           grep -q 'premium-v4-home.css?v=2.3.6-v4home2' premium-theme-polish.css
+          grep -q 'premium-v4-progress.css?v=2.3.7-v4progress1' premium-theme-polish.css
       - name: Sanctuaries remain exact
         run: |
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
@@ -42,15 +43,11 @@ jobs:
           google-chrome --version
       - name: Chrome — repeated visible navigation transaction
         run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu \
-            --virtual-time-budget=36000 --dump-dom \
-            'http://127.0.0.1:4173/field-navigation-v2-smoke.html' >/tmp/field-nav-v3.html
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=36000 --dump-dom 'http://127.0.0.1:4173/field-navigation-v2-smoke.html' >/tmp/field-nav-v3.html
           grep -q 'data-field-navigation-v2-smoke="ok"' /tmp/field-nav-v3.html || { cat /tmp/field-nav-v3.html; exit 1; }
       - name: Chrome — P0 global path and geometry tribunal
         run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu \
-            --virtual-time-budget=34000 --dump-dom \
-            'http://127.0.0.1:4173/p0-navigation-tribunal.html' >/tmp/p0-navigation-tribunal.html
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=34000 --dump-dom 'http://127.0.0.1:4173/p0-navigation-tribunal.html' >/tmp/p0-navigation-tribunal.html
           grep -q 'data-p0-navigation-tribunal="ok"' /tmp/p0-navigation-tribunal.html || { cat /tmp/p0-navigation-tribunal.html; exit 1; }
       - name: Stop static server
         if: always()
