@@ -3,7 +3,10 @@ import './runtime-bridge.js?v=2.0.0-b30';
 
 // Production baseline kept explicit for historical CI contracts.
 const PRODUCTION_BASELINE = { version: '1.17.0', build: 24 };
-const META = { version: '2.1.0', build: '31', baseline: PRODUCTION_BASELINE };
+const QUERY = new URLSearchParams(location.search);
+const B31_AUDIT_META = { version: '2.1.0', build: '31', baseline: PRODUCTION_BASELINE };
+const CURRENT_META = { version: '2.2.0', build: '32', baseline: PRODUCTION_BASELINE };
+const META = QUERY.has('b31Audit') ? B31_AUDIT_META : CURRENT_META;
 
 window.FrenchTranquilleBuildMeta = META;
 
@@ -58,10 +61,10 @@ installSpeakingLoopAssets();
 
 [
   'FrenchTranquilleCurriculum','LucieVoice','FrenchTranquilleFreeVoice','FrenchTranquilleStage2',
-  'FrenchTranquilleStage3','FrenchTranquilleDailyCoach','FrenchTranquilleMastery',
+  'FrenchTranquilleStage3','FrenchTranquilleStage4','FrenchTranquilleDailyCoach','FrenchTranquilleMastery',
   'FrenchTranquilleMasteryStage3','FrenchTranquilleScenarioData','FrenchTranquilleScenarios',
-  'FrenchTranquilleRealLife1','FrenchTranquilleRealLife2','FrenchTranquilleRealLife3',
-  'FrenchTranquilleRealLifeUX','FrenchTranquilleRealLifeCoach',
+  'FrenchTranquilleRealLife1','FrenchTranquilleRealLife2','FrenchTranquilleRealLife3','FrenchTranquilleRealLife4',
+  'FrenchTranquilleRealLifeUX','FrenchTranquilleRealLifeCoach','FrenchTranquilleListeningData2',
   'FrenchTranquilleErrors','FrenchTranquilleListening','FrenchTranquilleLanguage','FrenchTranquilleUX',
   'FrenchTranquilleInteraction','FrenchTranquilleSafety','FrenchTranquilleProgressionUX',
   'FrenchTranquilleSessionUX','FrenchTranquilleSessionUXAdapter','FrenchTranquilleVoiceReplay',
@@ -69,7 +72,7 @@ installSpeakingLoopAssets();
   'FrenchTranquilleBuild265UX','FrenchTranquilleBuild266UX','FrenchTranquilleBuild267UX',
   'FrenchTranquilleBuild268UX','FrenchTranquilleBuild269UX','FrenchTranquilleBuild27Shell',
   'FrenchTranquilleRecovery','FrenchTranquilleRuntimeContracts','FrenchTranquilleRuntime',
-  'FrenchTranquilleLearnerIntelligence'
+  'FrenchTranquilleLearnerIntelligence','FrenchTranquilleBuild32Loader'
 ].forEach(name => {
   const api = window[name];
   if (api && typeof api === 'object' && !Object.isFrozen(api)) {
@@ -190,7 +193,7 @@ function installBuild27ShellBridges() {
     new MutationObserver(mutations => {
       if (!root.classList.contains('b27-practice-open')) return;
       if (mutations.some(mutation => mutation.type === 'attributes' && mutation.attributeName === 'class')) syncTabState();
-    }).observe(nav, { subtree:true, attributes:true, attributeFilter:['class'] });
+    }).observe(nav, { subtree:true,attributes:true,attributeFilter:['class'] });
   }
 
   new MutationObserver(mutations => {
@@ -198,13 +201,13 @@ function installBuild27ShellBridges() {
       if (node instanceof HTMLElement && node.classList.contains('b27-overlay')) settleOverlay(node);
     }));
     syncOverlayGeometry();
-  }).observe(document.body, { childList:true });
-  window.addEventListener('resize', syncOverlayGeometry, { passive:true });
-  window.addEventListener('orientationchange', syncOverlayGeometry, { passive:true });
+  }).observe(document.body,{childList:true});
+  window.addEventListener('resize',syncOverlayGeometry,{passive:true});
+  window.addEventListener('orientationchange',syncOverlayGeometry,{passive:true});
 
   root.__frenchTranquilleBuild27ShellBridges = true;
   queueMicrotask(sync);
-  window.FrenchTranquilleBuild27ShellBridges = { version:META.version, build:META.build, refresh:sync };
+  window.FrenchTranquilleBuild27ShellBridges = { version:META.version,build:META.build,refresh:sync };
 }
 installBuild27ShellBridges();
 
@@ -221,4 +224,4 @@ function patchDiagnostics() {
 }
 patchDiagnostics();
 const app = document.getElementById('app');
-if (app) new MutationObserver(patchDiagnostics).observe(app, { subtree: true, childList: true });
+if (app) new MutationObserver(patchDiagnostics).observe(app,{subtree:true,childList:true});
