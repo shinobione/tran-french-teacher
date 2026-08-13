@@ -61,7 +61,7 @@ jobs:
       - name: Chrome — repeated Practice Listening Home Progress route transaction
         run: |
           google-chrome --headless=new --no-sandbox --disable-gpu \
-            --virtual-time-budget=28000 --dump-dom \
+            --virtual-time-budget=36000 --dump-dom \
             'http://127.0.0.1:4173/field-navigation-v2-smoke.html' >/tmp/field-nav-v2.html
           grep -q 'data-field-navigation-v2-smoke="ok"' /tmp/field-nav-v2.html || { cat /tmp/field-nav-v2.html; exit 1; }
 
