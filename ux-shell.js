@@ -8,7 +8,7 @@
   const DEBUG_KEY = 'tran-french-teacher:debug-fr:v1';
   const isDebug = () => localStorage.getItem(DEBUG_KEY) === '1';
   const T = (vi, fr) => isDebug() ? fr : vi;
-  const esc = (value = '') => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const esc = (value = '') => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]));
 
   let overlay = null;
   let scheduled = false;
@@ -59,15 +59,9 @@
 
   function nativeGo(id) {
     if (overlay) dismissPractice(false);
-
-    // Give immediate deterministic state feedback. The hidden legacy nav then
-    // performs the actual screen change; renderBottomNav confirms from runtime.
     setPrimaryActive(id);
     const target = document.querySelector(`.bottom-nav [data-go="${id}"]`);
     if (target) target.click();
-
-    // Different browsers/render paths may replace app content synchronously or
-    // on the next frame. Reconcile both without relying solely on MutationObserver.
     renderBottomNav();
     requestAnimationFrame(renderBottomNav);
     setTimeout(renderBottomNav, 80);
@@ -95,12 +89,10 @@
       button.append(iconNode, labelNode);
       nav.appendChild(button);
     }
-
     const iconNode = button.querySelector('span');
     const labelNode = button.querySelector('strong');
     if (iconNode && iconNode.textContent !== icon) iconNode.textContent = icon;
     if (labelNode && labelNode.textContent !== label) labelNode.textContent = label;
-
     button.classList.toggle('active', active);
     button.setAttribute('aria-current', active ? 'page' : 'false');
     return button;
@@ -111,7 +103,6 @@
     document.body.dataset.uxScreen = screen;
     document.documentElement.classList.toggle('ux-debug-mode', isDebug());
     document.documentElement.classList.toggle('ux-learner-mode', !isDebug());
-
     let nav = document.querySelector('.ux-bottom-nav');
     if (!nav) {
       nav = document.createElement('nav');
@@ -119,14 +110,13 @@
       document.body.appendChild(nav);
     }
     nav.setAttribute('aria-label', T('Điều hướng chính', 'Navigation principale'));
-
-    const practiceActive = Boolean(overlay) || ['conversation','review'].includes(screen);
+    const b27Practice = document.querySelector('.b27-practice-page:not(.b27-leaving)');
+    const practiceActive = Boolean(overlay) || Boolean(b27Practice) || ['conversation','review'].includes(screen);
     const items = [
       ['home','⌂',T('Hôm nay','Aujourd’hui'),!practiceActive && screen === 'home'],
       ['practice','◎',T('Luyện tập','Pratiquer'),practiceActive],
       ['progress','◔',T('Lộ trình','Parcours'),!practiceActive && screen === 'progress']
     ];
-
     const wanted = new Set(items.map(([id]) => id));
     nav.querySelectorAll('[data-ux-nav]').forEach(button => {
       if (!wanted.has(button.dataset.uxNav)) button.remove();
@@ -190,7 +180,6 @@
       const chip = lessonCard.querySelector('.ux-lesson-position');
       if (chip) chip.textContent = s.next ? T(`Bài ${s.next.number} / ${s.lessons.length}`,`Leçon ${s.next.number} / ${s.lessons.length}`) : T('Lộ trình hoàn thành','Parcours terminé');
     }
-
     const main = document.querySelector('.screen-home .home-main');
     if (main && !main.querySelector('.ux-home-note')) {
       const note = document.createElement('p');
