@@ -1,0 +1,25 @@
+/* French Trân’quille — premium bottom-nav geometry hotfix
+   Cosmetic only. Fixes V3 inheriting translateX(-50%) while also forcing left:0/right:0. */
+
+html[data-theme]:not([data-theme="original"]) .ux-bottom-nav{
+  left:50%;
+  right:auto;
+  transform:translateX(-50%);
+  width:min(720px,calc(100% - 20px));
+  margin:0;
+  box-sizing:border-box;
+}
+
+@media(max-width:759px){
+  html[data-theme]:not([data-theme="original"]) .ux-bottom-nav{
+    bottom:max(8px,env(safe-area-inset-bottom,0px));
+    width:calc(100% - 20px);
+  }
+}
+
+@media(min-width:760px){
+  html[data-theme]:not([data-theme="original"]) .ux-bottom-nav{
+    bottom:14px;
+    width:min(720px,calc(100% - 28px));
+  }
+}
