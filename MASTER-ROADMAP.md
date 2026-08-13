@@ -4,7 +4,7 @@
 >
 > This document consolidates the current runtime state, pending field gates, Premium V4 proposals, and the pedagogical Build 35→40 sequence. Any future AI/chat/session should read this file before making roadmap or implementation decisions.
 >
-> Current runtime baseline when this roadmap was written: `main` = `8051e580990fa3f3a6c44aadc543cfcba9b66f3d` after PR #93.
+> Automated P0 runtime certified on `main` = `118b0e6d86f26763c52665dda2cafdf8789e5d7f` after PR #95. Product pedagogy remains **V2.3.0 · Build 34**; current reliability/product-quality work remains in the **V2.3.x / Build 34 maintenance line**.
 
 ---
 
@@ -20,7 +20,8 @@
 | Durable pedagogical stores | **6** |
 | Foundations | **F01–F04 pilot**, lessons 8–13 |
 | Frozen architecture | **2.0.0 · Build 30** |
-| Runtime baseline | **8051e580990fa3f3a6c44aadc543cfcba9b66f3d** |
+| Pre-P0 visual baseline | **8051e580990fa3f3a6c44aadc543cfcba9b66f3d · PR #93** |
+| Automated P0 runtime | **118b0e6d86f26763c52665dda2cafdf8789e5d7f · PR #95** |
 | Primary target | **iPhone / Safari / PWA iOS** |
 | Recurring cost | **0 €** |
 
@@ -40,9 +41,11 @@ Non-negotiable product rules continue to apply: one-tap deterministic navigation
 
 # 1. P0 Stabilization after Premium work
 
-**Must happen before any further visual polish.**
+**Automated P0 status: CLOSED on `main` by PR #94 + PR #95.**
 
-A new field regression has been observed:
+**Remaining P0 gate: real-device Safari/PWA validation on Trân’s iPhone. Do not mark the field gate closed from CI alone.**
+
+The field regression that triggered this phase was:
 
 ```text
 Progress → Settings
@@ -50,57 +53,68 @@ Progress → Settings
 → only the bottom navigation remains visible
 ```
 
-This is a **P0 UX/navigation bug** because the application loses its usable screen.
+Root cause was the Build 27 Settings helper depending on `.screen-home`; from Progress the helper became a no-op after the active facade had already been faded out. PR #94 moved Settings open/return ownership into the field-navigation runtime. PR #95 completed Practice ownership, bottom-navigation hardening and the full browser tribunal.
 
 ## 1.1 Global Settings Shell
 
-Settings must become a truly global app surface and must not depend on one page owning the DOM.
+Settings is now treated as a global navigation transaction rather than as a Home-owned action.
 
-### Definition of Done
+### Automated Definition of Done
 
-- [ ] Settings opens correctly from Home.
-- [ ] Settings opens correctly from Practice.
-- [ ] Settings opens correctly from Progress.
-- [ ] Settings opens correctly from Listening where the control is available.
-- [ ] Closing Settings returns to the exact previous screen.
-- [ ] No blank background / empty-body state.
-- [ ] No recovery second tap.
-- [ ] Theme changes preserve the current screen.
-- [ ] Close via `X`, back/navigation and intended gestures is deterministic.
-- [ ] Learner data remains byte-safe.
-- [ ] Protected sanctuaries remain untouched unless absolutely necessary.
+- [x] Settings opens correctly from Home.
+- [x] Settings opens correctly from Practice.
+- [x] Settings opens correctly from Progress.
+- [x] Settings from Listening is N/A in the current runtime because Listening exposes no Settings control; no hidden fake entry was added merely to satisfy CI.
+- [x] Closing Settings returns to the exact previous supported screen: Home, Practice or Progress.
+- [x] No blank background / empty-body state in the browser tribunal.
+- [x] No recovery second tap.
+- [x] Theme changes preserve the Settings screen and return context.
+- [x] App Back control is deterministic in automated navigation tests.
+- [ ] Native Safari/browser back, X and gesture behavior where exposed: certify on the real PWA/iPhone.
+- [x] Learner data remains byte-safe.
+- [x] Protected sanctuaries remain untouched and are hash-guarded in CI.
 
 ## 1.2 Global navigation transaction tests
 
-Exercise the **actual action that previously failed**, not merely button presence.
+The actual failing actions are exercised, not merely button presence.
 
-Mandatory repeated path:
+Certified browser path:
 
 ```text
 Home → Practice → Progress → Settings → close → Listening → Home
 ```
 
-The browser tribunal must click the real controls and assert computed visible ownership after each step.
+Additional certified transaction:
+
+```text
+Practice → Settings → Practice
+```
+
+`p0-navigation-tribunal.html` clicks real controls and asserts computed visible ownership. It also neutralizes transition duration only inside the test harness so ownership is measured after visual settling, and measures fixed navigation against the iframe layout viewport rather than the scrollbar-inclusive outer width.
 
 ## 1.3 Bottom navigation hardening
 
-PR #93 repaired the major geometry regression. The next guard must lock:
+PR #93 repaired the major geometry regression. PR #95 locks the following contracts:
 
-- [ ] desktop centering;
-- [ ] mobile width and side margins;
-- [ ] correct z-index with Listening and Settings;
-- [ ] no clipped item;
-- [ ] active tab correctness;
-- [ ] no stale transform inheritance;
-- [ ] iPhone safe-area support.
+- [x] desktop centering;
+- [x] mobile width and side margins;
+- [x] correct z-index with Listening and Settings;
+- [x] no clipped item;
+- [x] active tab correctness;
+- [x] no stale transform inheritance;
+- [x] iPhone safe-area CSS support;
+- [x] 44 px+ contained navigation targets;
+- [x] geometry across Original / Aurora / Sunset / Jade at 390×844, 430×932, 768×1024, 1280×800 and 1440×900.
 
-**Phase gate:** no blank screen and deterministic navigation on the first gesture.
+**Automated phase gate:** PASS — no blank screen and deterministic visible ownership on the first app gesture.
+
+**Field phase gate:** PENDING — repeat the core transactions in the installed Safari/PWA runtime before Premium V4 implementation begins.
 
 ---
 
 # 2. Premium Polish V4 — Mockup Fidelity
 
-This is the next major visual milestone after P0 stabilization.
+This is the next major visual milestone after the remaining P0 real-device field certification.
 
 ## Source of truth
 
@@ -394,14 +408,14 @@ Settings
 
 - [ ] no horizontal overflow;
 - [ ] no element outside viewport;
-- [ ] bottom nav centered;
-- [ ] no blank content surface;
-- [ ] Settings visible when opened;
+- [x] bottom nav centered — automated P0 geometry gate;
+- [x] no blank content surface in the automated P0 navigation path;
+- [x] Settings visible when opened from Home / Practice / Progress;
 - [ ] text contrast acceptable;
 - [ ] primary CTA visible;
 - [ ] hero layout intact;
 - [ ] logo not cropped;
-- [ ] iPhone safe areas respected.
+- [x] iPhone safe-area CSS contracts present; real-device confirmation remains pending.
 
 Initial strategy: CI screenshots as artifacts for human review, before introducing fragile pixel-diff baselines.
 
@@ -413,9 +427,20 @@ Selective stable visual baselines may be added later.
 
 Several existing field gates remain open and are grouped here so they are never forgotten.
 
-## 5.1 Navigation
+## 5.1 P0 navigation certification — next required action
 
+On the installed Safari/PWA runtime, certify all of the following before beginning Premium V4 implementation:
+
+- [ ] Home → Settings → back → Home immediately visible.
+- [ ] Progress → Settings → back → Progress immediately visible.
+- [ ] Practice → Settings → back → Practice immediately visible.
+- [ ] Change Aurora / Sunset / Jade while Settings is open → Settings remains visible → back returns to source screen.
 - [ ] Listening → one tap `Aujourd’hui` → Home immediately visible.
+- [ ] Listening overlay + bottom navigation ownership looks correct and remains tappable.
+- [ ] Bottom navigation is centered, unclipped and clear of the iPhone safe area.
+- [ ] Close and reopen the installed PWA → no stale blank surface or stale navigation state.
+
+Record any failure with: source screen, exact tap sequence, active theme, screenshot/video, and whether the PWA was freshly opened or already running.
 
 ## 5.2 Own-voice replay
 
@@ -446,7 +471,7 @@ Validate with Trân:
 
 ## 5.4 Premium V4 real-device visual gate
 
-On the real iPhone/PWA:
+After V4 implementation, on the real iPhone/PWA:
 
 - [ ] Home;
 - [ ] Progress;
@@ -480,7 +505,8 @@ The closure must record:
 - Premium Depth #91;
 - Mockup Fidelity V3 #92;
 - nav geometry hotfix #93;
-- Settings P0 resolution;
+- Settings P0 resolution #94;
+- P0 navigation/bottom-nav hardening #95;
 - Premium Polish V4;
 - field validation results;
 - final certified runtime SHA;
@@ -781,11 +807,12 @@ Maintain throughout all future phases without stealing pedagogical build numbers
 # Canonical execution order
 
 ```text
-P0 Settings/navigation stabilization
+P0 Settings/navigation automated stabilization ✅
+→ P0 real-device Safari/PWA certification with Trân ⏳
 → Premium Polish V4 / Mockup Fidelity
 → Micro-interactions
 → Visual QA Tribunal
-→ Real-device Trân validation
+→ Premium V4 real-device Trân validation
 → V2.3.x / Build34 documentation closure
 → Build35 Memory design
 → Build36 if and only if migration proof is complete
@@ -796,7 +823,7 @@ P0 Settings/navigation stabilization
 → A2 only after Build40 decision
 ```
 
-This order is deliberate: first recover **professional product quality and runtime reliability**, then resume the deeper pedagogical architecture without losing any pending field gate.
+This order is deliberate: first recover **professional product quality and runtime reliability**, certify it on the actual iPhone/PWA target, then resume visual expansion and deeper pedagogical architecture without losing any pending field gate.
 
 ---
 
