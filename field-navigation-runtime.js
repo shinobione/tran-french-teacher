@@ -1,6 +1,7 @@
 (()=>{
 'use strict';
 if(window.FrenchTranquilleFieldNavigation)return;
+const params=new URLSearchParams(location.search);const historical=params.has('b31Audit')||params.has('b30Audit')||params.has('v2Audit')||[...params.keys()].some(key=>/smoke/i.test(key));const forced=params.has('fieldNavV2')||params.has('fieldNavV3');if(historical&&!forced)return;
 const R=document.documentElement;let seq=0,settingsReturn=null;
 const sleep=n=>new Promise(r=>setTimeout(r,n));
 function active(id){document.querySelectorAll('.ux-bottom-nav [data-ux-nav]').forEach(b=>{const on=b.dataset.uxNav===id;b.classList.toggle('active',on);b.setAttribute('aria-current',on?'page':'false')})}
