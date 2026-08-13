@@ -1,0 +1,51 @@
+<!doctype html><html><body><script>
+(()=>{
+  const root=document.documentElement;
+  const key='francais-avec-luc:learner:v1';
+  const stores=[key,'french-tranquille:learning-memory:v1','french-tranquille:error-intelligence:v1','french-tranquille:scenarios:v1','french-tranquille:listening:v1','french-tranquille:milestones:v1'];
+  const completed=Array.from({length:10},(_,i)=>`l${i+1}`);
+  const progress=Object.fromEntries(completed.map(id=>[id,999]));progress.l11=0;
+  localStorage.setItem(key,JSON.stringify({schemaVersion:2,learnerName:'Trân',level:'A0',lessonProgress:progress,completedLessons:completed,knownItems:['bonjour','merci','au-revoir','je-mappelle','svp','excusez-moi','je-comprends','je-ne-comprends-pas','repetez','plus-lentement','je-suis-vietnamienne','je-viens-vietnam','jhabite-hcm','et-vous','oui','non','je-voudrais','eau','cafe','the','addition','combien-ca-coute','jaime','je-naime-pas','beaucoup','un-peu','cest-bon','je-prefere','zero','un','deux','trois','quatre','cinq','six','sept','huit','neuf','dix','euros'],reviewState:{},conversationWins:0,streak:{current:1}}));
+  const frame=document.createElement('iframe');frame.style='width:390px;height:844px;border:0';frame.src='./?debug=fr';document.body.appendChild(frame);
+  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+  const waitFor=async(fn,timeout=12000)=>{const start=performance.now();while(performance.now()-start<timeout){try{const v=fn();if(v)return v}catch{}await sleep(80)}return null};
+  const text=n=>String(n?.textContent||'').replace(/\s+/g,' ').trim();
+  const fail=m=>{root.dataset.b34Smoke='fail';root.dataset.b34Detail=m};
+  frame.addEventListener('load',()=>setTimeout(async()=>{try{
+    const w=frame.contentWindow,d=frame.contentDocument;
+    const api=await waitFor(()=>w.FrenchTranquilleFoundationsPilot);
+    if(!api)throw Error('pilot-api');
+    if(api.version!=='2.3.0'||api.build!=='34'||api.persistent!==false)throw Error('pilot-contract');
+    if((w.FrenchTranquilleCurriculum?.lessons||[]).length!==52||(w.FrenchTranquilleCurriculum?.items||[]).length!==313)throw Error('curriculum');
+    let open=d.querySelector('[data-open-lesson="l11"]');
+    if(!open){
+      const all=[...d.querySelectorAll('[data-open-lesson]')];open=all.find(x=>x.dataset.openLesson==='l11');
+    }
+    if(!open)throw Error('l11-open');open.click();
+    if(!await waitFor(()=>d.querySelector('.screen-lesson')))throw Error('lesson-screen');
+    api.refresh();
+    const entry=await waitFor(()=>d.querySelector('[data-foundation-entry]'));
+    if(!entry)throw Error('entry');
+    if(!/le \/ la \/ les/.test(text(entry)))throw Error('entry-copy');
+    const before=Object.fromEntries(stores.map(k=>[k,w.localStorage.getItem(k)]));
+    entry.querySelector('[data-foundation-open]').click();
+    if(!await waitFor(()=>d.querySelector('.ft-foundation-overlay')))throw Error('overlay');
+    d.querySelector('[data-foundation-next]').click();await sleep(60);
+    for(const answer of ['la','un','une','les']){
+      const choice=await waitFor(()=>[...d.querySelectorAll('[data-foundation-choice]')].find(b=>b.dataset.foundationChoice===answer));
+      if(!choice)throw Error('choice-'+answer);choice.click();await sleep(40);
+      const next=d.querySelector('[data-foundation-next]');if(!next||next.hidden)throw Error('feedback-'+answer);next.click();await sleep(60);
+    }
+    const back=await waitFor(()=>d.querySelector('[data-foundation-close].ft-foundation-next'));
+    if(!back)throw Error('done');back.click();await sleep(80);
+    if(d.querySelector('.ft-foundation-overlay'))throw Error('close');
+    if(!d.querySelector('.screen-lesson'))throw Error('return-lesson');
+    const after=Object.fromEntries(stores.map(k=>[k,w.localStorage.getItem(k)]));
+    for(const k of stores)if(before[k]!==after[k])throw Error('store-'+k);
+    if([...w.localStorage.keys()].some(k=>/foundation/i.test(k)))throw Error('foundation-store');
+    const overflow=Math.max(0,d.documentElement.scrollWidth-d.documentElement.clientWidth);if(overflow>1)throw Error('overflow-'+overflow);
+    root.dataset.b34Concepts=api.concepts.join(',');root.dataset.b34StoresUnchanged='1';root.dataset.b34Overflow=String(Math.round(overflow));root.dataset.b34Smoke='ok';root.dataset.b34Detail='l11-roundtrip-f01-f04';
+  }catch(e){fail(e.message)}},2400));
+  setTimeout(()=>{if(!root.dataset.b34Smoke)fail('timeout')},22000);
+})();
+</script></body></html>
