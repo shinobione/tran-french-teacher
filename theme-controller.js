@@ -1,3 +1,4 @@
+/* Cosmetic appearance preference only. */
 (()=>{
 'use strict';
 const KEY='french-tranquille:appearance-theme:v1';
