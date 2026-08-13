@@ -25,11 +25,22 @@ jobs:
           grep -q "insertAdjacentElement('afterend',img)" theme-controller.js
           grep -q 'ft-theme-settings-inline' theme-controller.js
           grep -q 'data-theme-current' theme-controller.js
-          grep -q '#ff3faf' premium-theme-polish.css
-          grep -q '#a640ff' premium-theme-polish.css
-          grep -q '#f4c34f' premium-theme-polish.css
+          grep -q 'premium-theme-polish-v2-base.css' premium-theme-polish.css
+          grep -q 'premium-depth-pass.css' premium-theme-polish.css
+          test "$(git hash-object premium-theme-polish-v2-base.css)" = "b5578b1fae55426f06eac30e227d94cf4dfb2491"
+          grep -q '#ff3faf' premium-theme-polish-v2-base.css
+          grep -q '#a640ff' premium-theme-polish-v2-base.css
+          grep -q '#f4c34f' premium-theme-polish-v2-base.css
+          grep -q 'Original is intentionally untouched' premium-depth-pass.css
+          grep -q -- '--pd-depth:' premium-depth-pass.css
+          grep -q 'backdrop-filter:blur(24px)' premium-depth-pass.css
+          grep -q 'b27-primary-action' premium-depth-pass.css
+          grep -q 'b27-section-title' premium-depth-pass.css
+          grep -q 'ux-bottom-nav' premium-depth-pass.css
+          grep -q 'prefers-reduced-motion:reduce' premium-depth-pass.css
           ! grep -q 'francais-avec-luc:learner:v1' theme-controller.js
           ! grep -q 'french-tranquille:learning-memory:v1' theme-controller.js
+          ! grep -q 'francais-avec-luc:learner:v1' premium-depth-pass.css
       - name: Voice and learner sanctuaries remain exact
         run: |
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
