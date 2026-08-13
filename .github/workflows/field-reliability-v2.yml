@@ -21,11 +21,15 @@ jobs:
       - name: Static contracts
         run: |
           node --check stage2-boot.js
+          node --check field-navigation-runtime.js
           node --check field-audio-session.js
           ! grep -q 'mediarecorder-ios-compat' stage2-boot.js
           ! grep -q 'navigation-field-hotfix' stage2-boot.js
           ! grep -q 'localStorage.setItem' field-audio-session.js
-          grep -q 'event.stopImmediatePropagation' stage2-boot.js
+          ! grep -q 'localStorage.setItem' field-navigation-runtime.js
+          grep -q 'stopImmediatePropagation' field-navigation-runtime.js
+          grep -q 'waitGone' field-navigation-runtime.js
+          grep -q '#app .b27-page' field-navigation-runtime.js
           grep -q 'requestData' field-audio-session.js
           grep -q 'new Blob(s.chunks' field-audio-session.js
           grep -q 'data-field-audio-play' field-audio-session.js
