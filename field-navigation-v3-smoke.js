@@ -20,6 +20,14 @@
     if(id!=='practice'&&!clean(d))throw Error(`${step}:stale-overlay:${id}`);
     if(d.querySelector('.b27-page.b27-leaving'))throw Error(`${step}:persistent-leaving:${id}`);
   }
+  function assertSettings(w,d,source){
+    const shell=d.querySelector('#app .app-shell.screen-settings');
+    const narrow=d.querySelector('.screen-settings .narrow');
+    if(!visible(w,shell)||!visible(w,narrow))throw Error(`${step}:settings-not-visible:${detail(w,shell)}:${detail(w,narrow)}`);
+    if(d.documentElement.dataset.fieldSettingsReturn!==source)throw Error(`${step}:settings-return:${d.documentElement.dataset.fieldSettingsReturn||'missing'}`);
+    if(d.querySelector('.b27-page.b27-leaving'))throw Error(`${step}:settings-persistent-leaving`);
+    if(d.documentElement.dataset.fieldRouteError)throw Error(`${step}:settings-route-error:${d.documentElement.dataset.fieldRouteError}`);
+  }
   frame.addEventListener('load',()=>setTimeout(async()=>{
     try{
       const d=frame.contentDocument,w=frame.contentWindow;
@@ -30,6 +38,17 @@
       const keys=['francais-avec-luc:learner:v1','french-tranquille:learning-memory:v1','french-tranquille:error-intelligence:v1','french-tranquille:scenarios:v1','french-tranquille:milestones:v1'];
       const before=Object.fromEntries(keys.map(k=>[k,w.localStorage.getItem(k)]));
       step='initial-home';assertDestination(w,d,'home');
+
+      step='home-settings-open';await press(w,d.querySelector('.screen-home .b27-home [data-b27-settings]'));assertSettings(w,d,'home');
+      step='home-settings-return';await press(w,d.querySelector('.screen-settings [data-back]'));assertDestination(w,d,'home');
+
+      step='progress-before-settings';await press(w,d.querySelector('[data-ux-nav="progress"]'));assertDestination(w,d,'progress');
+      step='progress-settings-open';await press(w,d.querySelector('.screen-progress .b27-progress-page [data-b27-settings]'));assertSettings(w,d,'progress');
+      step='progress-settings-theme-stability';
+      const jade=d.querySelector('[data-theme-option="jade"]');if(jade)await press(w,jade,150);assertSettings(w,d,'progress');
+      step='progress-settings-return';await press(w,d.querySelector('.screen-settings [data-back]'));assertDestination(w,d,'progress');
+
+      step='progress-home-reset';await press(w,d.querySelector('[data-ux-nav="home"]'));assertDestination(w,d,'home');
       step='home-quick-listening-open';
       const quickListen=d.querySelector('[data-b27-action="listening"]');
       if(!quickListen||quickListen.disabled)throw Error(`${step}:unavailable`);
@@ -47,10 +66,12 @@
       }
       const after=Object.fromEntries(keys.map(k=>[k,w.localStorage.getItem(k)]));
       for(const k of keys){if(before[k]!==after[k])throw Error(`store-mutated:${k}`)}
-      if(Number(d.documentElement.dataset.fieldRouteCount||0)<15)throw Error('route-count');
+      if(Number(d.documentElement.dataset.fieldRouteCount||0)<18)throw Error('route-count');
+      if(Number(d.documentElement.dataset.fieldSettingsOpenCount||0)<2)throw Error('settings-open-count');
+      if(Number(d.documentElement.dataset.fieldSettingsReturnCount||0)<2)throw Error('settings-return-count');
       if(d.documentElement.dataset.fieldRouteError)throw Error(`route-error:${d.documentElement.dataset.fieldRouteError}`);
-      finish(true,`visible-home-listening-close + 5x route cycle; transactions=${d.documentElement.dataset.fieldRouteCount||0}`)
+      finish(true,`settings home/progress return + visible-home-listening-close + 5x route cycle; transactions=${d.documentElement.dataset.fieldRouteCount||0}`)
     }catch(e){finish(false,e.message)}
   },3200),{once:true});
-  setTimeout(()=>{if(!root.dataset.fieldNavigationV2Smoke)finish(false,'timeout')},32000)
+  setTimeout(()=>{if(!root.dataset.fieldNavigationV2Smoke)finish(false,'timeout')},36000)
 })();
