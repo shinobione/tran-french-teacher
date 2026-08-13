@@ -8,78 +8,31 @@ const COLORS={original:'#171026',aurora:'#050b22',sunset:'#1a0825',jade:'#04130f
 const valid=id=>IDS.includes(id)?id:'original';
 const current=()=>valid(localStorage.getItem(KEY)||'original');
 
-function ensurePolish(){
+function ensureStyle(){
  if(!document.querySelector('link[data-premium-theme-polish]')){
-  const link=document.createElement('link');
-  link.rel='stylesheet';
-  link.href='./premium-theme-polish.css?v=2.3.2-theme2';
-  link.dataset.premiumThemePolish='1';
-  document.head.appendChild(link);
+  const l=document.createElement('link');l.rel='stylesheet';l.href='./premium-theme-polish.css?v=2.3.2-theme2';l.dataset.premiumThemePolish='1';document.head.appendChild(l);
  }
  if(!document.querySelector('style[data-modern-home-brand-fix]')){
-  const style=document.createElement('style');
-  style.dataset.modernHomeBrandFix='1';
-  style.textContent='.ft-modern-home-brand::before{display:none!important}';
-  document.head.appendChild(style);
+  const s=document.createElement('style');s.dataset.modernHomeBrandFix='1';s.textContent='.ft-modern-home-brand::before{display:none!important}';document.head.appendChild(s);
  }
 }
-
-function syncUi(theme){
- document.querySelectorAll('[data-theme-option]').forEach(button=>button.setAttribute('aria-pressed',button.dataset.themeOption===theme?'true':'false'));
- document.querySelectorAll('[data-theme-current]').forEach(node=>node.textContent=LABELS[theme]);
- const meta=document.querySelector('meta[name="theme-color"]');
- if(meta)meta.setAttribute('content',COLORS[theme]);
+function sync(theme){
+ document.querySelectorAll('[data-theme-option]').forEach(b=>{const v=b.dataset.themeOption===theme?'true':'false';if(b.getAttribute('aria-pressed')!==v)b.setAttribute('aria-pressed',v)});
+ document.querySelectorAll('[data-theme-current]').forEach(n=>{const v=LABELS[theme];if(n.textContent!==v)n.textContent=v});
+ const m=document.querySelector('meta[name="theme-color"]');if(m&&m.content!==COLORS[theme])m.content=COLORS[theme];
 }
-
-function apply(id){
- const theme=valid(id);
- document.documentElement.dataset.theme=theme;
- localStorage.setItem(KEY,theme);
- syncUi(theme);
- return theme;
+function apply(id){const t=valid(id);document.documentElement.dataset.theme=t;if(localStorage.getItem(KEY)!==t)localStorage.setItem(KEY,t);sync(t);return t}
+function brand(){
+ const h=document.querySelector('.b27-home');if(!h)return;h.classList.add('ft-modern-home-brand');
+ let img=h.querySelector(':scope>.ft-modern-home-logo');if(!img){img=document.createElement('img');img.className='ft-modern-home-logo';img.src='./assets/HomeLogo.png?v=2.3.2-theme2';img.alt='French Trân’quille';img.decoding='async'}
+ const head=h.querySelector(':scope>.b27-header');if(head){if(head.nextElementSibling!==img)head.insertAdjacentElement('afterend',img)}else if(h.firstElementChild!==img)h.prepend(img);
 }
-
-function mountBrand(){
- const home=document.querySelector('.b27-home');
- if(!home)return;
- home.classList.add('ft-modern-home-brand');
- let img=home.querySelector(':scope > .ft-modern-home-logo');
- if(!img){
-  img=document.createElement('img');
-  img.className='ft-modern-home-logo';
-  img.src='./assets/HomeLogo.png?v=2.3.2-theme2';
-  img.alt='French Trân’quille';
-  img.decoding='async';
- }
- const header=home.querySelector(':scope > .b27-header');
- if(header){
-  if(header.nextElementSibling!==img)header.insertAdjacentElement('afterend',img);
- }else if(home.firstElementChild!==img){home.prepend(img)}
+function picker(){
+ const host=document.querySelector('.screen-settings .narrow'),tpl=document.getElementById('ft-theme-settings');if(!host||!tpl)return;
+ let p=host.querySelector(':scope>.ft-theme-settings-inline');if(!p){p=tpl.cloneNode(true);p.removeAttribute('id');p.classList.add('ft-theme-settings-inline');p.open=true;const v=p.querySelector('summary>span:last-child');if(v)v.dataset.themeCurrent='1';host.prepend(p)}
+ sync(current());
 }
-
-function mountSettingsPicker(){
- const host=document.querySelector('.screen-settings .narrow');
- const template=document.getElementById('ft-theme-settings');
- if(!host||!template)return;
- let picker=host.querySelector(':scope > .ft-theme-settings-inline');
- if(!picker){
-  picker=template.cloneNode(true);
-  picker.removeAttribute('id');
-  picker.classList.add('ft-theme-settings-inline');
-  picker.open=true;
-  const summaryValue=picker.querySelector('summary>span:last-child');
-  if(summaryValue)summaryValue.dataset.themeCurrent='1';
-  host.prepend(picker);
- }
- syncUi(current());
-}
-
-function mount(){mountBrand();mountSettingsPicker();syncUi(current())}
-
-ensurePolish();
-document.documentElement.dataset.theme=current();
-const app=document.getElementById('app');
-if(app)new MutationObserver(mount).observe(app,{childList:true,subtree:true});
-mount();
-window.FrenchTranquilleThemes=Object.freeze({version:'1.1.0',key:KEY,themes:IDS,current,apply,mountBrand,mountSettingsPicker,mount});
+function mount(){brand();picker();sync(current())}
+ensureStyle();document.documentElement.dataset.theme=current();const app=document.getElementById('app');if(app)new MutationObserver(mount).observe(app,{childList:true,subtree:true});mount();
+window.FrenchTranquilleThemes=Object.freeze({version:'1.1.1',key:KEY,themes:IDS,current,apply,mountBrand:brand,mountSettingsPicker:picker,mount});
 })();
