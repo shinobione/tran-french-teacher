@@ -90,26 +90,46 @@
     }
     if (stage4User) mark('Completed40',snap.learner.completedLessons);
 
-    runtime.route('progress');
-    const progressReady = await waitFor(() => document.querySelector('.b27-progress-page'));
-    mark('ProgressReady',progressReady?1:0);
-    const denominator = document.querySelector('.b27-level-head strong')?.textContent?.trim() || '';
-    mark('ProgressDenominator',/\/\s*52/.test(denominator)?52:0);
-    document.querySelector('[data-b27-open-journey]')?.click();
-    const journeyReady = await waitFor(() => document.querySelector('.b27-journey-page .b27-stage-tabs'));
-    await sleep(100);
-    const stageTabs = document.querySelectorAll('.b27-journey-page .b27-stage-tab').length;
-    mark('JourneyTabs',stageTabs);
-    const autonomy = document.querySelector('[data-b32-stage="a1-autonomy"]');
-    autonomy?.click();
-    await sleep(80);
-    mark('AutonomyRows',document.querySelectorAll('.b27-journey-page .b27-stage-lessons .b27-lesson-row').length);
-    const interaction = document.querySelector('[data-b32-stage="a1-interaction"]');
-    interaction?.click();
-    await sleep(80);
-    mark('InteractionRows',document.querySelectorAll('.b27-journey-page .b27-stage-lessons .b27-lesson-row').length);
-    document.querySelector('[data-b27-close-journey]')?.click();
-    await sleep(100);
+    let progressReady = true;
+    let denominator = '';
+    let journeyReady = true;
+    let stageTabs = 0;
+    let autonomyRows = 0;
+    let interactionRows = 0;
+
+    // realLifeSmoke=lesson40 is a historical data seed that intentionally disables
+    // the Build27 shell. It proves continuity 40 -> 41; the normal/old-user audits
+    // below own Build32 shell geometry and interaction.
+    if (!stage4User) {
+      runtime.route('progress');
+      progressReady = await waitFor(() => document.querySelector('.b27-progress-page'));
+      denominator = document.querySelector('.b27-level-head strong')?.textContent?.trim() || '';
+      document.querySelector('[data-b27-open-journey]')?.click();
+      journeyReady = await waitFor(() => (
+        document.querySelectorAll('.b27-journey-page .b27-stage-tab').length === 7 &&
+        document.querySelector('[data-b32-stage="a1-autonomy"]') &&
+        document.querySelector('[data-b32-stage="a1-interaction"]')
+      ));
+      stageTabs = document.querySelectorAll('.b27-journey-page .b27-stage-tab').length;
+
+      const autonomy = document.querySelector('[data-b32-stage="a1-autonomy"]');
+      autonomy?.click();
+      await waitFor(() => document.querySelectorAll('.b27-journey-page .b27-stage-lessons .b27-lesson-row').length === 6);
+      autonomyRows = document.querySelectorAll('.b27-journey-page .b27-stage-lessons .b27-lesson-row').length;
+
+      const interaction = document.querySelector('[data-b32-stage="a1-interaction"]');
+      interaction?.click();
+      await waitFor(() => document.querySelectorAll('.b27-journey-page .b27-stage-lessons .b27-lesson-row').length === 6);
+      interactionRows = document.querySelectorAll('.b27-journey-page .b27-stage-lessons .b27-lesson-row').length;
+      document.querySelector('[data-b27-close-journey]')?.click();
+      await sleep(80);
+    }
+
+    mark('ProgressReady',stage4User ? 'na' : progressReady?1:0);
+    mark('ProgressDenominator',stage4User ? 'na' : /\/\s*52/.test(denominator)?52:0);
+    mark('JourneyTabs',stage4User ? 'na' : stageTabs);
+    mark('AutonomyRows',stage4User ? 'na' : autonomyRows);
+    mark('InteractionRows',stage4User ? 'na' : interactionRows);
 
     const after = rawStores(contracts);
     const storesUnchanged = sameRaw(before,after);
@@ -133,10 +153,12 @@
       listen2.contrasts.length === 4,listen2.dialogues.length === 8,listen2.invalidItems.length === 0,
       coverage.lessons === 52,coverage.covered === 52,coverage.maxMoments === 2,
       intelligence.sourceKind('free-voice-voice') === 'recognition',intelligence.sourceKind('voice-unrecognized') === 'recognition',
-      progressReady,/\/\s*52/.test(denominator),journeyReady,stageTabs === 7,
-      Number(root.dataset.b32AutonomyRows) === 6,Number(root.dataset.b32InteractionRows) === 6,
       storesUnchanged,document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1
     ];
+    if (!stage4User) expected.push(
+      progressReady,/\/\s*52/.test(denominator),journeyReady,stageTabs === 7,
+      autonomyRows === 6,interactionRows === 6
+    );
     if (oldUser) expected.push(snap.learner.completedLessons === 7,snap.learner.knownItems === 40,snap.learner.lessonProgress?.l8 === 4);
     if (stage4User) expected.push(snap.learner.completedLessons === 40);
     mark('Complete',expected.every(Boolean)?1:0);
