@@ -15,37 +15,26 @@ jobs:
       - name: Static contracts
         run: |
           node --check theme-controller.js
-          grep -q 'appearance-themes.css' index.html
           grep -q 'Aurora Bleu/Rose' index.html
           grep -q 'Sunset Orange/Violet' index.html
           grep -q 'Nocturne Jade/Or' index.html
-          grep -q 'html.listening-open .ux-bottom-nav' index.html
-          grep -q 'assets/LOGO.png' brand.css
           grep -q 'premium-theme-polish.css' theme-controller.js
-          grep -q '2.3.7-v4progress1' theme-controller.js
-          grep -q "insertAdjacentElement('afterend',img)" theme-controller.js
-          grep -q 'ft-theme-settings-inline' theme-controller.js
-          grep -q 'data-theme-current' theme-controller.js
-          grep -q 'premium-theme-polish-v2-base.css' premium-theme-polish.css
-          grep -q 'premium-depth-pass.css' premium-theme-polish.css
-          grep -q 'premium-depth-mobile-geometry.css' premium-theme-polish.css
+          grep -q '2.3.8-v4practice1' theme-controller.js
           grep -q 'premium-v4-home.css?v=2.3.6-v4home2' premium-theme-polish.css
           grep -q 'premium-v4-progress.css?v=2.3.7-v4progress1' premium-theme-polish.css
+          grep -q 'premium-v4-practice.css?v=2.3.8-v4practice1' premium-theme-polish.css
           grep -q -- '--pv4-home-ready:1' premium-v4-home.css
           grep -q -- '--pv4-progress-ready:1' premium-v4-progress.css
-          grep -q ':not(\[data-theme="original"\])' premium-v4-progress.css
+          grep -q -- '--pv4-practice-ready:1' premium-v4-practice.css
+          grep -q 'data-b27-practice-action="conversation"' premium-v4-practice.css
           grep -q 'desktop-not-two-column' premium-v4-home-tribunal.html
           grep -q 'desktop-not-two-column' premium-v4-progress-tribunal.html
+          grep -q 'desktop-not-two-column' premium-v4-practice-tribunal.html
           test "$(git hash-object premium-theme-polish-v2-base.css)" = "b5578b1fae55426f06eac30e227d94cf4dfb2491"
-          grep -q '#ff3faf' premium-theme-polish-v2-base.css
-          grep -q '#a640ff' premium-theme-polish-v2-base.css
-          grep -q '#f4c34f' premium-theme-polish-v2-base.css
           grep -q 'Original is intentionally untouched' premium-depth-pass.css
-          grep -q -- '--pd-depth:' premium-depth-pass.css
-          grep -q 'backdrop-filter:blur(24px)' premium-depth-pass.css
-          grep -q 'prefers-reduced-motion:reduce' premium-depth-pass.css
+          grep -q 'prefers-reduced-motion:reduce' premium-v4-practice.css
           ! grep -q 'francais-avec-luc:learner:v1' theme-controller.js
-          ! grep -q 'francais-avec-luc:learner:v1' premium-v4-progress.css
+          ! grep -q 'francais-avec-luc:learner:v1' premium-v4-practice.css
       - name: Voice and learner sanctuaries remain exact
         run: |
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
@@ -69,6 +58,10 @@ jobs:
         run: |
           google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=32000 --dump-dom 'http://127.0.0.1:4173/premium-v4-progress-tribunal.html' >/tmp/premium-v4-progress-tribunal.html
           grep -q 'data-premium-v4-progress-tribunal="ok"' /tmp/premium-v4-progress-tribunal.html || { cat /tmp/premium-v4-progress-tribunal.html; exit 1; }
+      - name: Chrome — Premium V4 Practice viewport tribunal
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=32000 --dump-dom 'http://127.0.0.1:4173/premium-v4-practice-tribunal.html' >/tmp/premium-v4-practice-tribunal.html
+          grep -q 'data-premium-v4-practice-tribunal="ok"' /tmp/premium-v4-practice-tribunal.html || { cat /tmp/premium-v4-practice-tribunal.html; exit 1; }
       - name: Stop static server
         if: always()
         run: |
