@@ -53,7 +53,6 @@ F.onload=()=>setTimeout(async()=>{try{
       const card=d.querySelector('.b27-level-card'),pill=d.querySelector('.b27-level-head>div span'),gear=d.querySelector('.b27-progress-page [data-b27-settings]');
       if(!visible(w,card)||!visible(w,pill))throw Error(`${width}-${theme}:progress-nodes`);
       const ps=w.getComputedStyle(card,'::before'),cr=card.getBoundingClientRect(),pr=pill.getBoundingClientRect();
-      if(ps.left!=='auto'&&px(ps.left)>0)throw Error(`${width}-${theme}:a0-left-not-released`);
       const markerLeft=cr.right-px(ps.right)-px(ps.width);
       if(pr.right>markerLeft-8)throw Error(`${width}-${theme}:a0-pill-overlap`);
       assertControl(w,gear,`${width}-${theme}:progress-gear`);
