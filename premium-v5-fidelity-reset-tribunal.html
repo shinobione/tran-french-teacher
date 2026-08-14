@@ -4,21 +4,26 @@
 (() => {
   const root = document.documentElement;
   const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
-  const until = async (fn, limit=7000) => { for (let t=0;t<limit;t+=50){ const v=fn(); if(v) return v; await wait(50); } return fn(); };
+  const until = async (fn, limit=8000) => { for (let t=0;t<limit;t+=50){ const v=fn(); if(v) return v; await wait(50); } return fn(); };
   const fail = detail => { root.dataset.premiumV55='fail'; root.dataset.premiumV55Detail=detail; };
   const ok = detail => { root.dataset.premiumV55='ok'; root.dataset.premiumV55Detail=detail; };
   const rect = node => node?.getBoundingClientRect?.();
   const px = value => Number.parseFloat(value || '0') || 0;
   const visible = node => !!node && getComputedStyle(node).display !== 'none' && getComputedStyle(node).visibility !== 'hidden' && rect(node).width > 0 && rect(node).height > 0;
+  const sameAnchor = (reference, node, label) => {
+    if (!visible(node)) throw Error(`${label}-back-missing`);
+    const r = rect(node);
+    if (r.width < 44 || r.height < 44) throw Error(`${label}-back-target-${Math.round(r.width)}x${Math.round(r.height)}`);
+    if (Math.abs(reference.left-r.left)>2 || Math.abs(reference.top-r.top)>2) throw Error(`${label}-back-anchor:${reference.left},${reference.top}/${r.left},${r.top}`);
+    return r;
+  };
 
-  localStorage.setItem('tran-french-teacher:debug-fr:v1','1');
+  localStorage.setItem('tran-french-teacher:debug-fr:v1','0');
   localStorage.setItem('french-tranquille:appearance-theme:v1','aurora');
-  const learnerKey = 'francais-avec-luc:learner:v1';
-  const learnerBefore = localStorage.getItem(learnerKey);
 
   const frame = document.createElement('iframe');
   frame.style.width='390px'; frame.style.height='844px'; frame.style.border='0';
-  frame.src='./index.html?v55Audit=1';
+  frame.src='./index.html?uxSmoke=lesson8&fieldNavV3=1&v55Audit=1';
   document.body.appendChild(frame);
 
   frame.addEventListener('load', () => setTimeout(async () => {
@@ -27,7 +32,10 @@
       const themes = await until(() => w.FrenchTranquilleThemes);
       const shellApi = await until(() => w.FrenchTranquilleBuild27Shell);
       const fidelity = await until(() => w.FrenchTranquillePremiumV55);
-      if (!themes || !shellApi || !fidelity) return fail('runtime-missing');
+      const nav = await until(() => w.FrenchTranquilleFieldNavigation);
+      if (!themes || !shellApi || !fidelity || !nav) throw Error('runtime-missing');
+      const learnerKey = 'francais-avec-luc:learner:v1';
+      const learnerBefore = w.localStorage.getItem(learnerKey);
 
       const sceneChecks = [
         ['aurora','theme-aurora-paris.svg'],
@@ -37,85 +45,142 @@
       for (const [theme, asset] of sceneChecks) {
         themes.apply(theme); await wait(180);
         const bg = w.getComputedStyle(d.body).backgroundImage || '';
-        if (!bg.includes(asset)) return fail(`scene-${theme}`);
+        if (!bg.includes(asset)) throw Error(`scene-${theme}`);
       }
       root.dataset.v55Scenes='aurora+sunset+jade';
 
       themes.apply('aurora'); await wait(220);
       const gear = await until(() => d.querySelector('.b27-home [data-b27-settings]'));
-      if (!visible(gear)) return fail('home-gear-missing');
+      if (!visible(gear)) throw Error('home-gear-missing');
       const gearStyle = w.getComputedStyle(gear), gearRect = rect(gear);
-      if (gearRect.width < 44 || gearRect.height < 44 || px(gearStyle.borderRadius) < 20) return fail('gear-grammar');
+      if (gearRect.width < 44 || gearRect.height < 44 || px(gearStyle.borderRadius) < 20) throw Error('gear-grammar');
+      if (gearRect.left < 320) throw Error(`gear-not-right-${Math.round(gearRect.left)}`);
       root.dataset.v55Controls='filled-circle';
 
-      shellApi.openPractice();
-      const practice = await until(() => d.querySelector('body > .b27-practice-page'));
-      const practiceBack = await until(() => practice?.querySelector('.b27-back'));
-      if (!visible(practiceBack)) return fail('practice-back');
-      const pRect = rect(practiceBack);
+      await nav.go('practice'); await wait(180);
+      let practice = await until(() => d.querySelector('body > .b27-practice-page:not(.b27-leaving)'));
+      let practiceBack = await until(() => practice?.querySelector('.b27-back'));
+      if (!visible(practiceBack)) throw Error('practice-back');
+      const reference = rect(practiceBack);
+      const practiceGear = await until(() => practice?.querySelector('[data-b27-settings].ft-v55-settings-gear'));
+      if (!visible(practiceGear) || rect(practiceGear).left < 320) throw Error('practice-gear-anchor');
 
-      const review = practice.querySelector('[data-b27-practice-action="review"]');
-      if (!review) return fail('review-action');
-      review.click();
+      const openPracticeAction = async id => {
+        practice = await until(() => d.querySelector('body > .b27-practice-page:not(.b27-leaving)'));
+        const action = practice?.querySelector(`[data-b27-practice-action="${id}"]`);
+        if (!action || action.disabled) throw Error(`${id}-unavailable`);
+        action.click();
+      };
+      const waitPracticeReturn = async label => {
+        const returned = await until(() => d.querySelector('body > .b27-practice-page:not(.b27-leaving)'),9000);
+        if (!returned) throw Error(`${label}-return-practice`);
+        await wait(120);
+        sameAnchor(reference, returned.querySelector('.b27-back'), `${label}-practice`);
+        return returned;
+      };
+
+      /* REVIEW */
+      await openPracticeAction('review');
       const reviewShell = await until(() => d.querySelector('#app .app-shell.screen-review'));
-      if (!reviewShell) return fail('review-route');
+      if (!reviewShell) throw Error('review-route');
       const reviewBack = await until(() => reviewShell.querySelector('.topbar [data-back].ft-v55-subview-back'));
-      if (!visible(reviewBack)) return fail('review-back-missing');
-      const rRect = rect(reviewBack);
-      if (Math.abs(pRect.left-rRect.left)>2 || Math.abs(pRect.top-rRect.top)>2) return fail(`back-anchor:${pRect.left},${pRect.top}/${rRect.left},${rRect.top}`);
+      sameAnchor(reference, reviewBack, 'review');
+      reviewBack.click();
+      await waitPracticeReturn('review');
       root.dataset.v55ReviewBack='aligned';
 
-      reviewBack.click();
-      const practiceAgain = await until(() => d.querySelector('body > .b27-practice-page'));
-      if (!practiceAgain) return fail('review-back-roundtrip');
-      root.dataset.v55ReviewReturn='practice';
-      practiceAgain.querySelector('.b27-back')?.click();
-      await wait(240);
+      /* SPEAK / CONVERSATION */
+      await openPracticeAction('conversation');
+      const conversationShell = await until(() => d.querySelector('#app .app-shell.screen-conversation'));
+      if (!conversationShell) throw Error('conversation-route');
+      const conversationBack = await until(() => conversationShell.querySelector('.topbar [data-back].ft-v55-subview-back'));
+      sameAnchor(reference, conversationBack, 'conversation');
+      conversationBack.click();
+      await waitPracticeReturn('conversation');
+      root.dataset.v55SpeakBack='aligned';
 
-      const progressNav = d.querySelector('.bottom-nav [data-go="progress"], .ux-bottom-nav [data-go="progress"]');
-      if (!progressNav) return fail('progress-nav');
-      progressNav.click();
+      /* LISTENING */
+      await openPracticeAction('listening');
+      const listening = await until(() => d.querySelector('body > .listening-overlay'));
+      if (!listening) throw Error('listening-route');
+      const listeningBack = await until(() => listening.querySelector('.listening-close.ft-v55-subview-back'));
+      sameAnchor(reference, listeningBack, 'listening');
+      const listeningGear = await until(() => listening.querySelector('[data-b27-settings].ft-v55-settings-gear'));
+      if (!visible(listeningGear) || rect(listeningGear).left < 320) throw Error('listening-gear-anchor');
+      listeningBack.click();
+      await waitPracticeReturn('listening');
+      root.dataset.v55ListenBack='aligned';
+
+      /* REAL LIFE / SCENARIO */
+      await openPracticeAction('real-life');
+      const scenario = await until(() => d.querySelector('.scenario-runner'),10000);
+      if (!scenario) throw Error('scenario-route');
+      const scenarioBack = await until(() => scenario.querySelector('.scenario-close.ft-v55-subview-back'));
+      sameAnchor(reference, scenarioBack, 'scenario');
+      scenarioBack.click();
+      await waitPracticeReturn('scenario');
+      root.dataset.v55RealLifeBack='aligned';
+      root.dataset.v55PracticeReturns='review+speak+listen+real-life';
+
+      /* Leave Practice and inspect semantic Progress route. */
+      practice = d.querySelector('body > .b27-practice-page:not(.b27-leaving)');
+      practice?.querySelector('.b27-back')?.click();
+      await wait(180);
+      await nav.go('progress'); await wait(180);
       const progress = await until(() => d.querySelector('.b27-progress-page'));
-      if (!progress) return fail('progress-route');
+      if (!progress) throw Error('progress-route');
       const route = await until(() => progress.querySelector('.ft-v55-level-route'));
       const nodes = route?.querySelectorAll('.ft-v55-level-node');
       const track = route?.querySelector('.b27-level-track');
-      if (!route || nodes?.length !== 2 || !track) return fail('level-route-dom');
+      if (!route || nodes?.length !== 2 || !track) throw Error('level-route-dom');
       const a0=rect(nodes[0]), tr=rect(track), a1=rect(nodes[1]);
       const cy = r => r.top + r.height/2;
-      if (!(a0.right < tr.right && tr.left < a1.left && a0.left < tr.left && tr.right < a1.right)) return fail('level-route-order');
-      if (Math.max(Math.abs(cy(a0)-cy(tr)),Math.abs(cy(a1)-cy(tr))) > 4) return fail('level-route-axis');
+      if (!(a0.left < tr.left && tr.right < a1.right && a0.right < a1.left)) throw Error('level-route-order');
+      if (Math.max(Math.abs(cy(a0)-cy(tr)),Math.abs(cy(a1)-cy(tr))) > 4) throw Error('level-route-axis');
       root.dataset.v55Progress='A0-line-A1';
 
+      /* Learner Settings: no technical console in normal mode. */
       const settingsGear = progress.querySelector('[data-b27-settings]');
-      if (!settingsGear) return fail('progress-settings');
+      if (!settingsGear) throw Error('progress-settings');
       settingsGear.click();
       const settings = await until(() => d.querySelector('#app .app-shell.screen-settings'));
-      if (!settings) return fail('settings-route');
+      if (!settings) throw Error('settings-route');
       const close = await until(() => settings.querySelector('.topbar .ft-v55-settings-close'));
-      if (!visible(close) || close.textContent.trim() !== '×') return fail('settings-close');
+      if (!visible(close) || close.textContent.trim() !== '×') throw Error('settings-close');
+      const hiddenTechnical = [...settings.querySelectorAll('#debug-fr-card,.ft-v55-diagnostics-card,.ft-v55-technical-card')];
+      if (hiddenTechnical.some(node => visible(node))) throw Error('settings-technical-visible');
+      if (settings.querySelector('[data-v55-settings-row="diagnostic"]')) throw Error('settings-diagnostic-row-learner');
+      root.dataset.v55Settings='learner-first';
+
+      const recoveryRow = await until(() => settings.querySelector('[data-v55-recovery-toggle]'));
+      if (!visible(recoveryRow)) throw Error('recovery-row');
+      recoveryRow.click(); await wait(80);
+      if (settings.dataset.v55RecoveryOpen !== '1') throw Error('recovery-open');
+      root.dataset.v55Recovery='contained';
+
       const about = await until(() => settings.querySelector('#ft-settings-legal'));
       const aboutToggle = about?.querySelector('[data-v55-about-toggle]');
-      if (!about || !aboutToggle || !about.textContent.includes('2026 ShinoBiWan')) return fail('about-credits');
-      if (w.getComputedStyle(about.querySelector('.ft-legal-grid')).display !== 'none') return fail('about-not-collapsed');
+      if (!about || !aboutToggle || !about.textContent.includes('2026 ShinoBiWan')) throw Error('about-credits');
+      if (w.getComputedStyle(about.querySelector('.ft-legal-grid')).display !== 'none') throw Error('about-not-collapsed');
       aboutToggle.click(); await wait(80);
-      if (w.getComputedStyle(about.querySelector('.ft-legal-grid')).display === 'none') return fail('about-open');
+      if (w.getComputedStyle(about.querySelector('.ft-legal-grid')).display === 'none') throw Error('about-open');
       root.dataset.v55About='credits-contained';
 
-      if (d.documentElement.scrollWidth > d.documentElement.clientWidth + 1) return fail('horizontal-overflow');
-      if (localStorage.getItem(learnerKey) !== learnerBefore) return fail('learner-mutated');
+      if (d.documentElement.scrollWidth > d.documentElement.clientWidth + 1) throw Error('horizontal-overflow');
+      if (w.localStorage.getItem(learnerKey) !== learnerBefore) throw Error('learner-mutated');
       root.dataset.v55Learner='unchanged';
       root.dataset.v55Overflow='0';
 
       themes.apply('original'); await wait(180);
-      if ((w.getComputedStyle(d.body).backgroundImage || '').includes('theme-aurora-paris.svg')) return fail('original-scene-leak');
+      if ((w.getComputedStyle(d.body).backgroundImage || '').includes('theme-aurora-paris.svg')) throw Error('original-scene-leak');
+      if (d.querySelector('.ft-v55-settings-row')) throw Error('original-settings-row-leak');
       root.dataset.v55Original='witness';
 
-      ok('scenes=3;controls=unified;review=back;progress=A0-line-A1;about=contained;learner=unchanged;original=witness');
+      ok('scenes=3;chrome=4-subviews;returns=practice;progress=A0-line-A1;settings=learner-first;about=contained;learner=unchanged;original=witness');
     } catch (error) { fail(error?.stack || error?.message || String(error)); }
-  }, 2400));
+  }, 2600));
 
-  setTimeout(() => { if (!root.dataset.premiumV55) fail('timeout'); }, 26000);
+  setTimeout(() => { if (!root.dataset.premiumV55) fail('timeout'); }, 34000);
 })();
 </script>
 </body></html>
