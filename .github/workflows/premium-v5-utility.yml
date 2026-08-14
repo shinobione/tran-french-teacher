@@ -66,6 +66,14 @@ jobs:
           grep -q 'listening=no-overlap' /tmp/v52-utility.html
           grep -q 'original=witness' /tmp/v52-utility.html
 
+      - name: Upload V5.2 browser diagnostic
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: premium-v5-utility-diagnostic
+          path: /tmp/v52-utility.html
+          retention-days: 1
+
       - name: Chrome — V5.2 reduced-motion tribunal
         run: |
           timeout --signal=TERM --kill-after=5s 75s \
