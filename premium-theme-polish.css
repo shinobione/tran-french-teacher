@@ -18,4 +18,6 @@
 @import url('./premium-v5-utility.css?v=2.3.17-v5utility1');
 @import url('./premium-v5-islands.css?v=2.3.18-v5islands1');
 @import url('./premium-v5-mockup-convergence.css?v=2.3.19-v5mockup1');
+@import url('./premium-v5-fidelity-reset.css?v=2.3.20-v5fidelity1');
+/* P0 navigation geometry remains the final CSS authority. */
 @import url('./premium-nav-geometry-hotfix.css?v=2.3.4-p0nav1');
