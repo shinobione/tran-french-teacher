@@ -18,21 +18,24 @@ jobs:
           node --check stage2-boot.js
           node --check theme-controller.js
           grep -q 'ensurePracticeSettings' field-navigation-runtime.js
-          grep -q "version:'2.3.6'" field-navigation-runtime.js
-          grep -q "build:'34.6'" field-navigation-runtime.js
-          grep -q 'const host=currentScreen();window.FrenchTranquilleBuild27Shell?.openPractice?.()' field-navigation-runtime.js
-          grep -q "if(host!=='home'){legacy('home')" field-navigation-runtime.js
+          grep -q 'ensureListeningSettings' field-navigation-runtime.js
+          grep -q 'suspendListeningForSettings' field-navigation-runtime.js
+          grep -q 'restoreListeningFromSettings' field-navigation-runtime.js
+          grep -q "version:'2.3.7'" field-navigation-runtime.js
+          grep -q "build:'34.7'" field-navigation-runtime.js
+          grep -q 'const host=currentScreen()' field-navigation-runtime.js
+          grep -q "if(host!=='home')" field-navigation-runtime.js
           grep -q 'body > .b27-overlay.b27-entering' field-navigation-runtime.js
           ! grep -q 'body > .b27-overlay.b27-leaving' field-navigation-runtime.js
-          grep -q 'stage2-boot.js?v=2.3.6-b34.6' index.html
-          grep -q '2.3.6-b34.6' stage2-boot.js
+          grep -q 'stage2-boot.js?v=2.3.7-b34.7' index.html
+          grep -q '2.3.7-b34.7' stage2-boot.js
           grep -q 'safe-area-inset-left' premium-nav-geometry-hotfix.css
           grep -q 'safe-area-inset-right' premium-nav-geometry-hotfix.css
           grep -q 'safe-area-inset-bottom' premium-nav-geometry-hotfix.css
           grep -q 'translate3d(-50%,0,0)' premium-nav-geometry-hotfix.css
           grep -q 'z-index:10020' premium-nav-geometry-hotfix.css
           grep -q '2.3.4-p0nav1' premium-theme-polish.css
-          grep -q '2.3.15-v4contrast1' theme-controller.js
+          grep -q '2.3.16-v5coherence1' theme-controller.js
           grep -q 'premium-v4-home.css?v=2.3.6-v4home2' premium-theme-polish.css
           grep -q 'premium-v4-progress.css?v=2.3.7-v4progress1' premium-theme-polish.css
           grep -q 'premium-v4-practice.css?v=2.3.8-v4practice1' premium-theme-polish.css
@@ -42,6 +45,8 @@ jobs:
           grep -q 'premium-v4-route-coherence.css?v=2.3.12-v4coherence1' premium-theme-polish.css
           grep -q 'premium-v4-motion.css?v=2.3.14-v4motion1' premium-theme-polish.css
           grep -q 'premium-v4-contrast.css?v=2.3.15-v4contrast1' premium-theme-polish.css
+          grep -q 'premium-v5-coherence.css?v=2.3.16-v5coherence1' premium-theme-polish.css
+          grep -q 'premium-v5-listening-settings.css?v=2.3.16-v5coherence1' premium-theme-polish.css
           grep -q 'route/page containers' premium-v4-motion.css
       - name: Sanctuaries remain exact
         run: |
