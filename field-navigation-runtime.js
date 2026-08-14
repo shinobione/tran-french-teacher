@@ -11,6 +11,7 @@ const R=document.documentElement;
 let seq=0;
 let settingsReturn=null;
 let settingsReturnNav=null;
+let settingsListeningUnderlay=null;
 let suspendedListening=null;
 let controlsScheduled=false;
 const sleep=n=>new Promise(r=>setTimeout(r,n));
@@ -65,7 +66,8 @@ function ensurePracticeSettings(){
 }
 
 function ensureListeningSettings(){
-  const header=document.querySelector('body > .listening-overlay .listening-top');
+  const listeningOverlay=document.querySelector('body > .listening-overlay');
+  const header=listeningOverlay?.querySelector('.listening-top');
   if(!header)return;
   let button=header.querySelector('[data-b27-settings]');
   if(!button){
@@ -77,7 +79,7 @@ function ensureListeningSettings(){
     button.textContent='⚙';
     header.appendChild(button);
   }
-  button.disabled=!!header.querySelector('[data-listening-play][disabled]');
+  button.disabled=!!listeningOverlay.querySelector('[data-listening-play][disabled],[data-listening-slow][disabled]');
 }
 
 function scheduleControls(){
@@ -90,10 +92,19 @@ function scheduleControls(){
   });
 }
 
+function listeningUnderlay(){
+  if(document.querySelector('body > .b27-practice-page:not(.b27-leaving)'))return 'practice';
+  const screen=currentScreen();
+  if(['home','progress'].includes(screen))return screen;
+  const nav=currentActiveNav();
+  return ['home','practice','progress'].includes(nav)?nav:'home';
+}
+
 function suspendListeningForSettings(){
   const node=document.querySelector('body > .listening-overlay');
   if(!node)return false;
-  if(node.querySelector('[data-listening-play][disabled]'))return false;
+  if(node.querySelector('[data-listening-play][disabled],[data-listening-slow][disabled]'))return false;
+  settingsListeningUnderlay=listeningUnderlay();
   suspendedListening=node;
   node.remove();
   R.classList.remove('listening-open');
@@ -115,6 +126,7 @@ function closeTransient({preserveListening=false}={}){
   if(!preserveListening){
     window.FrenchTranquilleListening?.close?.();
     suspendedListening=null;
+    settingsListeningUnderlay=null;
   }
   window.FrenchTranquilleUX?.closePractice?.();
   document.querySelector('[data-b27-close-practice]')?.click();
@@ -157,6 +169,7 @@ function openSettings(){
 
   const preserveListening=source==='listening'&&suspendListeningForSettings();
   if(source==='listening'&&!preserveListening){
+    settingsListeningUnderlay=null;
     R.dataset.fieldRouteError='settings-listening-busy';
     return false;
   }
@@ -186,6 +199,25 @@ function openSettings(){
   return true;
 }
 
+function restoreListeningUnderlay(id){
+  const target=['home','practice','progress'].includes(id)?id:'home';
+  if(target==='practice'){
+    if(currentScreen()!=='home'&&!legacy('home'))return false;
+    refresh();
+    window.FrenchTranquilleBuild27Shell?.openPractice?.();
+    const practice=document.querySelector('body > .b27-practice-page');
+    if(!practice)return false;
+    ensurePracticeSettings();
+    settleFacades();
+    active('practice');
+    return true;
+  }
+  if(currentScreen()!==target&&!legacy(target))return false;
+  refresh();
+  active(target);
+  return true;
+}
+
 async function returnFromSettings(){
   const target=settingsReturn||R.dataset.fieldSettingsReturn||'home';
   const returnNav=settingsReturnNav||R.dataset.fieldSettingsReturnNav||'home';
@@ -201,22 +233,23 @@ async function returnFromSettings(){
     R.dataset.fieldRouteIntent='listening';
     R.dataset.fieldRouteReady='0';
     R.dataset.fieldRouteError='';
-    if(currentScreen()!=='home'&&!legacy('home')){
-      R.dataset.fieldRouteError='listening-return-missing-home';
+    const underlay=settingsListeningUnderlay||(['home','practice','progress'].includes(returnNav)?returnNav:'home');
+    settingsListeningUnderlay=null;
+    if(!restoreListeningUnderlay(underlay)){
+      R.dataset.fieldRouteError=`listening-underlay-${underlay}-restore-failed`;
       suspendedListening=null;
       return;
     }
-    refresh();
-    active(['home','practice','progress'].includes(returnNav)?returnNav:'home');
     if(!restoreListeningFromSettings()){
       R.dataset.fieldRouteError='listening-restore-failed';
       return;
     }
-    active(['home','practice','progress'].includes(returnNav)?returnNav:'home');
+    active(underlay);
     R.dataset.fieldRouteReady='1';
     return;
   }
 
+  settingsListeningUnderlay=null;
   if(target==='practice'){
     await go('practice');
     return;
@@ -297,6 +330,13 @@ function onSettingsBack(e){
   returnFromSettings();
 }
 
+function onSettingsEscape(e){
+  if(e.key!=='Escape'||R.dataset.fieldSettingsReturn!=='listening')return;
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  returnFromSettings();
+}
+
 function onListening(e){
   if(!e.target?.closest?.('[data-b27-action="listening"],[data-b27-practice-action="listening"],[data-listening-close]'))return;
   setTimeout(()=>{settleFacades();ensureListeningSettings()},220);
@@ -305,6 +345,7 @@ function onListening(e){
 window.addEventListener('click',onNav,true);
 window.addEventListener('click',onSettings,true);
 window.addEventListener('click',onSettingsBack,true);
+window.addEventListener('keydown',onSettingsEscape,true);
 window.addEventListener('click',onListening,true);
 if(document.body)new MutationObserver(scheduleControls).observe(document.body,{childList:true,subtree:true});
 setTimeout(()=>{
