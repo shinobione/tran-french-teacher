@@ -22,7 +22,10 @@ jobs:
           grep -q "build:'34.7'" field-navigation-runtime.js
           grep -q 'suspendListeningForSettings' field-navigation-runtime.js
           grep -q 'restoreListeningFromSettings' field-navigation-runtime.js
+          grep -q 'restoreListeningUnderlay' field-navigation-runtime.js
+          grep -q 'onSettingsEscape' field-navigation-runtime.js
           grep -q 'ensureListeningSettings' field-navigation-runtime.js
+          grep -q "listeningOverlay.querySelector('\[data-listening-play\]\[disabled\],\[data-listening-slow\]\[disabled\]')" field-navigation-runtime.js
           grep -q '2.3.7-b34.7' stage2-boot.js
           grep -q -- '--pv5-coherence-ready:1' premium-v5-coherence.css
           grep -q 'left:auto' premium-v5-coherence.css
@@ -49,26 +52,31 @@ jobs:
 
       - name: Chrome — V5 coherence field defects
         run: |
-          timeout --signal=TERM --kill-after=5s 75s \
+          timeout --signal=TERM --kill-after=5s 85s \
             google-chrome --headless=new --no-sandbox --disable-gpu \
             --disable-background-timer-throttling --disable-renderer-backgrounding \
-            --virtual-time-budget=38000 --dump-dom \
+            --virtual-time-budget=46000 --dump-dom \
             'http://127.0.0.1:4173/premium-v5-coherence-tribunal.html' > /tmp/v5-coherence.html
           grep -q 'data-premium-v5-coherence="ok"' /tmp/v5-coherence.html || { cat /tmp/v5-coherence.html; exit 1; }
           grep -q 'A0=no-overlap' /tmp/v5-coherence.html
           grep -q 'utility=filled' /tmp/v5-coherence.html
           grep -q 'listening-settings=exact-roundtrip' /tmp/v5-coherence.html
+          grep -q 'underlay=restored' /tmp/v5-coherence.html
+          grep -q 'escape=safe' /tmp/v5-coherence.html
+          grep -q 'audio-guard=disabled' /tmp/v5-coherence.html
           grep -q 'foundations=themed' /tmp/v5-coherence.html
           grep -q 'stores=unchanged' /tmp/v5-coherence.html
 
       - name: Chrome — V5 reduced-motion coherence
         run: |
-          timeout --signal=TERM --kill-after=5s 75s \
+          timeout --signal=TERM --kill-after=5s 85s \
             google-chrome --headless=new --no-sandbox --disable-gpu --force-prefers-reduced-motion \
             --disable-background-timer-throttling --disable-renderer-backgrounding \
-            --virtual-time-budget=38000 --dump-dom \
+            --virtual-time-budget=46000 --dump-dom \
             'http://127.0.0.1:4173/premium-v5-coherence-tribunal.html' > /tmp/v5-coherence-reduced.html
           grep -q 'data-premium-v5-coherence="ok"' /tmp/v5-coherence-reduced.html || { cat /tmp/v5-coherence-reduced.html; exit 1; }
+          grep -q 'underlay=restored' /tmp/v5-coherence-reduced.html
+          grep -q 'escape=safe' /tmp/v5-coherence-reduced.html
 
       - name: Capture V5 field-defect visual review matrix
         run: |
