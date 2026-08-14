@@ -89,7 +89,7 @@
   </details>
   <script>
     (()=>{
-      const HOTFIX='2.3.16-b34.7-v5coherence1';
+      const HOTFIX='2.3.17-b34.8-v5utility1';
       const learnerKey='francais-avec-luc:learner:v1';
       const params=new URLSearchParams(location.search);const realLifeSmoke=params.get('realLifeSmoke');const legacySmoke=params.get('uxSmoke');
       const seedProfile=mode=>{const knownItems=['bonjour','merci','au-revoir','je-mappelle','svp','excusez-moi','je-comprends','je-ne-comprends-pas','repetez','plus-lentement','je-suis-vietnamienne','je-viens-vietnam','jhabite-hcm','et-vous','oui','non','je-voudrais','eau','cafe','the','addition','combien-ca-coute','jaime','je-naime-pas','beaucoup','un-peu','cest-bon','je-prefere','zero','un','deux','trois','quatre','cinq','six','sept','huit','neuf','dix','euros'];let completedThrough=7,partialLesson='l8',partialStep=4;if(mode==='lesson15'){completedThrough=15;partialLesson='l16';partialStep=0}else if(mode==='lesson20'){completedThrough=20;partialLesson='l21';partialStep=0}else if(/^lesson(3[5-9]|40)$/.test(mode)){completedThrough=Number(mode.replace('lesson',''));partialLesson=completedThrough<40?`l${completedThrough+1}`:'l40';partialStep=0}const completedLessons=Array.from({length:completedThrough},(_,i)=>`l${i+1}`);const lessonProgress=Object.fromEntries(completedLessons.map(id=>[id,999]));if(partialStep)lessonProgress[partialLesson]=partialStep;localStorage.setItem(learnerKey,JSON.stringify({schemaVersion:2,learnerName:'Trân',level:'A0',lessonProgress,completedLessons,knownItems,reviewState:{bonjour:2,'je-voudrais':1},conversationWins:5,lastActivity:'2026-08-11T10:00:00.000Z',streak:{current:6,lastDate:'2026-08-11'}}))};
@@ -101,7 +101,7 @@
       window.addEventListener('load',()=>setTimeout(()=>{const app=root(),boot=document.getElementById('boot-status');if(app&&boot&&app.contains(boot))fatal('Startup watchdog: app.js did not replace the boot screen within 3 seconds.')},3000));
     })();
   </script>
-  <script src="./theme-controller.js?v=2.3.16-v5coherence1"></script>
+  <script src="./theme-controller.js?v=2.3.17-v5utility1"></script>
   <script src="./data-recovery-core.js?v=1.21.0-b28"></script>
   <script src="./data-recovery.js?v=1.21.0-b28"></script>
   <script type="module" src="./progress-safety.js?v=1.17.0-b24"></script>
