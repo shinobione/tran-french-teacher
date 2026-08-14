@@ -29,11 +29,11 @@ jobs:
           grep -q 'ft-v55-subview-back' premium-v5-fidelity-reset.js
           grep -q 'ft-v55-level-route' premium-v5-fidelity-reset.js
           grep -q 'data-v55-about-toggle' premium-v5-fidelity-reset.js
-          grep -q 'data-v55-recovery-toggle' premium-v5-fidelity-reset.js
           grep -q 'ft-v55-settings-gear' premium-v5-fidelity-refine.css
           grep -q 'premium-v5-fidelity-reset.css?v=2.3.20-v5fidelity1' premium-theme-polish.css
           grep -q 'premium-v5-fidelity-refine.css?v=2.3.20-v5fidelity2' premium-theme-polish.css
           grep -q 'premium-v5-fidelity-reset.js?v=2.3.20-v5fidelity1' theme-controller.js
+          grep -q "\['review','conversation','listening','real-life'\]" premium-v5-subview-chrome-tribunal.html
           test "$(tail -n 1 premium-theme-polish.css)" = "@import url('./premium-nav-geometry-hotfix.css?v=2.3.4-p0nav1');"
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
           test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
@@ -50,36 +50,46 @@ jobs:
 
       - name: Chrome — V5.5 structural fidelity tribunal
         run: |
-          timeout --signal=TERM --kill-after=5s 65s \
+          timeout --signal=TERM --kill-after=5s 60s \
             google-chrome --headless=new --no-sandbox --disable-gpu \
             --disable-background-timer-throttling --disable-renderer-backgrounding \
-            --virtual-time-budget=44000 --dump-dom \
+            --virtual-time-budget=36000 --dump-dom \
             'http://127.0.0.1:4173/premium-v5-fidelity-reset-tribunal.html' > /tmp/v55.html
           grep -q 'data-premium-v55="ok"' /tmp/v55.html || { grep -o 'data-premium-v55-detail="[^"]*"' /tmp/v55.html || true; exit 1; }
           grep -q 'data-v55-scenes="aurora+sunset+jade"' /tmp/v55.html
           grep -q 'data-v55-controls="filled-circle"' /tmp/v55.html
-          grep -q 'data-v55-review-back="aligned"' /tmp/v55.html
-          grep -q 'data-v55-speak-back="aligned"' /tmp/v55.html
-          grep -q 'data-v55-listen-back="aligned"' /tmp/v55.html
-          grep -q 'data-v55-real-life-back="aligned"' /tmp/v55.html
-          grep -q 'data-v55-practice-returns="review+speak+listen+real-life"' /tmp/v55.html
           grep -q 'data-v55-progress="A0-line-A1"' /tmp/v55.html
           grep -q 'data-v55-settings="learner-first"' /tmp/v55.html
-          grep -q 'data-v55-recovery="contained"' /tmp/v55.html
+          grep -q 'data-v55-recovery="accessible"' /tmp/v55.html
           grep -q 'data-v55-about="credits-contained"' /tmp/v55.html
           grep -q 'data-v55-learner="unchanged"' /tmp/v55.html
           grep -q 'data-v55-overflow="0"' /tmp/v55.html
           grep -q 'data-v55-original="witness"' /tmp/v55.html
 
+      - name: Chrome — all Practice children share one Back chrome
+        run: |
+          for case in review conversation listening real-life; do
+            out="/tmp/v55-subview-${case}.html"
+            timeout --signal=TERM --kill-after=5s 60s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --disable-background-timer-throttling --disable-renderer-backgrounding \
+              --virtual-time-budget=36000 --dump-dom \
+              "http://127.0.0.1:4173/premium-v5-subview-chrome-tribunal.html?case=${case}" > "$out"
+            grep -q 'data-v55-subview="ok"' "$out" || { grep -o 'data-v55-subview-detail="[^"]*"' "$out" || true; exit 1; }
+            grep -q "data-v55-subview-case=\"${case}\"" "$out"
+            grep -q 'data-v55-subview-anchor="same"' "$out"
+            grep -q 'data-v55-subview-return="practice"' "$out"
+            grep -q 'data-v55-subview-overflow="0"' "$out"
+          done
+
       - name: Chrome — V5.5 reduced-motion tribunal
         run: |
-          timeout --signal=TERM --kill-after=5s 65s \
+          timeout --signal=TERM --kill-after=5s 60s \
             google-chrome --headless=new --no-sandbox --disable-gpu --force-prefers-reduced-motion \
             --disable-background-timer-throttling --disable-renderer-backgrounding \
-            --virtual-time-budget=44000 --dump-dom \
+            --virtual-time-budget=36000 --dump-dom \
             'http://127.0.0.1:4173/premium-v5-fidelity-reset-tribunal.html' > /tmp/v55-reduced.html
           grep -q 'data-premium-v55="ok"' /tmp/v55-reduced.html || { grep -o 'data-premium-v55-detail="[^"]*"' /tmp/v55-reduced.html || true; exit 1; }
-          grep -q 'data-v55-practice-returns="review+speak+listen+real-life"' /tmp/v55-reduced.html
           grep -q 'data-v55-learner="unchanged"' /tmp/v55-reduced.html
 
       - name: Capture V5.5 primary iPhone review matrix
