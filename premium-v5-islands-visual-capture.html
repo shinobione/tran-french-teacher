@@ -1,21 +1,16 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Premium V5.3 island capture</title><style>html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050914}iframe{display:block;width:100%;height:100%;border:0}</style></head><body><iframe id="f" src="./index.html?fieldNavV3=1&debug=fr"></iframe><script>
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Premium V5.3 island capture</title><style>html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050914}iframe{display:block;width:100%;height:100%;border:0}</style></head><body><iframe id="f" src="./index.html?fieldNavV3=1&debug=fr&realLifeSmoke=lesson20&sessionSmoke=practice"></iframe><script>
 (()=>{'use strict';
-const R=document.documentElement,F=document.getElementById('f'),q=new URLSearchParams(location.search),theme=q.get('theme')||'aurora',surface=q.get('surface')||'oral',wait=ms=>new Promise(r=>setTimeout(r,ms));
-const waitFor=async(fn,limit=15000)=>{for(let t=0;t<limit;t+=50){try{const v=fn();if(v)return v}catch{}await wait(50)}try{return fn()}catch{return null}};
-const oralHtml=()=>`<main id="pv53-capture" style="position:fixed;z-index:11000;inset:var(--pv5-debug-rail-h,24px) 0 0;overflow:auto;padding:clamp(18px,4vw,54px);background:var(--ft-bg);color:var(--ft-text)"><div style="width:min(760px,100%);margin:auto;display:grid;gap:18px"><section class="speaking-loop-card"><div class="speaking-loop-head"><span class="speaking-loop-eyebrow">JE PARLE</span><h3>Écoute, répète, puis écoute-toi</h3><p>Utilise le modèle de Tyffany, puis compare ta voix.</p></div><div class="speaking-loop-phrase">Je voudrais un café, s’il vous plaît.</div><button class="listen speaking-loop-model">🔊 Écouter Tyffany</button><div class="speaking-loop-actions"><button>🎙️ Enregistrer ma voix</button><button class="primary">▶ Ma voix</button></div><small class="speaking-loop-note">Local uniquement • non sauvegardé dans la progression</small></section><section class="voice-replay-panel"><div class="voice-replay-copy"><strong>🎧 Écoute-toi</strong><small>Compare d’abord le rythme de toute la phrase.</small></div><div class="voice-replay-actions"><button class="voice-replay-record">🎙️ Enregistrer à nouveau</button><button class="voice-replay-play primary">▶ Ma voix</button></div></section><section class="session-success"><div class="session-success-mark"><span>✓</span></div><span class="session-success-eyebrow">SESSION TERMINÉE</span><h2>Petite session terminée</h2><p>Tu as fait l’essentiel. Tu peux revenir à Aujourd’hui ou continuer quelques minutes.</p><div class="session-success-actions"><button class="primary">Retour à Aujourd’hui</button><button class="secondary">Encore 3 minutes</button></div></section></div></main>`;
+const R=document.documentElement,F=document.getElementById('f'),q=new URLSearchParams(location.search),theme=q.get('theme')||'aurora',surface=q.get('surface')||'scenario',wait=ms=>new Promise(r=>setTimeout(r,ms));
+const waitFor=async(fn,limit=18000)=>{for(let t=0;t<limit;t+=50){try{const v=fn();if(v)return v}catch{}await wait(50)}try{return fn()}catch{return null}};
 F.onload=()=>setTimeout(async()=>{try{
- const w=F.contentWindow,d=F.contentDocument,ready=await waitFor(()=>w.FrenchTranquilleThemes&&w.FrenchTranquilleScenarios&&w.FrenchTranquilleCurriculum);
- if(!ready)throw Error('api-not-ready');
- const key=w.FrenchTranquilleCurriculum.key||'francais-avec-luc:learner:v1',completed=Array.from({length:20},(_,i)=>`l${i+1}`),lessonProgress=Object.fromEntries(completed.map(id=>[id,999]));
- w.localStorage.setItem(key,JSON.stringify({schemaVersion:2,learnerName:'Trân',level:'A0',completedLessons:completed,lessonProgress,knownItems:['bonjour','merci','au-revoir','je-mappelle','svp','excusez-moi','je-comprends','je-ne-comprends-pas','je-voudrais','cafe','eau','addition']}));
+ const w=F.contentWindow,d=F.contentDocument,ready=await waitFor(()=>w.FrenchTranquilleThemes&&w.FrenchTranquilleScenarios&&w.FrenchTranquilleCurriculum&&d.querySelector('.screen-conversation .narrow .scenario-lab-card'));
+ if(!ready)throw Error(`api-or-route-not-ready:themes=${!!w.FrenchTranquilleThemes};scenario=${!!w.FrenchTranquilleScenarios};conversation=${!!d.querySelector('.screen-conversation .narrow')};lab=${!!d.querySelector('.scenario-lab-card')}`);
+ if(surface!=='scenario')throw Error(`unknown-surface:${surface}`);
  const stable=d.createElement('style');stable.textContent='*,*::before,*::after{transition-duration:0s!important;animation-duration:0s!important;animation-delay:0s!important}';d.head.appendChild(stable);
- w.FrenchTranquilleThemes.apply(theme);w.FrenchTranquilleBuild27Shell?.refresh?.();w.FrenchTranquilleBuild32Shell?.refresh?.();await wait(160);
- if(surface==='oral'){
-   d.body.insertAdjacentHTML('beforeend',oralHtml());await wait(100);if(!d.querySelector('#pv53-capture .session-success'))throw Error('oral-not-ready');
- }else if(surface==='scenario'){
-   const native=d.querySelector('.bottom-nav [data-go="conversation"]');if(!native)throw Error('conversation-route');native.click();await wait(220);const api=w.FrenchTranquilleScenarios,s=api.scenarios.find(x=>api.unlocked(x));if(!s)throw Error('scenario-locked');api.start(s.id);await wait(180);if(!d.querySelector('.scenario-runner .scenario-npc'))throw Error('scenario-not-ready');
- }else throw Error(`unknown-surface:${surface}`);
- d.scrollingElement.scrollTop=0;R.dataset.captureReady='1';R.dataset.captureTheme=theme;R.dataset.captureSurface=surface;
+ w.FrenchTranquilleThemes.apply(theme);await wait(120);
+ const api=w.FrenchTranquilleScenarios,s=api.scenarios.find(x=>api.unlocked(x));if(!s)throw Error('scenario-locked');api.start(s.id);
+ const started=await waitFor(()=>d.querySelector('.scenario-runner .scenario-npc')&&d.querySelector('.scenario-runner .scenario-task')&&d.querySelector('.scenario-input-row input'),6000);if(!started)throw Error('scenario-not-ready');
+ await wait(120);d.scrollingElement.scrollTop=0;R.dataset.captureReady='1';R.dataset.captureTheme=theme;R.dataset.captureSurface=surface;
 }catch(e){R.dataset.captureReady='0';R.dataset.captureError=e.message}},120)})();
-setTimeout(()=>{if(!R.dataset.captureReady){R.dataset.captureReady='0';R.dataset.captureError='timeout'}},36000);
+setTimeout(()=>{if(!R.dataset.captureReady){R.dataset.captureReady='0';R.dataset.captureError='timeout'}},40000);
 </script></body></html>
