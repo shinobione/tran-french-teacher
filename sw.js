@@ -1,4 +1,4 @@
-const CACHE='tran-french-teacher-v2.3.20-b34.11-v5fidelity1';
+const CACHE='tran-french-teacher-v2.3.20-b34.12-v5fidelity2';
 const V='1.17.0-b24';
 const UX='1.17.5-b24.5';
 const P25='1.18.0-b25';
@@ -49,7 +49,7 @@ const CORE=[
   `./scenario-data.js?v=${V}`,`./real-life-data.js?v=${V}`,`./real-life-data-2.js?v=${V}`,`./real-life-data-3.js?v=${B26}`,`./scenario-host.js?v=${V}`,`./scenario-engine.js?v=${V}`,`./real-life-ux.js?v=${V}`,`./real-life-coach.js?v=${B26}`,
   `./listening-data.js?v=${V}`,`./listening-engine.js?v=${V}`,`./ux-shell.js?v=${UX}`,`./interaction-ux.js?v=${UX}`,`./progression-ux.js?v=${B266}`,`./session-ux.js?v=${B265}`,`./session-ux-adapter.js?v=${P252}`,`./voice-replay.js?v=${B261}`,`./progress-details-dashboard.js?v=${B266}`,`./build26-3-ux.js?v=${B263}`,`./build26-4-ux.js?v=${B264}`,`./build26-5-ux.js?v=${B265}`,`./build26-6-ux.js?v=${B266}`,`./build26-7-ux.js?v=${B267}`,`./build26-8-ux.js?v=${B268}`,`./build26-9-ux.js?v=${B269}`,`./build27-app-shell.js?v=${B27}`,`./build27-smoke.js?v=${B27}`,`./data-recovery-smoke.js?v=${B28}`,`./build29-iphone-a11y.js?v=${B29}`,`./build29-smoke.js?v=${B29}`,`./speaking-loop-content.js?v=${B292}`,`./speaking-loop-smoke.js?v=${B292}`,`./speaking-loop-variety-smoke.js?v=${B292}`,`./runtime-contracts.js?v=${B30}`,`./runtime-bridge.js?v=${B30}`,`./build30-architecture-smoke.js?v=${B30}`,`./v2-release-smoke.js?v=${V2}`,'./release-v2.json',`./build-meta.js?v=${B29}`,`./settings-legal.js?v=${LEGAL}`,`./build31-loader.js?v=${B31}`,`./learner-intelligence.js?v=${B31}`,`./learner-intelligence-smoke.js?v=${B31}`,`./build32-loader.js?v=${B32}`,`./curriculum-stage4.js?v=${B32}`,`./build32-shell-extension.js?v=${B32}`,`./real-life-data-4.js?v=${B32}`,`./listening-data-2.js?v=${B32}`,`./learner-intelligence-v2.js?v=${B32}`,`./build32-smoke.js?v=${B32}`,`./manifest.webmanifest?v=${B29}`,
   `./assets/LOGO.png?v=${V}`,`./assets/Favicon.png?v=${V}`,'./assets/icon-192.webp','./assets/apple-touch-icon.png','./assets/HomeLogo.png?v=2.3.2-theme2',
-  './assets/theme-aurora-paris.svg','./assets/theme-sunset-paris.svg','./assets/theme-jade-paris.svg'
+  './assets/theme-aurora-paris.svg','./assets/theme-sunset-paris.svg','./assets/theme-jade-paris.svg','./assets/eiffel-premium-mask.svg'
 ];
 
 self.addEventListener('install',event=>{
