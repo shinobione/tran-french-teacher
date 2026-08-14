@@ -35,7 +35,7 @@ jobs:
           grep -q 'premium-v5-utility.css?v=${V5U}' sw.js
           grep -q 'premium-theme-polish.css?v=${V5U}' sw.js
           grep -q 'theme-controller.js?v=${V5U}' sw.js
-          grep -q 'data-premium-v5-utility' premium-v5-utility-tribunal.html
+          grep -q 'premiumV5Utility' premium-v5-utility-tribunal.html
           grep -q 'debug-rail=reserved' premium-v5-utility-tribunal.html
           grep -q 'listening=no-overlap' premium-v5-utility-tribunal.html
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
