@@ -29,6 +29,16 @@ html[data-theme]:not([data-theme="original"]) :is(
   .scenario-runner .scenario-close
 ){z-index:12120!important}
 
+/* V5.5 reset originally put backdrop-filter directly on .scenario-runner. Like
+   transform, backdrop-filter creates a containing block for fixed descendants;
+   that trapped the real Scenario Back at runner-local 14/12 instead of viewport
+   14/12. Keep the card/panel premium material, but the runner itself must not
+   own a filtering containing block. */
+html[data-theme]:not([data-theme="original"]) .scenario-runner{
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+
 /* The Scenario engine owns its real [data-scenario-close] node. Do not require a
    cosmetic runtime class for its geometry: the actual exit is the V5.5 Back. */
 html[data-theme]:not([data-theme="original"]) .scenario-runner .scenario-close{
