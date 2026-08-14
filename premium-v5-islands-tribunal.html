@@ -7,6 +7,7 @@ const keys=['francais-avec-luc:learner:v1','french-tranquille:learning-memory:v1
 const finish=(ok,msg)=>{R.dataset.premiumV5Islands=ok?'ok':'fail';R.dataset.premiumV5IslandsDetail=msg};
 const px=v=>Number.parseFloat(v)||0;
 const visible=(w,n)=>{if(!n)return false;const s=w.getComputedStyle(n),r=n.getBoundingClientRect();return s.display!=='none'&&s.visibility!=='hidden'&&Number(s.opacity)>0&&r.width>1&&r.height>1};
+const nodeState=(w,n)=>{if(!n)return 'missing';const s=w.getComputedStyle(n),r=n.getBoundingClientRect();return `present/visible=${visible(w,n)?1:0}/display=${s.display}/visibility=${s.visibility}/opacity=${s.opacity}/rect=${Math.round(r.width)}x${Math.round(r.height)}@${Math.round(r.left)},${Math.round(r.top)}/hidden=${n.hidden?1:0}/class=${String(n.className).replace(/\s+/g,'.')}`};
 const assertPanel=(w,n,label,minRadius=16)=>{if(!visible(w,n))throw Error(`${label}:missing`);const s=w.getComputedStyle(n);if(px(s.borderTopLeftRadius)<minRadius)throw Error(`${label}:radius-${s.borderTopLeftRadius}`);if(!s.backgroundImage||s.backgroundImage==='none')throw Error(`${label}:flat-bg`);if(!s.boxShadow||s.boxShadow==='none')throw Error(`${label}:flat-shadow`)};
 const assertButton=(w,n,label)=>{if(!visible(w,n))throw Error(`${label}:missing`);const s=w.getComputedStyle(n),r=n.getBoundingClientRect();if(r.height<43||r.width<43)throw Error(`${label}:touch-${Math.round(r.width)}x${Math.round(r.height)}`);if(px(s.borderTopLeftRadius)<11)throw Error(`${label}:radius`);if(!s.backgroundImage||s.backgroundImage==='none')throw Error(`${label}:flat-bg`)};
 Promise.all([new Promise(resolve=>V.addEventListener('load',resolve,{once:true})),new Promise(resolve=>A.addEventListener('load',resolve,{once:true}))]).then(()=>setTimeout(async()=>{try{
@@ -20,7 +21,7 @@ Promise.all([new Promise(resolve=>V.addEventListener('load',resolve,{once:true})
   if(!realLife)throw Error('modern-real-life-action-missing');
   realLife.click();
   const runnerReady=await waitFor(()=>visible(aw,ad.querySelector('.screen-conversation .scenario-lab-card'))&&visible(aw,ad.querySelector('.scenario-runner'))&&visible(aw,ad.querySelector('.scenario-npc'))&&visible(aw,ad.querySelector('.scenario-task'))&&visible(aw,ad.querySelector('.scenario-input-row input')),7000);
-  if(!runnerReady)throw Error(`modern-scenario-route-failed:conversation=${!!ad.querySelector('.screen-conversation .narrow')};lab=${!!ad.querySelector('.scenario-lab-card')};runner=${!!ad.querySelector('.scenario-runner')}`);
+  if(!runnerReady){const lab=ad.querySelector('.scenario-lab-card'),runner=ad.querySelector('.scenario-runner'),npc=ad.querySelector('.scenario-npc'),task=ad.querySelector('.scenario-task'),input=ad.querySelector('.scenario-input-row input');throw Error(`modern-scenario-route-failed:conversation=${!!ad.querySelector('.screen-conversation .narrow')};lab=${nodeState(aw,lab)};runner=${nodeState(aw,runner)};npc=${nodeState(aw,npc)};task=${nodeState(aw,task)};input=${nodeState(aw,input)};practiceMode=${ad.documentElement.classList.contains('b27-practice-open')?1:0};screen=${ad.body.dataset.b27Screen||ad.body.dataset.uxScreen||'unknown'}`)}
   await wait(120);
   const before=Object.fromEntries(keys.map(k=>[k,aw.localStorage.getItem(k)]));
 
