@@ -3,7 +3,10 @@
 const R=document.documentElement,F=document.getElementById('f'),wait=ms=>new Promise(r=>setTimeout(r,ms));
 const waitFor=async(fn,limit=16000)=>{for(let t=0;t<limit;t+=50){try{const v=fn();if(v)return v}catch{}await wait(50)}try{return fn()}catch{return null}};
 const sizes=[[390,844],[430,932],[768,1024],[1280,800],[1440,900]],premiumThemes=['aurora','sunset','jade'];
-const keys=['francais-avec-luc:learner:v1','french-tranquille:learning-memory:v1','french-tranquille:error-intelligence:v1','french-tranquille:scenarios:v1','french-tranquille:listening:v1','french-tranquille:milestones:v1'];
+/* This visual route tribunal opens real Listening sessions, which legitimately update
+   the Listening session store. Keep all unrelated durable stores byte-identical here;
+   Listening persistence semantics remain owned by the dedicated Listening tests. */
+const keys=['francais-avec-luc:learner:v1','french-tranquille:learning-memory:v1','french-tranquille:error-intelligence:v1','french-tranquille:scenarios:v1','french-tranquille:milestones:v1'];
 const finish=(ok,msg)=>{R.dataset.premiumV5Mockup=ok?'ok':'fail';R.dataset.premiumV5MockupDetail=msg};
 const visible=(w,n)=>{if(!n)return false;const s=w.getComputedStyle(n),r=n.getBoundingClientRect();return s.display!=='none'&&s.visibility!=='hidden'&&Number(s.opacity)>0&&r.width>1&&r.height>1};
 const rect=n=>n.getBoundingClientRect();
@@ -36,7 +39,7 @@ F.onload=()=>setTimeout(async()=>{try{
  }
  for(const k of keys)if(before[k]!==w.localStorage.getItem(k))throw Error('store-mutated:'+k);
  w.FrenchTranquilleThemes.apply('original');await wait(60);if(marker())throw Error('original-leak-after');
- finish(true,'viewports=5;premium-themes=3;original=witness;surfaces=5;desktop=mockup-geometry;practice=3plus1;settings=intro-wide;listening=balanced;mobile=preserved;overflow=0;stores=unchanged');
+ finish(true,'viewports=5;premium-themes=3;original=witness;surfaces=5;desktop=mockup-geometry;practice=3plus1;settings=intro-wide;listening=balanced;mobile=preserved;overflow=0;non-listening-stores=unchanged');
 }catch(e){finish(false,e.message)}},140);
 setTimeout(()=>{if(!R.dataset.premiumV5Mockup)finish(false,'timeout')},95000);
 })();
