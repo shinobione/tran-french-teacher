@@ -1,0 +1,40 @@
+/* French Trân’quille — Premium V4 / Contrast pass
+   Visual-only refinement derived from the global Visual QA tribunal.
+   Bright Aurora/Sunset CTA gradients use dark premium ink so every opaque
+   gradient stop stays readable. Original and Jade remain untouched. */
+
+html[data-theme]:not([data-theme="original"]){--pv4-contrast-ready:1}
+
+/* Aurora — cyan / periwinkle / magenta gradients. */
+html[data-theme="aurora"] :where(
+  .b27-home .b27-primary-action,
+  .b27-progress-page .b27-current-card .b27-primary-action,
+  .listening-overlay .listening-play.primary
+){
+  color:#071531;
+  text-shadow:0 1px 0 rgba(255,255,255,.16);
+}
+
+/* Sunset — orange / coral / pink / violet gradients. */
+html[data-theme="sunset"] :where(
+  .b27-home .b27-primary-action,
+  .b27-progress-page .b27-current-card .b27-primary-action,
+  .listening-overlay .listening-play.primary
+){
+  color:#140b28;
+  text-shadow:0 1px 0 rgba(255,255,255,.13);
+}
+
+/* Keep disabled semantics visually obvious if a future state disables one. */
+html[data-theme="aurora"] :where(
+  .b27-home .b27-primary-action,
+  .b27-progress-page .b27-current-card .b27-primary-action,
+  .listening-overlay .listening-play.primary
+):disabled,
+html[data-theme="sunset"] :where(
+  .b27-home .b27-primary-action,
+  .b27-progress-page .b27-current-card .b27-primary-action,
+  .listening-overlay .listening-play.primary
+):disabled{
+  opacity:.55;
+}
