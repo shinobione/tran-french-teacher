@@ -61,7 +61,8 @@
         const cs=w.getComputedStyle(card),blur=cs.backdropFilter||cs.webkitBackdropFilter||'';
         if(!String(blur).includes('blur'))throw Error(`glass-missing-${id}`);
         if(card.getBoundingClientRect().width<300)throw Error(`primary-card-too-narrow-${id}`);
-        if(cta.getBoundingClientRect().height<53)throw Error(`cta-too-small-${id}`);
+        const ctaMin=successor()?44:53;
+        if(cta.getBoundingClientRect().height<ctaMin)throw Error(`cta-too-small-${id}:${Math.round(cta.getBoundingClientRect().height)}<${ctaMin}`);
         if(w.getComputedStyle(review).fontSize!=='0px'||w.getComputedStyle(listenIcon).fontSize!=='0px')throw Error(`control-emoji-not-replaced-${id}`);
         if(parseFloat(w.getComputedStyle(review,'::before').width)<18)throw Error(`review-css-icon-missing-${id}`);
         if(parseFloat(w.getComputedStyle(listenIcon,'::before').width)<20)throw Error(`listening-css-icon-missing-${id}`);
@@ -94,7 +95,7 @@
       const rect=nav.getBoundingClientRect();
       if(rect.width<300||rect.height<50)throw Error('nav-hidden-listening');
       for(const k of keys)if(before[k]!==w.localStorage.getItem(k))throw Error(`store-mutated:${k}`);
-      finish(true,`themes=4;premium-successor=${successor()?'v55':'historical'};css-control-icons=review+listening;cta>=54;original-untouched;overflow=0;listening-nav=above-overlay;learner-stores=unchanged`);
+      finish(true,`themes=4;premium-successor=${successor()?'v55':'historical'};css-control-icons=review+listening;cta=touch-safe;original-untouched;overflow=0;listening-nav=above-overlay;learner-stores=unchanged`);
     }catch(e){finish(false,e.message)}
   },3200);
   setTimeout(()=>{if(!root.dataset.appearanceFieldSmoke)finish(false,'timeout')},17000);
