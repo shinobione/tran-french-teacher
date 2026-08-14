@@ -15,6 +15,7 @@ F.onload=()=>setTimeout(async()=>{try{
   const w=F.contentWindow,d=F.contentDocument;
   const before=Object.fromEntries(keys.map(k=>[k,w.localStorage.getItem(k)]));
   const nav=id=>d.querySelector(`.ux-bottom-nav [data-ux-nav="${id}"]`);
+  const legacyHome=()=>d.querySelector('.bottom-nav [data-go="home"]');
   const content=()=>d.querySelector('#app .app-shell .content');
   const overlays=()=>[...d.querySelectorAll('body > .b27-overlay,body > .listening-overlay')].filter(n=>vis(w,n));
   const tokenColor=name=>{const p=d.createElement('i');p.style.cssText=`position:fixed;left:-9999px;color:var(${name})`;d.body.appendChild(p);const c=w.getComputedStyle(p).color;p.remove();return c};
@@ -43,13 +44,34 @@ F.onload=()=>setTimeout(async()=>{try{
     F.style.width=width+'px';F.style.height=height+'px';await wait(80);
     for(const theme of themes){
       await toHome();w.FrenchTranquilleThemes.apply(theme);await wait(80);checkFrame(`${width}-${theme}:home`);
-      nav('practice')?.click();await sample(`${width}-${theme}:home-practice`);await wait(180);
+      const homeButton=legacyHome();let redundantHomeHops=0;const onHomeHop=()=>{redundantHomeHops++};homeButton?.addEventListener('click',onHomeHop,true);
+      nav('practice')?.click();await sample(`${width}-${theme}:home-practice`);await wait(180);homeButton?.removeEventListener('click',onHomeHop,true);
+      if(redundantHomeHops)throw Error(`${width}-${theme}:redundant-home-hop:${redundantHomeHops}`);
       const practice=d.querySelector('body > .b27-practice-page');if(!vis(w,practice))throw Error(`${width}-${theme}:practice-not-visible`);
       if(w.getComputedStyle(content()).visibility!=='hidden')throw Error(`${width}-${theme}:practice-underlay`);
       practice.querySelector('[data-b27-close-practice]')?.click();await sample(`${width}-${theme}:practice-home`);await wait(180);
       if(d.querySelector('body > .b27-practice-page'))throw Error(`${width}-${theme}:practice-stale`);
       if(!vis(w,content()))throw Error(`${width}-${theme}:home-not-restored`);
     }
+  }
+
+  /* Deterministic field-flash contract: when Practice is opened from Progress,
+     the technical host normalization to Home may only occur AFTER the Practice
+     overlay already owns the viewport. This catches sub-frame flashes that a
+     settled-screen or 16 ms sampler can legitimately miss. */
+  F.style.width='390px';F.style.height='844px';await wait(80);
+  for(const theme of themes){
+    await toHome();w.FrenchTranquilleThemes.apply(theme);await wait(70);
+    nav('progress')?.click();await wait(240);checkFrame(theme+':progress-settled');
+    if(!d.querySelector('#app .app-shell.screen-progress'))throw Error(theme+':progress-host-missing');
+    const homeButton=legacyHome();let hostSwaps=0,hostSwapUncovered=false;
+    const onHostSwap=()=>{hostSwaps++;if(!d.querySelector('body > .b27-practice-page'))hostSwapUncovered=true};
+    homeButton?.addEventListener('click',onHostSwap,true);
+    nav('practice')?.click();await sample(theme+':progress-practice',12);await wait(140);homeButton?.removeEventListener('click',onHostSwap,true);
+    if(!hostSwaps)throw Error(theme+':practice-host-swap-missing');
+    if(hostSwapUncovered)throw Error(theme+':host-swap-uncovered');
+    const practice=d.querySelector('body > .b27-practice-page');if(!vis(w,practice))throw Error(theme+':progress-practice-missing');
+    practice.querySelector('[data-b27-close-practice]')?.click();await wait(180);
   }
 
   /* Deep route pass mirrors the field-video failure path: Practice -> Listening,
@@ -80,7 +102,7 @@ F.onload=()=>setTimeout(async()=>{try{
   for(const k of keys)if(before[k]!==w.localStorage.getItem(k))throw Error('store:'+k);
   w.FrenchTranquilleThemes.apply('original');await wait(70);
   if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv4-route-coherence-ready').trim())throw Error('original-leak-after');
-  done(true,'frames=sampled-16ms;viewports=5;themes=3;home-practice=atomic;practice-home=atomic;practice-listening=atomic;conversation=themed;scenario=themed;intermediate-opacity=0;underlay-bleed=0;stores=unchanged');
+  done(true,'frames=sampled-16ms;viewports=5;themes=3;home-practice=atomic;practice-home=atomic;practice-home-hop=0;progress-practice-host-swap=covered;practice-listening=atomic;conversation=themed;scenario=themed;intermediate-opacity=0;underlay-bleed=0;stores=unchanged');
 }catch(e){done(false,e.message)}},3400);
 setTimeout(()=>{if(!R.dataset.premiumV4TransitionTribunal)done(false,'timeout')},52000);
 })();

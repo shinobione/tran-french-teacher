@@ -18,12 +18,14 @@ jobs:
           node --check stage2-boot.js
           node --check theme-controller.js
           grep -q 'ensurePracticeSettings' field-navigation-runtime.js
-          grep -q "version:'2.3.5'" field-navigation-runtime.js
-          grep -q "build:'34.5'" field-navigation-runtime.js
+          grep -q "version:'2.3.6'" field-navigation-runtime.js
+          grep -q "build:'34.6'" field-navigation-runtime.js
+          grep -q 'const host=currentScreen();window.FrenchTranquilleBuild27Shell?.openPractice?.()' field-navigation-runtime.js
+          grep -q "if(host!=='home'){legacy('home')" field-navigation-runtime.js
           grep -q 'body > .b27-overlay.b27-entering' field-navigation-runtime.js
           ! grep -q 'body > .b27-overlay.b27-leaving' field-navigation-runtime.js
-          grep -q 'stage2-boot.js?v=2.3.5-b34.5' index.html
-          grep -q '2.3.5-b34.5' stage2-boot.js
+          grep -q 'stage2-boot.js?v=2.3.6-b34.6' index.html
+          grep -q '2.3.6-b34.6' stage2-boot.js
           grep -q 'safe-area-inset-left' premium-nav-geometry-hotfix.css
           grep -q 'safe-area-inset-right' premium-nav-geometry-hotfix.css
           grep -q 'safe-area-inset-bottom' premium-nav-geometry-hotfix.css
