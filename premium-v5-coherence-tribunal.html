@@ -24,8 +24,17 @@ const listeningRoundtrip=async(w,d,label)=>{
 };
 F.onload=()=>setTimeout(async()=>{try{
   const w=F.contentWindow,d=F.contentDocument;
-  const ready=await waitFor(()=>w.FrenchTranquilleThemes&&w.FrenchTranquilleFieldNavigation&&w.FrenchTranquilleListening&&w.FrenchTranquilleFoundationsPilot);
-  if(!ready)throw Error(`api-missing:themes=${!!w.FrenchTranquilleThemes};nav=${!!w.FrenchTranquilleFieldNavigation};listening=${!!w.FrenchTranquilleListening};foundations=${!!w.FrenchTranquilleFoundationsPilot}`);
+  const ready=await waitFor(()=>w.FrenchTranquilleThemes&&w.FrenchTranquilleFieldNavigation&&w.FrenchTranquilleListening&&w.FrenchTranquilleFoundationsPilot&&w.FrenchTranquilleCurriculum);
+  if(!ready)throw Error(`api-missing:themes=${!!w.FrenchTranquilleThemes};nav=${!!w.FrenchTranquilleFieldNavigation};listening=${!!w.FrenchTranquilleListening};foundations=${!!w.FrenchTranquilleFoundationsPilot};curriculum=${!!w.FrenchTranquilleCurriculum}`);
+
+  /* Deterministic fixture, independent from historical ?uxSmoke modes. Seed before
+     the immutability snapshot so the tribunal proves V5 interactions do not mutate it. */
+  const learnerKey=w.FrenchTranquilleCurriculum.key||'francais-avec-luc:learner:v1';
+  let learner={};try{learner=JSON.parse(w.localStorage.getItem(learnerKey)||'{}')||{}}catch{}
+  learner={...learner,schemaVersion:learner.schemaVersion||2,learnerName:learner.learnerName||'Trân',level:learner.level||'A0',lessonProgress:learner.lessonProgress||{},completedLessons:Array.isArray(learner.completedLessons)?learner.completedLessons:[],knownItems:[...new Set([...(Array.isArray(learner.knownItems)?learner.knownItems:[]),'bonjour','merci','au-revoir'])]};
+  w.localStorage.setItem(learnerKey,JSON.stringify(learner));
+  w.FrenchTranquilleBuild27Shell?.refresh?.();w.FrenchTranquilleBuild32Shell?.refresh?.();await wait(100);
+
   const motion=d.createElement('style');motion.textContent='*,*::before,*::after{transition-duration:0s!important;animation-duration:0s!important}';d.head.appendChild(motion);
   const before=Object.fromEntries(keys.map(k=>[k,w.localStorage.getItem(k)]));
 
