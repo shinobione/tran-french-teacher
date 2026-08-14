@@ -1,4 +1,4 @@
-import './field-navigation-runtime.js?v=2.3.5-b34.5';
+import './field-navigation-runtime.js?v=2.3.6-b34.6';
 
 if (window.FrenchTranquilleStage2 && !window.__FT_STAGE2_BOOTED__) {
   window.__FT_STAGE2_BOOTED__ = true;
@@ -17,7 +17,7 @@ if (window.FrenchTranquilleStage2 && !window.__FT_STAGE2_BOOTED__) {
     document.head.appendChild(script);
   };
 
-  if (enableFieldNav && !window.FrenchTranquilleFieldNavigation) load('./field-navigation-runtime.js?v=2.3.5-b34.5', 'fieldNavigationRuntime');
+  if (enableFieldNav && !window.FrenchTranquilleFieldNavigation) load('./field-navigation-runtime.js?v=2.3.6-b34.6', 'fieldNavigationRuntime');
   if (enableFieldAudio) load('./field-audio-session.js?v=2.3.1-b34.1', 'fieldAudioSessionV2');
 
   requestAnimationFrame(() => document.querySelector('.bottom-nav [data-go="home"]')?.click());
