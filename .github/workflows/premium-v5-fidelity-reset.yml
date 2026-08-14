@@ -21,6 +21,7 @@ jobs:
         run: |
           node --check premium-v5-fidelity-reset.js
           node --check theme-controller.js
+          node --check sw.js
           grep -q -- '--pv55-ready:1' premium-v5-fidelity-reset.css
           grep -q -- '--pv55-refine-ready:1' premium-v5-fidelity-refine.css
           grep -q 'theme-aurora-paris.svg' premium-v5-fidelity-reset.css
@@ -33,6 +34,15 @@ jobs:
           grep -q 'premium-v5-fidelity-reset.css?v=2.3.20-v5fidelity1' premium-theme-polish.css
           grep -q 'premium-v5-fidelity-refine.css?v=2.3.20-v5fidelity2' premium-theme-polish.css
           grep -q 'premium-v5-fidelity-reset.js?v=2.3.20-v5fidelity1' theme-controller.js
+          grep -q "const CACHE='tran-french-teacher-v2.3.20-b34.11-v5fidelity1'" sw.js
+          grep -q "const V5F='2.3.20-v5fidelity1'" sw.js
+          grep -q "const V5FR='2.3.20-v5fidelity2'" sw.js
+          grep -q 'premium-v5-fidelity-reset.css?v=${V5F}' sw.js
+          grep -q 'premium-v5-fidelity-refine.css?v=${V5FR}' sw.js
+          grep -q 'premium-v5-fidelity-reset.js?v=${V5F}' sw.js
+          grep -q './assets/theme-aurora-paris.svg' sw.js
+          grep -q './assets/theme-sunset-paris.svg' sw.js
+          grep -q './assets/theme-jade-paris.svg' sw.js
           grep -q "\['review','conversation','listening','real-life'\]" premium-v5-subview-chrome-tribunal.html
           test "$(tail -n 1 premium-theme-polish.css)" = "@import url('./premium-nav-geometry-hotfix.css?v=2.3.4-p0nav1');"
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
