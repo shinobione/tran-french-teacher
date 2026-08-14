@@ -1,6 +1,7 @@
-<!doctype html><html><head><meta charset="utf-8"><title>Premium V5 coherence tribunal</title><style>body{margin:0}iframe{display:block;border:0}</style></head><body><iframe id="appframe" src="./index.html?uxSmoke=lesson8&fieldNavV3=1" style="width:390px;height:844px"></iframe><script>
+<!doctype html><html><head><meta charset="utf-8"><title>Premium V5 coherence tribunal</title><style>body{margin:0}iframe{display:block;border:0}</style></head><body><iframe id="appframe" src="./index.html?fieldNavV3=1" style="width:390px;height:844px"></iframe><script>
 (()=>{'use strict';
 const R=document.documentElement,F=document.getElementById('appframe'),wait=ms=>new Promise(r=>setTimeout(r,ms));
+const waitFor=async(fn,limit=14000)=>{for(let t=0;t<limit;t+=50){try{const v=fn();if(v)return v}catch{}await wait(50)}try{return fn()}catch{return null}};
 const sizes=[[390,844],[1440,900]],themes=['aurora','sunset','jade'];
 const keys=['francais-avec-luc:learner:v1','french-tranquille:learning-memory:v1','french-tranquille:error-intelligence:v1','french-tranquille:scenarios:v1','french-tranquille:milestones:v1'];
 const finish=(ok,msg)=>{R.dataset.premiumV5Coherence=ok?'ok':'fail';R.dataset.premiumV5CoherenceDetail=msg};
@@ -23,8 +24,9 @@ const listeningRoundtrip=async(w,d,label)=>{
 };
 F.onload=()=>setTimeout(async()=>{try{
   const w=F.contentWindow,d=F.contentDocument;
+  const ready=await waitFor(()=>w.FrenchTranquilleThemes&&w.FrenchTranquilleFieldNavigation&&w.FrenchTranquilleListening&&w.FrenchTranquilleFoundationsPilot);
+  if(!ready)throw Error(`api-missing:themes=${!!w.FrenchTranquilleThemes};nav=${!!w.FrenchTranquilleFieldNavigation};listening=${!!w.FrenchTranquilleListening};foundations=${!!w.FrenchTranquilleFoundationsPilot}`);
   const motion=d.createElement('style');motion.textContent='*,*::before,*::after{transition-duration:0s!important;animation-duration:0s!important}';d.head.appendChild(motion);
-  if(!w.FrenchTranquilleThemes||!w.FrenchTranquilleFieldNavigation||!w.FrenchTranquilleListening||!w.FrenchTranquilleFoundationsPilot)throw Error('api-missing');
   const before=Object.fromEntries(keys.map(k=>[k,w.localStorage.getItem(k)]));
 
   /* Original remains visually untouched, but receives the real Listening Settings transaction. */
@@ -71,7 +73,7 @@ F.onload=()=>setTimeout(async()=>{try{
   w.FrenchTranquilleThemes.apply('original');await wait(60);
   if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv5-coherence-ready').trim())throw Error('original-v5-visual-leak-after');
   finish(true,'viewports=2;themes=3;A0=no-overlap;utility=filled;listening-settings=exact-roundtrip;foundations=themed;stores=unchanged;original=witness');
-}catch(e){finish(false,e.message)}},3400);
-setTimeout(()=>{if(!R.dataset.premiumV5Coherence)finish(false,'timeout')},42000);
+}catch(e){finish(false,e.message)}},120);
+setTimeout(()=>{if(!R.dataset.premiumV5Coherence)finish(false,'timeout')},52000);
 })();
 </script></body></html>
