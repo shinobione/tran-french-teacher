@@ -31,7 +31,9 @@ F.onload=()=>setTimeout(async()=>{try{
       if(!vis(w,top))throw Error(label+':no-top-owner');
     }else if(!vis(w,app))throw Error(label+':no-content-owner');
   };
-  const sample=async(label,frames=14)=>{for(let i=0;i<frames;i++){await new Promise(r=>w.requestAnimationFrame(r));checkFrame(`${label}:${i}`)}};
+  /* 16 ms ~= one 60 Hz frame. setTimeout is deterministic under Chrome's
+     virtual-time runner whereas iframe requestAnimationFrame may be throttled. */
+  const sample=async(label,frames=14)=>{for(let i=0;i<frames;i++){await wait(16);checkFrame(`${label}:${i}`)}};
   const toHome=async()=>{nav('home')?.click();await wait(260);checkFrame('settled-home')};
 
   w.FrenchTranquilleThemes.apply('original');await wait(80);
@@ -78,7 +80,7 @@ F.onload=()=>setTimeout(async()=>{try{
   for(const k of keys)if(before[k]!==w.localStorage.getItem(k))throw Error('store:'+k);
   w.FrenchTranquilleThemes.apply('original');await wait(70);
   if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv4-route-coherence-ready').trim())throw Error('original-leak-after');
-  done(true,'frames=sampled;viewports=5;themes=3;home-practice=atomic;practice-home=atomic;practice-listening=atomic;conversation=themed;scenario=themed;intermediate-opacity=0;underlay-bleed=0;stores=unchanged');
+  done(true,'frames=sampled-16ms;viewports=5;themes=3;home-practice=atomic;practice-home=atomic;practice-listening=atomic;conversation=themed;scenario=themed;intermediate-opacity=0;underlay-bleed=0;stores=unchanged');
 }catch(e){done(false,e.message)}},3400);
 setTimeout(()=>{if(!R.dataset.premiumV4TransitionTribunal)done(false,'timeout')},52000);
 })();
