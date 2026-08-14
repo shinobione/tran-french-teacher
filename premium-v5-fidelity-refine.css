@@ -26,8 +26,18 @@ html[data-theme]:not([data-theme="original"]) :is(
   .screen-review .ft-v55-subview-back,
   .screen-conversation .ft-v55-subview-back,
   .listening-overlay .ft-v55-subview-back,
-  .scenario-runner .ft-v55-subview-back
+  .scenario-runner .scenario-close
 ){z-index:12120!important}
+
+/* The Scenario engine owns its real [data-scenario-close] node. Do not require a
+   cosmetic runtime class for its geometry: the actual exit is the V5.5 Back. */
+html[data-theme]:not([data-theme="original"]) .scenario-runner .scenario-close{
+  position:fixed!important;
+  top:var(--pv55-top)!important;
+  left:var(--pv55-side)!important;
+  right:auto!important;
+  margin:0!important;
+}
 
 /* Practice: controls occupy the corners; content starts below their rail. */
 html[data-theme]:not([data-theme="original"]) .b27-practice-page .b27-overlay-header{
