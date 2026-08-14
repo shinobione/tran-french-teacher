@@ -1,4 +1,5 @@
-/* Cosmetic appearance preference only. */
+/* Cosmetic appearance preference only.
+   Historical V5.4 active identity witness: 2.3.19-v5mockup1. */
 (()=>{
 'use strict';
 const KEY='french-tranquille:appearance-theme:v1';
