@@ -93,10 +93,12 @@ html[data-theme]:not([data-theme="original"]) .scenario-runner-head{padding:calc
 html[data-theme]:not([data-theme="original"]):not(.ux-debug-mode) .screen-settings :is(#debug-fr-card,.ft-v55-diagnostics-card,.ft-v55-technical-card){display:none!important}
 html.ux-debug-mode[data-theme]:not([data-theme="original"]) .screen-settings :is(#debug-fr-card,.ft-v55-diagnostics-card,.ft-v55-technical-card){display:none!important}
 
-html[data-theme]:not([data-theme="original"]) #ft-settings-legal{order:30}
+/* Mockup information hierarchy: Theme first, About next (credits/privacy/rights),
+   then recovery. Credits no longer live below a long technical/recovery section. */
 html[data-theme]:not([data-theme="original"]) .screen-settings .ft-theme-settings-inline{order:10}
+html[data-theme]:not([data-theme="original"]) #ft-settings-legal{order:20}
+html[data-theme]:not([data-theme="original"]) .screen-settings :is(.ft-v55-recovery-card,.danger-zone){order:30;display:block!important}
 html[data-theme]:not([data-theme="original"]) .screen-settings .ux-settings-note{order:0}
-html[data-theme]:not([data-theme="original"]) .screen-settings :is(.ft-v55-recovery-card,.danger-zone){order:20;display:block!important}
 
 /* Recovery remains a real existing product surface. It is visually subordinate,
    never silently hidden behind a synthetic V5-only router. */
@@ -121,7 +123,179 @@ html[data-theme]:not([data-theme="original"]) #ft-settings-legal[data-v55-open="
 html[data-theme]:not([data-theme="original"]) .screen-settings .narrow{display:flex!important;flex-direction:column!important}
 html[data-theme]:not([data-theme="original"]) .screen-settings .narrow>*{width:100%}
 
+/* --------------------------------------------------------------------------
+   HOME — MOBILE MOCKUP COMPOSITION
+   The physical review showed the first V5.5 pass still read as the old vertical
+   app with new colours. Recompose the existing semantic nodes (no fake data) so
+   the first phone viewport has the approved rhythm: brand → greeting → compact
+   lesson hero → Practice actions → calm daily note.
+   -------------------------------------------------------------------------- */
 @media(max-width:759px){
+  html[data-theme]:not([data-theme="original"]) .b27-home{
+    padding-top:calc(env(safe-area-inset-top,0px) + 8px)!important;
+  }
+  html[data-theme]:not([data-theme="original"]) .b27-home>.b27-header{
+    min-height:46px!important;
+    margin-bottom:0!important;
+  }
+  html[data-theme]:not([data-theme="original"]) .ft-modern-home-logo{
+    width:min(76vw,300px)!important;
+    max-height:178px!important;
+    margin:-2px auto 0!important;
+  }
+  html[data-theme]:not([data-theme="original"]) .b27-home-grid,
+  html[data-theme]:not([data-theme="original"]) .b27-home-main,
+  html[data-theme]:not([data-theme="original"]) .b27-home-side{
+    gap:9px!important;
+  }
+  html[data-theme]:not([data-theme="original"]) .b27-welcome{
+    min-height:0!important;
+    padding:10px 12px 11px!important;
+    border-radius:18px!important;
+  }
+  html[data-theme]:not([data-theme="original"]) .b27-welcome>span{
+    font-size:.58rem!important;
+    letter-spacing:.13em!important;
+  }
+  html[data-theme]:not([data-theme="original"]) .b27-welcome h1{
+    margin:5px 0 3px!important;
+    font-size:clamp(1.58rem,7.4vw,2.05rem)!important;
+    line-height:1.02!important;
+  }
+  html[data-theme]:not([data-theme="original"]) .b27-welcome p{
+    margin:0!important;
+    font-size:.76rem!important;
+    line-height:1.35!important;
+  }
+
+  /* Daily lesson becomes the wide illustrated mockup card instead of a tall
+     stack. Its actual curriculum title/progress/CTA remain untouched. */
+  html[data-theme]:not([data-theme="original"]) .b27-primary-card{
+    position:relative!important;
+    overflow:hidden!important;
+    min-height:188px!important;
+    padding:14px!important;
+    display:grid!important;
+    grid-template-columns:62px minmax(0,1fr)!important;
+    grid-template-areas:
+      'top top'
+      'art title'
+      'art copy'
+      'art progress'
+      'action action'!important;
+    column-gap:12px!important;
+    row-gap:6px!important;
+    align-items:center!important;
+    border-radius:22px!important;
+  }
+  html[data-theme]:not([data-theme="original"]) .b27-primary-card>*{
+    position:relative;
+    z-index:2;
+  }
+  html[data-theme]:not([data-theme="original"]) .b27-primary-card::before{
+    content:'▤';
+    grid-area:art;
+    width:58px;
+    height:58px;
+    align-self:center;
+    display:grid;
+    place-items:center;
+    border-radius:50%;
+    border:1px solid color-mix(in srgb,var(--ft-accent) 58%,rgba(255,255,255,.18));
+    background:
+      radial-gradient(circle at 30% 22%,rgba(255,255,255,.26),transparent 31%),
+      linear-gradient(145deg,color-mix(in srgb,var(--ft-accent) 28%,var(--ft-surface)),color-mix(in srgb,var(--ft-accent2) 26%,var(--ft-surface-2)));
+    color:var(--ft-accent);
+    font-size:1.42rem;
+    font-weight:900;
+    box-shadow:0 0 0 7px color-mix(in srgb,var(--ft-accent) 4%,transparent),0 8px 24px rgba(0,0,0,.22),0 0 20px color-mix(in srgb,var(--ft-accent2) 10%,transparent);
+    z-index:2;
+  }
+  html[data-theme]:not([data-theme="original"]) .b27-primary-card::after{
+    content:'';
+    position:absolute;
+    z-index:0;
+    right:-8px;
+    bottom:37px;
+    width:104px;
+    height:142px;
+    background:linear-gradient(180deg,var(--ft-accent),var(--ft-accent2));
+    -webkit-mask:url('./assets/eiffel-premium-mask.svg') center/contain no-repeat;
+    mask:url('./assets/eiffel-premium-mask.svg') center/contain no-repeat;
+    opacity:.14;
+    pointer-events:none;
+  }
+  html[data-theme="sunset"] .b27-primary-card::after{opacity:.18}
+  html[data-theme="jade"] .b27-primary-card::after{opacity:.27;background:linear-gradient(180deg,var(--ft-accent2),var(--ft-accent))}
+  html[data-theme]:not([data-theme="original"]) .b27-primary-card .b27-card-topline{
+    grid-area:top!important;
+    margin:0!important;
+    min-height:20px!important;
+  }
+  html[data-theme]:not([data-theme="original"]) .b27-primary-card .b27-card-topline>b{display:none!important}
+  html[data-theme]:not([data-theme="original"]) .b27-primary-card h2{
+    grid-area:title!important;
+    margin:0!important;
+    font-size:1.18rem!important;
+    line-height:1.08!important;
+    padding-right:22px;
+  }
+  html[data-theme]:not([data-theme="original"]) .b27-primary-card>p{
+    grid-area:copy!important;
+    margin:0!important;
+    font-size:.72rem!important;
+    line-height:1.35!important;
+    padding-right:18px;
+  }
+  html[data-theme]:not([data-theme="original"]) .b27-primary-card>.b27-progress{
+    grid-area:progress!important;
+    margin:2px 0 0!important;
+    height:6px!important;
+  }
+  html[data-theme]:not([data-theme="original"]) .b27-primary-card>.b27-primary-action{
+    grid-area:action!important;
+    min-height:46px!important;
+    margin-top:2px!important;
+  }
+
+  /* Make the Practice area explicit, as in every approved mockup. */
+  html[data-theme]:not([data-theme="original"]) .b27-home-side{
+    position:relative!important;
+    padding-top:24px!important;
+  }
+  html[data-theme]:not([data-theme="original"]) .b27-home-side::before{
+    content:'LUYỆN TẬP';
+    position:absolute;
+    left:4px;
+    top:3px;
+    color:var(--ft-accent2);
+    font-size:.64rem;
+    line-height:1;
+    font-weight:900;
+    letter-spacing:.12em;
+  }
+  html.ux-debug-mode[data-theme]:not([data-theme="original"]) .b27-home-side::before{content:'PRATIQUER'}
+  html[data-theme]:not([data-theme="original"]) .b27-home-side .b27-quick-card{
+    min-height:62px!important;
+    padding:9px 12px!important;
+    border-radius:18px!important;
+  }
+  html[data-theme]:not([data-theme="original"]) .b27-home-side .b27-quick-icon{
+    width:42px!important;
+    height:42px!important;
+    min-width:42px!important;
+  }
+  html[data-theme]:not([data-theme="original"]) .b27-home-side .b27-quick-card strong{font-size:.82rem!important}
+  html[data-theme]:not([data-theme="original"]) .b27-home-side .b27-quick-card small{font-size:.65rem!important}
+  html[data-theme]:not([data-theme="original"]) .b27-today-note{
+    min-height:52px!important;
+    padding:9px 11px!important;
+    border-radius:17px!important;
+  }
+  html[data-theme]:not([data-theme="original"]) .b27-today-note strong{font-size:.74rem!important}
+  html[data-theme]:not([data-theme="original"]) .b27-today-note small{font-size:.62rem!important}
+
+  /* Existing subview chrome refinements. */
   html[data-theme]:not([data-theme="original"]) .b27-practice-page .b27-practice-intro{padding-top:2px!important}
   html[data-theme]:not([data-theme="original"]) .listening-top{padding-inline:68px!important}
   html[data-theme]:not([data-theme="original"]) .screen-settings .topbar{padding-top:calc(var(--pv55-top) + 50px)!important;padding-right:12px!important;padding-left:12px!important}
