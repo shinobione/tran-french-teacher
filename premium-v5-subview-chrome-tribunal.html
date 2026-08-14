@@ -11,8 +11,8 @@
   const finish=(ok,detail)=>{root.dataset.v55Subview=ok?'ok':'fail';root.dataset.v55SubviewCase=CASE;root.dataset.v55SubviewDetail=detail};
   const visible=(w,n)=>{if(!n)return false;const s=w.getComputedStyle(n),r=n.getBoundingClientRect();return s.display!=='none'&&s.visibility!=='hidden'&&s.opacity!=='0'&&r.width>1&&r.height>1};
   const same=(a,b)=>Math.abs(a.left-b.left)<=2&&Math.abs(a.top-b.top)<=2&&Math.abs(a.width-b.width)<=2&&Math.abs(a.height-b.height)<=2;
-  const rightGap=(d,n)=>d.documentElement.clientWidth-n.getBoundingClientRect().right;
-  const assertRight=(d,n,label)=>{const gap=rightGap(d,n);if(gap<8||gap>28)throw Error(`${label}-right-gap-${Math.round(gap)}`)};
+  const rightGap=(w,n)=>w.innerWidth-n.getBoundingClientRect().right;
+  const assertRight=(w,n,label)=>{const gap=rightGap(w,n);if(gap<8||gap>28)throw Error(`${label}-right-gap-${Math.round(gap)}`)};
   if(!allowed.has(CASE)){finish(false,'bad-case');return}
 
   const frame=document.createElement('iframe');
@@ -37,7 +37,7 @@
       const rr=reference.getBoundingClientRect(),gr=gear.getBoundingClientRect();
       if(rr.width<44||rr.height<44)throw Error('practice-back-target');
       if(gr.width<44||gr.height<44)throw Error('practice-gear-target');
-      assertRight(d,gear,'practice-gear');
+      assertRight(w,gear,'practice-gear');
       if(rr.left>24)throw Error(`practice-back-left-${Math.round(rr.left)}`);
 
       const action=practice.querySelector(`[data-b27-practice-action="${CASE}"]`);
@@ -56,7 +56,7 @@
         back=await until(()=>overlay?.querySelector('.listening-close.ft-v55-subview-back'));
         const listenGear=overlay?.querySelector('[data-b27-settings].ft-v55-settings-gear');
         if(!visible(w,listenGear))throw Error('listening-gear-missing');
-        assertRight(d,listenGear,'listening-gear');
+        assertRight(w,listenGear,'listening-gear');
         if(overlay?.querySelector('.listening-top .eyebrow')&&visible(w,overlay.querySelector('.listening-top .eyebrow')))throw Error('listening-build-label-visible');
       }else{
         const runner=await until(()=>d.querySelector('.scenario-runner'),12000);
