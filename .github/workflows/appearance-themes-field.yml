@@ -15,6 +15,7 @@ jobs:
       - name: Static contracts
         run: |
           node --check theme-controller.js
+          grep -q 'theme-controller.js?v=2.3.12-v4coherence1' index.html
           grep -q '2.3.12-v4coherence1' theme-controller.js
           grep -q 'premium-v4-home.css?v=2.3.6-v4home2' premium-theme-polish.css
           grep -q 'premium-v4-progress.css?v=2.3.7-v4progress1' premium-theme-polish.css
