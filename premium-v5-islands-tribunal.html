@@ -22,8 +22,11 @@ Promise.all([new Promise(resolve=>V.addEventListener('load',resolve,{once:true})
   realLife.click();
   const runnerExists=await waitFor(()=>ad.querySelector('.screen-conversation .scenario-lab-card')&&ad.querySelector('.scenario-runner')&&ad.querySelector('.scenario-npc')&&ad.querySelector('.scenario-task')&&ad.querySelector('.scenario-input-row input'),5000);
   if(!runnerExists)throw Error('modern-scenario-dom-missing');
-  aw.FrenchTranquilleSessionUX.schedule();
-  const runnerReady=await waitFor(()=>visible(aw,ad.querySelector('.screen-conversation .scenario-lab-card'))&&visible(aw,ad.querySelector('.scenario-runner'))&&visible(aw,ad.querySelector('.scenario-npc'))&&visible(aw,ad.querySelector('.scenario-task'))&&visible(aw,ad.querySelector('.scenario-input-row input')),4000);
+  /* Session UX auto-detection is covered by its own historical smoke. This
+     visual tribunal pins the already-open real Scenario to the public Scenario
+     mode API so Chrome virtual-time/rAF cannot hide the owner between frames. */
+  aw.FrenchTranquilleSessionUX.setPracticeMode('scenario');
+  const runnerReady=await waitFor(()=>visible(aw,ad.querySelector('.screen-conversation .scenario-lab-card'))&&visible(aw,ad.querySelector('.scenario-runner'))&&visible(aw,ad.querySelector('.scenario-npc'))&&visible(aw,ad.querySelector('.scenario-task'))&&visible(aw,ad.querySelector('.scenario-input-row input')),2500);
   if(!runnerReady){const lab=ad.querySelector('.scenario-lab-card'),runner=ad.querySelector('.scenario-runner'),npc=ad.querySelector('.scenario-npc'),task=ad.querySelector('.scenario-task'),input=ad.querySelector('.scenario-input-row input');throw Error(`modern-scenario-route-failed:conversation=${!!ad.querySelector('.screen-conversation .narrow')};lab=${nodeState(aw,lab)};runner=${nodeState(aw,runner)};npc=${nodeState(aw,npc)};task=${nodeState(aw,task)};input=${nodeState(aw,input)};practiceMode=${ad.documentElement.classList.contains('b27-practice-open')?1:0};screen=${ad.body.dataset.b27Screen||ad.body.dataset.uxScreen||'unknown'}`)}
   await wait(120);
   const before=Object.fromEntries(keys.map(k=>[k,aw.localStorage.getItem(k)]));
