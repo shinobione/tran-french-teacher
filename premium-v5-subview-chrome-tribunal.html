@@ -10,6 +10,7 @@
   const until=async(fn,limit=11000)=>{for(let t=0;t<limit;t+=50){let v=null;try{v=fn()}catch{}if(v)return v;await wait(50)}try{return fn()}catch{return null}};
   const finish=(ok,detail)=>{root.dataset.v55Subview=ok?'ok':'fail';root.dataset.v55SubviewCase=CASE;root.dataset.v55SubviewDetail=detail};
   const visible=(w,n)=>{if(!n)return false;const s=w.getComputedStyle(n),r=n.getBoundingClientRect();return s.display!=='none'&&s.visibility!=='hidden'&&s.opacity!=='0'&&r.width>1&&r.height>1};
+  const nodeState=(w,n)=>{if(!n)return 'missing';const s=w.getComputedStyle(n),r=n.getBoundingClientRect();return `vis=${visible(w,n)?1:0},display=${s.display},visibility=${s.visibility},opacity=${s.opacity},position=${s.position},top=${s.top},left=${s.left},z=${s.zIndex},rect=${Math.round(r.width)}x${Math.round(r.height)}@${Math.round(r.left)},${Math.round(r.top)},class=${String(n.className||'').replace(/\s+/g,'.')}`};
   const same=(a,b)=>Math.abs(a.left-b.left)<=2&&Math.abs(a.top-b.top)<=2&&Math.abs(a.width-b.width)<=2&&Math.abs(a.height-b.height)<=2;
   const rightGap=(d,n)=>d.documentElement.clientWidth-n.getBoundingClientRect().right;
   const assertRight=(d,n,label)=>{const gap=rightGap(d,n);if(gap<8||gap>28)throw Error(`${label}-right-gap-${Math.round(gap)}`)};
@@ -59,10 +60,20 @@
         assertRight(d,listenGear,'listening-gear');
         if(overlay?.querySelector('.listening-top .eyebrow')&&visible(w,overlay.querySelector('.listening-top .eyebrow')))throw Error('listening-build-label-visible');
       }else{
-        const runner=await until(()=>d.querySelector('.scenario-runner'),12000);
-        back=await until(()=>runner?.querySelector('[data-scenario-close]'));
+        const runner=await until(()=>[...d.querySelectorAll('.scenario-runner')].find(n=>visible(w,n)),12000);
+        if(!runner){
+          const runners=[...d.querySelectorAll('.scenario-runner')].map((n,i)=>`${i}:${nodeState(w,n)}`).join('|')||'none';
+          const lab=nodeState(w,d.querySelector('.scenario-lab-card'));
+          const shell=nodeState(w,d.querySelector('#app .app-shell.screen-conversation'));
+          throw Error(`real-life-visible-runner-missing:runners=${runners};lab=${lab};shell=${shell};mode=${d.documentElement.dataset.practiceMode||'-'};html=${d.documentElement.className.replace(/\s+/g,'.')}`);
+        }
+        back=runner.querySelector('[data-scenario-close]');
+        if(!visible(w,back)){
+          const all=[...d.querySelectorAll('[data-scenario-close]')].map((n,i)=>`${i}:${nodeState(w,n)}`).join('|')||'none';
+          throw Error(`real-life-back-node:${nodeState(w,back)};all=${all};runner=${nodeState(w,runner)};parent=${nodeState(w,runner.parentElement)}`);
+        }
         const underlayBack=d.querySelector('.screen-conversation .topbar [data-back].ft-v55-subview-back');
-        if(visible(w,underlayBack))throw Error('real-life-double-back-visible');
+        if(visible(w,underlayBack))throw Error(`real-life-double-back-visible:${nodeState(w,underlayBack)}`);
       }
       if(!visible(w,back))throw Error(`${CASE}-back-missing`);
       const br=back.getBoundingClientRect();
@@ -71,10 +82,10 @@
 
       if(CASE==='real-life'){
         back.click();
-        const listReady=await until(()=>!d.querySelector('.scenario-runner')&&d.querySelector('.scenario-grid'),12000);
-        if(!listReady)throw Error('real-life-list-not-restored');
+        const listReady=await until(()=>![...d.querySelectorAll('.scenario-runner')].some(n=>visible(w,n))&&visible(w,d.querySelector('.scenario-grid')),12000);
+        if(!listReady)throw Error(`real-life-list-not-restored:grid=${nodeState(w,d.querySelector('.scenario-grid'))};runner=${nodeState(w,[...d.querySelectorAll('.scenario-runner')].find(n=>visible(w,n)))}`);
         const listBack=await until(()=>d.querySelector('.screen-conversation .topbar [data-back].ft-v55-subview-back'));
-        if(!visible(w,listBack))throw Error('real-life-list-back-missing');
+        if(!visible(w,listBack))throw Error(`real-life-list-back-missing:${nodeState(w,listBack)}`);
         if(!same(rr,listBack.getBoundingClientRect()))throw Error('real-life-list-back-anchor');
         root.dataset.v55SubviewHierarchy='scenario-list-practice';
         listBack.click();
