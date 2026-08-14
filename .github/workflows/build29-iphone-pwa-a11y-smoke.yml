@@ -36,14 +36,16 @@ jobs:
           const match=text.match(/const META = \{ version: '[^']+', build: '([^']+)'/);
           if(!match || Number(match[1]) < 29) throw new Error('Build 29 contract cannot run on a pre-29 build');
           NODE
-          grep -q 'tran-french-teacher-v2.3.13-b34.6-v4practicecut1' index.html sw.js
+          grep -q 'tran-french-teacher-v2.3.14-b34.6-v4motion1' index.html sw.js
           grep -q "const NAV='2.3.6-b34.6'" sw.js
-          grep -q "const V4='2.3.12-v4coherence1'" sw.js
+          grep -q "const COHERENCE='2.3.12-v4coherence1'" sw.js
+          grep -q "const V4='2.3.14-v4motion1'" sw.js
           grep -q 'stage2-boot.js?v=${NAV}' sw.js
           grep -q 'field-navigation-runtime.js?v=${NAV}' sw.js
           grep -q 'theme-controller.js?v=${V4}' sw.js
           grep -q 'premium-theme-polish.css?v=${V4}' sw.js
-          grep -q 'premium-v4-route-coherence.css?v=${V4}' sw.js
+          grep -q 'premium-v4-route-coherence.css?v=${COHERENCE}' sw.js
+          grep -q 'premium-v4-motion.css?v=${V4}' sw.js
           grep -q 'premium-v4-ownership-hotfix.css?v=2.3.11-v4ownership1' sw.js
           grep -q 'build29-iphone-a11y.css' sw.js
           grep -q 'build29-iphone-a11y.js' sw.js

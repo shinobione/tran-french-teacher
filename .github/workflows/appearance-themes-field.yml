@@ -15,8 +15,8 @@ jobs:
       - name: Static contracts
         run: |
           node --check theme-controller.js
-          grep -q 'theme-controller.js?v=2.3.12-v4coherence1' index.html
-          grep -q '2.3.12-v4coherence1' theme-controller.js
+          grep -q 'theme-controller.js?v=2.3.14-v4motion1' index.html
+          grep -q '2.3.14-v4motion1' theme-controller.js
           grep -q 'premium-v4-home.css?v=2.3.6-v4home2' premium-theme-polish.css
           grep -q 'premium-v4-progress.css?v=2.3.7-v4progress1' premium-theme-polish.css
           grep -q 'premium-v4-practice.css?v=2.3.8-v4practice1' premium-theme-polish.css
@@ -24,12 +24,17 @@ jobs:
           grep -q 'premium-v4-settings.css?v=2.3.10-v4settings1' premium-theme-polish.css
           grep -q 'premium-v4-ownership-hotfix.css?v=2.3.11-v4ownership1' premium-theme-polish.css
           grep -q 'premium-v4-route-coherence.css?v=2.3.12-v4coherence1' premium-theme-polish.css
+          grep -q 'premium-v4-motion.css?v=2.3.14-v4motion1' premium-theme-polish.css
           grep -q -- '--pv4-home-ready:1' premium-v4-home.css
           grep -q -- '--pv4-progress-ready:1' premium-v4-progress.css
           grep -q -- '--pv4-practice-ready:1' premium-v4-practice.css
           grep -q -- '--pv4-listening-ready:1' premium-v4-listening.css
           grep -q -- '--pv4-settings-ready:1' premium-v4-settings.css
           grep -q -- '--pv4-route-coherence-ready:1' premium-v4-route-coherence.css
+          grep -q -- '--pv4-motion-ready:1' premium-v4-motion.css
+          grep -q 'prefers-reduced-motion:reduce' premium-v4-motion.css
+          grep -q 'pv4-confirm-pulse' premium-v4-motion.css
+          grep -q 'route-motion=0' premium-v4-motion-tribunal.html
           grep -q ':has(body > .b27-overlay)' premium-v4-route-coherence.css
           grep -q ':has(body > .listening-overlay)' premium-v4-route-coherence.css
           grep -q 'practice-session-hub' premium-v4-route-coherence.css
@@ -55,11 +60,11 @@ jobs:
           test "$(git hash-object premium-theme-polish-v2-base.css)" = "b5578b1fae55426f06eac30e227d94cf4dfb2491"
           grep -q 'Original is intentionally untouched' premium-depth-pass.css
           grep -q 'Original remains the visual witness' premium-v4-route-coherence.css
-          grep -q 'prefers-reduced-motion:reduce' premium-v4-settings.css
           ! grep -q 'francais-avec-luc:learner:v1' theme-controller.js
           ! grep -q 'francais-avec-luc:learner:v1' premium-v4-settings.css
           ! grep -q 'francais-avec-luc:learner:v1' premium-v4-ownership-hotfix.css
           ! grep -q 'francais-avec-luc:learner:v1' premium-v4-route-coherence.css
+          ! grep -q 'francais-avec-luc:learner:v1' premium-v4-motion.css
       - name: Voice and learner sanctuaries remain exact
         run: |
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
@@ -95,6 +100,16 @@ jobs:
         run: |
           google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=52000 --dump-dom 'http://127.0.0.1:4173/premium-v4-transition-tribunal.html' >/tmp/premium-v4-transition-tribunal.html
           grep -q 'data-premium-v4-transition-tribunal="ok"' /tmp/premium-v4-transition-tribunal.html || { cat /tmp/premium-v4-transition-tribunal.html; exit 1; }
+      - name: Chrome — Premium V4 micro-interaction tribunal
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=30000 --dump-dom 'http://127.0.0.1:4173/premium-v4-motion-tribunal.html' >/tmp/premium-v4-motion-tribunal.html
+          grep -q 'data-premium-v4-motion-tribunal="ok"' /tmp/premium-v4-motion-tribunal.html || { cat /tmp/premium-v4-motion-tribunal.html; exit 1; }
+          grep -q 'local-motion=enabled' /tmp/premium-v4-motion-tribunal.html || { cat /tmp/premium-v4-motion-tribunal.html; exit 1; }
+      - name: Chrome — Premium V4 reduced-motion tribunal
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --force-prefers-reduced-motion --virtual-time-budget=30000 --dump-dom 'http://127.0.0.1:4173/premium-v4-motion-tribunal.html' >/tmp/premium-v4-motion-reduced.html
+          grep -q 'data-premium-v4-motion-tribunal="ok"' /tmp/premium-v4-motion-reduced.html || { cat /tmp/premium-v4-motion-reduced.html; exit 1; }
+          grep -q 'local-motion=disabled' /tmp/premium-v4-motion-reduced.html || { cat /tmp/premium-v4-motion-reduced.html; exit 1; }
       - name: Chrome — Premium V4 Settings viewport tribunal
         run: |
           google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=36000 --dump-dom 'http://127.0.0.1:4173/premium-v4-settings-tribunal.html' >/tmp/premium-v4-settings-tribunal.html
