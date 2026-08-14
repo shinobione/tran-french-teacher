@@ -1,0 +1,74 @@
+name: Premium V5 Coherence
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  coherence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Static V5 contracts and sanctuaries
+        run: |
+          node --check field-navigation-runtime.js
+          node --check stage2-boot.js
+          grep -q "version:'2.3.7'" field-navigation-runtime.js
+          grep -q "build:'34.7'" field-navigation-runtime.js
+          grep -q 'suspendListeningForSettings' field-navigation-runtime.js
+          grep -q 'restoreListeningFromSettings' field-navigation-runtime.js
+          grep -q 'ensureListeningSettings' field-navigation-runtime.js
+          grep -q '2.3.7-b34.7' stage2-boot.js
+          grep -q -- '--pv5-coherence-ready:1' premium-v5-coherence.css
+          grep -q 'left:auto' premium-v5-coherence.css
+          grep -q 'ft-foundation-dialog' premium-v5-coherence.css
+          grep -q 'listening-settings' premium-v5-listening-settings.css
+          grep -q 'premium-v5-coherence.css?v=2.3.16-v5coherence1' premium-theme-polish.css
+          grep -q 'premium-v5-listening-settings.css?v=2.3.16-v5coherence1' premium-theme-polish.css
+          test "$(tail -n 1 premium-theme-polish.css)" = "@import url('./premium-nav-geometry-hotfix.css?v=2.3.4-p0nav1');"
+          test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+          test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
+          test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
+          ! grep -q 'localStorage.setItem' premium-v5-coherence.css
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-v5-coherence-http.log 2>&1 &
+          echo $! >/tmp/ft-v5-coherence-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — V5 coherence field defects
+        run: |
+          timeout --signal=TERM --kill-after=5s 75s \
+            google-chrome --headless=new --no-sandbox --disable-gpu \
+            --disable-background-timer-throttling --disable-renderer-backgrounding \
+            --virtual-time-budget=38000 --dump-dom \
+            'http://127.0.0.1:4173/premium-v5-coherence-tribunal.html' > /tmp/v5-coherence.html
+          grep -q 'data-premium-v5-coherence="ok"' /tmp/v5-coherence.html || { cat /tmp/v5-coherence.html; exit 1; }
+          grep -q 'A0=no-overlap' /tmp/v5-coherence.html
+          grep -q 'utility=filled' /tmp/v5-coherence.html
+          grep -q 'listening-settings=exact-roundtrip' /tmp/v5-coherence.html
+          grep -q 'foundations=themed' /tmp/v5-coherence.html
+          grep -q 'stores=unchanged' /tmp/v5-coherence.html
+
+      - name: Chrome — V5 reduced-motion coherence
+        run: |
+          timeout --signal=TERM --kill-after=5s 75s \
+            google-chrome --headless=new --no-sandbox --disable-gpu --force-prefers-reduced-motion \
+            --disable-background-timer-throttling --disable-renderer-backgrounding \
+            --virtual-time-budget=38000 --dump-dom \
+            'http://127.0.0.1:4173/premium-v5-coherence-tribunal.html' > /tmp/v5-coherence-reduced.html
+          grep -q 'data-premium-v5-coherence="ok"' /tmp/v5-coherence-reduced.html || { cat /tmp/v5-coherence-reduced.html; exit 1; }
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-v5-coherence-server.pid ]; then kill "$(cat /tmp/ft-v5-coherence-server.pid)" || true; fi
