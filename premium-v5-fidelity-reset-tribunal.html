@@ -10,7 +10,7 @@
   const rect = node => node?.getBoundingClientRect?.();
   const px = value => Number.parseFloat(value || '0') || 0;
   const visible = (w,node) => !!node && w.getComputedStyle(node).display !== 'none' && w.getComputedStyle(node).visibility !== 'hidden' && rect(node).width > 0 && rect(node).height > 0;
-  const assertRight = (d,node,label) => { const gap=d.documentElement.clientWidth-rect(node).right; if(gap<8||gap>28) throw Error(`${label}-right-gap-${Math.round(gap)}`); };
+  const assertRight = (w,node,label) => { const gap=w.innerWidth-rect(node).right; if(gap<8||gap>28) throw Error(`${label}-right-gap-${Math.round(gap)}`); };
 
   const frame = document.createElement('iframe');
   frame.style.width='390px'; frame.style.height='844px'; frame.style.border='0';
@@ -43,7 +43,7 @@
       if (!visible(w,gear)) throw Error('home-gear-missing');
       const gs = w.getComputedStyle(gear), gr = rect(gear);
       if (gr.width < 44 || gr.height < 44 || px(gs.borderRadius) < 20) throw Error('gear-grammar');
-      assertRight(d,gear,'home-gear');
+      assertRight(w,gear,'home-gear');
       root.dataset.v55Controls='filled-circle';
 
       await nav.go('progress'); await wait(180);
@@ -67,7 +67,7 @@
       fidelity.refresh(); await wait(100);
       const close = await until(() => settings.querySelector('.topbar .ft-v55-settings-close'));
       if (!visible(w,close) || close.textContent.trim() !== '×') throw Error('settings-close');
-      assertRight(d,close,'settings-close');
+      assertRight(w,close,'settings-close');
 
       const technical = [...settings.querySelectorAll('#debug-fr-card,.ft-v55-diagnostics-card,.ft-v55-technical-card')];
       if (technical.some(node => visible(w,node))) throw Error('settings-technical-visible');
