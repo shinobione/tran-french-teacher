@@ -1,0 +1,41 @@
+/* French Trân’quille — Premium V4 / Contrast pass
+   Visual-only refinement derived from the global Visual QA tribunal.
+   Bright Premium CTA gradients use dark theme-coherent ink so every opaque
+   gradient stop stays readable. Original remains untouched. */
+
+html[data-theme]:not([data-theme="original"]){--pv4-contrast-ready:1}
+
+/* Aurora — cyan / periwinkle / magenta gradients. */
+html[data-theme="aurora"] .b27-home .b27-primary-action,
+html[data-theme="aurora"] .b27-progress-page .b27-current-card .b27-primary-action,
+html[data-theme="aurora"] .listening-overlay .listening-play.primary{
+  color:#071531;
+  text-shadow:0 1px 0 rgba(255,255,255,.16);
+}
+
+/* Sunset — orange / coral / pink / violet gradients. */
+html[data-theme="sunset"] .b27-home .b27-primary-action,
+html[data-theme="sunset"] .b27-progress-page .b27-current-card .b27-primary-action,
+html[data-theme="sunset"] .listening-overlay .listening-play.primary{
+  color:#140b28;
+  text-shadow:0 1px 0 rgba(255,255,255,.13);
+}
+
+/* Jade — the generic color-mix Listening CTA resolves to a light mint/gold
+   gradient, so keep its label in dark jade ink. Home/Progress remain their
+   intentionally dark editorial buttons and need no override. */
+html[data-theme="jade"] .listening-overlay .listening-play.primary{
+  color:#041511;
+  text-shadow:0 1px 0 rgba(255,255,255,.12);
+}
+
+/* Keep disabled semantics visually obvious if a future state disables one. */
+html[data-theme="aurora"] .b27-home .b27-primary-action:disabled,
+html[data-theme="aurora"] .b27-progress-page .b27-current-card .b27-primary-action:disabled,
+html[data-theme="aurora"] .listening-overlay .listening-play.primary:disabled,
+html[data-theme="sunset"] .b27-home .b27-primary-action:disabled,
+html[data-theme="sunset"] .b27-progress-page .b27-current-card .b27-primary-action:disabled,
+html[data-theme="sunset"] .listening-overlay .listening-play.primary:disabled,
+html[data-theme="jade"] .listening-overlay .listening-play.primary:disabled{
+  opacity:.55;
+}

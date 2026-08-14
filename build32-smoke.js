@@ -105,6 +105,13 @@
       progressReady = await waitFor(() => document.querySelector('.b27-progress-page'));
       denominator = document.querySelector('.b27-level-head strong')?.textContent?.trim() || '';
       document.querySelector('[data-b27-open-journey]')?.click();
+      // Build32Shell normally patches a newly-created Journey through
+      // MutationObserver -> requestAnimationFrame. Chrome virtual-time may freeze
+      // that rAF even while timers continue, so the smoke uses the shell's public
+      // deterministic refresh hook after the Journey owner exists. Product runtime
+      // behavior is unchanged; this only stabilizes the historical browser harness.
+      await waitFor(() => document.querySelector('.b27-journey-page'),1000);
+      window.FrenchTranquilleBuild32Shell?.refresh?.();
       journeyReady = await waitFor(() => (
         document.querySelectorAll('.b27-journey-page .b27-stage-tab').length === 7 &&
         document.querySelector('[data-b32-stage="a1-autonomy"]') &&
