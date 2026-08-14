@@ -32,15 +32,23 @@ jobs:
           grep -q 'ft-v55-subview-back' premium-v5-fidelity-reset.js
           grep -q 'ft-v55-level-route' premium-v5-fidelity-reset.js
           grep -q 'data-v55-about-toggle' premium-v5-fidelity-reset.js
+          grep -q 'data-v55-recovery-toggle' premium-v5-fidelity-reset.js
           grep -q 'ft-v55-settings-gear' premium-v5-fidelity-refine.css
+          grep -q 'ft-v55-recovery-toggle' premium-v5-fidelity-settings-hotfix.css
           grep -q 'premium-v5-fidelity-reset.css?v=2.3.20-v5fidelity1' premium-theme-polish.css
           grep -q 'premium-v5-fidelity-refine.css?v=2.3.20-v5fidelity2' premium-theme-polish.css
+          grep -q 'premium-v5-fidelity-card-hotfix.css?v=2.3.20-v5fidelity2' premium-theme-polish.css
+          grep -q 'premium-v5-fidelity-settings-hotfix.css?v=2.3.20-v5fidelity2' premium-theme-polish.css
           grep -q 'premium-v5-fidelity-reset.js?v=2.3.20-v5fidelity1' theme-controller.js
           grep -q "const CACHE='tran-french-teacher-v2.3.20-b34.12-v5fidelity2'" sw.js
           grep -q "const V5F='2.3.20-v5fidelity1'" sw.js
           grep -q "const V5FR='2.3.20-v5fidelity2'" sw.js
           grep -q 'premium-v5-fidelity-reset.css?v=${V5F}' sw.js
           grep -q 'premium-v5-fidelity-refine.css?v=${V5FR}' sw.js
+          grep -q 'premium-v5-fidelity-card-hotfix.css?v=${V5FR}' sw.js
+          grep -q 'premium-v5-fidelity-settings-hotfix.css?v=${V5FR}' sw.js
+          grep -q 'premium-theme-polish.css?v=${V5F}' sw.js
+          grep -q 'theme-controller.js?v=${V5F}' sw.js
           grep -q 'premium-v5-fidelity-reset.js?v=${V5F}' sw.js
           grep -q './assets/theme-aurora-paris.svg' sw.js
           grep -q './assets/theme-sunset-paris.svg' sw.js
@@ -73,7 +81,7 @@ jobs:
           grep -q 'data-v55-controls="filled-circle"' /tmp/v55.html
           grep -q 'data-v55-progress="A0-line-A1"' /tmp/v55.html
           grep -q 'data-v55-settings="learner-first"' /tmp/v55.html
-          grep -q 'data-v55-recovery="accessible"' /tmp/v55.html
+          grep -q 'data-v55-recovery="collapsed-accessible"' /tmp/v55.html
           grep -q 'data-v55-about="credits-contained"' /tmp/v55.html
           grep -q 'data-v55-learner="unchanged"' /tmp/v55.html
           grep -q 'data-v55-overflow="0"' /tmp/v55.html
@@ -105,6 +113,7 @@ jobs:
             'http://127.0.0.1:4173/premium-v5-fidelity-reset-tribunal.html' > /tmp/v55-reduced.html
           grep -q 'data-premium-v55="ok"' /tmp/v55-reduced.html || { grep -o 'data-premium-v55-detail="[^"]*"' /tmp/v55-reduced.html || true; exit 1; }
           grep -q 'data-v55-learner="unchanged"' /tmp/v55-reduced.html
+          grep -q 'data-v55-recovery="collapsed-accessible"' /tmp/v55-reduced.html
 
       - name: Capture V5.5 primary iPhone review matrix
         run: |
