@@ -2,6 +2,16 @@
    Successor layer: one chrome anchor + learner-first Settings hierarchy. */
 html[data-theme]:not([data-theme="original"]){--pv55-refine-ready:1}
 
+/* Build 27 keeps transform:translateY(0) on settled route owners. Even though it
+   looks neutral, any non-none transform creates a containing block for fixed
+   descendants, so a "fixed" Settings/Back control gets anchored to the padded
+   page instead of the phone viewport. Premium V5.5 releases that containing
+   block only after the route has settled; entering/leaving transforms stay live. */
+html[data-theme]:not([data-theme="original"]) .b27-page:not(.b27-entering):not(.b27-leaving),
+html[data-theme]:not([data-theme="original"]) body>.b27-overlay:not(.b27-entering):not(.b27-leaving){
+  transform:none!important;
+}
+
 /* One physical chrome coordinate system everywhere. */
 html[data-theme]:not([data-theme="original"]) .ft-v55-settings-gear{
   position:fixed!important;
