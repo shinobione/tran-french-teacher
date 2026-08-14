@@ -1,0 +1,128 @@
+/* French Trân’quille — Premium Fidelity V5.2 / Utility control coherence
+   Build 34 maintenance only. Extends V5.1 without rewriting its certified layer. */
+
+html[data-theme]:not([data-theme="original"]){--pv5-utility-ready:1}
+
+html[data-theme]:not([data-theme="original"]) :is(
+  .ux-close,
+  .scenario-close,
+  .scenario-mic,
+  .progress-detail-panel-head button
+){
+  box-sizing:border-box;
+  width:46px;
+  height:46px;
+  min-width:46px;
+  min-height:46px;
+  padding:0;
+  border:1px solid color-mix(in srgb,var(--ft-border,rgba(180,199,224,.25)) 62%,var(--ft-accent,#45dfff) 38%);
+  border-radius:15px;
+  background-image:
+    radial-gradient(circle at 28% 18%,rgba(255,255,255,.18),transparent 31%),
+    linear-gradient(145deg,
+      color-mix(in srgb,var(--ft-surface,rgba(14,27,68,.93)) 78%,var(--ft-accent,#45dfff) 22%),
+      color-mix(in srgb,var(--ft-surface-2,rgba(8,16,48,.96)) 82%,var(--ft-accent2,#ff3faf) 18%))!important;
+  background-color:transparent!important;
+  color:var(--pv5-control-ink,var(--ft-accent,#f7f3eb));
+  box-shadow:0 11px 28px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.15),inset 0 -9px 18px rgba(0,0,0,.08);
+  backdrop-filter:blur(18px) saturate(1.14);
+  -webkit-backdrop-filter:blur(18px) saturate(1.14);
+  display:grid;
+  place-items:center;
+  line-height:1;
+  opacity:1;
+  cursor:pointer;
+  transition:transform .12s ease,box-shadow .12s ease,filter .12s ease,border-color .12s ease;
+}
+
+/* ux-shell historically controls .ux-close visibility in the real Practice overlay.
+   Once the overlay owns the viewport, V5.2 explicitly restores the close affordance. */
+html[data-theme]:not([data-theme="original"]) body > .ux-practice-overlay .ux-close{display:grid!important}
+
+html[data-theme]:not([data-theme="original"]) :is(.ux-close,.scenario-close){font-size:1.5rem;font-weight:750}
+html[data-theme]:not([data-theme="original"]) .scenario-mic{font-size:1.08rem}
+html[data-theme]:not([data-theme="original"]) .progress-detail-panel-head button{font-size:1.08rem}
+
+html[data-theme]:not([data-theme="original"]) :is(
+  .ux-close,
+  .scenario-close,
+  .scenario-mic,
+  .progress-detail-panel-head button
+):active{
+  transform:scale(.955);
+  filter:brightness(1.08);
+  box-shadow:0 6px 16px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.13),inset 0 4px 12px rgba(0,0,0,.10);
+}
+html[data-theme]:not([data-theme="original"]) :is(
+  .ux-close,
+  .scenario-close,
+  .scenario-mic,
+  .progress-detail-panel-head button
+):focus-visible{
+  outline:2px solid color-mix(in srgb,var(--ft-accent,#45dfff) 76%,#fff 24%);
+  outline-offset:3px;
+}
+
+html[data-theme]:not([data-theme="original"]) .scenario-listen{
+  min-height:44px;
+  padding:8px 12px;
+  border:1px solid color-mix(in srgb,var(--ft-border,rgba(180,199,224,.25)) 82%,transparent);
+  border-radius:13px;
+  background-image:linear-gradient(145deg,
+    color-mix(in srgb,var(--ft-surface,rgba(14,27,68,.93)) 78%,var(--ft-accent,#45dfff) 22%),
+    color-mix(in srgb,var(--ft-surface-2,rgba(8,16,48,.96)) 82%,var(--ft-accent2,#ff3faf) 18%))!important;
+  background-color:transparent!important;
+  color:var(--pv5-control-ink,var(--ft-accent,#f7f3eb));
+  box-shadow:0 8px 20px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.10);
+  font-weight:800;
+}
+
+@media (hover:hover){
+  html[data-theme]:not([data-theme="original"]) :is(
+    .ux-close,
+    .scenario-close,
+    .scenario-mic,
+    .progress-detail-panel-head button,
+    .scenario-listen
+  ):hover{
+    transform:translateY(-1px);
+    filter:brightness(1.09) saturate(1.08);
+    border-color:color-mix(in srgb,var(--ft-border,rgba(180,199,224,.25)) 46%,var(--ft-accent,#45dfff) 54%);
+    box-shadow:0 14px 34px rgba(0,0,0,.26),0 0 24px color-mix(in srgb,var(--ft-accent,#45dfff) 10%,transparent),inset 0 1px 0 rgba(255,255,255,.17);
+  }
+}
+
+/* Jerry-only DEBUG FR diagnostics get their own safe-area-aware rail instead of
+   consuming product layout space or colliding with overlay headers. */
+html.ux-debug-mode{--pv5-debug-rail-h:calc(24px + env(safe-area-inset-top,0px))}
+html.ux-debug-mode .debug-fr-banner{
+  position:fixed;
+  inset:0 0 auto;
+  z-index:12050;
+  box-sizing:border-box;
+  height:var(--pv5-debug-rail-h);
+  margin:0;
+  padding:calc(4px + env(safe-area-inset-top,0px)) 12px 4px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(90deg,rgba(73,45,8,.96),rgba(101,61,10,.96),rgba(73,45,8,.96));
+  border:0;
+  border-bottom:1px solid rgba(245,183,72,.44);
+  color:#ffe7b0;
+  box-shadow:0 5px 18px rgba(0,0,0,.24);
+  font:800 10px/1.1 system-ui;
+  letter-spacing:.045em;
+  pointer-events:none;
+}
+html.ux-debug-mode #app .app-shell{padding-top:var(--pv5-debug-rail-h)}
+html.ux-debug-mode :is(body > .listening-overlay,body > .b27-overlay,body > .ux-practice-overlay,body > .ft-foundation-overlay){top:var(--pv5-debug-rail-h)}
+
+@media(max-width:520px){
+  html.ux-debug-mode{--pv5-debug-rail-h:calc(22px + env(safe-area-inset-top,0px))}
+  html.ux-debug-mode .debug-fr-banner{font-size:9px;letter-spacing:.025em;padding-inline:7px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  html[data-theme]:not([data-theme="original"]) :is(.ux-close,.scenario-close,.scenario-mic,.progress-detail-panel-head button,.scenario-listen){transition:none!important;animation:none!important}
+}
