@@ -22,6 +22,7 @@ jobs:
           grep -q 'cases=' premium-v4-global-qa-tribunal.html
           grep -q 'text-contrast' premium-v4-global-qa-tribunal.html
           grep -q 'cta-contrast' premium-v4-global-qa-tribunal.html
+          grep -q 'color\\(srgb' premium-v4-global-qa-tribunal.html
           grep -q 'cta-gradient-contrast=pass' premium-v4-global-qa-tribunal.html
           grep -q 'horizontal-overflow' premium-v4-global-qa-tribunal.html
           grep -q 'logo-clipped' premium-v4-global-qa-tribunal.html
@@ -34,6 +35,7 @@ jobs:
           grep -q -- '--pv4-contrast-ready:1' premium-v4-contrast.css
           grep -q 'color:#071531' premium-v4-contrast.css
           grep -q 'color:#140b28' premium-v4-contrast.css
+          grep -q 'color:#041511' premium-v4-contrast.css
           grep -q 'premium-nav-geometry-hotfix.css?v=2.3.4-p0nav1' premium-theme-polish.css
           test "$(tail -n 1 premium-theme-polish.css)" = "@import url('./premium-nav-geometry-hotfix.css?v=2.3.4-p0nav1');"
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
