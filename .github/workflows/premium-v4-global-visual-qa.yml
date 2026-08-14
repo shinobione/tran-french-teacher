@@ -22,13 +22,18 @@ jobs:
           grep -q 'cases=' premium-v4-global-qa-tribunal.html
           grep -q 'text-contrast' premium-v4-global-qa-tribunal.html
           grep -q 'cta-contrast' premium-v4-global-qa-tribunal.html
+          grep -q 'cta-gradient-contrast=pass' premium-v4-global-qa-tribunal.html
           grep -q 'horizontal-overflow' premium-v4-global-qa-tribunal.html
           grep -q 'logo-clipped' premium-v4-global-qa-tribunal.html
           grep -q 'legacy-hub-slab' premium-v4-global-qa-tribunal.html
           grep -q 'route-motion' premium-v4-global-qa-tribunal.html
           grep -q 'captureReady' premium-v4-visual-capture.html
           grep -q 'premium-v4-motion.css?v=2.3.14-v4motion1' premium-theme-polish.css
+          grep -q 'premium-v4-contrast.css?v=2.3.15-v4contrast1' premium-theme-polish.css
           grep -q 'premium-v4-route-coherence.css?v=2.3.12-v4coherence1' premium-theme-polish.css
+          grep -q -- '--pv4-contrast-ready:1' premium-v4-contrast.css
+          grep -q 'color:#071531' premium-v4-contrast.css
+          grep -q 'color:#140b28' premium-v4-contrast.css
           grep -q 'premium-nav-geometry-hotfix.css?v=2.3.4-p0nav1' premium-theme-polish.css
           test "$(tail -n 1 premium-theme-polish.css)" = "@import url('./premium-nav-geometry-hotfix.css?v=2.3.4-p0nav1');"
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
@@ -55,6 +60,7 @@ jobs:
           grep -q 'cases=100' /tmp/v4-global.html
           grep -q 'overflow=0' /tmp/v4-global.html
           grep -q 'critical-clipping=0' /tmp/v4-global.html
+          grep -q 'cta-gradient-contrast=pass' /tmp/v4-global.html
           grep -q 'legacy-bridge=themed' /tmp/v4-global.html
           grep -q 'stores=unchanged' /tmp/v4-global.html
 
@@ -67,6 +73,7 @@ jobs:
           grep -q 'data-premium-v4-global-qa="ok"' /tmp/v4-global-reduced.html || { cat /tmp/v4-global-reduced.html; exit 1; }
           grep -q 'cases=100' /tmp/v4-global-reduced.html
           grep -q 'reduced=1' /tmp/v4-global-reduced.html
+          grep -q 'cta-gradient-contrast=pass' /tmp/v4-global-reduced.html
           grep -q 'route-ownership=atomic' /tmp/v4-global-reduced.html
 
       - name: Capture mobile + desktop visual review matrix
