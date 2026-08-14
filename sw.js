@@ -1,4 +1,4 @@
-const CACHE='tran-french-teacher-v1.22.0-b29-iphone-pwa-a11y';
+const CACHE='tran-french-teacher-v2.3.12-b34.5-v4coherence1';
 const V='1.17.0-b24';
 const UX='1.17.5-b24.5';
 const P25='1.18.0-b25';
@@ -23,18 +23,24 @@ const V2='2.0.0';
 const LEGAL='2.0.0-postv2-legal';
 const B31='2.1.0-b31';
 const B32='2.2.0-b32';
+const NAV='2.3.5-b34.5';
+const AUDIO='2.3.1-b34.1';
+const V4='2.3.12-v4coherence1';
 const CORE=[
   './','./index.html',
   `./styles.css?v=${V}`,`./brand.css?v=${V}`,`./learning-memory.css?v=${V}`,`./visual-pass.css?v=${V}`,`./lucie-avatar.css?v=${V}`,
   `./curriculum-stage2.css?v=${V}`,`./curriculum-stage3.css?v=${V}`,`./curriculum-stage4.css?v=${B32}`,`./daily-coach.css?v=${V}`,`./mastery-engine.css?v=${V}`,`./mastery-stage3.css?v=${V}`,
   `./scenario-engine.css?v=${V}`,`./real-life-ux.css?v=${V}`,`./error-intelligence.css?v=${V}`,`./listening-engine.css?v=${V}`,`./language-ratio.css?v=${V}`,`./ux-shell.css?v=${UX}`,`./interaction-ux.css?v=${UX}`,`./mobile-polish.css?v=${UX}`,`./progression-ux.css?v=${P25}`,`./session-ux.css?v=${P252}`,`./voice-replay.css?v=${B261}`,`./progress-details-dashboard.css?v=${B261}`,`./build26-3-ux.css?v=${B263}`,`./build26-4-ux.css?v=${B264}`,`./build26-5-ux.css?v=${B265}`,`./build26-6-ux.css?v=${B266}`,`./build26-7-ux.css?v=${B267}`,`./build26-8-ux.css?v=${B268}`,`./build26-9-ux.css?v=${B269}`,`./build27-app-shell.css?v=${B27}`,`./build29-iphone-a11y.css?v=${B29}`,`./speaking-loop-content.css?v=${B292}`,`./learner-intelligence.css?v=${B31}`,
+  './appearance-themes.css?v=1.0.0-theme1',
+  './premium-theme-polish-v2-base.css?v=2.3.2-theme2','./premium-depth-pass.css?v=2.3.2-depth1','./premium-depth-mobile-geometry.css?v=2.3.2-depth1','./premium-mockup-polish-v3.css?v=2.3.3-mockup3',
+  './premium-v4-home.css?v=2.3.6-v4home2','./premium-v4-progress.css?v=2.3.7-v4progress1','./premium-v4-practice.css?v=2.3.8-v4practice1','./premium-v4-listening.css?v=2.3.9-v4listening1','./premium-v4-settings.css?v=2.3.10-v4settings1','./premium-v4-ownership-hotfix.css?v=2.3.11-v4ownership1',`./premium-v4-route-coherence.css?v=${V4}`,'./premium-nav-geometry-hotfix.css?v=2.3.4-p0nav1',`./premium-theme-polish.css?v=${V4}`,
   `./data-recovery-core.js?v=${B28}`,`./data-recovery.js?v=${B28}`,
-  `./progress-safety.js?v=${V}`,`./app.js?v=${V}`,`./curriculum-stage2.js?v=${V}`,`./curriculum-stage3.js?v=${V}`,`./stage2-boot.js?v=${V}`,
+  `./progress-safety.js?v=${V}`,`./app.js?v=${V}`,`./curriculum-stage2.js?v=${V}`,`./curriculum-stage3.js?v=${V}`,`./stage2-boot.js?v=${NAV}`,`./field-navigation-runtime.js?v=${NAV}`,`./field-audio-session.js?v=${AUDIO}`,`./theme-controller.js?v=${V4}`,
   `./debug-fr.js?v=${V}`,`./voice-ios.js?v=${V}`,`./free-voice.js?v=${V}`,`./learning-memory.js?v=${V}`,`./error-intelligence.js?v=${V}`,
   `./language-ratio-core.js?v=${V}`,`./language-ratio.js?v=${V}`,`./daily-coach.js?v=${V}`,`./mastery-engine.js?v=${V}`,`./mastery-stage3.js?v=${V}`,
   `./scenario-data.js?v=${V}`,`./real-life-data.js?v=${V}`,`./real-life-data-2.js?v=${V}`,`./real-life-data-3.js?v=${B26}`,`./scenario-host.js?v=${V}`,`./scenario-engine.js?v=${V}`,`./real-life-ux.js?v=${V}`,`./real-life-coach.js?v=${B26}`,
   `./listening-data.js?v=${V}`,`./listening-engine.js?v=${V}`,`./ux-shell.js?v=${UX}`,`./interaction-ux.js?v=${UX}`,`./progression-ux.js?v=${B266}`,`./session-ux.js?v=${B265}`,`./session-ux-adapter.js?v=${P252}`,`./voice-replay.js?v=${B261}`,`./progress-details-dashboard.js?v=${B266}`,`./build26-3-ux.js?v=${B263}`,`./build26-4-ux.js?v=${B264}`,`./build26-5-ux.js?v=${B265}`,`./build26-6-ux.js?v=${B266}`,`./build26-7-ux.js?v=${B267}`,`./build26-8-ux.js?v=${B268}`,`./build26-9-ux.js?v=${B269}`,`./build27-app-shell.js?v=${B27}`,`./build27-smoke.js?v=${B27}`,`./data-recovery-smoke.js?v=${B28}`,`./build29-iphone-a11y.js?v=${B29}`,`./build29-smoke.js?v=${B29}`,`./speaking-loop-content.js?v=${B292}`,`./speaking-loop-smoke.js?v=${B292}`,`./speaking-loop-variety-smoke.js?v=${B292}`,`./runtime-contracts.js?v=${B30}`,`./runtime-bridge.js?v=${B30}`,`./build30-architecture-smoke.js?v=${B30}`,`./v2-release-smoke.js?v=${V2}`,'./release-v2.json',`./build-meta.js?v=${B29}`,`./settings-legal.js?v=${LEGAL}`,`./build31-loader.js?v=${B31}`,`./learner-intelligence.js?v=${B31}`,`./learner-intelligence-smoke.js?v=${B31}`,`./build32-loader.js?v=${B32}`,`./curriculum-stage4.js?v=${B32}`,`./build32-shell-extension.js?v=${B32}`,`./real-life-data-4.js?v=${B32}`,`./listening-data-2.js?v=${B32}`,`./learner-intelligence-v2.js?v=${B32}`,`./build32-smoke.js?v=${B32}`,`./manifest.webmanifest?v=${B29}`,
-  `./assets/LOGO.png?v=${V}`,`./assets/Favicon.png?v=${V}`,'./assets/icon-192.webp','./assets/apple-touch-icon.png'
+  `./assets/LOGO.png?v=${V}`,`./assets/Favicon.png?v=${V}`,'./assets/icon-192.webp','./assets/apple-touch-icon.png','./assets/HomeLogo.png?v=2.3.2-theme2'
 ];
 
 self.addEventListener('install',event=>{
