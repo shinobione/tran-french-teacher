@@ -1,0 +1,107 @@
+name: Premium V4 Global Visual QA
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  global-visual-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Static visual contracts and sanctuaries
+        run: |
+          grep -q "sizes=\[\[390,844\],\[430,932\],\[768,1024\],\[1280,800\],\[1440,900\]\]" premium-v4-global-qa-tribunal.html
+          grep -q "themes=\['original','aurora','sunset','jade'\]" premium-v4-global-qa-tribunal.html
+          grep -q "screens=\['home','progress','practice','listening','settings'\]" premium-v4-global-qa-tribunal.html
+          grep -q 'cases=' premium-v4-global-qa-tribunal.html
+          grep -q 'text-contrast' premium-v4-global-qa-tribunal.html
+          grep -q 'cta-contrast' premium-v4-global-qa-tribunal.html
+          grep -q 'horizontal-overflow' premium-v4-global-qa-tribunal.html
+          grep -q 'logo-clipped' premium-v4-global-qa-tribunal.html
+          grep -q 'legacy-hub-slab' premium-v4-global-qa-tribunal.html
+          grep -q 'route-motion' premium-v4-global-qa-tribunal.html
+          grep -q 'captureReady' premium-v4-visual-capture.html
+          grep -q 'premium-v4-motion.css?v=2.3.14-v4motion1' premium-theme-polish.css
+          grep -q 'premium-v4-route-coherence.css?v=2.3.12-v4coherence1' premium-theme-polish.css
+          grep -q 'premium-nav-geometry-hotfix.css?v=2.3.4-p0nav1' premium-theme-polish.css
+          test "$(tail -n 1 premium-theme-polish.css)" = "@import url('./premium-nav-geometry-hotfix.css?v=2.3.4-p0nav1');"
+          test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+          test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
+          test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
+          test "$(git hash-object field-audio-session.js)" = "06ca40074b345d77b8fc0c46fdb73ab35ffa2cd3"
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-v4-global-http.log 2>&1 &
+          echo $! >/tmp/ft-v4-global-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — 100-case global visual tribunal
+        run: |
+          timeout --signal=TERM --kill-after=5s 120s \
+            google-chrome --headless=new --no-sandbox --disable-gpu \
+            --virtual-time-budget=90000 --dump-dom \
+            'http://127.0.0.1:4173/premium-v4-global-qa-tribunal.html' > /tmp/v4-global.html
+          grep -q 'data-premium-v4-global-qa="ok"' /tmp/v4-global.html || { cat /tmp/v4-global.html; exit 1; }
+          grep -q 'cases=100' /tmp/v4-global.html
+          grep -q 'overflow=0' /tmp/v4-global.html
+          grep -q 'critical-clipping=0' /tmp/v4-global.html
+          grep -q 'legacy-bridge=themed' /tmp/v4-global.html
+          grep -q 'stores=unchanged' /tmp/v4-global.html
+
+      - name: Chrome — 100-case reduced-motion visual tribunal
+        run: |
+          timeout --signal=TERM --kill-after=5s 120s \
+            google-chrome --headless=new --no-sandbox --disable-gpu --force-prefers-reduced-motion \
+            --virtual-time-budget=90000 --dump-dom \
+            'http://127.0.0.1:4173/premium-v4-global-qa-tribunal.html' > /tmp/v4-global-reduced.html
+          grep -q 'data-premium-v4-global-qa="ok"' /tmp/v4-global-reduced.html || { cat /tmp/v4-global-reduced.html; exit 1; }
+          grep -q 'cases=100' /tmp/v4-global-reduced.html
+          grep -q 'reduced=1' /tmp/v4-global-reduced.html
+          grep -q 'route-ownership=atomic' /tmp/v4-global-reduced.html
+
+      - name: Capture mobile + desktop visual review matrix
+        run: |
+          mkdir -p artifacts/premium-v4-global
+          capture() {
+            label="$1"; dims="$2"; theme="$3"; screen="$4"
+            profile="/tmp/ft-v4-cap-${label}-${theme}-${screen}"
+            file="artifacts/premium-v4-global/${label}-${theme}-${screen}.png"
+            rm -rf "$profile"
+            timeout --signal=TERM --kill-after=5s 35s \
+              google-chrome --headless=new --no-sandbox --disable-gpu --hide-scrollbars \
+              --user-data-dir="$profile" --window-size="$dims" --virtual-time-budget=11000 \
+              --screenshot="$file" \
+              "http://127.0.0.1:4173/premium-v4-visual-capture.html?theme=${theme}&screen=${screen}"
+            test -s "$file"
+          }
+          for spec in 'mobile 390,844' 'desktop 1440,900'; do
+            set -- $spec; label="$1"; dims="$2"
+            for theme in original aurora sunset jade; do
+              for screen in home progress practice listening settings; do
+                capture "$label" "$dims" "$theme" "$screen"
+              done
+            done
+          done
+          test "$(find artifacts/premium-v4-global -name '*.png' | wc -l)" -eq 40
+
+      - name: Upload Premium V4 visual review artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: premium-v4-global-visual-review
+          path: artifacts/premium-v4-global/*.png
+          retention-days: 7
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-v4-global-server.pid ]; then kill "$(cat /tmp/ft-v4-global-server.pid)" || true; fi
