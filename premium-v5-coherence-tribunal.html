@@ -8,27 +8,41 @@ const finish=(ok,msg)=>{R.dataset.premiumV5Coherence=ok?'ok':'fail';R.dataset.pr
 const visible=(w,n)=>{if(!n)return false;const s=w.getComputedStyle(n),r=n.getBoundingClientRect();return s.display!=='none'&&s.visibility!=='hidden'&&s.opacity!=='0'&&r.width>1&&r.height>1};
 const px=v=>Number.parseFloat(v)||0;
 const screen=d=>[...(d.querySelector('#app .app-shell')?.classList||[])].find(x=>x.startsWith('screen-'))?.slice(7)||'none';
+const activeNav=d=>d.querySelector('.ux-bottom-nav [data-ux-nav].active')?.dataset.uxNav||'home';
 const assertControl=(w,n,label)=>{if(!visible(w,n))throw Error(`${label}:missing`);const s=w.getComputedStyle(n),r=n.getBoundingClientRect();if(r.width<43||r.height<43)throw Error(`${label}:touch-target`);const radius=px(s.borderTopLeftRadius);if(radius<11||radius>20)throw Error(`${label}:radius-${radius}`);if(!s.backgroundImage||s.backgroundImage==='none')throw Error(`${label}:hollow`);if(!s.boxShadow||s.boxShadow==='none')throw Error(`${label}:flat`)};
-const listeningRoundtrip=async(w,d,label)=>{
+const listeningRoundtrip=async(w,d,label,{escape=false,testAudioGuard=true}={})=>{
+  const expectedUnderlay=d.querySelector('body > .b27-practice-page:not(.b27-leaving)')?'practice':(['home','progress'].includes(screen(d))?screen(d):activeNav(d));
   w.FrenchTranquilleListening.open();await wait(120);w.FrenchTranquilleFieldNavigation.ensureListeningSettings();await wait(40);
   const gear=d.querySelector('body > .listening-overlay .listening-settings');if(!gear)throw Error(`${label}:listening-settings-missing`);
   const before=d.querySelector('.listening-question')?.textContent?.trim()||'';if(!before)throw Error(`${label}:question-before`);
+  if(testAudioGuard){
+    const play=d.querySelector('body > .listening-overlay [data-listening-play]');if(!play)throw Error(`${label}:play-control-missing`);
+    play.disabled=true;w.FrenchTranquilleFieldNavigation.ensureListeningSettings();if(!gear.disabled)throw Error(`${label}:busy-gear-enabled`);
+    play.disabled=false;w.FrenchTranquilleFieldNavigation.ensureListeningSettings();if(gear.disabled)throw Error(`${label}:gear-stuck-disabled`);
+  }
   gear.click();await wait(180);
   if(screen(d)!=='settings'||d.querySelector('body > .listening-overlay'))throw Error(`${label}:settings-ownership`);
   if(d.documentElement.dataset.fieldSettingsReturn!=='listening')throw Error(`${label}:return-source`);
-  const back=d.querySelector('.screen-settings [data-back]');if(!back)throw Error(`${label}:settings-back`);back.click();await wait(220);
+  if(escape){
+    w.dispatchEvent(new w.KeyboardEvent('keydown',{key:'Escape',bubbles:true,cancelable:true}));await wait(260);
+  }else{
+    const back=d.querySelector('.screen-settings [data-back]');if(!back)throw Error(`${label}:settings-back`);back.click();await wait(220);
+  }
   const restored=d.querySelector('body > .listening-overlay');if(!visible(w,restored))throw Error(`${label}:listening-not-restored`);
   const after=d.querySelector('.listening-question')?.textContent?.trim()||'';if(after!==before)throw Error(`${label}:question-changed`);
   if(d.documentElement.dataset.fieldRouteReady!=='1')throw Error(`${label}:route-not-ready`);
-  d.querySelector('[data-listening-close]')?.click();await wait(80);
+  if(activeNav(d)!==expectedUnderlay)throw Error(`${label}:underlay-nav-${activeNav(d)}-expected-${expectedUnderlay}`);
+  d.querySelector('[data-listening-close]')?.click();await wait(100);
+  if(d.querySelector('body > .listening-overlay'))throw Error(`${label}:controller-desynced-close`);
+  if(expectedUnderlay==='practice'){
+    if(!visible(w,d.querySelector('body > .b27-practice-page:not(.b27-leaving)')))throw Error(`${label}:practice-underlay-not-restored`);
+  }else if(screen(d)!==expectedUnderlay)throw Error(`${label}:underlay-screen-${screen(d)}-expected-${expectedUnderlay}`);
 };
 F.onload=()=>setTimeout(async()=>{try{
   const w=F.contentWindow,d=F.contentDocument;
   const ready=await waitFor(()=>w.FrenchTranquilleThemes&&w.FrenchTranquilleFieldNavigation&&w.FrenchTranquilleListening&&w.FrenchTranquilleFoundationsPilot&&w.FrenchTranquilleCurriculum);
   if(!ready)throw Error(`api-missing:themes=${!!w.FrenchTranquilleThemes};nav=${!!w.FrenchTranquilleFieldNavigation};listening=${!!w.FrenchTranquilleListening};foundations=${!!w.FrenchTranquilleFoundationsPilot};curriculum=${!!w.FrenchTranquilleCurriculum}`);
 
-  /* Deterministic fixture, independent from historical ?uxSmoke modes. Seed before
-     the immutability snapshot so the tribunal proves V5 interactions do not mutate it. */
   const learnerKey=w.FrenchTranquilleCurriculum.key||'francais-avec-luc:learner:v1';
   let learner={};try{learner=JSON.parse(w.localStorage.getItem(learnerKey)||'{}')||{}}catch{}
   learner={...learner,schemaVersion:learner.schemaVersion||2,learnerName:learner.learnerName||'Trân',level:learner.level||'A0',lessonProgress:learner.lessonProgress||{},completedLessons:Array.isArray(learner.completedLessons)?learner.completedLessons:[],knownItems:[...new Set([...(Array.isArray(learner.knownItems)?learner.knownItems:[]),'bonjour','merci','au-revoir'])]};
@@ -38,10 +52,13 @@ F.onload=()=>setTimeout(async()=>{try{
   const motion=d.createElement('style');motion.textContent='*,*::before,*::after{transition-duration:0s!important;animation-duration:0s!important}';d.head.appendChild(motion);
   const before=Object.fromEntries(keys.map(k=>[k,w.localStorage.getItem(k)]));
 
-  /* Original remains visually untouched, but receives the real Listening Settings transaction. */
   w.FrenchTranquilleThemes.apply('original');await wait(80);
   if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv5-coherence-ready').trim())throw Error('original-v5-visual-leak');
-  await listeningRoundtrip(w,d,'original');
+  await w.FrenchTranquilleFieldNavigation.go('home');await wait(120);
+  await listeningRoundtrip(w,d,'original-home-escape',{escape:true});
+  await w.FrenchTranquilleFieldNavigation.go('practice');await wait(160);w.FrenchTranquilleFieldNavigation.settle();
+  await listeningRoundtrip(w,d,'original-practice');
+  await w.FrenchTranquilleFieldNavigation.go('home');await wait(100);
 
   for(const[width,height]of sizes){
     F.style.width=`${width}px`;F.style.height=`${height}px`;await wait(100);
@@ -58,7 +75,7 @@ F.onload=()=>setTimeout(async()=>{try{
       assertControl(w,gear,`${width}-${theme}:progress-gear`);
       if(d.documentElement.scrollWidth>d.documentElement.clientWidth+1)throw Error(`${width}-${theme}:progress-overflow`);
 
-      await listeningRoundtrip(w,d,`${width}-${theme}`);
+      await listeningRoundtrip(w,d,`${width}-${theme}-progress`,{testAudioGuard:true});
       w.FrenchTranquilleListening.open();await wait(100);w.FrenchTranquilleFieldNavigation.ensureListeningSettings();await wait(30);
       assertControl(w,d.querySelector('.listening-close'),`${width}-${theme}:listening-back`);
       assertControl(w,d.querySelector('.listening-settings'),`${width}-${theme}:listening-gear`);
@@ -80,8 +97,8 @@ F.onload=()=>setTimeout(async()=>{try{
   for(const k of keys)if(before[k]!==w.localStorage.getItem(k))throw Error(`store-mutated:${k}`);
   w.FrenchTranquilleThemes.apply('original');await wait(60);
   if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv5-coherence-ready').trim())throw Error('original-v5-visual-leak-after');
-  finish(true,'viewports=2;themes=3;A0=no-overlap;utility=filled;listening-settings=exact-roundtrip;foundations=themed;stores=unchanged;original=witness');
+  finish(true,'viewports=2;themes=3;A0=no-overlap;utility=filled;listening-settings=exact-roundtrip;underlay=restored;escape=safe;audio-guard=disabled;foundations=themed;stores=unchanged;original=witness');
 }catch(e){finish(false,e.message)}},120);
-setTimeout(()=>{if(!R.dataset.premiumV5Coherence)finish(false,'timeout')},52000);
+setTimeout(()=>{if(!R.dataset.premiumV5Coherence)finish(false,'timeout')},60000);
 })();
 </script></body></html>
