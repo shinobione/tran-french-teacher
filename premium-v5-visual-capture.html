@@ -1,0 +1,32 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Premium V5 targeted visual capture</title><style>html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050914}iframe{display:block;width:100%;height:100%;border:0}</style></head>
+<body><iframe id="f" src="./index.html?uxSmoke=lesson8&fieldNavV3=1&debug=fr"></iframe><script>
+(()=>{'use strict';
+const R=document.documentElement,F=document.getElementById('f'),q=new URLSearchParams(location.search),theme=q.get('theme')||'aurora',surface=q.get('surface')||'progress',wait=ms=>new Promise(r=>setTimeout(r,ms));
+const waitFor=async(fn,limit=12000)=>{for(let t=0;t<limit;t+=50){try{const v=fn();if(v)return v}catch{}await wait(50)}try{return fn()}catch{return null}};
+F.onload=()=>setTimeout(async()=>{try{
+  const w=F.contentWindow,d=F.contentDocument;
+  const ready=await waitFor(()=>w.FrenchTranquilleThemes&&w.FrenchTranquilleFieldNavigation&&w.FrenchTranquilleFoundationsPilot&&w.FrenchTranquilleListening);
+  if(!ready)throw Error('api-not-ready');
+  const stable=d.createElement('style');stable.dataset.v5CaptureSettle='1';stable.textContent='*,*::before,*::after{transition-duration:0s!important;animation-duration:0s!important;animation-delay:0s!important}';d.head.appendChild(stable);
+  w.FrenchTranquilleThemes.apply(theme);w.FrenchTranquilleBuild27Shell?.refresh?.();w.FrenchTranquilleBuild32Shell?.refresh?.();await wait(150);
+  const nav=w.FrenchTranquilleFieldNavigation;
+  const settle=async(ms=70)=>{nav.settle?.();await wait(ms)};
+  await nav.go('home');await settle();
+  if(surface==='progress'){
+    await nav.go('progress');await settle(140);
+    if(!d.querySelector('.b27-level-card'))throw Error('progress-not-ready');
+  }else if(surface==='listening'){
+    await nav.go('practice');await settle(140);
+    const a=d.querySelector('body > .b27-practice-page [data-b27-practice-action="listening"]');if(!a||a.disabled)throw Error('listening-unavailable');a.click();await wait(320);nav.ensureListeningSettings?.();await settle(100);
+    if(!d.querySelector('body > .listening-overlay .listening-settings'))throw Error('listening-settings-missing');
+  }else if(surface==='foundations'){
+    w.FrenchTranquilleFoundationsPilot.open();await wait(180);
+    const next=d.querySelector('.ft-foundation-next');if(!next)throw Error('foundations-intro-missing');next.click();await wait(120);
+    if(!d.querySelector('.ft-foundation-options button'))throw Error('foundations-question-missing');
+  }else throw Error(`unknown-surface:${surface}`);
+  d.scrollingElement.scrollTop=0;
+  R.dataset.captureReady='1';R.dataset.captureTheme=theme;R.dataset.captureSurface=surface;
+}catch(e){R.dataset.captureReady='0';R.dataset.captureError=e.message}},150)})();
+setTimeout(()=>{if(!R.dataset.captureReady){R.dataset.captureReady='0';R.dataset.captureError='timeout'}},30000);
+</script></body></html>
