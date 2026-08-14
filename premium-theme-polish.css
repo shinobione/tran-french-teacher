@@ -1,5 +1,5 @@
 /* Premium visual composition. Keep the validated V2 palette/depth layers first,
-   then apply approved mockup alignment, Premium V4 refinements and P0 navigation hardening. */
+   then approved mockup alignment, certified V4 layers, V5 coherence and P0 nav last. */
 @import url('./premium-theme-polish-v2-base.css?v=2.3.2-theme2');
 @import url('./premium-depth-pass.css?v=2.3.2-depth1');
 @import url('./premium-depth-mobile-geometry.css?v=2.3.2-depth1');
@@ -13,4 +13,6 @@
 @import url('./premium-v4-route-coherence.css?v=2.3.12-v4coherence1');
 @import url('./premium-v4-motion.css?v=2.3.14-v4motion1');
 @import url('./premium-v4-contrast.css?v=2.3.15-v4contrast1');
+@import url('./premium-v5-coherence.css?v=2.3.16-v5coherence1');
+@import url('./premium-v5-listening-settings.css?v=2.3.16-v5coherence1');
 @import url('./premium-nav-geometry-hotfix.css?v=2.3.4-p0nav1');
