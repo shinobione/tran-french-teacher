@@ -59,7 +59,7 @@ jobs:
             --disable-background-timer-throttling --disable-renderer-backgrounding \
             --virtual-time-budget=42000 --dump-dom \
             'http://127.0.0.1:4173/premium-v5-utility-tribunal.html' > /tmp/v52-utility.html
-          grep -q 'data-premium-v5-utility="ok"' /tmp/v52-utility.html || { cat /tmp/v52-utility.html; exit 1; }
+          grep -q 'data-premium-v5-utility="ok"' /tmp/v52-utility.html || { grep -o 'data-premium-v5-utility-detail="[^"]*"' /tmp/v52-utility.html || true; exit 1; }
           grep -q 'legacy-utility=filled' /tmp/v52-utility.html
           grep -q 'touch=44plus' /tmp/v52-utility.html
           grep -q 'debug-rail=reserved' /tmp/v52-utility.html
@@ -73,7 +73,7 @@ jobs:
             --disable-background-timer-throttling --disable-renderer-backgrounding \
             --virtual-time-budget=42000 --dump-dom \
             'http://127.0.0.1:4173/premium-v5-utility-tribunal.html' > /tmp/v52-utility-reduced.html
-          grep -q 'data-premium-v5-utility="ok"' /tmp/v52-utility-reduced.html || { cat /tmp/v52-utility-reduced.html; exit 1; }
+          grep -q 'data-premium-v5-utility="ok"' /tmp/v52-utility-reduced.html || { grep -o 'data-premium-v5-utility-detail="[^"]*"' /tmp/v52-utility-reduced.html || true; exit 1; }
           grep -q 'debug-rail=reserved' /tmp/v52-utility-reduced.html
 
       - name: Capture Listening DEBUG FR visual review
