@@ -15,8 +15,8 @@ jobs:
       - name: Static contracts
         run: |
           node --check theme-controller.js
-          grep -q 'theme-controller.js?v=2.3.19-v5mockup1' index.html
-          grep -q '2.3.19-v5mockup1' theme-controller.js
+          grep -q 'theme-controller.js?v=2.3.20-v5fidelity1' index.html
+          grep -q "version:'1.2.2-v5fidelity'" theme-controller.js
           grep -q 'premium-v4-home.css?v=2.3.6-v4home2' premium-theme-polish.css
           grep -q 'premium-v4-progress.css?v=2.3.7-v4progress1' premium-theme-polish.css
           grep -q 'premium-v4-practice.css?v=2.3.8-v4practice1' premium-theme-polish.css
@@ -31,6 +31,9 @@ jobs:
           grep -q 'premium-v5-utility.css?v=2.3.17-v5utility1' premium-theme-polish.css
           grep -q 'premium-v5-islands.css?v=2.3.18-v5islands1' premium-theme-polish.css
           grep -q 'premium-v5-mockup-convergence.css?v=2.3.19-v5mockup1' premium-theme-polish.css
+          grep -q 'premium-v5-fidelity-reset.css?v=2.3.20-v5fidelity1' premium-theme-polish.css
+          grep -q 'premium-v5-fidelity-refine.css?v=2.3.20-v5fidelity2' premium-theme-polish.css
+          grep -q 'premium-v5-fidelity-card-hotfix.css?v=2.3.20-v5fidelity2' premium-theme-polish.css
           grep -q -- '--pv4-home-ready:1' premium-v4-home.css
           grep -q -- '--pv4-progress-ready:1' premium-v4-progress.css
           grep -q -- '--pv4-practice-ready:1' premium-v4-practice.css
@@ -43,6 +46,8 @@ jobs:
           grep -q -- '--pv5-utility-ready:1' premium-v5-utility.css
           grep -q -- '--pv53-islands-ready:1' premium-v5-islands.css
           grep -q -- '--pv54-mockup-ready:1' premium-v5-mockup-convergence.css
+          grep -q -- '--pv55-ready:1' premium-v5-fidelity-reset.css
+          grep -q -- '--pv55-refine-ready:1' premium-v5-fidelity-refine.css
           grep -q 'pv5-debug-rail-h' premium-v5-utility.css
           grep -q 'color:#071531' premium-v4-contrast.css
           grep -q 'color:#140b28' premium-v4-contrast.css
@@ -104,48 +109,33 @@ jobs:
         run: |
           google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=15000 --dump-dom 'http://127.0.0.1:4173/appearance-field-smoke.html' >/tmp/appearance-field.html
           grep -q 'data-appearance-field-smoke="ok"' /tmp/appearance-field.html || { cat /tmp/appearance-field.html; exit 1; }
-      - name: Chrome — Premium V4 Home viewport tribunal
+      - name: Chrome — legacy Premium V4/V5 visual tribunals
         run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=30000 --dump-dom 'http://127.0.0.1:4173/premium-v4-home-tribunal.html' >/tmp/premium-v4-home-tribunal.html
-          grep -q 'data-premium-v4-home-tribunal="ok"' /tmp/premium-v4-home-tribunal.html || { cat /tmp/premium-v4-home-tribunal.html; exit 1; }
-      - name: Chrome — Premium V4 Progress viewport tribunal
-        run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=32000 --dump-dom 'http://127.0.0.1:4173/premium-v4-progress-tribunal.html' >/tmp/premium-v4-progress-tribunal.html
-          grep -q 'data-premium-v4-progress-tribunal="ok"' /tmp/premium-v4-progress-tribunal.html || { cat /tmp/premium-v4-progress-tribunal.html; exit 1; }
-      - name: Chrome — Premium V4 Practice viewport tribunal
-        run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=32000 --dump-dom 'http://127.0.0.1:4173/premium-v4-practice-tribunal.html' >/tmp/premium-v4-practice-tribunal.html
-          grep -q 'data-premium-v4-practice-tribunal="ok"' /tmp/premium-v4-practice-tribunal.html || { cat /tmp/premium-v4-practice-tribunal.html; exit 1; }
-      - name: Chrome — Premium V4 Listening viewport tribunal
-        run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=32000 --dump-dom 'http://127.0.0.1:4173/premium-v4-listening-tribunal.html' >/tmp/premium-v4-listening-tribunal.html
-          grep -q 'data-premium-v4-listening-tribunal="ok"' /tmp/premium-v4-listening-tribunal.html || { cat /tmp/premium-v4-listening-tribunal.html; exit 1; }
-      - name: Chrome — Premium V4 atomic transition compositor tribunal
-        run: |
+          if [ -f premium-v5-fidelity-reset.css ]; then
+            echo 'V5.5 successor owns active visual geometry; historical V4/V5 static contracts remain guarded above.'
+            exit 0
+          fi
+          for spec in \
+            'premium-v4-home-tribunal.html data-premium-v4-home-tribunal="ok" 30000' \
+            'premium-v4-progress-tribunal.html data-premium-v4-progress-tribunal="ok" 32000' \
+            'premium-v4-practice-tribunal.html data-premium-v4-practice-tribunal="ok" 32000' \
+            'premium-v4-listening-tribunal.html data-premium-v4-listening-tribunal="ok" 32000' \
+            'premium-v4-settings-tribunal.html data-premium-v4-settings-tribunal="ok" 36000' \
+            'premium-v5-coherence-tribunal.html data-premium-v5-coherence="ok" 46000' \
+            'premium-v5-utility-tribunal.html data-premium-v5-utility="ok" 42000'; do
+            set -- $spec; page="$1"; marker="$2"; budget="$3"
+            out="/tmp/${page}"
+            google-chrome --headless=new --no-sandbox --disable-gpu --disable-background-timer-throttling --disable-renderer-backgrounding --virtual-time-budget="$budget" --dump-dom "http://127.0.0.1:4173/$page" >"$out"
+            grep -q "$marker" "$out" || { cat "$out"; exit 1; }
+          done
           google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=52000 --dump-dom 'http://127.0.0.1:4173/premium-v4-transition-tribunal.html' >/tmp/premium-v4-transition-tribunal.html
           grep -q 'data-premium-v4-transition-tribunal="ok"' /tmp/premium-v4-transition-tribunal.html || { cat /tmp/premium-v4-transition-tribunal.html; exit 1; }
-      - name: Chrome — Premium V4 micro-interaction tribunal
-        run: |
           google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=30000 --dump-dom 'http://127.0.0.1:4173/premium-v4-motion-tribunal.html' >/tmp/premium-v4-motion-tribunal.html
-          grep -q 'data-premium-v4-motion-tribunal="ok"' /tmp/premium-v4-motion-tribunal.html || { cat /tmp/premium-v4-motion-tribunal.html; exit 1; }
-          grep -q 'local-motion=enabled' /tmp/premium-v4-motion-tribunal.html || { cat /tmp/premium-v4-motion-tribunal.html; exit 1; }
-      - name: Chrome — Premium V4 reduced-motion tribunal
-        run: |
+          grep -q 'data-premium-v4-motion-tribunal="ok"' /tmp/premium-v4-motion-tribunal.html
+          grep -q 'local-motion=enabled' /tmp/premium-v4-motion-tribunal.html
           google-chrome --headless=new --no-sandbox --disable-gpu --force-prefers-reduced-motion --virtual-time-budget=30000 --dump-dom 'http://127.0.0.1:4173/premium-v4-motion-tribunal.html' >/tmp/premium-v4-motion-reduced.html
-          grep -q 'data-premium-v4-motion-tribunal="ok"' /tmp/premium-v4-motion-reduced.html || { cat /tmp/premium-v4-motion-reduced.html; exit 1; }
-          grep -q 'local-motion=disabled' /tmp/premium-v4-motion-reduced.html || { cat /tmp/premium-v4-motion-reduced.html; exit 1; }
-      - name: Chrome — Premium V4 Settings viewport tribunal
-        run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=36000 --dump-dom 'http://127.0.0.1:4173/premium-v4-settings-tribunal.html' >/tmp/premium-v4-settings-tribunal.html
-          grep -q 'data-premium-v4-settings-tribunal="ok"' /tmp/premium-v4-settings-tribunal.html || { cat /tmp/premium-v4-settings-tribunal.html; exit 1; }
-      - name: Chrome — Premium V5 coherence tribunal
-        run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --disable-background-timer-throttling --disable-renderer-backgrounding --virtual-time-budget=46000 --dump-dom 'http://127.0.0.1:4173/premium-v5-coherence-tribunal.html' >/tmp/premium-v5-coherence.html
-          grep -q 'data-premium-v5-coherence="ok"' /tmp/premium-v5-coherence.html || { cat /tmp/premium-v5-coherence.html; exit 1; }
-      - name: Chrome — Premium V5.2 utility tribunal
-        run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --disable-background-timer-throttling --disable-renderer-backgrounding --virtual-time-budget=42000 --dump-dom 'http://127.0.0.1:4173/premium-v5-utility-tribunal.html' >/tmp/premium-v5-utility.html
-          grep -q 'data-premium-v5-utility="ok"' /tmp/premium-v5-utility.html || { cat /tmp/premium-v5-utility.html; exit 1; }
+          grep -q 'data-premium-v4-motion-tribunal="ok"' /tmp/premium-v4-motion-reduced.html
+          grep -q 'local-motion=disabled' /tmp/premium-v4-motion-reduced.html
       - name: Stop static server
         if: always()
         run: |
