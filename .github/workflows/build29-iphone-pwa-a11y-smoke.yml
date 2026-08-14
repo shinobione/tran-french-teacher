@@ -36,21 +36,23 @@ jobs:
           const match=text.match(/const META = \{ version: '[^']+', build: '([^']+)'/);
           if(!match || Number(match[1]) < 29) throw new Error('Build 29 contract cannot run on a pre-29 build');
           NODE
-          grep -q 'tran-french-teacher-v2.3.16-b34.7-v5coherence1' index.html sw.js
+          grep -q 'tran-french-teacher-v2.3.17-b34.8-v5utility1' index.html sw.js
           grep -q "const NAV='2.3.7-b34.7'" sw.js
           grep -q "const COHERENCE='2.3.12-v4coherence1'" sw.js
           grep -q "const MOTION='2.3.14-v4motion1'" sw.js
           grep -q "const V4='2.3.15-v4contrast1'" sw.js
           grep -q "const V5='2.3.16-v5coherence1'" sw.js
+          grep -q "const V5U='2.3.17-v5utility1'" sw.js
           grep -q 'stage2-boot.js?v=${NAV}' sw.js
           grep -q 'field-navigation-runtime.js?v=${NAV}' sw.js
-          grep -q 'theme-controller.js?v=${V5}' sw.js
-          grep -q 'premium-theme-polish.css?v=${V5}' sw.js
+          grep -q 'theme-controller.js?v=${V5U}' sw.js
+          grep -q 'premium-theme-polish.css?v=${V5U}' sw.js
           grep -q 'premium-v4-route-coherence.css?v=${COHERENCE}' sw.js
           grep -q 'premium-v4-motion.css?v=${MOTION}' sw.js
           grep -q 'premium-v4-contrast.css?v=${V4}' sw.js
           grep -q 'premium-v5-coherence.css?v=${V5}' sw.js
           grep -q 'premium-v5-listening-settings.css?v=${V5}' sw.js
+          grep -q 'premium-v5-utility.css?v=${V5U}' sw.js
           grep -q 'premium-v4-ownership-hotfix.css?v=2.3.11-v4ownership1' sw.js
           grep -q 'build29-iphone-a11y.css' sw.js
           grep -q 'build29-iphone-a11y.js' sw.js
