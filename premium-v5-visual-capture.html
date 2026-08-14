@@ -1,32 +1,41 @@
 <!doctype html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Premium V5 targeted visual capture</title><style>html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050914}iframe{display:block;width:100%;height:100%;border:0}</style></head>
-<body><iframe id="f" src="./index.html?uxSmoke=lesson8&fieldNavV3=1&debug=fr"></iframe><script>
+<body><iframe id="f" src="./index.html?fieldNavV3=1&debug=fr"></iframe><script>
 (()=>{'use strict';
 const R=document.documentElement,F=document.getElementById('f'),q=new URLSearchParams(location.search),theme=q.get('theme')||'aurora',surface=q.get('surface')||'progress',wait=ms=>new Promise(r=>setTimeout(r,ms));
-const waitFor=async(fn,limit=12000)=>{for(let t=0;t<limit;t+=50){try{const v=fn();if(v)return v}catch{}await wait(50)}try{return fn()}catch{return null}};
+const waitFor=async(fn,limit=14000)=>{for(let t=0;t<limit;t+=50){try{const v=fn();if(v)return v}catch{}await wait(50)}try{return fn()}catch{return null}};
+const KNOWN=['bonjour','merci','au-revoir','je-mappelle','svp','excusez-moi','je-comprends','je-ne-comprends-pas','repetez','plus-lentement','je-suis-vietnamienne','je-viens-vietnam','jhabite-hcm','et-vous','oui','non','je-voudrais','eau','cafe','the','addition','combien-ca-coute','jaime','je-naime-pas','beaucoup','un-peu','cest-bon','je-prefere','zero','un','deux','trois','quatre','cinq','six','sept','huit','neuf','dix','euros'];
 F.onload=()=>setTimeout(async()=>{try{
   const w=F.contentWindow,d=F.contentDocument;
-  const ready=await waitFor(()=>w.FrenchTranquilleThemes&&w.FrenchTranquilleFieldNavigation&&w.FrenchTranquilleFoundationsPilot&&w.FrenchTranquilleListening);
-  if(!ready)throw Error('api-not-ready');
+  const ready=await waitFor(()=>w.FrenchTranquilleThemes&&w.FrenchTranquilleFieldNavigation&&w.FrenchTranquilleFoundationsPilot&&w.FrenchTranquilleListening&&w.FrenchTranquilleCurriculum);
+  if(!ready)throw Error(`api-not-ready:theme=${!!w.FrenchTranquilleThemes};nav=${!!w.FrenchTranquilleFieldNavigation};foundation=${!!w.FrenchTranquilleFoundationsPilot};listening=${!!w.FrenchTranquilleListening};curriculum=${!!w.FrenchTranquilleCurriculum}`);
+
+  /* Ephemeral visual fixture mirrors the field screenshot: 9/52 complete,
+     lesson 10 current and 40 known items. Every capture uses a fresh Chrome profile. */
+  const learnerKey=w.FrenchTranquilleCurriculum.key||'francais-avec-luc:learner:v1';
+  const completedLessons=Array.from({length:9},(_,i)=>`l${i+1}`);
+  const lessonProgress=Object.fromEntries(completedLessons.map(id=>[id,999]));lessonProgress.l10=1;
+  w.localStorage.setItem(learnerKey,JSON.stringify({schemaVersion:2,learnerName:'Trân',level:'A0',lessonProgress,completedLessons,knownItems:KNOWN,reviewState:{bonjour:2,'je-voudrais':1},conversationWins:5,lastActivity:'2026-08-14T12:00:00.000Z',streak:{current:6,lastDate:'2026-08-14'}}));
+
   const stable=d.createElement('style');stable.dataset.v5CaptureSettle='1';stable.textContent='*,*::before,*::after{transition-duration:0s!important;animation-duration:0s!important;animation-delay:0s!important}';d.head.appendChild(stable);
-  w.FrenchTranquilleThemes.apply(theme);w.FrenchTranquilleBuild27Shell?.refresh?.();w.FrenchTranquilleBuild32Shell?.refresh?.();await wait(150);
+  w.FrenchTranquilleThemes.apply(theme);w.FrenchTranquilleBuild27Shell?.refresh?.();w.FrenchTranquilleBuild32Shell?.refresh?.();await wait(180);
   const nav=w.FrenchTranquilleFieldNavigation;
   const settle=async(ms=70)=>{nav.settle?.();await wait(ms)};
   await nav.go('home');await settle();
   if(surface==='progress'){
-    await nav.go('progress');await settle(140);
+    await nav.go('progress');await settle(160);
     if(!d.querySelector('.b27-level-card'))throw Error('progress-not-ready');
   }else if(surface==='listening'){
-    await nav.go('practice');await settle(140);
-    const a=d.querySelector('body > .b27-practice-page [data-b27-practice-action="listening"]');if(!a||a.disabled)throw Error('listening-unavailable');a.click();await wait(320);nav.ensureListeningSettings?.();await settle(100);
+    await nav.go('practice');await settle(160);
+    const a=d.querySelector('body > .b27-practice-page [data-b27-practice-action="listening"]');if(!a||a.disabled)throw Error('listening-unavailable');a.click();await wait(360);nav.ensureListeningSettings?.();await settle(120);
     if(!d.querySelector('body > .listening-overlay .listening-settings'))throw Error('listening-settings-missing');
   }else if(surface==='foundations'){
-    w.FrenchTranquilleFoundationsPilot.open();await wait(180);
-    const next=d.querySelector('.ft-foundation-next');if(!next)throw Error('foundations-intro-missing');next.click();await wait(120);
+    w.FrenchTranquilleFoundationsPilot.open();await wait(220);
+    const next=d.querySelector('.ft-foundation-next');if(!next)throw Error('foundations-intro-missing');next.click();await wait(140);
     if(!d.querySelector('.ft-foundation-options button'))throw Error('foundations-question-missing');
   }else throw Error(`unknown-surface:${surface}`);
   d.scrollingElement.scrollTop=0;
   R.dataset.captureReady='1';R.dataset.captureTheme=theme;R.dataset.captureSurface=surface;
-}catch(e){R.dataset.captureReady='0';R.dataset.captureError=e.message}},150)})();
-setTimeout(()=>{if(!R.dataset.captureReady){R.dataset.captureReady='0';R.dataset.captureError='timeout'}},30000);
+}catch(e){R.dataset.captureReady='0';R.dataset.captureError=e.message}},120)})();
+setTimeout(()=>{if(!R.dataset.captureReady){R.dataset.captureReady='0';R.dataset.captureError='timeout'}},36000);
 </script></body></html>
