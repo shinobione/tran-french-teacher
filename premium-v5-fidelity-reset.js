@@ -1,11 +1,12 @@
 (() => {
   'use strict';
 
-  const VERSION = '2.3.20-v5fidelity1';
+  const VERSION = '2.3.20-v5fidelity2';
   const DEBUG_KEY = 'tran-french-teacher:debug-fr:v1';
   const ORIGIN = { review:'home', conversation:'practice', listening:'home', scenario:'practice' };
   const isPremium = () => (document.documentElement.dataset.theme || 'original') !== 'original';
-  const T = (vi, fr) => localStorage.getItem(DEBUG_KEY) === '1' ? fr : vi;
+  const isDebug = () => localStorage.getItem(DEBUG_KEY) === '1';
+  const T = (vi, fr) => isDebug() ? fr : vi;
   let scheduled = false;
 
   function currentScreen() {
@@ -41,8 +42,6 @@
       home()?.click();
       return;
     }
-    /* Same transaction ordering that killed the old Practice flash:
-       let Practice own the viewport first, then normalize the hidden host. */
     api.openPractice();
     requestAnimationFrame(() => {
       if (currentScreen() !== 'home') home()?.click();
@@ -146,6 +145,7 @@
       toggle.className = 'ft-v55-about-toggle';
       toggle.dataset.v55AboutToggle = '1';
       toggle.setAttribute('aria-label', T('Mở phần giới thiệu','Ouvrir À propos'));
+      toggle.setAttribute('aria-expanded','false');
       toggle.textContent = '›';
       head?.appendChild(toggle);
     }
@@ -166,12 +166,91 @@
     picker.open = false;
   }
 
+  function settingsRow(kind, icon, title, copy, toggleAttr) {
+    const settings = document.querySelector('.screen-settings');
+    const narrow = settings?.querySelector('.narrow');
+    if (!narrow) return null;
+    let row = narrow.querySelector(`[data-v55-settings-row="${kind}"]`);
+    if (!row) {
+      row = document.createElement('button');
+      row.type = 'button';
+      row.className = `ft-v55-settings-row ft-v55-${kind}-row`;
+      row.dataset.v55SettingsRow = kind;
+      row.dataset[toggleAttr] = '1';
+      row.innerHTML = '<span class="ft-v55-row-icon"></span><span class="ft-v55-row-copy"><strong></strong><small></small></span><span class="ft-v55-row-chevron">›</span>';
+      narrow.appendChild(row);
+    }
+    setText(row.querySelector('.ft-v55-row-icon'), icon);
+    setText(row.querySelector('strong'), title);
+    setText(row.querySelector('small'), copy);
+    return row;
+  }
+
+  function classifySettings() {
+    const settings = document.querySelector('.screen-settings');
+    const narrow = settings?.querySelector('.narrow');
+    if (!settings || !narrow) return;
+
+    const debugCard = settings.querySelector('#debug-fr-card');
+    if (debugCard) debugCard.classList.add('ft-v55-technical-card');
+    const diagnosticCard = settings.querySelector('.diagnostics')?.closest('.card');
+    if (diagnosticCard) diagnosticCard.classList.add('ft-v55-diagnostics-card');
+
+    [...narrow.children].forEach(card => {
+      if (!(card instanceof HTMLElement)) return;
+      if (card.id === 'ft-settings-legal' || card.matches('.ft-theme-settings-inline,.ux-settings-note,.ft-v55-settings-row')) return;
+      const text = (card.textContent || '').replace(/\s+/g,' ').trim();
+      const recovery = card.matches('.memory-backup-card,.danger-zone') || !!card.querySelector('[data-memory-export],[data-memory-import],[data-memory-file]');
+      const technical = card.id === 'debug-fr-card' || !!card.querySelector('.diagnostics') || /LOCAL\s*[•·-]\s*BUILD|ERROR INTELLIGENCE|DỮ LIỆU KHÓ KHĂN|DONNÉES DIFFICILES|DIAGNOSTIC|CHẨN ĐOÁN|BUILD\s*18/i.test(text);
+      if (recovery) card.classList.add('ft-v55-recovery-card');
+      else if (technical) card.classList.add('ft-v55-technical-card');
+    });
+
+    if (settings.querySelector('.ft-v55-recovery-card,.danger-zone')) {
+      const row = settingsRow(
+        'recovery',
+        '⌁',
+        T('Dữ liệu & khôi phục','Données & récupération'),
+        T('Sao lưu, khôi phục và đặt lại','Sauvegarde, restauration et réinitialisation'),
+        'v55RecoveryToggle'
+      );
+      row?.setAttribute('aria-expanded', settings.dataset.v55RecoveryOpen === '1' ? 'true' : 'false');
+    }
+
+    if (isDebug() && settings.querySelector('.ft-v55-diagnostics-card,.ft-v55-technical-card')) {
+      const row = settingsRow(
+        'diagnostic',
+        '⌘',
+        'Diagnostic Jerry',
+        'Moteurs, builds et outils techniques',
+        'v55DiagnosticToggle'
+      );
+      row?.setAttribute('aria-expanded', settings.dataset.v55DiagnosticOpen === '1' ? 'true' : 'false');
+    } else {
+      narrow.querySelector('[data-v55-settings-row="diagnostic"]')?.remove();
+      delete settings.dataset.v55DiagnosticOpen;
+    }
+  }
+
+  function cleanupSettings() {
+    document.querySelectorAll('.screen-settings .ft-v55-settings-row').forEach(node => node.remove());
+    document.querySelectorAll('.screen-settings .ft-v55-diagnostics-card,.screen-settings .ft-v55-technical-card,.screen-settings .ft-v55-recovery-card').forEach(node => {
+      node.classList.remove('ft-v55-diagnostics-card','ft-v55-technical-card','ft-v55-recovery-card');
+    });
+    const settings = document.querySelector('.screen-settings');
+    if (settings) {
+      delete settings.dataset.v55RecoveryOpen;
+      delete settings.dataset.v55DiagnosticOpen;
+    }
+  }
+
   function cleanupOriginal() {
     if (isPremium()) return;
     document.querySelectorAll('[data-v55-remembered="1"]').forEach(restoreNode);
     progressRoute();
     aboutPanel();
     themePicker();
+    cleanupSettings();
     delete document.documentElement.dataset.v55Fidelity;
   }
 
@@ -184,6 +263,7 @@
     progressRoute();
     aboutPanel();
     themePicker();
+    classifySettings();
     if (document.documentElement.dataset.v55Fidelity !== '1') document.documentElement.dataset.v55Fidelity = '1';
   }
 
@@ -236,6 +316,30 @@
         const next = card.dataset.v55Open === '1' ? '0' : '1';
         if (card.dataset.v55Open !== next) card.dataset.v55Open = next;
         about.setAttribute('aria-expanded', next === '1' ? 'true' : 'false');
+      }
+      return;
+    }
+
+    const recovery = event.target.closest('[data-v55-recovery-toggle]');
+    if (recovery) {
+      event.preventDefault();
+      const settings = recovery.closest('.screen-settings');
+      if (settings) {
+        const next = settings.dataset.v55RecoveryOpen === '1' ? '0' : '1';
+        settings.dataset.v55RecoveryOpen = next;
+        recovery.setAttribute('aria-expanded', next === '1' ? 'true' : 'false');
+      }
+      return;
+    }
+
+    const diagnostic = event.target.closest('[data-v55-diagnostic-toggle]');
+    if (diagnostic) {
+      event.preventDefault();
+      const settings = diagnostic.closest('.screen-settings');
+      if (settings) {
+        const next = settings.dataset.v55DiagnosticOpen === '1' ? '0' : '1';
+        settings.dataset.v55DiagnosticOpen = next;
+        diagnostic.setAttribute('aria-expanded', next === '1' ? 'true' : 'false');
       }
     }
   }, true);
