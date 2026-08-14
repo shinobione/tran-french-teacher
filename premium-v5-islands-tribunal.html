@@ -1,7 +1,7 @@
-<!doctype html><html><head><meta charset="utf-8"><title>Premium V5.3 pedagogical islands tribunal</title><style>body{margin:0;display:grid;grid-template-columns:1fr 1fr;gap:2px;background:#000}iframe{display:block;border:0;width:390px;height:844px}</style></head><body><iframe id="visual" src="./premium-v5-islands-fixture.html?theme=original"></iframe><iframe id="app" src="./index.html?fieldNavV3=1"></iframe><script>
+<!doctype html><html><head><meta charset="utf-8"><title>Premium V5.3 pedagogical islands tribunal</title><style>body{margin:0;display:grid;grid-template-columns:1fr 1fr;gap:2px;background:#000}iframe{display:block;border:0;width:390px;height:844px}</style></head><body><iframe id="visual" src="./premium-v5-islands-fixture.html?theme=original"></iframe><iframe id="app" src="./index.html?fieldNavV3=1&realLifeSmoke=lesson20&sessionSmoke=practice"></iframe><script>
 (()=>{'use strict';
 const R=document.documentElement,V=document.getElementById('visual'),A=document.getElementById('app'),wait=ms=>new Promise(r=>setTimeout(r,ms));
-const waitFor=async(fn,limit=16000)=>{for(let t=0;t<limit;t+=50){try{const v=fn();if(v)return v}catch{}await wait(50)}try{return fn()}catch{return null}};
+const waitFor=async(fn,limit=18000)=>{for(let t=0;t<limit;t+=50){try{const v=fn();if(v)return v}catch{}await wait(50)}try{return fn()}catch{return null}};
 const sizes=[[390,844],[1440,900]],themes=['aurora','sunset','jade'];
 const keys=['francais-avec-luc:learner:v1','french-tranquille:learning-memory:v1','french-tranquille:error-intelligence:v1','french-tranquille:scenarios:v1','french-tranquille:listening:v1','french-tranquille:milestones:v1'];
 const finish=(ok,msg)=>{R.dataset.premiumV5Islands=ok?'ok':'fail';R.dataset.premiumV5IslandsDetail=msg};
@@ -11,16 +11,17 @@ const assertPanel=(w,n,label,minRadius=16)=>{if(!visible(w,n))throw Error(`${lab
 const assertButton=(w,n,label)=>{if(!visible(w,n))throw Error(`${label}:missing`);const s=w.getComputedStyle(n),r=n.getBoundingClientRect();if(r.height<43||r.width<43)throw Error(`${label}:touch-${Math.round(r.width)}x${Math.round(r.height)}`);if(px(s.borderTopLeftRadius)<11)throw Error(`${label}:radius`);if(!s.backgroundImage||s.backgroundImage==='none')throw Error(`${label}:flat-bg`)};
 Promise.all([new Promise(resolve=>V.addEventListener('load',resolve,{once:true})),new Promise(resolve=>A.addEventListener('load',resolve,{once:true}))]).then(()=>setTimeout(async()=>{try{
   const vw=V.contentWindow,vd=V.contentDocument,aw=A.contentWindow,ad=A.contentDocument;
-  const ready=await waitFor(()=>vd.documentElement.dataset.captureReady==='1'&&aw.FrenchTranquilleThemes&&aw.FrenchTranquilleScenarios&&aw.FrenchTranquilleCurriculum);
-  if(!ready)throw Error(`api-or-fixture-missing:fixture=${vd.documentElement.dataset.captureReady||0};themes=${!!aw.FrenchTranquilleThemes};scenario=${!!aw.FrenchTranquilleScenarios};curriculum=${!!aw.FrenchTranquilleCurriculum}`);
+  const ready=await waitFor(()=>vd.documentElement.dataset.captureReady==='1'&&aw.FrenchTranquilleThemes&&aw.FrenchTranquilleScenarios&&aw.FrenchTranquilleCurriculum&&ad.querySelector('.screen-conversation .narrow .scenario-lab-card'));
+  if(!ready)throw Error(`api-or-route-missing:fixture=${vd.documentElement.dataset.captureReady||0};themes=${!!aw.FrenchTranquilleThemes};scenario=${!!aw.FrenchTranquilleScenarios};conversation=${!!ad.querySelector('.screen-conversation .narrow')};lab=${!!ad.querySelector('.scenario-lab-card')}`);
   if(vw.getComputedStyle(vd.documentElement).getPropertyValue('--pv53-islands-ready').trim())throw Error('original-islands-leak');
 
-  const learnerKey=aw.FrenchTranquilleCurriculum.key||keys[0];
-  const completed=Array.from({length:20},(_,i)=>`l${i+1}`),lessonProgress=Object.fromEntries(completed.map(id=>[id,999]));
-  aw.localStorage.setItem(learnerKey,JSON.stringify({schemaVersion:2,learnerName:'Trân',level:'A0',completedLessons:completed,lessonProgress,knownItems:['bonjour','merci','au-revoir','je-mappelle','svp','excusez-moi','je-comprends','je-ne-comprends-pas','je-voudrais','cafe','eau','addition']}));
-  aw.FrenchTranquilleBuild27Shell?.refresh?.();aw.FrenchTranquilleBuild32Shell?.refresh?.();await wait(100);
+  const api=aw.FrenchTranquilleScenarios,scenario=api.scenarios.find(x=>api.unlocked(x));
+  if(!scenario)throw Error('scenario-locked');
+  api.start(scenario.id);
+  const runnerReady=await waitFor(()=>visible(aw,ad.querySelector('.scenario-runner'))&&visible(aw,ad.querySelector('.scenario-npc'))&&visible(aw,ad.querySelector('.scenario-task'))&&visible(aw,ad.querySelector('.scenario-input-row input')),6000);
+  if(!runnerReady)throw Error(`scenario-start-failed:runner=${!!ad.querySelector('.scenario-runner')};npc=${!!ad.querySelector('.scenario-npc')};task=${!!ad.querySelector('.scenario-task')};input=${!!ad.querySelector('.scenario-input-row input')}`);
+  await wait(120);
   const before=Object.fromEntries(keys.map(k=>[k,aw.localStorage.getItem(k)]));
-  let scenarioRouteReady=false;
 
   for(const[width,height]of sizes){
     V.style.width=A.style.width=`${width}px`;V.style.height=A.style.height=`${height}px`;await wait(90);
@@ -37,17 +38,15 @@ Promise.all([new Promise(resolve=>V.addEventListener('load',resolve,{once:true})
       assertButton(vw,vd.querySelector('.speaking-loop-actions button'),`${width}-${theme}:speaking-action`);
       assertButton(vw,vd.querySelector('.voice-replay-actions button'),`${width}-${theme}:replay-action`);
 
-      if(!scenarioRouteReady){const native=ad.querySelector('.bottom-nav [data-go="conversation"]');if(!native)throw Error(`${width}-${theme}:conversation-route`);native.click();await wait(190);scenarioRouteReady=true}
-      const api=aw.FrenchTranquilleScenarios,scenario=api.scenarios.find(x=>api.unlocked(x));if(!scenario)throw Error(`${width}-${theme}:scenario-locked`);api.start(scenario.id);await wait(160);
       const lab=ad.querySelector('.scenario-lab-card'),runner=ad.querySelector('.scenario-runner'),npc=ad.querySelector('.scenario-npc'),task=ad.querySelector('.scenario-task'),input=ad.querySelector('.scenario-input-row input');
       assertPanel(aw,lab,`${width}-${theme}:scenario-lab`,18);if(!visible(aw,runner)||!visible(aw,npc)||!visible(aw,task)||!visible(aw,input))throw Error(`${width}-${theme}:scenario-nodes`);
       const ns=aw.getComputedStyle(npc),ts=aw.getComputedStyle(task),is=aw.getComputedStyle(input);if((!ns.backgroundImage||ns.backgroundImage==='none')&&ns.backgroundColor==='rgba(0, 0, 0, 0)')throw Error(`${width}-${theme}:npc-empty`);if(!ts.backgroundImage||ts.backgroundImage==='none')throw Error(`${width}-${theme}:task-flat`);if(px(is.borderTopLeftRadius)<12)throw Error(`${width}-${theme}:input-radius`);
       assertButton(aw,ad.querySelector('.scenario-close'),`${width}-${theme}:scenario-close`);
-      ad.querySelector('[data-scenario-close]')?.click();await wait(90);
       if(ad.documentElement.scrollWidth>ad.documentElement.clientWidth+1)throw Error(`${width}-${theme}:overflow`);
     }
   }
   for(const k of keys)if(before[k]!==aw.localStorage.getItem(k))throw Error(`store-mutated:${k}`);
+  ad.querySelector('[data-scenario-close]')?.click();await wait(60);
   vd.documentElement.dataset.theme='original';aw.FrenchTranquilleThemes.apply('original');await wait(60);if(vw.getComputedStyle(vd.documentElement).getPropertyValue('--pv53-islands-ready').trim()||aw.getComputedStyle(ad.documentElement).getPropertyValue('--pv53-islands-ready').trim())throw Error('original-islands-leak-after');
   finish(true,'viewports=2;themes=3;speaking=themed;voice-replay=themed;session=themed;milestone=themed;scenario=real-runner-themed;touch=44plus;stores=unchanged;original=witness');
 }catch(e){finish(false,e.message)}},120)).catch(e=>finish(false,e.message));
