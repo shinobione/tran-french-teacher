@@ -33,6 +33,7 @@ jobs:
           grep -q 'theme-controller.js?v=${V5I}' sw.js
           grep -q 'premiumV5Islands' premium-v5-islands-tribunal.html
           grep -q 'scenario=real-runner-themed' premium-v5-islands-tribunal.html
+          grep -q 'data-capture-surface=.oral' premium-v5-islands-fixture.html
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
           test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
           test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
@@ -81,12 +82,16 @@ jobs:
             png="artifacts/premium-v5-islands/${label}-${theme}-${surface}.png"
             dom="/tmp/v53-${label}-${theme}-${surface}.html"
             rm -rf "$profile" "$png" "$dom"
+            if [ "$surface" = oral ]; then
+              url="http://127.0.0.1:4173/premium-v5-islands-fixture.html?theme=${theme}"
+            else
+              url="http://127.0.0.1:4173/premium-v5-islands-visual-capture.html?theme=${theme}&surface=${surface}"
+            fi
             timeout --signal=TERM --kill-after=5s 50s \
               google-chrome --headless=new --no-sandbox --disable-gpu --hide-scrollbars \
               --disable-background-timer-throttling --disable-renderer-backgrounding \
               --user-data-dir="$profile" --window-size="$dims" --virtual-time-budget=22000 \
-              --screenshot="$png" --dump-dom \
-              "http://127.0.0.1:4173/premium-v5-islands-visual-capture.html?theme=${theme}&surface=${surface}" >"$dom"
+              --screenshot="$png" --dump-dom "$url" >"$dom"
             test -s "$png"
             grep -q 'data-capture-ready="1"' "$dom" || { grep -o 'data-capture-error="[^"]*"' "$dom" || true; exit 1; }
             grep -q "data-capture-theme=\"${theme}\"" "$dom"
