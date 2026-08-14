@@ -22,13 +22,17 @@ jobs:
           node --check premium-v5-fidelity-reset.js
           node --check theme-controller.js
           grep -q -- '--pv55-ready:1' premium-v5-fidelity-reset.css
+          grep -q -- '--pv55-refine-ready:1' premium-v5-fidelity-refine.css
           grep -q 'theme-aurora-paris.svg' premium-v5-fidelity-reset.css
           grep -q 'theme-sunset-paris.svg' premium-v5-fidelity-reset.css
           grep -q 'theme-jade-paris.svg' premium-v5-fidelity-reset.css
           grep -q 'ft-v55-subview-back' premium-v5-fidelity-reset.js
           grep -q 'ft-v55-level-route' premium-v5-fidelity-reset.js
           grep -q 'data-v55-about-toggle' premium-v5-fidelity-reset.js
+          grep -q 'data-v55-recovery-toggle' premium-v5-fidelity-reset.js
+          grep -q 'ft-v55-settings-gear' premium-v5-fidelity-refine.css
           grep -q 'premium-v5-fidelity-reset.css?v=2.3.20-v5fidelity1' premium-theme-polish.css
+          grep -q 'premium-v5-fidelity-refine.css?v=2.3.20-v5fidelity2' premium-theme-polish.css
           grep -q 'premium-v5-fidelity-reset.js?v=2.3.20-v5fidelity1' theme-controller.js
           test "$(tail -n 1 premium-theme-polish.css)" = "@import url('./premium-nav-geometry-hotfix.css?v=2.3.4-p0nav1');"
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
@@ -46,17 +50,22 @@ jobs:
 
       - name: Chrome — V5.5 structural fidelity tribunal
         run: |
-          timeout --signal=TERM --kill-after=5s 55s \
+          timeout --signal=TERM --kill-after=5s 65s \
             google-chrome --headless=new --no-sandbox --disable-gpu \
             --disable-background-timer-throttling --disable-renderer-backgrounding \
-            --virtual-time-budget=36000 --dump-dom \
+            --virtual-time-budget=44000 --dump-dom \
             'http://127.0.0.1:4173/premium-v5-fidelity-reset-tribunal.html' > /tmp/v55.html
           grep -q 'data-premium-v55="ok"' /tmp/v55.html || { grep -o 'data-premium-v55-detail="[^"]*"' /tmp/v55.html || true; exit 1; }
           grep -q 'data-v55-scenes="aurora+sunset+jade"' /tmp/v55.html
           grep -q 'data-v55-controls="filled-circle"' /tmp/v55.html
           grep -q 'data-v55-review-back="aligned"' /tmp/v55.html
-          grep -q 'data-v55-review-return="practice"' /tmp/v55.html
+          grep -q 'data-v55-speak-back="aligned"' /tmp/v55.html
+          grep -q 'data-v55-listen-back="aligned"' /tmp/v55.html
+          grep -q 'data-v55-real-life-back="aligned"' /tmp/v55.html
+          grep -q 'data-v55-practice-returns="review+speak+listen+real-life"' /tmp/v55.html
           grep -q 'data-v55-progress="A0-line-A1"' /tmp/v55.html
+          grep -q 'data-v55-settings="learner-first"' /tmp/v55.html
+          grep -q 'data-v55-recovery="contained"' /tmp/v55.html
           grep -q 'data-v55-about="credits-contained"' /tmp/v55.html
           grep -q 'data-v55-learner="unchanged"' /tmp/v55.html
           grep -q 'data-v55-overflow="0"' /tmp/v55.html
@@ -64,12 +73,13 @@ jobs:
 
       - name: Chrome — V5.5 reduced-motion tribunal
         run: |
-          timeout --signal=TERM --kill-after=5s 55s \
+          timeout --signal=TERM --kill-after=5s 65s \
             google-chrome --headless=new --no-sandbox --disable-gpu --force-prefers-reduced-motion \
             --disable-background-timer-throttling --disable-renderer-backgrounding \
-            --virtual-time-budget=36000 --dump-dom \
+            --virtual-time-budget=44000 --dump-dom \
             'http://127.0.0.1:4173/premium-v5-fidelity-reset-tribunal.html' > /tmp/v55-reduced.html
           grep -q 'data-premium-v55="ok"' /tmp/v55-reduced.html || { grep -o 'data-premium-v55-detail="[^"]*"' /tmp/v55-reduced.html || true; exit 1; }
+          grep -q 'data-v55-practice-returns="review+speak+listen+real-life"' /tmp/v55-reduced.html
           grep -q 'data-v55-learner="unchanged"' /tmp/v55-reduced.html
 
       - name: Capture V5.5 primary iPhone review matrix
