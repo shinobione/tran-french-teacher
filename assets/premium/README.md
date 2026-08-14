@@ -37,9 +37,9 @@ assets/premium/themes/original/background.webp
 | Theme | Status | Staging size | SHA-256 | Canonical direction |
 |---|---|---:|---|---|
 | Aurora | **LOCKED** | 320×569 | `f5a9945614dac98076bec0e25dd106d2b98a5612ebc1b58933c450fb715e94f6` | Blue/cyan/violet/pink luminous Paris night |
-| Sunset | **LOCKED** | 320×569 | `c6f8f020f099cc873e4f36284671da3ea6715f39c5562caea786cc9c23e66d2e` | Orange/coral/violet Paris sunset |
+| Sunset | **LOCKED** | 240×426 | `0dbbaa5334a79fb5e15cce2fee1526ddfe75606106bad24723b6c4cff0c1414c` | Orange/coral/violet Paris sunset |
 | Nocturne | **LOCKED** | 320×569 | `71bed3c1df77c7bd23ea6cbc46f25a948b67750cead56298301b6184c41a4303` | Dark jade/teal/gold Paris night |
-| Original | **CANDIDATE** | 320×569 | `837522fcd2ca8d6aa60420c119052c1de7f90b2c6b9f3cccc1c44a7118a4c57a` | Midnight blue/indigo, cyan/cobalt, restrained pink-magenta flagship Paris night |
+| Original | **CANDIDATE** | 240×426 | `6cfe0a3fc3c8f2fe23da84cc9dd20590ba4322f78a6f7a855b5967da337f6372` | Midnight blue/indigo, cyan/cobalt, restrained pink-magenta flagship Paris night |
 
 ## 1.1 The three user-locked sources
 
