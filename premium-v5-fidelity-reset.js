@@ -22,9 +22,13 @@
     node.dataset.v55WasInvisible = node.classList.contains('invisible') ? '1' : '0';
   }
 
+  function setText(node, text) {
+    if (node && node.textContent !== text) node.textContent = text;
+  }
+
   function restoreNode(node) {
     if (!node || node.dataset.v55Remembered !== '1') return;
-    node.textContent = node.dataset.v55Text || '';
+    setText(node, node.dataset.v55Text || '');
     if (node.dataset.v55WasInvisible === '1') node.classList.add('invisible');
     node.classList.remove('ft-v55-subview-back','ft-v55-settings-close','ft-v55-settings-gear');
     delete node.dataset.v55Return;
@@ -50,9 +54,10 @@
     remember(node);
     node.classList.remove('invisible');
     node.classList.add('ft-v55-subview-back');
-    node.dataset.v55Return = origin;
-    node.textContent = '‹';
-    node.setAttribute('aria-label', T('Quay lại','Retour'));
+    if (node.dataset.v55Return !== origin) node.dataset.v55Return = origin;
+    setText(node, '‹');
+    const label = T('Quay lại','Retour');
+    if (node.getAttribute('aria-label') !== label) node.setAttribute('aria-label', label);
   }
 
   function controls() {
@@ -80,8 +85,9 @@
       remember(settingsBack);
       settingsBack.classList.remove('invisible','ft-v55-subview-back');
       settingsBack.classList.add('ft-v55-settings-close');
-      settingsBack.textContent = '×';
-      settingsBack.setAttribute('aria-label', T('Đóng cài đặt','Fermer les réglages'));
+      setText(settingsBack, '×');
+      const label = T('Đóng cài đặt','Fermer les réglages');
+      if (settingsBack.getAttribute('aria-label') !== label) settingsBack.setAttribute('aria-label', label);
     }
   }
 
@@ -126,14 +132,14 @@
       card.removeAttribute('data-v55-open');
       head?.querySelector('.ft-v55-about-toggle')?.remove();
       if (title?.dataset.v55OriginalTitle) {
-        title.textContent = title.dataset.v55OriginalTitle;
+        setText(title, title.dataset.v55OriginalTitle);
         delete title.dataset.v55OriginalTitle;
       }
       return;
     }
 
     if (title && !title.dataset.v55OriginalTitle) title.dataset.v55OriginalTitle = title.textContent || '';
-    if (title) title.textContent = T('Giới thiệu','À propos');
+    if (title) setText(title, T('Giới thiệu','À propos'));
     if (!head?.querySelector('.ft-v55-about-toggle')) {
       const toggle = document.createElement('button');
       toggle.type = 'button';
@@ -166,6 +172,7 @@
     progressRoute();
     aboutPanel();
     themePicker();
+    delete document.documentElement.dataset.v55Fidelity;
   }
 
   function decorate() {
@@ -177,7 +184,7 @@
     progressRoute();
     aboutPanel();
     themePicker();
-    document.documentElement.dataset.v55Fidelity = '1';
+    if (document.documentElement.dataset.v55Fidelity !== '1') document.documentElement.dataset.v55Fidelity = '1';
   }
 
   function schedule() {
@@ -216,14 +223,10 @@
     }
 
     const listening = event.target.closest('.listening-close.ft-v55-subview-back');
-    if (listening?.dataset.v55Return === 'practice') {
-      setTimeout(openPracticeWithoutFlash, 0);
-    }
+    if (listening?.dataset.v55Return === 'practice') setTimeout(openPracticeWithoutFlash, 0);
 
     const scenario = event.target.closest('.scenario-close.ft-v55-subview-back');
-    if (scenario?.dataset.v55Return === 'practice') {
-      setTimeout(openPracticeWithoutFlash, 0);
-    }
+    if (scenario?.dataset.v55Return === 'practice') setTimeout(openPracticeWithoutFlash, 0);
 
     const about = event.target.closest('[data-v55-about-toggle]');
     if (about) {
@@ -231,7 +234,7 @@
       const card = about.closest('#ft-settings-legal');
       if (card) {
         const next = card.dataset.v55Open === '1' ? '0' : '1';
-        card.dataset.v55Open = next;
+        if (card.dataset.v55Open !== next) card.dataset.v55Open = next;
         about.setAttribute('aria-expanded', next === '1' ? 'true' : 'false');
       }
     }
