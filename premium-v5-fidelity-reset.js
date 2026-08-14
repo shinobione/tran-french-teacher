@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const VERSION = '2.3.20-v5fidelity4';
+  const VERSION = '2.3.20-v5fidelity5';
   const DEBUG_KEY = 'tran-french-teacher:debug-fr:v1';
   const ORIGIN = { review:'home', conversation:'practice', listening:'home', scenario:'scenario-list' };
   const isPremium = () => (document.documentElement.dataset.theme || 'original') !== 'original';
@@ -166,6 +166,64 @@
     picker.open = false;
   }
 
+  function restoreRecoveryPanel(card) {
+    if (!card || card.dataset.v55RecoveryPrepared !== '1') return;
+    const body = card.querySelector(':scope > .ft-v55-recovery-body');
+    const toggle = card.querySelector(':scope > .ft-v55-recovery-toggle');
+    if (body) {
+      while (body.firstChild) card.insertBefore(body.firstChild, body);
+      body.remove();
+    }
+    toggle?.remove();
+    delete card.dataset.v55RecoveryPrepared;
+    delete card.dataset.v55RecoveryOpen;
+    card.classList.remove('ft-v55-recovery-collapsible');
+  }
+
+  function recoveryPanel() {
+    const card = document.querySelector('.screen-settings .memory-backup-card');
+    if (!card) return;
+    if (!isPremium()) {
+      restoreRecoveryPanel(card);
+      return;
+    }
+    card.classList.add('ft-v55-recovery-card');
+    if (card.dataset.v55RecoveryPrepared === '1') return;
+
+    const body = document.createElement('div');
+    body.className = 'ft-v55-recovery-body';
+    while (card.firstChild) body.appendChild(card.firstChild);
+
+    const toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'ft-v55-recovery-toggle';
+    toggle.dataset.v55RecoveryToggle = '1';
+    toggle.setAttribute('aria-expanded','false');
+    toggle.setAttribute('aria-label', T('Mở dữ liệu và sao lưu','Ouvrir Données & sauvegarde'));
+
+    const icon = document.createElement('span');
+    icon.className = 'ft-v55-recovery-icon';
+    icon.textContent = '↥';
+    icon.setAttribute('aria-hidden','true');
+    const copy = document.createElement('span');
+    copy.className = 'ft-v55-recovery-copy';
+    const title = document.createElement('strong');
+    title.textContent = T('Dữ liệu & sao lưu','Données & sauvegarde');
+    const sub = document.createElement('small');
+    sub.textContent = T('Xuất, nhập hoặc khôi phục dữ liệu học','Exporter, importer ou restaurer les données');
+    copy.append(title, sub);
+    const chevron = document.createElement('b');
+    chevron.className = 'ft-v55-recovery-chevron';
+    chevron.textContent = '›';
+    chevron.setAttribute('aria-hidden','true');
+    toggle.append(icon, copy, chevron);
+
+    card.append(toggle, body);
+    card.dataset.v55RecoveryPrepared = '1';
+    card.dataset.v55RecoveryOpen = '0';
+    card.classList.add('ft-v55-recovery-collapsible');
+  }
+
   function classifySettings() {
     const settings = document.querySelector('.screen-settings');
     const narrow = settings?.querySelector('.narrow');
@@ -188,6 +246,7 @@
   }
 
   function cleanupSettings() {
+    document.querySelectorAll('.screen-settings .memory-backup-card[data-v55-recovery-prepared="1"]').forEach(restoreRecoveryPanel);
     document.querySelectorAll('.screen-settings .ft-v55-diagnostics-card,.screen-settings .ft-v55-technical-card,.screen-settings .ft-v55-recovery-card').forEach(node => {
       node.classList.remove('ft-v55-diagnostics-card','ft-v55-technical-card','ft-v55-recovery-card');
     });
@@ -213,6 +272,7 @@
     aboutPanel();
     themePicker();
     classifySettings();
+    recoveryPanel();
     if (document.documentElement.dataset.v55Fidelity !== '1') document.documentElement.dataset.v55Fidelity = '1';
   }
 
@@ -253,6 +313,19 @@
 
     const listening = event.target.closest('.listening-close.ft-v55-subview-back');
     if (listening?.dataset.v55Return === 'practice') setTimeout(openPracticeWithoutFlash, 0);
+
+    const recovery = event.target.closest('[data-v55-recovery-toggle]');
+    if (recovery) {
+      event.preventDefault();
+      const card = recovery.closest('.memory-backup-card');
+      if (card) {
+        const next = card.dataset.v55RecoveryOpen === '1' ? '0' : '1';
+        card.dataset.v55RecoveryOpen = next;
+        recovery.setAttribute('aria-expanded', next === '1' ? 'true' : 'false');
+        recovery.setAttribute('aria-label', next === '1' ? T('Đóng dữ liệu và sao lưu','Fermer Données & sauvegarde') : T('Mở dữ liệu và sao lưu','Ouvrir Données & sauvegarde'));
+      }
+      return;
+    }
 
     /* Scenario Close keeps its native semantic first: active scenario → list.
        The Conversation Back at the same physical anchor then returns to Practice. */
