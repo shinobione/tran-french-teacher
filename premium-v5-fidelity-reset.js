@@ -1,9 +1,9 @@
 (() => {
   'use strict';
 
-  const VERSION = '2.3.20-v5fidelity3';
+  const VERSION = '2.3.20-v5fidelity4';
   const DEBUG_KEY = 'tran-french-teacher:debug-fr:v1';
-  const ORIGIN = { review:'home', conversation:'practice', listening:'home', scenario:'practice' };
+  const ORIGIN = { review:'home', conversation:'practice', listening:'home', scenario:'scenario-list' };
   const isPremium = () => (document.documentElement.dataset.theme || 'original') !== 'original';
   const isDebug = () => localStorage.getItem(DEBUG_KEY) === '1';
   const T = (vi, fr) => isDebug() ? fr : vi;
@@ -232,7 +232,7 @@
       if (id === 'review') ORIGIN.review = 'practice';
       if (id === 'conversation') ORIGIN.conversation = 'practice';
       if (id === 'listening') ORIGIN.listening = 'practice';
-      if (id === 'real-life') { ORIGIN.conversation = 'practice'; ORIGIN.scenario = 'practice'; }
+      if (id === 'real-life') { ORIGIN.conversation = 'practice'; ORIGIN.scenario = 'scenario-list'; }
       schedule();
     }
 
@@ -254,8 +254,8 @@
     const listening = event.target.closest('.listening-close.ft-v55-subview-back');
     if (listening?.dataset.v55Return === 'practice') setTimeout(openPracticeWithoutFlash, 0);
 
-    const scenario = event.target.closest('.scenario-close.ft-v55-subview-back');
-    if (scenario?.dataset.v55Return === 'practice') setTimeout(openPracticeWithoutFlash, 0);
+    /* Scenario Close keeps its native semantic first: active scenario → list.
+       The Conversation Back at the same physical anchor then returns to Practice. */
 
     const about = event.target.closest('[data-v55-about-toggle]');
     if (about) {
