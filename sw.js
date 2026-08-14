@@ -1,4 +1,4 @@
-const CACHE='tran-french-teacher-v2.3.12-b34.5-v4coherence1';
+const CACHE='tran-french-teacher-v2.3.13-b34.6-v4practicecut1';
 const V='1.17.0-b24';
 const UX='1.17.5-b24.5';
 const P25='1.18.0-b25';
@@ -23,7 +23,7 @@ const V2='2.0.0';
 const LEGAL='2.0.0-postv2-legal';
 const B31='2.1.0-b31';
 const B32='2.2.0-b32';
-const NAV='2.3.5-b34.5';
+const NAV='2.3.6-b34.6';
 const AUDIO='2.3.1-b34.1';
 const V4='2.3.12-v4coherence1';
 const CORE=[
