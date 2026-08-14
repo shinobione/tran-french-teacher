@@ -29,6 +29,8 @@ jobs:
           grep -q 'legacy-hub-slab' premium-v4-global-qa-tribunal.html
           grep -q 'route-motion' premium-v4-global-qa-tribunal.html
           grep -q 'captureReady' premium-v4-visual-capture.html
+          grep -q 'captureTheme' premium-v4-visual-capture.html
+          grep -q 'captureScreen' premium-v4-visual-capture.html
           grep -q 'premium-v4-motion.css?v=2.3.14-v4motion1' premium-theme-polish.css
           grep -q 'premium-v4-contrast.css?v=2.3.15-v4contrast1' premium-theme-polish.css
           grep -q 'premium-v4-route-coherence.css?v=2.3.12-v4coherence1' premium-theme-polish.css
@@ -85,13 +87,19 @@ jobs:
             label="$1"; dims="$2"; theme="$3"; screen="$4"
             profile="/tmp/ft-v4-cap-${label}-${theme}-${screen}"
             file="artifacts/premium-v4-global/${label}-${theme}-${screen}.png"
-            rm -rf "$profile"
+            dom="/tmp/ft-v4-cap-${label}-${theme}-${screen}.html"
+            target="http://127.0.0.1:4173/premium-v4-visual-capture.html?theme=${theme}&screen=${screen}"
+            rm -rf "$profile" "$dom"
             timeout --signal=TERM --kill-after=5s 35s \
               google-chrome --headless=new --no-sandbox --disable-gpu --hide-scrollbars \
               --user-data-dir="$profile" --window-size="$dims" --virtual-time-budget=11000 \
-              --screenshot="$file" \
-              "http://127.0.0.1:4173/premium-v4-visual-capture.html?theme=${theme}&screen=${screen}"
+              --screenshot="$file" --dump-dom "$target" > "$dom"
             test -s "$file"
+            test -s "$dom"
+            grep -q 'data-capture-ready="1"' "$dom" || { echo "Capture not ready: ${label}/${theme}/${screen}"; cat "$dom"; exit 1; }
+            grep -q "data-capture-theme=\"${theme}\"" "$dom" || { echo "Wrong capture theme: ${label}/${theme}/${screen}"; cat "$dom"; exit 1; }
+            grep -q "data-capture-screen=\"${screen}\"" "$dom" || { echo "Wrong capture screen: ${label}/${theme}/${screen}"; cat "$dom"; exit 1; }
+            ! grep -q 'data-capture-ready="0"' "$dom"
           }
           for spec in 'mobile 390,844' 'desktop 1440,900'; do
             set -- $spec; label="$1"; dims="$2"
