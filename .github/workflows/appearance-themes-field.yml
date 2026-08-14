@@ -15,8 +15,8 @@ jobs:
       - name: Static contracts
         run: |
           node --check theme-controller.js
-          grep -q 'theme-controller.js?v=2.3.15-v4contrast1' index.html
-          grep -q '2.3.15-v4contrast1' theme-controller.js
+          grep -q 'theme-controller.js?v=2.3.16-v5coherence1' index.html
+          grep -q '2.3.16-v5coherence1' theme-controller.js
           grep -q 'premium-v4-home.css?v=2.3.6-v4home2' premium-theme-polish.css
           grep -q 'premium-v4-progress.css?v=2.3.7-v4progress1' premium-theme-polish.css
           grep -q 'premium-v4-practice.css?v=2.3.8-v4practice1' premium-theme-polish.css
@@ -26,6 +26,8 @@ jobs:
           grep -q 'premium-v4-route-coherence.css?v=2.3.12-v4coherence1' premium-theme-polish.css
           grep -q 'premium-v4-motion.css?v=2.3.14-v4motion1' premium-theme-polish.css
           grep -q 'premium-v4-contrast.css?v=2.3.15-v4contrast1' premium-theme-polish.css
+          grep -q 'premium-v5-coherence.css?v=2.3.16-v5coherence1' premium-theme-polish.css
+          grep -q 'premium-v5-listening-settings.css?v=2.3.16-v5coherence1' premium-theme-polish.css
           grep -q -- '--pv4-home-ready:1' premium-v4-home.css
           grep -q -- '--pv4-progress-ready:1' premium-v4-progress.css
           grep -q -- '--pv4-practice-ready:1' premium-v4-practice.css
@@ -34,10 +36,12 @@ jobs:
           grep -q -- '--pv4-route-coherence-ready:1' premium-v4-route-coherence.css
           grep -q -- '--pv4-motion-ready:1' premium-v4-motion.css
           grep -q -- '--pv4-contrast-ready:1' premium-v4-contrast.css
+          grep -q -- '--pv5-coherence-ready:1' premium-v5-coherence.css
           grep -q 'color:#071531' premium-v4-contrast.css
           grep -q 'color:#140b28' premium-v4-contrast.css
           grep -q 'color:#041511' premium-v4-contrast.css
           grep -q 'prefers-reduced-motion:reduce' premium-v4-motion.css
+          grep -q 'prefers-reduced-motion:reduce' premium-v5-coherence.css
           grep -q 'pv4-confirm-pulse' premium-v4-motion.css
           grep -q 'route-motion=0' premium-v4-motion-tribunal.html
           grep -q ':has(body > .b27-overlay)' premium-v4-route-coherence.css
@@ -71,6 +75,7 @@ jobs:
           ! grep -q 'francais-avec-luc:learner:v1' premium-v4-route-coherence.css
           ! grep -q 'francais-avec-luc:learner:v1' premium-v4-motion.css
           ! grep -q 'francais-avec-luc:learner:v1' premium-v4-contrast.css
+          ! grep -q 'francais-avec-luc:learner:v1' premium-v5-coherence.css
       - name: Voice and learner sanctuaries remain exact
         run: |
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
@@ -120,6 +125,10 @@ jobs:
         run: |
           google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=36000 --dump-dom 'http://127.0.0.1:4173/premium-v4-settings-tribunal.html' >/tmp/premium-v4-settings-tribunal.html
           grep -q 'data-premium-v4-settings-tribunal="ok"' /tmp/premium-v4-settings-tribunal.html || { cat /tmp/premium-v4-settings-tribunal.html; exit 1; }
+      - name: Chrome — Premium V5 coherence tribunal
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --disable-background-timer-throttling --disable-renderer-backgrounding --virtual-time-budget=38000 --dump-dom 'http://127.0.0.1:4173/premium-v5-coherence-tribunal.html' >/tmp/premium-v5-coherence.html
+          grep -q 'data-premium-v5-coherence="ok"' /tmp/premium-v5-coherence.html || { cat /tmp/premium-v5-coherence.html; exit 1; }
       - name: Stop static server
         if: always()
         run: |
