@@ -1,0 +1,41 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Premium V4 motion tribunal</title><style>body{margin:0}iframe{display:block;border:0;width:390px;height:844px}</style></head>
+<body><iframe id="f" src="./index.html?uxSmoke=lesson8&fieldNavV3=1"></iframe>
+<script>
+(()=>{'use strict';
+const R=document.documentElement,F=document.getElementById('f');
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+const done=(ok,detail)=>{R.dataset.premiumV4MotionTribunal=ok?'ok':'fail';R.dataset.premiumV4MotionDetail=detail};
+const secs=v=>String(v||'0s').split(',').map(x=>parseFloat(x)||0);
+const hasMotion=(w,n)=>{const s=w.getComputedStyle(n);return Math.max(...secs(s.transitionDuration),...secs(s.animationDuration))>0};
+const noMotion=(w,n)=>!hasMotion(w,n);
+F.onload=()=>setTimeout(async()=>{try{
+ const w=F.contentWindow,d=F.contentDocument,reduced=w.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const keys=['francais-avec-luc:learner:v1','french-tranquille:learning-memory:v1','french-tranquille:error-intelligence:v1','french-tranquille:scenarios:v1','french-tranquille:milestones:v1'];
+ const before=Object.fromEntries(keys.map(k=>[k,w.localStorage.getItem(k)]));
+ w.FrenchTranquilleThemes.apply('original');await wait(80);
+ if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv4-motion-ready').trim())throw Error('original-motion-leak');
+ w.FrenchTranquilleThemes.apply('aurora');await wait(140);
+ if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv4-motion-ready').trim()!=='1')throw Error('motion-marker');
+ const home=d.querySelector('.b27-home'),cta=home?.querySelector('.b27-primary-action'),nav=d.querySelector('.ux-bottom-nav [data-ux-nav="practice"]');
+ if(!home||!cta||!nav)throw Error('home-controls-missing');
+ if(!noMotion(w,home))throw Error('home-route-motion');
+ if(reduced){if(!noMotion(w,cta)||!noMotion(w,nav))throw Error('reduced-home-motion')}else{if(!hasMotion(w,cta)||!hasMotion(w,nav))throw Error('home-motion-missing')}
+ nav.click();await wait(180);
+ const practice=d.querySelector('body > .b27-practice-page'),action=practice?.querySelector('.b27-practice-action:not(:disabled)');
+ if(!practice||!action)throw Error('practice-controls-missing');
+ if(!noMotion(w,practice))throw Error('practice-route-motion');
+ if(reduced){if(!noMotion(w,action))throw Error('reduced-practice-motion')}else if(!hasMotion(w,action))throw Error('practice-motion-missing');
+ const listeningAction=practice.querySelector('[data-b27-practice-action="listening"]');
+ if(listeningAction&&!listeningAction.disabled){listeningAction.click();await wait(220);const overlay=d.querySelector('body > .listening-overlay'),play=overlay?.querySelector('.listening-play');if(!overlay||!play)throw Error('listening-controls-missing');if(!noMotion(w,overlay))throw Error('listening-route-motion');if(reduced){if(!noMotion(w,play))throw Error('reduced-listening-motion')}else if(!hasMotion(w,play))throw Error('listening-motion-missing');overlay.querySelector('[data-listening-close]')?.click();await wait(160)}
+ d.querySelector('.ux-bottom-nav [data-ux-nav="home"]')?.click();await wait(180);w.FrenchTranquilleFieldNavigation?.openSettings?.();await wait(180);
+ const settings=d.querySelector('.screen-settings'),theme=d.querySelector('.screen-settings .theme-option');
+ if(!settings||!theme)throw Error('settings-controls-missing');
+ if(!noMotion(w,settings))throw Error('settings-route-motion');
+ if(reduced){if(!noMotion(w,theme))throw Error('reduced-settings-motion')}else if(!hasMotion(w,theme))throw Error('settings-motion-missing');
+ for(const k of keys)if(before[k]!==w.localStorage.getItem(k))throw Error('store:'+k);
+ done(true,`reduced=${reduced?1:0};local-motion=${reduced?'disabled':'enabled'};route-motion=0;home=ok;practice=ok;listening=ok;settings=ok;stores=unchanged`);
+}catch(e){done(false,e.message)}},3400);
+setTimeout(()=>{if(!R.dataset.premiumV4MotionTribunal)done(false,'timeout')},30000);
+})();
+</script></body></html>
