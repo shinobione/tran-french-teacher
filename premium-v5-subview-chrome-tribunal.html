@@ -60,14 +60,28 @@
         if(overlay?.querySelector('.listening-top .eyebrow')&&visible(w,overlay.querySelector('.listening-top .eyebrow')))throw Error('listening-build-label-visible');
       }else{
         const runner=await until(()=>d.querySelector('.scenario-runner'),12000);
-        back=await until(()=>runner?.querySelector('.scenario-close.ft-v55-subview-back'));
+        back=await until(()=>runner?.querySelector('[data-scenario-close]'));
+        const underlayBack=d.querySelector('.screen-conversation .topbar [data-back].ft-v55-subview-back');
+        if(visible(w,underlayBack))throw Error('real-life-double-back-visible');
       }
       if(!visible(w,back))throw Error(`${CASE}-back-missing`);
       const br=back.getBoundingClientRect();
       if(!same(rr,br))throw Error(`${CASE}-back-not-same:${Math.round(rr.left)},${Math.round(rr.top)},${Math.round(rr.width)}x${Math.round(rr.height)}/${Math.round(br.left)},${Math.round(br.top)},${Math.round(br.width)}x${Math.round(br.height)}`);
       root.dataset.v55SubviewAnchor='same';
 
-      back.click();
+      if(CASE==='real-life'){
+        back.click();
+        const listReady=await until(()=>!d.querySelector('.scenario-runner')&&d.querySelector('.scenario-grid'),12000);
+        if(!listReady)throw Error('real-life-list-not-restored');
+        const listBack=await until(()=>d.querySelector('.screen-conversation .topbar [data-back].ft-v55-subview-back'));
+        if(!visible(w,listBack))throw Error('real-life-list-back-missing');
+        if(!same(rr,listBack.getBoundingClientRect()))throw Error('real-life-list-back-anchor');
+        root.dataset.v55SubviewHierarchy='scenario-list-practice';
+        listBack.click();
+      }else{
+        back.click();
+      }
+
       const returned=await until(()=>d.querySelector('body > .b27-practice-page:not(.b27-leaving)'),12000);
       if(!returned)throw Error(`${CASE}-no-practice-return`);
       const returnedBack=await until(()=>returned.querySelector('.b27-back.ft-v55-subview-back'));
