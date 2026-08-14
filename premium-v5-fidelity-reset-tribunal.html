@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><title>Premium V5.5 fidelity reset tribunal</title></head><body>
+<script>
+(() => {
+  const root = document.documentElement;
+  const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+  const until = async (fn, limit=7000) => { for (let t=0;t<limit;t+=50){ const v=fn(); if(v) return v; await wait(50); } return fn(); };
+  const fail = detail => { root.dataset.premiumV55='fail'; root.dataset.premiumV55Detail=detail; };
+  const ok = detail => { root.dataset.premiumV55='ok'; root.dataset.premiumV55Detail=detail; };
+  const rect = node => node?.getBoundingClientRect?.();
+  const px = value => Number.parseFloat(value || '0') || 0;
+  const visible = node => !!node && getComputedStyle(node).display !== 'none' && getComputedStyle(node).visibility !== 'hidden' && rect(node).width > 0 && rect(node).height > 0;
+
+  localStorage.setItem('tran-french-teacher:debug-fr:v1','1');
+  localStorage.setItem('french-tranquille:appearance-theme:v1','aurora');
+  const learnerKey = 'francais-avec-luc:learner:v1';
+  const learnerBefore = localStorage.getItem(learnerKey);
+
+  const frame = document.createElement('iframe');
+  frame.style.width='390px'; frame.style.height='844px'; frame.style.border='0';
+  frame.src='./index.html?v55Audit=1';
+  document.body.appendChild(frame);
+
+  frame.addEventListener('load', () => setTimeout(async () => {
+    try {
+      const w = frame.contentWindow, d = frame.contentDocument;
+      const themes = await until(() => w.FrenchTranquilleThemes);
+      const shellApi = await until(() => w.FrenchTranquilleBuild27Shell);
+      const fidelity = await until(() => w.FrenchTranquillePremiumV55);
+      if (!themes || !shellApi || !fidelity) return fail('runtime-missing');
+
+      const sceneChecks = [
+        ['aurora','theme-aurora-paris.svg'],
+        ['sunset','theme-sunset-paris.svg'],
+        ['jade','theme-jade-paris.svg']
+      ];
+      for (const [theme, asset] of sceneChecks) {
+        themes.apply(theme); await wait(180);
+        const bg = w.getComputedStyle(d.body).backgroundImage || '';
+        if (!bg.includes(asset)) return fail(`scene-${theme}`);
+      }
+      root.dataset.v55Scenes='aurora+sunset+jade';
+
+      themes.apply('aurora'); await wait(220);
+      const gear = await until(() => d.querySelector('.b27-home [data-b27-settings]'));
+      if (!visible(gear)) return fail('home-gear-missing');
+      const gearStyle = w.getComputedStyle(gear), gearRect = rect(gear);
+      if (gearRect.width < 44 || gearRect.height < 44 || px(gearStyle.borderRadius) < 20) return fail('gear-grammar');
+      root.dataset.v55Controls='filled-circle';
+
+      shellApi.openPractice();
+      const practice = await until(() => d.querySelector('body > .b27-practice-page'));
+      const practiceBack = await until(() => practice?.querySelector('.b27-back'));
+      if (!visible(practiceBack)) return fail('practice-back');
+      const pRect = rect(practiceBack);
+
+      const review = practice.querySelector('[data-b27-practice-action="review"]');
+      if (!review) return fail('review-action');
+      review.click();
+      const reviewShell = await until(() => d.querySelector('#app .app-shell.screen-review'));
+      if (!reviewShell) return fail('review-route');
+      const reviewBack = await until(() => reviewShell.querySelector('.topbar [data-back].ft-v55-subview-back'));
+      if (!visible(reviewBack)) return fail('review-back-missing');
+      const rRect = rect(reviewBack);
+      if (Math.abs(pRect.left-rRect.left)>2 || Math.abs(pRect.top-rRect.top)>2) return fail(`back-anchor:${pRect.left},${pRect.top}/${rRect.left},${rRect.top}`);
+      root.dataset.v55ReviewBack='aligned';
+
+      reviewBack.click();
+      const practiceAgain = await until(() => d.querySelector('body > .b27-practice-page'));
+      if (!practiceAgain) return fail('review-back-roundtrip');
+      root.dataset.v55ReviewReturn='practice';
+      practiceAgain.querySelector('.b27-back')?.click();
+      await wait(240);
+
+      const progressNav = d.querySelector('.bottom-nav [data-go="progress"], .ux-bottom-nav [data-go="progress"]');
+      if (!progressNav) return fail('progress-nav');
+      progressNav.click();
+      const progress = await until(() => d.querySelector('.b27-progress-page'));
+      if (!progress) return fail('progress-route');
+      const route = await until(() => progress.querySelector('.ft-v55-level-route'));
+      const nodes = route?.querySelectorAll('.ft-v55-level-node');
+      const track = route?.querySelector('.b27-level-track');
+      if (!route || nodes?.length !== 2 || !track) return fail('level-route-dom');
+      const a0=rect(nodes[0]), tr=rect(track), a1=rect(nodes[1]);
+      const cy = r => r.top + r.height/2;
+      if (!(a0.right < tr.right && tr.left < a1.left && a0.left < tr.left && tr.right < a1.right)) return fail('level-route-order');
+      if (Math.max(Math.abs(cy(a0)-cy(tr)),Math.abs(cy(a1)-cy(tr))) > 4) return fail('level-route-axis');
+      root.dataset.v55Progress='A0-line-A1';
+
+      const settingsGear = progress.querySelector('[data-b27-settings]');
+      if (!settingsGear) return fail('progress-settings');
+      settingsGear.click();
+      const settings = await until(() => d.querySelector('#app .app-shell.screen-settings'));
+      if (!settings) return fail('settings-route');
+      const close = await until(() => settings.querySelector('.topbar .ft-v55-settings-close'));
+      if (!visible(close) || close.textContent.trim() !== '×') return fail('settings-close');
+      const about = await until(() => settings.querySelector('#ft-settings-legal'));
+      const aboutToggle = about?.querySelector('[data-v55-about-toggle]');
+      if (!about || !aboutToggle || !about.textContent.includes('2026 ShinoBiWan')) return fail('about-credits');
+      if (w.getComputedStyle(about.querySelector('.ft-legal-grid')).display !== 'none') return fail('about-not-collapsed');
+      aboutToggle.click(); await wait(80);
+      if (w.getComputedStyle(about.querySelector('.ft-legal-grid')).display === 'none') return fail('about-open');
+      root.dataset.v55About='credits-contained';
+
+      if (d.documentElement.scrollWidth > d.documentElement.clientWidth + 1) return fail('horizontal-overflow');
+      if (localStorage.getItem(learnerKey) !== learnerBefore) return fail('learner-mutated');
+      root.dataset.v55Learner='unchanged';
+      root.dataset.v55Overflow='0';
+
+      themes.apply('original'); await wait(180);
+      if ((w.getComputedStyle(d.body).backgroundImage || '').includes('theme-aurora-paris.svg')) return fail('original-scene-leak');
+      root.dataset.v55Original='witness';
+
+      ok('scenes=3;controls=unified;review=back;progress=A0-line-A1;about=contained;learner=unchanged;original=witness');
+    } catch (error) { fail(error?.stack || error?.message || String(error)); }
+  }, 2400));
+
+  setTimeout(() => { if (!root.dataset.premiumV55) fail('timeout'); }, 26000);
+})();
+</script>
+</body></html>
