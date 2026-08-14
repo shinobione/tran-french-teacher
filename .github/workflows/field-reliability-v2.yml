@@ -34,7 +34,9 @@ jobs:
           grep -q 'new Blob(s.chunks' field-audio-session.js
           grep -q 'data-field-audio-play' field-audio-session.js
           grep -q 'limit=3200' field-audio-browser-smoke.html
-          grep -q "finish(false,'timeout')},12000" field-audio-browser-smoke.html
+          grep -q 'observeNode' field-audio-browser-smoke.html
+          grep -q 'play=observed' field-audio-browser-smoke.html
+          grep -q "finish(false,'timeout')},14000" field-audio-browser-smoke.html
 
       - name: Sanctuaries remain exact
         run: |
@@ -55,7 +57,7 @@ jobs:
         run: |
           google-chrome --headless=new --no-sandbox --disable-gpu \
             --autoplay-policy=no-user-gesture-required \
-            --virtual-time-budget=14000 --dump-dom \
+            --virtual-time-budget=18000 --dump-dom \
             'http://127.0.0.1:4173/field-audio-browser-smoke.html?fieldAudioV2=1' >/tmp/field-audio-v2.html
           grep -q 'data-field-audio-browser-smoke="ok"' /tmp/field-audio-v2.html || { cat /tmp/field-audio-v2.html; exit 1; }
           grep -Eq 'data-field-audio-blob-bytes="[1-9][0-9]*"' /tmp/field-audio-v2.html || { cat /tmp/field-audio-v2.html; exit 1; }
