@@ -15,17 +15,22 @@ jobs:
       - name: Static contracts
         run: |
           node --check theme-controller.js
-          grep -q '2.3.10-v4settings1' theme-controller.js
+          grep -q '2.3.11-v4ownership1' theme-controller.js
           grep -q 'premium-v4-home.css?v=2.3.6-v4home2' premium-theme-polish.css
           grep -q 'premium-v4-progress.css?v=2.3.7-v4progress1' premium-theme-polish.css
           grep -q 'premium-v4-practice.css?v=2.3.8-v4practice1' premium-theme-polish.css
           grep -q 'premium-v4-listening.css?v=2.3.9-v4listening1' premium-theme-polish.css
           grep -q 'premium-v4-settings.css?v=2.3.10-v4settings1' premium-theme-polish.css
+          grep -q 'premium-v4-ownership-hotfix.css?v=2.3.11-v4ownership1' premium-theme-polish.css
           grep -q -- '--pv4-home-ready:1' premium-v4-home.css
           grep -q -- '--pv4-progress-ready:1' premium-v4-progress.css
           grep -q -- '--pv4-practice-ready:1' premium-v4-practice.css
           grep -q -- '--pv4-listening-ready:1' premium-v4-listening.css
           grep -q -- '--pv4-settings-ready:1' premium-v4-settings.css
+          grep -q 'b27-practice-open' premium-v4-ownership-hotfix.css
+          grep -q 'visibility:hidden!important' premium-v4-ownership-hotfix.css
+          grep -q 'home-visible-under-practice' premium-v4-practice-tribunal.html
+          grep -q 'home-not-restored-after-practice' premium-v4-practice-tribunal.html
           grep -q '#ft-settings-legal' premium-v4-settings.css
           grep -q 'data-reset' premium-v4-settings-tribunal.html
           grep -q 'desktop-not-two-column' premium-v4-home-tribunal.html
@@ -41,6 +46,7 @@ jobs:
           grep -q 'prefers-reduced-motion:reduce' premium-v4-settings.css
           ! grep -q 'francais-avec-luc:learner:v1' theme-controller.js
           ! grep -q 'francais-avec-luc:learner:v1' premium-v4-settings.css
+          ! grep -q 'francais-avec-luc:learner:v1' premium-v4-ownership-hotfix.css
       - name: Voice and learner sanctuaries remain exact
         run: |
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"

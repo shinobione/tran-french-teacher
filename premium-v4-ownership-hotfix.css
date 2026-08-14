@@ -1,0 +1,12 @@
+/* French Trân’quille — Premium V4 surface ownership hotfix
+   Maintenance-only: an app surface must never visually bleed through another one. */
+
+/* Practice is implemented as a full-screen overlay above the canonical Home route.
+   Do not rely on overlay paint/opacity to hide Home: explicitly revoke Home visibility
+   and interaction ownership for the lifetime of the Practice surface. */
+html.b27-practice-open .screen-home .b27-home{
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+
+/* The bottom navigation is intentionally NOT hidden: it remains the global app shell. */
