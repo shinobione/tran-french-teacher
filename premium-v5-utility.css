@@ -15,13 +15,14 @@ html[data-theme]:not([data-theme="original"]) :is(
   min-width:46px;
   min-height:46px;
   padding:0;
-  border:1px solid var(--pv5-control-border);
-  border-radius:var(--pv5-control-radius);
-  background:
+  border:1px solid var(--pv5-control-border,color-mix(in srgb,var(--ft-border) 62%,var(--ft-accent) 38%));
+  border-radius:var(--pv5-control-radius,15px);
+  background-image:
     radial-gradient(circle at 28% 18%,rgba(255,255,255,.18),transparent 31%),
-    linear-gradient(145deg,var(--pv5-control-a),var(--pv5-control-b));
-  color:var(--pv5-control-ink);
-  box-shadow:var(--pv5-control-shadow);
+    linear-gradient(145deg,var(--pv5-control-a,color-mix(in srgb,var(--ft-surface) 78%,var(--ft-accent) 22%)),var(--pv5-control-b,color-mix(in srgb,var(--ft-surface-2) 82%,var(--ft-accent2) 18%)));
+  background-color:transparent;
+  color:var(--pv5-control-ink,var(--ft-accent));
+  box-shadow:var(--pv5-control-shadow,0 11px 28px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.15),inset 0 -9px 18px rgba(0,0,0,.08));
   backdrop-filter:blur(18px) saturate(1.14);
   -webkit-backdrop-filter:blur(18px) saturate(1.14);
   display:grid;
@@ -63,10 +64,11 @@ html[data-theme]:not([data-theme="original"]) :is(
 html[data-theme]:not([data-theme="original"]) .scenario-listen{
   min-height:44px;
   padding:8px 12px;
-  border:1px solid color-mix(in srgb,var(--pv5-control-border) 82%,transparent);
+  border:1px solid color-mix(in srgb,var(--pv5-control-border,var(--ft-border)) 82%,transparent);
   border-radius:13px;
-  background:linear-gradient(145deg,var(--pv5-control-a),var(--pv5-control-b));
-  color:var(--pv5-control-ink);
+  background-image:linear-gradient(145deg,var(--pv5-control-a,color-mix(in srgb,var(--ft-surface) 78%,var(--ft-accent) 22%)),var(--pv5-control-b,color-mix(in srgb,var(--ft-surface-2) 82%,var(--ft-accent2) 18%)));
+  background-color:transparent;
+  color:var(--pv5-control-ink,var(--ft-accent));
   box-shadow:0 8px 20px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.10);
   font-weight:800;
 }
