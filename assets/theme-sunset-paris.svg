@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" preserveAspectRatio="xMidYMid slice">
+<defs>
+  <linearGradient id="sky" x1="0" y1="0" x2="0.8" y2="1"><stop stop-color="#40105d"/><stop offset=".32" stop-color="#9f2f66"/><stop offset=".58" stop-color="#ef7045"/><stop offset="1" stop-color="#1c0a32"/></linearGradient>
+  <radialGradient id="sun"><stop stop-color="#ffd56b" stop-opacity=".95"/><stop offset=".45" stop-color="#ff8d43" stop-opacity=".55"/><stop offset="1" stop-color="#ff5b62" stop-opacity="0"/></radialGradient>
+  <linearGradient id="edge" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffbb58"/><stop offset=".5" stop-color="#ff704e"/><stop offset="1" stop-color="#d851cf"/></linearGradient>
+  <filter id="blur"><feGaussianBlur stdDeviation="34"/></filter>
+  <filter id="glow"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<rect width="1080" height="1920" fill="url(#sky)"/>
+<ellipse cx="135" cy="430" rx="410" ry="390" fill="url(#sun)" filter="url(#blur)"/>
+<g fill="#ffaf68" opacity=".18"><path d="M0 330 C160 260 300 305 430 270 C560 235 760 250 1080 170 V520 C815 465 620 482 448 515 C270 548 145 520 0 570Z"/></g>
+<path d="M0 1205 C170 1120 270 1170 420 1120 C590 1060 740 1110 1080 980 L1080 1920 L0 1920Z" fill="#180824" fill-opacity=".88"/>
+<g fill="#2b0e35" opacity=".9"><path d="M0 1220h90v-86h34v86h98v-128h42v128h82v-65h45v65h104v-104h50v104h90v-144h52v144h110v-88h54v88h229v700H0z"/></g>
+<g transform="translate(115 640)" fill="none" stroke="#30102f" stroke-width="15" stroke-linecap="round" stroke-linejoin="round">
+ <path d="M102 0 L66 247 L17 470 M102 0 L138 247 L187 470 M47 349 H157 M30 410 H174 M66 247 H138 M82 129 H122"/>
+ <path d="M17 470 H187 M47 349 Q102 310 157 349 M30 410 Q102 368 174 410"/>
+</g>
+<g transform="translate(115 640)" fill="none" stroke="url(#edge)" stroke-width="3.5" opacity=".72" filter="url(#glow)">
+ <path d="M102 0 L66 247 L17 470 M102 0 L138 247 L187 470 M47 349 H157 M30 410 H174 M66 247 H138"/>
+</g>
+<g fill="#ffd47a" opacity=".72"><circle cx="790" cy="245" r="3"/><circle cx="875" cy="385" r="2"/><circle cx="930" cy="580" r="3"/><circle cx="635" cy="450" r="2"/></g>
+<g opacity=".34" stroke-linecap="round"><path d="M320 1280 L520 1840" stroke="#ff9a45" stroke-width="10"/><path d="M400 1240 L655 1870" stroke="#ff5e8e" stroke-width="7"/><path d="M505 1200 L760 1810" stroke="#b95cff" stroke-width="5"/></g>
+<rect y="1200" width="1080" height="720" fill="#170824" opacity=".24"/>
+</svg>

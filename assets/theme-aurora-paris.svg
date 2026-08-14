@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" preserveAspectRatio="xMidYMid slice">
+<defs>
+  <linearGradient id="sky" x1="0" y1="0" x2="0.8" y2="1"><stop stop-color="#02081d"/><stop offset="0.48" stop-color="#06265e"/><stop offset="1" stop-color="#081735"/></linearGradient>
+  <radialGradient id="cyan"><stop stop-color="#24d9ff" stop-opacity=".72"/><stop offset="1" stop-color="#24d9ff" stop-opacity="0"/></radialGradient>
+  <radialGradient id="pink"><stop stop-color="#ff4fc7" stop-opacity=".62"/><stop offset="1" stop-color="#ff4fc7" stop-opacity="0"/></radialGradient>
+  <linearGradient id="tower" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#31dcff"/><stop offset=".55" stop-color="#7c72ff"/><stop offset="1" stop-color="#ff62c9"/></linearGradient>
+  <filter id="blur"><feGaussianBlur stdDeviation="42"/></filter>
+  <filter id="glow"><feGaussianBlur stdDeviation="8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<rect width="1080" height="1920" fill="url(#sky)"/>
+<ellipse cx="170" cy="260" rx="380" ry="320" fill="url(#cyan)" filter="url(#blur)"/>
+<ellipse cx="910" cy="630" rx="420" ry="360" fill="url(#pink)" filter="url(#blur)"/>
+<path d="M0 1320 C170 1220 260 1280 400 1230 C560 1174 690 1190 1080 1030 L1080 1920 L0 1920Z" fill="#03091d" fill-opacity=".74"/>
+<g opacity=".48" fill="#132c5e"><path d="M0 1320h120v-66h35v66h90v-112h44v112h132v-50h55v50h122v-92h52v92h126v-128h48v128h276v600H0z"/></g>
+<g transform="translate(710 690)" fill="none" stroke="url(#tower)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" opacity=".9" filter="url(#glow)">
+  <path d="M95 0 L60 235 L15 420 M95 0 L130 235 L175 420 M45 315 H145 M28 365 H162 M60 235 H130 M76 126 H114"/>
+  <path d="M15 420 H175 M45 315 Q95 280 145 315 M28 365 Q95 330 162 365"/>
+  <path d="M95 -30V0"/>
+</g>
+<g fill="#ffffff" opacity=".72"><circle cx="150" cy="610" r="3"/><circle cx="238" cy="450" r="2"/><circle cx="842" cy="360" r="3"/><circle cx="934" cy="510" r="2"/><circle cx="590" cy="280" r="2"/></g>
+<g opacity=".42" stroke-linecap="round"><path d="M690 1240 L930 1770" stroke="#2adfff" stroke-width="10"/><path d="M760 1230 L1010 1800" stroke="#ff50c8" stroke-width="7"/><path d="M612 1310 L780 1800" stroke="#7586ff" stroke-width="5"/></g>
+<rect y="1180" width="1080" height="740" fill="url(#sky)" opacity=".22"/>
+</svg>

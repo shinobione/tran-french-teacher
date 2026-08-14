@@ -1,0 +1,23 @@
+/* Premium V5.5 compact lesson-card inheritance reset.
+   V4 used these pseudo-elements as absolute decorative glows. V5.5 reuses
+   ::before as a real grid medallion and ::after as the Eiffel illustration. */
+@media(max-width:759px){
+  html[data-theme]:not([data-theme="original"]) .b27-primary-card::before{
+    position:relative!important;
+    inset:auto!important;
+    right:auto!important;
+    bottom:auto!important;
+    filter:none!important;
+    transform:none!important;
+    opacity:1!important;
+  }
+  html[data-theme]:not([data-theme="original"]) .b27-primary-card::after{
+    position:absolute!important;
+    inset:auto -8px 37px auto!important;
+    left:auto!important;
+    top:auto!important;
+    filter:none!important;
+    transform:none!important;
+    border-radius:0!important;
+  }
+}

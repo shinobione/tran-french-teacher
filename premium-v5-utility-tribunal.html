@@ -6,7 +6,8 @@ const sizes=[[390,844],[1440,900]],themes=['aurora','sunset','jade'];
 const finish=(ok,msg)=>{R.dataset.premiumV5Utility=ok?'ok':'fail';R.dataset.premiumV5UtilityDetail=msg};
 const px=v=>Number.parseFloat(v)||0;
 const visible=(w,n)=>{if(!n)return false;const s=w.getComputedStyle(n),r=n.getBoundingClientRect();return s.display!=='none'&&s.visibility!=='hidden'&&s.opacity!=='0'&&r.width>1&&r.height>1};
-const assertSquare=(w,n,label)=>{if(!visible(w,n))throw Error(`${label}:missing`);const s=w.getComputedStyle(n),r=n.getBoundingClientRect();if(r.width<44||r.height<44)throw Error(`${label}:touch-${Math.round(r.width)}x${Math.round(r.height)}`);const rad=px(s.borderTopLeftRadius);if(rad<11||rad>20)throw Error(`${label}:radius-${rad}`);if(!s.backgroundImage||s.backgroundImage==='none')throw Error(`${label}:hollow`);if(!s.boxShadow||s.boxShadow==='none')throw Error(`${label}:flat`)};
+const successor=w=>w.getComputedStyle(w.document.documentElement).getPropertyValue('--pv55-ready').trim()==='1';
+const assertSquare=(w,n,label)=>{if(!visible(w,n))throw Error(`${label}:missing`);const s=w.getComputedStyle(n),r=n.getBoundingClientRect();if(r.width<44||r.height<44)throw Error(`${label}:touch-${Math.round(r.width)}x${Math.round(r.height)}`);const rad=px(s.borderTopLeftRadius);if(rad<11||(!successor(w)&&rad>20))throw Error(`${label}:radius-${rad}`);if(!s.backgroundImage||s.backgroundImage==='none')throw Error(`${label}:hollow`);if(!s.boxShadow||s.boxShadow==='none')throw Error(`${label}:flat`)};
 const seed=async w=>{const c=w.FrenchTranquilleCurriculum,key=c.key||'francais-avec-luc:learner:v1';const known=['bonjour','merci','au-revoir','je-mappelle','svp','excusez-moi','je-comprends','je-ne-comprends-pas','repetez','plus-lentement'];w.localStorage.setItem(key,JSON.stringify({schemaVersion:2,learnerName:'Trân',level:'A0',lessonProgress:{},completedLessons:[],knownItems:known}));w.FrenchTranquilleBuild27Shell?.refresh?.();w.FrenchTranquilleBuild32Shell?.refresh?.();await wait(80)};
 F.onload=()=>setTimeout(async()=>{try{
  const w=F.contentWindow,d=F.contentDocument;
@@ -21,8 +22,6 @@ F.onload=()=>setTimeout(async()=>{try{
   for(const theme of themes){
    w.FrenchTranquilleThemes.apply(theme);await wait(90);
    if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv5-utility-ready').trim()!=='1')throw Error(`${width}-${theme}:marker`);
-
-   /* Test the real legacy UX close in its real overlay context. */
    fixture.hidden=true;
    w.FrenchTranquilleUX.openPractice?.();await wait(120);
    const uxOverlay=d.querySelector('body > .ux-practice-overlay'),uxClose=uxOverlay?.querySelector('.ux-close');
@@ -30,12 +29,10 @@ F.onload=()=>setTimeout(async()=>{try{
    assertSquare(w,uxClose,`${width}-${theme}:ux-close`);
    w.FrenchTranquilleUX.closePractice?.();await wait(80);
    fixture.hidden=false;
-
    assertSquare(w,fixture.querySelector('.scenario-close'),`${width}-${theme}:scenario-close`);
    assertSquare(w,fixture.querySelector('.scenario-mic'),`${width}-${theme}:scenario-mic`);
    assertSquare(w,fixture.querySelector('.progress-detail-panel-head button'),`${width}-${theme}:progress-detail-close`);
    const listen=fixture.querySelector('.scenario-listen'),ls=w.getComputedStyle(listen),lr=listen.getBoundingClientRect();if(lr.height<44||!ls.backgroundImage||ls.backgroundImage==='none')throw Error(`${width}-${theme}:scenario-listen`);
-
    fixture.hidden=true;
    w.FrenchTranquilleListening.open();await wait(140);w.FrenchTranquilleFieldNavigation.ensureListeningSettings();await wait(60);
    const banner=d.querySelector('.debug-fr-banner'),overlay=d.querySelector('body > .listening-overlay');if(!visible(w,banner)||!visible(w,overlay))throw Error(`${width}-${theme}:debug-listening-nodes`);

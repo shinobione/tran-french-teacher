@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><title>Premium V5.5 subview chrome tribunal</title></head><body>
+<script>
+(() => {
+  const root=document.documentElement;
+  const params=new URLSearchParams(location.search);
+  const CASE=params.get('case')||'review';
+  const allowed=new Set(['review','conversation','listening','real-life']);
+  const wait=ms=>new Promise(r=>setTimeout(r,ms));
+  const until=async(fn,limit=11000)=>{for(let t=0;t<limit;t+=50){let v=null;try{v=fn()}catch{}if(v)return v;await wait(50)}try{return fn()}catch{return null}};
+  const finish=(ok,detail)=>{root.dataset.v55Subview=ok?'ok':'fail';root.dataset.v55SubviewCase=CASE;root.dataset.v55SubviewDetail=detail};
+  const visible=(w,n)=>{if(!n)return false;const s=w.getComputedStyle(n),r=n.getBoundingClientRect();return s.display!=='none'&&s.visibility!=='hidden'&&s.opacity!=='0'&&r.width>1&&r.height>1};
+  const nodeState=(w,n)=>{if(!n)return 'missing';const s=w.getComputedStyle(n),r=n.getBoundingClientRect();return `vis=${visible(w,n)?1:0},display=${s.display},visibility=${s.visibility},opacity=${s.opacity},position=${s.position},top=${s.top},left=${s.left},z=${s.zIndex},rect=${Math.round(r.width)}x${Math.round(r.height)}@${Math.round(r.left)},${Math.round(r.top)},class=${String(n.className||'').replace(/\s+/g,'.')}`};
+  const same=(a,b)=>Math.abs(a.left-b.left)<=2&&Math.abs(a.top-b.top)<=2&&Math.abs(a.width-b.width)<=2&&Math.abs(a.height-b.height)<=2;
+  const rightGap=(d,n)=>d.documentElement.clientWidth-n.getBoundingClientRect().right;
+  const assertRight=(d,n,label)=>{const gap=rightGap(d,n);if(gap<8||gap>28)throw Error(`${label}-right-gap-${Math.round(gap)}`)};
+  if(!allowed.has(CASE)){finish(false,'bad-case');return}
+
+  const frame=document.createElement('iframe');
+  frame.style.cssText='width:390px;height:844px;border:0;display:block';
+  frame.src='./index.html?uxSmoke=lesson8&fieldNavV3=1&v55Subview=1';
+  document.body.appendChild(frame);
+  frame.addEventListener('load',()=>setTimeout(async()=>{
+    try{
+      const w=frame.contentWindow,d=frame.contentDocument;
+      w.localStorage.setItem('tran-french-teacher:debug-fr:v1','0');
+      w.localStorage.setItem('french-tranquille:appearance-theme:v1','aurora');
+      const ready=await until(()=>w.FrenchTranquilleThemes&&w.FrenchTranquillePremiumV55&&w.FrenchTranquilleFieldNavigation&&w.FrenchTranquilleBuild27Shell);
+      if(!ready)throw Error('runtime-missing');
+      w.FrenchTranquilleThemes.apply('aurora');w.FrenchTranquillePremiumV55.refresh();
+      await w.FrenchTranquilleFieldNavigation.go('practice');await wait(200);
+      const practice=await until(()=>d.querySelector('body > .b27-practice-page:not(.b27-leaving)'));
+      if(!practice)throw Error('practice-missing');
+      const reference=practice.querySelector('.b27-back.ft-v55-subview-back');
+      const gear=practice.querySelector('[data-b27-settings].ft-v55-settings-gear');
+      if(!visible(w,reference))throw Error('practice-back-missing');
+      if(!visible(w,gear))throw Error('practice-gear-missing');
+      const rr=reference.getBoundingClientRect(),gr=gear.getBoundingClientRect();
+      if(rr.width<44||rr.height<44)throw Error('practice-back-target');
+      if(gr.width<44||gr.height<44)throw Error('practice-gear-target');
+      assertRight(d,gear,'practice-gear');
+      if(rr.left>24)throw Error(`practice-back-left-${Math.round(rr.left)}`);
+
+      const action=practice.querySelector(`[data-b27-practice-action="${CASE}"]`);
+      if(!action||action.disabled)throw Error(`${CASE}-unavailable`);
+      action.click();
+
+      let back=null;
+      if(CASE==='review'){
+        const shell=await until(()=>d.querySelector('#app .app-shell.screen-review'));
+        back=await until(()=>shell?.querySelector('.topbar [data-back].ft-v55-subview-back'));
+      }else if(CASE==='conversation'){
+        const shell=await until(()=>d.querySelector('#app .app-shell.screen-conversation'));
+        back=await until(()=>shell?.querySelector('.topbar [data-back].ft-v55-subview-back'));
+      }else if(CASE==='listening'){
+        const overlay=await until(()=>d.querySelector('body > .listening-overlay'));
+        back=await until(()=>overlay?.querySelector('.listening-close.ft-v55-subview-back'));
+        const listenGear=overlay?.querySelector('[data-b27-settings].ft-v55-settings-gear');
+        if(!visible(w,listenGear))throw Error('listening-gear-missing');
+        assertRight(d,listenGear,'listening-gear');
+        if(overlay?.querySelector('.listening-top .eyebrow')&&visible(w,overlay.querySelector('.listening-top .eyebrow')))throw Error('listening-build-label-visible');
+      }else{
+        const runner=await until(()=>[...d.querySelectorAll('.scenario-runner')].find(n=>visible(w,n)),12000);
+        if(!runner){
+          const runners=[...d.querySelectorAll('.scenario-runner')].map((n,i)=>`${i}:${nodeState(w,n)}`).join('|')||'none';
+          const lab=nodeState(w,d.querySelector('.scenario-lab-card'));
+          const shell=nodeState(w,d.querySelector('#app .app-shell.screen-conversation'));
+          throw Error(`real-life-visible-runner-missing:runners=${runners};lab=${lab};shell=${shell};mode=${d.documentElement.dataset.practiceMode||'-'};html=${d.documentElement.className.replace(/\s+/g,'.')}`);
+        }
+        back=runner.querySelector('[data-scenario-close]');
+        if(!visible(w,back)){
+          const all=[...d.querySelectorAll('[data-scenario-close]')].map((n,i)=>`${i}:${nodeState(w,n)}`).join('|')||'none';
+          throw Error(`real-life-back-node:${nodeState(w,back)};all=${all};runner=${nodeState(w,runner)};parent=${nodeState(w,runner.parentElement)}`);
+        }
+        const underlayBack=d.querySelector('.screen-conversation .topbar [data-back].ft-v55-subview-back');
+        if(visible(w,underlayBack))throw Error(`real-life-double-back-visible:${nodeState(w,underlayBack)}`);
+      }
+      if(!visible(w,back))throw Error(`${CASE}-back-missing`);
+      const br=back.getBoundingClientRect();
+      if(!same(rr,br))throw Error(`${CASE}-back-not-same:${Math.round(rr.left)},${Math.round(rr.top)},${Math.round(rr.width)}x${Math.round(rr.height)}/${Math.round(br.left)},${Math.round(br.top)},${Math.round(br.width)}x${Math.round(br.height)}`);
+      root.dataset.v55SubviewAnchor='same';
+
+      if(CASE==='real-life'){
+        back.click();
+        const listReady=await until(()=>![...d.querySelectorAll('.scenario-runner')].some(n=>visible(w,n))&&visible(w,d.querySelector('.scenario-grid')),12000);
+        if(!listReady)throw Error(`real-life-list-not-restored:grid=${nodeState(w,d.querySelector('.scenario-grid'))};runner=${nodeState(w,[...d.querySelectorAll('.scenario-runner')].find(n=>visible(w,n)))}`);
+        const listBack=await until(()=>d.querySelector('.screen-conversation .topbar [data-back].ft-v55-subview-back'));
+        if(!visible(w,listBack))throw Error(`real-life-list-back-missing:${nodeState(w,listBack)}`);
+        if(!same(rr,listBack.getBoundingClientRect()))throw Error('real-life-list-back-anchor');
+        root.dataset.v55SubviewHierarchy='scenario-list-practice';
+        listBack.click();
+      }else{
+        back.click();
+      }
+
+      const returned=await until(()=>d.querySelector('body > .b27-practice-page:not(.b27-leaving)'),12000);
+      if(!returned)throw Error(`${CASE}-no-practice-return`);
+      const returnedBack=await until(()=>returned.querySelector('.b27-back.ft-v55-subview-back'));
+      if(!visible(w,returnedBack)||!same(rr,returnedBack.getBoundingClientRect()))throw Error(`${CASE}-return-anchor`);
+      if(d.documentElement.scrollWidth>d.documentElement.clientWidth+1)throw Error(`${CASE}-overflow`);
+      root.dataset.v55SubviewReturn='practice';
+      root.dataset.v55SubviewOverflow='0';
+      finish(true,`${CASE}=same-back+practice-return`);
+    }catch(e){finish(false,e.message||String(e))}
+  },2400));
+  setTimeout(()=>{if(!root.dataset.v55Subview)finish(false,'timeout')},30000);
+})();
+</script>
+</body></html>
