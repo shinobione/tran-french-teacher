@@ -1,4 +1,4 @@
-const CACHE='tran-french-teacher-v2.3.15-b34.6-v4contrast1';
+const CACHE='tran-french-teacher-v2.3.16-b34.7-v5coherence1';
 const V='1.17.0-b24';
 const UX='1.17.5-b24.5';
 const P25='1.18.0-b25';
@@ -23,11 +23,12 @@ const V2='2.0.0';
 const LEGAL='2.0.0-postv2-legal';
 const B31='2.1.0-b31';
 const B32='2.2.0-b32';
-const NAV='2.3.6-b34.6';
+const NAV='2.3.7-b34.7';
 const AUDIO='2.3.1-b34.1';
 const COHERENCE='2.3.12-v4coherence1';
 const MOTION='2.3.14-v4motion1';
 const V4='2.3.15-v4contrast1';
+const V5='2.3.16-v5coherence1';
 const CORE=[
   './','./index.html',
   `./styles.css?v=${V}`,`./brand.css?v=${V}`,`./learning-memory.css?v=${V}`,`./visual-pass.css?v=${V}`,`./lucie-avatar.css?v=${V}`,
@@ -35,9 +36,9 @@ const CORE=[
   `./scenario-engine.css?v=${V}`,`./real-life-ux.css?v=${V}`,`./error-intelligence.css?v=${V}`,`./listening-engine.css?v=${V}`,`./language-ratio.css?v=${V}`,`./ux-shell.css?v=${UX}`,`./interaction-ux.css?v=${UX}`,`./mobile-polish.css?v=${UX}`,`./progression-ux.css?v=${P25}`,`./session-ux.css?v=${P252}`,`./voice-replay.css?v=${B261}`,`./progress-details-dashboard.css?v=${B261}`,`./build26-3-ux.css?v=${B263}`,`./build26-4-ux.css?v=${B264}`,`./build26-5-ux.css?v=${B265}`,`./build26-6-ux.css?v=${B266}`,`./build26-7-ux.css?v=${B267}`,`./build26-8-ux.css?v=${B268}`,`./build26-9-ux.css?v=${B269}`,`./build27-app-shell.css?v=${B27}`,`./build29-iphone-a11y.css?v=${B29}`,`./speaking-loop-content.css?v=${B292}`,`./learner-intelligence.css?v=${B31}`,
   './appearance-themes.css?v=1.0.0-theme1',
   './premium-theme-polish-v2-base.css?v=2.3.2-theme2','./premium-depth-pass.css?v=2.3.2-depth1','./premium-depth-mobile-geometry.css?v=2.3.2-depth1','./premium-mockup-polish-v3.css?v=2.3.3-mockup3',
-  './premium-v4-home.css?v=2.3.6-v4home2','./premium-v4-progress.css?v=2.3.7-v4progress1','./premium-v4-practice.css?v=2.3.8-v4practice1','./premium-v4-listening.css?v=2.3.9-v4listening1','./premium-v4-settings.css?v=2.3.10-v4settings1','./premium-v4-ownership-hotfix.css?v=2.3.11-v4ownership1',`./premium-v4-route-coherence.css?v=${COHERENCE}`,`./premium-v4-motion.css?v=${MOTION}`,`./premium-v4-contrast.css?v=${V4}`,'./premium-nav-geometry-hotfix.css?v=2.3.4-p0nav1',`./premium-theme-polish.css?v=${V4}`,
+  './premium-v4-home.css?v=2.3.6-v4home2','./premium-v4-progress.css?v=2.3.7-v4progress1','./premium-v4-practice.css?v=2.3.8-v4practice1','./premium-v4-listening.css?v=2.3.9-v4listening1','./premium-v4-settings.css?v=2.3.10-v4settings1','./premium-v4-ownership-hotfix.css?v=2.3.11-v4ownership1',`./premium-v4-route-coherence.css?v=${COHERENCE}`,`./premium-v4-motion.css?v=${MOTION}`,`./premium-v4-contrast.css?v=${V4}`,`./premium-v5-coherence.css?v=${V5}`,`./premium-v5-listening-settings.css?v=${V5}`,'./premium-nav-geometry-hotfix.css?v=2.3.4-p0nav1',`./premium-theme-polish.css?v=${V5}`,
   `./data-recovery-core.js?v=${B28}`,`./data-recovery.js?v=${B28}`,
-  `./progress-safety.js?v=${V}`,`./app.js?v=${V}`,`./curriculum-stage2.js?v=${V}`,`./curriculum-stage3.js?v=${V}`,`./stage2-boot.js?v=${NAV}`,`./field-navigation-runtime.js?v=${NAV}`,`./field-audio-session.js?v=${AUDIO}`,`./theme-controller.js?v=${V4}`,
+  `./progress-safety.js?v=${V}`,`./app.js?v=${V}`,`./curriculum-stage2.js?v=${V}`,`./curriculum-stage3.js?v=${V}`,`./stage2-boot.js?v=${NAV}`,`./field-navigation-runtime.js?v=${NAV}`,`./field-audio-session.js?v=${AUDIO}`,`./theme-controller.js?v=${V5}`,
   `./debug-fr.js?v=${V}`,`./voice-ios.js?v=${V}`,`./free-voice.js?v=${V}`,`./learning-memory.js?v=${V}`,`./error-intelligence.js?v=${V}`,
   `./language-ratio-core.js?v=${V}`,`./language-ratio.js?v=${V}`,`./daily-coach.js?v=${V}`,`./mastery-engine.js?v=${V}`,`./mastery-stage3.js?v=${V}`,
   `./scenario-data.js?v=${V}`,`./real-life-data.js?v=${V}`,`./real-life-data-2.js?v=${V}`,`./real-life-data-3.js?v=${B26}`,`./scenario-host.js?v=${V}`,`./scenario-engine.js?v=${V}`,`./real-life-ux.js?v=${V}`,`./real-life-coach.js?v=${B26}`,
