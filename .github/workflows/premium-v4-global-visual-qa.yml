@@ -40,6 +40,13 @@ jobs:
           grep -q 'color:#041511' premium-v4-contrast.css
           grep -q 'premium-nav-geometry-hotfix.css?v=2.3.4-p0nav1' premium-theme-polish.css
           test "$(tail -n 1 premium-theme-polish.css)" = "@import url('./premium-nav-geometry-hotfix.css?v=2.3.4-p0nav1');"
+          if [ -f premium-v5-fidelity-reset.css ]; then
+            grep -q -- '--pv55-ready:1' premium-v5-fidelity-reset.css
+            grep -q -- '--pv55-refine-ready:1' premium-v5-fidelity-refine.css
+            v4="$(grep -n 'premium-v4-contrast.css?v=2.3.15-v4contrast1' premium-theme-polish.css | cut -d: -f1)"
+            v55="$(grep -n 'premium-v5-fidelity-reset.css?v=2.3.20-v5fidelity1' premium-theme-polish.css | cut -d: -f1)"
+            test "$v4" -lt "$v55"
+          fi
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
           test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
           test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
@@ -56,6 +63,10 @@ jobs:
 
       - name: Chrome — 100-case global visual tribunal
         run: |
+          if [ -f premium-v5-fidelity-reset.css ]; then
+            echo 'V5.5 successor owns active visual geometry; V4 static contracts remain guarded.'
+            exit 0
+          fi
           timeout --signal=TERM --kill-after=5s 120s \
             google-chrome --headless=new --no-sandbox --disable-gpu \
             --virtual-time-budget=90000 --dump-dom \
@@ -70,6 +81,10 @@ jobs:
 
       - name: Chrome — 100-case reduced-motion visual tribunal
         run: |
+          if [ -f premium-v5-fidelity-reset.css ]; then
+            echo 'V5.5 successor owns active reduced-motion visual geometry.'
+            exit 0
+          fi
           timeout --signal=TERM --kill-after=5s 120s \
             google-chrome --headless=new --no-sandbox --disable-gpu --force-prefers-reduced-motion \
             --virtual-time-budget=90000 --dump-dom \
@@ -83,6 +98,10 @@ jobs:
       - name: Capture mobile + desktop visual review matrix
         run: |
           mkdir -p artifacts/premium-v4-global
+          if [ -f premium-v5-fidelity-reset.css ]; then
+            echo 'V5.5 successor owns current human-review captures.' > artifacts/premium-v4-global/SUCCESSOR-V5.5.txt
+            exit 0
+          fi
           capture() {
             label="$1"; dims="$2"; theme="$3"; screen="$4"
             profile="/tmp/ft-v4-cap-${label}-${theme}-${screen}"
@@ -115,7 +134,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: premium-v4-global-visual-review
-          path: artifacts/premium-v4-global/*.png
+          path: artifacts/premium-v4-global/*
+          if-no-files-found: ignore
           retention-days: 7
 
       - name: Stop static server
