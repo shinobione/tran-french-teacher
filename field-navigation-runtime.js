@@ -5,7 +5,7 @@ const params=new URLSearchParams(location.search);const historical=params.has('b
 const R=document.documentElement;let seq=0,settingsReturn=null;
 const sleep=n=>new Promise(r=>setTimeout(r,n));
 function active(id){document.querySelectorAll('.ux-bottom-nav [data-ux-nav]').forEach(b=>{const on=b.dataset.uxNav===id;b.classList.toggle('active',on);b.setAttribute('aria-current',on?'page':'false')})}
-function settleFacades(){document.querySelectorAll('#app .b27-page.b27-entering,#app .b27-page.b27-leaving').forEach(n=>n.classList.remove('b27-entering','b27-leaving'))}
+function settleFacades(){document.querySelectorAll('#app .b27-page.b27-entering,#app .b27-page.b27-leaving').forEach(n=>n.classList.remove('b27-entering','b27-leaving'));document.querySelectorAll('body > .b27-overlay.b27-entering').forEach(n=>n.classList.remove('b27-entering'))}
 function legacy(id){const b=document.querySelector(`.bottom-nav [data-go="${id}"]`);if(!b)return false;b.click();return true}
 function currentScreen(){const shell=document.querySelector('#app .app-shell');if(!shell)return 'boot';const cls=[...shell.classList].find(name=>name.startsWith('screen-'));return cls?cls.slice(7):'home'}
 function practiceSettingsLabel(){try{return localStorage.getItem('tran-french-teacher:debug-fr:v1')==='1'?'Réglages':'Cài đặt'}catch{return 'Cài đặt'}}
@@ -21,5 +21,5 @@ function onNav(e){const b=e.target?.closest?.('.ux-bottom-nav [data-ux-nav]');if
 function onSettings(e){const trigger=e.target?.closest?.('[data-b27-settings]');if(!trigger)return;e.preventDefault();e.stopImmediatePropagation();openSettings()}
 function onSettingsBack(e){const back=e.target?.closest?.('.screen-settings [data-back]');if(!back||!R.dataset.fieldSettingsReturn)return;e.preventDefault();e.stopImmediatePropagation();returnFromSettings()}
 function onListening(e){if(!e.target?.closest?.('[data-b27-action="listening"],[data-b27-practice-action="listening"],[data-listening-close]'))return;setTimeout(settleFacades,220)}
-window.addEventListener('click',onNav,true);window.addEventListener('click',onSettings,true);window.addEventListener('click',onSettingsBack,true);window.addEventListener('click',onListening,true);setTimeout(()=>{settleFacades();ensurePracticeSettings();const p=document.querySelector('.b27-practice-page:not(.b27-leaving)');if(p)active('practice')},250);window.FrenchTranquilleFieldNavigation=Object.freeze({version:'2.3.4',build:'34.4',go,openSettings,returnFromSettings,settle:settleFacades,ensurePracticeSettings});
+window.addEventListener('click',onNav,true);window.addEventListener('click',onSettings,true);window.addEventListener('click',onSettingsBack,true);window.addEventListener('click',onListening,true);setTimeout(()=>{settleFacades();ensurePracticeSettings();const p=document.querySelector('.b27-practice-page:not(.b27-leaving)');if(p)active('practice')},250);window.FrenchTranquilleFieldNavigation=Object.freeze({version:'2.3.5',build:'34.5',go,openSettings,returnFromSettings,settle:settleFacades,ensurePracticeSettings});
 })();
