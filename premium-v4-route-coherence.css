@@ -1,0 +1,135 @@
+/* French Trân’quille — Premium V4 / P0 route coherence
+   Field-video repair: route surfaces must cut atomically and historical
+   practice/scenario panels must inherit the active Premium theme.
+   Original remains the visual witness and is intentionally untouched. */
+
+html[data-theme]:not([data-theme="original"]){
+  --pv4-route-coherence-ready:1;
+}
+
+/* Route-level fades were designed before Field Navigation V3. They can leave
+   two app facades painted at once when the modern router settles old classes.
+   Premium themes therefore use an atomic hold-and-cut transaction. Motion may
+   return later INSIDE a settled surface, never between competing surfaces. */
+html[data-theme]:not([data-theme="original"]) .b27-page,
+html[data-theme]:not([data-theme="original"]) .b27-overlay{
+  transition:none!important;
+}
+html[data-theme]:not([data-theme="original"]) .b27-page.b27-entering,
+html[data-theme]:not([data-theme="original"]) .b27-page.b27-leaving,
+html[data-theme]:not([data-theme="original"]) .b27-overlay.b27-entering,
+html[data-theme]:not([data-theme="original"]) .b27-overlay.b27-leaving{
+  opacity:1!important;
+  transform:none!important;
+}
+html[data-theme]:not([data-theme="original"]) .app-shell.ux-screen-enter,
+html[data-theme]:not([data-theme="original"]) .ux-practice-overlay.ux-screen-enter{
+  animation:none!important;
+}
+
+/* Full-screen overlays own the content viewport for their ENTIRE DOM lifetime.
+   Do not key ownership only to an 'open' class: legacy close code may clear the
+   class before the outgoing overlay node is physically removed. */
+html[data-theme]:not([data-theme="original"]):has(body > .b27-overlay) #app .app-shell .content,
+html[data-theme]:not([data-theme="original"]):has(body > .listening-overlay) #app .app-shell .content{
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+
+/* The persistent bottom navigation is the global shell and stays available. */
+html[data-theme]:not([data-theme="original"]):has(body > .b27-overlay) .ux-bottom-nav,
+html[data-theme]:not([data-theme="original"]):has(body > .listening-overlay) .ux-bottom-nav{
+  visibility:visible!important;
+  pointer-events:auto!important;
+}
+
+/* ---------- Legacy visual bridge ----------
+   V4 rebuilt the entry surfaces first. Downstream session/scenario engines are
+   deliberately preserved, but their old hard-coded navy/black panels must map
+   onto the active Premium palette instead of looking like foreign black slabs. */
+html[data-theme]:not([data-theme="original"]) .practice-session-hub,
+html[data-theme]:not([data-theme="original"]) .scenario-lab-card{
+  background:linear-gradient(155deg,var(--ft-surface),var(--ft-surface-2))!important;
+  border-color:var(--ft-border)!important;
+  color:var(--text)!important;
+  box-shadow:0 20px 56px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.055)!important;
+}
+
+html[data-theme]:not([data-theme="original"]) .practice-session-hub::before,
+html[data-theme]:not([data-theme="original"]) .scenario-lab-card::before{
+  background:linear-gradient(90deg,var(--ft-accent),var(--ft-accent2),var(--ft-accent3))!important;
+  opacity:.78;
+}
+
+html[data-theme]:not([data-theme="original"]) .practice-session-alternatives,
+html[data-theme]:not([data-theme="original"]) .scenario-stats{
+  border-color:var(--ft-border)!important;
+}
+
+html[data-theme]:not([data-theme="original"]) .practice-session-alternatives>button,
+html[data-theme]:not([data-theme="original"]) .scenario-tile,
+html[data-theme]:not([data-theme="original"]) .scenario-npc,
+html[data-theme]:not([data-theme="original"]) .scenario-task,
+html[data-theme]:not([data-theme="original"]) .scenario-model,
+html[data-theme]:not([data-theme="original"]) .scenario-progress-row,
+html[data-theme]:not([data-theme="original"]) .scenario-summary>div,
+html[data-theme]:not([data-theme="original"]) .scenario-stats span,
+html[data-theme]:not([data-theme="original"]) .scenario-close,
+html[data-theme]:not([data-theme="original"]) .scenario-input-row input,
+html[data-theme]:not([data-theme="original"]) .scenario-mic,
+html[data-theme]:not([data-theme="original"]) .session-daily-more{
+  background:color-mix(in srgb,var(--ft-surface-2) 84%,var(--ft-soft) 16%)!important;
+  border-color:var(--ft-border)!important;
+  color:var(--text)!important;
+}
+
+html[data-theme]:not([data-theme="original"]) .scenario-tile.unlocked:hover{
+  background:color-mix(in srgb,var(--ft-surface-2) 76%,var(--ft-accent) 24%)!important;
+  border-color:color-mix(in srgb,var(--ft-border) 58%,var(--ft-accent) 42%)!important;
+}
+
+html[data-theme]:not([data-theme="original"]) .scenario-icon,
+html[data-theme]:not([data-theme="original"]) .scenario-avatar,
+html[data-theme]:not([data-theme="original"]) .practice-session-alternatives>button>span,
+html[data-theme]:not([data-theme="original"]) .scenario-progress,
+html[data-theme]:not([data-theme="original"]) .session-contract-bar{
+  background:color-mix(in srgb,var(--ft-soft) 82%,transparent)!important;
+  border-color:var(--ft-border)!important;
+}
+
+html[data-theme]:not([data-theme="original"]) .scenario-task{
+  background:color-mix(in srgb,var(--ft-surface-2) 82%,var(--ft-accent3) 18%)!important;
+}
+html[data-theme]:not([data-theme="original"]) .scenario-model{
+  background:color-mix(in srgb,var(--ft-surface-2) 82%,var(--ft-accent2) 18%)!important;
+}
+
+html[data-theme]:not([data-theme="original"]) .scenario-copy small,
+html[data-theme]:not([data-theme="original"]) .scenario-copy em,
+html[data-theme]:not([data-theme="original"]) .scenario-npc small,
+html[data-theme]:not([data-theme="original"]) .scenario-stats span,
+html[data-theme]:not([data-theme="original"]) .practice-session-hub>p,
+html[data-theme]:not([data-theme="original"]) .practice-session-alternatives>small{
+  color:var(--muted)!important;
+}
+
+html[data-theme]:not([data-theme="original"]) .scenario-npc strong,
+html[data-theme]:not([data-theme="original"]) .practice-session-hub h2,
+html[data-theme]:not([data-theme="original"]) .practice-session-alternatives>button strong{
+  color:var(--text)!important;
+}
+
+html[data-theme]:not([data-theme="original"]) .scenario-progress i,
+html[data-theme]:not([data-theme="original"]) .session-contract-bar i{
+  background:linear-gradient(90deg,var(--ft-accent),var(--ft-accent2))!important;
+}
+
+@media(prefers-reduced-motion:reduce){
+  html[data-theme]:not([data-theme="original"]) .b27-page,
+  html[data-theme]:not([data-theme="original"]) .b27-overlay,
+  html[data-theme]:not([data-theme="original"]) .app-shell.ux-screen-enter,
+  html[data-theme]:not([data-theme="original"]) .ux-practice-overlay.ux-screen-enter{
+    animation:none!important;
+    transition:none!important;
+  }
+}
