@@ -96,13 +96,16 @@ F.onload=()=>setTimeout(async()=>{try{
     const scenarioMode=hub.querySelector('[data-session-practice-mode="scenario"]');if(!scenarioMode||scenarioMode.disabled)throw Error(theme+':scenario-mode-unavailable');
     scenarioMode.click();await wait(120);checkFrame(theme+':scenario-open');
     const lab=d.querySelector('.screen-conversation .scenario-lab-card:not(.session-mode-hidden)');if(!vis(w,lab))throw Error(theme+':scenario-lab-not-visible');
-    if(w.getComputedStyle(lab).borderTopColor!==tokenColor('--ft-border'))throw Error(theme+':scenario-lab-not-themed');
+    const labStyle=w.getComputedStyle(lab),v53=w.getComputedStyle(d.documentElement).getPropertyValue('--pv53-islands-ready').trim()==='1';
+    const expectedBorder=tokenColor(v53?'--pv53-edge':'--ft-border');
+    if(labStyle.borderTopColor!==expectedBorder)throw Error(theme+':scenario-lab-not-themed');
+    if(v53&&(!labStyle.backgroundImage||labStyle.backgroundImage==='none'))throw Error(theme+':scenario-lab-v53-flat');
   }
 
   for(const k of keys)if(before[k]!==w.localStorage.getItem(k))throw Error('store:'+k);
   w.FrenchTranquilleThemes.apply('original');await wait(70);
   if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv4-route-coherence-ready').trim())throw Error('original-leak-after');
-  done(true,'frames=sampled-16ms;viewports=5;themes=3;home-practice=atomic;practice-home=atomic;practice-home-hop=0;progress-practice-host-swap=covered;practice-listening=atomic;conversation=themed;scenario=themed;intermediate-opacity=0;underlay-bleed=0;stores=unchanged');
+  done(true,'frames=sampled-16ms;viewports=5;themes=3;home-practice=atomic;practice-home=atomic;practice-home-hop=0;progress-practice-host-swap=covered;practice-listening=atomic;conversation=themed;scenario=themed;v5-islands=forward-compatible;intermediate-opacity=0;underlay-bleed=0;stores=unchanged');
 }catch(e){done(false,e.message)}},3400);
 setTimeout(()=>{if(!R.dataset.premiumV4TransitionTribunal)done(false,'timeout')},52000);
 })();

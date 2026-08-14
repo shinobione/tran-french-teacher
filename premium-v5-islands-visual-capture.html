@@ -1,0 +1,19 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Premium V5.3 island capture</title><style>html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050914}iframe{display:block;width:100%;height:100%;border:0}</style></head><body><iframe id="f" src="./index.html?fieldNavV3=1&debug=fr&uxSmoke=lesson8"></iframe><script>
+(()=>{'use strict';
+const R=document.documentElement,F=document.getElementById('f'),q=new URLSearchParams(location.search),theme=q.get('theme')||'aurora',surface=q.get('surface')||'scenario',wait=ms=>new Promise(r=>setTimeout(r,ms));
+const waitFor=async(fn,limit=18000)=>{for(let t=0;t<limit;t+=50){try{const v=fn();if(v)return v}catch{}await wait(50)}try{return fn()}catch{return null}};
+const visible=(w,n)=>{if(!n)return false;const s=w.getComputedStyle(n),r=n.getBoundingClientRect();return s.display!=='none'&&s.visibility!=='hidden'&&Number(s.opacity)>0&&r.width>1&&r.height>1};
+F.onload=()=>setTimeout(async()=>{try{
+ const w=F.contentWindow,d=F.contentDocument,ready=await waitFor(()=>w.FrenchTranquilleThemes&&w.FrenchTranquilleScenarios&&w.FrenchTranquilleBuild27Shell&&w.FrenchTranquilleSessionUX);
+ if(!ready)throw Error(`api-not-ready:themes=${!!w.FrenchTranquilleThemes};scenario=${!!w.FrenchTranquilleScenarios};b27=${!!w.FrenchTranquilleBuild27Shell};session=${!!w.FrenchTranquilleSessionUX}`);
+ if(surface!=='scenario')throw Error(`unknown-surface:${surface}`);
+ const stable=d.createElement('style');stable.textContent='*,*::before,*::after{transition-duration:0s!important;animation-duration:0s!important;animation-delay:0s!important}';d.head.appendChild(stable);
+ w.FrenchTranquilleThemes.apply(theme);await wait(120);
+ w.FrenchTranquilleBuild27Shell.openPractice();const action=await waitFor(()=>d.querySelector('.b27-practice-page [data-b27-practice-action="real-life"]'),5000);if(!action)throw Error('real-life-action-not-ready');action.click();
+ const started=await waitFor(()=>d.querySelector('.screen-conversation .scenario-lab-card')&&d.querySelector('.scenario-runner .scenario-npc')&&d.querySelector('.scenario-runner .scenario-task')&&d.querySelector('.scenario-input-row input'),7000);if(!started)throw Error(`scenario-not-ready:conversation=${!!d.querySelector('.screen-conversation .narrow')};lab=${!!d.querySelector('.scenario-lab-card')};runner=${!!d.querySelector('.scenario-runner')}`);
+ w.FrenchTranquilleSessionUX.setPracticeMode('scenario');
+ const shown=await waitFor(()=>visible(w,d.querySelector('.screen-conversation .scenario-lab-card'))&&visible(w,d.querySelector('.scenario-runner'))&&visible(w,d.querySelector('.scenario-runner .scenario-npc'))&&visible(w,d.querySelector('.scenario-runner .scenario-task'))&&visible(w,d.querySelector('.scenario-input-row input')),2500);if(!shown)throw Error('scenario-owner-not-visible');
+ await wait(80);d.scrollingElement.scrollTop=0;R.dataset.captureReady='1';R.dataset.captureTheme=theme;R.dataset.captureSurface=surface;
+}catch(e){R.dataset.captureReady='0';R.dataset.captureError=e.message}},120)})();
+setTimeout(()=>{if(!R.dataset.captureReady){R.dataset.captureReady='0';R.dataset.captureError='timeout'}},40000);
+</script></body></html>
