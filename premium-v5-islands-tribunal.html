@@ -1,0 +1,67 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Premium V5.3 pedagogical islands tribunal</title><style>body{margin:0}iframe{display:block;border:0}</style></head><body><iframe id="f" src="./index.html?fieldNavV3=1" style="width:390px;height:844px"></iframe><script>
+(()=>{'use strict';
+const R=document.documentElement,F=document.getElementById('f'),wait=ms=>new Promise(r=>setTimeout(r,ms));
+const waitFor=async(fn,limit=15000)=>{for(let t=0;t<limit;t+=50){try{const v=fn();if(v)return v}catch{}await wait(50)}try{return fn()}catch{return null}};
+const sizes=[[390,844],[1440,900]],themes=['aurora','sunset','jade'];
+const keys=['francais-avec-luc:learner:v1','french-tranquille:learning-memory:v1','french-tranquille:error-intelligence:v1','french-tranquille:scenarios:v1','french-tranquille:listening:v1','french-tranquille:milestones:v1'];
+const finish=(ok,msg)=>{R.dataset.premiumV5Islands=ok?'ok':'fail';R.dataset.premiumV5IslandsDetail=msg};
+const px=v=>Number.parseFloat(v)||0;
+const visible=(w,n)=>{if(!n)return false;const s=w.getComputedStyle(n),r=n.getBoundingClientRect();return s.display!=='none'&&s.visibility!=='hidden'&&s.opacity!=='0'&&r.width>1&&r.height>1};
+const assertPanel=(w,n,label,minRadius=16)=>{if(!visible(w,n))throw Error(`${label}:missing`);const s=w.getComputedStyle(n);if(px(s.borderTopLeftRadius)<minRadius)throw Error(`${label}:radius-${s.borderTopLeftRadius}`);if(!s.backgroundImage||s.backgroundImage==='none')throw Error(`${label}:flat-bg`);if(!s.boxShadow||s.boxShadow==='none')throw Error(`${label}:flat-shadow`)};
+const assertButton=(w,n,label)=>{if(!visible(w,n))throw Error(`${label}:missing`);const s=w.getComputedStyle(n),r=n.getBoundingClientRect();if(r.height<43||r.width<43)throw Error(`${label}:touch-${Math.round(r.width)}x${Math.round(r.height)}`);if(px(s.borderTopLeftRadius)<11)throw Error(`${label}:radius`);if(!s.backgroundImage||s.backgroundImage==='none')throw Error(`${label}:flat-bg`)};
+const fixtureHtml=()=>`<section id="pv53-fixture" style="position:fixed;inset:80px 12px auto;z-index:13000;max-width:680px;max-height:720px;overflow:auto;padding:8px;display:grid;gap:10px;background:rgba(0,0,0,.12)">
+  <section class="speaking-loop-card"><div class="speaking-loop-head"><span class="speaking-loop-eyebrow">JE PARLE</span><h3>Écoute, répète, puis écoute-toi</h3><p>Compare le rythme et les sons.</p></div><div class="speaking-loop-phrase">Je voudrais un café.</div><button class="listen speaking-loop-model">🔊 Écouter Tyffany</button><div class="speaking-loop-actions"><button>🎙️ Enregistrer ma voix</button><button class="primary">▶ Ma voix</button></div></section>
+  <section class="voice-replay-panel"><div class="voice-replay-copy"><strong>🎧 Écoute-toi</strong><small>Local uniquement</small></div><div class="voice-replay-actions"><button class="voice-replay-record">🎙️ Enregistrer</button><button class="voice-replay-play primary">▶ Ma voix</button></div></section>
+  <section class="session-success"><div class="session-success-mark"><span>✓</span></div><span class="session-success-eyebrow">SESSION TERMINÉE</span><h2>Bien joué</h2><p>Tu as terminé ta petite session.</p><div class="session-success-actions"><button class="primary">Retour à Aujourd’hui</button><button class="secondary">Encore 3 minutes</button></div></section>
+  <section class="lesson-session-complete"><div class="session-success-mark"><span>✓</span></div><div><small>LEÇON TERMINÉE</small><strong>Une étape de plus</strong></div><button>×</button></section>
+  <aside class="milestone-toast show"><span>★</span><div><small>PROGRÈS</small><strong>10 acquis consolidés</strong></div></aside>
+</section>`;
+F.onload=()=>setTimeout(async()=>{try{
+  const w=F.contentWindow,d=F.contentDocument;
+  const ready=await waitFor(()=>w.FrenchTranquilleThemes&&w.FrenchTranquilleFieldNavigation&&w.FrenchTranquilleScenarios&&w.FrenchTranquilleCurriculum);
+  if(!ready)throw Error(`api-missing:themes=${!!w.FrenchTranquilleThemes};nav=${!!w.FrenchTranquilleFieldNavigation};scenario=${!!w.FrenchTranquilleScenarios};curriculum=${!!w.FrenchTranquilleCurriculum}`);
+  const learnerKey=w.FrenchTranquilleCurriculum.key||keys[0];
+  const completed=Array.from({length:20},(_,i)=>`l${i+1}`),lessonProgress=Object.fromEntries(completed.map(id=>[id,999]));
+  w.localStorage.setItem(learnerKey,JSON.stringify({schemaVersion:2,learnerName:'Trân',level:'A0',completedLessons:completed,lessonProgress,knownItems:['bonjour','merci','au-revoir','je-mappelle','svp','excusez-moi','je-comprends','je-ne-comprends-pas','je-voudrais','cafe','eau','addition']}));
+  w.FrenchTranquilleBuild27Shell?.refresh?.();w.FrenchTranquilleBuild32Shell?.refresh?.();await wait(100);
+  const before=Object.fromEntries(keys.map(k=>[k,w.localStorage.getItem(k)]));
+  const motion=d.createElement('style');motion.textContent='*,*::before,*::after{transition-duration:0s!important;animation-duration:0s!important;animation-delay:0s!important}';d.head.appendChild(motion);
+  d.body.insertAdjacentHTML('beforeend',fixtureHtml());const fixture=d.querySelector('#pv53-fixture');
+
+  w.FrenchTranquilleThemes.apply('original');await wait(60);
+  if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv53-islands-ready').trim())throw Error('original-islands-leak');
+
+  for(const[width,height]of sizes){
+    F.style.width=`${width}px`;F.style.height=`${height}px`;await wait(80);
+    for(const theme of themes){
+      w.FrenchTranquilleThemes.apply(theme);await wait(80);
+      if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv53-islands-ready').trim()!=='1')throw Error(`${width}-${theme}:marker`);
+      fixture.hidden=false;
+      assertPanel(w,fixture.querySelector('.speaking-loop-card'),`${width}-${theme}:speaking`,16);
+      assertPanel(w,fixture.querySelector('.voice-replay-panel'),`${width}-${theme}:replay`,14);
+      assertPanel(w,fixture.querySelector('.session-success'),`${width}-${theme}:success`,18);
+      assertPanel(w,fixture.querySelector('.lesson-session-complete'),`${width}-${theme}:lesson-complete`,14);
+      assertPanel(w,fixture.querySelector('.milestone-toast'),`${width}-${theme}:milestone`,14);
+      assertButton(w,fixture.querySelector('.speaking-loop-model'),`${width}-${theme}:model`);
+      assertButton(w,fixture.querySelector('.speaking-loop-actions button'),`${width}-${theme}:speaking-action`);
+      assertButton(w,fixture.querySelector('.voice-replay-actions button'),`${width}-${theme}:replay-action`);
+      fixture.hidden=true;
+
+      const native=d.querySelector('.bottom-nav [data-go="conversation"]');if(!native)throw Error(`${width}-${theme}:conversation-route`);native.click();await wait(180);
+      const api=w.FrenchTranquilleScenarios,scenario=api.scenarios.find(x=>api.unlocked(x));if(!scenario)throw Error(`${width}-${theme}:scenario-locked`);api.start(scenario.id);await wait(150);
+      const lab=d.querySelector('.scenario-lab-card'),runner=d.querySelector('.scenario-runner'),npc=d.querySelector('.scenario-npc'),task=d.querySelector('.scenario-task'),input=d.querySelector('.scenario-input-row input');
+      assertPanel(w,lab,`${width}-${theme}:scenario-lab`,18);if(!visible(w,runner)||!visible(w,npc)||!visible(w,task)||!visible(w,input))throw Error(`${width}-${theme}:scenario-nodes`);
+      const ns=w.getComputedStyle(npc),ts=w.getComputedStyle(task),is=w.getComputedStyle(input);if(!ns.backgroundImage&&ns.backgroundColor==='rgba(0, 0, 0, 0)')throw Error(`${width}-${theme}:npc-empty`);if(!ts.backgroundImage||ts.backgroundImage==='none')throw Error(`${width}-${theme}:task-flat`);if(px(is.borderTopLeftRadius)<12)throw Error(`${width}-${theme}:input-radius`);
+      assertButton(w,d.querySelector('.scenario-close'),`${width}-${theme}:scenario-close`);
+      d.querySelector('[data-scenario-close]')?.click();await wait(80);
+      if(d.documentElement.scrollWidth>d.documentElement.clientWidth+1)throw Error(`${width}-${theme}:overflow`);
+    }
+  }
+  fixture.remove();
+  for(const k of keys)if(before[k]!==w.localStorage.getItem(k))throw Error(`store-mutated:${k}`);
+  w.FrenchTranquilleThemes.apply('original');await wait(50);if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv53-islands-ready').trim())throw Error('original-islands-leak-after');
+  finish(true,'viewports=2;themes=3;speaking=themed;voice-replay=themed;session=themed;milestone=themed;scenario=real-runner-themed;touch=44plus;stores=unchanged;original=witness');
+}catch(e){finish(false,e.message)}},120);
+setTimeout(()=>{if(!R.dataset.premiumV5Islands)finish(false,'timeout')},60000);
+})();
+</script></body></html>
