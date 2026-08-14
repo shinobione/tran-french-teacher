@@ -1,0 +1,104 @@
+/* French Trân’quille — Premium V5.5 / physical-review refinements
+   Successor layer: one chrome anchor + learner-first Settings hierarchy. */
+html[data-theme]:not([data-theme="original"]){--pv55-refine-ready:1}
+
+/* One physical chrome coordinate system everywhere. */
+html[data-theme]:not([data-theme="original"]) .ft-v55-settings-gear{
+  position:fixed!important;
+  top:var(--pv55-top)!important;
+  right:max(14px,env(safe-area-inset-right,0px))!important;
+  left:auto!important;
+  margin:0!important;
+  z-index:12120!important;
+}
+html[data-theme]:not([data-theme="original"]) :is(
+  .b27-practice-page .b27-back,
+  .screen-review .ft-v55-subview-back,
+  .screen-conversation .ft-v55-subview-back,
+  .listening-overlay .ft-v55-subview-back,
+  .scenario-runner .ft-v55-subview-back
+){z-index:12120!important}
+
+/* Practice: controls occupy the corners; content starts below their rail. */
+html[data-theme]:not([data-theme="original"]) .b27-practice-page .b27-overlay-header{
+  display:block!important;
+  padding:calc(var(--pv55-top) + 58px) 18px 6px!important;
+  min-height:0!important;
+}
+html[data-theme]:not([data-theme="original"]) .b27-practice-page .b27-overlay-header>div:nth-child(2)>span{display:none!important}
+html[data-theme]:not([data-theme="original"]) .b27-practice-page .b27-overlay-header h1{margin:0!important;font-size:1.55rem!important;line-height:1.05!important}
+html[data-theme]:not([data-theme="original"]) .b27-practice-page .b27-practice-main{padding-top:4px!important}
+
+/* Legacy Review / Conversation get the same reserved chrome rail. */
+html[data-theme]:not([data-theme="original"]) :is(.screen-review,.screen-conversation) .topbar{
+  min-height:calc(var(--pv55-top) + 58px)!important;
+  padding-top:calc(var(--pv55-top) + 54px)!important;
+  padding-left:18px!important;
+  padding-right:18px!important;
+}
+
+/* Listening keeps content but removes release-engine language from learner chrome. */
+html[data-theme]:not([data-theme="original"]) .listening-top .eyebrow{display:none!important}
+html[data-theme]:not([data-theme="original"]) .listening-top{
+  min-height:calc(var(--pv55-top) + 72px)!important;
+  padding:calc(var(--pv55-top) + 8px) 72px 10px!important;
+  text-align:center!important;
+}
+html[data-theme]:not([data-theme="original"]) .listening-top>div:nth-child(2){min-width:0}
+html[data-theme]:not([data-theme="original"]) .listening-top h1{margin:0!important;line-height:1.1!important}
+html[data-theme]:not([data-theme="original"]) .listening-session-score{margin:8px auto 0!important}
+
+/* Scenario runner title clears the fixed Back rail too. */
+html[data-theme]:not([data-theme="original"]) .scenario-runner-head{padding:calc(var(--pv55-top) + 58px) 14px 10px!important}
+
+/* Settings: learner-facing surfaces only. Diagnostic plumbing is Jerry-only. */
+html[data-theme]:not([data-theme="original"]):not(.ux-debug-mode) .screen-settings :is(#debug-fr-card,.ft-v55-diagnostics-card,.ft-v55-technical-card){display:none!important}
+html.ux-debug-mode[data-theme]:not([data-theme="original"]) .screen-settings :is(#debug-fr-card,.ft-v55-diagnostics-card,.ft-v55-technical-card){display:none!important}
+html.ux-debug-mode[data-theme]:not([data-theme="original"]) .screen-settings[data-v55-diagnostic-open="1"] :is(#debug-fr-card,.ft-v55-diagnostics-card,.ft-v55-technical-card){display:block!important}
+
+/* Compact settings rows: Theme / Recovery / About / optional Jerry diagnostics. */
+html[data-theme]:not([data-theme="original"]) .ft-v55-settings-row{
+  width:100%;min-height:68px;display:grid;grid-template-columns:44px minmax(0,1fr) 34px;align-items:center;gap:11px;
+  padding:11px 14px;border-radius:20px;border:1px solid color-mix(in srgb,var(--ft-border) 72%,var(--ft-accent2) 28%);
+  background:linear-gradient(145deg,color-mix(in srgb,var(--ft-surface) 84%,transparent),color-mix(in srgb,var(--ft-surface-2) 90%,transparent));
+  color:var(--ft-text);box-shadow:0 14px 36px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.06);text-align:left
+}
+html[data-theme]:not([data-theme="original"]) .ft-v55-settings-row>.ft-v55-row-icon{
+  width:42px;height:42px;display:grid;place-items:center;border-radius:50%;font-size:1.05rem;
+  border:1px solid color-mix(in srgb,var(--ft-accent) 32%,var(--ft-border));background:color-mix(in srgb,var(--ft-accent) 9%,transparent);color:var(--ft-accent)
+}
+html[data-theme]:not([data-theme="original"]) .ft-v55-settings-row strong{display:block;font-size:.9rem;line-height:1.2}
+html[data-theme]:not([data-theme="original"]) .ft-v55-settings-row small{display:block;margin-top:4px;color:var(--ft-muted);font-size:.69rem;line-height:1.35}
+html[data-theme]:not([data-theme="original"]) .ft-v55-settings-row>.ft-v55-row-chevron{justify-self:end;color:var(--ft-accent2);font-size:1.25rem}
+
+html[data-theme]:not([data-theme="original"]) .ft-v55-recovery-row{order:20}
+html[data-theme]:not([data-theme="original"]) .ft-v55-diagnostic-row{order:90}
+html[data-theme]:not([data-theme="original"]) #ft-settings-legal{order:30}
+html[data-theme]:not([data-theme="original"]) .screen-settings .ft-theme-settings-inline{order:10}
+html[data-theme]:not([data-theme="original"]) .screen-settings .ux-settings-note{order:0}
+
+html[data-theme]:not([data-theme="original"]) .screen-settings:not([data-v55-recovery-open="1"]) :is(.ft-v55-recovery-card,.danger-zone){display:none!important}
+html[data-theme]:not([data-theme="original"]) .screen-settings[data-v55-recovery-open="1"] :is(.ft-v55-recovery-card,.danger-zone){display:block!important}
+
+/* The theme disclosure itself visually acts like the first settings row. */
+html[data-theme]:not([data-theme="original"]) .screen-settings .ft-theme-settings-inline>summary{
+  min-height:68px!important;border-bottom:0!important;padding:11px 14px!important;
+}
+html[data-theme]:not([data-theme="original"]) .screen-settings .ft-theme-settings-inline[open]>summary{border-bottom:1px solid color-mix(in srgb,var(--ft-border) 68%,transparent)!important}
+
+/* About reads like a single destination until opened. */
+html[data-theme]:not([data-theme="original"]) #ft-settings-legal .ft-legal-head{border-bottom:0!important}
+html[data-theme]:not([data-theme="original"]) #ft-settings-legal[data-v55-open="1"] .ft-legal-head{border-bottom:1px solid color-mix(in srgb,var(--ft-border) 68%,transparent)!important}
+
+/* Normal learner screenshot should not look like a debugging console. */
+html[data-theme]:not([data-theme="original"]) .screen-settings .narrow{display:flex!important;flex-direction:column!important}
+html[data-theme]:not([data-theme="original"]) .screen-settings .narrow>*{width:100%}
+
+@media(max-width:759px){
+  html[data-theme]:not([data-theme="original"]) .b27-practice-page .b27-practice-intro{padding-top:2px!important}
+  html[data-theme]:not([data-theme="original"]) .listening-top{padding-inline:68px!important}
+  html[data-theme]:not([data-theme="original"]) .screen-settings .topbar{padding-top:calc(var(--pv55-top) + 50px)!important;padding-right:12px!important;padding-left:12px!important}
+  html[data-theme]:not([data-theme="original"]) .screen-settings .topbar .brandline{display:none!important}
+}
+
+@media(prefers-reduced-motion:reduce){html[data-theme]:not([data-theme="original"]) .ft-v55-settings-row{transition:none!important;animation:none!important}}
