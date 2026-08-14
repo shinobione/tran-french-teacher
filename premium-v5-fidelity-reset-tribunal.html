@@ -73,9 +73,17 @@
       if (technical.some(node => visible(w,node))) throw Error('settings-technical-visible');
       root.dataset.v55Settings='learner-first';
 
-      const recovery = await until(() => settings.querySelector('.ft-v55-recovery-card,.memory-backup-card,.danger-zone'));
-      if (!recovery || !visible(w,recovery)) throw Error('recovery-not-accessible');
-      root.dataset.v55Recovery='accessible';
+      const recovery = await until(() => settings.querySelector('.memory-backup-card.ft-v55-recovery-card'));
+      const recoveryToggle = await until(() => recovery?.querySelector(':scope > [data-v55-recovery-toggle]'));
+      const recoveryBody = recovery?.querySelector(':scope > .ft-v55-recovery-body');
+      if (!recovery || !visible(w,recovery) || !recoveryToggle || !recoveryBody) throw Error('recovery-not-accessible');
+      if (recoveryToggle.getAttribute('aria-expanded') !== 'false') throw Error('recovery-expanded-default');
+      if (visible(w,recoveryBody)) throw Error('recovery-body-visible-default');
+      recoveryToggle.click(); await wait(80);
+      if (recoveryToggle.getAttribute('aria-expanded') !== 'true' || !visible(w,recoveryBody)) throw Error('recovery-open');
+      recoveryToggle.click(); await wait(40);
+      if (visible(w,recoveryBody)) throw Error('recovery-recollapse');
+      root.dataset.v55Recovery='collapsed-accessible';
 
       const about = await until(() => settings.querySelector('#ft-settings-legal'));
       const aboutToggle = about?.querySelector('[data-v55-about-toggle]');
@@ -92,9 +100,10 @@
 
       themes.apply('original'); fidelity.refresh(); await wait(180);
       if ((w.getComputedStyle(d.body).backgroundImage || '').includes('theme-aurora-paris.svg')) throw Error('original-scene-leak');
+      if (settings.querySelector('.memory-backup-card [data-v55-recovery-toggle],.memory-backup-card>.ft-v55-recovery-body')) throw Error('original-recovery-structure-leak');
       root.dataset.v55Original='witness';
 
-      ok('scenes=3;controls=unified;progress=A0-line-A1;settings=learner-first;recovery=accessible;about=contained;learner=unchanged;original=witness');
+      ok('scenes=3;controls=unified;progress=A0-line-A1;settings=learner-first;recovery=collapsed-accessible;about=contained;learner=unchanged;original=witness');
     } catch (error) { fail(error?.message || String(error)); }
   }, 2400));
 
