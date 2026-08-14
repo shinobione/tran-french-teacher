@@ -38,6 +38,13 @@ html[data-theme]:not([data-theme="original"]) .scenario-runner .scenario-close{
   right:auto!important;
   margin:0!important;
 }
+/* Real Life has two legitimate hierarchy levels: active scenario → scenario list
+   → Practice. While the runner is active, suppress the underlying Conversation
+   Back so there is exactly one visible control at the canonical top-left anchor. */
+html[data-theme]:not([data-theme="original"]) .screen-conversation:has(.scenario-runner) .topbar .ft-v55-subview-back{
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
 
 /* Practice: controls occupy the corners; content starts below their rail. */
 html[data-theme]:not([data-theme="original"]) .b27-practice-page .b27-overlay-header{
