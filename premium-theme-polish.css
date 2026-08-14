@@ -21,5 +21,6 @@
 @import url('./premium-v5-fidelity-reset.css?v=2.3.20-v5fidelity1');
 @import url('./premium-v5-fidelity-refine.css?v=2.3.20-v5fidelity2');
 @import url('./premium-v5-fidelity-card-hotfix.css?v=2.3.20-v5fidelity2');
+@import url('./premium-v5-fidelity-settings-hotfix.css?v=2.3.20-v5fidelity2');
 /* P0 navigation geometry remains the final CSS authority. */
 @import url('./premium-nav-geometry-hotfix.css?v=2.3.4-p0nav1');
