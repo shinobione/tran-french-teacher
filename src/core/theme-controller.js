@@ -49,5 +49,5 @@ function pickerSummary(target){return target?.closest?.('.screen-settings .ft-th
 document.addEventListener('click',event=>{const summary=pickerSummary(event.target);if(!summary)return;const p=summary.parentElement;if(!(p instanceof HTMLDetailsElement))return;event.preventDefault();setPickerOpen(p,!p.open)},true);
 document.addEventListener('keydown',event=>{if(!['Enter',' '].includes(event.key))return;const summary=pickerSummary(event.target);if(!summary)return;const p=summary.parentElement;if(!(p instanceof HTMLDetailsElement))return;event.preventDefault();setPickerOpen(p,!p.open)},true);
 ensureStyle();document.documentElement.dataset.theme=current();const app=document.getElementById('app');if(app)new MutationObserver(mount).observe(app,{childList:true,subtree:true});mount();
-window.FrenchTranquilleThemes=Object.freeze({version:'1.3.1-v510themeinteraction1',key:KEY,themes:IDS,current,apply,mountBrand:brand,mountSettingsPicker:picker,mount,setPickerOpen});
+window.FrenchTranquilleThemes=Object.freeze({version:'1.3.0-v57art',interactionVersion:'2.3.36-v510themeinteraction1',key:KEY,themes:IDS,current,apply,mountBrand:brand,mountSettingsPicker:picker,mount,setPickerOpen});
 })();
