@@ -1,0 +1,158 @@
+name: French Trân'quille nav click smoke
+
+on:
+  push:
+    branches: [main, build24-4-mobile-polish]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  nav-click-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Build physical-click harness
+        run: |
+          cat > nav-click-smoke.html <<'HTML'
+          <!doctype html><html><head><meta charset="utf-8"><title>Nav click smoke</title></head><body>
+          <script>
+          (() => {
+            const frame=document.createElement('iframe');
+            frame.src='./index.html?debug=fr';
+            frame.style.cssText='width:390px;height:844px;border:0';
+            document.body.appendChild(frame);
+            let done=false;
+            const root=document.documentElement;
+            const finish=(status,detail='')=>{if(done)return;done=true;root.dataset.navSmoke=status;root.dataset.navDetail=detail};
+            const wait=ms=>new Promise(r=>setTimeout(r,ms));
+            const describe=el=>el?`${el.tagName.toLowerCase()}.${String(el.className||'').replace(/\s+/g,'.')}[${el.getAttribute('data-ux-nav')||''}]`:'null';
+            function point(d,selector,label){
+              const button=d.querySelector(selector);
+              if(!button)throw new Error(`${label}:button-missing`);
+              const r=button.getBoundingClientRect();
+              const x=r.left+r.width/2,y=r.top+r.height/2;
+              const hit=d.elementFromPoint(x,y);
+              root.dataset[`nav${label}Hit`]=describe(hit);
+              if(!hit||!button.contains(hit))throw new Error(`${label}:hit-${describe(hit)}`);
+              return {button,hit,x,y};
+            }
+            function physicalPress(d,selector,label){
+              const p=point(d,selector,label);
+              p.hit.dispatchEvent(new frame.contentWindow.PointerEvent('pointerdown',{bubbles:true,cancelable:true,pointerId:1,pointerType:'touch',clientX:p.x,clientY:p.y}));
+              root.dataset[`nav${label}Pressed`]=String(p.button.classList.contains('ux-pressing'));
+              root.dataset[`nav${label}Echo`]=String(Boolean(d.querySelector('.ux-tap-echo')));
+              p.hit.dispatchEvent(new frame.contentWindow.PointerEvent('pointerup',{bubbles:true,cancelable:true,pointerId:1,pointerType:'touch',clientX:p.x,clientY:p.y}));
+              p.hit.dispatchEvent(new frame.contentWindow.MouseEvent('click',{bubbles:true,cancelable:true,view:frame.contentWindow,clientX:p.x,clientY:p.y}));
+            }
+            function oneActive(d,id){
+              const active=[...d.querySelectorAll('.ux-bottom-nav [data-ux-nav].active')];
+              if(active.length!==1)throw new Error(`active-count:${active.length}`);
+              if(active[0].dataset.uxNav!==id)throw new Error(`active-wrong:${active[0].dataset.uxNav}:${id}`);
+            }
+            frame.addEventListener('load',()=>setTimeout(async()=>{
+              try{
+                const d=frame.contentDocument,w=frame.contentWindow;
+                if(!d.querySelector('.app-shell.screen-home'))throw new Error('home-missing');
+                if(!d.querySelector('link[href*="src/ui/interaction-ux.css"]'))throw new Error('interaction-css-missing');
+                if(!d.querySelector('link[href*="src/ui/mobile-polish.css"]'))throw new Error('mobile-polish-css-missing');
+                if(!w.FrenchTranquilleInteraction)throw new Error('interaction-runtime-missing');
+                const build27=Boolean(w.FrenchTranquilleBuild27Shell);
+                root.dataset.navShell=build27?'b27':'legacy';
+
+                const homeRef=d.querySelector('[data-ux-nav="home"]');
+                const practiceRef=d.querySelector('[data-ux-nav="practice"]');
+                const progressRef=d.querySelector('[data-ux-nav="progress"]');
+                if(!homeRef||!practiceRef||!progressRef)throw new Error('nav-ref-missing');
+
+                w.scrollTo(0,d.documentElement.scrollHeight);
+                await wait(220);
+
+                physicalPress(d,'[data-ux-nav="practice"]','Practice');
+                if(root.dataset.navPracticePressed!=='true')throw new Error('practice-no-pointer-feedback');
+                if(root.dataset.navPracticeEcho!=='true')throw new Error('practice-no-persistent-echo');
+                await wait(320);
+                const practice=d.querySelector(build27?'.b27-practice-page':'.ux-practice-overlay');
+                if(!practice)throw new Error('practice-did-not-open');
+                if(d.querySelector('[data-ux-nav="home"]')!==homeRef||d.querySelector('[data-ux-nav="practice"]')!==practiceRef||d.querySelector('[data-ux-nav="progress"]')!==progressRef)throw new Error('nav-replaced-opening-practice');
+                oneActive(d,'practice');
+                const nav=d.querySelector('.ux-bottom-nav');
+                const pr=practice.getBoundingClientRect(),nr=nav.getBoundingClientRect();
+                if(Math.abs(pr.bottom-nr.top)>6)throw new Error(`practice-not-full-tab:${Math.round(pr.bottom)}:${Math.round(nr.top)}`);
+                if(build27){
+                  if(!d.querySelector('.b27-practice-page [data-b27-close-practice]'))throw new Error('b27-practice-back-missing');
+                  if(d.querySelectorAll('.b27-practice-page .b27-practice-action').length!==4)throw new Error('b27-practice-action-count');
+                }else{
+                  if(getComputedStyle(d.querySelector('.ux-close')).display!=='none')throw new Error('practice-still-modal-close');
+                }
+
+                physicalPress(d,'[data-ux-nav="progress"]','Progress');
+                if(root.dataset.navProgressPressed!=='true'||root.dataset.navProgressEcho!=='true')throw new Error('progress-no-feedback');
+                await wait(400);
+                if(!d.querySelector('.app-shell.screen-progress'))throw new Error('progress-did-not-open');
+                if(build27&&!d.querySelector('.b27-progress-page'))throw new Error('b27-progress-page-missing');
+                if(d.querySelector('[data-ux-nav="home"]')!==homeRef||d.querySelector('[data-ux-nav="practice"]')!==practiceRef||d.querySelector('[data-ux-nav="progress"]')!==progressRef)throw new Error('nav-replaced-on-progress');
+                oneActive(d,'progress');
+
+                physicalPress(d,'[data-ux-nav="home"]','Home');
+                if(root.dataset.navHomePressed!=='true'||root.dataset.navHomeEcho!=='true')throw new Error('home-no-feedback');
+                await wait(400);
+                if(!d.querySelector('.app-shell.screen-home'))throw new Error('home-did-not-return');
+                if(build27&&!d.querySelector('.b27-home'))throw new Error('b27-home-missing');
+                if(d.querySelector('[data-ux-nav="home"]')!==homeRef||d.querySelector('[data-ux-nav="practice"]')!==practiceRef||d.querySelector('[data-ux-nav="progress"]')!==progressRef)throw new Error('nav-replaced-on-home');
+                oneActive(d,'home');
+                root.dataset.navNodesPersist='true';
+
+                const lessonButton=d.querySelector(build27?'.b27-home [data-b27-open-lesson]':'.screen-home .lesson-card .primary');
+                if(!lessonButton)throw new Error('lesson-button-missing');
+                lessonButton.click();
+                await wait(500);
+                const topbar=d.querySelector('.screen-lesson .topbar');
+                if(!topbar)throw new Error('lesson-topbar-missing');
+                const cs=getComputedStyle(topbar);
+                root.dataset.lessonTopbarPosition=cs.position;
+                root.dataset.lessonTopbarBackdrop=cs.backdropFilter||cs.webkitBackdropFilter||'none';
+                if(cs.position==='sticky')throw new Error('lesson-topbar-still-sticky');
+                const bg=cs.backgroundColor;
+                if(bg && bg!=='rgba(0, 0, 0, 0)' && bg!=='transparent')throw new Error(`lesson-topbar-background:${bg}`);
+                root.dataset.lessonHeaderClean='true';
+
+                finish('ok','persistent-nav-feedback-and-clean-lesson-header-ok');
+              }catch(e){finish('fail',e?.message||String(e))}
+            },1900));
+            setTimeout(()=>finish('fail','timeout'),12000);
+          })();
+          </script></body></html>
+          HTML
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-nav-http.log 2>&1 &
+          echo $! >/tmp/ft-nav-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — persistent mobile feedback and clean lesson header
+        run: |
+          timeout 40s google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=20000 --dump-dom 'http://127.0.0.1:4173/nav-click-smoke.html' >/tmp/nav.html
+          grep -q 'data-nav-smoke="ok"' /tmp/nav.html || { cat /tmp/nav.html; exit 1; }
+          grep -q 'data-nav-practice-pressed="true"' /tmp/nav.html
+          grep -q 'data-nav-practice-echo="true"' /tmp/nav.html
+          grep -q 'data-nav-progress-pressed="true"' /tmp/nav.html
+          grep -q 'data-nav-progress-echo="true"' /tmp/nav.html
+          grep -q 'data-nav-home-pressed="true"' /tmp/nav.html
+          grep -q 'data-nav-home-echo="true"' /tmp/nav.html
+          grep -q 'data-nav-nodes-persist="true"' /tmp/nav.html
+          grep -q 'data-lesson-header-clean="true"' /tmp/nav.html
+          grep -q 'data-nav-detail="persistent-nav-feedback-and-clean-lesson-header-ok"' /tmp/nav.html
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-nav-server.pid ]; then kill "$(cat /tmp/ft-nav-server.pid)" || true; fi

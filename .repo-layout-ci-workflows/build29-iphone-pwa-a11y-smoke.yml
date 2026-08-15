@@ -1,0 +1,157 @@
+name: Build 29 iPhone PWA accessibility smoke
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  iphone-pwa-a11y:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax, manifest and wiring
+        run: |
+          node --check src/ui/build29-iphone-a11y.js
+          node --check tests/smoke/build29-smoke.js
+          node --check src/core/build-meta.js
+          node --check sw.js
+          node --check tools/build29-offline-cdp.mjs
+          grep -q 'viewport-fit=cover' index.html
+          grep -q 'assets/premium/brand/goat-app-icon-180.png?v=2.3.26-v59d1' index.html
+          grep -q 'src/ui/build29-iphone-a11y.css?v=1.22.0-b29' index.html
+          grep -q 'src/ui/build29-iphone-a11y.js?v=1.22.0-b29' index.html
+          grep -q 'tests/smoke/build29-smoke.js?v=1.22.0-b29' index.html
+          grep -q 'src/core/build-meta.js?v=1.22.0-b29' index.html
+          node - <<'NODE'
+          const fs=require('fs');
+          const text=fs.readFileSync('src/core/build-meta.js','utf8');
+          const match=text.match(/const META = \{ version: '[^']+', build: '([^']+)'/);
+          if(!match || Number(match[1]) < 29) throw new Error('Build 29 contract cannot run on a pre-29 build');
+          NODE
+          grep -q 'tran-french-teacher-v2.3.22-b34.14-v58debug1' index.html sw.js
+          grep -q "const DEBUG='2.3.22-v58debug1'" sw.js
+          grep -q "const NAV='2.3.7-b34.7'" sw.js
+          grep -q "const COHERENCE='2.3.21-v57art1'" sw.js
+          grep -q "const MOTION='2.3.21-v57art1'" sw.js
+          grep -q "const V4='2.3.21-v57art1'" sw.js
+          grep -q "const V5='2.3.21-v57art1'" sw.js
+          grep -q "const V5U='2.3.21-v57art1'" sw.js
+          grep -q "const V5I='2.3.21-v57art1'" sw.js
+          grep -q "const V5M='2.3.21-v57art1'" sw.js
+          grep -q "const V5F='2.3.21-v57art1'" sw.js
+          grep -q "const V5FR='2.3.21-v57art1'" sw.js
+          grep -q 'src/core/stage2-boot.js?v=${NAV}' sw.js
+          grep -q 'src/core/field-navigation-runtime.js?v=${NAV}' sw.js
+          grep -q 'src/core/theme-controller.js?v=${V5F}' sw.js
+          grep -q 'src/premium/premium-theme-polish.css?v=${V5F}' sw.js
+          grep -q 'src/premium/premium-v4-route-coherence.css?v=${COHERENCE}' sw.js
+          grep -q 'src/premium/premium-v4-motion.css?v=${MOTION}' sw.js
+          grep -q 'src/premium/premium-v4-contrast.css?v=${V4}' sw.js
+          grep -q 'src/premium/premium-v5-coherence.css?v=${V5}' sw.js
+          grep -q 'src/premium/premium-v5-listening-settings.css?v=${V5}' sw.js
+          grep -q 'src/premium/premium-v5-utility.css?v=${V5U}' sw.js
+          grep -q 'src/premium/premium-v5-islands.css?v=${V5I}' sw.js
+          grep -q 'src/premium/premium-v5-mockup-convergence.css?v=${V5M}' sw.js
+          grep -q 'src/premium/premium-v5-fidelity-reset.css?v=${V5F}' sw.js
+          grep -q 'src/premium/premium-v5-fidelity-refine.css?v=${V5FR}' sw.js
+          grep -q 'src/premium/premium-v5-fidelity-card-hotfix.css?v=${V5FR}' sw.js
+          grep -q 'src/premium/premium-v4-ownership-hotfix.css?v=${V5F}' sw.js
+          grep -q 'src/ui/build29-iphone-a11y.css' sw.js
+          grep -q 'src/ui/build29-iphone-a11y.js' sw.js
+          grep -q 'tests/smoke/build29-smoke.js' sw.js
+          grep -q 'assets/apple-touch-icon.png' sw.js
+          grep -q 'assets/premium/brand/goat-app-icon-180.png' sw.js
+          python3 - <<'PY'
+          import json
+          m=json.load(open('manifest.webmanifest',encoding='utf-8'))
+          assert m['id']=='./'
+          assert m['start_url']=='./'
+          assert m['scope']=='./'
+          assert m['display']=='standalone'
+          assert m['orientation']=='any'
+          assert m['lang']=='vi'
+          assert m.get('prefer_related_applications') is False
+          assert len(m['icons']) >= 2
+          print('manifest contract OK')
+          PY
+
+      - name: Data, voice and branding sanctuaries remain intact
+        run: |
+          test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
+          test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+          grep -q "francais-avec-luc:learner:v1" src/core/data-recovery-core.js
+          grep -q "french-tranquille:learning-memory:v1" src/core/data-recovery-core.js
+          grep -q "french-tranquille:error-intelligence:v1" src/core/data-recovery-core.js
+          grep -q "french-tranquille:scenarios:v1" src/core/data-recovery-core.js
+          grep -q "french-tranquille:listening:v1" src/core/data-recovery-core.js
+          grep -q "french-tranquille:milestones:v1" src/core/data-recovery-core.js
+          grep -q 'normal: 0.88' src/core/build-meta.js
+          grep -q 'slow: 0.65' src/core/build-meta.js
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-b29-http.log 2>&1 &
+          echo $! >/tmp/ft-b29-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome mobile matrix — touch, semantics, safe viewport and reduced motion
+        run: |
+          run_case() {
+            label="$1"; width="$2"; height="$3"; reduced="$4"
+            passed=0
+            for attempt in 1 2 3; do
+              profile="/tmp/ft-b29-${label}-${attempt}"
+              file="/tmp/b29-${label}-${attempt}.html"
+              rm -rf "$profile" "$file"
+              chrome_status=0
+              extra_flags=''
+              if [ "$reduced" = 1 ]; then extra_flags='--force-prefers-reduced-motion'; fi
+              timeout --signal=TERM --kill-after=5s 50s \
+                google-chrome --headless=new --no-sandbox --disable-gpu \
+                $extra_flags --user-data-dir="$profile" --window-size="${width},${height}" \
+                --virtual-time-budget=22000 --dump-dom \
+                "http://127.0.0.1:4173/?uxSmoke=lesson8&b29Audit=${label}" >"$file" || chrome_status=$?
+              echo "Build29 ${label} attempt ${attempt}: chrome_status=${chrome_status} bytes=$(wc -c < "$file")"
+              ok=1
+              grep -q 'data-b29-smoke="passed"' "$file" || ok=0
+              grep -q 'data-b29-ready="1"' "$file" || ok=0
+              grep -q 'data-b29-audit-home-visible="1"' "$file" || ok=0
+              grep -q 'data-b29-audit-too-small="0"' "$file" || ok=0
+              grep -q 'data-b29-audit-unnamed="0"' "$file" || ok=0
+              grep -q 'data-b29-audit-current-tabs="1"' "$file" || ok=0
+              grep -q 'data-b29-audit-overflow="0"' "$file" || ok=0
+              grep -q 'data-b29-sw-registered="1"' "$file" || ok=0
+              grep -q 'aria-current="page"' "$file" || ok=0
+              if [ "$reduced" = 1 ]; then grep -q 'data-b29-smoke-reduced="1"' "$file" || ok=0; fi
+              if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then ok=0; fi
+              if [ "$ok" = 1 ]; then passed=1; break; fi
+              echo "=== Build 29 ${label} markers ==="
+              grep -o 'data-b29-[^ >]*' "$file" | head -50 || true
+            done
+            test "$passed" = 1
+          }
+          run_case reference 390 844 0
+          run_case compact 320 568 0
+          run_case large 430 932 0
+          run_case reduced 390 844 1
+
+      - name: PWA offline — same-browser controlled boot via Chrome DevTools Protocol
+        run: |
+          node tools/build29-offline-cdp.mjs http://127.0.0.1:4173 /tmp/ft-b29-server.pid
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-b29-server.pid ]; then kill "$(cat /tmp/ft-b29-server.pid)" || true; fi

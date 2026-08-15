@@ -1,0 +1,74 @@
+name: Build24 gated release-doc closure
+
+on:
+  push:
+    branches: [build24-release-docs]
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  close:
+    if: "!contains(github.event.head_commit.message, '[build24-docs-closed]')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: build24-release-docs
+          fetch-depth: 0
+
+      - name: Resolve production base and require Build 24
+        id: base
+        run: |
+          git fetch origin main
+          BASE=$(git merge-base HEAD origin/main)
+          echo "sha=$BASE" >> "$GITHUB_OUTPUT"
+          git show "$BASE:src/core/build-meta.js" | grep -q "version: '1.17.0', build: 24"
+          echo "Production base is Build 24: $BASE"
+
+      - name: Wait for quality and Pages on exact production SHA
+        id: proof
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BASE_SHA: ${{ steps.base.outputs.sha }}
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 36); do
+            RUNS=$(gh api -X GET "repos/$REPO/actions/runs?head_sha=$BASE_SHA&per_page=100")
+            Q=$(echo "$RUNS" | jq -r '[.workflow_runs[] | select(.path==".github/workflows/quality.yml")][0].conclusion // "pending"')
+            P=$(echo "$RUNS" | jq -r '[.workflow_runs[] | select(.path==".github/workflows/pages.yml")][0].conclusion // "pending"')
+            QR=$(echo "$RUNS" | jq -r '[.workflow_runs[] | select(.path==".github/workflows/quality.yml")][0].run_number // ""')
+            PR=$(echo "$RUNS" | jq -r '[.workflow_runs[] | select(.path==".github/workflows/pages.yml")][0].run_number // ""')
+            echo "attempt=$attempt quality=$Q (#$QR) pages=$P (#$PR)"
+            if [ "$Q" = "success" ] && [ "$P" = "success" ]; then
+              echo "quality_run=$QR" >> "$GITHUB_OUTPUT"
+              echo "pages_run=$PR" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            if [ "$Q" = "failure" ] || [ "$Q" = "cancelled" ] || [ "$P" = "failure" ] || [ "$P" = "cancelled" ]; then
+              echo "Production proof failed; refusing documentation closure."
+              exit 1
+            fi
+            sleep 10
+          done
+          echo "Timed out waiting for production proof."
+          exit 1
+
+      - name: Close canonical Build 24 docs
+        env:
+          BASE_SHA: ${{ steps.base.outputs.sha }}
+          QUALITY_RUN: ${{ steps.proof.outputs.quality_run }}
+          PAGES_RUN: ${{ steps.proof.outputs.pages_run }}
+        run: python tools/close-build24.py
+
+      - name: Remove one-shot helpers and commit exact closure
+        run: |
+          rm -f tools/close-build24.py .github/workflows/build24-close.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git diff --cached --quiet && exit 0
+          git commit -m 'Docs close v1.17.0 Build 24 after production proof [build24-docs-closed]'
+          git push origin HEAD:build24-release-docs

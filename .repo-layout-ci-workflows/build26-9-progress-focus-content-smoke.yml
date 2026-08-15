@@ -1,0 +1,120 @@
+name: Build 26.9 Progress focus content smoke
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  progress-focus-content:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax, historical wiring and forward-compatible contract
+        run: |
+          node --check src/ui/build26-9-ux.js
+          node --check src/core/build-meta.js
+          node --check sw.js
+          grep -q 'src/ui/build26-9-ux.css?v=1.19.9-b26.9' index.html
+          grep -q 'src/ui/build26-9-ux.js?v=1.19.9-b26.9' index.html
+          grep -q 'FrenchTranquilleBuild269UX' src/core/build-meta.js
+          grep -q 'card:only-child' src/ui/build26-9-ux.css
+          grep -q 'data-b269-content-ready' src/ui/build26-9-ux.css
+
+      - name: Learner, voice and branding remain sanctuarized
+        run: |
+          test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
+          test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+          grep -q "francais-avec-luc:learner:v1" app.js
+          grep -q 'normal: 0.88' src/core/build-meta.js
+          grep -q 'slow: 0.65' src/core/build-meta.js
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-b269-http.log 2>&1 &
+          echo $! >/tmp/ft-b269-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome desktop — every real Details family has visible content
+        run: |
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-b269-groups-$attempt"
+            file="/tmp/b269-groups-$attempt.html"
+            rm -rf "$profile" "$file"
+            if ! timeout --signal=TERM --kill-after=5s 75s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=1640,900 \
+              --virtual-time-budget=65000 --dump-dom \
+              'http://127.0.0.1:4173/?uxSmoke=lesson8&debug=fr&b269Smoke=groups' >"$file"; then
+              echo "Build 26.9 groups attempt $attempt timed out or exited non-zero"
+              continue
+            fi
+
+            ok=1
+            grep -q 'data-b269-groups-complete="1"' "$file" || ok=0
+            grep -q 'data-b269-horizontal-overflow="0"' "$file" || ok=0
+
+            for key in memory mastery listening real-life path; do
+              grep -q "data-b269-$key-ready=\"1\"" "$file" || ok=0
+              cards=$(grep -o "data-b269-$key-cards=\"[0-9]*\"" "$file" | head -1 | cut -d'"' -f2)
+              panel=$(grep -o "data-b269-$key-panel-width=\"[0-9]*\"" "$file" | head -1 | cut -d'"' -f2)
+              card=$(grep -o "data-b269-$key-card-width=\"[0-9]*\"" "$file" | head -1 | cut -d'"' -f2)
+              height=$(grep -o "data-b269-$key-panel-height=\"[0-9]*\"" "$file" | head -1 | cut -d'"' -f2)
+              echo "$key cards=${cards:-0} panel=${panel:-0}px card=${card:-0}px height=${height:-0}px"
+              [ "${cards:-0}" -ge 1 ] || ok=0
+              [ "${panel:-0}" -ge 850 ] || ok=0
+              [ "${height:-0}" -ge 50 ] || ok=0
+              if [ "${cards:-0}" -eq 1 ]; then
+                [ "${card:-0}" -ge 700 ] || ok=0
+              else
+                [ "${card:-0}" -ge 300 ] || ok=0
+              fi
+            done
+
+            if [ "$ok" = 1 ]; then passed=1; break; fi
+            echo "Build 26.9 real-content contract failed"
+            grep -o 'data-b269-[^ >]*' "$file" | head -80 || true
+          done
+          test "$passed" = 1
+
+      - name: Chrome mobile — real focused card is visible and uses the column
+        run: |
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-b269-mobile-$attempt"
+            file="/tmp/b269-mobile-$attempt.html"
+            rm -rf "$profile" "$file"
+            if ! timeout --signal=TERM --kill-after=5s 55s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=390,844 \
+              --virtual-time-budget=42000 --dump-dom \
+              'http://127.0.0.1:4173/?uxSmoke=lesson8&debug=fr&b269Smoke=memory' >"$file"; then
+              continue
+            fi
+            if grep -q 'data-b269-memory-complete="1"' "$file" \
+              && grep -q 'data-b269-memory-ready="1"' "$file" \
+              && grep -q 'data-b269-horizontal-overflow="0"' "$file"; then
+              cards=$(grep -o 'data-b269-memory-cards="[0-9]*"' "$file" | head -1 | cut -d'"' -f2)
+              width=$(grep -o 'data-b269-memory-card-width="[0-9]*"' "$file" | head -1 | cut -d'"' -f2)
+              echo "mobile memory cards=${cards:-0} card=${width:-0}px"
+              if [ "${cards:-0}" -ge 1 ] && [ "${width:-0}" -ge 300 ]; then passed=1; break; fi
+            fi
+          done
+          test "$passed" = 1
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-b269-server.pid ]; then kill "$(cat /tmp/ft-b269-server.pid)" || true; fi

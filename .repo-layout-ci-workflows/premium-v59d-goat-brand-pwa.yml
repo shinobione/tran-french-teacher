@@ -1,0 +1,92 @@
+name: Premium V5.9D Goat Brand + PWA
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  v59d-brand:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Static brand, PWA and sanctuaries
+        run: |
+          set -euo pipefail
+          test -s assets/premium/brand/goat-favicon-32.png
+          test -s assets/premium/brand/goat-app-icon-180.png
+          test -s assets/premium/brand/goat-app-icon-192.webp
+          test -s assets/premium/brand/goat-app-icon-512.webp
+          test -s assets/premium/brand/goat-app-icon-maskable-512.webp
+          test -s tests/browser/premium-v59-brand-tribunal.html
+          grep -q 'goat-favicon-32.png' index.html
+          grep -q 'goat-app-icon-180.png' index.html
+          grep -q 'goat-app-icon-192.webp' manifest.webmanifest
+          grep -q 'goat-app-icon-maskable-512.webp' manifest.webmanifest
+          grep -q "const CACHE='tran-french-teacher-v2.3.22-b34.14-v58debug1'" sw.js
+          grep -q 'src/premium/premium-v59-interactions.js' sw.js
+          grep -q 'src/premium/premium-v59-lesson-layout.js' sw.js
+          grep -q 'src/premium/premium-v59-system.js' sw.js
+          grep -q 'goat-app-icon-maskable-512.webp' sw.js
+          test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+          test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
+          test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-v59d-http.log 2>&1 &
+          echo $! >/tmp/ft-v59d-server.pid
+          sleep 1
+
+      - name: Service worker CORE — every install URL resolves
+        run: |
+          set -euo pipefail
+          node - <<'NODE' >/tmp/v59d-core.txt
+          const fs=require('fs');
+          const source=fs.readFileSync('sw.js','utf8');
+          const prefix=source.split("self.addEventListener('install'")[0];
+          const core=Function(`${prefix}; return CORE;`)();
+          for(const entry of core) console.log(entry);
+          NODE
+          total=0
+          while IFS= read -r entry; do
+            total=$((total+1))
+            path="${entry#./}"
+            url="http://127.0.0.1:4173/${path}"
+            if ! curl --silent --show-error --fail --output /dev/null "$url"; then
+              echo "CORE install URL failed: $entry"
+              exit 1
+            fi
+          done </tmp/v59d-core.txt
+          echo "CORE install URLs OK: $total"
+
+      - name: Chrome — icon geometry, manifest and offline contract
+        run: |
+          timeout --signal=TERM --kill-after=5s 35s \
+            google-chrome --headless=new --no-sandbox --disable-gpu \
+            --virtual-time-budget=7000 --dump-dom \
+            'http://127.0.0.1:4173/tests/browser/premium-v59-brand-tribunal.html' >/tmp/v59d.html
+          grep -q 'data-v59d="ok"' /tmp/v59d.html || { grep -o 'data-v59d-detail="[^"]*"' /tmp/v59d.html || true; exit 1; }
+
+      - name: Chrome — real app still loads A+B+C
+        run: |
+          timeout --signal=TERM --kill-after=5s 45s \
+            google-chrome --headless=new --no-sandbox --disable-gpu \
+            --window-size=390,844 --virtual-time-budget=16000 --dump-dom \
+            'http://127.0.0.1:4173/?fieldNavV3=1' >/tmp/v59d-app.html
+          grep -q 'data-v59-interactions="1"' /tmp/v59d-app.html
+          grep -q 'data-v59-lesson-layout="1"' /tmp/v59d-app.html
+          grep -q 'data-v59-premium-system="1"' /tmp/v59d-app.html
+          ! grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/v59d-app.html
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-v59d-server.pid ]; then kill "$(cat /tmp/ft-v59d-server.pid)" || true; fi

@@ -1,0 +1,144 @@
+name: Build 25.2 Session UX smoke
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  session-ux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax and wiring
+        run: |
+          node --check src/ui/session-ux.js
+          node --check src/ui/session-ux-adapter.js
+          node --check src/core/build-meta.js
+          node --check sw.js
+          # Build 25.2 remains a required subsystem, while later builds may upgrade its owner file.
+          grep -q 'src/ui/session-ux.css?v=1.18.2-b25.2' index.html
+          grep -q 'src/ui/session-ux.js?v=' index.html
+          grep -q 'src/ui/session-ux-adapter.js?v=1.18.2-b25.2' index.html
+          grep -q 'src/ui/session-ux.js' sw.js
+          grep -q 'src/ui/session-ux-adapter.js' sw.js
+          grep -q 'src/ui/session-ux.css' sw.js
+          grep -q 'prefers-reduced-motion' src/ui/session-ux.css
+          grep -q 'french-tranquille:milestones:v1' src/ui/session-ux.js
+          grep -q "'FrenchTranquilleSessionUX'" src/core/build-meta.js
+          grep -q "'FrenchTranquilleSessionUXAdapter'" src/core/build-meta.js
+
+      - name: Sanctuaries remain byte-identical
+        run: |
+          test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
+          test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-session-http.log 2>&1 &
+          echo $! >/tmp/ft-session-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — Home daily plan is progressively disclosed
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=22000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8' >/tmp/session-home.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/session-home.html; then cat /tmp/session-home.html; exit 1; fi
+          grep -q 'app-shell screen-home' /tmp/session-home.html
+          grep -q 'data-session-daily-visible="2"' /tmp/session-home.html
+          grep -E -q 'data-session-daily-extra="[1-9][0-9]*"' /tmp/session-home.html
+          grep -q 'data-b263-daily-toggle' /tmp/session-home.html
+          grep -q 'b263-daily-extras' /tmp/session-home.html
+          grep -q 'data-ux-smoke-next="l8"' /tmp/session-home.html
+          grep -q 'data-ux-smoke-known="40"' /tmp/session-home.html
+
+      - name: Chrome — Practice opens a single-choice hub
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=24000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&sessionSmoke=practice' >/tmp/session-practice.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/session-practice.html; then cat /tmp/session-practice.html; exit 1; fi
+          grep -q 'app-shell screen-conversation' /tmp/session-practice.html
+          grep -q 'data-session-smoke-practice="1"' /tmp/session-practice.html
+          grep -q 'data-session-practice-mode="hub"' /tmp/session-practice.html
+          grep -q 'practice-session-hub' /tmp/session-practice.html
+          grep -q 'session-mode-hidden' /tmp/session-practice.html
+
+      - name: Chrome — Listening reaches an explicit 5-question finish
+        run: |
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-listening-profile-$attempt"
+            rm -rf "$profile"
+            if ! timeout --signal=TERM --kill-after=5s 55s \
+              google-chrome --headless=new --no-sandbox --disable-gpu --user-data-dir="$profile" --window-size=390,844 --virtual-time-budget=36000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&sessionSmoke=listening' >"/tmp/session-listening-$attempt.html"; then
+              echo "Listening smoke attempt $attempt timed out or Chrome exited early"
+              continue
+            fi
+            file="/tmp/session-listening-$attempt.html"
+            if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then
+              echo "Listening smoke attempt $attempt hit app boot error"
+              continue
+            fi
+            if grep -q 'data-session-listening-progress="5/5"' "$file" \
+              && grep -q 'data-session-listening-done="1"' "$file" \
+              && grep -q 'data-session-complete="listening"' "$file" \
+              && grep -q 'session-complete-mode' "$file" \
+              && grep -q 'data-listening-slow-rate="0.65"' "$file"; then
+              passed=1
+              break
+            fi
+            echo "Listening smoke attempt $attempt did not reach completion; diagnostic markers:"
+            grep -o 'data-session-listening-[^ >]*' "$file" | head -20 || true
+            grep -o 'data-listening-[^ >]*' "$file" | head -30 || true
+          done
+          if [ "$passed" -ne 1 ]; then
+            echo 'Listening bounded-session smoke failed after 3 isolated browser attempts'
+            exit 1
+          fi
+
+      - name: Chrome — Review reaches an explicit bounded finish
+        run: |
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-review-profile-$attempt"
+            rm -rf "$profile"
+            if ! timeout --signal=TERM --kill-after=5s 55s \
+              google-chrome --headless=new --no-sandbox --disable-gpu --user-data-dir="$profile" --window-size=390,844 --virtual-time-budget=36000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&sessionSmoke=review' >"/tmp/session-review-$attempt.html"; then
+              echo "Review smoke attempt $attempt timed out or Chrome exited early"
+              continue
+            fi
+            file="/tmp/session-review-$attempt.html"
+            if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then
+              echo "Review smoke attempt $attempt hit app boot error"
+              continue
+            fi
+            if grep -q 'app-shell screen-review' "$file" \
+              && grep -E -q 'data-session-review-progress="[1-5]/[1-5]"' "$file" \
+              && grep -q 'data-session-review-done="1"' "$file" \
+              && grep -q 'data-session-complete="review"' "$file" \
+              && grep -q 'session-hidden' "$file"; then
+              passed=1
+              break
+            fi
+            echo "Review smoke attempt $attempt did not reach completion; diagnostic markers:"
+            grep -o 'data-session-review-[^ >]*' "$file" | head -20 || true
+            grep -o 'data-session-complete="[^"]*"' "$file" | head -10 || true
+          done
+          if [ "$passed" -ne 1 ]; then
+            echo 'Review bounded-session smoke failed after 3 isolated browser attempts'
+            exit 1
+          fi
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-session-server.pid ]; then kill "$(cat /tmp/ft-session-server.pid)" || true; fi

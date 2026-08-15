@@ -1,0 +1,104 @@
+name: French Trân'quille Options smoke
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  options-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax + idempotence guard
+        run: |
+          node --check src/core/build-meta.js
+          node --check sw.js
+          grep -Fq 'if (value.textContent !== next) value.textContent = next;' src/core/build-meta.js
+
+      - name: Sanctuaries remain untouched
+        run: |
+          test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
+          test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+
+      - name: Build browser smoke harness
+        run: |
+          cat > options-smoke.html <<'HTML'
+          <!doctype html>
+          <html><head><meta charset="utf-8"><title>Options smoke</title></head><body>
+          <script>
+          (() => {
+            const mode = new URLSearchParams(location.search).get('mode') || 'normal';
+            const frame = document.createElement('iframe');
+            frame.src = mode === 'debug' ? './index.html?debug=fr' : './index.html';
+            frame.style.width='390px'; frame.style.height='844px';
+            document.body.appendChild(frame);
+            let finished = false;
+            const finish = (status, detail='') => {
+              if (finished) return; finished = true;
+              document.documentElement.dataset.optionsSmoke = status;
+              document.documentElement.dataset.optionsMode = mode;
+              document.documentElement.dataset.optionsDetail = detail;
+            };
+            frame.addEventListener('load', () => setTimeout(() => {
+              try {
+                const d = frame.contentDocument;
+                const gear = d.querySelector('[data-go="settings"]');
+                if (!gear) return finish('fail','gear-missing');
+                gear.click();
+                setTimeout(() => {
+                  try {
+                    const fatal = d.querySelector('#app .boot-status.error');
+                    if (fatal) return finish('fail','fatal-card');
+                    const shell = d.querySelector('#app .app-shell.screen-settings');
+                    const diagnostics = d.querySelector('.screen-settings .diagnostics');
+                    const version = [...(diagnostics?.querySelectorAll(':scope > div') || [])]
+                      .find(row => /version|phiên bản/i.test(row.querySelector('span')?.textContent || ''))
+                      ?.querySelector('strong')?.textContent?.trim();
+                    if (!shell) return finish('fail','settings-shell-missing');
+                    if (!diagnostics) return finish('fail','diagnostics-missing');
+                    if (!version) return finish('fail','version-missing');
+                    document.documentElement.dataset.optionsVersion = version;
+                    finish('ok','settings-open');
+                  } catch (error) { finish('fail', error?.message || String(error)); }
+                }, 1200);
+              } catch (error) { finish('fail', error?.message || String(error)); }
+            }, 1200));
+            setTimeout(() => finish('fail','timeout'), 7000);
+          })();
+          </script></body></html>
+          HTML
+
+      - name: Start static test server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-options-http.log 2>&1 &
+          echo $! >/tmp/ft-options-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — Options opens in learner mode
+        run: |
+          timeout 30s google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=12000 --dump-dom 'http://127.0.0.1:4173/options-smoke.html?mode=normal' >/tmp/options-normal.html
+          grep -q 'data-options-smoke="ok"' /tmp/options-normal.html || { cat /tmp/options-normal.html; exit 1; }
+          grep -q 'data-options-detail="settings-open"' /tmp/options-normal.html
+
+      - name: Chrome — Options opens in DEBUG FR with Lucie voice tools
+        run: |
+          timeout 30s google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=14000 --dump-dom 'http://127.0.0.1:4173/options-smoke.html?mode=debug' >/tmp/options-debug.html
+          grep -q 'data-options-smoke="ok"' /tmp/options-debug.html || { cat /tmp/options-debug.html; exit 1; }
+          grep -q 'data-options-detail="settings-open"' /tmp/options-debug.html
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-options-server.pid ]; then kill "$(cat /tmp/ft-options-server.pid)" || true; fi

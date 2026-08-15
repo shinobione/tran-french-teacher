@@ -1,0 +1,158 @@
+name: Build 26.1 Voice replay + Details dashboard smoke
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build26-1-ux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax and wiring
+        run: |
+          node --check src/pedagogy/voice-replay.js
+          node --check src/ui/progress-details-dashboard.js
+          node --check src/core/build-meta.js
+          node --check sw.js
+          grep -q 'src/pedagogy/voice-replay.css?v=1.19.1-b26.1' index.html
+          grep -q 'src/ui/progress-details-dashboard.css?v=1.19.1-b26.1' index.html
+          grep -q 'src/pedagogy/voice-replay.js?v=1.19.1-b26.1' index.html
+          grep -q 'src/ui/progress-details-dashboard.js?v=' index.html
+          grep -q 'src/pedagogy/real-life-data-3.js?v=1.19.0-b26' index.html
+          grep -q 'src/pedagogy/real-life-coach.js?v=1.19.0-b26' index.html
+          grep -q 'src/pedagogy/voice-replay.js' sw.js
+          grep -q 'src/ui/progress-details-dashboard.js' sw.js
+
+      - name: Voice replay is local-only and does not replace recognition
+        run: |
+          grep -q 'navigator.mediaDevices.getUserMedia' src/pedagogy/voice-replay.js
+          grep -q 'MediaRecorder' src/pedagogy/voice-replay.js
+          grep -q 'URL.createObjectURL' src/pedagogy/voice-replay.js
+          grep -q 'track.stop' src/pedagogy/voice-replay.js
+          ! grep -q 'localStorage.setItem' src/pedagogy/voice-replay.js
+          ! grep -Eq 'fetch\(|XMLHttpRequest|FormData|sendBeacon' src/pedagogy/voice-replay.js
+          ! grep -q 'SpeechRecognition' src/pedagogy/voice-replay.js
+
+      - name: Sanctuaries remain byte-identical
+        run: |
+          test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
+          test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-261-http.log 2>&1 &
+          echo $! >/tmp/ft-261-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — learning details are grouped, not stacked
+        run: |
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-261-details-profile-$attempt"
+            file="/tmp/details-dashboard-$attempt.html"
+            rm -rf "$profile" "$file"
+            if ! timeout --signal=TERM --kill-after=5s 40s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=390,844 \
+              --virtual-time-budget=32000 --dump-dom \
+              'http://127.0.0.1:4173/?uxSmoke=lesson8&progressionSmoke=details&detailsDashboardSmoke=memory' >"$file"; then
+              echo "Details Chrome attempt $attempt timed out or exited non-zero"
+              continue
+            fi
+            if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then continue; fi
+            if grep -q 'data-progress-detail-dashboard="1"' "$file" \
+              && grep -E -q 'data-progress-detail-groups="[3-9]"' "$file" \
+              && grep -q 'data-progress-detail-active="memory"' "$file" \
+              && grep -q 'progress-detail-grid' "$file" \
+              && grep -q 'data-progress-detail-panel="memory"' "$file" \
+              && grep -q 'memory-progress-card' "$file" \
+              && grep -q 'mastery-progress-card' "$file" \
+              && test "$(grep -o 'data-progress-detail-open=' "$file" | wc -l)" -ge 3; then
+              passed=1
+              break
+            fi
+            echo "Details attempt $attempt missing markers"
+          done
+          if [ "$passed" -ne 1 ]; then
+            echo 'Build 26.1 Details dashboard smoke failed after 3 bounded isolated attempts'
+            exit 1
+          fi
+
+      - name: Chrome — Real Life III remains loaded beside UX patch
+        run: |
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-261-real-life-profile-$attempt"
+            file="/tmp/real-life-40-$attempt.html"
+            rm -rf "$profile" "$file"
+            if ! timeout --signal=TERM --kill-after=5s 40s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=390,844 \
+              --virtual-time-budget=30000 --dump-dom \
+              'http://127.0.0.1:4173/?realLifeSmoke=lesson40&sessionSmoke=practice' >"$file"; then
+              echo "Real Life Chrome attempt $attempt timed out or exited non-zero"
+              continue
+            fi
+            if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then continue; fi
+            if grep -q 'data-real-life-pack3-open="8"' "$file" \
+              && grep -q 'data-real-life-scenario-total="36"' "$file" \
+              && grep -q 'data-real-life-turn-total="108"' "$file" \
+              && grep -q 'data-real-life-resolution-invalid="0"' "$file"; then
+              passed=1
+              break
+            fi
+            echo "Real Life attempt $attempt missing markers"
+          done
+          if [ "$passed" -ne 1 ]; then
+            echo 'Build 26.1 Real Life coexistence smoke failed after 3 bounded isolated attempts'
+            exit 1
+          fi
+
+      - name: Chrome — voice replay layer appears after a spoken-result surface
+        run: |
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-261-replay-profile-$attempt"
+            file="/tmp/voice-replay-$attempt.html"
+            rm -rf "$profile" "$file"
+            if ! timeout --signal=TERM --kill-after=5s 40s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=390,844 \
+              --virtual-time-budget=32000 --dump-dom \
+              'http://127.0.0.1:4173/?uxSmoke=lesson8&voiceReplaySmoke=1' >"$file"; then
+              echo "Voice replay Chrome attempt $attempt timed out or exited non-zero"
+              continue
+            fi
+            if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then continue; fi
+            if grep -q 'data-voice-replay-module="1"' "$file" \
+              && grep -q 'data-voice-replay-smoke-card="1"' "$file" \
+              && grep -q 'data-voice-replay-smoke-panel="1"' "$file" \
+              && grep -q 'data-voice-replay="1"' "$file" \
+              && grep -q 'free-voice-card' "$file"; then
+              passed=1
+              break
+            fi
+            echo "Voice replay attempt $attempt missing markers"
+          done
+          if [ "$passed" -ne 1 ]; then
+            echo 'Build 26.1 voice replay smoke failed after 3 bounded isolated attempts'
+            exit 1
+          fi
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-261-server.pid ]; then kill "$(cat /tmp/ft-261-server.pid)" || true; fi

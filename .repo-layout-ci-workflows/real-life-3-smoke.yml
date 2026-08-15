@@ -1,0 +1,82 @@
+name: Build 26 Real Life French III smoke
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  real-life-3:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax and wiring
+        run: |
+          node --check src/pedagogy/real-life-data-3.js
+          node --check src/pedagogy/real-life-coach.js
+          node --check src/core/build-meta.js
+          node --check sw.js
+          # Build 26 remains a required subsystem, while the global product version may advance.
+          grep -q 'src/pedagogy/real-life-data-3.js?v=1.19.0-b26' index.html
+          grep -q 'src/pedagogy/real-life-coach.js?v=1.19.0-b26' index.html
+          grep -q 'src/pedagogy/real-life-data-3.js' sw.js
+          grep -q 'src/pedagogy/real-life-coach.js' sw.js
+          grep -q "'FrenchTranquilleRealLife3'" src/core/build-meta.js
+          grep -q "'FrenchTranquilleRealLifeCoach'" src/core/build-meta.js
+
+      - name: Sanctuaries remain byte-identical
+        run: |
+          test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
+          test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-real-life-3-http.log 2>&1 &
+          echo $! >/tmp/ft-real-life-3.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — lesson 20 opens oral French only
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=24000 --dump-dom 'http://127.0.0.1:4173/?realLifeSmoke=lesson20&sessionSmoke=practice' >/tmp/rl20.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/rl20.html; then cat /tmp/rl20.html; exit 1; fi
+          grep -q 'data-real-life-pack3-total="8"' /tmp/rl20.html
+          grep -q 'data-real-life-pack3-open="1"' /tmp/rl20.html
+          grep -q 'data-real-life-scenario-total="36"' /tmp/rl20.html
+          grep -q 'data-real-life-turn-total="108"' /tmp/rl20.html
+          grep -q 'data-real-life-resolution-total="15"' /tmp/rl20.html
+          grep -q 'data-real-life-resolution-invalid="0"' /tmp/rl20.html
+
+      - name: Chrome — lesson 35 adds futur proche scene
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=24000 --dump-dom 'http://127.0.0.1:4173/?realLifeSmoke=lesson35&sessionSmoke=practice' >/tmp/rl35.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/rl35.html; then cat /tmp/rl35.html; exit 1; fi
+          grep -q 'data-real-life-pack3-open="2"' /tmp/rl35.html
+          grep -q 'data-real-life-resolution-invalid="0"' /tmp/rl35.html
+
+      - name: Chrome — lesson 40 unlocks complete Pack III without flooding catalog
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=26000 --dump-dom 'http://127.0.0.1:4173/?realLifeSmoke=lesson40&sessionSmoke=practice' >/tmp/rl40.html
+          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/rl40.html; then cat /tmp/rl40.html; exit 1; fi
+          grep -q 'data-real-life-pack3-open="8"' /tmp/rl40.html
+          grep -q 'data-real-life-scenario-total="36"' /tmp/rl40.html
+          grep -q 'data-real-life-turn-total="108"' /tmp/rl40.html
+          grep -q 'data-real-life-resolution-invalid="0"' /tmp/rl40.html
+          visible=$(grep -o 'data-real-life-visible-tiles="[0-9]*"' /tmp/rl40.html | tail -1 | grep -o '[0-9]*')
+          test -n "$visible"
+          test "$visible" -le 6
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-real-life-3.pid ]; then kill "$(cat /tmp/ft-real-life-3.pid)" || true; fi
