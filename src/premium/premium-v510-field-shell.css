@@ -7,6 +7,43 @@ html[data-theme]{
   --v510-feature-content:1036px;
 }
 
+/* Late identity authority for historical surfaces that still paint the protected old Favicon.
+   FTQ product branding uses the current goat asset; tutor/avatar surfaces use the canonical
+   Tyffany SVG mask. The old files remain byte-identical for rollback and legacy contracts. */
+html[data-theme] body .b27-brandline > img[data-v510-brand-identity="goat-v1"]{
+  object-fit:contain!important;
+  padding:2px!important;
+  background:color-mix(in srgb,var(--ft-surface,#13241f) 84%,transparent)!important;
+  border:1px solid color-mix(in srgb,var(--ft-accent,#7fe3bd) 28%,var(--ft-border,rgba(255,255,255,.15)))!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 8px 22px rgba(0,0,0,.18)!important;
+}
+
+html[data-theme] body .luc[data-v510-tyffany-avatar="canonical-svg-v1"]{
+  overflow:hidden!important;
+  padding:2px!important;
+  background:linear-gradient(145deg,
+    color-mix(in srgb,var(--ft-accent,var(--ux-accent,#7ce7ff)) 34%,var(--ft-surface,#13241f)),
+    color-mix(in srgb,var(--ft-accent2,var(--ux-accent2,#a98cff)) 28%,var(--ft-surface-2,#0a1714)))!important;
+  border:1px solid color-mix(in srgb,var(--ft-accent,var(--ux-accent,#7ce7ff)) 30%,var(--ft-border,rgba(255,255,255,.15)))!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.11),0 8px 22px rgba(0,0,0,.18)!important;
+}
+
+html[data-theme] body .luc[data-v510-tyffany-avatar="canonical-svg-v1"] > span{
+  color:transparent!important;
+  text-shadow:none!important;
+  font-size:0!important;
+  background-color:transparent!important;
+  background-image:linear-gradient(135deg,
+    var(--ft-accent,var(--ux-accent,#7ce7ff)),
+    var(--ft-accent2,var(--ux-accent2,#a98cff)))!important;
+  background-repeat:no-repeat!important;
+  background-position:center!important;
+  background-size:100% 100%!important;
+  -webkit-mask:url('../../assets/premium/brand/tyffany-memory.svg') center/64% no-repeat!important;
+  mask:url('../../assets/premium/brand/tyffany-memory.svg') center/64% no-repeat!important;
+  filter:drop-shadow(0 0 8px color-mix(in srgb,var(--ft-accent,var(--ux-accent,#7ce7ff)) 20%,transparent));
+}
+
 @media(min-width:1024px){
   /* V5.7's desktop art crop pushed the Paris scene into a right-side strip.
      Keep both background layers full-viewport so Practice and its destinations
@@ -60,8 +97,9 @@ html[data-theme]{
 }
 
 /* Physical mobile closeout — late authority after the older V4/V5 layers.
-   Review / Conversation must not reserve the invisible legacy Settings column,
-   and Listening keeps its real session score without sacrificing title width. */
+   All Practice destinations get the same two-column identity row. Listening keeps
+   Settings usable as a floating control, while the redundant 0/0 session pill is
+   removed from mobile because the 0/5 objective card already owns task progress. */
 @media(max-width:520px){
   html[data-theme] body .screen-review .topbar[data-v510-feature-header],
   html[data-theme] body .screen-conversation .topbar[data-v510-feature-header]{
@@ -85,16 +123,15 @@ html[data-theme]{
     justify-self:stretch!important;
   }
 
-  /* Listening is the only destination with a real session counter. Give the
-     identity the same first row as its siblings, then place the counter below
-     instead of letting it squeeze `Luyện nghe` / the brand into narrow columns. */
   html[data-theme] body .listening-top[data-v510-feature-header]{
+    position:relative!important;
     display:grid!important;
     grid-template-columns:44px minmax(0,1fr)!important;
-    grid-template-rows:auto auto!important;
+    grid-template-rows:auto!important;
     column-gap:10px!important;
-    row-gap:6px!important;
+    row-gap:0!important;
     align-items:center!important;
+    min-height:64px!important;
   }
 
   html[data-theme] body .listening-top[data-v510-feature-header] > :first-child{
@@ -114,11 +151,21 @@ html[data-theme]{
   }
 
   html[data-theme] body .listening-top[data-v510-feature-header] > .listening-session-score{
-    grid-column:2!important;
-    grid-row:2!important;
-    justify-self:end!important;
-    align-self:start!important;
-    margin:0!important;
+    display:none!important;
+  }
+
+  /* V5.1 assigned Settings to grid-column:4; with a two-column field header that
+     silently created implicit columns and pushed the identity off-axis. Keep the
+     control usable, but take it out of layout so it cannot squeeze the title. */
+  html[data-theme] body .listening-top[data-v510-feature-header] > .listening-settings{
+    position:absolute!important;
+    top:0!important;
+    right:0!important;
+    grid-column:auto!important;
+    grid-row:auto!important;
+    align-self:auto!important;
+    justify-self:auto!important;
+    z-index:2;
   }
 
   html[data-theme] body .ft-v510-feature-identity{
