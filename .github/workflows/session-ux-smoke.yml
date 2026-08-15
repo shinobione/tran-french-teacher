@@ -78,7 +78,11 @@ jobs:
           for attempt in 1 2 3; do
             profile="/tmp/ft-listening-profile-$attempt"
             rm -rf "$profile"
-            google-chrome --headless=new --no-sandbox --disable-gpu --user-data-dir="$profile" --window-size=390,844 --virtual-time-budget=36000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&sessionSmoke=listening' >"/tmp/session-listening-$attempt.html"
+            if ! timeout --signal=TERM --kill-after=5s 55s \
+              google-chrome --headless=new --no-sandbox --disable-gpu --user-data-dir="$profile" --window-size=390,844 --virtual-time-budget=36000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&sessionSmoke=listening' >"/tmp/session-listening-$attempt.html"; then
+              echo "Listening smoke attempt $attempt timed out or Chrome exited early"
+              continue
+            fi
             file="/tmp/session-listening-$attempt.html"
             if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then
               echo "Listening smoke attempt $attempt hit app boot error"
@@ -107,7 +111,11 @@ jobs:
           for attempt in 1 2 3; do
             profile="/tmp/ft-review-profile-$attempt"
             rm -rf "$profile"
-            google-chrome --headless=new --no-sandbox --disable-gpu --user-data-dir="$profile" --window-size=390,844 --virtual-time-budget=36000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&sessionSmoke=review' >"/tmp/session-review-$attempt.html"
+            if ! timeout --signal=TERM --kill-after=5s 55s \
+              google-chrome --headless=new --no-sandbox --disable-gpu --user-data-dir="$profile" --window-size=390,844 --virtual-time-budget=36000 --dump-dom 'http://127.0.0.1:4173/?uxSmoke=lesson8&sessionSmoke=review' >"/tmp/session-review-$attempt.html"; then
+              echo "Review smoke attempt $attempt timed out or Chrome exited early"
+              continue
+            fi
             file="/tmp/session-review-$attempt.html"
             if grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file"; then
               echo "Review smoke attempt $attempt hit app boot error"
