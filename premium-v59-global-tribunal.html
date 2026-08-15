@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Premium V5.9 Global Tribunal</title>
+  <style>
+    body{font-family:system-ui;background:#07100d;color:#eafff6;margin:0;padding:20px}
+    #grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    iframe{width:100%;height:330px;border:1px solid #315b4a;border-radius:16px;background:#fff}
+    pre{white-space:pre-wrap}
+    @media(max-width:760px){#grid{grid-template-columns:1fr}iframe{height:280px}}
+  </style>
+</head>
+<body>
+  <h1>V5.9 Global Tribunal</h1>
+  <pre id="status">RUN</pre>
+  <div id="grid"></div>
+  <script>
+  (()=>{
+    const root=document.documentElement;
+    const status=document.getElementById('status');
+    const grid=document.getElementById('grid');
+    const cases=[
+      {name:'A interactions',src:'./premium-v59-interactions-tribunal.html?e=v59e',marker:'v59a'},
+      {name:'B lesson layout',src:'./premium-v59-lesson-layout-tribunal.html?e=v59e',marker:'v59b'},
+      {name:'C shared system',src:'./premium-v59-system-tribunal.html?e=v59e',marker:'v59c'},
+      {name:'D goat/PWA brand',src:'./premium-v59-brand-tribunal.html?e=v59e',marker:'v59d'}
+    ];
+    const learnerKeys=[
+      'francais-avec-luc:learner:v1',
+      'french-tranquille:learning-memory:v1',
+      'french-tranquille:error-intelligence:v1',
+      'french-tranquille:scenarios:v1',
+      'french-tranquille:listening:v1',
+      'french-tranquille:milestones:v1'
+    ];
+    const themes=['original','aurora','sunset','jade'];
+    const wait=ms=>new Promise(r=>setTimeout(r,ms));
+    const fail=message=>{
+      root.dataset.v59e='fail';
+      root.dataset.v59eDetail=message;
+      status.textContent='FAIL '+message;
+      throw new Error(message);
+    };
+    async function waitCase(c,frame){
+      const started=performance.now();
+      while(performance.now()-started<9000){
+        try{
+          const doc=frame.contentDocument;
+          const state=doc?.documentElement?.dataset?.[c.marker];
+          if(state==='ok') return;
+          if(state==='fail') fail(`${c.name}:${doc.documentElement.dataset[`${c.marker}Detail`]||'failed'}`);
+        }catch(e){if(root.dataset.v59e==='fail')throw e;}
+        await wait(100);
+      }
+      fail(`${c.name}:timeout`);
+    }
+    async function realAppGate(){
+      const frame=document.createElement('iframe');
+      frame.title='Real app V5.9 integration';
+      frame.src='./?fieldNavV3=1&v59e=1';
+      grid.append(frame);
+      const started=performance.now();
+      let win,doc;
+      while(performance.now()-started<14000){
+        win=frame.contentWindow;doc=frame.contentDocument;
+        if(win?.FrenchTranquilleThemes && doc?.documentElement?.dataset?.v59Interactions==='1' && doc.documentElement.dataset.v59LessonLayout==='1' && doc.documentElement.dataset.v59PremiumSystem==='1')break;
+        await wait(150);
+      }
+      if(!win?.FrenchTranquilleThemes)fail('real-app:themes-api-missing');
+      if(doc.documentElement.dataset.v59Interactions!=='1')fail('real-app:A-missing');
+      if(doc.documentElement.dataset.v59LessonLayout!=='1')fail('real-app:B-missing');
+      if(doc.documentElement.dataset.v59PremiumSystem!=='1')fail('real-app:C-missing');
+      const before=Object.fromEntries(learnerKeys.map(k=>[k,win.localStorage.getItem(k)]));
+      for(const theme of themes){
+        win.FrenchTranquilleThemes.apply(theme);
+        win.FrenchTranquilleThemes.mount?.();
+        await wait(30);
+        if(doc.documentElement.dataset.theme!==theme)fail(`real-app:theme-${theme}-not-applied`);
+        const hero=doc.querySelector('.b27-home .b27-primary-card');
+        if(hero && hero.dataset.v59LessonLayout!=='1')fail(`real-app:hero-${theme}-not-marked`);
+      }
+      for(const [key,value] of Object.entries(before))if(win.localStorage.getItem(key)!==value)fail(`real-app:store-mutated:${key}`);
+      frame.dataset.v59eRealApp='ok';
+    }
+    async function run(){
+      const frames=[];
+      for(const c of cases){
+        const frame=document.createElement('iframe');
+        frame.title=c.name;
+        frame.src=c.src;
+        grid.append(frame);
+        frames.push([c,frame]);
+      }
+      await Promise.all(frames.map(([c,f])=>waitCase(c,f)));
+      await realAppGate();
+      root.dataset.v59e='ok';
+      root.dataset.v59eDetail='A+B+C+D=pass;real-app=4-themes;stores=6-stable';
+      status.textContent='PASS V5.9 GLOBAL — A+B+C+D + REAL APP';
+    }
+    run().catch(error=>{if(root.dataset.v59e!=='fail'){root.dataset.v59e='fail';root.dataset.v59eDetail=error.message||String(error);status.textContent='FAIL '+root.dataset.v59eDetail;}});
+  })();
+  </script>
+</body>
+</html>
