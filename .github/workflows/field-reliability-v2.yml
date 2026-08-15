@@ -36,9 +36,11 @@ jobs:
           grep -Fq '.speaking-loop-actions[hidden][aria-hidden="true"]{display:none!important}' src/pedagogy/speaking-loop-content.css
           grep -q 'singleVoiceRecordControl' tests/browser/single-voice-record-control-smoke.html
           grep -Fq "observeNode('[data-field-audio-record]',6000)" tests/browser/field-audio-browser-smoke.html
-          grep -q 'observeNode' tests/browser/field-audio-browser-smoke.html
-          grep -q 'play=observed' tests/browser/field-audio-browser-smoke.html
-          grep -q "finish(false,'timeout')},14000" tests/browser/field-audio-browser-smoke.html
+          grep -Fq "root.dataset.fieldAudioPhase==='ready'" tests/browser/field-audio-browser-smoke.html
+          grep -q 'initial-play-button' tests/browser/field-audio-browser-smoke.html
+          grep -q 'rerender-play-button' tests/browser/field-audio-browser-smoke.html
+          grep -q 'play=observed-after-ready' tests/browser/field-audio-browser-smoke.html
+          grep -q "finish(false,'timeout')},18000" tests/browser/field-audio-browser-smoke.html
 
       - name: Sanctuaries remain exact
         run: |
@@ -68,7 +70,7 @@ jobs:
         run: |
           google-chrome --headless=new --no-sandbox --disable-gpu \
             --autoplay-policy=no-user-gesture-required \
-            --virtual-time-budget=18000 --dump-dom \
+            --virtual-time-budget=22000 --dump-dom \
             'http://127.0.0.1:4173/tests/browser/field-audio-browser-smoke.html?fieldAudioV2=1' >/tmp/field-audio-v2.html
           grep -q 'data-field-audio-browser-smoke="ok"' /tmp/field-audio-v2.html || { cat /tmp/field-audio-v2.html; exit 1; }
           grep -Eq 'data-field-audio-blob-bytes="[1-9][0-9]*"' /tmp/field-audio-v2.html || { cat /tmp/field-audio-v2.html; exit 1; }
