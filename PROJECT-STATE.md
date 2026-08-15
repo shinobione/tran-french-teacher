@@ -9,14 +9,55 @@
 - Reconciled: **2026-08-15**
 - Repository: `shinobione/tran-french-teacher`
 - Default branch: `main`
-- Last runtime-bearing main checkpoint: **`e3d434b48913bd6adf421b5445266c49944160b3`**.
-- Runtime delivery: **PR #148 — V5.10 · approved Premium Practice artwork**, squash-merged.
-- Runtime rollback base immediately before that slice: **`e959b6416f0258f07c130561e138bdd4fba3b486`**.
-- PR #148 head passed **42/42** pull-request workflows before merge.
-- Runtime main checkpoint passed **28/28** push workflows, including **GitHub Pages #199 SUCCESS** on the exact runtime SHA.
+- Current structural/runtime main checkpoint: **`88ca5f32a67d2989fcfb81684079848e67bffad5`** — PR **#149**, repository layout reorganization, squash-merged.
+- Previous feature-bearing runtime checkpoint: **`e3d434b48913bd6adf421b5445266c49944160b3`** — PR **#148**, approved Premium Practice artwork.
+- Rollback immediately before repository reorganization: **`2267f8f868b517e6f37a17f5e73394249eb40500`**.
+- PR #149 final head passed **43/43** pull-request workflows. Build26.5 hit its known bounded Chrome timeout once and passed unchanged on rerun; no product patch was made for that flake.
+- Merged structural checkpoint passed **28/28** push workflows.
+- **GitHub Pages #201 SUCCESS** on exact SHA `88ca5f32a67d2989fcfb81684079848e67bffad5`.
 - Premium gate issue: **#114 OPEN**.
 - **V5.10 remains the active human/physical installed-iPhone/PWA visual field gate.**
 - Build 35 remains **BLOCKED / RESERVED** until the explicit user field PASS and #114 closure.
+
+## Repository layout — canonical after PR #149
+
+The root-file sprawl was reorganized without intended product/pedagogy/store/voice behavior changes.
+
+```text
+src/
+  core/       platform/runtime, Recovery, loaders, debug/theme, contracts
+  pedagogy/   curriculum, Memory, Listening, Scenario, Real Life, Speaking, learner intelligence
+  ui/         app shell, responsive/interaction and historical UX compatibility layers
+  premium/    Premium V4/V5/V5.9/V5.10 runtime layers
+
+tests/
+  browser/    browser tribunals, visual captures, fixtures and field harnesses
+  smoke/      JavaScript smoke/guard harnesses
+```
+
+Root intentionally keeps canonical docs, PWA entrypoints and protected sanctuaries, including:
+
+```text
+AGENTS.md
+PROJECT-STATE.md
+MASTER-ROADMAP.md
+index.html
+sw.js
+manifest.webmanifest
+styles.css
+app.js
+voice-ios.js
+free-voice.js
+```
+
+PR #149 moved **169 former root files** and rewired `index.html`, Service Worker paths, CSS-relative URLs, loaders, tools, browser harnesses and historical GitHub Actions contracts. Temporary migration helpers/scratch workflow staging were removed before merge and are not part of `main`.
+
+Important path rule for future work:
+
+- repository/root URLs should use `./src/...` or `./tests/...` as appropriate;
+- ES-module imports between files already inside the same folder remain module-relative, e.g. `./runtime-contracts.js` inside `src/core/`;
+- CSS imports inside `src/premium/` remain stylesheet-relative, e.g. `./premium-v5-utility.css`, not `./src/premium/...`;
+- browser harness URLs must be resolved relative to `tests/browser/`, while assertions comparing literal app-owned `src` attributes must preserve the app document's own path semantics.
 
 ## Current product state
 
@@ -77,7 +118,7 @@ PWA/cache choice:
 
 ## Protected sanctuaries
 
-The V5.10 Practice-art slice did **not** change:
+The V5.10 Practice-art slice and repository reorganization did **not** change the protected sanctuary contents:
 
 ```text
 app.js
@@ -87,7 +128,7 @@ assets/LOGO.png
 assets/Favicon.png
 ```
 
-It also did not change curriculum semantics, learner progression, Scenario, Listening semantics, voice/replay behavior, migration contracts or durable-store schemas.
+They also did not intentionally change curriculum semantics, learner progression, Scenario, Listening semantics, voice/replay behavior, migration contracts or durable-store schemas.
 
 ## Locked / must not regress
 
@@ -100,6 +141,7 @@ It also did not change curriculum semantics, learner progression, Scenario, List
 - Build 35 remains unavailable for CSS/assets/animation/cache/DEBUG/visual QA work.
 - Locked Aurora / Sunset / Nocturne backgrounds must not be silently regenerated.
 - Approved Practice artwork must not silently fall back to the superseded generated SVG family.
+- Do not flatten the organized `src/` / `tests/` layout back into repository root.
 
 ## Canonical next action — V5.10 physical field gate
 
@@ -109,6 +151,7 @@ Next action is the real installed-iPhone/PWA review of the newly integrated artw
 
 ```text
 V5.10 automated Practice-art certification ✅
+repository structure migration certification ✅
 → physical installed-iPhone/PWA review
 → verify the four approved Practice artworks by eye
 → verify exact Home reuse for Écouter / Réviser
@@ -138,8 +181,8 @@ For the Practice-art field review specifically, inspect:
 4. Check open PRs and issue #114.
 5. Verify CI/Pages for the current main/candidate SHA when relevant.
 6. Read V5.10 in MASTER-ROADMAP.md.
-7. Do NOT start Build 35 before explicit V5.10 field PASS and #114 closure.
-8. For a reproduced V5.10 defect, create one small checkpointed field-fix slice and rerun the relevant tribunals.
-9. Keep learner stores / voice / navigation sanctuaries intact.
-10. Update this checkpoint before declaring Premium fully closed.
+7. Respect the organized src/ and tests/ layout; do not assume historical files still live at root.
+8. Do NOT start Build 35 before explicit V5.10 field PASS and #114 closure.
+9. For a reproduced V5.10 defect, create one small checkpointed field-fix slice and rerun the relevant tribunals.
+10. Keep learner stores / voice / navigation sanctuaries intact and update this checkpoint before declaring Premium fully closed.
 ```
