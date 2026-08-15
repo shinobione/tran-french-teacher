@@ -1,4 +1,4 @@
-const CACHE='tran-french-teacher-v2.3.34-b34.16-v510identity1';
+const CACHE='tran-french-teacher-v2.3.22-b34.14-v58debug1';
 const V='1.17.0-b24';
 const UX='1.17.5-b24.5';
 const P25='1.18.0-b25';
