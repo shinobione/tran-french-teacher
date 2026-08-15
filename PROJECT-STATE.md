@@ -6,16 +6,15 @@
 
 ## Last reconciliation
 
-- Reconciled: **2026-08-15**
+- Reconciled: **2026-08-16**
 - Repository: `shinobione/tran-french-teacher`
 - Default branch: `main`
-- Latest runtime-bearing checkpoint: **`deecd20c95e0552302e68548125ccb538c5bad32`** — PR **#159**, V5.10 canonical lesson identity + Tyffany action alignment field closeout.
-- Previous field checkpoint: **`69833c50f1c83ddb03a1df05471f89b759cd30c3`** — PR **#158**, Listening parity + canonical FTQ/Tyffany identity cleanup.
-- Earlier V5.10 headers: PR **#151/#152** established shared Premium Feature Headers and screenshot-driven Listening brand correction.
-- Repository layout checkpoint underneath: PR **#149**, `src/` + `tests/` reorganization.
-- PR #159 final head passed **44/44** pull-request workflows after the historical Build 26.4 Chrome Progress timeout was rerun **strictly unchanged** and passed; no product patch was made for that flake.
-- Runtime checkpoint `deecd20c…` passed **29/29** push workflows with **0 failure / 0 queued / 0 in-progress**.
-- **GitHub Pages #212 SUCCESS** on exact runtime SHA `deecd20c95e0552302e68548125ccb538c5bad32`.
+- Latest runtime-bearing checkpoint: **`54209392d3a349a1aefab14615dcecf24a59fcea`** — PR **#161**, V5.10 Settings Theme-picker physical-field interaction repair.
+- Previous runtime-bearing checkpoint: **`deecd20c95e0552302e68548125ccb538c5bad32`** — PR **#159**, canonical lesson identity + Tyffany action alignment field closeout.
+- Earlier field checkpoint: **`69833c50f1c83ddb03a1df05471f89b759cd30c3`** — PR **#158**, Listening parity + canonical FTQ/Tyffany identity cleanup.
+- PR #161 final head passed **44/44** pull-request workflows with no rerun required.
+- Runtime checkpoint `54209392…` passed **29/29** push workflows with **0 failure / 0 queued / 0 in-progress**.
+- **GitHub Pages #214 SUCCESS** on exact runtime SHA `54209392d3a349a1aefab14615dcecf24a59fcea`.
 - Premium gate issue: **#114 OPEN**.
 - **V5.10 remains the active human/physical installed-PWA visual field gate.**
 - Build 35 remains **BLOCKED / RESERVED** until explicit user field PASS and #114 closure.
@@ -91,13 +90,13 @@ Parler → explicit oral-training mode only
 
 ### Lesson identity + Tyffany action alignment — PR #159
 
-Physical Android screenshots exposed three final ownership defects:
+Physical Android screenshots exposed three ownership defects:
 
 1. the mobile Today lesson card hid the real curriculum icon and painted a hard-coded `▤` pseudo icon;
 2. lesson detail was being captured by the global Tyffany avatar decorator and showed a generic brain where the current lesson identity belongs;
 3. `Nghe Tyffany / Écouter Tyffany` had no explicit icon+label centering contract.
 
-The Premium layer now fixes these without changing curriculum or voice engines:
+The Premium layer fixes these without changing curriculum or voice engines:
 
 - Home uses the exact canonical **`lesson.icon`** from `FrenchTranquilleCurriculum`;
 - lesson detail uses that same canonical **`lesson.icon`** plus the current lesson title;
@@ -106,19 +105,33 @@ The Premium layer now fixes these without changing curriculum or voice engines:
 - Tyffany remains the tutor/voice identity everywhere it actually owns the surface;
 - model/replay actions use an explicit centered flex contract.
 
-Example certified synthetic lesson 8:
+### Settings Theme picker after navigation churn — PR #161
 
-```text
-Home lesson identity   → 📍
-Lesson detail identity → 📍 Hỏi đường & tìm địa điểm
-Legacy Tyffany brain   → hidden on this lesson-identity row
-```
+Physical installed-PWA review exposed a real interaction failure after several navigations and a completed lesson: the Settings **Theme** card could remain visually present but tapping its collapsed header produced no visible action.
 
-This contract generalizes from the curriculum data, so restaurant (`🍽️`), pharmacy (`🩺`) and the other lessons reuse their existing canonical icons automatically rather than adding a second icon map.
+The investigation found a QA/ownership gap rather than a theme-engine failure:
+
+- the existing Appearance smoke changed themes through `FrenchTranquilleThemes.apply(...)` directly;
+- the historical Settings tribunal could click theme-option DOM programmatically without first verifying the real collapsed Theme header;
+- therefore CI certified theme application while the actual user gesture that opens the card was not covered;
+- Settings also retained a historical fixed `#ft-theme-settings` source template while mounting the newer inline owner, leaving two potential Theme surfaces/hit targets.
+
+PR #161 fixes the real interaction owner in `src/core/theme-controller.js`:
+
+- the inline Theme `<details>` open/close state is now controlled deterministically by the theme controller;
+- real pointer clicks on the Theme `summary` explicitly toggle the disclosure;
+- Enter / Space keyboard activation follows the same path;
+- `aria-expanded` and `data-theme-picker-open` stay synchronized;
+- once the inline Settings picker owns the surface, the historical fixed template is hidden and removed from interaction ownership;
+- theme selection still uses the existing appearance-only store and does **not** touch learner progression, pedagogy or voice.
+
+Permanent field guard: `V5.10 Theme Picker Interaction` / `tests/browser/v510-theme-picker-interaction.html`.
+
+It performs real summary clicks after route churn and after a second Settings remount, changes Sunset → Original through visible theme options, and requires the learner-related stores to remain byte-identical.
 
 ## Permanent V5.10 field QA
 
-`V5.10 Field Identity Closeout` now verifies in real Chrome:
+Current V5.10 field automation now covers both visual ownership and the real Theme interaction path:
 
 - Home canonical lesson icon is visible and the generic `▤` pseudo icon is gone;
 - lesson detail uses the same curriculum lesson icon;
@@ -127,27 +140,17 @@ This contract generalizes from the curriculum data, so restaurant (`🍽️`), p
 - Listening Feature Header parity remains intact;
 - Real-Life mapping remains intact;
 - Progress FTQ brand identity remains canonical;
-- pure Premium visual decorators leave all **6 durable learner stores byte-identical**.
-
-The workflow also emits six **430×932** captures:
-
-```text
-Home
-Listening
-Real-Life
-Progress
-Lesson detail
-Speaking / Tyffany model action
-```
-
-The latest PR #159 captures were manually reviewed before merge.
+- Theme card opens and closes by real user-style click after route churn/remount;
+- visible theme options remain interactive inside Settings;
+- pure visual/theme travel leaves durable learner data unchanged.
 
 ## PWA/cache choice
 
-- V5.10 targeted runtime URL version: **`2.3.35-v510lessonidentity1`**.
+- V5.10 lesson-identity targeted runtime URL version remains **`2.3.35-v510lessonidentity1`**.
+- Theme interaction contract marker: **`2.3.36-v510themeinteraction1`** inside `FrenchTranquilleThemes.interactionVersion`.
 - Global Service Worker cache identity remains deliberately unchanged.
-- `src/premium/premium-v510-lesson-identity.css` is precached offline.
-- No global cache nuke was used for this visual correction.
+- No global cache nuke was used for this interaction correction.
+- Service Worker remains network-first for GET requests; physical retest should be performed after one warm-online reopen so the current runtime can refresh normally without deleting learner data.
 
 ## Protected sanctuaries
 
@@ -173,6 +176,7 @@ Also preserve:
 ## Locked / must not regress
 
 - **ZERO route flash / ZERO remanence / ZERO competing facades.**
+- **ZERO competing Theme owners/hit targets in Settings.**
 - No route/page crossfade may expose old and new facades simultaneously.
 - Global chrome baseline: Back top-left, Settings top-right, coherent control family.
 - Progress visual grammar: **A0 → progress line → A1**.
@@ -187,26 +191,27 @@ Also preserve:
 
 **Do not start Build 35. Do not close #114 from automation alone.**
 
-The runtime/automation side is currently green:
+The current runtime/automation side is green:
 
 ```text
-PR #159                       44/44 SUCCESS
-main runtime deecd20c…        29/29 SUCCESS
-V5.10 Field Identity #7       SUCCESS
-GitHub Pages #212             SUCCESS on deecd20c…
+PR #161                       44/44 SUCCESS
+main runtime 54209392…        29/29 SUCCESS
+V5.10 Theme Picker #2         SUCCESS
+GitHub Pages #214             SUCCESS on 54209392…
 ```
 
-Next action is physical installed-PWA review:
+Next action is physical installed-PWA continuation from the current runtime:
 
 ```text
-→ reopen PWA without deleting data
-→ Home: verify current lesson uses its lesson-specific icon
-→ open a lesson: verify same lesson icon + lesson title, no generic Tyffany brain in lesson identity row
-→ verify Tyffany still appears correctly on actual tutor / voice actions
-→ verify “Nghe Tyffany” icon+label is visually centered
+→ warm-online reopen PWA without deleting data
+→ navigate normally / complete or revisit a lesson
+→ Settings → Theme: verify the card visibly opens on tap
+→ select at least one different theme and verify the UI changes while Settings remains usable
+→ close/reopen Theme and revisit Settings after further navigation
+→ re-check lesson identity / Tyffany action alignment
 → spot-check Listening / Real-Life / Progress
 → verify ZERO flash/remanence regression
-→ explicit user FIELD PASS
+→ explicit user FIELD PASS only when the physical package is actually clean
 → close #114 / governance closeout
 → only then Build 35
 ```
