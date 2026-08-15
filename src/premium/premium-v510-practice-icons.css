@@ -110,12 +110,14 @@ html[data-theme] .ft-v510-feature-art{
   flex:0 0 56px!important;
 }
 html[data-theme] .ft-v510-feature-copy{
-  display:block;
+  display:block!important;
   min-width:0;
   text-align:left;
 }
 html[data-theme] .ft-v510-feature-brand{
-  display:block;
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
   margin:0 0 4px!important;
   font-size:.58rem!important;
   line-height:1.15;
