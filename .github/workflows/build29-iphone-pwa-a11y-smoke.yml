@@ -36,17 +36,17 @@ jobs:
           const match=text.match(/const META = \{ version: '[^']+', build: '([^']+)'/);
           if(!match || Number(match[1]) < 29) throw new Error('Build 29 contract cannot run on a pre-29 build');
           NODE
-          grep -q 'tran-french-teacher-v2.3.20-b34.12-v5fidelity2' index.html sw.js
+          grep -q 'tran-french-teacher-v2.3.21-b34.13-v57art1' index.html sw.js
           grep -q "const NAV='2.3.7-b34.7'" sw.js
-          grep -q "const COHERENCE='2.3.12-v4coherence1'" sw.js
-          grep -q "const MOTION='2.3.14-v4motion1'" sw.js
-          grep -q "const V4='2.3.15-v4contrast1'" sw.js
-          grep -q "const V5='2.3.16-v5coherence1'" sw.js
-          grep -q "const V5U='2.3.17-v5utility1'" sw.js
-          grep -q "const V5I='2.3.18-v5islands1'" sw.js
-          grep -q "const V5M='2.3.19-v5mockup1'" sw.js
-          grep -q "const V5F='2.3.20-v5fidelity1'" sw.js
-          grep -q "const V5FR='2.3.20-v5fidelity2'" sw.js
+          grep -q "const COHERENCE='2.3.21-v57art1'" sw.js
+          grep -q "const MOTION='2.3.21-v57art1'" sw.js
+          grep -q "const V4='2.3.21-v57art1'" sw.js
+          grep -q "const V5='2.3.21-v57art1'" sw.js
+          grep -q "const V5U='2.3.21-v57art1'" sw.js
+          grep -q "const V5I='2.3.21-v57art1'" sw.js
+          grep -q "const V5M='2.3.21-v57art1'" sw.js
+          grep -q "const V5F='2.3.21-v57art1'" sw.js
+          grep -q "const V5FR='2.3.21-v57art1'" sw.js
           grep -q 'stage2-boot.js?v=${NAV}' sw.js
           grep -q 'field-navigation-runtime.js?v=${NAV}' sw.js
           grep -q 'theme-controller.js?v=${V5F}' sw.js
@@ -62,7 +62,7 @@ jobs:
           grep -q 'premium-v5-fidelity-reset.css?v=${V5F}' sw.js
           grep -q 'premium-v5-fidelity-refine.css?v=${V5FR}' sw.js
           grep -q 'premium-v5-fidelity-card-hotfix.css?v=${V5FR}' sw.js
-          grep -q 'premium-v4-ownership-hotfix.css?v=2.3.11-v4ownership1' sw.js
+          grep -q 'premium-v4-ownership-hotfix.css?v=${V5F}' sw.js
           grep -q 'build29-iphone-a11y.css' sw.js
           grep -q 'build29-iphone-a11y.js' sw.js
           grep -q 'build29-smoke.js' sw.js

@@ -1,9 +1,9 @@
 /* French Trân’quille — Premium Fidelity V5.2 / Utility control coherence
    Build 34 maintenance only. Extends V5.1 without rewriting its certified layer. */
 
-html[data-theme]:not([data-theme="original"]){--pv5-utility-ready:1}
+html[data-theme]{--pv5-utility-ready:1}
 
-html[data-theme]:not([data-theme="original"]) :is(
+html[data-theme] :is(
   .ux-close,
   .scenario-close,
   .scenario-mic,
@@ -37,13 +37,13 @@ html[data-theme]:not([data-theme="original"]) :is(
 
 /* ux-shell historically controls .ux-close visibility in the real Practice overlay.
    Once the overlay owns the viewport, V5.2 explicitly restores the close affordance. */
-html[data-theme]:not([data-theme="original"]) body > .ux-practice-overlay .ux-close{display:grid!important}
+html[data-theme] body > .ux-practice-overlay .ux-close{display:grid!important}
 
-html[data-theme]:not([data-theme="original"]) :is(.ux-close,.scenario-close){font-size:1.5rem;font-weight:750}
-html[data-theme]:not([data-theme="original"]) .scenario-mic{font-size:1.08rem}
-html[data-theme]:not([data-theme="original"]) .progress-detail-panel-head button{font-size:1.08rem}
+html[data-theme] :is(.ux-close,.scenario-close){font-size:1.5rem;font-weight:750}
+html[data-theme] .scenario-mic{font-size:1.08rem}
+html[data-theme] .progress-detail-panel-head button{font-size:1.08rem}
 
-html[data-theme]:not([data-theme="original"]) :is(
+html[data-theme] :is(
   .ux-close,
   .scenario-close,
   .scenario-mic,
@@ -53,7 +53,7 @@ html[data-theme]:not([data-theme="original"]) :is(
   filter:brightness(1.08);
   box-shadow:0 6px 16px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.13),inset 0 4px 12px rgba(0,0,0,.10);
 }
-html[data-theme]:not([data-theme="original"]) :is(
+html[data-theme] :is(
   .ux-close,
   .scenario-close,
   .scenario-mic,
@@ -63,7 +63,7 @@ html[data-theme]:not([data-theme="original"]) :is(
   outline-offset:3px;
 }
 
-html[data-theme]:not([data-theme="original"]) .scenario-listen{
+html[data-theme] .scenario-listen{
   min-height:44px;
   padding:8px 12px;
   border:1px solid color-mix(in srgb,var(--ft-border,rgba(180,199,224,.25)) 82%,transparent);
@@ -78,7 +78,7 @@ html[data-theme]:not([data-theme="original"]) .scenario-listen{
 }
 
 @media (hover:hover){
-  html[data-theme]:not([data-theme="original"]) :is(
+  html[data-theme] :is(
     .ux-close,
     .scenario-close,
     .scenario-mic,
@@ -124,5 +124,5 @@ html.ux-debug-mode :is(body > .listening-overlay,body > .b27-overlay,body > .ux-
 }
 
 @media(prefers-reduced-motion:reduce){
-  html[data-theme]:not([data-theme="original"]) :is(.ux-close,.scenario-close,.scenario-mic,.progress-detail-panel-head button,.scenario-listen){transition:none!important;animation:none!important}
+  html[data-theme] :is(.ux-close,.scenario-close,.scenario-mic,.progress-detail-panel-head button,.scenario-listen){transition:none!important;animation:none!important}
 }

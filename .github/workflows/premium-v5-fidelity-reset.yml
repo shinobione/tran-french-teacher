@@ -1,4 +1,4 @@
-name: Premium V5.5 Mockup Fidelity Reset
+name: Premium V5.7 Fidelity + Theme Art
 
 on:
   pull_request:
@@ -24,10 +24,12 @@ jobs:
           node --check sw.js
           grep -q -- '--pv55-ready:1' premium-v5-fidelity-reset.css
           grep -q -- '--pv55-refine-ready:1' premium-v5-fidelity-refine.css
-          grep -q 'theme-aurora-paris.svg' premium-v5-fidelity-reset.css
-          grep -q 'theme-sunset-paris.svg' premium-v5-fidelity-reset.css
-          grep -q 'theme-jade-paris.svg' premium-v5-fidelity-reset.css
-          grep -q 'eiffel-premium-mask.svg' premium-v5-fidelity-refine.css
+          grep -q 'premium/themes/original/background-v2.png' premium-v5-fidelity-reset.css
+          grep -q 'premium/themes/aurora/background.webp' premium-v5-fidelity-reset.css
+          grep -q 'premium/themes/sunset/background.webp' premium-v5-fidelity-reset.css
+          grep -q 'premium/themes/nocturne/background.webp' premium-v5-fidelity-reset.css
+          grep -q 'premium/themes/original/lesson-eiffel-v2.png' premium-v5-fidelity-reset.css
+          ! grep -q 'eiffel-premium-mask.svg' premium-v5-fidelity-reset.css premium-v5-fidelity-refine.css
           grep -q "content:'LUYỆN TẬP'" premium-v5-fidelity-refine.css
           grep -q 'ft-v55-subview-back' premium-v5-fidelity-reset.js
           grep -q 'ft-v55-level-route' premium-v5-fidelity-reset.js
@@ -35,14 +37,14 @@ jobs:
           grep -q 'data-v55-recovery-toggle' premium-v5-fidelity-reset.js
           grep -q 'ft-v55-settings-gear' premium-v5-fidelity-refine.css
           grep -q 'ft-v55-recovery-toggle' premium-v5-fidelity-settings-hotfix.css
-          grep -q 'premium-v5-fidelity-reset.css?v=2.3.20-v5fidelity1' premium-theme-polish.css
-          grep -q 'premium-v5-fidelity-refine.css?v=2.3.20-v5fidelity2' premium-theme-polish.css
-          grep -q 'premium-v5-fidelity-card-hotfix.css?v=2.3.20-v5fidelity2' premium-theme-polish.css
-          grep -q 'premium-v5-fidelity-settings-hotfix.css?v=2.3.20-v5fidelity2' premium-theme-polish.css
-          grep -q 'premium-v5-fidelity-reset.js?v=2.3.20-v5fidelity1' theme-controller.js
-          grep -q "const CACHE='tran-french-teacher-v2.3.20-b34.12-v5fidelity2'" sw.js
-          grep -q "const V5F='2.3.20-v5fidelity1'" sw.js
-          grep -q "const V5FR='2.3.20-v5fidelity2'" sw.js
+          grep -q 'premium-v5-fidelity-reset.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v5-fidelity-refine.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v5-fidelity-card-hotfix.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v5-fidelity-settings-hotfix.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v5-fidelity-reset.js?v=2.3.21-v57art1' theme-controller.js
+          grep -q "const CACHE='tran-french-teacher-v2.3.21-b34.13-v57art1'" sw.js
+          grep -q "const V5F='2.3.21-v57art1'" sw.js
+          grep -q "const V5FR='2.3.21-v57art1'" sw.js
           grep -q 'premium-v5-fidelity-reset.css?v=${V5F}' sw.js
           grep -q 'premium-v5-fidelity-refine.css?v=${V5FR}' sw.js
           grep -q 'premium-v5-fidelity-card-hotfix.css?v=${V5FR}' sw.js
@@ -50,12 +52,14 @@ jobs:
           grep -q 'premium-theme-polish.css?v=${V5F}' sw.js
           grep -q 'theme-controller.js?v=${V5F}' sw.js
           grep -q 'premium-v5-fidelity-reset.js?v=${V5F}' sw.js
-          grep -q './assets/theme-aurora-paris.svg' sw.js
-          grep -q './assets/theme-sunset-paris.svg' sw.js
-          grep -q './assets/theme-jade-paris.svg' sw.js
-          grep -q './assets/eiffel-premium-mask.svg' sw.js
+          grep -q './assets/premium/themes/original/background-v2.png' sw.js
+          grep -q './assets/premium/themes/aurora/background.webp' sw.js
+          grep -q './assets/premium/themes/sunset/background.webp' sw.js
+          grep -q './assets/premium/themes/nocturne/background.webp' sw.js
+          grep -q './assets/premium/themes/original/lesson-eiffel-v2.png' sw.js
+          ! grep -q 'eiffel-premium-mask.svg' sw.js
           grep -q "\['review','conversation','listening','real-life'\]" premium-v5-subview-chrome-tribunal.html
-          test "$(tail -n 1 premium-theme-polish.css)" = "@import url('./premium-nav-geometry-hotfix.css?v=2.3.4-p0nav1');"
+          test "$(tail -n 1 premium-theme-polish.css)" = "@import url('./premium-nav-geometry-hotfix.css?v=2.3.21-v57art1');"
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
           test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
           test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
@@ -77,7 +81,7 @@ jobs:
             --virtual-time-budget=36000 --dump-dom \
             'http://127.0.0.1:4173/premium-v5-fidelity-reset-tribunal.html' > /tmp/v55.html
           grep -q 'data-premium-v55="ok"' /tmp/v55.html || { grep -o 'data-premium-v55-detail="[^"]*"' /tmp/v55.html || true; exit 1; }
-          grep -q 'data-v55-scenes="aurora+sunset+jade"' /tmp/v55.html
+          grep -q 'data-v55-scenes="original+aurora+sunset+nocturne"' /tmp/v55.html
           grep -q 'data-v55-controls="filled-circle"' /tmp/v55.html
           grep -q 'data-v55-progress="A0-line-A1"' /tmp/v55.html
           grep -q 'data-v55-settings="learner-first"' /tmp/v55.html
@@ -85,7 +89,7 @@ jobs:
           grep -q 'data-v55-about="credits-contained"' /tmp/v55.html
           grep -q 'data-v55-learner="unchanged"' /tmp/v55.html
           grep -q 'data-v55-overflow="0"' /tmp/v55.html
-          grep -q 'data-v55-original="witness"' /tmp/v55.html
+          grep -q 'data-v55-original="parity"' /tmp/v55.html
 
       - name: Chrome — all Practice children share one Back chrome
         run: |
@@ -135,12 +139,12 @@ jobs:
             grep -q "data-capture-theme=\"${theme}\"" "$dom"
             grep -q "data-capture-screen=\"${screen}\"" "$dom"
           }
-          for theme in aurora sunset jade; do
+          for theme in original aurora sunset jade; do
             for screen in home progress practice listening settings; do
               capture "$theme" "$screen"
             done
           done
-          test "$(find artifacts/premium-v55-mobile -name '*.png' | wc -l)" -eq 15
+          test "$(find artifacts/premium-v55-mobile -name '*.png' | wc -l)" -eq 20
 
       - name: Upload V5.5 iPhone visual review artifact
         uses: actions/upload-artifact@v4

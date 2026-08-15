@@ -44,7 +44,7 @@ F.onload=()=>setTimeout(async()=>{try{
   const before=Object.fromEntries(keys.map(k=>[k,w.localStorage.getItem(k)]));
 
   w.FrenchTranquilleThemes.apply('original');await wait(80);
-  if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv5-coherence-ready').trim())throw Error('original-v5-visual-leak');
+  if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv5-coherence-ready').trim()!=='1')throw Error('original-v5-parity-missing');
   await w.FrenchTranquilleFieldNavigation.go('home');await wait(120);
   await listeningRoundtrip(w,d,'original-home-escape',{escape:true});
   await w.FrenchTranquilleFieldNavigation.go('practice');await wait(160);w.FrenchTranquilleFieldNavigation.settle();
@@ -79,8 +79,8 @@ F.onload=()=>setTimeout(async()=>{try{
   }
   for(const k of keys)if(before[k]!==w.localStorage.getItem(k))throw Error(`store-mutated:${k}`);
   w.FrenchTranquilleThemes.apply('original');await wait(60);
-  if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv5-coherence-ready').trim())throw Error('original-v5-visual-leak-after');
-  finish(true,'viewports=2;themes=3;A0=no-overlap;utility=filled;listening-settings=exact-roundtrip;underlay=restored;escape=safe;audio-guard=disabled;foundations=themed;stores=unchanged;original=witness');
+  if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv5-coherence-ready').trim()!=='1')throw Error('original-v5-parity-missing-after');
+  finish(true,'viewports=2;themes=3;A0=no-overlap;utility=filled;listening-settings=exact-roundtrip;underlay=restored;escape=safe;audio-guard=disabled;foundations=themed;stores=unchanged;original=parity');
 }catch(e){finish(false,e.message)}},120);
 setTimeout(()=>{if(!R.dataset.premiumV5Coherence)finish(false,'timeout')},60000);
 })();

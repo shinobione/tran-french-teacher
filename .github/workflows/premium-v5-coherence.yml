@@ -33,9 +33,9 @@ jobs:
           grep -q 'listening-settings' premium-v5-listening-settings.css
           grep -q 'captureReady' premium-v5-visual-capture.html
           grep -q "surface==='foundations'" premium-v5-visual-capture.html
-          grep -q 'premium-v5-coherence.css?v=2.3.16-v5coherence1' premium-theme-polish.css
-          grep -q 'premium-v5-listening-settings.css?v=2.3.16-v5coherence1' premium-theme-polish.css
-          test "$(tail -n 1 premium-theme-polish.css)" = "@import url('./premium-nav-geometry-hotfix.css?v=2.3.4-p0nav1');"
+          grep -q 'premium-v5-coherence.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v5-listening-settings.css?v=2.3.21-v57art1' premium-theme-polish.css
+          test "$(tail -n 1 premium-theme-polish.css)" = "@import url('./premium-nav-geometry-hotfix.css?v=2.3.21-v57art1');"
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
           test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
           test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"

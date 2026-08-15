@@ -1,8 +1,8 @@
 /* French Trân’quille — Premium Fidelity V5.1 / System coherence primitives
    Build 34 maintenance only. No pedagogy, learner-store, voice or audio semantics.
-   Original remains the visual witness. */
+   V5.7 extends the coherence contract to Original. */
 
-html[data-theme]:not([data-theme="original"]){
+html[data-theme]{
   --pv5-coherence-ready:1;
   --pv5-control-radius:15px;
   --pv5-control-border:color-mix(in srgb,var(--ft-border) 62%,var(--ft-accent) 38%);
@@ -19,27 +19,27 @@ html[data-theme="jade"]{--pv5-control-ink:#f3d47d}
    V4 added right-rail A0/A1 markers while an older pseudo decoration still
    supplied a left edge. Explicitly release that historical edge so the marker
    actually lives in the reserved right rail on every viewport. */
-html[data-theme]:not([data-theme="original"]) .b27-level-card::before,
-html[data-theme]:not([data-theme="original"]) .b27-level-card::after{
+html[data-theme] .b27-level-card::before,
+html[data-theme] .b27-level-card::after{
   left:auto;
   right:clamp(16px,2vw,22px);
 }
-html[data-theme]:not([data-theme="original"]) .b27-level-head{
+html[data-theme] .b27-level-head{
   padding-right:64px;
 }
-html[data-theme]:not([data-theme="original"]) .b27-level-head>b{
+html[data-theme] .b27-level-head>b{
   margin-right:2px;
 }
-html[data-theme]:not([data-theme="original"]) .b27-level-track{
+html[data-theme] .b27-level-track{
   margin-right:64px;
 }
-html[data-theme]:not([data-theme="original"]) .b27-level-card p{
+html[data-theme] .b27-level-card p{
   margin-right:64px;
 }
 
 /* ---------- One utility-control language ----------
    Premium controls must read as tactile glass controls, not 1px wire circles. */
-html[data-theme]:not([data-theme="original"]) :is(.b27-icon-button,.b27-back,.listening-close,.ft-foundation-close){
+html[data-theme] :is(.b27-icon-button,.b27-back,.listening-close,.ft-foundation-close){
   box-sizing:border-box;
   width:46px;
   height:46px;
@@ -61,21 +61,21 @@ html[data-theme]:not([data-theme="original"]) :is(.b27-icon-button,.b27-back,.li
   opacity:1;
   transition:transform .12s ease,box-shadow .12s ease,filter .12s ease,border-color .12s ease;
 }
-html[data-theme]:not([data-theme="original"]) :is(.b27-icon-button,.b27-back,.listening-close,.ft-foundation-close):active{
+html[data-theme] :is(.b27-icon-button,.b27-back,.listening-close,.ft-foundation-close):active{
   transform:scale(.955);
   filter:brightness(1.08);
   box-shadow:0 6px 16px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.13),inset 0 4px 12px rgba(0,0,0,.10);
 }
-html[data-theme]:not([data-theme="original"]) :is(.b27-icon-button,.b27-back,.listening-close,.ft-foundation-close):focus-visible{
+html[data-theme] :is(.b27-icon-button,.b27-back,.listening-close,.ft-foundation-close):focus-visible{
   outline:2px solid color-mix(in srgb,var(--ft-accent) 76%,#fff 24%);
   outline-offset:3px;
 }
-html[data-theme]:not([data-theme="original"]) :is(.b27-back,.listening-close){font-size:1.55rem;font-weight:700}
-html[data-theme]:not([data-theme="original"]) .b27-icon-button{font-size:1.02rem;font-weight:900}
-html[data-theme]:not([data-theme="original"]) .b27-home .b27-icon-button{border-radius:var(--pv5-control-radius)}
+html[data-theme] :is(.b27-back,.listening-close){font-size:1.55rem;font-weight:700}
+html[data-theme] .b27-icon-button{font-size:1.02rem;font-weight:900}
+html[data-theme] .b27-home .b27-icon-button{border-radius:var(--pv5-control-radius)}
 
 @media (hover:hover){
-  html[data-theme]:not([data-theme="original"]) :is(.b27-icon-button,.b27-back,.listening-close,.ft-foundation-close):hover{
+  html[data-theme] :is(.b27-icon-button,.b27-back,.listening-close,.ft-foundation-close):hover{
     transform:translateY(-1px);
     filter:brightness(1.09) saturate(1.08);
     border-color:color-mix(in srgb,var(--ft-border) 46%,var(--ft-accent) 54%);
@@ -84,24 +84,24 @@ html[data-theme]:not([data-theme="original"]) .b27-home .b27-icon-button{border-
 }
 
 /* ---------- Listening header parity ---------- */
-html[data-theme]:not([data-theme="original"]) .listening-top:has(.listening-settings){
+html[data-theme] .listening-top:has(.listening-settings){
   grid-template-columns:46px minmax(0,1fr) auto 46px;
   align-items:center;
 }
-html[data-theme]:not([data-theme="original"]) .listening-settings{grid-column:4;grid-row:1}
-html[data-theme]:not([data-theme="original"]) .listening-session-score{grid-column:3;grid-row:1}
-html[data-theme]:not([data-theme="original"]) .listening-settings:disabled{opacity:.42;filter:saturate(.55);transform:none}
+html[data-theme] .listening-settings{grid-column:4;grid-row:1}
+html[data-theme] .listening-session-score{grid-column:3;grid-row:1}
+html[data-theme] .listening-settings:disabled{opacity:.42;filter:saturate(.55);transform:none}
 
 /* ---------- Foundations / pedagogical overlay bridge ----------
    Keep the pilot pedagogy intact; only map its old hard-coded shell onto the
    same Premium component grammar as the rest of the application. */
-html[data-theme]:not([data-theme="original"]) .ft-foundation-overlay{
+html[data-theme] .ft-foundation-overlay{
   z-index:10030;
   background:color-mix(in srgb,var(--ft-bg) 72%,#000 28%);
   backdrop-filter:blur(18px) saturate(1.12);
   -webkit-backdrop-filter:blur(18px) saturate(1.12);
 }
-html[data-theme]:not([data-theme="original"]) .ft-foundation-dialog{
+html[data-theme] .ft-foundation-dialog{
   position:relative;
   isolation:isolate;
   width:min(650px,100%);
@@ -115,7 +115,7 @@ html[data-theme]:not([data-theme="original"]) .ft-foundation-dialog{
   color:var(--ft-text);
   box-shadow:0 30px 88px rgba(0,0,0,.38),0 0 40px color-mix(in srgb,var(--ft-accent2) 8%,transparent),inset 0 1px 0 rgba(255,255,255,.07);
 }
-html[data-theme]:not([data-theme="original"]) .ft-foundation-dialog::before{
+html[data-theme] .ft-foundation-dialog::before{
   content:"";
   position:absolute;
   inset:0 0 auto;
@@ -125,21 +125,21 @@ html[data-theme]:not([data-theme="original"]) .ft-foundation-dialog::before{
   opacity:.8;
   pointer-events:none;
 }
-html[data-theme]:not([data-theme="original"]) .ft-foundation-top{align-items:flex-start}
-html[data-theme]:not([data-theme="original"]) .ft-foundation-top h2{color:var(--ft-text);font-size:clamp(1.35rem,3vw,1.75rem);letter-spacing:-.035em}
-html[data-theme]:not([data-theme="original"]) .ft-foundation-eyebrow{color:var(--ft-accent);font-size:.64rem;font-weight:950;letter-spacing:.14em}
-html[data-theme]:not([data-theme="original"]) .ft-foundation-bar{height:7px;background:rgba(0,0,0,.25);box-shadow:inset 0 1px 4px rgba(0,0,0,.34)}
-html[data-theme]:not([data-theme="original"]) .ft-foundation-bar i{background:linear-gradient(90deg,var(--ft-accent),var(--ft-accent2));box-shadow:0 0 18px color-mix(in srgb,var(--ft-accent) 18%,transparent)}
-html[data-theme]:not([data-theme="original"]) .ft-foundation-copy,
-html[data-theme]:not([data-theme="original"]) .ft-foundation-feedback,
-html[data-theme]:not([data-theme="original"]) .ft-foundation-done p{color:var(--ft-muted)}
-html[data-theme]:not([data-theme="original"]) .ft-foundation-examples b{
+html[data-theme] .ft-foundation-top{align-items:flex-start}
+html[data-theme] .ft-foundation-top h2{color:var(--ft-text);font-size:clamp(1.35rem,3vw,1.75rem);letter-spacing:-.035em}
+html[data-theme] .ft-foundation-eyebrow{color:var(--ft-accent);font-size:.64rem;font-weight:950;letter-spacing:.14em}
+html[data-theme] .ft-foundation-bar{height:7px;background:rgba(0,0,0,.25);box-shadow:inset 0 1px 4px rgba(0,0,0,.34)}
+html[data-theme] .ft-foundation-bar i{background:linear-gradient(90deg,var(--ft-accent),var(--ft-accent2));box-shadow:0 0 18px color-mix(in srgb,var(--ft-accent) 18%,transparent)}
+html[data-theme] .ft-foundation-copy,
+html[data-theme] .ft-foundation-feedback,
+html[data-theme] .ft-foundation-done p{color:var(--ft-muted)}
+html[data-theme] .ft-foundation-examples b{
   color:var(--ft-text);
   background:color-mix(in srgb,var(--ft-surface-2) 82%,var(--ft-soft) 18%);
   border:1px solid color-mix(in srgb,var(--ft-border) 78%,transparent);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
 }
-html[data-theme]:not([data-theme="original"]) .ft-foundation-options button{
+html[data-theme] .ft-foundation-options button{
   min-height:52px;
   border:1px solid color-mix(in srgb,var(--ft-border) 74%,var(--ft-accent) 26%);
   border-radius:15px;
@@ -149,18 +149,18 @@ html[data-theme]:not([data-theme="original"]) .ft-foundation-options button{
   font-weight:850;
   box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
 }
-html[data-theme]:not([data-theme="original"]) .ft-foundation-options button.ok{
+html[data-theme] .ft-foundation-options button.ok{
   outline:0;
   border-color:rgba(91,219,171,.58);
   background:linear-gradient(145deg,rgba(55,170,128,.20),color-mix(in srgb,var(--ft-surface-2) 90%,transparent));
   box-shadow:0 0 0 2px rgba(91,219,171,.08),inset 0 1px 0 rgba(255,255,255,.06);
 }
-html[data-theme]:not([data-theme="original"]) .ft-foundation-options button.bad{
+html[data-theme] .ft-foundation-options button.bad{
   outline:0;
   border-color:rgba(238,131,119,.55);
   background:linear-gradient(145deg,rgba(203,91,83,.18),color-mix(in srgb,var(--ft-surface-2) 90%,transparent));
 }
-html[data-theme]:not([data-theme="original"]) .ft-foundation-next{
+html[data-theme] .ft-foundation-next{
   border-radius:17px;
   border:1px solid rgba(255,255,255,.10);
   background:linear-gradient(105deg,var(--ft-accent),var(--ft-accent2),var(--ft-accent3));
@@ -173,22 +173,22 @@ html[data-theme="sunset"] .ft-foundation-next{color:#140b28}
 html[data-theme="jade"] .ft-foundation-next{color:#041511}
 
 @media(max-width:620px){
-  html[data-theme]:not([data-theme="original"]) .b27-level-head{padding-right:54px}
-  html[data-theme]:not([data-theme="original"]) .b27-level-track,
-  html[data-theme]:not([data-theme="original"]) .b27-level-card p{margin-right:52px}
-  html[data-theme]:not([data-theme="original"]) .listening-top:has(.listening-settings){
+  html[data-theme] .b27-level-head{padding-right:54px}
+  html[data-theme] .b27-level-track,
+  html[data-theme] .b27-level-card p{margin-right:52px}
+  html[data-theme] .listening-top:has(.listening-settings){
     grid-template-columns:44px minmax(0,1fr) 44px;
     gap:9px;
   }
-  html[data-theme]:not([data-theme="original"]) .listening-top:has(.listening-settings)>div:nth-child(2){grid-column:2;grid-row:1}
-  html[data-theme]:not([data-theme="original"]) .listening-top:has(.listening-settings) .listening-session-score{grid-column:2;grid-row:2;justify-self:start;margin-top:2px;height:38px;min-width:54px}
-  html[data-theme]:not([data-theme="original"]) .listening-settings{grid-column:3;grid-row:1;align-self:start}
-  html[data-theme]:not([data-theme="original"]) .ft-foundation-dialog{border-radius:22px;padding:17px 15px}
-  html[data-theme]:not([data-theme="original"]) .ft-foundation-options{grid-template-columns:1fr}
+  html[data-theme] .listening-top:has(.listening-settings)>div:nth-child(2){grid-column:2;grid-row:1}
+  html[data-theme] .listening-top:has(.listening-settings) .listening-session-score{grid-column:2;grid-row:2;justify-self:start;margin-top:2px;height:38px;min-width:54px}
+  html[data-theme] .listening-settings{grid-column:3;grid-row:1;align-self:start}
+  html[data-theme] .ft-foundation-dialog{border-radius:22px;padding:17px 15px}
+  html[data-theme] .ft-foundation-options{grid-template-columns:1fr}
 }
 
 @media(prefers-reduced-motion:reduce){
-  html[data-theme]:not([data-theme="original"]) :is(.b27-icon-button,.b27-back,.listening-close,.ft-foundation-close){
+  html[data-theme] :is(.b27-icon-button,.b27-back,.listening-close,.ft-foundation-close){
     transition:none!important;
     animation:none!important;
   }

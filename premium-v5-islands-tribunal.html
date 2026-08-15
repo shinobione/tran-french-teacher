@@ -14,7 +14,7 @@ Promise.all([new Promise(resolve=>V.addEventListener('load',resolve,{once:true})
   const vw=V.contentWindow,vd=V.contentDocument,aw=A.contentWindow,ad=A.contentDocument;
   const ready=await waitFor(()=>vd.documentElement.dataset.captureReady==='1'&&aw.FrenchTranquilleThemes&&aw.FrenchTranquilleScenarios&&aw.FrenchTranquilleCurriculum&&aw.FrenchTranquilleBuild27Shell&&aw.FrenchTranquilleSessionUX);
   if(!ready)throw Error(`api-missing:fixture=${vd.documentElement.dataset.captureReady||0};themes=${!!aw.FrenchTranquilleThemes};scenario=${!!aw.FrenchTranquilleScenarios};b27=${!!aw.FrenchTranquilleBuild27Shell};session=${!!aw.FrenchTranquilleSessionUX}`);
-  if(vw.getComputedStyle(vd.documentElement).getPropertyValue('--pv53-islands-ready').trim())throw Error('original-islands-leak');
+  if(vw.getComputedStyle(vd.documentElement).getPropertyValue('--pv53-islands-ready').trim()!=='1')throw Error('original-islands-parity-missing');
 
   aw.FrenchTranquilleBuild27Shell.openPractice();
   const realLife=await waitFor(()=>ad.querySelector('.b27-practice-page [data-b27-practice-action="real-life"]'),5000);
@@ -55,8 +55,8 @@ Promise.all([new Promise(resolve=>V.addEventListener('load',resolve,{once:true})
   }
   for(const k of keys)if(before[k]!==aw.localStorage.getItem(k))throw Error(`store-mutated:${k}`);
   ad.querySelector('[data-scenario-close]')?.click();await wait(60);
-  vd.documentElement.dataset.theme='original';aw.FrenchTranquilleThemes.apply('original');await wait(60);if(vw.getComputedStyle(vd.documentElement).getPropertyValue('--pv53-islands-ready').trim()||aw.getComputedStyle(ad.documentElement).getPropertyValue('--pv53-islands-ready').trim())throw Error('original-islands-leak-after');
-  finish(true,'viewports=2;themes=3;speaking=themed;voice-replay=themed;session=themed;milestone=themed;scenario=real-runner-themed;touch=44plus;stores=unchanged;original=witness');
+  vd.documentElement.dataset.theme='original';aw.FrenchTranquilleThemes.apply('original');await wait(60);if(vw.getComputedStyle(vd.documentElement).getPropertyValue('--pv53-islands-ready').trim()!=='1'||aw.getComputedStyle(ad.documentElement).getPropertyValue('--pv53-islands-ready').trim()!=='1')throw Error('original-islands-parity-missing-after');
+  finish(true,'viewports=2;themes=3;speaking=themed;voice-replay=themed;session=themed;milestone=themed;scenario=real-runner-themed;touch=44plus;stores=unchanged;original=parity');
 }catch(e){finish(false,e.message)}},120)).catch(e=>finish(false,e.message));
 setTimeout(()=>{if(!R.dataset.premiumV5Islands)finish(false,'timeout')},65000);
 })();

@@ -1,8 +1,8 @@
 /* French Trân’quille — Premium Fidelity V5.4 / Direct mockup convergence
    Build 34 maintenance only. Composition / geometry / desktop density.
-   Mobile-first learner flow, pedagogy, routes, stores and Original remain untouched. */
+   Mobile-first learner flow, pedagogy, routes and stores remain untouched; Original now has parity. */
 
-html[data-theme]:not([data-theme="original"]){
+html[data-theme]{
   --pv54-mockup-ready:1;
   --pv54-wide:1180px;
   --pv54-content:1100px;
@@ -12,19 +12,19 @@ html[data-theme]:not([data-theme="original"]){
 /* Tablet/desktop: use the canvas like the approved mockups instead of keeping
    every surface at the old compact app-shell width. */
 @media (min-width:760px){
-  html[data-theme]:not([data-theme="original"]) :is(.b27-home,.b27-progress-page){
+  html[data-theme] :is(.b27-home,.b27-progress-page){
     width:min(100%,var(--pv54-wide));
   }
-  html[data-theme]:not([data-theme="original"]) .b27-practice-page .b27-overlay-inner{
+  html[data-theme] .b27-practice-page .b27-overlay-inner{
     width:min(100%,var(--pv54-wide));
   }
-  html[data-theme]:not([data-theme="original"]) .listening-shell{
+  html[data-theme] .listening-shell{
     width:min(100%,var(--pv54-content));
   }
-  html[data-theme]:not([data-theme="original"]) .screen-settings .content{
+  html[data-theme] .screen-settings .content{
     width:min(100%,var(--pv54-wide));
   }
-  html[data-theme]:not([data-theme="original"]) .screen-settings :is(.topbar,.narrow){
+  html[data-theme] .screen-settings :is(.topbar,.narrow){
     width:min(100%,var(--pv54-content));
     max-width:none;
   }
@@ -33,32 +33,32 @@ html[data-theme]:not([data-theme="original"]){
 /* HOME — keep the accepted flat Aurora welcome, but reduce the desktop logo/
    hero dead-zone so the lesson jewel enters the viewport sooner. */
 @media (min-width:1100px){
-  html[data-theme]:not([data-theme="original"]) .b27-home{
+  html[data-theme] .b27-home{
     padding-inline:clamp(28px,3vw,42px);
   }
-  html[data-theme]:not([data-theme="original"]) .b27-home .b27-header{
+  html[data-theme] .b27-home .b27-header{
     margin-bottom:20px;
   }
-  html[data-theme]:not([data-theme="original"]) .ft-modern-home-logo{
+  html[data-theme] .ft-modern-home-logo{
     width:min(360px,29vw)!important;
     max-height:208px!important;
     margin:0 auto 8px!important;
   }
-  html[data-theme]:not([data-theme="original"]) .b27-home-grid{
+  html[data-theme] .b27-home-grid{
     grid-template-columns:minmax(0,1.55fr) minmax(320px,.82fr);
     gap:var(--pv54-gap);
     align-items:start;
   }
-  html[data-theme]:not([data-theme="original"]) .b27-home-main{gap:15px}
-  html[data-theme]:not([data-theme="original"]) .b27-home-side{gap:11px}
-  html[data-theme]:not([data-theme="original"]) .b27-welcome{
+  html[data-theme] .b27-home-main{gap:15px}
+  html[data-theme] .b27-home-side{gap:11px}
+  html[data-theme] .b27-welcome{
     padding-top:8px;
     padding-bottom:13px;
   }
-  html[data-theme]:not([data-theme="original"]) .b27-welcome h1{
+  html[data-theme] .b27-welcome h1{
     font-size:clamp(2.6rem,3.3vw,3.35rem);
   }
-  html[data-theme]:not([data-theme="original"]) .b27-primary-card{
+  html[data-theme] .b27-primary-card{
     min-height:292px;
   }
 }
@@ -66,14 +66,14 @@ html[data-theme]:not([data-theme="original"]){
 /* PROGRESS — already structurally strong in V4. V5.4 only gives the desktop
    columns the same wider editorial rhythm as the mockups. */
 @media (min-width:1100px){
-  html[data-theme]:not([data-theme="original"]) .b27-progress-page{
+  html[data-theme] .b27-progress-page{
     padding-inline:clamp(28px,3vw,42px);
   }
-  html[data-theme]:not([data-theme="original"]) .b27-progress-main{
+  html[data-theme] .b27-progress-main{
     grid-template-columns:minmax(350px,.74fr) minmax(0,1.26fr);
     gap:20px;
   }
-  html[data-theme]:not([data-theme="original"]) .b27-current-card{
+  html[data-theme] .b27-current-card{
     min-height:314px;
   }
 }
@@ -82,25 +82,25 @@ html[data-theme]:not([data-theme="original"]){
    whichever action Tyffany marks as recommended (:has(em)) owns the full row.
    Dense auto-placement keeps this adaptive rather than hard-coding an action. */
 @media (min-width:1100px){
-  html[data-theme]:not([data-theme="original"]) .b27-practice-main{
+  html[data-theme] .b27-practice-main{
     max-width:1040px;
   }
-  html[data-theme]:not([data-theme="original"]) .b27-practice-intro{
+  html[data-theme] .b27-practice-intro{
     max-width:760px;
     margin-top:clamp(20px,3.5vh,38px);
     margin-bottom:24px;
   }
-  html[data-theme]:not([data-theme="original"]) .b27-practice-list{
+  html[data-theme] .b27-practice-list{
     grid-template-columns:repeat(3,minmax(0,1fr));
     grid-auto-flow:dense;
     gap:14px;
   }
-  html[data-theme]:not([data-theme="original"]) .b27-practice-action:not(:has(em)){
+  html[data-theme] .b27-practice-action:not(:has(em)){
     min-height:138px;
     grid-template-columns:52px minmax(0,1fr) 28px;
     padding:15px 14px;
   }
-  html[data-theme]:not([data-theme="original"]) .b27-practice-action:has(em){
+  html[data-theme] .b27-practice-action:has(em){
     grid-column:1/-1;
     min-height:116px;
     grid-template-columns:58px minmax(0,1fr) 32px;
@@ -111,21 +111,21 @@ html[data-theme]:not([data-theme="original"]){
 /* LISTENING — preserve the proven two-column interaction, simply let it occupy
    a more confident desktop frame and keep both task cards visually balanced. */
 @media (min-width:1100px){
-  html[data-theme]:not([data-theme="original"]) .listening-shell{
+  html[data-theme] .listening-shell{
     width:min(1120px,100%);
     gap:17px;
   }
-  html[data-theme]:not([data-theme="original"]) .listening-main{
+  html[data-theme] .listening-main{
     grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);
     gap:18px;
   }
-  html[data-theme]:not([data-theme="original"]) :is(.listening-audio-card,.listening-question-card){
+  html[data-theme] :is(.listening-audio-card,.listening-question-card){
     min-height:386px;
   }
-  html[data-theme]:not([data-theme="original"]) .listening-audio-card{
+  html[data-theme] .listening-audio-card{
     padding:25px 23px;
   }
-  html[data-theme]:not([data-theme="original"]) .listening-question-card{
+  html[data-theme] .listening-question-card{
     padding:23px;
   }
 }
@@ -133,12 +133,12 @@ html[data-theme]:not([data-theme="original"]){
 /* SETTINGS — the learner-friendly intro is a section lead, not a stray half-card.
    Theme remains full-width; diagnostics/legal continue as the proven two columns. */
 @media (min-width:821px){
-  html[data-theme]:not([data-theme="original"]) .screen-settings .narrow{
+  html[data-theme] .screen-settings .narrow{
     grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);
     column-gap:18px;
     row-gap:16px;
   }
-  html[data-theme]:not([data-theme="original"]) .screen-settings .narrow>.ux-settings-note{
+  html[data-theme] .screen-settings .narrow>.ux-settings-note{
     grid-column:1/-1!important;
     display:grid;
     grid-template-columns:minmax(220px,.72fr) minmax(0,1.28fr);
@@ -147,11 +147,11 @@ html[data-theme]:not([data-theme="original"]){
     min-height:94px;
     padding:18px 22px!important;
   }
-  html[data-theme]:not([data-theme="original"]) .screen-settings .ux-settings-note strong{
+  html[data-theme] .screen-settings .ux-settings-note strong{
     font-size:1.03rem;
     line-height:1.3;
   }
-  html[data-theme]:not([data-theme="original"]) .screen-settings .ux-settings-note p{
+  html[data-theme] .screen-settings .ux-settings-note p{
     margin:0;
     max-width:720px;
     line-height:1.5;
@@ -159,21 +159,21 @@ html[data-theme]:not([data-theme="original"]){
 }
 
 @media (min-width:1280px){
-  html[data-theme]:not([data-theme="original"]) .screen-settings .ft-theme-grid{
+  html[data-theme] .screen-settings .ft-theme-grid{
     gap:11px;
   }
-  html[data-theme]:not([data-theme="original"]) .screen-settings .theme-option{
+  html[data-theme] .screen-settings .theme-option{
     min-height:110px;
   }
 }
 
 /* Mobile is the primary product. V5.4 deliberately does not reshape it. */
 @media (max-width:759px){
-  html[data-theme]:not([data-theme="original"]){--pv54-mobile-preserved:1}
+  html[data-theme]{--pv54-mobile-preserved:1}
 }
 
 @media(prefers-reduced-motion:reduce){
-  html[data-theme]:not([data-theme="original"]) :is(.b27-home,.b27-progress-page,.b27-practice-page,.listening-shell,.screen-settings .content){
+  html[data-theme] :is(.b27-home,.b27-progress-page,.b27-practice-page,.listening-shell,.screen-settings .content){
     transition:none!important;
     animation:none!important;
   }

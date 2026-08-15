@@ -1,5 +1,13 @@
-/* French Trân’quille — premium cosmetic themes
-   Original is deliberately untouched. Alternate themes only remap appearance. */
+/* French Trân’quille — four first-class cosmetic themes.
+   V5.7 supersedes the historical "Original untouched" witness rule. */
+
+html[data-theme="original"]{
+  --page:#08101d;--panel:#101a2b;--panel2:#091321;--line:rgba(125,195,255,.2);--text:#f6f9ff;--muted:#a8b7cc;--mint:#64c9ff;--lilac:#a98cff;
+  --ux-bg:#07101d;--ux-panel:rgba(14,25,42,.94);--ux-panel-soft:rgba(100,201,255,.075);--ux-border:rgba(125,195,255,.2);--ux-text:#f7faff;--ux-muted:#a9b8cc;--ux-accent:#64c9ff;--ux-accent2:#a98cff;
+  --brand-mint:#64c9ff;--brand-lilac:#a98cff;--brand-violet:#7f75df;
+  --b27-bg:#07101d;--b27-bg2:#0b1728;--b27-surface:rgba(16,29,49,.91);--b27-surface-strong:#14243b;--b27-surface-soft:rgba(100,201,255,.075);--b27-line:rgba(125,195,255,.18);--b27-text:#f7faff;--b27-muted:#a8b7cc;--b27-mint:#64c9ff;--b27-lilac:#a98cff;--b27-warm:#eef6ff;--b27-shadow:0 24px 72px rgba(0,4,12,.5);
+  --ft-bg-1:#07101d;--ft-bg-2:#0b1728;--ft-surface:rgba(16,29,49,.92);--ft-surface-2:rgba(8,18,32,.96);--ft-soft:rgba(100,201,255,.075);--ft-border:rgba(125,195,255,.2);--ft-accent:#64c9ff;--ft-accent2:#a98cff;--ft-accent3:#d3e8ff;--ft-glow1:rgba(61,155,232,.17);--ft-glow2:rgba(137,112,224,.13);--ft-nav:rgba(5,13,25,.96);--ft-primary:#eef6ff;--ft-primary-text:#0b1727;
+}
 
 html[data-theme="aurora"]{
   --page:#070d21;--panel:#111b3b;--panel2:#0a1430;--line:rgba(126,188,255,.22);--text:#f8fbff;--muted:#a9b7d8;--mint:#57ddff;--lilac:#ff71c8;

@@ -1,9 +1,9 @@
 /* French Trân’quille — Premium V4 / Contrast pass
    Visual-only refinement derived from the global Visual QA tribunal.
    Bright Premium CTA gradients use dark theme-coherent ink so every opaque
-   gradient stop stays readable. Original remains untouched. */
+   gradient stop stays readable across all four themes. */
 
-html[data-theme]:not([data-theme="original"]){--pv4-contrast-ready:1}
+html[data-theme]{--pv4-contrast-ready:1}
 
 /* Aurora — cyan / periwinkle / magenta gradients. */
 html[data-theme="aurora"] .b27-home .b27-primary-action,

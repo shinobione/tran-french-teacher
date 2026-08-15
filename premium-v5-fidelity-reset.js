@@ -1,10 +1,10 @@
 (() => {
   'use strict';
 
-  const VERSION = '2.3.20-v5fidelity5';
+  const VERSION = '2.3.21-v57art1';
   const DEBUG_KEY = 'tran-french-teacher:debug-fr:v1';
   const ORIGIN = { review:'home', conversation:'practice', listening:'home', scenario:'scenario-list' };
-  const isPremium = () => (document.documentElement.dataset.theme || 'original') !== 'original';
+  const isPremium = () => ['original','aurora','sunset','jade'].includes(document.documentElement.dataset.theme || 'original');
   const isDebug = () => localStorage.getItem(DEBUG_KEY) === '1';
   const T = (vi, fr) => isDebug() ? fr : vi;
   let scheduled = false;

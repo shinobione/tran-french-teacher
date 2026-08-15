@@ -1,8 +1,8 @@
 /* French Trân’quille — Premium V4 / Micro-interactions
    Local tactile feedback only. Route ownership remains atomic and untouched.
-   Original remains the visual witness. */
+   Local component motion only; V5.7 includes Original without route crossfades. */
 
-html[data-theme]:not([data-theme="original"]){
+html[data-theme]{
   --pv4-motion-ready:1;
   --pv4-motion-fast:90ms;
   --pv4-motion-ui:140ms;
@@ -11,7 +11,7 @@ html[data-theme]:not([data-theme="original"]){
 }
 
 /* Interactive components only — never route/page containers. */
-html[data-theme]:not([data-theme="original"]) :where(
+html[data-theme] :where(
   .b27-home,
   .b27-progress-page,
   .b27-practice-page,
@@ -20,14 +20,14 @@ html[data-theme]:not([data-theme="original"]) :where(
   .practice-session-hub,
   .scenario-lab-card
 ) button:not(:disabled),
-html[data-theme]:not([data-theme="original"]) .ux-bottom-nav>button:not(:disabled){
+html[data-theme] .ux-bottom-nav>button:not(:disabled){
   transition-property:transform,filter,box-shadow,border-color,background-color,color;
   transition-duration:var(--pv4-motion-fast),var(--pv4-motion-ui),var(--pv4-motion-ui),var(--pv4-motion-ui),var(--pv4-motion-ui),var(--pv4-motion-ui);
   transition-timing-function:var(--pv4-motion-ease);
   -webkit-tap-highlight-color:transparent;
 }
 
-html[data-theme]:not([data-theme="original"]) :where(
+html[data-theme] :where(
   .b27-home,
   .b27-progress-page,
   .b27-practice-page,
@@ -36,12 +36,12 @@ html[data-theme]:not([data-theme="original"]) :where(
   .practice-session-hub,
   .scenario-lab-card
 ) button:not(:disabled):active,
-html[data-theme]:not([data-theme="original"]) .ux-bottom-nav>button:not(:disabled):active{
+html[data-theme] .ux-bottom-nav>button:not(:disabled):active{
   transform:translateY(1px) scale(.975);
   filter:brightness(1.045) saturate(1.04);
 }
 
-html[data-theme]:not([data-theme="original"]) :where(
+html[data-theme] :where(
   .b27-home,
   .b27-progress-page,
   .b27-practice-page,
@@ -50,13 +50,13 @@ html[data-theme]:not([data-theme="original"]) :where(
   .practice-session-hub,
   .scenario-lab-card
 ) button:focus-visible,
-html[data-theme]:not([data-theme="original"]) .ux-bottom-nav>button:focus-visible{
+html[data-theme] .ux-bottom-nav>button:focus-visible{
   outline:2px solid var(--pv4-focus-ring);
   outline-offset:3px;
 }
 
 /* Strong CTAs get a restrained energy lift; no layout movement beyond 1px. */
-html[data-theme]:not([data-theme="original"]) :where(
+html[data-theme] :where(
   .b27-primary-action,
   .b27-current-card .b27-primary-action,
   .b27-practice-action:has(em),
@@ -67,7 +67,7 @@ html[data-theme]:not([data-theme="original"]) :where(
 }
 
 /* Cards advertise clickability without turning the UI into a carnival. */
-html[data-theme]:not([data-theme="original"]) :where(
+html[data-theme] :where(
   .b27-quick-card,
   .b27-practice-action,
   .b27-lesson-row:not(:disabled),
@@ -80,17 +80,17 @@ html[data-theme]:not([data-theme="original"]) :where(
 }
 
 /* Bottom nav: only the active control moves; the shell geometry never does. */
-html[data-theme]:not([data-theme="original"]) .ux-bottom-nav>button.active,
-html[data-theme]:not([data-theme="original"]) .ux-bottom-nav>button[aria-current="page"]{
+html[data-theme] .ux-bottom-nav>button.active,
+html[data-theme] .ux-bottom-nav>button[aria-current="page"]{
   transform:translateY(-1px);
   filter:brightness(1.08) saturate(1.08);
 }
 
 /* Theme picker feedback is local to the option/swatch. */
-html[data-theme]:not([data-theme="original"]) .screen-settings .theme-option[aria-pressed="true"] .theme-swatch{
+html[data-theme] .screen-settings .theme-option[aria-pressed="true"] .theme-swatch{
   box-shadow:inset 0 1px 0 rgba(255,255,255,.30),0 8px 22px rgba(0,0,0,.24),0 0 24px color-mix(in srgb,var(--ft-accent) 22%,transparent);
 }
-html[data-theme]:not([data-theme="original"]) .screen-settings .theme-swatch{
+html[data-theme] .screen-settings .theme-swatch{
   transition:transform var(--pv4-motion-ui) var(--pv4-motion-ease),box-shadow var(--pv4-motion-ui) var(--pv4-motion-ease),filter var(--pv4-motion-ui) var(--pv4-motion-ease);
 }
 
@@ -100,13 +100,13 @@ html[data-theme]:not([data-theme="original"]) .screen-settings .theme-swatch{
   55%{box-shadow:0 0 0 7px color-mix(in srgb,#67dfb2 10%,transparent)}
   100%{box-shadow:0 0 0 0 transparent}
 }
-html[data-theme]:not([data-theme="original"]) .listening-feedback.ok,
-html[data-theme]:not([data-theme="original"]) .listening-options button.correct{
+html[data-theme] .listening-feedback.ok,
+html[data-theme] .listening-options button.correct{
   animation:pv4-confirm-pulse 360ms ease-out 1;
 }
 
 @media (hover:hover) and (pointer:fine){
-  html[data-theme]:not([data-theme="original"]) :where(
+  html[data-theme] :where(
     .b27-primary-action,
     .b27-secondary-action,
     .b27-quick-card,
@@ -131,7 +131,7 @@ html[data-theme]:not([data-theme="original"]) .listening-options button.correct{
     border-color:color-mix(in srgb,var(--ft-border) 52%,var(--ft-accent) 48%);
   }
 
-  html[data-theme]:not([data-theme="original"]) :where(
+  html[data-theme] :where(
     .b27-primary-action,
     .b27-current-card .b27-primary-action,
     .b27-practice-action:has(em),
@@ -142,14 +142,14 @@ html[data-theme]:not([data-theme="original"]) .listening-options button.correct{
     box-shadow:0 16px 38px rgba(0,0,0,.22),0 0 28px color-mix(in srgb,var(--ft-accent) 12%,transparent),inset 0 1px 0 rgba(255,255,255,.14);
   }
 
-  html[data-theme]:not([data-theme="original"]) .screen-settings .theme-option:hover .theme-swatch{
+  html[data-theme] .screen-settings .theme-option:hover .theme-swatch{
     transform:scale(1.045);
     filter:brightness(1.06) saturate(1.08);
   }
 }
 
 /* Hard safety rail: no route-level motion is permitted in this layer. */
-html[data-theme]:not([data-theme="original"]) :where(
+html[data-theme] :where(
   .b27-page,
   .b27-overlay,
   .listening-overlay,
@@ -160,7 +160,7 @@ html[data-theme]:not([data-theme="original"]) :where(
 }
 
 @media (prefers-reduced-motion:reduce){
-  html[data-theme]:not([data-theme="original"]) :where(
+  html[data-theme] :where(
     .b27-home,
     .b27-progress-page,
     .b27-practice-page,
@@ -169,7 +169,7 @@ html[data-theme]:not([data-theme="original"]) :where(
     .practice-session-hub,
     .scenario-lab-card
   ) *,
-  html[data-theme]:not([data-theme="original"]) .ux-bottom-nav>*{
+  html[data-theme] .ux-bottom-nav>*{
     transition-duration:0s!important;
     animation-duration:0s!important;
     animation-iteration-count:1!important;

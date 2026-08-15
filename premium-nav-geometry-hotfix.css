@@ -1,7 +1,7 @@
 /* French Trân’quille — P0 bottom-navigation geometry hardening */
 .ux-bottom-nav{box-sizing:border-box;grid-template-columns:repeat(3,minmax(0,1fr))}
 .ux-bottom-nav>button{min-width:0;max-width:100%}
-html[data-theme]:not([data-theme="original"]) .ux-bottom-nav{
+html[data-theme] .ux-bottom-nav{
   left:50%;right:auto;transform:translate3d(-50%,0,0);margin:0;
   width:min(720px,calc(100% - 20px));
   max-width:calc(100% - env(safe-area-inset-left,0px) - env(safe-area-inset-right,0px) - 20px);
@@ -10,12 +10,12 @@ html[data-theme]:not([data-theme="original"]) .ux-bottom-nav{
 html.listening-open .ux-bottom-nav{z-index:10020}
 body[data-ux-screen="settings"] .ux-bottom-nav{display:none!important}
 @media(max-width:759px){
-  html[data-theme]:not([data-theme="original"]) .ux-bottom-nav{
+  html[data-theme] .ux-bottom-nav{
     bottom:max(8px,env(safe-area-inset-bottom,0px));width:calc(100% - 20px);
     max-width:calc(100% - env(safe-area-inset-left,0px) - env(safe-area-inset-right,0px) - 20px);
     padding-left:max(10px,env(safe-area-inset-left,0px));padding-right:max(10px,env(safe-area-inset-right,0px));padding-bottom:8px
   }
 }
 @media(min-width:760px){
-  html[data-theme]:not([data-theme="original"]) .ux-bottom-nav{bottom:14px;width:min(720px,calc(100% - 28px));max-width:calc(100% - 28px)}
+  html[data-theme] .ux-bottom-nav{bottom:14px;width:min(720px,calc(100% - 28px));max-width:calc(100% - 28px)}
 }

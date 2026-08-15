@@ -14,7 +14,7 @@ F.onload=()=>setTimeout(async()=>{try{
  const keys=['francais-avec-luc:learner:v1','french-tranquille:learning-memory:v1','french-tranquille:error-intelligence:v1','french-tranquille:scenarios:v1','french-tranquille:milestones:v1'];
  const before=Object.fromEntries(keys.map(k=>[k,w.localStorage.getItem(k)]));
  w.FrenchTranquilleThemes.apply('original');await wait(80);
- if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv4-motion-ready').trim())throw Error('original-motion-leak');
+ if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv4-motion-ready').trim()!=='1')throw Error('original-motion-parity-missing');
  w.FrenchTranquilleThemes.apply('aurora');await wait(140);
  if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv4-motion-ready').trim()!=='1')throw Error('motion-marker');
  const home=d.querySelector('.b27-home'),cta=home?.querySelector('.b27-primary-action'),nav=d.querySelector('.ux-bottom-nav [data-ux-nav="practice"]');
