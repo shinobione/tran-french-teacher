@@ -1,10 +1,11 @@
 (() => {
   'use strict';
 
-  const VERSION = '2.3.33-v510mobile1';
+  const VERSION = '2.3.34-v510fieldidentity1';
   const root = document.documentElement;
   const DEBUG_KEY = 'tran-french-teacher:debug-fr:v1';
   const TYFFANY_ASSET = './assets/premium/brand/tyffany-memory.svg';
+  const BRAND_ASSET = './assets/premium/brand/goat-app-icon-180.png';
   let scheduled = false;
   let conversationOwner = 'real-life';
 
@@ -139,6 +140,35 @@
     root.dataset.v510TyffanyIcons = 'canonical-svg-v1';
   }
 
+  function decorateTyffanyAvatars() {
+    document.querySelectorAll('.luc > span').forEach(span => {
+      const host = span.closest('.luc');
+      if (!host) return;
+      host.dataset.v510TyffanyAvatar = 'canonical-svg-v1';
+      span.dataset.v510TyffanyAsset = TYFFANY_ASSET;
+      span.textContent = '';
+      span.setAttribute('aria-hidden', 'true');
+    });
+    root.dataset.v510TyffanyAvatars = 'canonical-svg-v1';
+  }
+
+  function decorateBrandIdentity() {
+    document.querySelectorAll('.b27-brandline > img').forEach(img => {
+      const src = img.getAttribute('src') || '';
+      if (!src.includes('assets/Favicon.png') && img.dataset.v510BrandIdentity !== 'goat-v1') return;
+      if (img.getAttribute('src') !== BRAND_ASSET) img.setAttribute('src', BRAND_ASSET);
+      img.dataset.v510BrandIdentity = 'goat-v1';
+      img.alt = '';
+      img.setAttribute('aria-hidden', 'true');
+    });
+    root.dataset.v510BrandIdentity = 'goat-v1';
+  }
+
+  function decorateLegacyIdentityAssets() {
+    decorateTyffanyAvatars();
+    decorateBrandIdentity();
+  }
+
   function conversationFeature() {
     const screen = document.querySelector('.screen-conversation');
     if (!screen) return null;
@@ -184,6 +214,7 @@
 
     decorateFeatureHeaders();
     decorateTyffanyMemory();
+    decorateLegacyIdentityAssets();
     root.dataset.v510PracticeIcons = 'approved-art-v1';
   }
 
@@ -220,10 +251,14 @@
     style: 'approved-premium-art-v1',
     featureHeaderStyle: 'feature-header-v1',
     tyffanyIconStyle: 'canonical-svg-v1',
+    tyffanyAvatarStyle: 'canonical-svg-v1',
     tyffanyAsset: TYFFANY_ASSET,
+    brandIdentityStyle: 'goat-v1',
+    brandAsset: BRAND_ASSET,
     refresh: decorate,
     refreshFeatureHeaders: decorateFeatureHeaders,
     refreshTyffanyIcons: decorateTyffanyMemory,
+    refreshIdentityAssets: decorateLegacyIdentityAssets,
     assets: ASSETS,
     featureCopy: FEATURE_COPY,
     icons: Object.freeze(Object.keys(ASSETS))
