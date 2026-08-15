@@ -12,7 +12,8 @@
 - Git state used as the basis of this checkpoint: **`b2b22efbdbef18f4556012171dd42605d80df467`**.
 - That basis commit is the squash merge of PR **#126 — V5.6 Premium asset finalization candidates** after the user’s global PASS.
 - Active V5.7 candidate branch: **`codex/v5.7-theme-art-integration`**.
-- Active draft PR: **pending creation at this checkpoint commit**.
+- Active draft PR: **#127 — V5.7 integrate four-theme Premium artwork**.
+- First verified candidate commit: **`895351ca341c2dd8e49c6b6a04463f53dd9af3f0`**.
 - V5.7 runtime wiring exists only on the candidate branch; it is not yet merged, deployed or field-approved.
 
 **Important:** this document does not claim that its own commit is the latest `main` SHA. A checkpoint cannot safely self-embed its final commit SHA. Fresh agents must verify current HEAD first.
@@ -104,7 +105,7 @@ Fresh agents must re-check CI after any newer commit instead of inheriting these
 
 ### NEXT exact slice
 
-1. Open the V5.7 draft PR from **`codex/v5.7-theme-art-integration`** and let exact-head CI complete.
+1. Let exact-head CI complete on draft PR **#127**.
 2. Review the generated 5-viewport × 4-theme matrix and exercise the candidate on the primary iPhone / installed-PWA target.
 3. Do not merge V5.7 or mark its assets **FIELD PASS** without an explicit human verdict.
 4. After V5.7 PASS + green CI, merge and continue the canonical sequence only:
