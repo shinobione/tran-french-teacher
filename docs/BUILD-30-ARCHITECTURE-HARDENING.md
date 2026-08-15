@@ -41,7 +41,7 @@ Build 30 adopte un **strangler refactor** :
 6. certifier en vrai Chrome que cette frontière pilote l’application sans modifier la progression ;
 7. rendre les prochaines extractions/remplacements possibles module par module au lieu d’un big-bang.
 
-## `runtime-contracts.js`
+## `src/core/runtime-contracts.js`
 
 Ce module contient uniquement des constantes et fonctions pures :
 
@@ -56,7 +56,7 @@ Ce module contient uniquement des constantes et fonctions pures :
 
 Le contrat est gelé avec `Object.freeze` et **n’écrit dans aucun store**.
 
-## `runtime-bridge.js`
+## `src/core/runtime-bridge.js`
 
 La façade `window.FrenchTranquilleRuntime` fournit :
 

@@ -67,12 +67,12 @@ Le contenu ne crée aucune nouvelle leçon et ne modifie pas la baseline **40 / 
 
 ## Fichiers
 
-- `speaking-loop-content.js`
-- `speaking-loop-content.css`
-- `speaking-loop-smoke.js`
+- `src/pedagogy/speaking-loop-content.js`
+- `src/pedagogy/speaking-loop-content.css`
+- `tests/smoke/speaking-loop-smoke.js`
 - `.github/workflows/build29-1-speaking-loop-smoke.yml`
 
-Le loader est installé par `build-meta.js`; le Service Worker Build 29 précache les nouveaux assets sans modifier son identité de cache, afin de rester cohérent avec le cache guardian de la PWA.
+Le loader est installé par `src/core/build-meta.js`; le Service Worker Build 29 précache les nouveaux assets sans modifier son identité de cache, afin de rester cohérent avec le cache guardian de la PWA.
 
 ## Tribunal
 

@@ -20,16 +20,16 @@ jobs:
 
       - name: Static architecture contracts
         run: |
-          node --check runtime-contracts.js
-          node --check runtime-bridge.js
-          node --check build30-architecture-smoke.js
-          node --check build-meta.js
+          node --check src/core/runtime-contracts.js
+          node --check src/core/runtime-bridge.js
+          node --check tests/smoke/build30-architecture-smoke.js
+          node --check src/core/build-meta.js
           node --check sw.js
           node - <<'NODE'
           const fs=require('fs');
-          const contracts=fs.readFileSync('runtime-contracts.js','utf8');
-          const meta=fs.readFileSync('build-meta.js','utf8');
-          const bridge=fs.readFileSync('runtime-bridge.js','utf8');
+          const contracts=fs.readFileSync('src/core/runtime-contracts.js','utf8');
+          const meta=fs.readFileSync('src/core/build-meta.js','utf8');
+          const bridge=fs.readFileSync('src/core/runtime-bridge.js','utf8');
           const cv=contracts.match(/const VERSION = '([^']+)'/);
           const cb=contracts.match(/const BUILD = ([0-9.]+);/);
           const mm=meta.match(/const META = \{ version: '([^']+)', build: '([^']+)'/);
@@ -37,23 +37,23 @@ jobs:
           if(cv[1] !== '2.0.0' || Number(cb[1]) !== 30) throw new Error('Frozen Build 30 runtime contract moved');
           const parts=mm[1].split('.').map(Number);
           if(parts.length!==3 || parts[0]!==2 || Number(mm[2])<30) throw new Error('Current product release is not compatible with Build 30 baseline');
-          if(!meta.includes('runtime-contracts.js?v=2.0.0-b30')) throw new Error('build-meta frozen contract import mismatch');
-          if(!meta.includes('runtime-bridge.js?v=2.0.0-b30')) throw new Error('build-meta frozen bridge import mismatch');
-          if(!bridge.includes('runtime-contracts.js?v=2.0.0-b30')) throw new Error('bridge frozen contract import mismatch');
+          if(!meta.includes('./runtime-contracts.js?v=2.0.0-b30')) throw new Error('build-meta frozen contract import mismatch');
+          if(!meta.includes('./runtime-bridge.js?v=2.0.0-b30')) throw new Error('build-meta frozen bridge import mismatch');
+          if(!bridge.includes('./runtime-contracts.js?v=2.0.0-b30')) throw new Error('bridge frozen contract import mismatch');
           console.log(`Build 30 architecture frozen under current product ${mm[1]} / Build ${mm[2]}`);
           NODE
-          grep -Fq 'runtime-contracts.js?v=${B30}' sw.js
-          grep -Fq 'runtime-bridge.js?v=${B30}' sw.js
-          grep -Fq 'build30-architecture-smoke.js?v=${B30}' sw.js
-          grep -q "learner: 'francais-avec-luc:learner:v1'" runtime-contracts.js
-          grep -q 'lessons: 40' runtime-contracts.js
-          grep -q 'items: 241' runtime-contracts.js
-          grep -q 'scenarios: 36' runtime-contracts.js
-          grep -q 'scenarioTurns: 108' runtime-contracts.js
-          grep -q 'listeningNormal: 0.88' runtime-contracts.js
-          grep -q 'listeningSlow: 0.65' runtime-contracts.js
-          ! grep -q 'localStorage.setItem' runtime-contracts.js
-          ! grep -q 'localStorage.setItem' runtime-bridge.js
+          grep -Fq 'src/core/runtime-contracts.js?v=${B30}' sw.js
+          grep -Fq 'src/core/runtime-bridge.js?v=${B30}' sw.js
+          grep -Fq 'tests/smoke/build30-architecture-smoke.js?v=${B30}' sw.js
+          grep -q "learner: 'francais-avec-luc:learner:v1'" src/core/runtime-contracts.js
+          grep -q 'lessons: 40' src/core/runtime-contracts.js
+          grep -q 'items: 241' src/core/runtime-contracts.js
+          grep -q 'scenarios: 36' src/core/runtime-contracts.js
+          grep -q 'scenarioTurns: 108' src/core/runtime-contracts.js
+          grep -q 'listeningNormal: 0.88' src/core/runtime-contracts.js
+          grep -q 'listeningSlow: 0.65' src/core/runtime-contracts.js
+          ! grep -q 'localStorage.setItem' src/core/runtime-contracts.js
+          ! grep -q 'localStorage.setItem' src/core/runtime-bridge.js
 
       - name: Legacy core, voice and branding sanctuaries stay byte-identical
         run: |

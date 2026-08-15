@@ -75,7 +75,7 @@ Pénalités temporaires :
 
 ## Score pur
 
-`language-ratio-core.js` ne dépend ni du DOM ni de `localStorage`.
+`src/pedagogy/language-ratio-core.js` ne dépend ni du DOM ni de `localStorage`.
 
 Il expose :
 
@@ -158,7 +158,7 @@ Les planchers évitent qu’un profil avancé retire trop d’aide dans des cont
 
 ## Adapter runtime
 
-`language-ratio.js` lit localement :
+`src/pedagogy/language-ratio.js` lit localement :
 
 ```text
 francais-avec-luc:learner:v1
@@ -212,15 +212,15 @@ Les données curriculum d’origine ne sont pas réécrites.
 
 ### Daily Coach
 
-`daily-coach.js` consomme le profil lorsqu’il génère ses textes.
+`src/pedagogy/daily-coach.js` consomme le profil lorsqu’il génère ses textes.
 
 ### Scenario Lab
 
-`scenario-engine.js` consomme le profil pour les consignes générales. Les indices peuvent conserver davantage de vietnamien via le contexte `scenario-hint`.
+`src/pedagogy/scenario-engine.js` consomme le profil pour les consignes générales. Les indices peuvent conserver davantage de vietnamien via le contexte `scenario-hint`.
 
 ### Listening
 
-`listening-engine.js` consomme le profil pour les consignes et questions.
+`src/pedagogy/listening-engine.js` consomme le profil pour les consignes et questions.
 
 **Garde-fou : les options de réponse du mode Sens restent vietnamiennes**, afin de ne jamais révéler le transcript français avant la tentative.
 

@@ -21,22 +21,22 @@ jobs:
       - name: Static V5.9 chain and sanctuaries
         run: |
           set -euo pipefail
-          node --check premium-v59-interactions.js
-          node --check premium-v59-lesson-layout.js
-          node --check premium-v59-system.js
-          node --check theme-controller.js
+          node --check src/premium/premium-v59-interactions.js
+          node --check src/premium/premium-v59-lesson-layout.js
+          node --check src/premium/premium-v59-system.js
+          node --check src/core/theme-controller.js
           node --check sw.js
           for f in \
-            premium-v59-interactions-tribunal.html \
-            premium-v59-lesson-layout-tribunal.html \
-            premium-v59-system-tribunal.html \
-            premium-v59-brand-tribunal.html \
-            premium-v59-global-tribunal.html; do test -s "$f"; done
-          grep -q 'premium-v59-interactions.js' theme-controller.js sw.js
-          grep -q 'premium-v59-lesson-layout.js' theme-controller.js sw.js
-          grep -q 'premium-v59-system.js' theme-controller.js sw.js
+            tests/browser/premium-v59-interactions-tribunal.html \
+            tests/browser/premium-v59-lesson-layout-tribunal.html \
+            tests/browser/premium-v59-system-tribunal.html \
+            tests/browser/premium-v59-brand-tribunal.html \
+            tests/browser/premium-v59-global-tribunal.html; do test -s "$f"; done
+          grep -q 'src/premium/premium-v59-interactions.js' src/core/theme-controller.js sw.js
+          grep -q 'src/premium/premium-v59-lesson-layout.js' src/core/theme-controller.js sw.js
+          grep -q 'src/premium/premium-v59-system.js' src/core/theme-controller.js sw.js
           grep -q 'goat-app-icon-maskable-512.webp' manifest.webmanifest sw.js
-          ! grep -E -q 'francais-avec-luc:learner:v1|french-tranquille:learning-memory:v1|french-tranquille:error-intelligence:v1|french-tranquille:scenarios:v1|french-tranquille:listening:v1|french-tranquille:milestones:v1' premium-v59-interactions.js premium-v59-lesson-layout.js premium-v59-system.js
+          ! grep -E -q 'francais-avec-luc:learner:v1|french-tranquille:learning-memory:v1|french-tranquille:error-intelligence:v1|french-tranquille:scenarios:v1|french-tranquille:listening:v1|french-tranquille:milestones:v1' src/premium/premium-v59-interactions.js src/premium/premium-v59-lesson-layout.js src/premium/premium-v59-system.js
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
           test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
           test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
@@ -56,7 +56,7 @@ jobs:
           timeout --signal=TERM --kill-after=5s 55s \
             google-chrome --headless=new --no-sandbox --disable-gpu \
             --window-size=1440,1000 --virtual-time-budget=22000 --dump-dom \
-            'http://127.0.0.1:4173/premium-v59-global-tribunal.html' >/tmp/v59e-global.html
+            'http://127.0.0.1:4173/tests/browser/premium-v59-global-tribunal.html' >/tmp/v59e-global.html
           grep -q 'data-v59e="ok"' /tmp/v59e-global.html || { grep -o 'data-v59e-detail="[^"]*"' /tmp/v59e-global.html || true; exit 1; }
 
       - name: Chrome — shared Lesson/Eiffel geometry at five viewports
@@ -68,7 +68,7 @@ jobs:
             timeout --signal=TERM --kill-after=5s 35s \
               google-chrome --headless=new --no-sandbox --disable-gpu \
               --window-size="${width},${height}" --virtual-time-budget=6000 --dump-dom \
-              'http://127.0.0.1:4173/premium-v59-lesson-layout-tribunal.html?e=v59e' >"$file"
+              'http://127.0.0.1:4173/tests/browser/premium-v59-lesson-layout-tribunal.html?e=v59e' >"$file"
             grep -q 'data-v59b="ok"' "$file" || { grep -o 'data-v59b-detail="[^"]*"' "$file" || true; exit 1; }
           }
           run_case iphone 390 844
@@ -84,7 +84,7 @@ jobs:
             google-chrome --headless=new --no-sandbox --disable-gpu \
             --force-prefers-reduced-motion --window-size=390,844 \
             --virtual-time-budget=7000 --dump-dom \
-            'http://127.0.0.1:4173/premium-v59-system-tribunal.html?e=v59e-reduced' >/tmp/v59e-reduced.html
+            'http://127.0.0.1:4173/tests/browser/premium-v59-system-tribunal.html?e=v59e-reduced' >/tmp/v59e-reduced.html
           grep -q 'data-v59c="ok"' /tmp/v59e-reduced.html || { grep -o 'data-v59c-detail="[^"]*"' /tmp/v59e-reduced.html || true; exit 1; }
 
       - name: Chrome — real learner shell has no boot error

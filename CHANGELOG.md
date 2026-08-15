@@ -22,7 +22,7 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 - embarque la conclusion de **Build 33 — Foundations Audit** ;
 - audit structurel : leçons 1–15 = 88 items surtout implicites, 16–25 = 60 avec notes contextuelles, 26–40 = 93 A1 contextuels, 41–52 = 72 Build32 ;
 - identifie le principal trou transférable précoce : **genre + articles + singulier/pluriel**, et non une absence générale de conjugaison ;
-- ajoute `foundations-pilot.js`, chargé uniquement en runtime courant non historique ;
+- ajoute `src/pedagogy/foundations-pilot.js`, chargé uniquement en runtime courant non historique ;
 - propose dans la zone leçons 8–13 une entrée facultative `🧩 Nền tảng nhỏ / Petite base utile` ;
 - couvre seulement **F01 genre**, **F02 un/une/des**, **F03 le/la/l’/les**, **F04 singulier/pluriel** ;
 - exemples existants : `la gare`, `un billet`, `une table`, `les toilettes`, `la pharmacie → les pharmacies` ;
@@ -47,7 +47,7 @@ Maintenance sans migration et sans modification des sanctuaires voix/core.
 
 - corrige le cas réel `Listening → Aujourd’hui` où le premier tap pouvait laisser le corps de l’app vide/bloqué indéfiniment et nécessiter un deuxième tap ;
 - cause-frontière : Listening est un overlay `body` avec état propre ; la bottom nav routait le contenu sous-jacent sans fermeture préalable ;
-- nouveau shim : `navigation-field-hotfix.js` ;
+- nouveau shim : `src/core/navigation-field-hotfix.js` ;
 - Listening est fermé au geste physique de navigation avant le routage historique ;
 - aucune donnée learner modifiée.
 
@@ -57,7 +57,7 @@ Maintenance sans migration et sans modification des sanctuaires voix/core.
 - confirme qu’il n’existe aucune condition « lesson >= 11 » ;
 - le playback dépend d’un Blob non vide après `MediaRecorder.stop()` ;
 - le Speaking Loop demandait des chunks via `MediaRecorder.start(120)` ;
-- ajoute `mediarecorder-ios-compat.js` : pour un MediaRecorder **audio-only**, le `timeslice` est retiré afin de laisser Safari/iOS finaliser une prise complète au stop ;
+- ajoute `src/core/mediarecorder-ios-compat.js` : pour un MediaRecorder **audio-only**, le `timeslice` est retiré afin de laisser Safari/iOS finaliser une prise complète au stop ;
 - les MediaRecorder non audio-only gardent leur appel original ;
 - `voice-ios.js`, `free-voice.js`, SpeechRecognition, progression et backups inchangés ;
 - audio toujours local/jetable ;
@@ -72,12 +72,12 @@ Maintenance sans migration et sans modification des sanctuaires voix/core.
 
 - produit courant à l’époque : **v2.2.0 • Build 32** au-dessus de l’Architecture Runtime gelée **2.0.0 / Build 30** ;
 - conserve le cœur historique **40 leçons / 241 éléments** rejouable et ordonné ;
-- ajoute `curriculum-stage4.js` : **12 leçons / 72 éléments** ;
+- ajoute `src/pedagogy/curriculum-stage4.js` : **12 leçons / 72 éléments** ;
 - curriculum courant depuis Build32 : **52 leçons / 313 éléments**, 313 IDs uniques ;
 - ajoute **Autonomie A1 41–46** et **Interaction A1 47–52** ;
 - capacités : clarification, quantités, comparaison, invitation/refus, santé/rendez-vous, pharmacie, travail/consignes, panne/logement, transport perturbé, récit, avis et `on` oral ;
-- `real-life-data-4.js` : **8 situations / 24 tours**, Scenario **44 / 132** ;
-- `listening-data-2.js` : **4 contrastes + 8 mini-dialogues**, vitesses **0.88 / 0.65** ;
+- `src/pedagogy/real-life-data-4.js` : **8 situations / 24 tours**, Scenario **44 / 132** ;
+- `src/pedagogy/listening-data-2.js` : **4 contrastes + 8 mini-dialogues**, vitesses **0.88 / 0.65** ;
 - Speaking Loop : **52/52**, max 2 ;
 - Learner Intelligence 2.2 : **7 bandes / 52 / 313** ;
 - `A1+` interne uniquement ; reconnaissance vocale ≠ prononciation ;
@@ -138,7 +138,7 @@ Maintenance sans migration et sans modification des sanctuaires voix/core.
 - progressive disclosure, objectifs de session, milestones et fins explicites.
 
 ## [1.17.0] — Build 24 — Real Life French II — 2026-08-11
-- **28 situations / 84 tours** avant Pack III ; `real-life-data-2.js` témoin historique.
+- **28 situations / 84 tours** avant Pack III ; `src/pedagogy/real-life-data-2.js` témoin historique.
 
 ## [1.16.0] — Build 23 — Real Life French I — 2026-08-11
 - situations liées à la vraie vie avec Jerry.

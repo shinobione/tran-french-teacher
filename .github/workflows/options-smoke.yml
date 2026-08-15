@@ -20,9 +20,9 @@ jobs:
 
       - name: Syntax + idempotence guard
         run: |
-          node --check build-meta.js
+          node --check src/core/build-meta.js
           node --check sw.js
-          grep -Fq 'if (value.textContent !== next) value.textContent = next;' build-meta.js
+          grep -Fq 'if (value.textContent !== next) value.textContent = next;' src/core/build-meta.js
 
       - name: Sanctuaries remain untouched
         run: |

@@ -16,35 +16,35 @@ jobs:
 
       - name: Static visual contracts and sanctuaries
         run: |
-          grep -q "sizes=\[\[390,844\],\[430,932\],\[768,1024\],\[1280,800\],\[1440,900\]\]" premium-v4-global-qa-tribunal.html
-          grep -q "themes=\['original','aurora','sunset','jade'\]" premium-v4-global-qa-tribunal.html
-          grep -q "screens=\['home','progress','practice','listening','settings'\]" premium-v4-global-qa-tribunal.html
-          grep -q 'cases=' premium-v4-global-qa-tribunal.html
-          grep -q 'text-contrast' premium-v4-global-qa-tribunal.html
-          grep -q 'cta-contrast' premium-v4-global-qa-tribunal.html
-          grep -q 'color\\(srgb' premium-v4-global-qa-tribunal.html
-          grep -q 'cta-gradient-contrast=pass' premium-v4-global-qa-tribunal.html
-          grep -q 'horizontal-overflow' premium-v4-global-qa-tribunal.html
-          grep -q 'logo-clipped' premium-v4-global-qa-tribunal.html
-          grep -q 'legacy-hub-slab' premium-v4-global-qa-tribunal.html
-          grep -q 'route-motion' premium-v4-global-qa-tribunal.html
-          grep -q 'captureReady' premium-v4-visual-capture.html
-          grep -q 'captureTheme' premium-v4-visual-capture.html
-          grep -q 'captureScreen' premium-v4-visual-capture.html
-          grep -q 'premium-v4-motion.css?v=2.3.21-v57art1' premium-theme-polish.css
-          grep -q 'premium-v4-contrast.css?v=2.3.21-v57art1' premium-theme-polish.css
-          grep -q 'premium-v4-route-coherence.css?v=2.3.21-v57art1' premium-theme-polish.css
-          grep -q -- '--pv4-contrast-ready:1' premium-v4-contrast.css
-          grep -q 'color:#071531' premium-v4-contrast.css
-          grep -q 'color:#140b28' premium-v4-contrast.css
-          grep -q 'color:#041511' premium-v4-contrast.css
-          grep -q 'premium-nav-geometry-hotfix.css?v=2.3.21-v57art1' premium-theme-polish.css
-          test "$(tail -n 1 premium-theme-polish.css)" = "@import url('./premium-nav-geometry-hotfix.css?v=2.3.21-v57art1');"
-          if [ -f premium-v5-fidelity-reset.css ]; then
-            grep -q -- '--pv55-ready:1' premium-v5-fidelity-reset.css
-            grep -q -- '--pv55-refine-ready:1' premium-v5-fidelity-refine.css
-            v4="$(grep -n 'premium-v4-contrast.css?v=2.3.21-v57art1' premium-theme-polish.css | cut -d: -f1)"
-            v55="$(grep -n 'premium-v5-fidelity-reset.css?v=2.3.21-v57art1' premium-theme-polish.css | cut -d: -f1)"
+          grep -q "sizes=\[\[390,844\],\[430,932\],\[768,1024\],\[1280,800\],\[1440,900\]\]" tests/browser/premium-v4-global-qa-tribunal.html
+          grep -q "themes=\['original','aurora','sunset','jade'\]" tests/browser/premium-v4-global-qa-tribunal.html
+          grep -q "screens=\['home','progress','practice','listening','settings'\]" tests/browser/premium-v4-global-qa-tribunal.html
+          grep -q 'cases=' tests/browser/premium-v4-global-qa-tribunal.html
+          grep -q 'text-contrast' tests/browser/premium-v4-global-qa-tribunal.html
+          grep -q 'cta-contrast' tests/browser/premium-v4-global-qa-tribunal.html
+          grep -q 'color\\(srgb' tests/browser/premium-v4-global-qa-tribunal.html
+          grep -q 'cta-gradient-contrast=pass' tests/browser/premium-v4-global-qa-tribunal.html
+          grep -q 'horizontal-overflow' tests/browser/premium-v4-global-qa-tribunal.html
+          grep -q 'logo-clipped' tests/browser/premium-v4-global-qa-tribunal.html
+          grep -q 'legacy-hub-slab' tests/browser/premium-v4-global-qa-tribunal.html
+          grep -q 'route-motion' tests/browser/premium-v4-global-qa-tribunal.html
+          grep -q 'captureReady' tests/browser/premium-v4-visual-capture.html
+          grep -q 'captureTheme' tests/browser/premium-v4-visual-capture.html
+          grep -q 'captureScreen' tests/browser/premium-v4-visual-capture.html
+          grep -q './premium-v4-motion.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v4-contrast.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v4-route-coherence.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q -- '--pv4-contrast-ready:1' src/premium/premium-v4-contrast.css
+          grep -q 'color:#071531' src/premium/premium-v4-contrast.css
+          grep -q 'color:#140b28' src/premium/premium-v4-contrast.css
+          grep -q 'color:#041511' src/premium/premium-v4-contrast.css
+          grep -q './premium-nav-geometry-hotfix.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          test "$(tail -n 1 src/premium/premium-theme-polish.css)" = "@import url('./premium-nav-geometry-hotfix.css?v=2.3.21-v57art1');"
+          if [ -f src/premium/premium-v5-fidelity-reset.css ]; then
+            grep -q -- '--pv55-ready:1' src/premium/premium-v5-fidelity-reset.css
+            grep -q -- '--pv55-refine-ready:1' src/premium/premium-v5-fidelity-refine.css
+            v4="$(grep -n './premium-v4-contrast.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css | cut -d: -f1)"
+            v55="$(grep -n './premium-v5-fidelity-reset.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css | cut -d: -f1)"
             test "$v4" -lt "$v55"
           fi
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
@@ -52,7 +52,7 @@ jobs:
           test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
           test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
           test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
-          test "$(git hash-object field-audio-session.js)" = "06ca40074b345d77b8fc0c46fdb73ab35ffa2cd3"
+          test "$(git hash-object src/core/field-audio-session.js)" = "06ca40074b345d77b8fc0c46fdb73ab35ffa2cd3"
 
       - name: Start static server
         run: |
@@ -63,14 +63,14 @@ jobs:
 
       - name: Chrome — 100-case global visual tribunal
         run: |
-          if [ -f premium-v5-fidelity-reset.css ]; then
+          if [ -f src/premium/premium-v5-fidelity-reset.css ]; then
             echo 'V5.5 successor owns active visual geometry; V4 static contracts remain guarded.'
             exit 0
           fi
           timeout --signal=TERM --kill-after=5s 120s \
             google-chrome --headless=new --no-sandbox --disable-gpu \
             --virtual-time-budget=90000 --dump-dom \
-            'http://127.0.0.1:4173/premium-v4-global-qa-tribunal.html' > /tmp/v4-global.html
+            'http://127.0.0.1:4173/tests/browser/premium-v4-global-qa-tribunal.html' > /tmp/v4-global.html
           grep -q 'data-premium-v4-global-qa="ok"' /tmp/v4-global.html || { cat /tmp/v4-global.html; exit 1; }
           grep -q 'cases=100' /tmp/v4-global.html
           grep -q 'overflow=0' /tmp/v4-global.html
@@ -81,14 +81,14 @@ jobs:
 
       - name: Chrome — 100-case reduced-motion visual tribunal
         run: |
-          if [ -f premium-v5-fidelity-reset.css ]; then
+          if [ -f src/premium/premium-v5-fidelity-reset.css ]; then
             echo 'V5.5 successor owns active reduced-motion visual geometry.'
             exit 0
           fi
           timeout --signal=TERM --kill-after=5s 120s \
             google-chrome --headless=new --no-sandbox --disable-gpu --force-prefers-reduced-motion \
             --virtual-time-budget=90000 --dump-dom \
-            'http://127.0.0.1:4173/premium-v4-global-qa-tribunal.html' > /tmp/v4-global-reduced.html
+            'http://127.0.0.1:4173/tests/browser/premium-v4-global-qa-tribunal.html' > /tmp/v4-global-reduced.html
           grep -q 'data-premium-v4-global-qa="ok"' /tmp/v4-global-reduced.html || { cat /tmp/v4-global-reduced.html; exit 1; }
           grep -q 'cases=100' /tmp/v4-global-reduced.html
           grep -q 'reduced=1' /tmp/v4-global-reduced.html
@@ -98,7 +98,7 @@ jobs:
       - name: Capture mobile + desktop visual review matrix
         run: |
           mkdir -p artifacts/premium-v4-global
-          if [ -f premium-v5-fidelity-reset.css ]; then
+          if [ -f src/premium/premium-v5-fidelity-reset.css ]; then
             echo 'V5.5 successor owns current human-review captures.' > artifacts/premium-v4-global/SUCCESSOR-V5.5.txt
             exit 0
           fi
@@ -107,7 +107,7 @@ jobs:
             profile="/tmp/ft-v4-cap-${label}-${theme}-${screen}"
             file="artifacts/premium-v4-global/${label}-${theme}-${screen}.png"
             dom="/tmp/ft-v4-cap-${label}-${theme}-${screen}.html"
-            target="http://127.0.0.1:4173/premium-v4-visual-capture.html?theme=${theme}&screen=${screen}"
+            target="http://127.0.0.1:4173/tests/browser/premium-v4-visual-capture.html?theme=${theme}&screen=${screen}"
             rm -rf "$profile" "$dom"
             timeout --signal=TERM --kill-after=5s 35s \
               google-chrome --headless=new --no-sandbox --disable-gpu --hide-scrollbars \

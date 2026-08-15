@@ -29,8 +29,8 @@ Créer une couche de feedback commune à toute l’application sans toucher à l
 
 Nouveaux fichiers :
 
-- `interaction-ux.js`
-- `interaction-ux.css`
+- `src/ui/interaction-ux.js`
+- `src/ui/interaction-ux.css`
 
 Le runtime écoute `pointerdown / pointerup / pointercancel` en capture et applique un état visuel immédiat `.ux-pressing`.
 
@@ -95,11 +95,11 @@ tran-french-teacher-v1.17.3-b24.3-premium-interaction
 Assets UX :
 
 ```text
-ux-shell.css?v=1.17.3-b24.3
-ux-shell.js?v=1.17.3-b24.3
-interaction-ux.css?v=1.17.3-b24.3
-interaction-ux.js?v=1.17.3-b24.3
-build-meta.js?v=1.17.3-b24.3
+src/ui/ux-shell.css?v=1.17.3-b24.3
+src/ui/ux-shell.js?v=1.17.3-b24.3
+src/ui/interaction-ux.css?v=1.17.3-b24.3
+src/ui/interaction-ux.js?v=1.17.3-b24.3
+src/core/build-meta.js?v=1.17.3-b24.3
 ```
 
 ## Contrat CI

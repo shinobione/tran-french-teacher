@@ -10,7 +10,7 @@ Sur vrai mobile, Build 24.3 avait un comportement asymétrique :
 
 ## Cause navigation
 
-`ux-shell.js` reconstruisait la bottom bar via `innerHTML` quand l’état actif changeait.
+`src/ui/ux-shell.js` reconstruisait la bottom bar via `innerHTML` quand l’état actif changeait.
 
 Un tap réel suit :
 
@@ -35,13 +35,13 @@ Aucun remplacement de nœud lors d’un simple changement d’écran.
 
 ### Tap echo
 
-`interaction-ux.js` crée un élément visuel `ux-tap-echo` positionné sur le rectangle du composant au `pointerdown`.
+`src/ui/interaction-ux.js` crée un élément visuel `ux-tap-echo` positionné sur le rectangle du composant au `pointerdown`.
 
 Cet élément vit dans `document.body`, avec `pointer-events:none`, et disparaît après ~230 ms. Il reste donc perceptible même si la surface initiale est rerendue.
 
 ### Header de leçon
 
-`mobile-polish.css` retire :
+`src/ui/mobile-polish.css` retire :
 
 - le fond violet opaque ;
 - le comportement sticky ;
@@ -65,12 +65,12 @@ tran-french-teacher-v1.17.4-b24.4-mobile-polish
 Assets :
 
 ```text
-ux-shell.css?v=1.17.4-b24.4
-interaction-ux.css?v=1.17.4-b24.4
-mobile-polish.css?v=1.17.4-b24.4
-ux-shell.js?v=1.17.4-b24.4
-interaction-ux.js?v=1.17.4-b24.4
-build-meta.js?v=1.17.4-b24.4
+src/ui/ux-shell.css?v=1.17.4-b24.4
+src/ui/interaction-ux.css?v=1.17.4-b24.4
+src/ui/mobile-polish.css?v=1.17.4-b24.4
+src/ui/ux-shell.js?v=1.17.4-b24.4
+src/ui/interaction-ux.js?v=1.17.4-b24.4
+src/core/build-meta.js?v=1.17.4-b24.4
 ```
 
 ## Données protégées

@@ -20,18 +20,18 @@ jobs:
 
       - name: Syntax and immutable-layer contracts
         run: |
-          for f in curriculum-stage4.js build32-loader.js build32-shell-extension.js real-life-data-4.js listening-data-2.js learner-intelligence-v2.js build32-smoke.js build31-loader.js build-meta.js v2-release-smoke.js sw.js; do node --check "$f"; done
+          for f in src/pedagogy/curriculum-stage4.js src/core/build32-loader.js src/core/build32-shell-extension.js src/pedagogy/real-life-data-4.js src/pedagogy/listening-data-2.js src/pedagogy/learner-intelligence-v2.js tests/smoke/build32-smoke.js src/core/build31-loader.js src/core/build-meta.js tests/smoke/v2-release-smoke.js sw.js; do node --check "$f"; done
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
           test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
           test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
           test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
           test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
-          grep -Fq "const CURRENT_META = { version: '2.2.0', build: '32'" build-meta.js
+          grep -Fq "const CURRENT_META = { version: '2.2.0', build: '32'" src/core/build-meta.js
           grep -Fq "const B32='2.2.0-b32'" sw.js
-          grep -Fq "./build32-loader.js?v=2.2.0-b32" build31-loader.js
-          ! grep -q 'localStorage.setItem' curriculum-stage4.js
-          ! grep -q 'localStorage.setItem' learner-intelligence-v2.js
-          ! grep -q 'localStorage.setItem' build32-shell-extension.js
+          grep -Fq "./src/core/build32-loader.js?v=2.2.0-b32" src/core/build31-loader.js
+          ! grep -q 'localStorage.setItem' src/pedagogy/curriculum-stage4.js
+          ! grep -q 'localStorage.setItem' src/pedagogy/learner-intelligence-v2.js
+          ! grep -q 'localStorage.setItem' src/core/build32-shell-extension.js
           python3 - <<'PY'
           import json
           r=json.load(open('release-v2.json',encoding='utf-8'))
@@ -50,24 +50,24 @@ jobs:
           global.window=global;
           global.document={querySelector:s=>s==='#app'?app:null,querySelectorAll:()=>[],getElementById:id=>id==='app'?app:null,addEventListener:()=>{},createElement:()=>({className:'',dataset:{},innerHTML:'',appendChild(){},prepend(){},remove(){},querySelector(){return null},querySelectorAll(){return[]}})};
           global.navigator={};global.confirm=()=>false;global.requestAnimationFrame=fn=>fn();global.queueMicrotask=fn=>fn();global.MutationObserver=class{observe(){}};global.window.addEventListener=()=>{};global.window.scrollTo=()=>{};
-          require('./app.js');require('./curriculum-stage2.js');require('./curriculum-stage3.js');
+          require('./app.js');require('./src/pedagogy/curriculum-stage2.js');require('./src/pedagogy/curriculum-stage3.js');
           const c=global.FrenchTranquilleCurriculum;
           if(c.lessons.length!==40||c.items.length!==241)throw new Error(`Historical core moved: ${c.lessons.length}/${c.items.length}`);
           const historicalLessonIds=c.lessons.map(x=>x.id).join('|');
           const historicalItemIds=c.items.map(x=>x.id).join('|');
-          require('./curriculum-stage4.js');
+          require('./src/pedagogy/curriculum-stage4.js');
           if(c.lessons.length!==52||c.items.length!==313)throw new Error(`Current curriculum mismatch: ${c.lessons.length}/${c.items.length}`);
           if(c.stage4.length!==12||c.stage4Items.length!==72)throw new Error('Stage4 must be 12/72');
           if(c.lessons.slice(0,40).map(x=>x.id).join('|')!==historicalLessonIds)throw new Error('Historical lesson order changed');
           if(c.items.slice(0,241).map(x=>x.id).join('|')!==historicalItemIds)throw new Error('Historical item order changed');
           if(new Set(c.items.map(x=>x.id)).size!==313)throw new Error('Duplicate current item IDs');
           if(c.stage4[0].id!=='l41'||c.stage4.at(-1).id!=='l52')throw new Error('Stage4 lesson boundary mismatch');
-          require('./scenario-data.js');require('./real-life-data.js');require('./real-life-data-2.js');require('./real-life-data-3.js');require('./real-life-data-4.js');
+          require('./src/pedagogy/scenario-data.js');require('./src/pedagogy/real-life-data.js');require('./src/pedagogy/real-life-data-2.js');require('./src/pedagogy/real-life-data-3.js');require('./src/pedagogy/real-life-data-4.js');
           const scenarios=global.FrenchTranquilleScenarioData.scenarios;
           if(scenarios.length!==44||scenarios.reduce((n,s)=>n+s.turns.length,0)!==132)throw new Error('Scenario successor must be 44/132');
           const p4=global.FrenchTranquilleRealLife4;
           if(p4.scenarios.length!==8||p4.scenarios.reduce((n,s)=>n+s.turns.length,0)!==24||p4.invalidItems.length)throw new Error('Pack IV contract failed');
-          require('./listening-data.js');require('./listening-data-2.js');
+          require('./src/pedagogy/listening-data.js');require('./src/pedagogy/listening-data-2.js');
           const l2=global.FrenchTranquilleListeningData2;
           if(l2.contrasts.length!==4||l2.dialogues.length!==8||l2.invalidItems.length)throw new Error('Listening II contract failed');
           console.log('Build32 data contracts OK: 40/241 preserved → 52/313; Scenario 44/132; Listening II 4+8');

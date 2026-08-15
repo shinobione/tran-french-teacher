@@ -20,21 +20,21 @@ jobs:
 
       - name: Syntax and wiring
         run: |
-          node --check session-ux.js
-          node --check session-ux-adapter.js
-          node --check build-meta.js
+          node --check src/ui/session-ux.js
+          node --check src/ui/session-ux-adapter.js
+          node --check src/core/build-meta.js
           node --check sw.js
           # Build 25.2 remains a required subsystem, while later builds may upgrade its owner file.
-          grep -q 'session-ux.css?v=1.18.2-b25.2' index.html
-          grep -q 'session-ux.js?v=' index.html
-          grep -q 'session-ux-adapter.js?v=1.18.2-b25.2' index.html
-          grep -q 'session-ux.js' sw.js
-          grep -q 'session-ux-adapter.js' sw.js
-          grep -q 'session-ux.css' sw.js
-          grep -q 'prefers-reduced-motion' session-ux.css
-          grep -q 'french-tranquille:milestones:v1' session-ux.js
-          grep -q "'FrenchTranquilleSessionUX'" build-meta.js
-          grep -q "'FrenchTranquilleSessionUXAdapter'" build-meta.js
+          grep -q 'src/ui/session-ux.css?v=1.18.2-b25.2' index.html
+          grep -q 'src/ui/session-ux.js?v=' index.html
+          grep -q 'src/ui/session-ux-adapter.js?v=1.18.2-b25.2' index.html
+          grep -q 'src/ui/session-ux.js' sw.js
+          grep -q 'src/ui/session-ux-adapter.js' sw.js
+          grep -q 'src/ui/session-ux.css' sw.js
+          grep -q 'prefers-reduced-motion' src/ui/session-ux.css
+          grep -q 'french-tranquille:milestones:v1' src/ui/session-ux.js
+          grep -q "'FrenchTranquilleSessionUX'" src/core/build-meta.js
+          grep -q "'FrenchTranquilleSessionUXAdapter'" src/core/build-meta.js
 
       - name: Sanctuaries remain byte-identical
         run: |

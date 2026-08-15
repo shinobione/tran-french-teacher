@@ -66,12 +66,12 @@ Le cœur historique :
 
 ```text
 app.js
-curriculum-stage2.js
-curriculum-stage3.js
+src/pedagogy/curriculum-stage2.js
+src/pedagogy/curriculum-stage3.js
 → 40 leçons / 241 items
 ```
 
-Stage 4 (`curriculum-stage4.js`) ajoute :
+Stage 4 (`src/pedagogy/curriculum-stage4.js`) ajoute :
 
 ```text
 41–46  Autonomie A1
@@ -85,10 +85,10 @@ Les 40 premiers lesson IDs et 241 premiers item IDs restent dans le même ordre.
 Build32 ajoute aussi :
 
 ```text
-real-life-data-4.js          → Pack IV
-listening-data-2.js          → Listening II
-learner-intelligence-v2.js   → 7 bandes
-build32-shell-extension.js   → étapes 41–52
+src/pedagogy/real-life-data-4.js          → Pack IV
+src/pedagogy/listening-data-2.js          → Listening II
+src/pedagogy/learner-intelligence-v2.js   → 7 bandes
+src/core/build32-shell-extension.js   → étapes 41–52
 ```
 
 Aucun nouveau store durable.
@@ -99,7 +99,7 @@ La CI protège explicitement :
 
 ```text
 v1.17.0 — Build 24 — Real Life French II
-real-life-data-2.js
+src/pedagogy/real-life-data-2.js
 28 situations / 84 tours avant Pack III
 ```
 
@@ -126,7 +126,7 @@ Conclusion : la conjugaison utile existe déjà largement à partir de l16. Le p
 
 # Build 34 — Foundations Pilot
 
-Module : `foundations-pilot.js`.
+Module : `src/pedagogy/foundations-pilot.js`.
 
 API :
 
@@ -147,7 +147,7 @@ F03  le / la / l’ / les
 F04  singulier / pluriel
 ```
 
-Le module est chargé par `build32-loader.js` seulement dans le runtime courant. Les routes historiques `b32Audit`, `b31Audit`, `b30Audit`, `v2Audit` restent hors pilote.
+Le module est chargé par `src/core/build32-loader.js` seulement dans le runtime courant. Les routes historiques `b32Audit`, `b31Audit`, `b30Audit`, `v2Audit` restent hors pilote.
 
 UX :
 
@@ -184,7 +184,7 @@ transfer
 
 Deux shims additifs ont été livrés via PR #82.
 
-## `navigation-field-hotfix.js`
+## `src/core/navigation-field-hotfix.js`
 
 Listening possède un overlay `body` et un état `listening-open`. Le bug terrain venait du routage du shell sous cet overlay sans fermeture préalable.
 
@@ -198,7 +198,7 @@ geste bottom-nav
 
 Le shim intervient en capture pointer/mouse/clavier. Aucun store, aucune route canonique modifiée.
 
-## `mediarecorder-ios-compat.js`
+## `src/core/mediarecorder-ios-compat.js`
 
 Speaking Loop / Voice Replay n’affichent `Ma voix` qu’après un Blob audio non vide.
 

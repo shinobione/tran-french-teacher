@@ -52,7 +52,7 @@ Les 40 premiers lesson IDs et les 241 premiers item IDs restent dans le même or
 
 ### Real Life Pack IV
 
-`real-life-data-4.js` ajoute **8 situations / 24 tours**. Scenario courant :
+`src/pedagogy/real-life-data-4.js` ajoute **8 situations / 24 tours**. Scenario courant :
 
 ```text
 44 situations / 132 tours
@@ -64,7 +64,7 @@ Chaque ID de preuve du Pack IV est validé contre un vrai acquis du curriculum.
 
 ### Listening Pack II
 
-`listening-data-2.js` ajoute :
+`src/pedagogy/listening-data-2.js` ajoute :
 
 - **4 contrastes** ;
 - **8 mini-dialogues**.

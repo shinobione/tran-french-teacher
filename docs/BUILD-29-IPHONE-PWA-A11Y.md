@@ -37,9 +37,9 @@ Aucune clé durable n’a été renommée.
 ## Couche Build 29
 
 ```text
-build29-iphone-a11y.css
-build29-iphone-a11y.js
-build29-smoke.js
+src/ui/build29-iphone-a11y.css
+src/ui/build29-iphone-a11y.js
+tests/smoke/build29-smoke.js
 .github/workflows/build29-iphone-pwa-a11y-smoke.yml
 ```
 

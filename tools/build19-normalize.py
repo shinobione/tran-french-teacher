@@ -1,6 +1,6 @@
 from pathlib import Path
 
-stage3 = Path('curriculum-stage3.js')
+stage3 = Path('src/pedagogy/curriculum-stage3.js')
 text = stage3.read_text(encoding='utf-8')
 
 text = text.replace(
@@ -24,7 +24,7 @@ text = text.replace(
 )
 stage3.write_text(text, encoding='utf-8')
 
-mastery = Path('mastery-stage3.js')
+mastery = Path('src/pedagogy/mastery-stage3.js')
 m = mastery.read_text(encoding='utf-8')
 hook = """
 

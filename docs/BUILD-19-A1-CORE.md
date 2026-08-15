@@ -45,18 +45,18 @@
 
 ```text
 app.js                     ← historique intact
-curriculum-stage2.js       ← 16–25
-curriculum-stage3.js       ← 26–40
-stage2-boot.js             ← rerender réutilisé après Stage 2 + 3
-learning-memory.js
-mastery-engine.js
-mastery-stage3.js          ← 5e palier A1 Core
-scenario-engine.js
-error-intelligence.js
-build-meta.js              ← chargé en dernier
+src/pedagogy/curriculum-stage2.js       ← 16–25
+src/pedagogy/curriculum-stage3.js       ← 26–40
+src/core/stage2-boot.js             ← rerender réutilisé après Stage 2 + 3
+src/pedagogy/learning-memory.js
+src/pedagogy/mastery-engine.js
+src/pedagogy/mastery-stage3.js          ← 5e palier A1 Core
+src/pedagogy/scenario-engine.js
+src/pedagogy/error-intelligence.js
+src/core/build-meta.js              ← chargé en dernier
 ```
 
-Le boot existant est volontairement réutilisé : Stage 3 est chargé **avant** `stage2-boot.js`, ce qui permet un seul rerender curriculum.
+Le boot existant est volontairement réutilisé : Stage 3 est chargé **avant** `src/core/stage2-boot.js`, ce qui permet un seul rerender curriculum.
 
 ## Mastery A1 Core
 

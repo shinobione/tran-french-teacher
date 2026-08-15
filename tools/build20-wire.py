@@ -1,7 +1,7 @@
 from pathlib import Path
 
 # Error Intelligence: add listening-specific observable evidence and prevent double counting.
-p=Path('error-intelligence.js')
+p=Path('src/pedagogy/error-intelligence.js')
 t=p.read_text(encoding='utf-8')
 t=t.replace("    'voice-unrecognized': { icon:'🎙️', vi:'Câu nói chưa được nhận ra', fr:'Phrase vocale non reconnue' },\n", "    'voice-unrecognized': { icon:'🎙️', vi:'Câu nói chưa được nhận ra', fr:'Phrase vocale non reconnue' },\n    'listening-miss': { icon:'🎧', vi:'Chưa hiểu phần nghe', fr:'Compréhension orale à retravailler' },\n")
 t=t.replace("    if (value === 'voice' || value.endsWith('-voice')) return 'voice';\n", "    if (value.startsWith('listening-')) return 'listening';\n    if (value === 'voice' || value.endsWith('-voice')) return 'voice';\n")
@@ -12,25 +12,25 @@ p.write_text(t,encoding='utf-8')
 # index.html
 p=Path('index.html')
 t=p.read_text(encoding='utf-8').replace('1.12.0-b19','1.13.0-b20').replace('Build 19 affiche','Build 20 affiche')
-css='  <link rel="stylesheet" href="./error-intelligence.css?v=1.13.0-b20" />\n'
-if 'listening-engine.css' not in t:
-    t=t.replace(css,css+'  <link rel="stylesheet" href="./listening-engine.css?v=1.13.0-b20" />\n')
-needle='  <script type="module" src="./error-intelligence.js?v=1.13.0-b20"></script>\n'
-if 'listening-data.js' not in t:
-    t=t.replace(needle,needle+'  <script type="module" src="./listening-data.js?v=1.13.0-b20"></script>\n  <script type="module" src="./listening-engine.js?v=1.13.0-b20"></script>\n')
+css='  <link rel="stylesheet" href="./src/pedagogy/error-intelligence.css?v=1.13.0-b20" />\n'
+if 'src/pedagogy/listening-engine.css' not in t:
+    t=t.replace(css,css+'  <link rel="stylesheet" href="./src/pedagogy/listening-engine.css?v=1.13.0-b20" />\n')
+needle='  <script type="module" src="./src/pedagogy/error-intelligence.js?v=1.13.0-b20"></script>\n'
+if 'src/pedagogy/listening-data.js' not in t:
+    t=t.replace(needle,needle+'  <script type="module" src="./src/pedagogy/listening-data.js?v=1.13.0-b20"></script>\n  <script type="module" src="./src/pedagogy/listening-engine.js?v=1.13.0-b20"></script>\n')
 p.write_text(t,encoding='utf-8')
 
 # service worker
 p=Path('sw.js')
 t=p.read_text(encoding='utf-8').replace("tran-french-teacher-v1.12.0-b19","tran-french-teacher-v1.13.0-b20").replace("const V='1.12.0-b19';","const V='1.13.0-b20';")
-if 'listening-engine.css' not in t:
-    t=t.replace("  `./error-intelligence.css?v=${V}`,\n", "  `./error-intelligence.css?v=${V}`,\n  `./listening-engine.css?v=${V}`,\n")
-if 'listening-data.js' not in t:
-    t=t.replace("  `./error-intelligence.js?v=${V}`,\n", "  `./error-intelligence.js?v=${V}`,\n  `./listening-data.js?v=${V}`,\n  `./listening-engine.js?v=${V}`,\n")
+if 'src/pedagogy/listening-engine.css' not in t:
+    t=t.replace("  `./src/pedagogy/error-intelligence.css?v=${V}`,\n", "  `./src/pedagogy/error-intelligence.css?v=${V}`,\n  `./src/pedagogy/listening-engine.css?v=${V}`,\n")
+if 'src/pedagogy/listening-data.js' not in t:
+    t=t.replace("  `./src/pedagogy/error-intelligence.js?v=${V}`,\n", "  `./src/pedagogy/error-intelligence.js?v=${V}`,\n  `./src/pedagogy/listening-data.js?v=${V}`,\n  `./src/pedagogy/listening-engine.js?v=${V}`,\n")
 p.write_text(t,encoding='utf-8')
 
 # centralized build metadata
-p=Path('build-meta.js')
+p=Path('src/core/build-meta.js')
 t=p.read_text(encoding='utf-8').replace("const META = { version: '1.12.0', build: 19 };","const META = { version: '1.13.0', build: 20 };")
 if "'FrenchTranquilleListeningData'" not in t:
     t=t.replace("  'FrenchTranquilleErrors'\n", "  'FrenchTranquilleErrors',\n  'FrenchTranquilleListeningData',\n  'FrenchTranquilleListening'\n")
@@ -242,8 +242,8 @@ entry=r'''## [Unreleased]
 
 ### v1.13.0 — Build 20 — Listening Comprehension
 
-- moteur local `listening-engine.js` ;
-- banque déclarative `listening-data.js` ;
+- moteur local `src/pedagogy/listening-engine.js` ;
+- banque déclarative `src/pedagogy/listening-data.js` ;
 - stockage `french-tranquille:listening:v1` ;
 - historique récent borné à 100 entrées ;
 - trois familles : Sens / Contrastes / Mini-dialogues ;
@@ -277,9 +277,9 @@ t=t.replace('# v1.13.0 — Build 20 — Listening Comprehension — 🔥 PROCHAI
 needle='## Critères de clôture Build 20\n'
 status=r'''## Implémentation candidate
 
-- [x] `listening-data.js` ;
-- [x] `listening-engine.js` ;
-- [x] `listening-engine.css` ;
+- [x] `src/pedagogy/listening-data.js` ;
+- [x] `src/pedagogy/listening-engine.js` ;
+- [x] `src/pedagogy/listening-engine.css` ;
 - [x] Sens ;
 - [x] Contrastes ;
 - [x] Mini-dialogues ;
@@ -323,36 +323,36 @@ iPhone/Safari/PWA | Android | PC
 
 ```text
 app.js
-curriculum-stage2.js
-curriculum-stage3.js
-stage2-boot.js
-debug-fr.js
+src/pedagogy/curriculum-stage2.js
+src/pedagogy/curriculum-stage3.js
+src/core/stage2-boot.js
+src/core/debug-fr.js
 voice-ios.js
 free-voice.js
-learning-memory.js
-daily-coach.js
-mastery-engine.js
-mastery-stage3.js
-scenario-data.js
-scenario-host.js
-scenario-engine.js
-error-intelligence.js
-listening-data.js
-listening-engine.js
-build-meta.js
+src/pedagogy/learning-memory.js
+src/pedagogy/daily-coach.js
+src/pedagogy/mastery-engine.js
+src/pedagogy/mastery-stage3.js
+src/pedagogy/scenario-data.js
+src/pedagogy/scenario-host.js
+src/pedagogy/scenario-engine.js
+src/pedagogy/error-intelligence.js
+src/pedagogy/listening-data.js
+src/pedagogy/listening-engine.js
+src/core/build-meta.js
 ```
 
-`build-meta.js` reste chargé en dernier et impose la version/runtime finale à tous les modules exposés.
+`src/core/build-meta.js` reste chargé en dernier et impose la version/runtime finale à tous les modules exposés.
 
 ---
 
 # Curriculum
 
 - `app.js` : cœur historique + 1–15 ;
-- `curriculum-stage2.js` : 16–25 ;
-- `curriculum-stage3.js` : 26–40 ;
+- `src/pedagogy/curriculum-stage2.js` : 16–25 ;
+- `src/pedagogy/curriculum-stage3.js` : 26–40 ;
 - total : **40 leçons / 238 éléments** ;
-- `stage2-boot.js` réalise un unique rerender après les extensions.
+- `src/core/stage2-boot.js` réalise un unique rerender après les extensions.
 
 `app.js` reste sanctuarisé.
 
@@ -360,7 +360,7 @@ build-meta.js
 
 # Learning Memory
 
-`learning-memory.js`
+`src/pedagogy/learning-memory.js`
 
 Clé : `french-tranquille:learning-memory:v1`.
 
@@ -370,7 +370,7 @@ Clé : `french-tranquille:learning-memory:v1`.
 
 # Error Intelligence
 
-`error-intelligence.js`
+`src/pedagogy/error-intelligence.js`
 
 Clé : `french-tranquille:error-intelligence:v1`.
 
@@ -388,7 +388,7 @@ listening-miss
 
 # Listening Comprehension — Build 20
 
-## `listening-data.js`
+## `src/pedagogy/listening-data.js`
 
 Catalogue déclaratif :
 
@@ -399,7 +399,7 @@ Catalogue déclaratif :
 - options ;
 - items servant de preuves Memory/Error.
 
-## `listening-engine.js`
+## `src/pedagogy/listening-engine.js`
 
 Clé :
 
@@ -462,9 +462,9 @@ Aucun score phonétique.
 
 # Mastery
 
-`mastery-engine.js` = quatre étapes historiques.
+`src/pedagogy/mastery-engine.js` = quatre étapes historiques.
 
-`mastery-stage3.js` = A1 Core 26–40, avec preuves Memory requises avant maîtrise.
+`src/pedagogy/mastery-stage3.js` = A1 Core 26–40, avec preuves Memory requises avant maîtrise.
 
 Build 20 n’altère pas les seuils de maîtrise.
 

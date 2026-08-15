@@ -193,7 +193,7 @@ Inchangés fonctionnellement :
 - Build 26.9 Content Reliability ;
 - gate terrain iPhone Build 26.1 toujours ouvert.
 
-Baseline historique protégée : **v1.17.0 — Build 24 — Real Life French II**, Scenario **28 situations / 84 tours** avant Pack III ; `real-life-data-2.js` reste canonique.
+Baseline historique protégée : **v1.17.0 — Build 24 — Real Life French II**, Scenario **28 situations / 84 tours** avant Pack III ; `src/pedagogy/real-life-data-2.js` reste canonique.
 
 ## Critères de clôture
 

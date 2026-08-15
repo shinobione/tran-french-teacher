@@ -175,4 +175,4 @@ Le retour terrain confirme que **la propre voix est bien audible après l’enre
 
 ## Baseline historique
 
-**v1.17.0 — Build 24 — Real Life French II** : **28 situations / 84 tours** avant Pack III ; `real-life-data-2.js` reste canonique.
+**v1.17.0 — Build 24 — Real Life French II** : **28 situations / 84 tours** avant Pack III ; `src/pedagogy/real-life-data-2.js` reste canonique.

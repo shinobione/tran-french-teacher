@@ -29,7 +29,7 @@ free-voice.js
 
 Ces fichiers sont restés byte-identiques.
 
-La reconnaissance pédagogique fonctionne d’abord exactement comme avant. `voice-replay.js` intervient seulement quand `.free-voice-result` existe déjà.
+La reconnaissance pédagogique fonctionne d’abord exactement comme avant. `src/pedagogy/voice-replay.js` intervient seulement quand `.free-voice-result` existe déjà.
 
 ## UX livrée
 
@@ -60,8 +60,8 @@ La capture simultanée exacte du premier essai reste hors scope jusqu’à valid
 ## Implémentation
 
 ```text
-voice-replay.js
-voice-replay.css
+src/pedagogy/voice-replay.js
+src/pedagogy/voice-replay.css
 ```
 
 ```text
@@ -173,15 +173,15 @@ Le dashboard est considéré **PROD** : ses contrats navigateur et Progression s
 Build 26 reste présent et versionné séparément :
 
 ```text
-real-life-data-3.js?v=1.19.0-b26
-real-life-coach.js?v=1.19.0-b26
+src/pedagogy/real-life-data-3.js?v=1.19.0-b26
+src/pedagogy/real-life-coach.js?v=1.19.0-b26
 ```
 
 Build 26.1 ajoute :
 
 ```text
-voice-replay.js?v=1.19.1-b26.1
-progress-details-dashboard.js?v=1.19.1-b26.1
+src/pedagogy/voice-replay.js?v=1.19.1-b26.1
+src/ui/progress-details-dashboard.js?v=1.19.1-b26.1
 ```
 
 Scenario reste :
@@ -195,7 +195,7 @@ Scenario reste :
 
 Le smoke Build 26 a été rendu durable : il protège Pack III sans exiger que la version globale reste éternellement `1.19.0`.
 
-Baseline historique conservée : **v1.17.0 Build 24 / real-life-data-2.js / 28 situations / 84 tours** avant Pack III.
+Baseline historique conservée : **v1.17.0 Build 24 / src/pedagogy/real-life-data-2.js / 28 situations / 84 tours** avant Pack III.
 
 ---
 

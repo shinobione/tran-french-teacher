@@ -19,20 +19,20 @@ jobs:
 
       - name: Static V5.7 contracts and sanctuaries
         run: |
-          node --check theme-controller.js
-          node --check premium-v5-fidelity-reset.js
+          node --check src/core/theme-controller.js
+          node --check src/premium/premium-v5-fidelity-reset.js
           node --check sw.js
-          grep -q "version:'1.3.0-v57art'" theme-controller.js
-          grep -q 'premium/themes/original/background-v2.png' premium-v5-fidelity-reset.css
-          grep -q 'premium/themes/aurora/background.webp' premium-v5-fidelity-reset.css
-          grep -q 'premium/themes/sunset/background.webp' premium-v5-fidelity-reset.css
-          grep -q 'premium/themes/nocturne/background.webp' premium-v5-fidelity-reset.css
-          grep -q 'premium/themes/original/lesson-eiffel-v2.png' premium-v5-fidelity-reset.css
-          grep -q 'premium/themes/aurora/lesson-eiffel-v2.png' premium-v5-fidelity-reset.css
-          grep -q 'premium/themes/sunset/lesson-eiffel-v2.png' premium-v5-fidelity-reset.css
-          grep -q 'premium/themes/nocturne/lesson-eiffel-v2.png' premium-v5-fidelity-reset.css
-          ! grep -q 'eiffel-premium-mask.svg' premium-v5-fidelity-reset.css premium-v5-fidelity-refine.css sw.js
-          ! grep -q 'theme-aurora-paris.svg\|theme-sunset-paris.svg\|theme-jade-paris.svg' premium-v5-fidelity-reset.css sw.js
+          grep -q "version:'1.3.0-v57art'" src/core/theme-controller.js
+          grep -q 'premium/themes/original/background-v2.png' src/premium/premium-v5-fidelity-reset.css
+          grep -q 'premium/themes/aurora/background.webp' src/premium/premium-v5-fidelity-reset.css
+          grep -q 'premium/themes/sunset/background.webp' src/premium/premium-v5-fidelity-reset.css
+          grep -q 'premium/themes/nocturne/background.webp' src/premium/premium-v5-fidelity-reset.css
+          grep -q 'premium/themes/original/lesson-eiffel-v2.png' src/premium/premium-v5-fidelity-reset.css
+          grep -q 'premium/themes/aurora/lesson-eiffel-v2.png' src/premium/premium-v5-fidelity-reset.css
+          grep -q 'premium/themes/sunset/lesson-eiffel-v2.png' src/premium/premium-v5-fidelity-reset.css
+          grep -q 'premium/themes/nocturne/lesson-eiffel-v2.png' src/premium/premium-v5-fidelity-reset.css
+          ! grep -q 'eiffel-premium-mask.svg' src/premium/premium-v5-fidelity-reset.css src/premium/premium-v5-fidelity-refine.css sw.js
+          ! grep -q 'theme-aurora-paris.svg\|theme-sunset-paris.svg\|theme-jade-paris.svg' src/premium/premium-v5-fidelity-reset.css sw.js
           grep -q "const CACHE='tran-french-teacher-v2.3.22-b34.14-v58debug1'" sw.js
           for asset in \
             assets/premium/themes/original/background-v2.png \
@@ -62,7 +62,7 @@ jobs:
             google-chrome --headless=new --no-sandbox --disable-gpu \
             --disable-background-timer-throttling --disable-renderer-backgrounding \
             --virtual-time-budget=46000 --dump-dom \
-            'http://127.0.0.1:4173/premium-v5-theme-art-tribunal.html' >/tmp/v57.html
+            'http://127.0.0.1:4173/tests/browser/premium-v5-theme-art-tribunal.html' >/tmp/v57.html
           grep -q 'data-premium-v57="ok"' /tmp/v57.html || { grep -o 'data-premium-v57-detail="[^"]*"' /tmp/v57.html || true; exit 1; }
 
       - name: Capture V5.7 five-viewport by four-theme matrix
@@ -73,7 +73,7 @@ jobs:
             profile="/tmp/ft-v57-${label}-${theme}"
             png="artifacts/premium-v57-theme-art/${label}-${theme}-home.png"
             dom="/tmp/v57-${label}-${theme}.html"
-            target="http://127.0.0.1:4173/premium-v4-visual-capture.html?theme=${theme}&screen=home"
+            target="http://127.0.0.1:4173/tests/browser/premium-v4-visual-capture.html?theme=${theme}&screen=home"
             rm -rf "$profile" "$png" "$dom"
             timeout --signal=TERM --kill-after=5s 45s \
               google-chrome --headless=new --no-sandbox --disable-gpu --hide-scrollbars \

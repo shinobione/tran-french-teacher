@@ -2,7 +2,7 @@ from pathlib import Path
 import os, re, sys
 
 root = Path('.')
-meta = (root/'build-meta.js').read_text(encoding='utf-8')
+meta = (root/'src/core/build-meta.js').read_text(encoding='utf-8')
 if "version: '1.17.0', build: 24" not in meta:
     raise SystemExit('Refuse close: branch base is not v1.17.0 Build 24')
 

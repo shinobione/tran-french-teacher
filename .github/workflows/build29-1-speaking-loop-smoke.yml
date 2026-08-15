@@ -20,22 +20,22 @@ jobs:
 
       - name: Syntax, wiring and pedagogical contract
         run: |
-          node --check speaking-loop-content.js
-          node --check speaking-loop-smoke.js
-          node --check build-meta.js
+          node --check src/pedagogy/speaking-loop-content.js
+          node --check tests/smoke/speaking-loop-smoke.js
+          node --check src/core/build-meta.js
           node --check sw.js
           node - <<'NODE'
           const fs=require('fs');
-          const text=fs.readFileSync('build-meta.js','utf8');
+          const text=fs.readFileSync('src/core/build-meta.js','utf8');
           const match=text.match(/const META = \{ version: '([^']+)', build: '([^']+)'/);
           if(!match || Number(match[2]) < 29.1) throw new Error('Build 29.1 contract cannot run on a pre-29.1 build');
           console.log(`release metadata ${match[1]} / ${match[2]} keeps Build 29.1 contract`);
           NODE
-          grep -Eq 'speaking-loop-content.css\?v=1\.22\.[1-9][0-9]*-b29\.[1-9][0-9]*' build-meta.js sw.js
-          grep -Eq 'speaking-loop-content.js\?v=1\.22\.[1-9][0-9]*-b29\.[1-9][0-9]*' build-meta.js sw.js
-          grep -q 'maxMoments: 2' speaking-loop-content.js
+          grep -Eq 'src/pedagogy/speaking-loop-content.css\?v=1\.22\.[1-9][0-9]*-b29\.[1-9][0-9]*' src/core/build-meta.js sw.js
+          grep -Eq 'src/pedagogy/speaking-loop-content.js\?v=1\.22\.[1-9][0-9]*-b29\.[1-9][0-9]*' src/core/build-meta.js sw.js
+          grep -q 'maxMoments: 2' src/pedagogy/speaking-loop-content.js
           grep -E -qi '(aucun|pas de)[^\n]{0,40}(faux )?score[^\n]{0,20}prononciation' README.md docs/BUILD-29-1-SPEAKING-LOOP-CONTENT.md docs/BUILD-29-2-SPEAKING-VARIETY-CLARITY.md
-          ! grep -E -q '([0-9]{1,3}[[:space:]]*%.*prononciation|prononciation.*[0-9]{1,3}[[:space:]]*%)' speaking-loop-content.js
+          ! grep -E -q '([0-9]{1,3}[[:space:]]*%.*prononciation|prononciation.*[0-9]{1,3}[[:space:]]*%)' src/pedagogy/speaking-loop-content.js
 
       - name: Learner, voice, branding and durable data sanctuaries stay intact
         run: |
@@ -43,11 +43,11 @@ jobs:
           test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
           test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
           test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
-          grep -q "francais-avec-luc:learner:v1" app.js data-recovery-core.js
-          grep -q "french-tranquille:learning-memory:v1" data-recovery-core.js
-          grep -q "french-tranquille:listening:v1" data-recovery-core.js
-          grep -q 'normal: 0.88' build-meta.js
-          grep -q 'slow: 0.65' build-meta.js
+          grep -q "francais-avec-luc:learner:v1" app.js src/core/data-recovery-core.js
+          grep -q "french-tranquille:learning-memory:v1" src/core/data-recovery-core.js
+          grep -q "french-tranquille:listening:v1" src/core/data-recovery-core.js
+          grep -q 'normal: 0.88' src/core/build-meta.js
+          grep -q 'slow: 0.65' src/core/build-meta.js
 
       - name: Curriculum and content cardinality remain canonical
         run: |
@@ -55,7 +55,7 @@ jobs:
           const fs=require('fs');
           const app=fs.readFileSync('app.js','utf8');
           if(!app.includes("window.FrenchTranquilleCurriculum")) throw new Error('curriculum API missing');
-          const loop=fs.readFileSync('speaking-loop-content.js','utf8');
+          const loop=fs.readFileSync('src/pedagogy/speaking-loop-content.js','utf8');
           if(!loop.includes('selectionForLesson') || !loop.includes('coverage')) throw new Error('selection API missing');
           console.log('speaking-loop selection API present');
           NODE

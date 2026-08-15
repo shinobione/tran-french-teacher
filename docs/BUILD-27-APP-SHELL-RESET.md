@@ -65,7 +65,7 @@ moteurs historiques + DOM historique
             ↓
      restent propriétaires
             ↓
- build27-app-shell.js/css
+ src/ui/build27-app-shell.js/css
             ↓
  façade apprenante simplifiée
 ```
@@ -154,7 +154,7 @@ Le gate terrain Voice Replay Build 26.1 reste ouvert.
 
 ### Baseline historique protégée
 
-**v1.17.0 — Build 24 — Real Life French II** : Scenario **28 situations / 84 tours** avant Pack III. `real-life-data-2.js` reste explicitement conservé.
+**v1.17.0 — Build 24 — Real Life French II** : Scenario **28 situations / 84 tours** avant Pack III. `src/pedagogy/real-life-data-2.js` reste explicitement conservé.
 
 ## Suite
 

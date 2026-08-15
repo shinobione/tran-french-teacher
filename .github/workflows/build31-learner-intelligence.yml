@@ -20,24 +20,24 @@ jobs:
 
       - name: Static Build31 replay contracts
         run: |
-          node --check learner-intelligence.js
-          node --check learner-intelligence-smoke.js
-          node --check build31-loader.js
-          node --check settings-legal.js
-          node --check build-meta.js
+          node --check src/pedagogy/learner-intelligence.js
+          node --check src/pedagogy/learner-intelligence-smoke.js
+          node --check src/core/build31-loader.js
+          node --check src/core/settings-legal.js
+          node --check src/core/build-meta.js
           node --check sw.js
-          grep -Fq "const VERSION = '2.1.0'" learner-intelligence.js
-          grep -Fq 'const BUILD = 31' learner-intelligence.js
-          grep -Fq "const B31_AUDIT_META = { version: '2.1.0', build: '31'" build-meta.js
-          grep -Fq "const CURRENT_META = { version: '2.2.0', build: '32'" build-meta.js
-          grep -Fq './build31-loader.js?v=2.1.0-b31' settings-legal.js
+          grep -Fq "const VERSION = '2.1.0'" src/pedagogy/learner-intelligence.js
+          grep -Fq 'const BUILD = 31' src/pedagogy/learner-intelligence.js
+          grep -Fq "const B31_AUDIT_META = { version: '2.1.0', build: '31'" src/core/build-meta.js
+          grep -Fq "const CURRENT_META = { version: '2.2.0', build: '32'" src/core/build-meta.js
+          grep -Fq './src/core/build31-loader.js?v=2.1.0-b31' src/core/settings-legal.js
           grep -Fq "const B31='2.1.0-b31'" sw.js
-          grep -Fq 'learner-intelligence.css?v=${B31}' sw.js
-          grep -Fq 'learner-intelligence.js?v=${B31}' sw.js
-          grep -Fq 'learner-intelligence-smoke.js?v=${B31}' sw.js
-          grep -Fq "return 'recognition'" learner-intelligence.js
-          ! grep -q 'localStorage.setItem' learner-intelligence.js
-          ! grep -q 'localStorage.setItem' build31-loader.js
+          grep -Fq 'src/pedagogy/learner-intelligence.css?v=${B31}' sw.js
+          grep -Fq 'src/pedagogy/learner-intelligence.js?v=${B31}' sw.js
+          grep -Fq 'src/pedagogy/learner-intelligence-smoke.js?v=${B31}' sw.js
+          grep -Fq "return 'recognition'" src/pedagogy/learner-intelligence.js
+          ! grep -q 'localStorage.setItem' src/pedagogy/learner-intelligence.js
+          ! grep -q 'localStorage.setItem' src/core/build31-loader.js
           python3 - <<'PY'
           import json
           r=json.load(open('release-v2.json',encoding='utf-8'))

@@ -60,8 +60,8 @@ jobs:
               try{
                 const d=frame.contentDocument,w=frame.contentWindow;
                 if(!d.querySelector('.app-shell.screen-home'))throw new Error('home-missing');
-                if(!d.querySelector('link[href*="interaction-ux.css"]'))throw new Error('interaction-css-missing');
-                if(!d.querySelector('link[href*="mobile-polish.css"]'))throw new Error('mobile-polish-css-missing');
+                if(!d.querySelector('link[href*="src/ui/interaction-ux.css"]'))throw new Error('interaction-css-missing');
+                if(!d.querySelector('link[href*="src/ui/mobile-polish.css"]'))throw new Error('mobile-polish-css-missing');
                 if(!w.FrenchTranquilleInteraction)throw new Error('interaction-runtime-missing');
                 const build27=Boolean(w.FrenchTranquilleBuild27Shell);
                 root.dataset.navShell=build27?'b27':'legacy';

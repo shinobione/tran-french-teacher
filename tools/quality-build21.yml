@@ -20,13 +20,13 @@ jobs:
 
       - name: Syntax check
         run: |
-          for f in app.js curriculum-stage2.js curriculum-stage3.js stage2-boot.js debug-fr.js voice-ios.js free-voice.js learning-memory.js language-ratio-core.js language-ratio.js daily-coach.js mastery-engine.js mastery-stage3.js scenario-data.js scenario-host.js scenario-engine.js error-intelligence.js listening-data.js listening-engine.js build-meta.js; do node --check "$f"; done
+          for f in app.js src/pedagogy/curriculum-stage2.js src/pedagogy/curriculum-stage3.js src/core/stage2-boot.js src/core/debug-fr.js voice-ios.js free-voice.js src/pedagogy/learning-memory.js src/pedagogy/language-ratio-core.js src/pedagogy/language-ratio.js src/pedagogy/daily-coach.js src/pedagogy/mastery-engine.js src/pedagogy/mastery-stage3.js src/pedagogy/scenario-data.js src/pedagogy/scenario-host.js src/pedagogy/scenario-engine.js src/pedagogy/error-intelligence.js src/pedagogy/listening-data.js src/pedagogy/listening-engine.js src/core/build-meta.js; do node --check "$f"; done
 
       - name: Current curriculum contract
         run: |
           node <<'NODE'
           const fs=require('fs');
-          const s=fs.readFileSync('curriculum-stage3.js','utf8');
+          const s=fs.readFileSync('src/pedagogy/curriculum-stage3.js','utf8');
           const lessons=[...s.matchAll(/id:'(l(?:2[6-9]|3[0-9]|40))'/g)].map(m=>m[1]);
           if(lessons.length!==15||new Set(lessons).size!==15)throw new Error('Stage3 must remain 15 unique lessons');
           const blocks=s.split(/\n\s*\{\n\s*id:'l/).slice(1);let total=0;
@@ -38,7 +38,7 @@ jobs:
       - name: Adaptive Language pure decision contract
         run: |
           node <<'NODE'
-          const core=require('./language-ratio-core.js');
+          const core=require('./src/pedagogy/language-ratio-core.js');
           const beginner={curriculum:{completed:1,total:40,known:4,totalItems:238},memory:{reviewed:0,solid:0,fragile:0,due:0},listening:{attempts:0,correct:0},practice:{conversationWins:0,scenarioSuccesses:0},errors:{recent:0,recurring:0,assisted:0}};
           const strong={curriculum:{completed:36,total:40,known:220,totalItems:238},memory:{reviewed:190,solid:170,fragile:5,due:3},listening:{attempts:20,correct:18},practice:{conversationWins:12,scenarioSuccesses:10},errors:{recent:1,recurring:0,assisted:0}};
           const fragile={curriculum:{completed:36,total:40,known:220,totalItems:238},memory:{reviewed:190,solid:120,fragile:80,due:20},listening:{attempts:20,correct:16},practice:{conversationWins:12,scenarioSuccesses:10},errors:{recent:12,recurring:5,assisted:4}};
@@ -56,36 +56,36 @@ jobs:
 
       - name: Adaptive Language wiring guard
         run: |
-          grep -q 'FrenchTranquilleLanguageCore' language-ratio-core.js
-          grep -q 'FrenchTranquilleLanguage' language-ratio.js
+          grep -q 'FrenchTranquilleLanguageCore' src/pedagogy/language-ratio-core.js
+          grep -q 'FrenchTranquilleLanguage' src/pedagogy/language-ratio.js
           grep -q 'VI-HEAVY' docs/BUILD-21-ADAPTIVE-LANGUAGE.md
           grep -q 'FR-GROWING' docs/BUILD-21-ADAPTIVE-LANGUAGE.md
-          grep -q "context='daily'" daily-coach.js
-          grep -q "context='scenario'" scenario-engine.js
-          grep -q "scenario-hint" scenario-engine.js
-          grep -q "context='listening'" listening-engine.js
-          grep -q 'label:option.vi' listening-engine.js
-          grep -q 'language-ratio.css' index.html
-          grep -q 'language-ratio-core.js' index.html
-          grep -q 'language-ratio.js' index.html
-          grep -q 'language-ratio.css' sw.js
-          grep -q 'language-ratio-core.js' sw.js
-          grep -q 'language-ratio.js' sw.js
-          grep -q "version: '1.14.0', build: 21" build-meta.js
-          grep -q 'FrenchTranquilleLanguageCore' build-meta.js
-          grep -q 'FrenchTranquilleLanguage' build-meta.js
+          grep -q "context='daily'" src/pedagogy/daily-coach.js
+          grep -q "context='scenario'" src/pedagogy/scenario-engine.js
+          grep -q "scenario-hint" src/pedagogy/scenario-engine.js
+          grep -q "context='listening'" src/pedagogy/listening-engine.js
+          grep -q 'label:option.vi' src/pedagogy/listening-engine.js
+          grep -q 'src/pedagogy/language-ratio.css' index.html
+          grep -q 'src/pedagogy/language-ratio-core.js' index.html
+          grep -q 'src/pedagogy/language-ratio.js' index.html
+          grep -q 'src/pedagogy/language-ratio.css' sw.js
+          grep -q 'src/pedagogy/language-ratio-core.js' sw.js
+          grep -q 'src/pedagogy/language-ratio.js' sw.js
+          grep -q "version: '1.14.0', build: 21" src/core/build-meta.js
+          grep -q 'FrenchTranquilleLanguageCore' src/core/build-meta.js
+          grep -q 'FrenchTranquilleLanguage' src/core/build-meta.js
           grep -q '1.14.0-b21' index.html
           grep -q '1.14.0-b21' sw.js
 
       - name: Existing systems guard
         run: |
-          grep -q "french-tranquille:learning-memory:v1" learning-memory.js
-          grep -q "french-tranquille:listening:v1" listening-engine.js
-          grep -q "'listening-miss'" error-intelligence.js
-          grep -q 'MAX_ITEM_EVENTS = 20' error-intelligence.js
-          grep -q 'MAX_RECENT_EVENTS = 120' error-intelligence.js
-          grep -q "french-tranquille:scenarios:v1" scenario-engine.js
-          grep -q 'FrenchTranquilleMasteryStage3' mastery-stage3.js
+          grep -q "french-tranquille:learning-memory:v1" src/pedagogy/learning-memory.js
+          grep -q "french-tranquille:listening:v1" src/pedagogy/listening-engine.js
+          grep -q "'listening-miss'" src/pedagogy/error-intelligence.js
+          grep -q 'MAX_ITEM_EVENTS = 20' src/pedagogy/error-intelligence.js
+          grep -q 'MAX_RECENT_EVENTS = 120' src/pedagogy/error-intelligence.js
+          grep -q "french-tranquille:scenarios:v1" src/pedagogy/scenario-engine.js
+          grep -q 'FrenchTranquilleMasteryStage3' src/pedagogy/mastery-stage3.js
 
       - name: Documentation guard
         run: |
@@ -94,20 +94,20 @@ jobs:
           grep -q 'Build 21' README.md
           grep -q 'Build 21' ROADMAP.md
           grep -q 'Build 21' CHANGELOG.md
-          grep -q 'language-ratio-core.js' docs/ARCHITECTURE.md
-          grep -q 'language-ratio.js' docs/ARCHITECTURE.md
+          grep -q 'src/pedagogy/language-ratio-core.js' docs/ARCHITECTURE.md
+          grep -q 'src/pedagogy/language-ratio.js' docs/ARCHITECTURE.md
           grep -q 'Documentation obligatoire' docs/BUILD-POLICY.md
 
       - name: Listening data non-regression
         run: |
           node <<'NODE'
-          global.window=global;require('./listening-data.js');const d=global.FrenchTranquilleListeningData;if(!d||d.contrasts.length<10||d.dialogues.length<8)throw new Error('Listening data regression');console.log('Listening data OK');
+          global.window=global;require('./src/pedagogy/listening-data.js');const d=global.FrenchTranquilleListeningData;if(!d||d.contrasts.length<10||d.dialogues.length<8)throw new Error('Listening data regression');console.log('Listening data OK');
           NODE
 
       - name: Scenario data non-regression
         run: |
           node <<'NODE'
-          global.window=global;require('./scenario-data.js');const s=global.FrenchTranquilleScenarioData?.scenarios||[];if(s.length!==12||s.some(x=>x.turns.length<3))throw new Error('Scenario regression');console.log('Scenario data OK');
+          global.window=global;require('./src/pedagogy/scenario-data.js');const s=global.FrenchTranquilleScenarioData?.scenarios||[];if(s.length!==12||s.some(x=>x.turns.length<3))throw new Error('Scenario regression');console.log('Scenario data OK');
           NODE
 
       - name: Start static server

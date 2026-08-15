@@ -20,22 +20,22 @@ jobs:
 
       - name: Syntax, labels and contextual planner contract
         run: |
-          node --check speaking-loop-content.js
-          node --check speaking-loop-smoke.js
-          node --check speaking-loop-variety-smoke.js
-          node --check build-meta.js
+          node --check src/pedagogy/speaking-loop-content.js
+          node --check tests/smoke/speaking-loop-smoke.js
+          node --check tests/smoke/speaking-loop-variety-smoke.js
+          node --check src/core/build-meta.js
           node --check sw.js
-          grep -q "const META = { version:" build-meta.js
-          grep -q 'speaking-loop-content.css?v=1.22.2-b29.2' build-meta.js sw.js
-          grep -q 'speaking-loop-content.js?v=1.22.2-b29.2' build-meta.js sw.js
-          grep -q 'speaking-loop-variety-smoke.js?v=1.22.2-b29.2' build-meta.js sw.js
-          grep -q "T('↻ Ghi âm lại','↻ Enregistrer à nouveau')" speaking-loop-content.js
-          grep -q "T('🔊 Nghe Tyffany','🔊 Écouter Tyffany')" speaking-loop-content.js
-          grep -q 'FrenchTranquilleMemory?.summary' speaking-loop-content.js
-          grep -q 'recentPhrases' speaking-loop-content.js
-          grep -q "kind:'recap'" speaking-loop-content.js
-          grep -q 'isNumericLike' speaking-loop-content.js
-          ! grep -q 'localStorage.setItem' speaking-loop-content.js
+          grep -q "const META = { version:" src/core/build-meta.js
+          grep -q 'src/pedagogy/speaking-loop-content.css?v=1.22.2-b29.2' src/core/build-meta.js sw.js
+          grep -q 'src/pedagogy/speaking-loop-content.js?v=1.22.2-b29.2' src/core/build-meta.js sw.js
+          grep -q 'tests/smoke/speaking-loop-variety-smoke.js?v=1.22.2-b29.2' src/core/build-meta.js sw.js
+          grep -q "T('↻ Ghi âm lại','↻ Enregistrer à nouveau')" src/pedagogy/speaking-loop-content.js
+          grep -q "T('🔊 Nghe Tyffany','🔊 Écouter Tyffany')" src/pedagogy/speaking-loop-content.js
+          grep -q 'FrenchTranquilleMemory?.summary' src/pedagogy/speaking-loop-content.js
+          grep -q 'recentPhrases' src/pedagogy/speaking-loop-content.js
+          grep -q "kind:'recap'" src/pedagogy/speaking-loop-content.js
+          grep -q 'isNumericLike' src/pedagogy/speaking-loop-content.js
+          ! grep -q 'localStorage.setItem' src/pedagogy/speaking-loop-content.js
 
       - name: Voice, branding, learner and data sanctuaries remain intact
         run: |
@@ -43,9 +43,9 @@ jobs:
           test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
           test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
           test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
-          grep -q "const LEARNER_KEY = 'francais-avec-luc:learner:v1'" speaking-loop-content.js
-          grep -q 'normal: 0.88' build-meta.js
-          grep -q 'slow: 0.65' build-meta.js
+          grep -q "const LEARNER_KEY = 'francais-avec-luc:learner:v1'" src/pedagogy/speaking-loop-content.js
+          grep -q 'normal: 0.88' src/core/build-meta.js
+          grep -q 'slow: 0.65' src/core/build-meta.js
 
       - name: Start static server
         run: |

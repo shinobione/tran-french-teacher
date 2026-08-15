@@ -11,7 +11,7 @@ normal effectif = 0.88
 lent effectif   = 0.64
 ```
 
-Le moteur Listening historique continue à demander `0.68` pour Lent ; `build-meta.js` calibre cette demande à `0.64` avant la couche voix, puis restaure exactement le réglage Lucie précédent.
+Le moteur Listening historique continue à demander `0.68` pour Lent ; `src/core/build-meta.js` calibre cette demande à `0.64` avant la couche voix, puis restaure exactement le réglage Lucie précédent.
 
 ## Garanties
 

@@ -20,19 +20,19 @@ jobs:
 
       - name: Syntax and Build 26.4 contract wiring
         run: |
-          node --check build26-4-ux.js
-          node --check build-meta.js
+          node --check src/ui/build26-4-ux.js
+          node --check src/core/build-meta.js
           node --check sw.js
-          grep -q 'build26-4-ux.css?v=1.19.4-b26.4' index.html
-          grep -q 'build26-4-ux.js?v=1.19.4-b26.4' index.html
-          grep -q 'build-meta.js?v=' index.html
-          grep -q 'FrenchTranquilleBuild264UX' build-meta.js
-          grep -q 'build26-4-ux.css' sw.js
-          grep -q 'build26-4-ux.js' sw.js
-          grep -q "OLD_NAME = 'Lucie'" build26-4-ux.js
-          grep -q "NEW_NAME = 'Tyffany'" build26-4-ux.js
-          grep -q 'overflow:visible!important' build26-4-ux.css
-          grep -q 'max-height:none!important' build26-4-ux.css
+          grep -q 'src/ui/build26-4-ux.css?v=1.19.4-b26.4' index.html
+          grep -q 'src/ui/build26-4-ux.js?v=1.19.4-b26.4' index.html
+          grep -q 'src/core/build-meta.js?v=' index.html
+          grep -q 'FrenchTranquilleBuild264UX' src/core/build-meta.js
+          grep -q 'src/ui/build26-4-ux.css' sw.js
+          grep -q 'src/ui/build26-4-ux.js' sw.js
+          grep -q "OLD_NAME = 'Lucie'" src/ui/build26-4-ux.js
+          grep -q "NEW_NAME = 'Tyffany'" src/ui/build26-4-ux.js
+          grep -q 'overflow:visible!important' src/ui/build26-4-ux.css
+          grep -q 'max-height:none!important' src/ui/build26-4-ux.css
 
       - name: Data, voice and branding sanctuaries remain byte-identical
         run: |
@@ -41,8 +41,8 @@ jobs:
           test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
           test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
           grep -q "francais-avec-luc:learner:v1" app.js
-          grep -q 'normal: 0.88' build-meta.js
-          grep -q 'slow: 0.65' build-meta.js
+          grep -q 'normal: 0.88' src/core/build-meta.js
+          grep -q 'slow: 0.65' src/core/build-meta.js
 
       - name: Start static server
         run: |

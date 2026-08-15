@@ -207,7 +207,7 @@ Validation :
 
 ## Addendum terrain — 2026-08-11
 
-Un conflit ultérieur a été identifié : `listening-engine.js` demandait correctement `0.88` / `0.68`, mais la couche globale Lucie réappliquait sa vitesse générale aux deux lectures. PR #29 a corrigé ce conflit **sans modifier `voice-ios.js`**.
+Un conflit ultérieur a été identifié : `src/pedagogy/listening-engine.js` demandait correctement `0.88` / `0.68`, mais la couche globale Lucie réappliquait sa vitesse générale aux deux lectures. PR #29 a corrigé ce conflit **sans modifier `voice-ios.js`**.
 
 État réellement observé après correction :
 

@@ -54,7 +54,7 @@ Le moteur historique gère toujours :
 
 ## UX livrée
 
-`real-life-ux.js` :
+`src/pedagogy/real-life-ux.js` :
 
 - scènes personnelles disponibles en premier ;
 - badge `Ta vraie vie` ;

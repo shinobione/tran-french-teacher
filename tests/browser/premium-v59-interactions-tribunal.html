@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="fr" data-theme="original">
+<head>
+  <meta charset="utf-8">
+  <title>V5.9A Interaction Ownership Tribunal</title>
+  <link rel="stylesheet" href="../../src/premium/premium-v59-interactions.css?v=2.3.23-v59a1">
+</head>
+<body>
+  <div id="app">
+    <div class="app-shell screen-lesson">
+      <div class="lesson-step" id="lesson-step">
+        <section class="voice-replay-panel" id="legacy-replay"><button>legacy replay</button></section>
+        <section class="speaking-loop-card" id="speaking-owner">
+          <button data-speaking-record>record owner</button>
+          <button data-speaking-record>record stale duplicate</button>
+          <small class="speaking-loop-note">owner note</small>
+          <small class="speaking-loop-note">stale duplicate note</small>
+        </section>
+        <section class="speaking-loop-card" id="stale-card"><button data-speaking-record>stale card</button></section>
+      </div>
+    </div>
+    <div class="screen-settings">
+      <section id="ft-settings-legal">
+        <div class="ft-legal-head"><h2>Giới thiệu</h2><button type="button" data-v55-about-toggle aria-expanded="false">›</button></div>
+      </section>
+    </div>
+    <button type="button" class="b27-practice-action" data-b27-practice-action="real-life"><span class="b27-practice-icon">♥</span></button>
+  </div>
+  <script>
+    (()=>{
+      const card=document.getElementById('ft-settings-legal');
+      const toggle=card.querySelector('[data-v55-about-toggle]');
+      let toggles=0;
+      toggle.addEventListener('click',()=>{
+        toggles+=1;
+        const open=card.dataset.v55Open==='1';
+        card.dataset.v55Open=open?'0':'1';
+        toggle.setAttribute('aria-expanded',open?'false':'true');
+        document.documentElement.dataset.v59TestToggles=String(toggles);
+      });
+    })();
+  </script>
+  <script src="../../src/premium/premium-v59-interactions.js?v=2.3.23-v59a1"></script>
+  <script>
+    (()=>{
+      const root=document.documentElement;
+      const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+      const fail=message=>{root.dataset.v59a='fail';root.dataset.v59aDetail=message;};
+      const pass=()=>{root.dataset.v59a='ok';root.dataset.v59aDetail='owner=1;about=whole-card;real-life=svg;legacy-restores=1';};
+      setTimeout(async()=>{
+        try{
+          const step=document.getElementById('lesson-step');
+          const owner=document.getElementById('speaking-owner');
+          if(step.querySelectorAll(':scope > .speaking-loop-card').length!==1)throw Error('speaking-card-not-unique');
+          if(owner.querySelectorAll('[data-speaking-record]').length!==1)throw Error('record-cta-not-unique');
+          if(owner.querySelectorAll('.speaking-loop-note').length!==1)throw Error('speaking-note-not-unique');
+          if(document.getElementById('legacy-replay').getAttribute('aria-hidden')!=='true')throw Error('legacy-replay-not-suppressed');
+          if(getComputedStyle(document.getElementById('legacy-replay')).display!=='none')throw Error('legacy-replay-still-visible');
+
+          const head=document.querySelector('#ft-settings-legal .ft-legal-head');
+          if(head.getAttribute('role')!=='button'||head.getAttribute('tabindex')!=='0')throw Error('about-semantics');
+          head.dispatchEvent(new MouseEvent('click',{bubbles:true}));
+          await wait(0);
+          if(root.dataset.v59TestToggles!=='1'||document.getElementById('ft-settings-legal').dataset.v55Open!=='1')throw Error('about-click');
+          head.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
+          await wait(0);
+          if(root.dataset.v59TestToggles!=='2'||document.getElementById('ft-settings-legal').dataset.v55Open!=='0')throw Error('about-keyboard');
+
+          if(!document.querySelector('[data-b27-practice-action="real-life"] .ft-v59-real-life-svg'))throw Error('real-life-icon');
+          owner.remove();
+          window.FrenchTranquillePremiumV59Interactions.refresh();
+          await wait(0);
+          if(document.getElementById('legacy-replay').hasAttribute('aria-hidden'))throw Error('legacy-replay-not-restored');
+          pass();
+        }catch(error){fail(error.message||String(error));}
+      },80);
+      setTimeout(()=>{if(!root.dataset.v59a)fail('timeout');},3000);
+    })();
+  </script>
+</body>
+</html>
