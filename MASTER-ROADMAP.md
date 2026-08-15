@@ -350,12 +350,12 @@ No theme may look like “Premium themes + one old skin”.
 - [x] 4 approved V2 lesson Eiffel assets wired on the V5.7 candidate branch.
 - [ ] Original reaches Premium parity — implementation present; human visual verdict pending.
 - [x] No legacy CSS Eiffel remains visible in the candidate tribunal.
-- [ ] No broken/missing asset online or offline — service-worker contract present; exact-head CI/deployed PWA evidence pending.
+- [x] No broken/missing asset in automated online/offline coverage — service-worker precache and exact-head PWA smoke green; physical installed-PWA verdict remains pending.
 - [x] No route flash regression in the local navigation tribunal.
 - [x] No learner-store mutation in the local four-theme tribunals.
 - [x] 5-viewport screenshot matrix generated for all 4 themes.
 
-Candidate status on 2026-08-15: local tribunals are green and the complete 20-shot matrix exists. This is **not** a merge, deployment, physical-device PASS or user visual PASS.
+Candidate status on 2026-08-15: local tribunals are green, exact runtime-head CI is **35 / 35 SUCCESS**, and the complete 20-shot matrix exists locally and as CI artifact `9239746575`. This is **not** a merge, deployment, physical-device PASS or user visual PASS.
 
 ---
 

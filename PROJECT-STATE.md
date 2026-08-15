@@ -14,6 +14,7 @@
 - Active V5.7 candidate branch: **`codex/v5.7-theme-art-integration`**.
 - Active draft PR: **#127 — V5.7 integrate four-theme Premium artwork**.
 - First verified candidate commit: **`895351ca341c2dd8e49c6b6a04463f53dd9af3f0`**.
+- Latest runtime-bearing candidate commit: **`56e743e7fe0f232b546138a29292952099bd6e8f`**.
 - V5.7 runtime wiring exists only on the candidate branch; it is not yet merged, deployed or field-approved.
 
 **Important:** this document does not claim that its own commit is the latest `main` SHA. A checkpoint cannot safely self-embed its final commit SHA. Fresh agents must verify current HEAD first.
@@ -83,6 +84,16 @@ For current verified `main` basis `b2b22efbdbef18f4556012171dd42605d80df467`, Gi
 - GitHub Pages run **`31856811221`**: **SUCCESS** on that exact SHA.
 - Current exact-HEAD result: **27 / 27 SUCCESS**.
 
+For PR #127 runtime-bearing candidate `56e743e7fe0f232b546138a29292952099bd6e8f`, GitHub returned **35 / 35 SUCCESS**:
+
+- V5.7 Theme Art Integration run **`31858356578`**: **SUCCESS**;
+- V5.7 Fidelity + Theme Art run **`31858356530`**: **SUCCESS**;
+- Build 29 iPhone PWA accessibility/offline run **`31858356513`**: **SUCCESS**;
+- Field navigation V3 run **`31858356575`**: **SUCCESS**;
+- visual artifact **`premium-v57-theme-art-visual-review`**, ID **`9239746575`**, contains the 20-shot review matrix.
+
+An earlier docs-only candidate head failed Build 29 before browser execution because its workflow asserted a literal cache value where `sw.js` correctly used `${V5F}`. Only the stale assertion was repaired; no product code changed for that failure.
+
 For the previous runtime-bearing `main` checkpoint `2bba5bd06ba14be7286e16a6a9a417fa04ce642a`, issue #114 records:
 
 - Pages **#174 SUCCESS**;
@@ -105,10 +116,10 @@ Fresh agents must re-check CI after any newer commit instead of inheriting these
 
 ### NEXT exact slice
 
-1. Let exact-head CI complete on draft PR **#127**.
-2. Review the generated 5-viewport × 4-theme matrix and exercise the candidate on the primary iPhone / installed-PWA target.
+1. Review the generated 5-viewport × 4-theme matrix for draft PR **#127**.
+2. Exercise the candidate on the primary iPhone / installed-PWA target.
 3. Do not merge V5.7 or mark its assets **FIELD PASS** without an explicit human verdict.
-4. After V5.7 PASS + green CI, merge and continue the canonical sequence only:
+4. After V5.7 PASS, merge and continue the canonical sequence only:
 
 ```text
 V5.7 Theme Art Integration
