@@ -51,7 +51,7 @@
     const viewport = document.querySelector('meta[name="viewport"]')?.content || '';
     if (!viewport.includes('viewport-fit=cover')) fail('viewport-fit=cover missing');
     const appleIcon = document.querySelector('link[rel="apple-touch-icon"]')?.getAttribute('href') || '';
-    if (!appleIcon.includes('apple-touch-icon.png')) fail('dedicated apple-touch-icon not wired');
+    if (!appleIcon.includes('assets/premium/brand/goat-app-icon-180.png')) fail('canonical goat apple-touch-icon not wired');
 
     if (audit.tooSmall !== 0) fail(`small touch targets: ${audit.tooSmall}`);
     if (audit.unnamed !== 0) fail(`unnamed buttons: ${audit.unnamed}`);

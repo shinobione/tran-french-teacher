@@ -25,7 +25,7 @@ jobs:
           node --check build-meta.js
           node --check sw.js
           grep -q 'viewport-fit=cover' index.html
-          grep -q 'assets/apple-touch-icon.png?v=1.22.0-b29' index.html
+          grep -q 'assets/premium/brand/goat-app-icon-180.png?v=2.3.26-v59d1' index.html
           grep -q 'build29-iphone-a11y.css?v=1.22.0-b29' index.html
           grep -q 'build29-iphone-a11y.js?v=1.22.0-b29' index.html
           grep -q 'build29-smoke.js?v=1.22.0-b29' index.html
@@ -68,6 +68,7 @@ jobs:
           grep -q 'build29-iphone-a11y.js' sw.js
           grep -q 'build29-smoke.js' sw.js
           grep -q 'assets/apple-touch-icon.png' sw.js
+          grep -q 'assets/premium/brand/goat-app-icon-180.png' sw.js
           python3 - <<'PY'
           import json
           m=json.load(open('manifest.webmanifest',encoding='utf-8'))

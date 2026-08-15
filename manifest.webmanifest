@@ -10,10 +10,28 @@
   "background_color": "#08111d",
   "theme_color": "#171026",
   "lang": "vi",
-  "categories": ["education"],
+  "categories": [
+    "education"
+  ],
   "prefer_related_applications": false,
   "icons": [
-    { "src": "./assets/icon-192.webp", "sizes": "192x192", "type": "image/webp", "purpose": "any maskable" },
-    { "src": "./assets/Favicon.png", "sizes": "any", "type": "image/png", "purpose": "any maskable" }
+    {
+      "src": "./assets/premium/brand/goat-app-icon-192.webp",
+      "sizes": "192x192",
+      "type": "image/webp",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/premium/brand/goat-app-icon-512.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/premium/brand/goat-app-icon-maskable-512.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "maskable"
+    }
   ]
 }
