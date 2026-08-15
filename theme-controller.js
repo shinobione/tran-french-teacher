@@ -27,5 +27,5 @@ function brand(){const h=document.querySelector('.b27-home');if(!h)return;h.clas
 function picker(){const host=document.querySelector('.screen-settings .narrow'),tpl=document.getElementById('ft-theme-settings');if(!host||!tpl)return;let p=host.querySelector(':scope>.ft-theme-settings-inline');if(!p){p=tpl.cloneNode(true);p.removeAttribute('id');p.classList.add('ft-theme-settings-inline');p.open=true;const v=p.querySelector('summary>span:last-child');if(v)v.dataset.themeCurrent='1';host.prepend(p)}sync(current())}
 function mount(){brand();picker();sync(current());window.FrenchTranquillePremiumV55?.refresh?.();window.FrenchTranquillePremiumV59?.refresh?.()}
 ensureStyle();document.documentElement.dataset.theme=current();const app=document.getElementById('app');if(app)new MutationObserver(mount).observe(app,{childList:true,subtree:true});mount();
-window.FrenchTranquilleThemes=Object.freeze({version:'1.4.0-v59ui1',key:KEY,themes:IDS,current,apply,mountBrand:brand,mountSettingsPicker:picker,mount});
+window.FrenchTranquilleThemes=Object.freeze({version:'1.3.0-v57art',key:KEY,themes:IDS,current,apply,mountBrand:brand,mountSettingsPicker:picker,mount});
 })();
