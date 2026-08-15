@@ -129,6 +129,10 @@ html[data-theme] .ft-v510-3d-arrow{
 html[data-theme] .b27-practice-action[data-b27-practice-action]{
   grid-template-columns:60px minmax(0,1fr) 24px;
 }
+html[data-theme] .b27-quick-card[data-b27-action="review"],
+html[data-theme] .b27-quick-card[data-b27-action="listening"]{
+  grid-template-columns:56px minmax(0,1fr) 22px;
+}
 
 /* Home quick actions use exactly the same Listening and Review pictograms. */
 html[data-theme] .b27-quick-card[data-b27-action="review"] .b27-quick-icon,
@@ -138,21 +142,13 @@ html[data-theme] .b27-quick-card[data-b27-action="listening"] .b27-quick-icon{
 
 /* Theme coherence lives in the glass host, not by repainting the 3D object. */
 html[data-theme="original"] .b27-practice-icon[data-v510-practice-icon],
-html[data-theme="original"] .b27-quick-icon[data-v510-practice-icon]{
-  --v510-host-accent:#7ce7ff;
-}
+html[data-theme="original"] .b27-quick-icon[data-v510-practice-icon]{--v510-host-accent:#7ce7ff}
 html[data-theme="aurora"] .b27-practice-icon[data-v510-practice-icon],
-html[data-theme="aurora"] .b27-quick-icon[data-v510-practice-icon]{
-  --v510-host-accent:#72cfff;
-}
+html[data-theme="aurora"] .b27-quick-icon[data-v510-practice-icon]{--v510-host-accent:#72cfff}
 html[data-theme="sunset"] .b27-practice-icon[data-v510-practice-icon],
-html[data-theme="sunset"] .b27-quick-icon[data-v510-practice-icon]{
-  --v510-host-accent:#ff9d55;
-}
+html[data-theme="sunset"] .b27-quick-icon[data-v510-practice-icon]{--v510-host-accent:#ff9d55}
 html[data-theme="jade"] .b27-practice-icon[data-v510-practice-icon],
-html[data-theme="jade"] .b27-quick-icon[data-v510-practice-icon]{
-  --v510-host-accent:#7fe3bd;
-}
+html[data-theme="jade"] .b27-quick-icon[data-v510-practice-icon]{--v510-host-accent:#7fe3bd}
 
 @media(max-width:520px){
   html[data-theme] .b27-practice-icon[data-v510-practice-icon]{
@@ -178,9 +174,9 @@ html[data-theme="jade"] .b27-quick-icon[data-v510-practice-icon]{
     height:38px;
     flex-basis:38px;
   }
-  html[data-theme] .b27-practice-action[data-b27-practice-action]{
-    grid-template-columns:58px minmax(0,1fr) 24px;
-  }
+  html[data-theme] .b27-practice-action[data-b27-practice-action]{grid-template-columns:58px minmax(0,1fr) 24px}
+  html[data-theme] .b27-quick-card[data-b27-action="review"],
+  html[data-theme] .b27-quick-card[data-b27-action="listening"]{grid-template-columns:54px minmax(0,1fr) 22px}
 }
 
 @media(prefers-reduced-motion:reduce){
