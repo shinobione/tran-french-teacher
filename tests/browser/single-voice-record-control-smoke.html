@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Single visible voice record control smoke</title>
+  <link rel="stylesheet" href="../../src/pedagogy/speaking-loop-content.css">
+</head>
+<body>
+  <div id="app">
+    <div class="app-shell screen-lesson">
+      <header class="topbar"><h1>Leçon 12</h1></header>
+      <div class="lesson-step">
+        <section class="speaking-loop-card" data-speaking-loop="teach" data-speaking-loop-phrase="Une table pour deux, s’il vous plaît.">
+          <div class="speaking-loop-phrase">Une table pour deux, s’il vous plaît.</div>
+          <div class="speaking-loop-actions">
+            <button type="button" data-speaking-record>🎙️ Enregistrer ma voix</button>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../src/core/field-audio-session.js?v=2.3.1-b34.1"></script>
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const visible = node => Boolean(node && node.getClientRects().length && getComputedStyle(node).visibility !== 'hidden');
+      const finish = () => {
+        const legacy = document.querySelector('.speaking-loop-card > .speaking-loop-actions[aria-hidden="true"]');
+        const field = document.querySelector('.field-speaking-audio');
+        const controls = [...document.querySelectorAll('[data-speaking-record],[data-field-audio-record]')];
+        const visibleControls = controls.filter(visible);
+        const legacyHidden = Boolean(legacy && getComputedStyle(legacy).display === 'none' && !visible(legacy));
+        const fieldVisible = root.dataset.fieldAudioSupported === '1'
+          ? Boolean(field && field.querySelector('[data-field-audio-record]') && visible(field.querySelector('[data-field-audio-record]')))
+          : true;
+        const ok = legacyHidden && fieldVisible && visibleControls.length <= 1;
+        root.dataset.singleVoiceRecordControl = ok ? 'ok' : 'fail';
+        root.dataset.singleVoiceVisibleCount = String(visibleControls.length);
+        root.dataset.singleVoiceLegacyDisplay = legacy ? getComputedStyle(legacy).display : 'missing';
+      };
+
+      window.addEventListener('load', () => setTimeout(finish, 250));
+      setTimeout(() => {
+        if (!root.dataset.singleVoiceRecordControl) finish();
+      }, 1500);
+    })();
+  </script>
+</body>
+</html>
