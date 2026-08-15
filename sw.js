@@ -38,6 +38,7 @@ const DEBUG='2.3.22-v58debug1';
 const V59A='2.3.23-v59a1';
 const V59B='2.3.24-v59b1';
 const V59C='2.3.25-v59c1';
+const V510ICONS='2.3.27-v510icons1';
 const CORE=[
   './','./index.html',
   `./styles.css?v=${V}`,`./brand.css?v=${V}`,`./learning-memory.css?v=${V}`,`./visual-pass.css?v=${V}`,`./lucie-avatar.css?v=${V}`,
@@ -46,9 +47,9 @@ const CORE=[
   './appearance-themes.css?v=1.1.0-v57art1',
   `./premium-theme-polish-v2-base.css?v=${V5F}`,`./premium-depth-pass.css?v=${V5F}`,`./premium-depth-mobile-geometry.css?v=${V5F}`,`./premium-mockup-polish-v3.css?v=${V5F}`,
   `./premium-v4-home.css?v=${V5F}`,`./premium-v4-progress.css?v=${V5F}`,`./premium-v4-practice.css?v=${V5F}`,`./premium-v4-listening.css?v=${V5F}`,`./premium-v4-settings.css?v=${V5F}`,`./premium-v4-ownership-hotfix.css?v=${V5F}`,`./premium-v4-route-coherence.css?v=${COHERENCE}`,`./premium-v4-motion.css?v=${MOTION}`,`./premium-v4-contrast.css?v=${V4}`,`./premium-v5-coherence.css?v=${V5}`,`./premium-v5-listening-settings.css?v=${V5}`,`./premium-v5-utility.css?v=${V5U}`,`./premium-v5-islands.css?v=${V5I}`,`./premium-v5-mockup-convergence.css?v=${V5M}`,`./premium-v5-fidelity-reset.css?v=${V5F}`,`./premium-v5-fidelity-refine.css?v=${V5FR}`,`./premium-v5-fidelity-card-hotfix.css?v=${V5FR}`,`./premium-v5-fidelity-settings-hotfix.css?v=${V5FR}`,`./premium-nav-geometry-hotfix.css?v=${V5F}`,`./premium-theme-polish.css?v=${V5F}`,
-  `./premium-v59-interactions.css?v=${V59A}`,`./premium-v59-lesson-layout.css?v=${V59B}`,`./premium-v59-system.css?v=${V59C}`,
+  `./premium-v59-interactions.css?v=${V59A}`,`./premium-v59-lesson-layout.css?v=${V59B}`,`./premium-v59-system.css?v=${V59C}`,`./premium-v510-practice-icons.css?v=${V510ICONS}`,
   `./data-recovery-core.js?v=${B28}`,`./data-recovery.js?v=${B28}`,
-  `./progress-safety.js?v=${V}`,`./app.js?v=${V}`,`./curriculum-stage2.js?v=${V}`,`./curriculum-stage3.js?v=${V}`,`./stage2-boot.js?v=${NAV}`,`./field-navigation-runtime.js?v=${NAV}`,`./field-audio-session.js?v=${AUDIO}`,`./theme-controller.js?v=${V5F}`,`./premium-v5-fidelity-reset.js?v=${V5F}`,`./premium-v59-interactions.js?v=${V59A}`,`./premium-v59-lesson-layout.js?v=${V59B}`,`./premium-v59-system.js?v=${V59C}`,
+  `./progress-safety.js?v=${V}`,`./app.js?v=${V}`,`./curriculum-stage2.js?v=${V}`,`./curriculum-stage3.js?v=${V}`,`./stage2-boot.js?v=${NAV}`,`./field-navigation-runtime.js?v=${NAV}`,`./field-audio-session.js?v=${AUDIO}`,`./theme-controller.js?v=${V5F}`,`./premium-v5-fidelity-reset.js?v=${V5F}`,`./premium-v59-interactions.js?v=${V59A}`,`./premium-v59-lesson-layout.js?v=${V59B}`,`./premium-v59-system.js?v=${V59C}`,`./premium-v510-practice-icons.js?v=${V510ICONS}`,
   `./debug-fr.js?v=${DEBUG}`,`./voice-ios.js?v=${V}`,`./free-voice.js?v=${V}`,`./learning-memory.js?v=${V}`,`./error-intelligence.js?v=${V}`,
   `./language-ratio-core.js?v=${V}`,`./language-ratio.js?v=${V}`,`./daily-coach.js?v=${V}`,`./mastery-engine.js?v=${V}`,`./mastery-stage3.js?v=${V}`,
   `./scenario-data.js?v=${V}`,`./real-life-data.js?v=${V}`,`./real-life-data-2.js?v=${V}`,`./real-life-data-3.js?v=${B26}`,`./scenario-host.js?v=${V}`,`./scenario-engine.js?v=${V}`,`./real-life-ux.js?v=${V}`,`./real-life-coach.js?v=${B26}`,
