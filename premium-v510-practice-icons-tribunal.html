@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>V5.10 Practice icon tribunal</title>
+  <title>V5.10 Practice pictogram tribunal</title>
   <style>html,body{margin:0;background:#080b12;color:#fff;font-family:system-ui}iframe{position:absolute;left:-9999px;width:390px;height:844px;border:0}#result{padding:20px}</style>
 </head>
 <body>
@@ -16,18 +16,19 @@
       const themes=['original','aurora','sunset','jade'];
       const waitFor=async(fn,timeout=15000)=>{const start=performance.now();while(performance.now()-start<timeout){try{const value=fn();if(value)return value}catch{}await new Promise(r=>setTimeout(r,50))}throw new Error('timeout')};
       const fail=error=>{result.dataset.v510PracticeIcons='fail';result.textContent=`FAIL: ${error?.message||error}`;document.documentElement.dataset.v510PracticeIcons='fail'};
-      const pass=()=>{result.dataset.v510PracticeIcons='ok';result.textContent='V5.10 practice icon system OK';document.documentElement.dataset.v510PracticeIcons='ok'};
+      const pass=()=>{result.dataset.v510PracticeIcons='ok';result.textContent='V5.10 practice pictogram system V2 OK';document.documentElement.dataset.v510PracticeIcons='ok'};
 
       frame.addEventListener('load',async()=>{
         try{
           const w=frame.contentWindow;
           const d=frame.contentDocument;
           await waitFor(()=>w.FrenchTranquilleBuild27Shell?.openPractice&&w.FrenchTranquilleThemes?.apply&&w.FrenchTranquilleV510PracticeIcons?.refresh);
+          if(w.FrenchTranquilleV510PracticeIcons?.style!=='premium-pictogram-v2')throw new Error('V2 pictogram runtime marker missing');
           for(const theme of themes){
             w.FrenchTranquilleThemes.apply(theme);
             w.FrenchTranquilleBuild27Shell.openPractice();
             w.FrenchTranquilleV510PracticeIcons.refresh();
-            await waitFor(()=>d.querySelectorAll('.b27-practice-action .ft-v510-practice-glyph').length===4);
+            await waitFor(()=>d.querySelectorAll('.b27-practice-action .ft-v510-practice-pictogram').length===4);
             if(d.documentElement.dataset.theme!==theme)throw new Error(`theme ${theme} did not apply`);
             const cards=[...d.querySelectorAll('.b27-practice-action[data-b27-practice-action]')];
             if(cards.length!==4)throw new Error(`theme ${theme}: expected 4 practice cards, got ${cards.length}`);
@@ -37,23 +38,32 @@
               const card=cards.find(node=>node.dataset.b27PracticeAction===id);
               if(!card)throw new Error(`theme ${theme}: missing ${id} card`);
               const host=card.querySelector('.b27-practice-icon');
-              const glyph=host?.querySelector('.ft-v510-practice-glyph');
-              if(!host||!glyph)throw new Error(`theme ${theme}: ${id} missing SVG glyph`);
+              const glyph=host?.querySelector('.ft-v510-practice-pictogram');
+              if(!host||!glyph)throw new Error(`theme ${theme}: ${id} missing V2 pictogram`);
               if(host.dataset.v510PracticeIcon!==id)throw new Error(`theme ${theme}: ${id} ownership marker missing`);
+              if(glyph.dataset.v510Pictogram!==id)throw new Error(`theme ${theme}: ${id} pictogram identity missing`);
               if(host.textContent.trim())throw new Error(`theme ${theme}: ${id} still exposes text/emoji glyph content`);
+              const primaryShapes=[...glyph.querySelectorAll('.ft-v510-picto-primary')];
+              if(!primaryShapes.length)throw new Error(`theme ${theme}: ${id} missing primary pictogram shape`);
+              const hasFilledPrimary=primaryShapes.some(node=>{
+                const fill=w.getComputedStyle(node).fill;
+                return Boolean(fill&&fill!=='none'&&fill!=='transparent'&&fill!=='rgba(0, 0, 0, 0)');
+              });
+              if(!hasFilledPrimary)throw new Error(`theme ${theme}: ${id} has no filled primary shape`);
+              if(!glyph.querySelector('.ft-v510-picto-secondary,.ft-v510-picto-accent'))throw new Error(`theme ${theme}: ${id} missing secondary pictogram detail`);
               const hr=host.getBoundingClientRect();
               const gr=glyph.getBoundingClientRect();
               const dx=Math.abs((hr.left+hr.width/2)-(gr.left+gr.width/2));
               const dy=Math.abs((hr.top+hr.height/2)-(gr.top+gr.height/2));
               if(dx>0.75||dy>0.75)throw new Error(`theme ${theme}: ${id} not centered (${dx.toFixed(2)}, ${dy.toFixed(2)})`);
-              const cs=w.getComputedStyle(glyph);
               const hs=w.getComputedStyle(host);
+              const inner=w.getComputedStyle(host,'::before');
               if(hs.display!=='flex')throw new Error(`theme ${theme}: ${id} host is not flex-centered`);
-              if(cs.stroke==='none')throw new Error(`theme ${theme}: ${id} has no line stroke`);
+              if(inner.content==='none')throw new Error(`theme ${theme}: ${id} inner pictogram frame missing`);
               widths.push(Math.round(gr.width*10)/10);
               heights.push(Math.round(gr.height*10)/10);
             }
-            if(new Set(widths).size!==1||new Set(heights).size!==1)throw new Error(`theme ${theme}: inconsistent glyph geometry`);
+            if(new Set(widths).size!==1||new Set(heights).size!==1)throw new Error(`theme ${theme}: inconsistent pictogram geometry`);
           }
           pass();
         }catch(error){fail(error)}
