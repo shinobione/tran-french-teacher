@@ -38,7 +38,7 @@ const DEBUG='2.3.22-v58debug1';
 const V59A='2.3.23-v59a1';
 const V59B='2.3.24-v59b1';
 const V59C='2.3.25-v59c1';
-const V510ICONS='2.3.30-v510icons4';
+const V510ICONS='2.3.31-v510png1';
 const CORE=[
   './','./index.html',
   `./styles.css?v=${V}`,`./brand.css?v=${V}`,`./learning-memory.css?v=${V}`,`./visual-pass.css?v=${V}`,`./lucie-avatar.css?v=${V}`,
@@ -56,6 +56,7 @@ const CORE=[
   `./listening-data.js?v=${V}`,`./listening-engine.js?v=${V}`,`./ux-shell.js?v=${UX}`,`./interaction-ux.js?v=${UX}`,`./progression-ux.js?v=${B266}`,`./session-ux.js?v=${B265}`,`./session-ux-adapter.js?v=${P252}`,`./voice-replay.js?v=${B261}`,`./progress-details-dashboard.js?v=${B266}`,`./build26-3-ux.js?v=${B263}`,`./build26-4-ux.js?v=${B264}`,`./build26-5-ux.js?v=${B265}`,`./build26-6-ux.js?v=${B266}`,`./build26-7-ux.js?v=${B267}`,`./build26-8-ux.js?v=${B268}`,`./build26-9-ux.js?v=${B269}`,`./build27-app-shell.js?v=${B27}`,`./build27-smoke.js?v=${B27}`,`./data-recovery-smoke.js?v=${B28}`,`./build29-iphone-a11y.js?v=${B29}`,`./build29-smoke.js?v=${B29}`,`./speaking-loop-content.js?v=${B292}`,`./speaking-loop-smoke.js?v=${B292}`,`./speaking-loop-variety-smoke.js?v=${B292}`,`./runtime-contracts.js?v=${B30}`,`./runtime-bridge.js?v=${B30}`,`./build30-architecture-smoke.js?v=${B30}`,`./v2-release-smoke.js?v=${V2}`,'./release-v2.json',`./build-meta.js?v=${B29}`,`./settings-legal.js?v=${LEGAL}`,`./build31-loader.js?v=${B31}`,`./learner-intelligence.js?v=${B31}`,`./learner-intelligence-smoke.js?v=${B31}`,`./build32-loader.js?v=${B32}`,`./curriculum-stage4.js?v=${B32}`,`./build32-shell-extension.js?v=${B32}`,`./real-life-data-4.js?v=${B32}`,`./listening-data-2.js?v=${B32}`,`./learner-intelligence-v2.js?v=${B32}`,`./build32-smoke.js?v=${B32}`,`./manifest.webmanifest?v=${B29}`,
   `./assets/LOGO.png?v=${V}`,`./assets/Favicon.png?v=${V}`,'./assets/icon-192.webp','./assets/apple-touch-icon.png','./assets/HomeLogo.png?v=2.3.2-theme2',
   './assets/premium/brand/goat-favicon-32.png','./assets/premium/brand/goat-app-icon-180.png','./assets/premium/brand/goat-app-icon-192.webp','./assets/premium/brand/goat-app-icon-512.webp','./assets/premium/brand/goat-app-icon-maskable-512.webp',
+  './assets/premium/practice/speak-premium.webp','./assets/premium/practice/listen-premium.webp','./assets/premium/practice/review-premium.webp','./assets/premium/practice/real-life-premium.webp',
   './assets/premium/themes/original/background-v2.png','./assets/premium/themes/aurora/background.webp','./assets/premium/themes/sunset/background.webp','./assets/premium/themes/nocturne/background.webp',
   './assets/premium/themes/original/lesson-eiffel-v2.png','./assets/premium/themes/aurora/lesson-eiffel-v2.png','./assets/premium/themes/sunset/lesson-eiffel-v2.png','./assets/premium/themes/nocturne/lesson-eiffel-v2.png'
 ];
