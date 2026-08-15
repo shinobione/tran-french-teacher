@@ -1,4 +1,4 @@
-name: V5.10 Practice Icon System
+name: V5.10 Practice Pictogram System
 
 on:
   pull_request:
@@ -21,22 +21,26 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Static icon-system contract
+      - name: Static pictogram-system contract
         shell: bash
         run: |
           node --check premium-v510-practice-icons.js
           node --check sw.js
-          grep -q 'premium-v510-practice-icons.css?v=2.3.27-v510icons1' index.html
-          grep -q 'premium-v510-practice-icons.js?v=2.3.27-v510icons1' index.html
-          grep -q "const V510ICONS='2.3.27-v510icons1'" sw.js
+          grep -q 'premium-v510-practice-icons.css?v=2.3.28-v510icons2' index.html
+          grep -q 'premium-v510-practice-icons.js?v=2.3.28-v510icons2' index.html
+          grep -q "const V510ICONS='2.3.28-v510icons2'" sw.js
           grep -q 'premium-v510-practice-icons.css?v=${V510ICONS}' sw.js
           grep -q 'premium-v510-practice-icons.js?v=${V510ICONS}' sw.js
-          grep -q "conversation: svg" premium-v510-practice-icons.js
-          grep -q "listening: svg" premium-v510-practice-icons.js
-          grep -q "review: svg" premium-v510-practice-icons.js
-          grep -q "'real-life': svg" premium-v510-practice-icons.js
-          grep -q 'display:flex!important' premium-v510-practice-icons.css
-          grep -q 'stroke-width:1.8' premium-v510-practice-icons.css
+          grep -q "style: 'premium-pictogram-v2'" premium-v510-practice-icons.js
+          grep -q "conversation: svg('conversation'" premium-v510-practice-icons.js
+          grep -q "listening: svg('listening'" premium-v510-practice-icons.js
+          grep -q "review: svg('review'" premium-v510-practice-icons.js
+          grep -q "'real-life': svg('real-life'" premium-v510-practice-icons.js
+          grep -q 'ft-v510-picto-primary' premium-v510-practice-icons.js
+          grep -q 'ft-v510-picto-secondary' premium-v510-practice-icons.js
+          grep -q -- '--v510-picto-a' premium-v510-practice-icons.css
+          grep -q 'stroke-width:3.8' premium-v510-practice-icons.css
+          grep -q '::before' premium-v510-practice-icons.css
       - name: Start static server
         shell: bash
         run: |
@@ -44,7 +48,7 @@ jobs:
           echo $! >/tmp/ft-v510-icons-server.pid
           sleep 1
           google-chrome --version
-      - name: Chrome — four themes, four SVGs, optical centering
+      - name: Chrome — four themes, four premium pictograms, optical centering
         shell: bash
         run: |
           rm -rf /tmp/ft-v510-icons-profile /tmp/ft-v510-icons.html
@@ -56,7 +60,7 @@ jobs:
             --dump-dom 'http://127.0.0.1:4173/premium-v510-practice-icons-tribunal.html' \
             >/tmp/ft-v510-icons.html
           grep -q 'data-v510-practice-icons="ok"' /tmp/ft-v510-icons.html
-          grep -q 'V5.10 practice icon system OK' /tmp/ft-v510-icons.html
+          grep -q 'V5.10 practice pictogram system V2 OK' /tmp/ft-v510-icons.html
       - name: Stop static server
         if: always()
         shell: bash
