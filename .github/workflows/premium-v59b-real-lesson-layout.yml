@@ -22,17 +22,17 @@ jobs:
       - name: Static contracts and sanctuaries
         run: |
           set -euo pipefail
-          test -s premium-v59-lesson-layout.js
-          test -s premium-v59-lesson-layout.css
-          test -s premium-v59-lesson-layout-tribunal.html
-          node --check premium-v59-lesson-layout.js
-          node --check theme-controller.js
-          grep -q "const V59B='2.3.24-v59b1'" theme-controller.js
-          grep -q 'premium-v59-lesson-layout.css' theme-controller.js
-          grep -q 'premium-v59-lesson-layout.js' theme-controller.js
-          grep -q 'ft-v59-lesson-identity' premium-v59-lesson-layout.js premium-v59-lesson-layout.css
-          grep -q 'order:-1' premium-v59-lesson-layout.css
-          grep -q 'ft-v59-lesson-hero::after' premium-v59-lesson-layout.css
+          test -s src/premium/premium-v59-lesson-layout.js
+          test -s src/premium/premium-v59-lesson-layout.css
+          test -s tests/browser/premium-v59-lesson-layout-tribunal.html
+          node --check src/premium/premium-v59-lesson-layout.js
+          node --check src/core/theme-controller.js
+          grep -q "const V59B='2.3.24-v59b1'" src/core/theme-controller.js
+          grep -q 'src/premium/premium-v59-lesson-layout.css' src/core/theme-controller.js
+          grep -q 'src/premium/premium-v59-lesson-layout.js' src/core/theme-controller.js
+          grep -q 'ft-v59-lesson-identity' src/premium/premium-v59-lesson-layout.js src/premium/premium-v59-lesson-layout.css
+          grep -q 'order:-1' src/premium/premium-v59-lesson-layout.css
+          grep -q 'ft-v59-lesson-hero::after' src/premium/premium-v59-lesson-layout.css
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
           test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
           test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
@@ -52,7 +52,7 @@ jobs:
             timeout --signal=TERM --kill-after=5s 35s \
               google-chrome --headless=new --no-sandbox --disable-gpu \
               --window-size="${width},${height}" --virtual-time-budget=5000 --dump-dom \
-              'http://127.0.0.1:4173/premium-v59-lesson-layout-tribunal.html' >"/tmp/v59b-${label}.html"
+              'http://127.0.0.1:4173/tests/browser/premium-v59-lesson-layout-tribunal.html' >"/tmp/v59b-${label}.html"
             grep -q 'data-v59b="ok"' "/tmp/v59b-${label}.html" || { grep -o 'data-v59b-detail="[^"]*"' "/tmp/v59b-${label}.html" || true; exit 1; }
           }
           run_case iphone 390 844

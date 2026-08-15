@@ -24,7 +24,7 @@ jobs:
           git fetch origin main
           BASE=$(git merge-base HEAD origin/main)
           echo "sha=$BASE" >> "$GITHUB_OUTPUT"
-          git show "$BASE:build-meta.js" | grep -q "version: '1.17.0', build: 24"
+          git show "$BASE:src/core/build-meta.js" | grep -q "version: '1.17.0', build: 24"
           echo "Production base is Build 24: $BASE"
 
       - name: Wait for quality and Pages on exact production SHA

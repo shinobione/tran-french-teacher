@@ -20,20 +20,20 @@ jobs:
 
       - name: Syntax, manifest and wiring
         run: |
-          node --check build29-iphone-a11y.js
-          node --check build29-smoke.js
-          node --check build-meta.js
+          node --check src/ui/build29-iphone-a11y.js
+          node --check tests/smoke/build29-smoke.js
+          node --check src/core/build-meta.js
           node --check sw.js
           node --check tools/build29-offline-cdp.mjs
           grep -q 'viewport-fit=cover' index.html
           grep -q 'assets/premium/brand/goat-app-icon-180.png?v=2.3.26-v59d1' index.html
-          grep -q 'build29-iphone-a11y.css?v=1.22.0-b29' index.html
-          grep -q 'build29-iphone-a11y.js?v=1.22.0-b29' index.html
-          grep -q 'build29-smoke.js?v=1.22.0-b29' index.html
-          grep -q 'build-meta.js?v=1.22.0-b29' index.html
+          grep -q 'src/ui/build29-iphone-a11y.css?v=1.22.0-b29' index.html
+          grep -q 'src/ui/build29-iphone-a11y.js?v=1.22.0-b29' index.html
+          grep -q 'tests/smoke/build29-smoke.js?v=1.22.0-b29' index.html
+          grep -q 'src/core/build-meta.js?v=1.22.0-b29' index.html
           node - <<'NODE'
           const fs=require('fs');
-          const text=fs.readFileSync('build-meta.js','utf8');
+          const text=fs.readFileSync('src/core/build-meta.js','utf8');
           const match=text.match(/const META = \{ version: '[^']+', build: '([^']+)'/);
           if(!match || Number(match[1]) < 29) throw new Error('Build 29 contract cannot run on a pre-29 build');
           NODE
@@ -49,25 +49,25 @@ jobs:
           grep -q "const V5M='2.3.21-v57art1'" sw.js
           grep -q "const V5F='2.3.21-v57art1'" sw.js
           grep -q "const V5FR='2.3.21-v57art1'" sw.js
-          grep -q 'stage2-boot.js?v=${NAV}' sw.js
-          grep -q 'field-navigation-runtime.js?v=${NAV}' sw.js
-          grep -q 'theme-controller.js?v=${V5F}' sw.js
-          grep -q 'premium-theme-polish.css?v=${V5F}' sw.js
-          grep -q 'premium-v4-route-coherence.css?v=${COHERENCE}' sw.js
-          grep -q 'premium-v4-motion.css?v=${MOTION}' sw.js
-          grep -q 'premium-v4-contrast.css?v=${V4}' sw.js
-          grep -q 'premium-v5-coherence.css?v=${V5}' sw.js
-          grep -q 'premium-v5-listening-settings.css?v=${V5}' sw.js
-          grep -q 'premium-v5-utility.css?v=${V5U}' sw.js
-          grep -q 'premium-v5-islands.css?v=${V5I}' sw.js
-          grep -q 'premium-v5-mockup-convergence.css?v=${V5M}' sw.js
-          grep -q 'premium-v5-fidelity-reset.css?v=${V5F}' sw.js
-          grep -q 'premium-v5-fidelity-refine.css?v=${V5FR}' sw.js
-          grep -q 'premium-v5-fidelity-card-hotfix.css?v=${V5FR}' sw.js
-          grep -q 'premium-v4-ownership-hotfix.css?v=${V5F}' sw.js
-          grep -q 'build29-iphone-a11y.css' sw.js
-          grep -q 'build29-iphone-a11y.js' sw.js
-          grep -q 'build29-smoke.js' sw.js
+          grep -q 'src/core/stage2-boot.js?v=${NAV}' sw.js
+          grep -q 'src/core/field-navigation-runtime.js?v=${NAV}' sw.js
+          grep -q 'src/core/theme-controller.js?v=${V5F}' sw.js
+          grep -q 'src/premium/premium-theme-polish.css?v=${V5F}' sw.js
+          grep -q 'src/premium/premium-v4-route-coherence.css?v=${COHERENCE}' sw.js
+          grep -q 'src/premium/premium-v4-motion.css?v=${MOTION}' sw.js
+          grep -q 'src/premium/premium-v4-contrast.css?v=${V4}' sw.js
+          grep -q 'src/premium/premium-v5-coherence.css?v=${V5}' sw.js
+          grep -q 'src/premium/premium-v5-listening-settings.css?v=${V5}' sw.js
+          grep -q 'src/premium/premium-v5-utility.css?v=${V5U}' sw.js
+          grep -q 'src/premium/premium-v5-islands.css?v=${V5I}' sw.js
+          grep -q 'src/premium/premium-v5-mockup-convergence.css?v=${V5M}' sw.js
+          grep -q 'src/premium/premium-v5-fidelity-reset.css?v=${V5F}' sw.js
+          grep -q 'src/premium/premium-v5-fidelity-refine.css?v=${V5FR}' sw.js
+          grep -q 'src/premium/premium-v5-fidelity-card-hotfix.css?v=${V5FR}' sw.js
+          grep -q 'src/premium/premium-v4-ownership-hotfix.css?v=${V5F}' sw.js
+          grep -q 'src/ui/build29-iphone-a11y.css' sw.js
+          grep -q 'src/ui/build29-iphone-a11y.js' sw.js
+          grep -q 'tests/smoke/build29-smoke.js' sw.js
           grep -q 'assets/apple-touch-icon.png' sw.js
           grep -q 'assets/premium/brand/goat-app-icon-180.png' sw.js
           python3 - <<'PY'
@@ -90,14 +90,14 @@ jobs:
           test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
           test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
           test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
-          grep -q "francais-avec-luc:learner:v1" data-recovery-core.js
-          grep -q "french-tranquille:learning-memory:v1" data-recovery-core.js
-          grep -q "french-tranquille:error-intelligence:v1" data-recovery-core.js
-          grep -q "french-tranquille:scenarios:v1" data-recovery-core.js
-          grep -q "french-tranquille:listening:v1" data-recovery-core.js
-          grep -q "french-tranquille:milestones:v1" data-recovery-core.js
-          grep -q 'normal: 0.88' build-meta.js
-          grep -q 'slow: 0.65' build-meta.js
+          grep -q "francais-avec-luc:learner:v1" src/core/data-recovery-core.js
+          grep -q "french-tranquille:learning-memory:v1" src/core/data-recovery-core.js
+          grep -q "french-tranquille:error-intelligence:v1" src/core/data-recovery-core.js
+          grep -q "french-tranquille:scenarios:v1" src/core/data-recovery-core.js
+          grep -q "french-tranquille:listening:v1" src/core/data-recovery-core.js
+          grep -q "french-tranquille:milestones:v1" src/core/data-recovery-core.js
+          grep -q 'normal: 0.88' src/core/build-meta.js
+          grep -q 'slow: 0.65' src/core/build-meta.js
 
       - name: Start static server
         run: |

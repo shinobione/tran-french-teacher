@@ -16,26 +16,26 @@ jobs:
 
       - name: Static V5.3 contracts and sanctuaries
         run: |
-          grep -q -- '--pv53-islands-ready:1' premium-v5-islands.css
-          grep -q '.speaking-loop-card' premium-v5-islands.css
-          grep -q '.voice-replay-panel' premium-v5-islands.css
-          grep -q '.session-success' premium-v5-islands.css
-          grep -q '.scenario-lab-card' premium-v5-islands.css
-          grep -q 'prefers-reduced-motion:reduce' premium-v5-islands.css
-          grep -q 'premium-v5-islands.css?v=2.3.21-v57art1' premium-theme-polish.css
-          grep -q 'premium-v5-utility.css?v=2.3.21-v57art1' premium-theme-polish.css
-          test "$(tail -n 1 premium-theme-polish.css)" = "@import url('./premium-nav-geometry-hotfix.css?v=2.3.21-v57art1');"
+          grep -q -- '--pv53-islands-ready:1' src/premium/premium-v5-islands.css
+          grep -q '.speaking-loop-card' src/premium/premium-v5-islands.css
+          grep -q '.voice-replay-panel' src/premium/premium-v5-islands.css
+          grep -q '.session-success' src/premium/premium-v5-islands.css
+          grep -q '.scenario-lab-card' src/premium/premium-v5-islands.css
+          grep -q 'prefers-reduced-motion:reduce' src/premium/premium-v5-islands.css
+          grep -q 'src/premium/premium-v5-islands.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q 'src/premium/premium-v5-utility.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          test "$(tail -n 1 src/premium/premium-theme-polish.css)" = "@import url('./src/premium/premium-nav-geometry-hotfix.css?v=2.3.21-v57art1');"
           # Historical V5.3 owns its island layer and precache survivability.
           # The newest Premium slice owns the active cache/controller identity.
           grep -q "const V5I='2.3.21-v57art1'" sw.js
-          grep -q 'premium-v5-islands.css?v=${V5I}' sw.js
-          grep -q 'premiumV5Islands' premium-v5-islands-tribunal.html
-          grep -q 'scenario=real-runner-themed' premium-v5-islands-tribunal.html
-          grep -q 'data-capture-surface=.oral' premium-v5-islands-fixture.html
+          grep -q 'src/premium/premium-v5-islands.css?v=${V5I}' sw.js
+          grep -q 'premiumV5Islands' tests/browser/premium-v5-islands-tribunal.html
+          grep -q 'scenario=real-runner-themed' tests/browser/premium-v5-islands-tribunal.html
+          grep -q 'data-capture-surface=.oral' tests/browser/premium-v5-islands-fixture.html
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
           test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
           test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
-          test "$(git hash-object field-audio-session.js)" = "06ca40074b345d77b8fc0c46fdb73ab35ffa2cd3"
+          test "$(git hash-object src/core/field-audio-session.js)" = "06ca40074b345d77b8fc0c46fdb73ab35ffa2cd3"
           test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
           test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
 
@@ -52,7 +52,7 @@ jobs:
             google-chrome --headless=new --no-sandbox --disable-gpu \
             --disable-background-timer-throttling --disable-renderer-backgrounding \
             --virtual-time-budget=50000 --dump-dom \
-            'http://127.0.0.1:4173/premium-v5-islands-tribunal.html' > /tmp/v53-islands.html
+            'http://127.0.0.1:4173/tests/browser/premium-v5-islands-tribunal.html' > /tmp/v53-islands.html
           grep -q 'data-premium-v5-islands="ok"' /tmp/v53-islands.html || { grep -o 'data-premium-v5-islands-detail="[^"]*"' /tmp/v53-islands.html || true; exit 1; }
           grep -q 'speaking=themed' /tmp/v53-islands.html
           grep -q 'voice-replay=themed' /tmp/v53-islands.html
@@ -67,7 +67,7 @@ jobs:
             google-chrome --headless=new --no-sandbox --disable-gpu --force-prefers-reduced-motion \
             --disable-background-timer-throttling --disable-renderer-backgrounding \
             --virtual-time-budget=50000 --dump-dom \
-            'http://127.0.0.1:4173/premium-v5-islands-tribunal.html' > /tmp/v53-islands-reduced.html
+            'http://127.0.0.1:4173/tests/browser/premium-v5-islands-tribunal.html' > /tmp/v53-islands-reduced.html
           grep -q 'data-premium-v5-islands="ok"' /tmp/v53-islands-reduced.html || { grep -o 'data-premium-v5-islands-detail="[^"]*"' /tmp/v53-islands-reduced.html || true; exit 1; }
           grep -q 'scenario=real-runner-themed' /tmp/v53-islands-reduced.html
 
@@ -81,9 +81,9 @@ jobs:
             dom="/tmp/v53-${label}-${theme}-${surface}.html"
             rm -rf "$profile" "$png" "$dom"
             if [ "$surface" = oral ]; then
-              url="http://127.0.0.1:4173/premium-v5-islands-fixture.html?theme=${theme}"
+              url="http://127.0.0.1:4173/tests/browser/premium-v5-islands-fixture.html?theme=${theme}"
             else
-              url="http://127.0.0.1:4173/premium-v5-islands-visual-capture.html?theme=${theme}&surface=${surface}"
+              url="http://127.0.0.1:4173/tests/browser/premium-v5-islands-visual-capture.html?theme=${theme}&surface=${surface}"
             fi
             timeout --signal=TERM --kill-after=5s 50s \
               google-chrome --headless=new --no-sandbox --disable-gpu --hide-scrollbars \

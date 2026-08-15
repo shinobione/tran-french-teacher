@@ -20,21 +20,21 @@ jobs:
 
       - name: Syntax, version, cache and wiring
         run: |
-          node --check session-ux.js
-          node --check progression-ux.js
-          node --check build26-5-ux.js
-          node --check build-meta.js
+          node --check src/ui/session-ux.js
+          node --check src/ui/progression-ux.js
+          node --check src/ui/build26-5-ux.js
+          node --check src/core/build-meta.js
           node --check sw.js
-          grep -q 'build26-5-ux.css?v=1.19.5-b26.5' index.html
-          grep -q 'build26-5-ux.js?v=1.19.5-b26.5' index.html
-          grep -q 'progression-ux.js?v=' index.html
-          grep -q 'session-ux.js?v=1.19.5-b26.5' index.html
-          grep -q 'build-meta.js?v=' index.html
-          grep -q 'FrenchTranquilleBuild265UX' build-meta.js
-          grep -q 'build26-5-ux.css' sw.js
-          grep -q 'build26-5-ux.js' sw.js
-          grep -q 'setPracticeMode' session-ux.js
-          grep -q "progressComposition = 'contained-independent-columns'" progression-ux.js
+          grep -q 'src/ui/build26-5-ux.css?v=1.19.5-b26.5' index.html
+          grep -q 'src/ui/build26-5-ux.js?v=1.19.5-b26.5' index.html
+          grep -q 'src/ui/progression-ux.js?v=' index.html
+          grep -q 'src/ui/session-ux.js?v=1.19.5-b26.5' index.html
+          grep -q 'src/core/build-meta.js?v=' index.html
+          grep -q 'FrenchTranquilleBuild265UX' src/core/build-meta.js
+          grep -q 'src/ui/build26-5-ux.css' sw.js
+          grep -q 'src/ui/build26-5-ux.js' sw.js
+          grep -q 'setPracticeMode' src/ui/session-ux.js
+          grep -q "progressComposition = 'contained-independent-columns'" src/ui/progression-ux.js
 
       - name: Learner, voice and branding sanctuaries remain byte-identical
         run: |
@@ -43,8 +43,8 @@ jobs:
           test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
           test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
           grep -q "francais-avec-luc:learner:v1" app.js
-          grep -q 'normal: 0.88' build-meta.js
-          grep -q 'slow: 0.65' build-meta.js
+          grep -q 'normal: 0.88' src/core/build-meta.js
+          grep -q 'slow: 0.65' src/core/build-meta.js
 
       - name: Start static server
         run: |

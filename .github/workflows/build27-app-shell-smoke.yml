@@ -20,17 +20,17 @@ jobs:
 
       - name: Syntax, version, cache and wiring
         run: |
-          node --check build27-app-shell.js
-          node --check build27-smoke.js
-          node --check build-meta.js
+          node --check src/ui/build27-app-shell.js
+          node --check tests/smoke/build27-smoke.js
+          node --check src/core/build-meta.js
           node --check sw.js
-          grep -q 'build27-app-shell.css?v=1.20.0-b27' index.html
-          grep -q 'build27-app-shell.js?v=1.20.0-b27' index.html
-          grep -q 'build27-smoke.js?v=1.20.0-b27' index.html
-          grep -q 'build-meta.js?v=' index.html
+          grep -q 'src/ui/build27-app-shell.css?v=1.20.0-b27' index.html
+          grep -q 'src/ui/build27-app-shell.js?v=1.20.0-b27' index.html
+          grep -q 'tests/smoke/build27-smoke.js?v=1.20.0-b27' index.html
+          grep -q 'src/core/build-meta.js?v=' index.html
           node - <<'NODE'
           const fs=require('fs');
-          const text=fs.readFileSync('build-meta.js','utf8');
+          const text=fs.readFileSync('src/core/build-meta.js','utf8');
           const match=text.match(/const META = \{ version: '[^']+', build: '([0-9]+(?:\.[0-9]+)?)'/);
           if(!match || Number(match[1]) < 27) throw new Error('Build 27 shell contract cannot run on a pre-27 build');
           const sw=fs.readFileSync('sw.js','utf8');
@@ -39,11 +39,11 @@ jobs:
           const hotfix=html.match(/const HOTFIX='([^']+)'/);
           if(!cache || !hotfix || cache[1]!==hotfix[1]) throw new Error(`PWA cache identity mismatch: sw=${cache?.[1]} html=${hotfix?.[1]}`);
           NODE
-          grep -q 'FrenchTranquilleBuild27Shell' build-meta.js
+          grep -q 'FrenchTranquilleBuild27Shell' src/core/build-meta.js
           grep -q "const CACHE='tran-french-teacher-v" sw.js
-          grep -q 'b27-practice-page' build27-app-shell.js build27-app-shell.css
-          grep -q 'b27-progress-page' build27-app-shell.js build27-app-shell.css
-          grep -q 'b27-journey-page' build27-app-shell.js build27-app-shell.css
+          grep -q 'b27-practice-page' src/ui/build27-app-shell.js src/ui/build27-app-shell.css
+          grep -q 'b27-progress-page' src/ui/build27-app-shell.js src/ui/build27-app-shell.css
+          grep -q 'b27-journey-page' src/ui/build27-app-shell.js src/ui/build27-app-shell.css
 
       - name: Learner, voice and branding sanctuaries remain byte-identical
         run: |
@@ -51,9 +51,9 @@ jobs:
           test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
           test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
           test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
-          grep -q "francais-avec-luc:learner:v1" app.js build27-app-shell.js
-          grep -q 'normal: 0.88' build-meta.js
-          grep -q 'slow: 0.65' build-meta.js
+          grep -q "francais-avec-luc:learner:v1" app.js src/ui/build27-app-shell.js
+          grep -q 'normal: 0.88' src/core/build-meta.js
+          grep -q 'slow: 0.65' src/core/build-meta.js
 
       - name: Start static server
         run: |

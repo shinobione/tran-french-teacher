@@ -171,7 +171,7 @@ La CI continue volontairement de protéger l’ancienne étape :
 
 - **v1.17.0 — Build 24 — Real Life French II** ;
 - **28 situations / 84 tours** avant Pack III ;
-- `real-life-data-2.js` reste le témoin canonique de ce jalon.
+- `src/pedagogy/real-life-data-2.js` reste le témoin canonique de ce jalon.
 
 Cette référence historique ne décrit pas le produit courant ; elle empêche les évolutions V2.x/V2.3 de réécrire le passé pour rendre les tests verts.
 

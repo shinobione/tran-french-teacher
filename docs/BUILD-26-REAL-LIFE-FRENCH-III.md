@@ -16,8 +16,8 @@ Build 26 ajoute du français oral naturel côté interlocuteur et des réponses 
 ## Nouveaux fichiers
 
 ```text
-real-life-data-3.js
-real-life-coach.js
+src/pedagogy/real-life-data-3.js
+src/pedagogy/real-life-coach.js
 .github/workflows/real-life-3-smoke.yml
 ```
 

@@ -19,14 +19,14 @@ jobs:
           node-version: '22'
       - name: Static calibration contract
         run: |
-          node --check build-meta.js
+          node --check src/core/build-meta.js
           node --check sw.js
-          grep -q 'normal: 0.88' build-meta.js
-          grep -q 'engineSlow: 0.68' build-meta.js
-          grep -q 'slow: 0.65' build-meta.js
-          grep -q 'LISTENING_RATES.slow' build-meta.js
-          grep -q 'FrenchTranquilleListeningRates' build-meta.js
-          grep -q 'build-meta.js?v=' index.html
+          grep -q 'normal: 0.88' src/core/build-meta.js
+          grep -q 'engineSlow: 0.68' src/core/build-meta.js
+          grep -q 'slow: 0.65' src/core/build-meta.js
+          grep -q 'LISTENING_RATES.slow' src/core/build-meta.js
+          grep -q 'FrenchTranquilleListeningRates' src/core/build-meta.js
+          grep -q 'src/core/build-meta.js?v=' index.html
           grep -q "n>=.65" voice-ios.js
       - name: Voice and branding remain sanctuarized
         run: |

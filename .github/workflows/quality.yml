@@ -22,7 +22,7 @@ jobs:
 
       - name: Syntax — full active runtime
         run: |
-          for f in app.js progress-safety.js curriculum-stage2.js curriculum-stage3.js stage2-boot.js debug-fr.js voice-ios.js free-voice.js learning-memory.js error-intelligence.js language-ratio-core.js language-ratio.js daily-coach.js mastery-engine.js mastery-stage3.js scenario-data.js real-life-data.js real-life-data-2.js scenario-host.js scenario-engine.js real-life-ux.js listening-data.js listening-engine.js ux-shell.js build-meta.js sw.js; do
+          for f in app.js src/core/progress-safety.js src/pedagogy/curriculum-stage2.js src/pedagogy/curriculum-stage3.js src/core/stage2-boot.js src/core/debug-fr.js voice-ios.js free-voice.js src/pedagogy/learning-memory.js src/pedagogy/error-intelligence.js src/pedagogy/language-ratio-core.js src/pedagogy/language-ratio.js src/pedagogy/daily-coach.js src/pedagogy/mastery-engine.js src/pedagogy/mastery-stage3.js src/pedagogy/scenario-data.js src/pedagogy/real-life-data.js src/pedagogy/real-life-data-2.js src/pedagogy/scenario-host.js src/pedagogy/scenario-engine.js src/pedagogy/real-life-ux.js src/pedagogy/listening-data.js src/pedagogy/listening-engine.js src/ui/ux-shell.js src/core/build-meta.js sw.js; do
             node --check "$f"
           done
 
@@ -42,12 +42,12 @@ jobs:
           global.window=global;
           global.document={querySelector:s=>s==='#app'?app:null,querySelectorAll:()=>[],getElementById:id=>id==='app'?app:null,addEventListener:()=>{},createElement:()=>({className:'',dataset:{},innerHTML:'',appendChild(){},prepend(){},remove(){},querySelector(){return null},querySelectorAll(){return[]}})};
           global.navigator={};global.confirm=()=>false;global.requestAnimationFrame=fn=>fn();global.queueMicrotask=fn=>fn();global.MutationObserver=class{observe(){}};global.window.addEventListener=()=>{};global.window.scrollTo=()=>{};
-          require('./app.js');require('./curriculum-stage2.js');require('./curriculum-stage3.js');
+          require('./app.js');require('./src/pedagogy/curriculum-stage2.js');require('./src/pedagogy/curriculum-stage3.js');
           const c=global.FrenchTranquilleCurriculum;
           if(!c||c.lessons.length!==40||c.items.length!==241)throw new Error(`Curriculum mismatch ${c?.lessons?.length}/${c?.items?.length}`);
           const itemIds=new Set(c.items.map(x=>x.id));
           if(itemIds.size!==241)throw new Error('Duplicate curriculum item IDs');
-          require('./scenario-data.js');require('./real-life-data.js');require('./real-life-data-2.js');
+          require('./src/pedagogy/scenario-data.js');require('./src/pedagogy/real-life-data.js');require('./src/pedagogy/real-life-data-2.js');
           const all=global.FrenchTranquilleScenarioData.scenarios;
           const p1=global.FrenchTranquilleRealLife1;
           const p2=global.FrenchTranquilleRealLife2;
@@ -74,23 +74,23 @@ jobs:
 
       - name: Error / Listening static contracts
         run: |
-          grep -q 'MAX_ITEM_EVENTS = 20' error-intelligence.js
-          grep -q 'MAX_RECENT_EVENTS = 120' error-intelligence.js
-          grep -Fq 'const source=`listening-${currentExercise.family}`;' listening-engine.js
+          grep -q 'MAX_ITEM_EVENTS = 20' src/pedagogy/error-intelligence.js
+          grep -q 'MAX_RECENT_EVENTS = 120' src/pedagogy/error-intelligence.js
+          grep -Fq 'const source=`listening-${currentExercise.family}`;' src/pedagogy/listening-engine.js
 
       - name: Build 24 wiring and docs
         run: |
           grep -q '1.17.0-b24' index.html
           grep -q '1.17.0-b24' sw.js
-          grep -q "version: '1.17.0', build: 24" build-meta.js
-          grep -q 'real-life-data-2.js' index.html sw.js
-          grep -q 'real-life-jerry-2' real-life-data-2.js
-          grep -q 'MAX_OPEN = 6' real-life-ux.js
-          grep -q 'real-life-open-hidden' real-life-ux.css
+          grep -q "version: '1.17.0', build: 24" src/core/build-meta.js
+          grep -q 'src/pedagogy/real-life-data-2.js' index.html sw.js
+          grep -q 'real-life-jerry-2' src/pedagogy/real-life-data-2.js
+          grep -q 'MAX_OPEN = 6' src/pedagogy/real-life-ux.js
+          grep -q 'real-life-open-hidden' src/pedagogy/real-life-ux.css
           grep -q 'v1.17.0' README.md
           grep -q 'Build 24 — Real Life French II' README.md ROADMAP.md CHANGELOG.md docs/BUILD-24-REAL-LIFE-FRENCH-II.md
           grep -q '28 situations / 84 tours' README.md docs/BUILD-24-REAL-LIFE-FRENCH-II.md
-          grep -q 'real-life-data-2.js' docs/ARCHITECTURE.md
+          grep -q 'src/pedagogy/real-life-data-2.js' docs/ARCHITECTURE.md
 
       - name: Start static test server
         run: |

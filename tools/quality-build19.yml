@@ -21,40 +21,40 @@ jobs:
       - name: Syntax check
         run: |
           node --check app.js
-          node --check curriculum-stage2.js
-          node --check curriculum-stage3.js
-          node --check stage2-boot.js
-          node --check debug-fr.js
+          node --check src/pedagogy/curriculum-stage2.js
+          node --check src/pedagogy/curriculum-stage3.js
+          node --check src/core/stage2-boot.js
+          node --check src/core/debug-fr.js
           node --check voice-ios.js
           node --check free-voice.js
-          node --check learning-memory.js
-          node --check daily-coach.js
-          node --check mastery-engine.js
-          node --check mastery-stage3.js
-          node --check scenario-data.js
-          node --check scenario-host.js
-          node --check scenario-engine.js
-          node --check error-intelligence.js
-          node --check build-meta.js
+          node --check src/pedagogy/learning-memory.js
+          node --check src/pedagogy/daily-coach.js
+          node --check src/pedagogy/mastery-engine.js
+          node --check src/pedagogy/mastery-stage3.js
+          node --check src/pedagogy/scenario-data.js
+          node --check src/pedagogy/scenario-host.js
+          node --check src/pedagogy/scenario-engine.js
+          node --check src/pedagogy/error-intelligence.js
+          node --check src/core/build-meta.js
 
       - name: Historical core guard
         run: |
           grep -q "id:'l1'" app.js
           grep -q "id:'l15'" app.js
-          grep -q "id:'l16'" curriculum-stage2.js
-          grep -q "id:'l25'" curriculum-stage2.js
-          grep -q "french-tranquille:learning-memory:v1" learning-memory.js
-          grep -q 'daily-coach-card' daily-coach.js
-          grep -q 'mastery-home-card' mastery-engine.js
-          grep -q "french-tranquille:scenarios:v1" scenario-engine.js
-          grep -q "french-tranquille:error-intelligence:v1" error-intelligence.js
-          grep -q 'scenario-host' scenario-host.js
+          grep -q "id:'l16'" src/pedagogy/curriculum-stage2.js
+          grep -q "id:'l25'" src/pedagogy/curriculum-stage2.js
+          grep -q "french-tranquille:learning-memory:v1" src/pedagogy/learning-memory.js
+          grep -q 'daily-coach-card' src/pedagogy/daily-coach.js
+          grep -q 'mastery-home-card' src/pedagogy/mastery-engine.js
+          grep -q "french-tranquille:scenarios:v1" src/pedagogy/scenario-engine.js
+          grep -q "french-tranquille:error-intelligence:v1" src/pedagogy/error-intelligence.js
+          grep -q 'scenario-host' src/pedagogy/scenario-host.js
 
       - name: Curriculum Stage 3 contract
         run: |
           node <<'NODE'
           const fs = require('fs');
-          const source = fs.readFileSync('curriculum-stage3.js','utf8');
+          const source = fs.readFileSync('src/pedagogy/curriculum-stage3.js','utf8');
           const lessonIds = [...source.matchAll(/id:'(l(?:2[6-9]|3[0-9]|40))'/g)].map(m=>m[1]);
           if (lessonIds.length !== 15) throw new Error(`Expected 15 Stage3 lessons, got ${lessonIds.length}`);
           if (new Set(lessonIds).size !== 15) throw new Error('Stage3 lesson IDs are not unique');
@@ -79,7 +79,7 @@ jobs:
         run: |
           node <<'NODE'
           const fs=require('fs');
-          const files=['app.js','curriculum-stage2.js','curriculum-stage3.js'];
+          const files=['app.js','src/pedagogy/curriculum-stage2.js','src/pedagogy/curriculum-stage3.js'];
           const ids=[];
           for(const file of files){
             const text=fs.readFileSync(file,'utf8');
@@ -94,47 +94,47 @@ jobs:
 
       - name: Build 19 wiring guard
         run: |
-          grep -q 'curriculum-stage3.css' index.html
-          grep -q 'curriculum-stage3.js' index.html
-          grep -q 'mastery-stage3.css' index.html
-          grep -q 'mastery-stage3.js' index.html
-          grep -q 'curriculum-stage3.css' sw.js
-          grep -q 'curriculum-stage3.js' sw.js
-          grep -q 'mastery-stage3.css' sw.js
-          grep -q 'mastery-stage3.js' sw.js
-          grep -q "version: '1.12.0', build: 19" build-meta.js
+          grep -q 'src/pedagogy/curriculum-stage3.css' index.html
+          grep -q 'src/pedagogy/curriculum-stage3.js' index.html
+          grep -q 'src/pedagogy/mastery-stage3.css' index.html
+          grep -q 'src/pedagogy/mastery-stage3.js' index.html
+          grep -q 'src/pedagogy/curriculum-stage3.css' sw.js
+          grep -q 'src/pedagogy/curriculum-stage3.js' sw.js
+          grep -q 'src/pedagogy/mastery-stage3.css' sw.js
+          grep -q 'src/pedagogy/mastery-stage3.js' sw.js
+          grep -q "version: '1.12.0', build: 19" src/core/build-meta.js
           grep -q '1.12.0-b19' index.html
           grep -q '1.12.0-b19' sw.js
-          grep -q 'FrenchTranquilleStage3' build-meta.js
-          grep -q 'FrenchTranquilleMasteryStage3' build-meta.js
+          grep -q 'FrenchTranquilleStage3' src/core/build-meta.js
+          grep -q 'FrenchTranquilleMasteryStage3' src/core/build-meta.js
 
       - name: A1 Core mastery contract
         run: |
-          grep -q 'STAGE_LESSONS.length' mastery-stage3.js
-          grep -q 'knownRatio >= .95' mastery-stage3.js
-          grep -q 'reviewedRatio >= .70' mastery-stage3.js
-          grep -q 'solidRatio >= .55' mastery-stage3.js
-          grep -q 'fragileRatio <= .20' mastery-stage3.js
-          grep -q 'mastery-stage3-card' mastery-stage3.js
-          grep -q 'mastery-stage3-chip' mastery-stage3.js
-          grep -q 'stage3Smoke' mastery-stage3.js
+          grep -q 'STAGE_LESSONS.length' src/pedagogy/mastery-stage3.js
+          grep -q 'knownRatio >= .95' src/pedagogy/mastery-stage3.js
+          grep -q 'reviewedRatio >= .70' src/pedagogy/mastery-stage3.js
+          grep -q 'solidRatio >= .55' src/pedagogy/mastery-stage3.js
+          grep -q 'fragileRatio <= .20' src/pedagogy/mastery-stage3.js
+          grep -q 'mastery-stage3-card' src/pedagogy/mastery-stage3.js
+          grep -q 'mastery-stage3-chip' src/pedagogy/mastery-stage3.js
+          grep -q 'stage3Smoke' src/pedagogy/mastery-stage3.js
 
       - name: Learning Memory / Voice / Error compatibility
         run: |
-          grep -q 'FrenchTranquilleCurriculum' learning-memory.js
+          grep -q 'FrenchTranquilleCurriculum' src/pedagogy/learning-memory.js
           grep -q 'curriculum().items' free-voice.js
           grep -q 'FrenchTranquilleMemory.*recordPractice' free-voice.js
           grep -q 'FrenchTranquilleErrors.*recordAttempt' free-voice.js
-          grep -q 'itemById' error-intelligence.js
-          grep -q 'sourceChannel' error-intelligence.js
-          grep -q 'MAX_ITEM_EVENTS = 20' error-intelligence.js
-          grep -q 'MAX_RECENT_EVENTS = 120' error-intelligence.js
+          grep -q 'itemById' src/pedagogy/error-intelligence.js
+          grep -q 'sourceChannel' src/pedagogy/error-intelligence.js
+          grep -q 'MAX_ITEM_EVENTS = 20' src/pedagogy/error-intelligence.js
+          grep -q 'MAX_RECENT_EVENTS = 120' src/pedagogy/error-intelligence.js
 
       - name: Scenario catalog non-regression
         run: |
           node <<'NODE'
           global.window=global;
-          require('./scenario-data.js');
+          require('./src/pedagogy/scenario-data.js');
           const s=global.FrenchTranquilleScenarioData?.scenarios||[];
           if(s.length!==12)throw new Error(`Expected 12 scenarios, got ${s.length}`);
           if(new Set(s.map(x=>x.id)).size!==12)throw new Error('Scenario IDs not unique');

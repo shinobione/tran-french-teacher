@@ -91,7 +91,7 @@ Ainsi :
 
 ## Dashboard : appartenance stable
 
-`progress-details-dashboard.js` reçoit en plus un contrat défensif :
+`src/ui/progress-details-dashboard.js` reçoit en plus un contrat défensif :
 
 - chaque carte reçoit une famille stable `data-progress-detail-family` ;
 - une carte déjà classée n’est plus reclassée à cause d’un changement de texte/DOM ;

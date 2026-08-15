@@ -22,9 +22,9 @@ Une vidéo d’usage réel a montré une séparation cohérente entre les contr�
 
 La surface Today était composée par plusieurs couches indépendantes :
 
-1. `daily-coach.js` crée les boutons Daily.
-2. `listening-engine.js` injecte Listening dans `.daily-steps`.
-3. `session-ux.js` déplaçait les boutons Daily dans un `<details>`, puis les remettait dans `.daily-steps`, supprimait le disclosure et le reconstruisait.
+1. `src/pedagogy/daily-coach.js` crée les boutons Daily.
+2. `src/pedagogy/listening-engine.js` injecte Listening dans `.daily-steps`.
+3. `src/ui/session-ux.js` déplaçait les boutons Daily dans un `<details>`, puis les remettait dans `.daily-steps`, supprimait le disclosure et le reconstruisait.
 4. Listening et Session UX observent tous deux les mutations `childList`.
 
 Un contrôle visible pouvait donc être remplacé entre le feedback `pointerdown` et le `click` final. Le `<summary>` natif de `Voir les autres activités` était également différent des vrais boutons couverts par l’Interaction Layer.
@@ -33,7 +33,7 @@ Un contrôle visible pouvait donc être remplacé entre le feedback `pointerdown
 
 ## Runtime fix
 
-Build 26.3 ajoute une couche isolée `build26-3-ux.js` / `build26-3-ux.css`.
+Build 26.3 ajoute une couche isolée `src/ui/build26-3-ux.js` / `src/ui/build26-3-ux.css`.
 
 ### Stable Today controls
 

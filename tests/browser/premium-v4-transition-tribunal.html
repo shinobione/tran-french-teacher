@@ -1,0 +1,112 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Premium V4 transition compositor tribunal</title><style>body{margin:0}iframe{display:block;border:0}</style></head>
+<body><iframe id="f" src="../../index.html?uxSmoke=lesson8&fieldNavV3=1" style="width:390px;height:844px"></iframe>
+<script>
+(()=>{'use strict';
+const R=document.documentElement,F=document.getElementById('f');
+const sizes=[[390,844],[430,932],[768,1024],[1280,800],[1440,900]];
+const themes=['aurora','sunset','jade'];
+const keys=['francais-avec-luc:learner:v1','french-tranquille:learning-memory:v1','french-tranquille:error-intelligence:v1','french-tranquille:scenarios:v1','french-tranquille:milestones:v1'];
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+const done=(ok,detail)=>{R.dataset.premiumV4TransitionTribunal=ok?'ok':'fail';R.dataset.premiumV4TransitionDetail=detail};
+const vis=(w,n)=>{if(!n)return false;const s=w.getComputedStyle(n),r=n.getBoundingClientRect(),o=parseFloat(s.opacity||'1');return s.display!=='none'&&s.visibility!=='hidden'&&o>.001&&r.width>1&&r.height>1};
+const op=(w,n)=>parseFloat(w.getComputedStyle(n).opacity||'1');
+F.onload=()=>setTimeout(async()=>{try{
+  const w=F.contentWindow,d=F.contentDocument;
+  const before=Object.fromEntries(keys.map(k=>[k,w.localStorage.getItem(k)]));
+  const nav=id=>d.querySelector(`.ux-bottom-nav [data-ux-nav="${id}"]`);
+  const legacyHome=()=>d.querySelector('.bottom-nav [data-go="home"]');
+  const content=()=>d.querySelector('#app .app-shell .content');
+  const overlays=()=>[...d.querySelectorAll('body > .b27-overlay,body > .listening-overlay')].filter(n=>vis(w,n));
+  const tokenColor=name=>{const p=d.createElement('i');p.style.cssText=`position:fixed;left:-9999px;color:var(${name})`;d.body.appendChild(p);const c=w.getComputedStyle(p).color;p.remove();return c};
+  const checkFrame=label=>{
+    const premium=d.documentElement.dataset.theme!=='original';
+    if(!premium)return;
+    if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv4-route-coherence-ready').trim()!=='1')throw Error(label+':coherence-marker');
+    const app=content(),ovs=overlays();
+    for(const n of d.querySelectorAll('.b27-page,.b27-overlay')){const s=w.getComputedStyle(n),r=n.getBoundingClientRect(),o=parseFloat(s.opacity||'1');if(s.display!=='none'&&s.visibility!=='hidden'&&r.width>1&&r.height>1&&o>.001&&o<.999)throw Error(label+':intermediate-opacity:'+n.className)}
+    if(ovs.length){
+      if(app&&w.getComputedStyle(app).visibility!=='hidden')throw Error(label+':underlay-visible');
+      if(ovs.some(n=>op(w,n)<.999))throw Error(label+':overlay-translucent');
+      const top=ovs.reduce((a,b)=>Number(w.getComputedStyle(a).zIndex||0)>=Number(w.getComputedStyle(b).zIndex||0)?a:b);
+      if(!vis(w,top))throw Error(label+':no-top-owner');
+    }else if(!vis(w,app))throw Error(label+':no-content-owner');
+  };
+  /* 16 ms ~= one 60 Hz frame. setTimeout is deterministic under Chrome's
+     virtual-time runner whereas iframe requestAnimationFrame may be throttled. */
+  const sample=async(label,frames=14)=>{for(let i=0;i<frames;i++){await wait(16);checkFrame(`${label}:${i}`)}};
+  const toHome=async()=>{nav('home')?.click();await wait(260);checkFrame('settled-home')};
+
+  w.FrenchTranquilleThemes.apply('original');await wait(80);
+  if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv4-route-coherence-ready').trim()!=='1')throw Error('original-route-parity-missing');
+
+  for(const [width,height] of sizes){
+    F.style.width=width+'px';F.style.height=height+'px';await wait(80);
+    for(const theme of themes){
+      await toHome();w.FrenchTranquilleThemes.apply(theme);await wait(80);checkFrame(`${width}-${theme}:home`);
+      const homeButton=legacyHome();let redundantHomeHops=0;const onHomeHop=()=>{redundantHomeHops++};homeButton?.addEventListener('click',onHomeHop,true);
+      nav('practice')?.click();await sample(`${width}-${theme}:home-practice`);await wait(180);homeButton?.removeEventListener('click',onHomeHop,true);
+      if(redundantHomeHops)throw Error(`${width}-${theme}:redundant-home-hop:${redundantHomeHops}`);
+      const practice=d.querySelector('body > .b27-practice-page');if(!vis(w,practice))throw Error(`${width}-${theme}:practice-not-visible`);
+      if(w.getComputedStyle(content()).visibility!=='hidden')throw Error(`${width}-${theme}:practice-underlay`);
+      practice.querySelector('[data-b27-close-practice]')?.click();await sample(`${width}-${theme}:practice-home`);await wait(180);
+      if(d.querySelector('body > .b27-practice-page'))throw Error(`${width}-${theme}:practice-stale`);
+      if(!vis(w,content()))throw Error(`${width}-${theme}:home-not-restored`);
+    }
+  }
+
+  /* Deterministic field-flash contract: when Practice is opened from Progress,
+     the technical host normalization to Home may only occur AFTER the Practice
+     overlay already owns the viewport. This catches sub-frame flashes that a
+     settled-screen or 16 ms sampler can legitimately miss. */
+  F.style.width='390px';F.style.height='844px';await wait(80);
+  for(const theme of themes){
+    await toHome();w.FrenchTranquilleThemes.apply(theme);await wait(70);
+    nav('progress')?.click();await wait(240);checkFrame(theme+':progress-settled');
+    if(!d.querySelector('#app .app-shell.screen-progress'))throw Error(theme+':progress-host-missing');
+    const homeButton=legacyHome();let hostSwaps=0,hostSwapUncovered=false;
+    const onHostSwap=()=>{hostSwaps++;if(!d.querySelector('body > .b27-practice-page'))hostSwapUncovered=true};
+    homeButton?.addEventListener('click',onHostSwap,true);
+    nav('practice')?.click();await sample(theme+':progress-practice',12);await wait(140);homeButton?.removeEventListener('click',onHostSwap,true);
+    if(!hostSwaps)throw Error(theme+':practice-host-swap-missing');
+    if(hostSwapUncovered)throw Error(theme+':host-swap-uncovered');
+    const practice=d.querySelector('body > .b27-practice-page');if(!vis(w,practice))throw Error(theme+':progress-practice-missing');
+    practice.querySelector('[data-b27-close-practice]')?.click();await wait(180);
+  }
+
+  /* Deep route pass mirrors the field-video failure path: Practice -> Listening,
+     then Practice -> Conversation hub -> Scenario. */
+  F.style.width='1280px';F.style.height='800px';await wait(80);
+  for(const theme of themes){
+    await toHome();w.FrenchTranquilleThemes.apply(theme);await wait(70);
+    nav('practice')?.click();await wait(90);
+    let practice=d.querySelector('body > .b27-practice-page');if(!practice)throw Error(theme+':deep-practice-missing');
+    const listen=practice.querySelector('[data-b27-practice-action="listening"]');if(!listen||listen.disabled)throw Error(theme+':listening-unavailable');
+    listen.click();await sample(theme+':practice-listening',18);await wait(220);
+    const listening=d.querySelector('body > .listening-overlay');if(!vis(w,listening))throw Error(theme+':listening-not-visible');
+    if(w.getComputedStyle(content()).visibility!=='hidden')throw Error(theme+':listening-underlay');
+    listening.querySelector('[data-listening-close]')?.click();await sample(theme+':listening-close',8);await wait(120);
+    if(d.querySelector('body > .listening-overlay'))throw Error(theme+':listening-stale');
+
+    await toHome();nav('practice')?.click();await wait(90);practice=d.querySelector('body > .b27-practice-page');
+    const conversation=practice?.querySelector('[data-b27-practice-action="conversation"]');if(!conversation)throw Error(theme+':conversation-action-missing');
+    conversation.click();await sample(theme+':practice-conversation',18);await wait(240);
+    const hub=d.querySelector('.screen-conversation .practice-session-hub');if(!vis(w,hub))throw Error(theme+':hub-not-visible');
+    if(w.getComputedStyle(hub).borderTopColor!==tokenColor('--ft-border'))throw Error(theme+':hub-not-themed');
+    const scenarioMode=hub.querySelector('[data-session-practice-mode="scenario"]');if(!scenarioMode||scenarioMode.disabled)throw Error(theme+':scenario-mode-unavailable');
+    scenarioMode.click();await wait(120);checkFrame(theme+':scenario-open');
+    const lab=d.querySelector('.screen-conversation .scenario-lab-card:not(.session-mode-hidden)');if(!vis(w,lab))throw Error(theme+':scenario-lab-not-visible');
+    const labStyle=w.getComputedStyle(lab),v53=w.getComputedStyle(d.documentElement).getPropertyValue('--pv53-islands-ready').trim()==='1';
+    const expectedBorder=tokenColor(v53?'--pv53-edge':'--ft-border');
+    if(labStyle.borderTopColor!==expectedBorder)throw Error(theme+':scenario-lab-not-themed');
+    if(v53&&(!labStyle.backgroundImage||labStyle.backgroundImage==='none'))throw Error(theme+':scenario-lab-v53-flat');
+  }
+
+  for(const k of keys)if(before[k]!==w.localStorage.getItem(k))throw Error('store:'+k);
+  w.FrenchTranquilleThemes.apply('original');await wait(70);
+  if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv4-route-coherence-ready').trim()!=='1')throw Error('original-route-parity-missing-after');
+  done(true,'frames=sampled-16ms;viewports=5;themes=3;home-practice=atomic;practice-home=atomic;practice-home-hop=0;progress-practice-host-swap=covered;practice-listening=atomic;conversation=themed;scenario=themed;v5-islands=forward-compatible;intermediate-opacity=0;underlay-bleed=0;stores=unchanged');
+}catch(e){done(false,e.message)}},3400);
+setTimeout(()=>{if(!R.dataset.premiumV4TransitionTribunal)done(false,'timeout')},52000);
+})();
+</script></body></html>

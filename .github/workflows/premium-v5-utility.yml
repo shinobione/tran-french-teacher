@@ -16,33 +16,33 @@ jobs:
 
       - name: Static V5.2 contracts and sanctuaries
         run: |
-          grep -q -- '--pv5-utility-ready:1' premium-v5-utility.css
-          grep -q '.ux-close' premium-v5-utility.css
-          grep -q '.scenario-close' premium-v5-utility.css
-          grep -q '.scenario-mic' premium-v5-utility.css
-          grep -q 'progress-detail-panel-head button' premium-v5-utility.css
-          grep -q '.scenario-listen' premium-v5-utility.css
-          grep -q 'pv5-debug-rail-h' premium-v5-utility.css
-          grep -q '.debug-fr-banner' premium-v5-utility.css
-          grep -q 'body > .listening-overlay' premium-v5-utility.css
-          grep -q 'prefers-reduced-motion:reduce' premium-v5-utility.css
-          grep -q 'premium-v5-utility.css?v=2.3.21-v57art1' premium-theme-polish.css
-          grep -q 'premium-v5-coherence.css?v=2.3.21-v57art1' premium-theme-polish.css
-          grep -q 'premium-v5-islands.css?v=2.3.21-v57art1' premium-theme-polish.css
-          test "$(tail -n 1 premium-theme-polish.css)" = "@import url('./premium-nav-geometry-hotfix.css?v=2.3.21-v57art1');"
+          grep -q -- '--pv5-utility-ready:1' src/premium/premium-v5-utility.css
+          grep -q '.ux-close' src/premium/premium-v5-utility.css
+          grep -q '.scenario-close' src/premium/premium-v5-utility.css
+          grep -q '.scenario-mic' src/premium/premium-v5-utility.css
+          grep -q 'progress-detail-panel-head button' src/premium/premium-v5-utility.css
+          grep -q '.scenario-listen' src/premium/premium-v5-utility.css
+          grep -q 'pv5-debug-rail-h' src/premium/premium-v5-utility.css
+          grep -q '.debug-fr-banner' src/premium/premium-v5-utility.css
+          grep -q 'body > .listening-overlay' src/premium/premium-v5-utility.css
+          grep -q 'prefers-reduced-motion:reduce' src/premium/premium-v5-utility.css
+          grep -q 'src/premium/premium-v5-utility.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q 'src/premium/premium-v5-coherence.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q 'src/premium/premium-v5-islands.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          test "$(tail -n 1 src/premium/premium-theme-polish.css)" = "@import url('./src/premium/premium-nav-geometry-hotfix.css?v=2.3.21-v57art1');"
           # Historical V5.2 owns its layer and precache survivability. The latest
           # Premium workflow owns the active theme-controller / PWA generation.
           grep -q "const V5U='2.3.21-v57art1'" sw.js
           grep -q "const V5I='2.3.21-v57art1'" sw.js
-          grep -q 'premium-v5-utility.css?v=${V5U}' sw.js
-          grep -q 'premium-v5-islands.css?v=${V5I}' sw.js
-          grep -q 'premiumV5Utility' premium-v5-utility-tribunal.html
-          grep -q 'debug-rail=reserved' premium-v5-utility-tribunal.html
-          grep -q 'listening=no-overlap' premium-v5-utility-tribunal.html
+          grep -q 'src/premium/premium-v5-utility.css?v=${V5U}' sw.js
+          grep -q 'src/premium/premium-v5-islands.css?v=${V5I}' sw.js
+          grep -q 'premiumV5Utility' tests/browser/premium-v5-utility-tribunal.html
+          grep -q 'debug-rail=reserved' tests/browser/premium-v5-utility-tribunal.html
+          grep -q 'listening=no-overlap' tests/browser/premium-v5-utility-tribunal.html
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
           test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
           test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
-          test "$(git hash-object field-audio-session.js)" = "06ca40074b345d77b8fc0c46fdb73ab35ffa2cd3"
+          test "$(git hash-object src/core/field-audio-session.js)" = "06ca40074b345d77b8fc0c46fdb73ab35ffa2cd3"
           test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
           test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
 
@@ -59,7 +59,7 @@ jobs:
             google-chrome --headless=new --no-sandbox --disable-gpu \
             --disable-background-timer-throttling --disable-renderer-backgrounding \
             --virtual-time-budget=42000 --dump-dom \
-            'http://127.0.0.1:4173/premium-v5-utility-tribunal.html' > /tmp/v52-utility.html
+            'http://127.0.0.1:4173/tests/browser/premium-v5-utility-tribunal.html' > /tmp/v52-utility.html
           grep -q 'data-premium-v5-utility="ok"' /tmp/v52-utility.html || { grep -o 'data-premium-v5-utility-detail="[^"]*"' /tmp/v52-utility.html || true; exit 1; }
           grep -q 'legacy-utility=filled' /tmp/v52-utility.html
           grep -q 'touch=44plus' /tmp/v52-utility.html
@@ -81,7 +81,7 @@ jobs:
             google-chrome --headless=new --no-sandbox --disable-gpu --force-prefers-reduced-motion \
             --disable-background-timer-throttling --disable-renderer-backgrounding \
             --virtual-time-budget=42000 --dump-dom \
-            'http://127.0.0.1:4173/premium-v5-utility-tribunal.html' > /tmp/v52-utility-reduced.html
+            'http://127.0.0.1:4173/tests/browser/premium-v5-utility-tribunal.html' > /tmp/v52-utility-reduced.html
           grep -q 'data-premium-v5-utility="ok"' /tmp/v52-utility-reduced.html || { grep -o 'data-premium-v5-utility-detail="[^"]*"' /tmp/v52-utility-reduced.html || true; exit 1; }
           grep -q 'debug-rail=reserved' /tmp/v52-utility-reduced.html
 
@@ -99,7 +99,7 @@ jobs:
               --disable-background-timer-throttling --disable-renderer-backgrounding \
               --user-data-dir="$profile" --window-size="$dims" --virtual-time-budget=18000 \
               --screenshot="$png" --dump-dom \
-              "http://127.0.0.1:4173/premium-v5-visual-capture.html?theme=${theme}&surface=listening" >"$dom"
+              "http://127.0.0.1:4173/tests/browser/premium-v5-visual-capture.html?theme=${theme}&surface=listening" >"$dom"
             test -s "$png"
             grep -q 'data-capture-ready="1"' "$dom" || { cat "$dom"; exit 1; }
             grep -q "data-capture-theme=\"${theme}\"" "$dom" || { cat "$dom"; exit 1; }

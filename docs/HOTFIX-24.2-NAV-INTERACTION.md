@@ -8,10 +8,10 @@ Les smokes Chrome propres confirmaient que la logique de navigation et le hit-te
 
 ## Correctifs
 
-- `ux-shell.js` : le menu ne remplace plus ses boutons si son état visuel n’a pas changé ;
+- `src/ui/ux-shell.js` : le menu ne remplace plus ses boutons si son état visuel n’a pas changé ;
 - le handler principal de navigation est exécuté en phase de capture pour recevoir le clic avant les couches applicatives ;
-- `ux-shell.js` et `ux-shell.css` sont servis avec le token neuf `1.17.2-b24.2` ;
-- `build-meta.js` utilise le même token neuf ;
+- `src/ui/ux-shell.js` et `src/ui/ux-shell.css` sont servis avec le token neuf `1.17.2-b24.2` ;
+- `src/core/build-meta.js` utilise le même token neuf ;
 - le cache service worker devient `tran-french-teacher-v1.17.2-b24.2-nav-hotfix` ;
 - `index.html` utilise exactement la même identité de cache lors du nettoyage ;
 - ajout d’un smoke Chrome permanent qui vérifie le hit-testing et les clics physiques sur `Pratiquer`, `Parcours` et `Aujourd’hui`, page scrollée en viewport desktop.

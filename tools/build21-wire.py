@@ -17,46 +17,46 @@ def patch_t(path, context):
     p.write_text(t2,encoding='utf-8')
 
 for path,ctx in [
-    ('daily-coach.js','daily'),
-    ('scenario-engine.js','scenario'),
-    ('listening-engine.js','listening'),
-    ('curriculum-stage2.js','lesson-new'),
-    ('curriculum-stage3.js','lesson-new')
+    ('src/pedagogy/daily-coach.js','daily'),
+    ('src/pedagogy/scenario-engine.js','scenario'),
+    ('src/pedagogy/listening-engine.js','listening'),
+    ('src/pedagogy/curriculum-stage2.js','lesson-new'),
+    ('src/pedagogy/curriculum-stage3.js','lesson-new')
 ]:
     patch_t(path,ctx)
 
 # Scenario hints get extra Vietnamese support when the learner is blocked.
-p=Path('scenario-engine.js'); t=p.read_text(encoding='utf-8')
+p=Path('src/pedagogy/scenario-engine.js'); t=p.read_text(encoding='utf-8')
 t=re.sub(r"T\(([^,\n]*\.hintVi),\s*([^\)\n]*\.hintFr)\)",r"T(\1,\2,'scenario-hint')",t)
 p.write_text(t,encoding='utf-8')
 
 # Listening answer choices keep Vietnamese meaning to avoid leaking French transcript.
-p=Path('listening-engine.js'); t=p.read_text(encoding='utf-8')
+p=Path('src/pedagogy/listening-engine.js'); t=p.read_text(encoding='utf-8')
 t=t.replace("options:dialogue.options.map(option=>({label:T(option.vi,option.fr)}))","options:dialogue.options.map(option=>({label:option.vi}))")
 p.write_text(t,encoding='utf-8')
 
 # index.html version + assets + runtime order.
 p=Path('index.html'); t=p.read_text(encoding='utf-8')
 t=t.replace('1.13.0-b20',VERSION).replace('Build 20 affiche','Build 21 affiche')
-css='  <link rel="stylesheet" href="./listening-engine.css?v=1.14.0-b21" />\n'
-if 'language-ratio.css' not in t:
-    t=t.replace(css,css+'  <link rel="stylesheet" href="./language-ratio.css?v=1.14.0-b21" />\n')
-needle='  <script type="module" src="./learning-memory.js?v=1.14.0-b21"></script>\n'
-if 'language-ratio-core.js' not in t:
-    t=t.replace(needle,needle+'  <script type="module" src="./language-ratio-core.js?v=1.14.0-b21"></script>\n  <script type="module" src="./language-ratio.js?v=1.14.0-b21"></script>\n')
+css='  <link rel="stylesheet" href="./src/pedagogy/listening-engine.css?v=1.14.0-b21" />\n'
+if 'src/pedagogy/language-ratio.css' not in t:
+    t=t.replace(css,css+'  <link rel="stylesheet" href="./src/pedagogy/language-ratio.css?v=1.14.0-b21" />\n')
+needle='  <script type="module" src="./src/pedagogy/learning-memory.js?v=1.14.0-b21"></script>\n'
+if 'src/pedagogy/language-ratio-core.js' not in t:
+    t=t.replace(needle,needle+'  <script type="module" src="./src/pedagogy/language-ratio-core.js?v=1.14.0-b21"></script>\n  <script type="module" src="./src/pedagogy/language-ratio.js?v=1.14.0-b21"></script>\n')
 p.write_text(t,encoding='utf-8')
 
 # Service worker.
 p=Path('sw.js'); t=p.read_text(encoding='utf-8')
 t=t.replace('tran-french-teacher-v1.13.0-b20','tran-french-teacher-v1.14.0-b21').replace("const V='1.13.0-b20';","const V='1.14.0-b21';")
-if 'language-ratio.css' not in t:
-    t=t.replace("  `./listening-engine.css?v=${V}`,\n","  `./listening-engine.css?v=${V}`,\n  `./language-ratio.css?v=${V}`,\n")
-if 'language-ratio-core.js' not in t:
-    t=t.replace("  `./learning-memory.js?v=${V}`,\n","  `./learning-memory.js?v=${V}`,\n  `./language-ratio-core.js?v=${V}`,\n  `./language-ratio.js?v=${V}`,\n")
+if 'src/pedagogy/language-ratio.css' not in t:
+    t=t.replace("  `./src/pedagogy/listening-engine.css?v=${V}`,\n","  `./src/pedagogy/listening-engine.css?v=${V}`,\n  `./src/pedagogy/language-ratio.css?v=${V}`,\n")
+if 'src/pedagogy/language-ratio-core.js' not in t:
+    t=t.replace("  `./src/pedagogy/learning-memory.js?v=${V}`,\n","  `./src/pedagogy/learning-memory.js?v=${V}`,\n  `./src/pedagogy/language-ratio-core.js?v=${V}`,\n  `./src/pedagogy/language-ratio.js?v=${V}`,\n")
 p.write_text(t,encoding='utf-8')
 
 # Central metadata remains last in index and patches new modules.
-p=Path('build-meta.js'); t=p.read_text(encoding='utf-8')
+p=Path('src/core/build-meta.js'); t=p.read_text(encoding='utf-8')
 t=t.replace("const META = { version: '1.13.0', build: 20 };","const META = { version: '1.14.0', build: 21 };")
 if "'FrenchTranquilleLanguageCore'" not in t:
     t=t.replace("  'FrenchTranquilleListening'\n","  'FrenchTranquilleListening',\n  'FrenchTranquilleLanguageCore',\n  'FrenchTranquilleLanguage'\n")
@@ -198,7 +198,7 @@ Diagnostic compact du soutien courant.
 
 # Moteur pur
 
-`language-ratio-core.js` est testable sans navigateur.
+`src/pedagogy/language-ratio-core.js` est testable sans navigateur.
 
 Contrat CI :
 
@@ -214,7 +214,7 @@ Le profil fragile utilise volontairement les mêmes progrès de curriculum que l
 
 # Runtime adapter
 
-`language-ratio.js` lit les clés pédagogiques existantes et recalcule le profil. Il ne crée pas de « niveau VI/FR » permanent qui pourrait devenir obsolète.
+`src/pedagogy/language-ratio.js` lit les clés pédagogiques existantes et recalcule le profil. Il ne crée pas de « niveau VI/FR » permanent qui pourrait devenir obsolète.
 
 Il expose :
 
@@ -284,9 +284,9 @@ entry=r'''## [Unreleased]
 
 ### v1.14.0 — Build 21 — Adaptive Language Ratio
 
-- `language-ratio-core.js` : moteur pur de scoring ;
-- `language-ratio.js` : adapter runtime ;
-- `language-ratio.css` ;
+- `src/pedagogy/language-ratio-core.js` : moteur pur de scoring ;
+- `src/pedagogy/language-ratio.js` : adapter runtime ;
+- `src/pedagogy/language-ratio.css` ;
 - profils VI-HEAVY / VI-SUPPORT / BALANCED / FR-GROWING ;
 - preuves Curriculum / Memory / Listening / pratique ;
 - pénalités fragilité / erreurs récentes / répétition / assistance ;
@@ -375,30 +375,30 @@ iPhone/Safari/PWA | Android | PC
 
 ```text
 app.js
-curriculum-stage2.js
-curriculum-stage3.js
-stage2-boot.js
-debug-fr.js
+src/pedagogy/curriculum-stage2.js
+src/pedagogy/curriculum-stage3.js
+src/core/stage2-boot.js
+src/core/debug-fr.js
 voice-ios.js
 free-voice.js
-learning-memory.js
-language-ratio-core.js
-language-ratio.js
-daily-coach.js
-mastery-engine.js
-mastery-stage3.js
-scenario-data.js
-scenario-host.js
-scenario-engine.js
-error-intelligence.js
-listening-data.js
-listening-engine.js
-build-meta.js
+src/pedagogy/learning-memory.js
+src/pedagogy/language-ratio-core.js
+src/pedagogy/language-ratio.js
+src/pedagogy/daily-coach.js
+src/pedagogy/mastery-engine.js
+src/pedagogy/mastery-stage3.js
+src/pedagogy/scenario-data.js
+src/pedagogy/scenario-host.js
+src/pedagogy/scenario-engine.js
+src/pedagogy/error-intelligence.js
+src/pedagogy/listening-data.js
+src/pedagogy/listening-engine.js
+src/core/build-meta.js
 ```
 
 Le moteur Language est chargé **après Learning Memory** mais **avant les surfaces modernes** Daily / Scenario / Listening, afin que leurs fonctions de texte puissent consulter le profil dès leur premier rendu.
 
-`build-meta.js` reste dernier.
+`src/core/build-meta.js` reste dernier.
 
 ---
 
@@ -422,7 +422,7 @@ Clé : `french-tranquille:listening:v1`.
 
 La Language Ratio utilise uniquement : nombre de tentatives et réussites. La confiance Listening augmente progressivement jusqu’à 12 tentatives dans le score.
 
-`listening-engine.js` consomme `FrenchTranquilleLanguage.text()` pour ses consignes, mais conserve les options de sens en vietnamien.
+`src/pedagogy/listening-engine.js` consomme `FrenchTranquilleLanguage.text()` pour ses consignes, mais conserve les options de sens en vietnamien.
 
 ---
 
@@ -436,7 +436,7 @@ Signaux consommés par Language Ratio : erreurs 24 h, récurrences, assistance. 
 
 # Adaptive Language Ratio — Build 21
 
-## `language-ratio-core.js`
+## `src/pedagogy/language-ratio-core.js`
 
 Moteur pur. Aucune dépendance DOM/localStorage.
 
@@ -456,7 +456,7 @@ Profils : VI-HEAVY / VI-SUPPORT / BALANCED / FR-GROWING.
 
 `ratioFor()` applique ensuite un ajustement par contexte.
 
-## `language-ratio.js`
+## `src/pedagogy/language-ratio.js`
 
 Adapter runtime :
 
@@ -475,7 +475,7 @@ Les cartes utilisent des signatures de rendu. MutationObserver ne doit jamais r�
 
 # Surfaces adaptatives
 
-`daily-coach.js`, `scenario-engine.js`, `listening-engine.js` utilisent désormais une fonction `T()` dynamique :
+`src/pedagogy/daily-coach.js`, `src/pedagogy/scenario-engine.js`, `src/pedagogy/listening-engine.js` utilisent désormais une fonction `T()` dynamique :
 
 ```text
 DEBUG FR ? français : FrenchTranquilleLanguage.text(...)

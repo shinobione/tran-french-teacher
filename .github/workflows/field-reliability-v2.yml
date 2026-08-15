@@ -20,23 +20,23 @@ jobs:
 
       - name: Static contracts
         run: |
-          node --check stage2-boot.js
-          node --check field-navigation-runtime.js
-          node --check field-audio-session.js
-          ! grep -q 'mediarecorder-ios-compat' stage2-boot.js
-          ! grep -q 'navigation-field-hotfix' stage2-boot.js
-          ! grep -q 'localStorage.setItem' field-audio-session.js
-          ! grep -q 'localStorage.setItem' field-navigation-runtime.js
-          grep -q 'stopImmediatePropagation' field-navigation-runtime.js
-          grep -q 'waitGone' field-navigation-runtime.js
-          grep -q '#app .b27-page' field-navigation-runtime.js
-          grep -q 'requestData' field-audio-session.js
-          grep -q 'new Blob(s.chunks' field-audio-session.js
-          grep -q 'data-field-audio-play' field-audio-session.js
-          grep -q 'limit=3200' field-audio-browser-smoke.html
-          grep -q 'observeNode' field-audio-browser-smoke.html
-          grep -q 'play=observed' field-audio-browser-smoke.html
-          grep -q "finish(false,'timeout')},14000" field-audio-browser-smoke.html
+          node --check src/core/stage2-boot.js
+          node --check src/core/field-navigation-runtime.js
+          node --check src/core/field-audio-session.js
+          ! grep -q 'mediarecorder-ios-compat' src/core/stage2-boot.js
+          ! grep -q 'navigation-field-hotfix' src/core/stage2-boot.js
+          ! grep -q 'localStorage.setItem' src/core/field-audio-session.js
+          ! grep -q 'localStorage.setItem' src/core/field-navigation-runtime.js
+          grep -q 'stopImmediatePropagation' src/core/field-navigation-runtime.js
+          grep -q 'waitGone' src/core/field-navigation-runtime.js
+          grep -q '#app .b27-page' src/core/field-navigation-runtime.js
+          grep -q 'requestData' src/core/field-audio-session.js
+          grep -q 'new Blob(s.chunks' src/core/field-audio-session.js
+          grep -q 'data-field-audio-play' src/core/field-audio-session.js
+          grep -q 'limit=3200' tests/browser/field-audio-browser-smoke.html
+          grep -q 'observeNode' tests/browser/field-audio-browser-smoke.html
+          grep -q 'play=observed' tests/browser/field-audio-browser-smoke.html
+          grep -q "finish(false,'timeout')},14000" tests/browser/field-audio-browser-smoke.html
 
       - name: Sanctuaries remain exact
         run: |
@@ -58,7 +58,7 @@ jobs:
           google-chrome --headless=new --no-sandbox --disable-gpu \
             --autoplay-policy=no-user-gesture-required \
             --virtual-time-budget=18000 --dump-dom \
-            'http://127.0.0.1:4173/field-audio-browser-smoke.html?fieldAudioV2=1' >/tmp/field-audio-v2.html
+            'http://127.0.0.1:4173/tests/browser/field-audio-browser-smoke.html?fieldAudioV2=1' >/tmp/field-audio-v2.html
           grep -q 'data-field-audio-browser-smoke="ok"' /tmp/field-audio-v2.html || { cat /tmp/field-audio-v2.html; exit 1; }
           grep -Eq 'data-field-audio-blob-bytes="[1-9][0-9]*"' /tmp/field-audio-v2.html || { cat /tmp/field-audio-v2.html; exit 1; }
 
@@ -66,7 +66,7 @@ jobs:
         run: |
           google-chrome --headless=new --no-sandbox --disable-gpu \
             --virtual-time-budget=36000 --dump-dom \
-            'http://127.0.0.1:4173/field-navigation-v2-smoke.html' >/tmp/field-nav-v2.html
+            'http://127.0.0.1:4173/tests/browser/field-navigation-v2-smoke.html' >/tmp/field-nav-v2.html
           grep -q 'data-field-navigation-v2-smoke="ok"' /tmp/field-nav-v2.html || { cat /tmp/field-nav-v2.html; exit 1; }
 
       - name: Stop static server

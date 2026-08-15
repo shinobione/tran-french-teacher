@@ -216,7 +216,7 @@ Tout fichier déclaré livré doit être :
 
 **« Le fichier existe dans le repo » n’est pas une preuve que la fonctionnalité est active.**
 
-`build-meta.js` doit être chargé en dernier lorsque son rôle est de normaliser les métadonnées de tous les modules.
+`src/core/build-meta.js` doit être chargé en dernier lorsque son rôle est de normaliser les métadonnées de tous les modules.
 
 ---
 

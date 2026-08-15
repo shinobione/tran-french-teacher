@@ -16,31 +16,31 @@ jobs:
 
       - name: Static V5.4 contracts and sanctuaries
         run: |
-          grep -q -- '--pv54-mockup-ready:1' premium-v5-mockup-convergence.css
-          grep -q -- '--pv54-mobile-preserved:1' premium-v5-mockup-convergence.css
-          grep -q 'grid-auto-flow:dense' premium-v5-mockup-convergence.css
-          grep -q '.ux-settings-note' premium-v5-mockup-convergence.css
-          grep -q '.listening-shell' premium-v5-mockup-convergence.css
-          grep -q 'prefers-reduced-motion:reduce' premium-v5-mockup-convergence.css
-          grep -q 'premium-v5-mockup-convergence.css?v=2.3.21-v57art1' premium-theme-polish.css
-          grep -q 'premium-v5-islands.css?v=2.3.21-v57art1' premium-theme-polish.css
-          test "$(tail -n 1 premium-theme-polish.css)" = "@import url('./premium-nav-geometry-hotfix.css?v=2.3.21-v57art1');"
-          grep -q '2.3.21-v57art1' theme-controller.js
-          grep -q 'premiumV5Mockup' premium-v5-mockup-convergence-tribunal.html
-          grep -q 'practice=3plus1' premium-v5-mockup-convergence-tribunal.html
-          grep -q 'settings=intro-wide' premium-v5-mockup-convergence-tribunal.html
-          grep -q 'mobile=preserved' premium-v5-mockup-convergence-tribunal.html
-          if [ -f premium-v5-fidelity-reset.css ]; then
-            grep -q -- '--pv55-ready:1' premium-v5-fidelity-reset.css
-            grep -q -- '--pv55-refine-ready:1' premium-v5-fidelity-refine.css
-            v54="$(grep -n 'premium-v5-mockup-convergence.css?v=2.3.21-v57art1' premium-theme-polish.css | cut -d: -f1)"
-            v55="$(grep -n 'premium-v5-fidelity-reset.css?v=2.3.21-v57art1' premium-theme-polish.css | cut -d: -f1)"
+          grep -q -- '--pv54-mockup-ready:1' src/premium/premium-v5-mockup-convergence.css
+          grep -q -- '--pv54-mobile-preserved:1' src/premium/premium-v5-mockup-convergence.css
+          grep -q 'grid-auto-flow:dense' src/premium/premium-v5-mockup-convergence.css
+          grep -q '.ux-settings-note' src/premium/premium-v5-mockup-convergence.css
+          grep -q '.listening-shell' src/premium/premium-v5-mockup-convergence.css
+          grep -q 'prefers-reduced-motion:reduce' src/premium/premium-v5-mockup-convergence.css
+          grep -q 'src/premium/premium-v5-mockup-convergence.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q 'src/premium/premium-v5-islands.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          test "$(tail -n 1 src/premium/premium-theme-polish.css)" = "@import url('./src/premium/premium-nav-geometry-hotfix.css?v=2.3.21-v57art1');"
+          grep -q '2.3.21-v57art1' src/core/theme-controller.js
+          grep -q 'premiumV5Mockup' tests/browser/premium-v5-mockup-convergence-tribunal.html
+          grep -q 'practice=3plus1' tests/browser/premium-v5-mockup-convergence-tribunal.html
+          grep -q 'settings=intro-wide' tests/browser/premium-v5-mockup-convergence-tribunal.html
+          grep -q 'mobile=preserved' tests/browser/premium-v5-mockup-convergence-tribunal.html
+          if [ -f src/premium/premium-v5-fidelity-reset.css ]; then
+            grep -q -- '--pv55-ready:1' src/premium/premium-v5-fidelity-reset.css
+            grep -q -- '--pv55-refine-ready:1' src/premium/premium-v5-fidelity-refine.css
+            v54="$(grep -n 'src/premium/premium-v5-mockup-convergence.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css | cut -d: -f1)"
+            v55="$(grep -n 'src/premium/premium-v5-fidelity-reset.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css | cut -d: -f1)"
             test "$v54" -lt "$v55"
           fi
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
           test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
           test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
-          test "$(git hash-object field-audio-session.js)" = "06ca40074b345d77b8fc0c46fdb73ab35ffa2cd3"
+          test "$(git hash-object src/core/field-audio-session.js)" = "06ca40074b345d77b8fc0c46fdb73ab35ffa2cd3"
           test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
           test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
 
@@ -53,7 +53,7 @@ jobs:
 
       - name: Chrome — V5.4 geometry tribunal
         run: |
-          if [ -f premium-v5-fidelity-reset.css ]; then
+          if [ -f src/premium/premium-v5-fidelity-reset.css ]; then
             echo 'V5.5 successor owns active geometry; V5.4 static layer/order/sanctuaries remain guarded.'
             exit 0
           fi
@@ -61,7 +61,7 @@ jobs:
             google-chrome --headless=new --no-sandbox --disable-gpu \
             --disable-background-timer-throttling --disable-renderer-backgrounding \
             --virtual-time-budget=96000 --dump-dom \
-            'http://127.0.0.1:4173/premium-v5-mockup-convergence-tribunal.html' > /tmp/v54-mockup.html
+            'http://127.0.0.1:4173/tests/browser/premium-v5-mockup-convergence-tribunal.html' > /tmp/v54-mockup.html
           grep -q 'data-premium-v5-mockup="ok"' /tmp/v54-mockup.html || { grep -o 'data-premium-v5-mockup-detail="[^"]*"' /tmp/v54-mockup.html || true; exit 1; }
           grep -q 'desktop=mockup-geometry' /tmp/v54-mockup.html
           grep -q 'practice=3plus1' /tmp/v54-mockup.html
@@ -72,7 +72,7 @@ jobs:
 
       - name: Chrome — V5.4 reduced-motion geometry tribunal
         run: |
-          if [ -f premium-v5-fidelity-reset.css ]; then
+          if [ -f src/premium/premium-v5-fidelity-reset.css ]; then
             echo 'V5.5 successor owns active reduced-motion geometry.'
             exit 0
           fi
@@ -80,7 +80,7 @@ jobs:
             google-chrome --headless=new --no-sandbox --disable-gpu --force-prefers-reduced-motion \
             --disable-background-timer-throttling --disable-renderer-backgrounding \
             --virtual-time-budget=96000 --dump-dom \
-            'http://127.0.0.1:4173/premium-v5-mockup-convergence-tribunal.html' > /tmp/v54-mockup-reduced.html
+            'http://127.0.0.1:4173/tests/browser/premium-v5-mockup-convergence-tribunal.html' > /tmp/v54-mockup-reduced.html
           grep -q 'data-premium-v5-mockup="ok"' /tmp/v54-mockup-reduced.html || { grep -o 'data-premium-v5-mockup-detail="[^"]*"' /tmp/v54-mockup-reduced.html || true; exit 1; }
           grep -q 'overflow=0' /tmp/v54-mockup-reduced.html
           grep -q 'stores=unchanged' /tmp/v54-mockup-reduced.html
@@ -88,7 +88,7 @@ jobs:
       - name: Capture V5.4 desktop mockup review matrix
         run: |
           mkdir -p artifacts/premium-v5-mockup
-          if [ -f premium-v5-fidelity-reset.css ]; then
+          if [ -f src/premium/premium-v5-fidelity-reset.css ]; then
             echo 'V5.5 successor owns current human-review captures.' > artifacts/premium-v5-mockup/SUCCESSOR-V5.5.txt
             exit 0
           fi
@@ -97,7 +97,7 @@ jobs:
             profile="/tmp/ft-v54-${label}-${theme}-${screen}"
             png="artifacts/premium-v5-mockup/${label}-${theme}-${screen}.png"
             dom="/tmp/v54-${label}-${theme}-${screen}.html"
-            target="http://127.0.0.1:4173/premium-v4-visual-capture.html?theme=${theme}&screen=${screen}"
+            target="http://127.0.0.1:4173/tests/browser/premium-v4-visual-capture.html?theme=${theme}&screen=${screen}"
             rm -rf "$profile" "$png" "$dom"
             timeout --signal=TERM --kill-after=5s 40s \
               google-chrome --headless=new --no-sandbox --disable-gpu --hide-scrollbars \

@@ -28,20 +28,20 @@ Build31 choisit donc un **agrégateur read-only** avant toute extension de conte
 ### Ajouté
 
 ```text
-build31-loader.js
-learner-intelligence.js
-learner-intelligence.css
-learner-intelligence-smoke.js
+src/core/build31-loader.js
+src/pedagogy/learner-intelligence.js
+src/pedagogy/learner-intelligence.css
+src/pedagogy/learner-intelligence-smoke.js
 .github/workflows/build31-learner-intelligence.yml
 ```
 
 ### Adapté
 
 ```text
-build-meta.js
-settings-legal.js
+src/core/build-meta.js
+src/core/settings-legal.js
 sw.js
-v2-release-smoke.js
+tests/smoke/v2-release-smoke.js
 .github/workflows/v2-release-freeze.yml
 .github/workflows/build30-architecture-hardening.yml
 ```

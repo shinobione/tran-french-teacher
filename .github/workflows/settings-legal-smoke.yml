@@ -20,12 +20,12 @@ jobs:
 
       - name: Static contracts
         run: |
-          node --check settings-legal.js
-          grep -Fq './settings-legal.js?v=2.0.0-postv2-legal' index.html
-          grep -Fq "Tous droits réservés" settings-legal.js
-          grep -Fq "Mọi quyền được bảo lưu" settings-legal.js
-          grep -Fq "reconnaissance vocale" settings-legal.js
-          grep -Fq "Nhận dạng giọng nói" settings-legal.js
+          node --check src/core/settings-legal.js
+          grep -Fq './src/core/settings-legal.js?v=2.0.0-postv2-legal' index.html
+          grep -Fq "Tous droits réservés" src/core/settings-legal.js
+          grep -Fq "Mọi quyền được bảo lưu" src/core/settings-legal.js
+          grep -Fq "reconnaissance vocale" src/core/settings-legal.js
+          grep -Fq "Nhận dạng giọng nói" src/core/settings-legal.js
 
       - name: Frozen V2 sanctuaries remain byte-identical
         run: |

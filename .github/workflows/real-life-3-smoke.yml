@@ -20,17 +20,17 @@ jobs:
 
       - name: Syntax and wiring
         run: |
-          node --check real-life-data-3.js
-          node --check real-life-coach.js
-          node --check build-meta.js
+          node --check src/pedagogy/real-life-data-3.js
+          node --check src/pedagogy/real-life-coach.js
+          node --check src/core/build-meta.js
           node --check sw.js
           # Build 26 remains a required subsystem, while the global product version may advance.
-          grep -q 'real-life-data-3.js?v=1.19.0-b26' index.html
-          grep -q 'real-life-coach.js?v=1.19.0-b26' index.html
-          grep -q 'real-life-data-3.js' sw.js
-          grep -q 'real-life-coach.js' sw.js
-          grep -q "'FrenchTranquilleRealLife3'" build-meta.js
-          grep -q "'FrenchTranquilleRealLifeCoach'" build-meta.js
+          grep -q 'src/pedagogy/real-life-data-3.js?v=1.19.0-b26' index.html
+          grep -q 'src/pedagogy/real-life-coach.js?v=1.19.0-b26' index.html
+          grep -q 'src/pedagogy/real-life-data-3.js' sw.js
+          grep -q 'src/pedagogy/real-life-coach.js' sw.js
+          grep -q "'FrenchTranquilleRealLife3'" src/core/build-meta.js
+          grep -q "'FrenchTranquilleRealLifeCoach'" src/core/build-meta.js
 
       - name: Sanctuaries remain byte-identical
         run: |

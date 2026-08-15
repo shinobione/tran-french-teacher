@@ -20,23 +20,23 @@ jobs:
 
       - name: Syntax and owner wiring
         run: |
-          node --check progression-ux.js
-          node --check progress-details-dashboard.js
-          node --check build26-6-ux.js
-          node --check build-meta.js
+          node --check src/ui/progression-ux.js
+          node --check src/ui/progress-details-dashboard.js
+          node --check src/ui/build26-6-ux.js
+          node --check src/core/build-meta.js
           node --check sw.js
           # Build 26.6 owns containment behavior, but later builds may legitimately
           # bump the global build meta/cache and cache-bust owner files.
-          grep -q 'build26-6-ux.css?v=' index.html
-          grep -q 'build26-6-ux.js?v=' index.html
-          grep -q 'progression-ux.js?v=' index.html
-          grep -q 'progress-details-dashboard.js?v=' index.html
-          grep -q 'build-meta.js?v=' index.html
-          grep -q 'FrenchTranquilleBuild266UX' build-meta.js
-          grep -q 'build26-6-ux.css' sw.js
-          grep -q 'build26-6-ux.js' sw.js
-          grep -q "progressComposition = 'contained-independent-columns'" progression-ux.js
-          grep -q 'progressDetailFamily' progress-details-dashboard.js
+          grep -q 'src/ui/build26-6-ux.css?v=' index.html
+          grep -q 'src/ui/build26-6-ux.js?v=' index.html
+          grep -q 'src/ui/progression-ux.js?v=' index.html
+          grep -q 'src/ui/progress-details-dashboard.js?v=' index.html
+          grep -q 'src/core/build-meta.js?v=' index.html
+          grep -q 'FrenchTranquilleBuild266UX' src/core/build-meta.js
+          grep -q 'src/ui/build26-6-ux.css' sw.js
+          grep -q 'src/ui/build26-6-ux.js' sw.js
+          grep -q "progressComposition = 'contained-independent-columns'" src/ui/progression-ux.js
+          grep -q 'progressDetailFamily' src/ui/progress-details-dashboard.js
 
       - name: Learner, voice and branding sanctuaries remain byte-identical
         run: |
@@ -45,8 +45,8 @@ jobs:
           test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
           test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
           grep -q "francais-avec-luc:learner:v1" app.js
-          grep -q 'normal: 0.88' build-meta.js
-          grep -q 'slow: 0.65' build-meta.js
+          grep -q 'normal: 0.88' src/core/build-meta.js
+          grep -q 'slow: 0.65' src/core/build-meta.js
 
       - name: Start static server
         run: |

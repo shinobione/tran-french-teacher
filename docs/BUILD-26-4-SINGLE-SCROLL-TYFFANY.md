@@ -72,7 +72,7 @@ No card is cloned or migrated. Memory, Mastery, Listening, Scenario and A1 cards
 
 ## Teacher rename — Tyffany
 
-The rename is implemented as an additive compatibility layer in `build26-4-ux.js`.
+The rename is implemented as an additive compatibility layer in `src/ui/build26-4-ux.js`.
 
 ### Learner-facing contract
 

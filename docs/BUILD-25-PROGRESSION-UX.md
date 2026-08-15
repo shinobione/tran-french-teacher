@@ -13,8 +13,8 @@ Réduire drastiquement la charge cognitive de `Parcours` sans supprimer une capa
 Nouveaux fichiers :
 
 ```text
-progression-ux.js
-progression-ux.css
+src/ui/progression-ux.js
+src/ui/progression-ux.css
 .github/workflows/progression-ux-smoke.yml
 ```
 

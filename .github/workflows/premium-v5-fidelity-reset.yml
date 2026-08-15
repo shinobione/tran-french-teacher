@@ -19,47 +19,47 @@ jobs:
 
       - name: Static V5.5 contracts and sanctuaries
         run: |
-          node --check premium-v5-fidelity-reset.js
-          node --check theme-controller.js
+          node --check src/premium/premium-v5-fidelity-reset.js
+          node --check src/core/theme-controller.js
           node --check sw.js
-          grep -q -- '--pv55-ready:1' premium-v5-fidelity-reset.css
-          grep -q -- '--pv55-refine-ready:1' premium-v5-fidelity-refine.css
-          grep -q 'premium/themes/original/background-v2.png' premium-v5-fidelity-reset.css
-          grep -q 'premium/themes/aurora/background.webp' premium-v5-fidelity-reset.css
-          grep -q 'premium/themes/sunset/background.webp' premium-v5-fidelity-reset.css
-          grep -q 'premium/themes/nocturne/background.webp' premium-v5-fidelity-reset.css
-          grep -q 'premium/themes/original/lesson-eiffel-v2.png' premium-v5-fidelity-reset.css
-          ! grep -q 'eiffel-premium-mask.svg' premium-v5-fidelity-reset.css premium-v5-fidelity-refine.css
-          grep -q "content:'LUYỆN TẬP'" premium-v5-fidelity-refine.css
-          grep -q 'ft-v55-subview-back' premium-v5-fidelity-reset.js
-          grep -q 'ft-v55-level-route' premium-v5-fidelity-reset.js
-          grep -q 'data-v55-about-toggle' premium-v5-fidelity-reset.js
-          grep -q 'data-v55-recovery-toggle' premium-v5-fidelity-reset.js
-          grep -q 'ft-v55-settings-gear' premium-v5-fidelity-refine.css
-          grep -q 'ft-v55-recovery-toggle' premium-v5-fidelity-settings-hotfix.css
-          grep -q 'premium-v5-fidelity-reset.css?v=2.3.21-v57art1' premium-theme-polish.css
-          grep -q 'premium-v5-fidelity-refine.css?v=2.3.21-v57art1' premium-theme-polish.css
-          grep -q 'premium-v5-fidelity-card-hotfix.css?v=2.3.21-v57art1' premium-theme-polish.css
-          grep -q 'premium-v5-fidelity-settings-hotfix.css?v=2.3.21-v57art1' premium-theme-polish.css
-          grep -q 'premium-v5-fidelity-reset.js?v=2.3.21-v57art1' theme-controller.js
+          grep -q -- '--pv55-ready:1' src/premium/premium-v5-fidelity-reset.css
+          grep -q -- '--pv55-refine-ready:1' src/premium/premium-v5-fidelity-refine.css
+          grep -q 'premium/themes/original/background-v2.png' src/premium/premium-v5-fidelity-reset.css
+          grep -q 'premium/themes/aurora/background.webp' src/premium/premium-v5-fidelity-reset.css
+          grep -q 'premium/themes/sunset/background.webp' src/premium/premium-v5-fidelity-reset.css
+          grep -q 'premium/themes/nocturne/background.webp' src/premium/premium-v5-fidelity-reset.css
+          grep -q 'premium/themes/original/lesson-eiffel-v2.png' src/premium/premium-v5-fidelity-reset.css
+          ! grep -q 'eiffel-premium-mask.svg' src/premium/premium-v5-fidelity-reset.css src/premium/premium-v5-fidelity-refine.css
+          grep -q "content:'LUYỆN TẬP'" src/premium/premium-v5-fidelity-refine.css
+          grep -q 'ft-v55-subview-back' src/premium/premium-v5-fidelity-reset.js
+          grep -q 'ft-v55-level-route' src/premium/premium-v5-fidelity-reset.js
+          grep -q 'data-v55-about-toggle' src/premium/premium-v5-fidelity-reset.js
+          grep -q 'data-v55-recovery-toggle' src/premium/premium-v5-fidelity-reset.js
+          grep -q 'ft-v55-settings-gear' src/premium/premium-v5-fidelity-refine.css
+          grep -q 'ft-v55-recovery-toggle' src/premium/premium-v5-fidelity-settings-hotfix.css
+          grep -q 'src/premium/premium-v5-fidelity-reset.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q 'src/premium/premium-v5-fidelity-refine.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q 'src/premium/premium-v5-fidelity-card-hotfix.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q 'src/premium/premium-v5-fidelity-settings-hotfix.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q 'src/premium/premium-v5-fidelity-reset.js?v=2.3.21-v57art1' src/core/theme-controller.js
           grep -q "const CACHE='tran-french-teacher-v2.3.22-b34.14-v58debug1'" sw.js
           grep -q "const V5F='2.3.21-v57art1'" sw.js
           grep -q "const V5FR='2.3.21-v57art1'" sw.js
-          grep -q 'premium-v5-fidelity-reset.css?v=${V5F}' sw.js
-          grep -q 'premium-v5-fidelity-refine.css?v=${V5FR}' sw.js
-          grep -q 'premium-v5-fidelity-card-hotfix.css?v=${V5FR}' sw.js
-          grep -q 'premium-v5-fidelity-settings-hotfix.css?v=${V5FR}' sw.js
-          grep -q 'premium-theme-polish.css?v=${V5F}' sw.js
-          grep -q 'theme-controller.js?v=${V5F}' sw.js
-          grep -q 'premium-v5-fidelity-reset.js?v=${V5F}' sw.js
+          grep -q 'src/premium/premium-v5-fidelity-reset.css?v=${V5F}' sw.js
+          grep -q 'src/premium/premium-v5-fidelity-refine.css?v=${V5FR}' sw.js
+          grep -q 'src/premium/premium-v5-fidelity-card-hotfix.css?v=${V5FR}' sw.js
+          grep -q 'src/premium/premium-v5-fidelity-settings-hotfix.css?v=${V5FR}' sw.js
+          grep -q 'src/premium/premium-theme-polish.css?v=${V5F}' sw.js
+          grep -q 'src/core/theme-controller.js?v=${V5F}' sw.js
+          grep -q 'src/premium/premium-v5-fidelity-reset.js?v=${V5F}' sw.js
           grep -q './assets/premium/themes/original/background-v2.png' sw.js
           grep -q './assets/premium/themes/aurora/background.webp' sw.js
           grep -q './assets/premium/themes/sunset/background.webp' sw.js
           grep -q './assets/premium/themes/nocturne/background.webp' sw.js
           grep -q './assets/premium/themes/original/lesson-eiffel-v2.png' sw.js
           ! grep -q 'eiffel-premium-mask.svg' sw.js
-          grep -q "\['review','conversation','listening','real-life'\]" premium-v5-subview-chrome-tribunal.html
-          test "$(tail -n 1 premium-theme-polish.css)" = "@import url('./premium-nav-geometry-hotfix.css?v=2.3.21-v57art1');"
+          grep -q "\['review','conversation','listening','real-life'\]" tests/browser/premium-v5-subview-chrome-tribunal.html
+          test "$(tail -n 1 src/premium/premium-theme-polish.css)" = "@import url('./src/premium/premium-nav-geometry-hotfix.css?v=2.3.21-v57art1');"
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
           test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
           test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
@@ -79,7 +79,7 @@ jobs:
             google-chrome --headless=new --no-sandbox --disable-gpu \
             --disable-background-timer-throttling --disable-renderer-backgrounding \
             --virtual-time-budget=36000 --dump-dom \
-            'http://127.0.0.1:4173/premium-v5-fidelity-reset-tribunal.html' > /tmp/v55.html
+            'http://127.0.0.1:4173/tests/browser/premium-v5-fidelity-reset-tribunal.html' > /tmp/v55.html
           grep -q 'data-premium-v55="ok"' /tmp/v55.html || { grep -o 'data-premium-v55-detail="[^"]*"' /tmp/v55.html || true; exit 1; }
           grep -q 'data-v55-scenes="original+aurora+sunset+nocturne"' /tmp/v55.html
           grep -q 'data-v55-controls="filled-circle"' /tmp/v55.html
@@ -99,7 +99,7 @@ jobs:
               google-chrome --headless=new --no-sandbox --disable-gpu \
               --disable-background-timer-throttling --disable-renderer-backgrounding \
               --virtual-time-budget=36000 --dump-dom \
-              "http://127.0.0.1:4173/premium-v5-subview-chrome-tribunal.html?case=${case}" > "$out"
+              "http://127.0.0.1:4173/tests/browser/premium-v5-subview-chrome-tribunal.html?case=${case}" > "$out"
             grep -q 'data-v55-subview="ok"' "$out" || { grep -o 'data-v55-subview-detail="[^"]*"' "$out" || true; exit 1; }
             grep -q "data-v55-subview-case=\"${case}\"" "$out"
             grep -q 'data-v55-subview-anchor="same"' "$out"
@@ -114,7 +114,7 @@ jobs:
             google-chrome --headless=new --no-sandbox --disable-gpu --force-prefers-reduced-motion \
             --disable-background-timer-throttling --disable-renderer-backgrounding \
             --virtual-time-budget=36000 --dump-dom \
-            'http://127.0.0.1:4173/premium-v5-fidelity-reset-tribunal.html' > /tmp/v55-reduced.html
+            'http://127.0.0.1:4173/tests/browser/premium-v5-fidelity-reset-tribunal.html' > /tmp/v55-reduced.html
           grep -q 'data-premium-v55="ok"' /tmp/v55-reduced.html || { grep -o 'data-premium-v55-detail="[^"]*"' /tmp/v55-reduced.html || true; exit 1; }
           grep -q 'data-v55-learner="unchanged"' /tmp/v55-reduced.html
           grep -q 'data-v55-recovery="collapsed-accessible"' /tmp/v55-reduced.html
@@ -127,7 +127,7 @@ jobs:
             profile="/tmp/ft-v55-${theme}-${screen}"
             png="artifacts/premium-v55-mobile/iphone390-${theme}-${screen}.png"
             dom="/tmp/v55-${theme}-${screen}.html"
-            target="http://127.0.0.1:4173/premium-v4-visual-capture.html?theme=${theme}&screen=${screen}"
+            target="http://127.0.0.1:4173/tests/browser/premium-v4-visual-capture.html?theme=${theme}&screen=${screen}"
             rm -rf "$profile" "$png" "$dom"
             timeout --signal=TERM --kill-after=5s 40s \
               google-chrome --headless=new --no-sandbox --disable-gpu --hide-scrollbars \

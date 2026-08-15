@@ -1,0 +1,25 @@
+/* French Trân'quille — Build 14.1 avatar hotfix
+   Replace the temporary letter avatar with the app identity until Lucie gets a dedicated portrait. */
+
+.luc{
+  overflow:hidden;
+  padding:2px;
+  background:linear-gradient(135deg,#8ef0cf 0%,#d9d8f7 48%,#bd9bf4 100%);
+  box-shadow:0 8px 26px rgba(0,0,0,.22),0 0 0 1px rgba(189,165,245,.12);
+}
+
+.luc span{
+  color:transparent!important;
+  text-shadow:none!important;
+  font-size:0!important;
+  background-color:#0d1423!important;
+  background-image:url('../../assets/Favicon.png?v=1.7.1-b14-avatar1')!important;
+  background-repeat:no-repeat!important;
+  background-position:center!important;
+  background-size:cover!important;
+}
+
+.teacher-line .luc,
+.luc-row .luc{
+  flex:0 0 auto;
+}

@@ -20,22 +20,22 @@ jobs:
       - name: Static contracts and sanctuaries
         run: |
           set -euo pipefail
-          test -s premium-v59-interactions.js
-          test -s premium-v59-interactions.css
-          test -s premium-v59-interactions-tribunal.html
-          node --check premium-v59-interactions.js
-          node --check theme-controller.js
-          grep -q "const V59A='2.3.23-v59a1'" theme-controller.js
-          grep -q 'premium-v59-interactions.css' theme-controller.js
-          grep -q 'premium-v59-interactions.js' theme-controller.js
-          grep -q 'ft-v59-speaking-owner' premium-v59-interactions.js premium-v59-interactions.css
-          grep -q 'data-v55-about-toggle' premium-v59-interactions.js
-          grep -q 'ft-v59-real-life-svg' premium-v59-interactions.js premium-v59-interactions.css
+          test -s src/premium/premium-v59-interactions.js
+          test -s src/premium/premium-v59-interactions.css
+          test -s tests/browser/premium-v59-interactions-tribunal.html
+          node --check src/premium/premium-v59-interactions.js
+          node --check src/core/theme-controller.js
+          grep -q "const V59A='2.3.23-v59a1'" src/core/theme-controller.js
+          grep -q 'src/premium/premium-v59-interactions.css' src/core/theme-controller.js
+          grep -q 'src/premium/premium-v59-interactions.js' src/core/theme-controller.js
+          grep -q 'ft-v59-speaking-owner' src/premium/premium-v59-interactions.js src/premium/premium-v59-interactions.css
+          grep -q 'data-v55-about-toggle' src/premium/premium-v59-interactions.js
+          grep -q 'ft-v59-real-life-svg' src/premium/premium-v59-interactions.js src/premium/premium-v59-interactions.css
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
           test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
           test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
-          test "$(git hash-object voice-replay.js)" = "a0dda64e61fa3cd5a788d9b19ebb3307f31ff29d"
-          test "$(git hash-object speaking-loop-content.js)" = "beda16a5412c0fdc32ff90287d745eccb3568b03"
+          test "$(git hash-object src/pedagogy/voice-replay.js)" = "a0dda64e61fa3cd5a788d9b19ebb3307f31ff29d"
+          test "$(git hash-object src/pedagogy/speaking-loop-content.js)" = "beda16a5412c0fdc32ff90287d745eccb3568b03"
           test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
           test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
 
@@ -51,7 +51,7 @@ jobs:
           timeout --signal=TERM --kill-after=5s 35s \
             google-chrome --headless=new --no-sandbox --disable-gpu \
             --virtual-time-budget=5000 --dump-dom \
-            'http://127.0.0.1:4173/premium-v59-interactions-tribunal.html' >/tmp/v59a.html
+            'http://127.0.0.1:4173/tests/browser/premium-v59-interactions-tribunal.html' >/tmp/v59a.html
           grep -q 'data-v59a="ok"' /tmp/v59a.html || { grep -o 'data-v59a-detail="[^"]*"' /tmp/v59a.html || true; exit 1; }
 
       - name: Chrome — real app actually loads V5.9A runtime

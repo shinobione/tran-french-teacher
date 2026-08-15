@@ -18,17 +18,17 @@ jobs:
           node-version: '22'
       - name: Static V5.8 contracts and sanctuaries
         run: |
-          node --check debug-fr.js
-          node --check theme-controller.js
+          node --check src/core/debug-fr.js
+          node --check src/core/theme-controller.js
           node --check sw.js
-          grep -q "const VERSION='2.3.22-v58debug1'" debug-fr.js
-          grep -q "const DEBUG_KEY='tran-french-teacher:debug-fr:v1'" debug-fr.js
-          grep -q "const THEME_KEY='french-tranquille:appearance-theme:v1'" debug-fr.js
-          grep -q 'FrenchTranquilleDebugFr' debug-fr.js
-          grep -q 'debug-fr.js?v=2.3.22-v58debug1' index.html
+          grep -q "const VERSION='2.3.22-v58debug1'" src/core/debug-fr.js
+          grep -q "const DEBUG_KEY='tran-french-teacher:debug-fr:v1'" src/core/debug-fr.js
+          grep -q "const THEME_KEY='french-tranquille:appearance-theme:v1'" src/core/debug-fr.js
+          grep -q 'FrenchTranquilleDebugFr' src/core/debug-fr.js
+          grep -q 'src/core/debug-fr.js?v=2.3.22-v58debug1' index.html
           grep -q "const DEBUG='2.3.22-v58debug1'" sw.js
-          grep -q 'debug-fr.js?v=${DEBUG}' sw.js
-          ! grep -q 'francais-avec-luc:learner:v1' debug-fr.js
+          grep -q 'src/core/debug-fr.js?v=${DEBUG}' sw.js
+          ! grep -q 'francais-avec-luc:learner:v1' src/core/debug-fr.js
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
           test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
           test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
@@ -46,7 +46,7 @@ jobs:
             google-chrome --headless=new --no-sandbox --disable-gpu \
             --disable-background-timer-throttling --disable-renderer-backgrounding \
             --virtual-time-budget=34000 --dump-dom \
-            'http://127.0.0.1:4173/premium-v5-debug-theme-tribunal.html' >/tmp/v58.html
+            'http://127.0.0.1:4173/tests/browser/premium-v5-debug-theme-tribunal.html' >/tmp/v58.html
           grep -q 'data-premium-v58="ok"' /tmp/v58.html || { grep -o 'data-premium-v58-detail="[^"]*"' /tmp/v58.html || true; exit 1; }
       - name: Capture four-theme DEBUG matrix
         run: |
@@ -62,7 +62,7 @@ jobs:
                 --disable-background-timer-throttling --disable-renderer-backgrounding \
                 --user-data-dir="$profile" --window-size=390,844 --virtual-time-budget=15000 \
                 --screenshot="$png" --dump-dom \
-                "http://127.0.0.1:4173/premium-v5-debug-theme-capture.html?theme=${theme}&debug=${debug}" >"$dom"
+                "http://127.0.0.1:4173/tests/browser/premium-v5-debug-theme-capture.html?theme=${theme}&debug=${debug}" >"$dom"
               test -s "$png"
               grep -q 'data-capture-ready="1"' "$dom"
               grep -q "data-capture-theme=\"${theme}\"" "$dom"

@@ -6,7 +6,7 @@ Opening **⚙️ Options / Réglages** could freeze or crash the whole applicati
 
 ## Root cause
 
-`build-meta.js` observes mutations under `#app` so it can keep the displayed Version / Build synchronized after screen renders.
+`src/core/build-meta.js` observes mutations under `#app` so it can keep the displayed Version / Build synchronized after screen renders.
 
 On the Settings screen, the observer found the Version row and executed `value.textContent = ...` on every mutation, even when the text was already correct. Replacing `textContent` creates a new `childList` mutation, which called the observer again. This created an unbounded feedback loop specifically while the diagnostic card existed.
 

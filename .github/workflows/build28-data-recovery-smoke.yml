@@ -20,37 +20,37 @@ jobs:
 
       - name: Syntax, pure recovery tests and wiring
         run: |
-          node --check data-recovery-core.js
-          node --check data-recovery.js
-          node --check data-recovery-smoke.js
-          node --check build-meta.js
+          node --check src/core/data-recovery-core.js
+          node --check src/core/data-recovery.js
+          node --check tests/smoke/data-recovery-smoke.js
+          node --check src/core/build-meta.js
           node --check sw.js
           node tools/test-build28-data-recovery.cjs
           # Build 28 remains a mandatory subsystem; later builds may own global metadata/cache identity.
-          grep -q 'data-recovery-core.js?v=1.21.0-b28' index.html
-          grep -q 'data-recovery.js?v=1.21.0-b28' index.html
-          grep -q 'data-recovery-smoke.js?v=1.21.0-b28' index.html
-          grep -q 'build-meta.js?v=' index.html
-          grep -q 'FrenchTranquilleRecovery' build-meta.js
+          grep -q 'src/core/data-recovery-core.js?v=1.21.0-b28' index.html
+          grep -q 'src/core/data-recovery.js?v=1.21.0-b28' index.html
+          grep -q 'tests/smoke/data-recovery-smoke.js?v=1.21.0-b28' index.html
+          grep -q 'src/core/build-meta.js?v=' index.html
+          grep -q 'FrenchTranquilleRecovery' src/core/build-meta.js
           grep -q 'tran-french-teacher-v' index.html sw.js
-          grep -q 'data-recovery-core.js' sw.js
-          grep -q 'data-recovery.js' sw.js
-          grep -q 'data-recovery-smoke.js' sw.js
+          grep -q 'src/core/data-recovery-core.js' sw.js
+          grep -q 'src/core/data-recovery.js' sw.js
+          grep -q 'tests/smoke/data-recovery-smoke.js' sw.js
 
       - name: Durable-store contract is explicit
         run: |
-          grep -q "francais-avec-luc:learner:v1" data-recovery-core.js
-          grep -q "french-tranquille:learning-memory:v1" data-recovery-core.js
-          grep -q "french-tranquille:error-intelligence:v1" data-recovery-core.js
-          grep -q "french-tranquille:scenarios:v1" data-recovery-core.js
-          grep -q "french-tranquille:listening:v1" data-recovery-core.js
-          grep -q "french-tranquille:milestones:v1" data-recovery-core.js
-          grep -q "french-tranquille:recovery:last-good:v1" data-recovery.js
-          grep -q "french-tranquille:recovery:pre-restore:v1" data-recovery.js
-          grep -q "french-tranquille:recovery:pre-migration:v1" data-recovery.js
-          grep -q "french-tranquille:recovery:pre-reset:v1" data-recovery.js
-          grep -q "french-tranquille:recovery:quarantine:v1" data-recovery.js
-          grep -q "french-tranquille:safety:pre-build22:v1" data-recovery.js
+          grep -q "francais-avec-luc:learner:v1" src/core/data-recovery-core.js
+          grep -q "french-tranquille:learning-memory:v1" src/core/data-recovery-core.js
+          grep -q "french-tranquille:error-intelligence:v1" src/core/data-recovery-core.js
+          grep -q "french-tranquille:scenarios:v1" src/core/data-recovery-core.js
+          grep -q "french-tranquille:listening:v1" src/core/data-recovery-core.js
+          grep -q "french-tranquille:milestones:v1" src/core/data-recovery-core.js
+          grep -q "french-tranquille:recovery:last-good:v1" src/core/data-recovery.js
+          grep -q "french-tranquille:recovery:pre-restore:v1" src/core/data-recovery.js
+          grep -q "french-tranquille:recovery:pre-migration:v1" src/core/data-recovery.js
+          grep -q "french-tranquille:recovery:pre-reset:v1" src/core/data-recovery.js
+          grep -q "french-tranquille:recovery:quarantine:v1" src/core/data-recovery.js
+          grep -q "french-tranquille:safety:pre-build22:v1" src/core/data-recovery.js
 
       - name: Learner, voice and branding sanctuaries remain byte-identical
         run: |
@@ -58,9 +58,9 @@ jobs:
           test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
           test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
           test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
-          grep -q "francais-avec-luc:learner:v1" app.js data-recovery-core.js
-          grep -q 'normal: 0.88' build-meta.js
-          grep -q 'slow: 0.65' build-meta.js
+          grep -q "francais-avec-luc:learner:v1" app.js src/core/data-recovery-core.js
+          grep -q 'normal: 0.88' src/core/build-meta.js
+          grep -q 'slow: 0.65' src/core/build-meta.js
 
       - name: Start static server
         run: |

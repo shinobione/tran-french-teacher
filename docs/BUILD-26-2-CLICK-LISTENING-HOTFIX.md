@@ -13,7 +13,7 @@ Une vidéo de test a montré deux problèmes distincts :
 
 ## Fix 1 — Détails d’apprentissage
 
-Le panneau reste un `<details>` natif, mais `progression-ux.js` prend désormais explicitement en charge le clic sur son `<summary>` :
+Le panneau reste un `<details>` natif, mais `src/ui/progression-ux.js` prend désormais explicitement en charge le clic sur son `<summary>` :
 
 ```text
 click summary

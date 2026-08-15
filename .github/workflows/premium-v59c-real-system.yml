@@ -22,19 +22,19 @@ jobs:
       - name: Static contracts and sanctuaries
         run: |
           set -euo pipefail
-          test -s premium-v59-system.js
-          test -s premium-v59-system.css
-          test -s premium-v59-system-tribunal.html
-          node --check premium-v59-system.js
-          node --check theme-controller.js
-          grep -q "const V59C='2.3.25-v59c1'" theme-controller.js
-          grep -q 'premium-v59-system.css' theme-controller.js
-          grep -q 'premium-v59-system.js' theme-controller.js
-          grep -q 'LONG_PRESS_MS = 820' premium-v59-system.js
-          grep -q "event.altKey && event.shiftKey && event.code === 'KeyD'" premium-v59-system.js
-          grep -q 'prefers-reduced-motion:reduce' premium-v59-system.css
-          ! grep -q 'francais-avec-luc:learner:v1' premium-v59-system.js
-          ! grep -q 'french-tranquille:learning-memory:v1' premium-v59-system.js
+          test -s src/premium/premium-v59-system.js
+          test -s src/premium/premium-v59-system.css
+          test -s tests/browser/premium-v59-system-tribunal.html
+          node --check src/premium/premium-v59-system.js
+          node --check src/core/theme-controller.js
+          grep -q "const V59C='2.3.25-v59c1'" src/core/theme-controller.js
+          grep -q 'src/premium/premium-v59-system.css' src/core/theme-controller.js
+          grep -q 'src/premium/premium-v59-system.js' src/core/theme-controller.js
+          grep -q 'LONG_PRESS_MS = 820' src/premium/premium-v59-system.js
+          grep -q "event.altKey && event.shiftKey && event.code === 'KeyD'" src/premium/premium-v59-system.js
+          grep -q 'prefers-reduced-motion:reduce' src/premium/premium-v59-system.css
+          ! grep -q 'francais-avec-luc:learner:v1' src/premium/premium-v59-system.js
+          ! grep -q 'french-tranquille:learning-memory:v1' src/premium/premium-v59-system.js
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
           test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
           test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
@@ -52,7 +52,7 @@ jobs:
           timeout --signal=TERM --kill-after=5s 35s \
             google-chrome --headless=new --no-sandbox --disable-gpu \
             --virtual-time-budget=6000 --dump-dom \
-            'http://127.0.0.1:4173/premium-v59-system-tribunal.html' >/tmp/v59c.html
+            'http://127.0.0.1:4173/tests/browser/premium-v59-system-tribunal.html' >/tmp/v59c.html
           grep -q 'data-v59c="ok"' /tmp/v59c.html || { grep -o 'data-v59c-detail="[^"]*"' /tmp/v59c.html || true; exit 1; }
 
       - name: Chrome — reduced motion remains functional
@@ -60,7 +60,7 @@ jobs:
           timeout --signal=TERM --kill-after=5s 35s \
             google-chrome --headless=new --no-sandbox --disable-gpu \
             --force-prefers-reduced-motion --virtual-time-budget=6000 --dump-dom \
-            'http://127.0.0.1:4173/premium-v59-system-tribunal.html' >/tmp/v59c-reduced.html
+            'http://127.0.0.1:4173/tests/browser/premium-v59-system-tribunal.html' >/tmp/v59c-reduced.html
           grep -q 'data-v59c="ok"' /tmp/v59c-reduced.html
 
       - name: Chrome — real app loads A+B+C layers

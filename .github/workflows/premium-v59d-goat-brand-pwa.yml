@@ -23,15 +23,15 @@ jobs:
           test -s assets/premium/brand/goat-app-icon-192.webp
           test -s assets/premium/brand/goat-app-icon-512.webp
           test -s assets/premium/brand/goat-app-icon-maskable-512.webp
-          test -s premium-v59-brand-tribunal.html
+          test -s tests/browser/premium-v59-brand-tribunal.html
           grep -q 'goat-favicon-32.png' index.html
           grep -q 'goat-app-icon-180.png' index.html
           grep -q 'goat-app-icon-192.webp' manifest.webmanifest
           grep -q 'goat-app-icon-maskable-512.webp' manifest.webmanifest
           grep -q "const CACHE='tran-french-teacher-v2.3.22-b34.14-v58debug1'" sw.js
-          grep -q 'premium-v59-interactions.js' sw.js
-          grep -q 'premium-v59-lesson-layout.js' sw.js
-          grep -q 'premium-v59-system.js' sw.js
+          grep -q 'src/premium/premium-v59-interactions.js' sw.js
+          grep -q 'src/premium/premium-v59-lesson-layout.js' sw.js
+          grep -q 'src/premium/premium-v59-system.js' sw.js
           grep -q 'goat-app-icon-maskable-512.webp' sw.js
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
           test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
@@ -72,7 +72,7 @@ jobs:
           timeout --signal=TERM --kill-after=5s 35s \
             google-chrome --headless=new --no-sandbox --disable-gpu \
             --virtual-time-budget=7000 --dump-dom \
-            'http://127.0.0.1:4173/premium-v59-brand-tribunal.html' >/tmp/v59d.html
+            'http://127.0.0.1:4173/tests/browser/premium-v59-brand-tribunal.html' >/tmp/v59d.html
           grep -q 'data-v59d="ok"' /tmp/v59d.html || { grep -o 'data-v59d-detail="[^"]*"' /tmp/v59d.html || true; exit 1; }
 
       - name: Chrome — real app still loads A+B+C

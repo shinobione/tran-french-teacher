@@ -20,28 +20,28 @@ jobs:
 
       - name: Syntax and wiring
         run: |
-          node --check voice-replay.js
-          node --check progress-details-dashboard.js
-          node --check build-meta.js
+          node --check src/pedagogy/voice-replay.js
+          node --check src/ui/progress-details-dashboard.js
+          node --check src/core/build-meta.js
           node --check sw.js
-          grep -q 'voice-replay.css?v=1.19.1-b26.1' index.html
-          grep -q 'progress-details-dashboard.css?v=1.19.1-b26.1' index.html
-          grep -q 'voice-replay.js?v=1.19.1-b26.1' index.html
-          grep -q 'progress-details-dashboard.js?v=' index.html
-          grep -q 'real-life-data-3.js?v=1.19.0-b26' index.html
-          grep -q 'real-life-coach.js?v=1.19.0-b26' index.html
-          grep -q 'voice-replay.js' sw.js
-          grep -q 'progress-details-dashboard.js' sw.js
+          grep -q 'src/pedagogy/voice-replay.css?v=1.19.1-b26.1' index.html
+          grep -q 'src/ui/progress-details-dashboard.css?v=1.19.1-b26.1' index.html
+          grep -q 'src/pedagogy/voice-replay.js?v=1.19.1-b26.1' index.html
+          grep -q 'src/ui/progress-details-dashboard.js?v=' index.html
+          grep -q 'src/pedagogy/real-life-data-3.js?v=1.19.0-b26' index.html
+          grep -q 'src/pedagogy/real-life-coach.js?v=1.19.0-b26' index.html
+          grep -q 'src/pedagogy/voice-replay.js' sw.js
+          grep -q 'src/ui/progress-details-dashboard.js' sw.js
 
       - name: Voice replay is local-only and does not replace recognition
         run: |
-          grep -q 'navigator.mediaDevices.getUserMedia' voice-replay.js
-          grep -q 'MediaRecorder' voice-replay.js
-          grep -q 'URL.createObjectURL' voice-replay.js
-          grep -q 'track.stop' voice-replay.js
-          ! grep -q 'localStorage.setItem' voice-replay.js
-          ! grep -Eq 'fetch\(|XMLHttpRequest|FormData|sendBeacon' voice-replay.js
-          ! grep -q 'SpeechRecognition' voice-replay.js
+          grep -q 'navigator.mediaDevices.getUserMedia' src/pedagogy/voice-replay.js
+          grep -q 'MediaRecorder' src/pedagogy/voice-replay.js
+          grep -q 'URL.createObjectURL' src/pedagogy/voice-replay.js
+          grep -q 'track.stop' src/pedagogy/voice-replay.js
+          ! grep -q 'localStorage.setItem' src/pedagogy/voice-replay.js
+          ! grep -Eq 'fetch\(|XMLHttpRequest|FormData|sendBeacon' src/pedagogy/voice-replay.js
+          ! grep -q 'SpeechRecognition' src/pedagogy/voice-replay.js
 
       - name: Sanctuaries remain byte-identical
         run: |

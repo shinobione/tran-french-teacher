@@ -16,16 +16,16 @@ Le premier hotfix post-Build32 est donc considéré **insuffisant** : il traitai
 
 La bottom bar visible était partagée entre plusieurs propriétaires :
 
-- `ux-shell.js` routait le noyau historique ;
-- `build27-app-shell.js` possédait Practice et les façades Home/Progress ;
-- `build-meta.js` ajoutait encore des refresh différés ;
+- `src/ui/ux-shell.js` routait le noyau historique ;
+- `src/ui/build27-app-shell.js` possédait Practice et les façades Home/Progress ;
+- `src/core/build-meta.js` ajoutait encore des refresh différés ;
 - Listening possédait un overlay body indépendant.
 
 Un même geste pouvait donc annoncer une route dans la bottom bar avant que la façade correspondante soit reconstruite, ou laisser une page Build27 en animation au-dessus d’une route déjà changée.
 
 ## Contrat V2 navigation
 
-`stage2-boot.js` enregistre désormais, avant Build27, le propriétaire unique du geste sur `.ux-bottom-nav` :
+`src/core/stage2-boot.js` enregistre désormais, avant Build27, le propriétaire unique du geste sur `.ux-bottom-nav` :
 
 1. intercepter une fois le clic visible ;
 2. fermer Listening, Practice UX, Practice Build27 et Journey ;
@@ -39,7 +39,7 @@ Un même geste pouvait donc annoncer une route dans la bottom bar avant que la f
 
 Le Speaking Loop historique garde `recorder`, `chunks` et `blobUrl` dans un état global au module. Ce fichier est resté identique depuis Build29.2, mais les couches runtime ajoutées depuis multiplient les mutations/renders autour de lui. Le premier hotfix qui supprimait seulement `start(120)` n’a pas corrigé le terrain.
 
-`field-audio-session.js` prend désormais possession des boutons d’enregistrement des cartes Speaking Loop sans modifier `voice-ios.js` ni `free-voice.js` :
+`src/core/field-audio-session.js` prend désormais possession des boutons d’enregistrement des cartes Speaking Loop sans modifier `voice-ios.js` ni `free-voice.js` :
 
 - une prise = un token + un stream + un MediaRecorder + son tableau de chunks ;
 - le navigateur choisit son format natif ;

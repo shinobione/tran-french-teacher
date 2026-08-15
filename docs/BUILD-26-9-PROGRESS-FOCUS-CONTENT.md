@@ -39,7 +39,7 @@ Le smoke pouvait donc être vert avec un wrapper large mais un contenu vide ou s
 Build 26.9 reste une couche de présentation/fiabilité :
 
 - aucune carte Memory/Mastery/Listening/Scenario n’est reparentée ;
-- `progress-details-dashboard.js` reste propriétaire du `activeKey` ;
+- `src/ui/progress-details-dashboard.js` reste propriétaire du `activeKey` ;
 - 26.9 réconcilie de façon idempotente `activeKey → hidden` lorsqu’une recomposition concurrente laisse un état visuel obsolète ;
 - une famille à carte unique span toute la grille Focus ;
 - `data-b269-content-ready` n’est validé qu’après mesure d’une vraie carte visible et dimensionnée ;

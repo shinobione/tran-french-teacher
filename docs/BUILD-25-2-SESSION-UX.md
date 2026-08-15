@@ -11,9 +11,9 @@ Supprimer la sensation de tunnel sans fin : chaque activité possède un objecti
 ## Runtime livré
 
 ```text
-session-ux.js
-session-ux-adapter.js
-session-ux.css
+src/ui/session-ux.js
+src/ui/session-ux-adapter.js
+src/ui/session-ux.css
 .github/workflows/session-ux-smoke.yml
 ```
 

@@ -154,7 +154,7 @@ Chrome 390×844 validated:
 
 ## CI durability cleanup
 
-The field repair legitimately upgrades `session-ux.js` and `progression-ux.js`. Several historical workflows had started treating exact asset query versions as permanent invariants (`session-ux.js?v=1.18.2-b25.2`, `progression-ux.js?v=1.19.2-b26.2`, global Build 26.4 metadata).
+The field repair legitimately upgrades `src/ui/session-ux.js` and `src/ui/progression-ux.js`. Several historical workflows had started treating exact asset query versions as permanent invariants (`src/ui/session-ux.js?v=1.18.2-b25.2`, `src/ui/progression-ux.js?v=1.19.2-b26.2`, global Build 26.4 metadata).
 
 Those guards now protect **historical behavior and subsystem presence**, not the impossibility of future owner-file fixes. Their browser assertions remain active.
 

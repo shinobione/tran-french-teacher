@@ -20,20 +20,20 @@ jobs:
 
       - name: Syntax check
         run: |
-          for f in app.js curriculum-stage2.js curriculum-stage3.js stage2-boot.js debug-fr.js voice-ios.js free-voice.js learning-memory.js daily-coach.js mastery-engine.js mastery-stage3.js scenario-data.js scenario-host.js scenario-engine.js error-intelligence.js listening-data.js listening-engine.js build-meta.js; do node --check "$f"; done
+          for f in app.js src/pedagogy/curriculum-stage2.js src/pedagogy/curriculum-stage3.js src/core/stage2-boot.js src/core/debug-fr.js voice-ios.js free-voice.js src/pedagogy/learning-memory.js src/pedagogy/daily-coach.js src/pedagogy/mastery-engine.js src/pedagogy/mastery-stage3.js src/pedagogy/scenario-data.js src/pedagogy/scenario-host.js src/pedagogy/scenario-engine.js src/pedagogy/error-intelligence.js src/pedagogy/listening-data.js src/pedagogy/listening-engine.js src/core/build-meta.js; do node --check "$f"; done
 
       - name: Current curriculum contract
         run: |
           node <<'NODE'
           const fs=require('fs');
-          const s=fs.readFileSync('curriculum-stage3.js','utf8');
+          const s=fs.readFileSync('src/pedagogy/curriculum-stage3.js','utf8');
           const lessons=[...s.matchAll(/id:'(l(?:2[6-9]|3[0-9]|40))'/g)].map(m=>m[1]);
           if(lessons.length!==15||new Set(lessons).size!==15)throw new Error('Stage3 must remain 15 unique lessons');
           const blocks=s.split(/\n\s*\{\n\s*id:'l/).slice(1);
           let total=0;
           for(const b of blocks){const area=(b.split('items:[')[1]||'').split('],')[0];const n=(area.match(/\{id:'/g)||[]).length;if(n!==6)throw new Error('Stage3 lesson lost its 6-item contract');total+=n}
           if(total!==90)throw new Error(`Stage3 expected 90 items, got ${total}`);
-          const files=['app.js','curriculum-stage2.js','curriculum-stage3.js'];
+          const files=['app.js','src/pedagogy/curriculum-stage2.js','src/pedagogy/curriculum-stage3.js'];
           const ids=[];
           for(const file of files){const text=fs.readFileSync(file,'utf8');for(const m of text.matchAll(/\{id:'([^']+)'/g))ids.push([m[1],file])}
           const seen=new Map();for(const [id,file] of ids){if(seen.has(id))throw new Error(`Duplicate curriculum ID ${id}: ${seen.get(id)} + ${file}`);seen.set(id,file)}
@@ -45,12 +45,12 @@ jobs:
           node <<'NODE'
           const fs=require('fs');
           global.window=global;
-          require('./listening-data.js');
+          require('./src/pedagogy/listening-data.js');
           const d=global.FrenchTranquilleListeningData;
           if(!d||d.version!=='1.13.0'||d.build!==20)throw new Error('Listening data version/build mismatch');
           if(d.contrasts.length<10)throw new Error('Expected at least 10 contrast groups');
           if(d.dialogues.length<8)throw new Error('Expected at least 8 mini-dialogues');
-          const files=['app.js','curriculum-stage2.js','curriculum-stage3.js'];
+          const files=['app.js','src/pedagogy/curriculum-stage2.js','src/pedagogy/curriculum-stage3.js'];
           const ids=new Set();for(const file of files){const text=fs.readFileSync(file,'utf8');for(const m of text.matchAll(/\{id:'([^']+)'/g))ids.add(m[1])}
           for(const c of d.contrasts){if(!c.id||!Array.isArray(c.items)||c.items.length<2)throw new Error(`Bad contrast ${c.id}`);for(const id of c.items)if(!ids.has(id))throw new Error(`Contrast ${c.id} references unknown item ${id}`)}
           for(const x of d.dialogues){if(!x.id||!Array.isArray(x.lines)||x.lines.length<2)throw new Error(`Bad dialogue ${x.id}`);if(!Array.isArray(x.options)||x.options.length<3)throw new Error(`Dialogue ${x.id} needs >=3 options`);if(x.answer<0||x.answer>=x.options.length)throw new Error(`Dialogue ${x.id} answer out of range`);for(const id of [...x.requiredItems,...x.evidenceItems])if(!ids.has(id))throw new Error(`Dialogue ${x.id} references unknown item ${id}`)}
@@ -59,61 +59,61 @@ jobs:
 
       - name: Listening engine guard
         run: |
-          grep -q "french-tranquille:listening:v1" listening-engine.js
-          grep -q 'MAX_RECENT = 100' listening-engine.js
-          grep -q "listening-meaning" listening-engine.js
-          grep -q "listening-contrast" listening-engine.js
-          grep -q "listening-dialogue" listening-engine.js
-          grep -q 'listening-transcript' listening-engine.js
-          grep -q 'data-listening-slow' listening-engine.js
-          grep -q 'listening-home-card' listening-engine.js
-          grep -q 'listening-progress-card' listening-engine.js
-          grep -q 'listening-daily-step' listening-engine.js
-          grep -q 'FrenchTranquilleMemory.*recordPractice' listening-engine.js
-          grep -q 'FrenchTranquilleErrors.*recordAttempt' listening-engine.js
-          grep -q 'listeningSmoke' listening-engine.js
+          grep -q "french-tranquille:listening:v1" src/pedagogy/listening-engine.js
+          grep -q 'MAX_RECENT = 100' src/pedagogy/listening-engine.js
+          grep -q "listening-meaning" src/pedagogy/listening-engine.js
+          grep -q "listening-contrast" src/pedagogy/listening-engine.js
+          grep -q "listening-dialogue" src/pedagogy/listening-engine.js
+          grep -q 'listening-transcript' src/pedagogy/listening-engine.js
+          grep -q 'data-listening-slow' src/pedagogy/listening-engine.js
+          grep -q 'listening-home-card' src/pedagogy/listening-engine.js
+          grep -q 'listening-progress-card' src/pedagogy/listening-engine.js
+          grep -q 'listening-daily-step' src/pedagogy/listening-engine.js
+          grep -q 'FrenchTranquilleMemory.*recordPractice' src/pedagogy/listening-engine.js
+          grep -q 'FrenchTranquilleErrors.*recordAttempt' src/pedagogy/listening-engine.js
+          grep -q 'listeningSmoke' src/pedagogy/listening-engine.js
 
       - name: Error Intelligence Listening bridge
         run: |
-          grep -q "'listening-miss'" error-intelligence.js
-          grep -q "startsWith('listening-')" error-intelligence.js
-          grep -q "channel === 'listening'" error-intelligence.js
-          grep -q 'MAX_ITEM_EVENTS = 20' error-intelligence.js
-          grep -q 'MAX_RECENT_EVENTS = 120' error-intelligence.js
-          grep -q 'sourceChannel' error-intelligence.js
+          grep -q "'listening-miss'" src/pedagogy/error-intelligence.js
+          grep -q "startsWith('listening-')" src/pedagogy/error-intelligence.js
+          grep -q "channel === 'listening'" src/pedagogy/error-intelligence.js
+          grep -q 'MAX_ITEM_EVENTS = 20' src/pedagogy/error-intelligence.js
+          grep -q 'MAX_RECENT_EVENTS = 120' src/pedagogy/error-intelligence.js
+          grep -q 'sourceChannel' src/pedagogy/error-intelligence.js
 
       - name: Existing adaptive systems guard
         run: |
-          grep -q "french-tranquille:learning-memory:v1" learning-memory.js
-          grep -q 'daily-coach-card' daily-coach.js
-          grep -q 'FrenchTranquilleMasteryStage3' mastery-stage3.js
-          grep -q "french-tranquille:scenarios:v1" scenario-engine.js
-          grep -q 'scenario-host' scenario-host.js
-          grep -q "french-tranquille:error-intelligence:v1" error-intelligence.js
+          grep -q "french-tranquille:learning-memory:v1" src/pedagogy/learning-memory.js
+          grep -q 'daily-coach-card' src/pedagogy/daily-coach.js
+          grep -q 'FrenchTranquilleMasteryStage3' src/pedagogy/mastery-stage3.js
+          grep -q "french-tranquille:scenarios:v1" src/pedagogy/scenario-engine.js
+          grep -q 'scenario-host' src/pedagogy/scenario-host.js
+          grep -q "french-tranquille:error-intelligence:v1" src/pedagogy/error-intelligence.js
 
       - name: Build 20 wiring and docs guard
         run: |
-          grep -q 'listening-engine.css' index.html
-          grep -q 'listening-data.js' index.html
-          grep -q 'listening-engine.js' index.html
-          grep -q 'listening-engine.css' sw.js
-          grep -q 'listening-data.js' sw.js
-          grep -q 'listening-engine.js' sw.js
-          grep -q "version: '1.13.0', build: 20" build-meta.js
-          grep -q 'FrenchTranquilleListeningData' build-meta.js
-          grep -q 'FrenchTranquilleListening' build-meta.js
+          grep -q 'src/pedagogy/listening-engine.css' index.html
+          grep -q 'src/pedagogy/listening-data.js' index.html
+          grep -q 'src/pedagogy/listening-engine.js' index.html
+          grep -q 'src/pedagogy/listening-engine.css' sw.js
+          grep -q 'src/pedagogy/listening-data.js' sw.js
+          grep -q 'src/pedagogy/listening-engine.js' sw.js
+          grep -q "version: '1.13.0', build: 20" src/core/build-meta.js
+          grep -q 'FrenchTranquilleListeningData' src/core/build-meta.js
+          grep -q 'FrenchTranquilleListening' src/core/build-meta.js
           grep -q '1.13.0-b20' index.html
           grep -q '1.13.0-b20' sw.js
           grep -q 'Build 20' README.md
           grep -q 'Build 20' ROADMAP.md
           grep -q 'Build 20' CHANGELOG.md
-          grep -q 'listening-engine.js' docs/ARCHITECTURE.md
+          grep -q 'src/pedagogy/listening-engine.js' docs/ARCHITECTURE.md
           test -f docs/BUILD-20-LISTENING.md
 
       - name: Scenario data non-regression
         run: |
           node <<'NODE'
-          global.window=global;require('./scenario-data.js');const s=global.FrenchTranquilleScenarioData?.scenarios||[];if(s.length!==12)throw new Error(`Expected 12 scenarios, got ${s.length}`);if(s.some(x=>x.turns.length<3))throw new Error('Scenario turn regression');console.log('Scenario catalog OK');
+          global.window=global;require('./src/pedagogy/scenario-data.js');const s=global.FrenchTranquilleScenarioData?.scenarios||[];if(s.length!==12)throw new Error(`Expected 12 scenarios, got ${s.length}`);if(s.some(x=>x.turns.length<3))throw new Error('Scenario turn regression');console.log('Scenario catalog OK');
           NODE
 
       - name: Node base-engine smoke
