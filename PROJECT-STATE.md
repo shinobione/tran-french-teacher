@@ -9,11 +9,14 @@
 - Reconciled: **2026-08-15**
 - Repository: `shinobione/tran-french-teacher`
 - Default branch: `main`
-- Git state used as the basis of this checkpoint: **`4f78729cf36402da275e6dcfdab85e32fc08bdcc`**
-- That basis commit is the merge of PR **#123**, which persisted the post-V5.5 canonical roadmap and Premium visual asset archive.
+- Git state used as the basis of this checkpoint: **`1465ba69171a0c885e6cf603fb535c806715eeda`**
+- That basis commit is the merge of PR **#125**, which added the durable AI/Codex project handoff.
 - Product/runtime-bearing checkpoint immediately before those docs/assets: **`2bba5bd06ba14be7286e16a6a9a417fa04ce642a`**.
 - PR #123 explicitly introduced **no runtime wiring**.
-- Open implementation PRs at that reconciliation point: **none**.
+- Active V5.6 review branch: **`codex/v5.6-asset-finalization`**.
+- Active draft PR: **#126 — V5.6 Premium asset finalization candidates**.
+- Verified asset-package commit inside that PR: **`2cbb070f70c494707e7a19a665bf5746e3e56c39`**.
+- PR #126 is intentionally blocked at the V5.6 human visual gate; it contains no runtime wiring.
 
 **Important:** this document does not claim that its own commit is the latest `main` SHA. A checkpoint cannot safely self-embed its final commit SHA. Fresh agents must verify current HEAD first.
 
@@ -22,7 +25,7 @@
 | Area | State |
 |---|---|
 | Product pedagogy | **V2.3.0 · Build 34** |
-| Visual line | **Premium V5.5 structural base** |
+| Visual line | **Premium V5.6 assets human-approved · V5.7 next** |
 | Curriculum | **52 lessons / 313 items** |
 | Scenario | **44 situations / 132 turns** |
 | Speaking Loop | **52/52 · max 2 moments / lesson** |
@@ -46,7 +49,7 @@
 
 ## Current Premium asset state
 
-PR #123 preserved the canonical local candidates under:
+PR #123 preserved the first-generation archive under:
 
 ```text
 assets/premium/themes/aurora/background.webp
@@ -62,18 +65,27 @@ assets/premium/themes/original/lesson-eiffel.webp
 V5.6 status from `MASTER-ROADMAP.md`:
 
 - 3 user-approved Premium backgrounds preserved ✅
-- Original background candidate preserved ✅
-- 4 lesson-card Eiffel candidates preserved ✅
+- first-generation Original `background.webp` explicitly rejected as too bright / too Aurora-like ✅
+- 4 first-generation `lesson-eiffel.webp` files explicitly rejected as opaque rectangular scenes ✅
+- corrected dark Original `background-v2.png` candidate generated ✅
+- 4 genuine-alpha `lesson-eiffel-v2.png` candidates generated ✅
+- comparison boards generated under `assets/premium/v5.6-*-review.png` ✅
 - asset manifest/ownership preserved ✅
-- **human approval of Original background candidate pending**
-- **human approval of the 4 lesson-card Eiffel candidates pending**
+- corrected dark Original V2 candidate: **USER PASS 2026-08-15** ✅
+- four transparent lesson-card Eiffel V2 candidates: **USER PASS 2026-08-15** ✅
 - runtime integration deliberately deferred to **V5.7**
 
 Do not silently regenerate/replace user-locked Aurora, Sunset, or Nocturne backgrounds.
 
 ## CI / deployment evidence at last reconciliation
 
-For docs/assets merge basis `4f78729cf36402da275e6dcfdab85e32fc08bdcc`, GitHub returned **27 workflow runs** for that exact SHA. The fetched snapshot showed no failure, in-progress, or queued marker.
+For current verified `main` basis `1465ba69171a0c885e6cf603fb535c806715eeda`, GitHub returned **27 workflow runs** for that exact SHA.
+
+- GitHub Pages run **`31853500070`**: **SUCCESS** on that exact SHA.
+- Build 26.5 run **`31853500062`** initially failed in Chrome-headless at the Progress layout step.
+- The failed job was rerun strictly unchanged and completed **SUCCESS** on attempt 2.
+- No runtime patch was made for that historical browser flake.
+- Current exact-HEAD result: **27 / 27 SUCCESS**.
 
 For the previous runtime-bearing `main` checkpoint `2bba5bd06ba14be7286e16a6a9a417fa04ce642a`, issue #114 records:
 
@@ -96,8 +108,8 @@ Fresh agents must re-check CI after any newer commit instead of inheriting these
 
 ### NEXT exact slice
 
-1. **Human-review the archived V5.6 candidates** still awaiting approval: Original background + four `lesson-eiffel.webp` assets.
-2. After approval, execute **V5.7 — Original Theme Parity + Theme Art Integration**:
+1. Merge draft PR **#126** only after its PASS checkpoint CI is green.
+2. Execute **V5.7 — Original Theme Parity + Theme Art Integration**:
    - wire all four local background assets;
    - wire all four lesson Eiffel assets;
    - remove the visible legacy/CSS “Paint Eiffel” treatment;
