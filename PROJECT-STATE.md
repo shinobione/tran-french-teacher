@@ -12,7 +12,8 @@
 - Git state used as the basis of this checkpoint: **`1b404b58bd87cad4eb7860c004d48292e550732e`**.
 - That basis commit is the squash merge of PR **#127 — V5.7 integrate four-theme Premium artwork** after the explicit user PASS.
 - Active V5.8 branch: **`codex/v5.8-debug-theme-decoupling`**.
-- Active V5.8 PR: **pending creation at this checkpoint commit**.
+- Active V5.8 draft PR: **#128 — V5.8 decouple DEBUG FR from visual themes**.
+- First V5.8 candidate commit: **`622aaa04a0e7493a048adbe63552357c82773c92`**.
 - V5.7 is merged, deployed by Pages and technically green; its visual PASS remains distinct from the later V5.10 physical-device FIELD PASS.
 
 **Important:** this document does not claim that its own commit is the latest `main` SHA. A checkpoint cannot safely self-embed its final commit SHA. Fresh agents must verify current HEAD first.
@@ -112,7 +113,7 @@ Fresh agents must re-check CI after any newer commit instead of inheriting these
 ### OPEN
 
 - issue **#114 — Premium Fidelity V5 — final post-V5.5 polish gate before Build 35**.
-- branch **`codex/v5.8-debug-theme-decoupling`** — independent DEBUG FR/theme state and 4-theme × OFF/ON matrix.
+- draft PR **#128** on branch **`codex/v5.8-debug-theme-decoupling`** — independent DEBUG FR/theme state and 4-theme × OFF/ON matrix.
 
 ### BLOCKED
 
