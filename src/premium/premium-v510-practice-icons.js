@@ -1,9 +1,11 @@
 (() => {
   'use strict';
 
-  const VERSION = '2.3.31-v510png1';
+  const VERSION = '2.3.32-v510headers2';
   const root = document.documentElement;
+  const DEBUG_KEY = 'tran-french-teacher:debug-fr:v1';
   let scheduled = false;
+  let conversationOwner = 'real-life';
 
   const ASSETS = Object.freeze({
     conversation: './assets/premium/practice/speak-premium.webp',
@@ -12,9 +14,24 @@
     'real-life': './assets/premium/practice/real-life-premium.webp'
   });
 
-  function buildArt(id) {
+  const FEATURE_COPY = Object.freeze({
+    listening: Object.freeze({ vi: 'Luyện nghe', fr: 'Compréhension orale' }),
+    review: Object.freeze({ vi: 'Ôn tập', fr: 'Révision' }),
+    'real-life': Object.freeze({ vi: 'Tình huống thực tế', fr: 'Conversation' }),
+    speak: Object.freeze({ vi: 'Trả lời bằng giọng nói', fr: 'Répondre à l’oral' })
+  });
+
+  const isDebug = () => localStorage.getItem(DEBUG_KEY) === '1';
+  const featureAssetId = feature => feature === 'speak' ? 'conversation' : feature;
+  const featureAsset = feature => ASSETS[featureAssetId(feature)] || '';
+  const featureTitle = feature => {
+    const copy = FEATURE_COPY[feature];
+    return copy ? (isDebug() ? copy.fr : copy.vi) : '';
+  };
+
+  function buildArt(id, extraClass = '') {
     const img = document.createElement('img');
-    img.className = 'ft-v510-practice-art';
+    img.className = `ft-v510-practice-art${extraClass ? ` ${extraClass}` : ''}`;
     img.dataset.v510Pictogram = id;
     img.src = ASSETS[id];
     img.alt = '';
@@ -40,6 +57,78 @@
     host.replaceChildren(buildArt(id));
   }
 
+  function buildFeatureArt(feature) {
+    const id = featureAssetId(feature);
+    const host = document.createElement('span');
+    host.className = 'ft-v510-feature-art-host';
+    host.dataset.v510FeatureArt = feature;
+    host.setAttribute('aria-hidden', 'true');
+    host.appendChild(buildArt(id, 'ft-v510-feature-art'));
+    return host;
+  }
+
+  function decorateFeatureHeader(header, feature, surface) {
+    if (!header || !FEATURE_COPY[feature] || !featureAsset(feature)) return;
+    const identity = header.children?.[1];
+    if (!identity || identity.matches('button')) return;
+    const title = featureTitle(feature);
+    const currentArt = identity.querySelector('.ft-v510-feature-art');
+    const currentTitle = identity.querySelector('.ft-v510-feature-title');
+    if (
+      header.dataset.v510FeatureHeader === feature &&
+      header.dataset.v510FeatureSurface === surface &&
+      currentArt?.getAttribute('src') === featureAsset(feature) &&
+      currentTitle?.textContent === title
+    ) return;
+
+    const copy = document.createElement('span');
+    copy.className = 'ft-v510-feature-copy';
+    const brand = document.createElement('span');
+    brand.className = 'eyebrow ft-v510-feature-brand';
+    brand.textContent = 'FRENCH TRÂN’QUILLE';
+    const heading = document.createElement('h1');
+    heading.className = 'ft-v510-feature-title';
+    heading.textContent = title;
+    copy.append(brand, heading);
+
+    identity.classList.add('ft-v510-feature-identity');
+    identity.dataset.v510FeatureIdentity = feature;
+    identity.replaceChildren(buildFeatureArt(feature), copy);
+    header.dataset.v510FeatureHeader = feature;
+    header.dataset.v510FeatureSurface = surface;
+  }
+
+  function conversationFeature() {
+    const screen = document.querySelector('.screen-conversation');
+    if (!screen) return null;
+    // A running Scenario is authoritative Real-Life state, even if Session UX has not yet
+    // rewritten an older voice mode flag during the route transition.
+    if (screen.querySelector('.scenario-runner,.scenario-done')) return 'real-life';
+    if (conversationOwner === 'real-life') return 'real-life';
+    const mode = root.dataset.sessionPracticeMode || '';
+    if (conversationOwner === 'speak' || mode === 'voice') return 'speak';
+    if (screen.querySelector('#free-voice-card:not(.session-mode-hidden)')) return 'speak';
+    // Product mapping is intentional: the page titled Conversation is the Real-Life surface.
+    // Speak owns only the explicit oral-training mode ("Répondre à l’oral").
+    return 'real-life';
+  }
+
+  function decorateFeatureHeaders() {
+    decorateFeatureHeader(document.querySelector('.listening-top'), 'listening', 'listening');
+    decorateFeatureHeader(document.querySelector('.screen-review .topbar'), 'review', 'review');
+
+    const conversation = conversationFeature();
+    if (conversation) {
+      decorateFeatureHeader(
+        document.querySelector('.screen-conversation .topbar'),
+        conversation,
+        conversation === 'speak' ? 'oral-training' : 'real-life'
+      );
+    }
+
+    root.dataset.v510FeatureHeaders = 'feature-header-v1';
+  }
+
   function decorate() {
     document.querySelectorAll('.b27-practice-action[data-b27-practice-action]').forEach(card => {
       const id = card.dataset.b27PracticeAction;
@@ -52,6 +141,7 @@
       decorateHost(card.querySelector('.b27-quick-icon'), id, 'home');
     });
 
+    decorateFeatureHeaders();
     root.dataset.v510PracticeIcons = 'approved-art-v1';
   }
 
@@ -64,6 +154,21 @@
     });
   }
 
+  // Remember the product route intent before legacy/Session UX layers begin mutating the
+  // shared Conversation DOM. This prevents a stale voice-mode flag from giving Real-Life
+  // the Speak artwork while changing practice modes.
+  document.addEventListener('click', event => {
+    const practice = event.target.closest('[data-b27-practice-action]');
+    if (practice?.dataset.b27PracticeAction === 'real-life') conversationOwner = 'real-life';
+    if (practice?.dataset.b27PracticeAction === 'conversation') conversationOwner = 'real-life';
+
+    const mode = event.target.closest('[data-session-practice-mode]')?.dataset.sessionPracticeMode;
+    if (mode === 'voice') conversationOwner = 'speak';
+    if (mode === 'scenario' || mode === 'guided') conversationOwner = 'real-life';
+    if (event.target.closest('[data-session-practice-back]')) conversationOwner = 'real-life';
+    schedule();
+  }, true);
+
   new MutationObserver(schedule).observe(document.body, { childList: true, subtree: true });
   window.addEventListener('focus', schedule);
   schedule();
@@ -71,8 +176,11 @@
   window.FrenchTranquilleV510PracticeIcons = Object.freeze({
     version: VERSION,
     style: 'approved-premium-art-v1',
+    featureHeaderStyle: 'feature-header-v1',
     refresh: decorate,
+    refreshFeatureHeaders: decorateFeatureHeaders,
     assets: ASSETS,
+    featureCopy: FEATURE_COPY,
     icons: Object.freeze(Object.keys(ASSETS))
   });
 })();

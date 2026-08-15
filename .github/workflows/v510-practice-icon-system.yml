@@ -22,7 +22,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Static approved-art contract
+      - name: Static approved-art + Feature Header contract
         shell: bash
         run: |
           set -euo pipefail
@@ -32,10 +32,15 @@ jobs:
           grep -q 'src/premium/premium-v510-practice-icons.js?v=2.3.31-v510png1' index.html
           grep -q "const V510ICONS='2.3.31-v510png1'" sw.js
           grep -q "style: 'approved-premium-art-v1'" src/premium/premium-v510-practice-icons.js
+          grep -q "featureHeaderStyle: 'feature-header-v1'" src/premium/premium-v510-practice-icons.js
           grep -q "speak-premium.webp" src/premium/premium-v510-practice-icons.js
           grep -q "listen-premium.webp" src/premium/premium-v510-practice-icons.js
           grep -q "review-premium.webp" src/premium/premium-v510-practice-icons.js
           grep -q "real-life-premium.webp" src/premium/premium-v510-practice-icons.js
+          grep -q "fr: 'Compréhension orale'" src/premium/premium-v510-practice-icons.js
+          grep -q "fr: 'Révision'" src/premium/premium-v510-practice-icons.js
+          grep -q "fr: 'Conversation'" src/premium/premium-v510-practice-icons.js
+          grep -q "fr: 'Répondre à l’oral'" src/premium/premium-v510-practice-icons.js
           if grep -q '<svg\|svg(' src/premium/premium-v510-practice-icons.js; then echo 'legacy SVG generator still present'; exit 1; fi
           if grep -q 'ft-v510-3d-' src/premium/premium-v510-practice-icons.js src/premium/premium-v510-practice-icons.css; then echo 'legacy V4 SVG classes still present'; exit 1; fi
           for asset in speak listen review; do test -s "assets/premium/practice/${asset}-premium.webp"; done
@@ -63,21 +68,21 @@ jobs:
           echo $! >/tmp/ft-v510-icons-server.pid
           sleep 1
           google-chrome --version
-      - name: Chrome — iPhone + desktop, four themes, exact Home reuse, six stores unchanged
+      - name: Chrome — Practice + Feature Headers, three viewports, four themes
         shell: bash
         run: |
           rm -rf /tmp/ft-v510-icons-profile /tmp/ft-v510-icons.html
-          timeout --signal=TERM --kill-after=5s 75s google-chrome \
+          timeout --signal=TERM --kill-after=5s 110s google-chrome \
             --headless=new --no-sandbox --disable-gpu \
             --user-data-dir=/tmp/ft-v510-icons-profile \
-            --window-size=1440,900 \
-            --virtual-time-budget=65000 \
+            --window-size=1440,1000 \
+            --virtual-time-budget=95000 \
             --dump-dom 'http://127.0.0.1:4173/tests/browser/premium-v510-practice-icons-tribunal.html' \
             >/tmp/ft-v510-icons.html
-          if ! grep -q 'data-v510-practice-icons="ok"' /tmp/ft-v510-icons.html || ! grep -q 'V5.10 approved Premium artwork icon system OK' /tmp/ft-v510-icons.html; then
-            echo '--- V5.10 approved artwork tribunal failure ---'
+          if ! grep -q 'data-v510-practice-icons="ok"' /tmp/ft-v510-icons.html || ! grep -q 'Feature Header System OK' /tmp/ft-v510-icons.html; then
+            echo '--- V5.10 approved artwork / Feature Header tribunal failure ---'
             grep -o 'FAIL: [^<]*' /tmp/ft-v510-icons.html || true
-            tail -n 100 /tmp/ft-v510-icons.html || true
+            tail -n 120 /tmp/ft-v510-icons.html || true
             exit 1
           fi
       - name: Stop static server

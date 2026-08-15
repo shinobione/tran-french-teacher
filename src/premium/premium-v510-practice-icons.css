@@ -1,4 +1,4 @@
-/* French Trân’quille — V5.10 approved Premium Practice artwork.
+/* French Trân’quille — V5.10 approved Premium Practice artwork + Feature Header System.
    The approved 3D artwork keeps its own palette. Theme adaptation belongs to the glass host only. */
 
 html[data-theme] .b27-practice-action[data-b27-practice-action] .b27-practice-icon{
@@ -17,7 +17,8 @@ html[data-theme] .b27-quick-card[data-b27-action="listening"] .b27-quick-icon{
 }
 
 html[data-theme] .b27-practice-icon[data-v510-practice-icon],
-html[data-theme] .b27-quick-icon[data-v510-practice-icon]{
+html[data-theme] .b27-quick-icon[data-v510-practice-icon],
+html[data-theme] .ft-v510-feature-art-host{
   --v510-host-accent:var(--ft-accent,var(--ux-accent,#ff9f43));
   position:relative;
   isolation:isolate;
@@ -26,7 +27,7 @@ html[data-theme] .b27-quick-icon[data-v510-practice-icon]{
   justify-content:center!important;
   padding:0!important;
   line-height:0!important;
-  overflow:visible;
+  overflow:hidden;
   color:inherit!important;
   background:
     radial-gradient(circle at 24% 18%,color-mix(in srgb,var(--v510-host-accent) 12%,transparent),transparent 56%),
@@ -44,7 +45,9 @@ html[data-theme] .b27-quick-icon[data-v510-practice-icon]{border-radius:17px!imp
 html[data-theme] .b27-practice-icon[data-v510-practice-icon]::before,
 html[data-theme] .b27-practice-icon[data-v510-practice-icon]::after,
 html[data-theme] .b27-quick-icon[data-v510-practice-icon]::before,
-html[data-theme] .b27-quick-icon[data-v510-practice-icon]::after{
+html[data-theme] .b27-quick-icon[data-v510-practice-icon]::after,
+html[data-theme] .ft-v510-feature-art-host::before,
+html[data-theme] .ft-v510-feature-art-host::after{
   content:none!important;
 }
 
@@ -81,15 +84,111 @@ html[data-theme] .b27-quick-card[data-b27-action="listening"]{
   grid-template-columns:58px minmax(0,1fr) 22px;
 }
 
+/* V5.10 field fix — one compact identity contract for Practice destination headers. */
+html[data-theme] .topbar[data-v510-feature-header],
+html[data-theme] .listening-top[data-v510-feature-header]{
+  align-items:center!important;
+}
+html[data-theme] .ft-v510-feature-identity{
+  display:grid!important;
+  grid-template-columns:64px minmax(0,1fr)!important;
+  align-items:center!important;
+  gap:14px!important;
+  min-width:0;
+  width:100%;
+  text-align:left!important;
+}
+html[data-theme] .ft-v510-feature-art-host{
+  width:64px;
+  height:64px;
+  min-width:64px;
+  border-radius:18px!important;
+}
+html[data-theme] .ft-v510-feature-art{
+  width:56px!important;
+  height:56px!important;
+  flex:0 0 56px!important;
+}
+html[data-theme] .ft-v510-feature-copy{
+  display:block;
+  min-width:0;
+  text-align:left;
+}
+html[data-theme] .ft-v510-feature-brand{
+  display:block;
+  margin:0 0 4px!important;
+  font-size:.58rem!important;
+  line-height:1.15;
+  font-weight:850;
+  letter-spacing:.14em!important;
+  color:color-mix(in srgb,var(--ft-text,#fff) 66%,var(--v510-host-accent,#8adfff) 34%)!important;
+  white-space:normal;
+}
+html[data-theme] .ft-v510-feature-title{
+  margin:0!important;
+  color:var(--ft-text,var(--ux-text,#fff))!important;
+  font-size:clamp(1.22rem,2.2vw,1.58rem)!important;
+  line-height:1.06!important;
+  font-weight:900!important;
+  letter-spacing:-.025em;
+  text-wrap:balance;
+}
+html[data-theme] .listening-top .ft-v510-feature-title{
+  font-size:clamp(1.24rem,2.5vw,1.68rem)!important;
+}
+html[data-theme] .topbar[data-v510-feature-header] > .ft-v510-feature-identity{
+  justify-self:center;
+  max-width:520px;
+}
+html[data-theme] .listening-top[data-v510-feature-header] > .ft-v510-feature-identity{
+  justify-self:start;
+  max-width:560px;
+}
+
 /* Theme coherence lives around the approved artwork; the artwork itself is never recolored. */
 html[data-theme="original"] .b27-practice-icon[data-v510-practice-icon],
-html[data-theme="original"] .b27-quick-icon[data-v510-practice-icon]{--v510-host-accent:#7ce7ff}
+html[data-theme="original"] .b27-quick-icon[data-v510-practice-icon],
+html[data-theme="original"] .ft-v510-feature-art-host{--v510-host-accent:#7ce7ff}
 html[data-theme="aurora"] .b27-practice-icon[data-v510-practice-icon],
-html[data-theme="aurora"] .b27-quick-icon[data-v510-practice-icon]{--v510-host-accent:#72cfff}
+html[data-theme="aurora"] .b27-quick-icon[data-v510-practice-icon],
+html[data-theme="aurora"] .ft-v510-feature-art-host{--v510-host-accent:#72cfff}
 html[data-theme="sunset"] .b27-practice-icon[data-v510-practice-icon],
-html[data-theme="sunset"] .b27-quick-icon[data-v510-practice-icon]{--v510-host-accent:#ff9d55}
+html[data-theme="sunset"] .b27-quick-icon[data-v510-practice-icon],
+html[data-theme="sunset"] .ft-v510-feature-art-host{--v510-host-accent:#ff9d55}
 html[data-theme="jade"] .b27-practice-icon[data-v510-practice-icon],
-html[data-theme="jade"] .b27-quick-icon[data-v510-practice-icon]{--v510-host-accent:#7fe3bd}
+html[data-theme="jade"] .b27-quick-icon[data-v510-practice-icon],
+html[data-theme="jade"] .ft-v510-feature-art-host{--v510-host-accent:#7fe3bd}
+
+@media(max-width:760px){
+  html[data-theme] .listening-top[data-v510-feature-header]{
+    grid-template-columns:40px minmax(0,1fr) auto!important;
+    gap:9px!important;
+  }
+  html[data-theme] .ft-v510-feature-identity{
+    grid-template-columns:56px minmax(0,1fr)!important;
+    gap:10px!important;
+  }
+  html[data-theme] .ft-v510-feature-art-host{
+    width:56px;
+    height:56px;
+    min-width:56px;
+    border-radius:16px!important;
+  }
+  html[data-theme] .ft-v510-feature-art{
+    width:49px!important;
+    height:49px!important;
+    flex-basis:49px!important;
+  }
+  html[data-theme] .ft-v510-feature-brand{
+    margin-bottom:3px!important;
+    font-size:.52rem!important;
+    letter-spacing:.12em!important;
+  }
+  html[data-theme] .ft-v510-feature-title,
+  html[data-theme] .listening-top .ft-v510-feature-title{
+    font-size:clamp(1.05rem,4.5vw,1.3rem)!important;
+  }
+}
 
 @media(max-width:520px){
   html[data-theme] .b27-practice-action[data-b27-practice-action] .b27-practice-icon{
@@ -119,4 +218,29 @@ html[data-theme="jade"] .b27-quick-icon[data-v510-practice-icon]{--v510-host-acc
   html[data-theme] .b27-practice-action[data-b27-practice-action]{grid-template-columns:60px minmax(0,1fr) 24px}
   html[data-theme] .b27-quick-card[data-b27-action="review"],
   html[data-theme] .b27-quick-card[data-b27-action="listening"]{grid-template-columns:56px minmax(0,1fr) 22px}
+
+  html[data-theme] .topbar[data-v510-feature-header]{
+    grid-template-columns:44px minmax(0,1fr) 44px!important;
+    gap:8px!important;
+  }
+  html[data-theme] .ft-v510-feature-identity{
+    grid-template-columns:52px minmax(0,1fr)!important;
+    gap:9px!important;
+  }
+  html[data-theme] .ft-v510-feature-art-host{
+    width:52px;
+    height:52px;
+    min-width:52px;
+    border-radius:15px!important;
+  }
+  html[data-theme] .ft-v510-feature-art{
+    width:46px!important;
+    height:46px!important;
+    flex-basis:46px!important;
+  }
+  html[data-theme] .ft-v510-feature-title,
+  html[data-theme] .listening-top .ft-v510-feature-title{
+    font-size:clamp(1rem,4.2vw,1.18rem)!important;
+  }
+  html[data-theme] .listening-session-score{min-width:38px}
 }
