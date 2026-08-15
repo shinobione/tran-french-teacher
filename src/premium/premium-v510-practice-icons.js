@@ -1,9 +1,10 @@
 (() => {
   'use strict';
 
-  const VERSION = '2.3.32-v510headers3';
+  const VERSION = '2.3.33-v510mobile1';
   const root = document.documentElement;
   const DEBUG_KEY = 'tran-french-teacher:debug-fr:v1';
+  const TYFFANY_ASSET = './assets/premium/brand/tyffany-memory.svg';
   let scheduled = false;
   let conversationOwner = 'real-life';
 
@@ -20,6 +21,15 @@
     'real-life': Object.freeze({ vi: 'Tình huống thực tế', fr: 'Conversation' }),
     speak: Object.freeze({ vi: 'Trả lời bằng giọng nói', fr: 'Répondre à l’oral' })
   });
+
+  const TYFFANY_MEMORY_SELECTOR = [
+    '.screen-review .memory-review-head .pill',
+    '.memory-home-card h2',
+    '.memory-progress-card h2',
+    '.memory-dashboard-card h2',
+    '[class*="memory"] .pill',
+    '[class*="memory"] h2'
+  ].join(',');
 
   const isDebug = () => localStorage.getItem(DEBUG_KEY) === '1';
   const featureAssetId = feature => feature === 'speak' ? 'conversation' : feature;
@@ -100,6 +110,35 @@
     header.dataset.v510FeatureSurface = surface;
   }
 
+  function decorateTyffanyMemoryNode(node) {
+    if (!(node instanceof HTMLElement)) return;
+    const raw = (node.textContent || '').replace(/\s+/g, ' ').trim();
+    const clean = raw.replace(/^🧠\s*/u, '').trim();
+    if (!/(?:Trí nhớ của|Mémoire de)\s+(?:Tyffany|Lucie)\b/i.test(clean)) return;
+
+    const currentMark = node.querySelector(':scope > .ft-v510-tyffany-mark');
+    const currentLabel = node.querySelector(':scope > .ft-v510-tyffany-label');
+    if (
+      node.dataset.v510TyffanyIcon === 'canonical-svg-v1' &&
+      currentMark && currentLabel && currentLabel.textContent.trim() === clean
+    ) return;
+
+    const mark = document.createElement('span');
+    mark.className = 'ft-v510-tyffany-mark';
+    mark.dataset.v510TyffanyAsset = TYFFANY_ASSET;
+    mark.setAttribute('aria-hidden', 'true');
+    const label = document.createElement('span');
+    label.className = 'ft-v510-tyffany-label';
+    label.textContent = clean;
+    node.replaceChildren(mark, label);
+    node.dataset.v510TyffanyIcon = 'canonical-svg-v1';
+  }
+
+  function decorateTyffanyMemory() {
+    document.querySelectorAll(TYFFANY_MEMORY_SELECTOR).forEach(decorateTyffanyMemoryNode);
+    root.dataset.v510TyffanyIcons = 'canonical-svg-v1';
+  }
+
   function conversationFeature() {
     const screen = document.querySelector('.screen-conversation');
     if (!screen) return null;
@@ -128,7 +167,7 @@
       );
     }
 
-    root.dataset.v510FeatureHeaders = 'feature-header-v1';
+    root.dataset.v510FeatureHeaders = 'feature-header-v2-mobile';
   }
 
   function decorate() {
@@ -144,6 +183,7 @@
     });
 
     decorateFeatureHeaders();
+    decorateTyffanyMemory();
     root.dataset.v510PracticeIcons = 'approved-art-v1';
   }
 
@@ -179,8 +219,11 @@
     version: VERSION,
     style: 'approved-premium-art-v1',
     featureHeaderStyle: 'feature-header-v1',
+    tyffanyIconStyle: 'canonical-svg-v1',
+    tyffanyAsset: TYFFANY_ASSET,
     refresh: decorate,
     refreshFeatureHeaders: decorateFeatureHeaders,
+    refreshTyffanyIcons: decorateTyffanyMemory,
     assets: ASSETS,
     featureCopy: FEATURE_COPY,
     icons: Object.freeze(Object.keys(ASSETS))

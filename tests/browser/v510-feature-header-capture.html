@@ -19,13 +19,14 @@
       const params=new URLSearchParams(location.search);
       const feature=params.get('feature')||'listening';
       const theme=params.get('theme')||'aurora';
+      const debugFr=params.get('debug')==='fr';
       const expected={review:'review',listening:'listening',speak:'speak','real-life':'real-life'};
       const app=document.getElementById('app');
       const status=document.getElementById('status');
       const pause=ms=>new Promise(r=>setTimeout(r,ms));
       const waitFor=async(fn,timeout=20000)=>{const start=performance.now();while(performance.now()-start<timeout){try{const value=fn();if(value)return value}catch{}await pause(50)}throw new Error(`timeout waiting for ${feature}`)};
       const fail=error=>{document.documentElement.dataset.captureState='fail';status.textContent=`CAPTURE FAIL · ${feature} · ${error?.message||error}`};
-      const ready=()=>{document.documentElement.dataset.captureState='ready';document.documentElement.dataset.captureFeature=feature;document.documentElement.dataset.captureTheme=theme};
+      const ready=()=>{document.documentElement.dataset.captureState='ready';document.documentElement.dataset.captureFeature=feature;document.documentElement.dataset.captureTheme=theme;document.documentElement.dataset.captureLanguage=debugFr?'fr':'vi'};
 
       async function openPracticeAndClick(w,d,id){
         d.querySelector('[data-b27-close-practice]')?.click();
@@ -34,6 +35,15 @@
         w.FrenchTranquilleBuild27Shell.openPractice();
         const button=await waitFor(()=>d.querySelector(`.b27-practice-action[data-b27-practice-action="${id}"]`));
         button.click();
+      }
+
+      function titleMetrics(w,header){
+        const title=header.querySelector('.ft-v510-feature-title');
+        if(!title)throw new Error('Feature Header title missing');
+        const style=w.getComputedStyle(title);
+        const lineHeight=Number.parseFloat(style.lineHeight)||Number.parseFloat(style.fontSize)*1.1;
+        const titleHeight=title.getBoundingClientRect().height;
+        return {title,lineHeight,titleHeight,lines:titleHeight/Math.max(lineHeight,1)};
       }
 
       function assertDesktopFieldGeometry(w,d,header){
@@ -63,13 +73,49 @@
         const headerWidth=header.getBoundingClientRect().width;
         if(headerWidth<920||headerWidth>1005)throw new Error(`desktop Feature Header width ${headerWidth.toFixed(1)}px`);
 
-        const title=header.querySelector('.ft-v510-feature-title');
-        const titleStyle=w.getComputedStyle(title);
-        const lineHeight=Number.parseFloat(titleStyle.lineHeight)||Number.parseFloat(titleStyle.fontSize)*1.1;
-        const titleHeight=title.getBoundingClientRect().height;
+        const {lineHeight,titleHeight}=titleMetrics(w,header);
         if(titleHeight>lineHeight*1.35)throw new Error(`desktop title wrapped (${titleHeight.toFixed(1)}px / ${lineHeight.toFixed(1)}px)`);
 
         document.documentElement.dataset.captureShellWidth=String(Math.round(shellWidth));
+      }
+
+      async function assertMobileFieldGeometry(w,d,header){
+        if(w.innerWidth>520)return;
+        const {title,lines}=titleMetrics(w,header);
+        if(feature==='real-life'&&!debugFr&&lines>2.15){
+          throw new Error(`Vietnamese Real-Life title still squeezed (${lines.toFixed(2)} lines)`);
+        }
+        if(feature==='real-life'&&!debugFr&&title.textContent.trim()!=='Tình huống thực tế'){
+          throw new Error(`wrong Vietnamese Real-Life title (${title.textContent.trim()})`);
+        }
+
+        if(feature==='listening'&&!debugFr){
+          if(title.textContent.trim()!=='Luyện nghe')throw new Error(`wrong Vietnamese Listening title (${title.textContent.trim()})`);
+          if(lines>1.35)throw new Error(`Vietnamese Listening title still wrapped (${lines.toFixed(2)} lines)`);
+          const identity=header.querySelector('.ft-v510-feature-identity');
+          const score=header.querySelector('.listening-session-score');
+          if(!identity||!score)throw new Error('Listening identity/score missing');
+          const ir=identity.getBoundingClientRect();
+          const sr=score.getBoundingClientRect();
+          if(sr.top<ir.bottom-1)throw new Error('Listening score still squeezes the title row');
+          const brand=header.querySelector('.ft-v510-feature-brand');
+          const bs=w.getComputedStyle(brand);
+          const brandLineHeight=Number.parseFloat(bs.lineHeight)||Number.parseFloat(bs.fontSize)*1.2;
+          if(brand.getBoundingClientRect().height>brandLineHeight*1.35)throw new Error('Listening brand line still wraps');
+        }
+
+        if(feature==='review'){
+          w.FrenchTranquilleV510PracticeIcons?.refreshTyffanyIcons?.();
+          const memory=await waitFor(()=>d.querySelector('.screen-review [data-v510-tyffany-icon="canonical-svg-v1"]'));
+          const mark=memory.querySelector('.ft-v510-tyffany-mark');
+          if(!mark)throw new Error('Tyffany SVG mark missing');
+          if((memory.textContent||'').includes('🧠'))throw new Error('legacy Tyffany brain emoji survived');
+          const mask=w.getComputedStyle(mark).webkitMaskImage||w.getComputedStyle(mark).maskImage||'';
+          if(!mask.includes('tyffany-memory.svg'))throw new Error(`Tyffany SVG mask missing (${mask})`);
+          if(w.FrenchTranquilleV510PracticeIcons?.tyffanyAsset!=='./assets/premium/brand/tyffany-memory.svg')throw new Error('Tyffany canonical asset marker mismatch');
+        }
+
+        document.documentElement.dataset.captureTitleLines=lines.toFixed(2);
       }
 
       async function route(w,d){
@@ -98,9 +144,11 @@
         });
         await pause(550);
         assertDesktopFieldGeometry(w,d,header);
+        await assertMobileFieldGeometry(w,d,header);
       }
 
-      app.src=`../../?uxSmoke=lesson8&debug=fr&v510Capture=${encodeURIComponent(feature)}-${Date.now()}`;
+      const debugQuery=debugFr?'&debug=fr':'';
+      app.src=`../../?uxSmoke=lesson8${debugQuery}&v510Capture=${encodeURIComponent(feature)}-${Date.now()}`;
       app.addEventListener('load',async()=>{
         try{
           const w=app.contentWindow,d=app.contentDocument;
