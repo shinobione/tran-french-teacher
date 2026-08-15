@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="fr" data-theme="original">
+<head>
+  <meta charset="utf-8">
+  <title>V5.9B Lesson Layout Tribunal</title>
+  <style>
+    :root{--ft-accent:#73d7ff;--ft-accent2:#c9a8ff;--ft-border:#40506b;--ft-surface:#151b2c;--ft-surface-2:#101625}
+    body{margin:0;padding:20px;background:#080d18;color:white;font-family:system-ui}
+    .b27-home{width:min(900px,calc(100vw - 40px));margin:auto}
+    .b27-primary-card{position:relative;overflow:hidden;padding:24px;border:1px solid #33405a;border-radius:26px;background:#151b2c}
+    .b27-primary-card>*{position:relative;z-index:2}.b27-primary-card::after{content:'';position:absolute;background:linear-gradient(135deg,transparent,#78d8ff);}
+    .b27-card-topline{display:flex;justify-content:space-between}.b27-card-topline>b{font-size:24px}.b27-card-topline>span{font-size:12px}
+    h2{font-size:30px;margin:18px 0 10px}.b27-primary-card p{line-height:1.45}.b27-progress{height:8px;background:#273047;margin:24px 0 18px}.b27-primary-action{width:100%;height:58px}
+  </style>
+  <link rel="stylesheet" href="./premium-v59-lesson-layout.css?v=2.3.24-v59b1">
+</head>
+<body>
+  <div id="app"><div class="b27-home"><section class="b27-primary-card" id="hero">
+    <div class="b27-card-topline"><span>BÀI 12 / 52</span><b>✦</b></div>
+    <h2>Một bài học thực tế ở Paris</h2>
+    <p>Nội dung bài học phải giữ vùng đọc riêng và không tranh chỗ với hình tháp Eiffel.</p>
+    <div class="b27-progress"><i></i></div>
+    <button class="b27-primary-action">Tiếp tục <b>›</b></button>
+  </section></div></div>
+  <script src="./premium-v59-lesson-layout.js?v=2.3.24-v59b1"></script>
+  <script>
+    (()=>{
+      const root=document.documentElement,hero=document.getElementById('hero'),themes=['original','aurora','sunset','jade'];
+      const fail=m=>{root.dataset.v59b='fail';root.dataset.v59bDetail=m};
+      setTimeout(()=>{try{
+        if(hero.dataset.v59LessonLayout!=='1')throw Error('hero-not-marked');
+        const identity=hero.querySelector('.ft-v59-lesson-identity'),icon=hero.querySelector('.ft-v59-lesson-identity-icon'),badge=hero.querySelector('.ft-v59-lesson-identity-badge');
+        if(!identity||!icon||!badge)throw Error('identity-missing');
+        const ir=icon.getBoundingClientRect(),br=badge.getBoundingClientRect(),hr=hero.getBoundingClientRect();
+        if(ir.left>=br.left)throw Error('icon-not-left-of-badge');
+        if(Math.max(ir.right,br.right)>hr.left+hr.width*.72)throw Error('identity-in-art-zone');
+        const title=hero.querySelector('.ft-v59-lesson-title'),progress=hero.querySelector('.ft-v59-lesson-progress');
+        if(title.getBoundingClientRect().width>=hr.width*.9)throw Error('title-not-protected');
+        if(parseFloat(getComputedStyle(progress).marginRight)<40)throw Error('progress-not-protected');
+        const geometries=[];
+        for(const theme of themes){root.dataset.theme=theme;const pseudo=getComputedStyle(hero,'::after');geometries.push([pseudo.bottom,pseudo.right,pseudo.width,pseudo.height].join('|'));}
+        if(new Set(geometries).size!==1)throw Error('theme-geometry-diverged');
+        root.dataset.v59b='ok';
+        root.dataset.v59bViewport=`${innerWidth}x${innerHeight}`;
+        root.dataset.v59bGeometry=geometries[0];
+      }catch(e){fail(e.message||String(e));}},100);
+      setTimeout(()=>{if(!root.dataset.v59b)fail('timeout')},2500);
+    })();
+  </script>
+</body>
+</html>

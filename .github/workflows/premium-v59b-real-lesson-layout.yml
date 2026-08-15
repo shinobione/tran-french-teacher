@@ -1,0 +1,75 @@
+name: Premium V5.9B Real Lesson Layout
+
+on:
+  pull_request:
+    branches:
+      - main
+      - agent/v59a-real-interactions
+
+permissions:
+  contents: read
+
+jobs:
+  v59b-layout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Static contracts and sanctuaries
+        run: |
+          set -euo pipefail
+          test -s premium-v59-lesson-layout.js
+          test -s premium-v59-lesson-layout.css
+          test -s premium-v59-lesson-layout-tribunal.html
+          node --check premium-v59-lesson-layout.js
+          node --check theme-controller.js
+          grep -q "const V59B='2.3.24-v59b1'" theme-controller.js
+          grep -q 'premium-v59-lesson-layout.css' theme-controller.js
+          grep -q 'premium-v59-lesson-layout.js' theme-controller.js
+          grep -q 'ft-v59-lesson-identity' premium-v59-lesson-layout.js premium-v59-lesson-layout.css
+          grep -q 'order:-1' premium-v59-lesson-layout.css
+          grep -q 'ft-v59-lesson-hero::after' premium-v59-lesson-layout.css
+          test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+          test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
+          test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-v59b-http.log 2>&1 &
+          echo $! >/tmp/ft-v59b-server.pid
+          sleep 1
+
+      - name: Chrome — shared geometry at mobile and desktop sizes
+        run: |
+          run_case() {
+            label="$1"; width="$2"; height="$3"
+            timeout --signal=TERM --kill-after=5s 35s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --window-size="${width},${height}" --virtual-time-budget=5000 --dump-dom \
+              'http://127.0.0.1:4173/premium-v59-lesson-layout-tribunal.html' >"/tmp/v59b-${label}.html"
+            grep -q 'data-v59b="ok"' "/tmp/v59b-${label}.html" || { grep -o 'data-v59b-detail="[^"]*"' "/tmp/v59b-${label}.html" || true; exit 1; }
+          }
+          run_case iphone 390 844
+          run_case largeiphone 430 932
+          run_case desktop 1440 900
+
+      - name: Chrome — real app loads both V5.9 layers
+        run: |
+          timeout --signal=TERM --kill-after=5s 45s \
+            google-chrome --headless=new --no-sandbox --disable-gpu \
+            --window-size=390,844 --virtual-time-budget=16000 --dump-dom \
+            'http://127.0.0.1:4173/?fieldNavV3=1' >/tmp/v59b-app.html
+          grep -q 'data-v59-interactions="1"' /tmp/v59b-app.html
+          grep -q 'data-v59-lesson-layout="1"' /tmp/v59b-app.html
+          ! grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/v59b-app.html
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-v59b-server.pid ]; then kill "$(cat /tmp/ft-v59b-server.pid)" || true; fi
