@@ -9,19 +9,35 @@
 - Reconciled: **2026-08-15**
 - Repository: `shinobione/tran-french-teacher`
 - Default branch: `main`
-- Current structural/runtime main checkpoint: **`88ca5f32a67d2989fcfb81684079848e67bffad5`** — PR **#149**, repository layout reorganization, squash-merged.
-- Previous feature-bearing runtime checkpoint: **`e3d434b48913bd6adf421b5445266c49944160b3`** — PR **#148**, approved Premium Practice artwork.
-- Rollback immediately before repository reorganization: **`2267f8f868b517e6f37a17f5e73394249eb40500`**.
-- PR #149 final head passed **43/43** pull-request workflows. Build26.5 hit its known bounded Chrome timeout once and passed unchanged on rerun; no product patch was made for that flake.
-- Merged structural checkpoint passed **28/28** push workflows.
-- **GitHub Pages #201 SUCCESS** on exact SHA `88ca5f32a67d2989fcfb81684079848e67bffad5`.
+- Latest runtime-bearing checkpoint at reconciliation: **`a23dcfa3704802f6f26d8eb5451cabb77847a6cb`** — PR **#151**, V5.10 shared Premium Feature Header System.
+- Immediately previous runtime checkpoint: **`4c4e22470fe976ea604ff672963b132abd34fcee`** — single-visible-record-control field fix.
+- Repository layout checkpoint underneath: **`88ca5f32a67d2989fcfb81684079848e67bffad5`** — PR **#149**, `src/` + `tests/` reorganization.
+- PR #151 final head passed **43/43** pull-request workflows.
+- Runtime checkpoint `a23dcfa…` passed **28/28** push workflows with **0 failure / 0 queued / 0 in-progress**.
+- **GitHub Pages #204 SUCCESS** on exact runtime SHA `a23dcfa3704802f6f26d8eb5451cabb77847a6cb`.
 - Premium gate issue: **#114 OPEN**.
 - **V5.10 remains the active human/physical installed-iPhone/PWA visual field gate.**
-- Build 35 remains **BLOCKED / RESERVED** until the explicit user field PASS and #114 closure.
+- Build 35 remains **BLOCKED / RESERVED** until explicit user field PASS and #114 closure.
 
-## Repository layout — canonical after PR #149
+A later docs/test-only reconciliation commit may advance `main` without changing the runtime-bearing SHA above. Always verify GitHub HEAD before acting.
 
-The root-file sprawl was reorganized without intended product/pedagogy/store/voice behavior changes.
+## Current product state
+
+| Area | State |
+|---|---|
+| Product pedagogy | **V2.3.0 · Build 34** |
+| Visual line | **Premium V5.10 · Feature Header System integrated · physical field verdict still required** |
+| Curriculum | **52 lessons / 313 items** |
+| Scenario | **44 situations / 132 turns** |
+| Speaking Loop | **52/52 · max 2 moments / lesson** |
+| Listening | **0.88 normal / 0.65 slow** |
+| Durable pedagogical stores | **6** |
+| Foundations | **F01–F04 pilot** |
+| Primary field target | **iPhone / Safari / installed PWA** |
+| Premium gate | issue **#114 OPEN** |
+| Build 35 | **BLOCKED / RESERVED** |
+
+## Repository layout — canonical
 
 ```text
 src/
@@ -50,34 +66,9 @@ voice-ios.js
 free-voice.js
 ```
 
-PR #149 moved **169 former root files** and rewired `index.html`, Service Worker paths, CSS-relative URLs, loaders, tools, browser harnesses and historical GitHub Actions contracts. Temporary migration helpers/scratch workflow staging were removed before merge and are not part of `main`.
+Do not flatten the organized `src/` / `tests/` layout back into repository root.
 
-Important path rule for future work:
-
-- repository/root URLs should use `./src/...` or `./tests/...` as appropriate;
-- ES-module imports between files already inside the same folder remain module-relative, e.g. `./runtime-contracts.js` inside `src/core/`;
-- CSS imports inside `src/premium/` remain stylesheet-relative, e.g. `./premium-v5-utility.css`, not `./src/premium/...`;
-- browser harness URLs must be resolved relative to `tests/browser/`, while assertions comparing literal app-owned `src` attributes must preserve the app document's own path semantics.
-
-## Current product state
-
-| Area | State |
-|---|---|
-| Product pedagogy | **V2.3.0 · Build 34** |
-| Visual line | **Premium V5.10 · approved Practice artwork integrated · physical field verdict still required** |
-| Curriculum | **52 lessons / 313 items** |
-| Scenario | **44 situations / 132 turns** |
-| Speaking Loop | **52/52 · max 2 moments / lesson** |
-| Listening | **0.88 normal / 0.65 slow** |
-| Durable pedagogical stores | **6** |
-| Foundations | **F01–F04 pilot** |
-| Primary field target | **iPhone / Safari / installed PWA** |
-| Premium gate | issue **#114 OPEN** |
-| Build 35 | **BLOCKED / RESERVED** |
-
-## V5.10 approved Practice artwork slice
-
-The previous V5.10 generated/inline SVG Practice-icon iterations are **superseded** by the user-approved Premium raster artwork family.
+## V5.10 approved Premium Practice artwork
 
 Runtime assets:
 
@@ -88,7 +79,7 @@ assets/premium/practice/review-premium.webp
 assets/premium/practice/real-life-premium.webp
 ```
 
-Semantic mapping:
+Practice mapping:
 
 ```text
 Parler            → speak-premium.webp
@@ -97,28 +88,95 @@ Réviser           → review-premium.webp
 Dans la vraie vie → real-life-premium.webp
 ```
 
-Contracts now locked by the V5.10 tribunal:
+Permanent artwork rules:
 
-- the approved artwork itself is not redrawn as SVG and is not recolored by CSS;
-- theme adaptation belongs only to the surrounding glass host;
-- Home / Aujourd’hui reuses the **exact same** `listen-premium.webp` and `review-premium.webp` files as Pratiquer;
-- the four artworks decode in real Chrome;
-- Original / Aurora / Sunset / Jade are exercised;
-- iPhone-size **390×844** and desktop **1280×800** are exercised;
-- no horizontal overflow and no surviving legacy SVG/emoji inside the owned icon hosts;
-- artwork is centered and remains unfiltered;
-- the six durable learner stores remain byte-identical during pure icon/theme travel;
-- all four artwork files are included in the Service Worker offline core.
+- use the approved files directly;
+- do not redraw them as SVG or emoji;
+- do not recolor/filter the artwork by theme;
+- Original / Aurora / Sunset / Jade may change only the surrounding glass host treatment;
+- Aujourd’hui reuses the **exact same** Listen and Review source files as Pratiquer;
+- all four assets remain in the Service Worker offline core.
 
-PWA/cache choice:
+## V5.10 shared Premium Feature Header System — PR #151
 
-- targeted icon/runtime version: **`2.3.31-v510png1`**;
-- global Service Worker cache identity deliberately remains **`tran-french-teacher-v2.3.22-b34.14-v58debug1`**;
-- this avoids an unrelated global cache bump while still invalidating the V5.10 icon JS/CSS URLs and caching the four new artwork files.
+The approved Practice identity now continues into the destination surfaces through one shared compact header contract:
+
+```text
+[ APPROVED ARTWORK ]   FRENCH TRÂN’QUILLE
+                       CANONICAL FEATURE TITLE
+```
+
+Canonical destination mapping:
+
+```text
+Écouter
+→ listen-premium.webp
+→ Compréhension orale
+
+Réviser
+→ review-premium.webp
+→ Révision
+
+Dans la vraie vie / Real-Life
+→ real-life-premium.webp
+→ Conversation
+
+Parler → explicit oral-training mode only
+→ speak-premium.webp
+→ Répondre à l’oral
+```
+
+### Critical semantic rule
+
+**`Conversation` is the Real-Life destination here. It is NOT the Speak header.**
+
+Speak ownership begins only after the user explicitly opens the oral-training mode **`Répondre à l’oral`** from Parler. The V5.10 runtime preserves that distinction across Session UX mode switches so a stale voice-mode flag cannot leak the Speak artwork/title into Real-Life.
+
+Header owners are deliberately adapted through the Premium layer rather than by rewriting protected historical engines:
+
+- Listening existing header: `.listening-top`;
+- Review existing header: `.screen-review .topbar`;
+- shared Conversation/Practice host: `.screen-conversation .topbar`, with runtime semantic ownership between Real-Life and explicit Speak mode.
+
+No `app.js`, `voice-ios.js`, `free-voice.js`, curriculum, pedagogy, durable-store schema or migration contract was changed for this slice.
+
+## V5.10 permanent QA after PR #151
+
+The V5.10 Chrome tribunal now performs real navigation and asserts exact semantic ownership:
+
+```text
+Pratiquer → Réviser
+Pratiquer → Écouter
+Pratiquer → Parler → Répondre à l’oral
+Pratiquer → Dans la vraie vie → Conversation
+```
+
+It verifies:
+
+- exact approved artwork source per destination;
+- `Conversation` never receives the Speak artwork;
+- canonical FR titles under DEBUG FR;
+- `FRENCH TRÂN’QUILLE` identity line;
+- Original / Aurora / Sunset / Jade;
+- **390×844**, **430×932**, **1280×800**;
+- no horizontal overflow;
+- no header collision with Back / Settings / session score;
+- artwork remains centered and unfiltered;
+- exact Home ↔ Practice reuse remains locked;
+- six durable learner stores remain byte-identical during pure visual travel.
+
+A dedicated capture harness also produces visual field-review screenshots for the four destination headers at mobile and desktop sizes when the V5.10 workflow is exercised.
+
+## PWA/cache choice
+
+- Existing targeted artwork/runtime URL version remains **`2.3.31-v510png1`** in `index.html` / `sw.js`.
+- Existing global Service Worker cache identity deliberately remains unchanged.
+- No new artwork file was introduced by Feature Headers; they reuse the four already-pre-cached approved Practice assets.
+- Therefore PR #151 required **no global cache bump and no asset duplication**.
 
 ## Protected sanctuaries
 
-The V5.10 Practice-art slice and repository reorganization did **not** change the protected sanctuary contents:
+Current Premium field fixes must not silently change:
 
 ```text
 app.js
@@ -128,34 +186,44 @@ assets/LOGO.png
 assets/Favicon.png
 ```
 
-They also did not intentionally change curriculum semantics, learner progression, Scenario, Listening semantics, voice/replay behavior, migration contracts or durable-store schemas.
+Also preserve:
+
+- learner progression;
+- six durable stores;
+- lesson IDs;
+- curriculum semantics;
+- Scenario / Listening / Memory semantics;
+- voice / replay semantics;
+- Recovery / migration contracts.
 
 ## Locked / must not regress
 
-- Physical navigation contract: **ZERO route flash / ZERO remanence / ZERO competing facades**.
+- **ZERO route flash / ZERO remanence / ZERO competing facades.**
 - No route/page crossfade may expose old and new facades simultaneously.
 - Global chrome baseline: Back top-left, Settings top-right, coherent control family.
 - Progress visual grammar: **A0 → progress line → A1**.
 - DEBUG FR remains logically independent from visual theme.
-- Visual work must not alter pedagogy, learner stores, lesson IDs, voice/audio semantics or migration contracts.
+- Approved Practice artwork must not silently fall back to superseded generated SVG/emoji families.
+- Feature Header artwork must remain the exact same approved source file used on Practice.
+- `Conversation` remains Real-Life; Speak remains explicit `Répondre à l’oral` only.
 - Build 35 remains unavailable for CSS/assets/animation/cache/DEBUG/visual QA work.
-- Locked Aurora / Sunset / Nocturne backgrounds must not be silently regenerated.
-- Approved Practice artwork must not silently fall back to the superseded generated SVG family.
-- Do not flatten the organized `src/` / `tests/` layout back into repository root.
 
 ## Canonical next action — V5.10 physical field gate
 
 **Do not start Build 35. Do not close #114 from automation alone.**
 
-Next action is the real installed-iPhone/PWA review of the newly integrated artwork plus the existing V5.10 field matrix:
+Next action is the real installed-iPhone/PWA field review of the current V5.10 package:
 
 ```text
-V5.10 automated Practice-art certification ✅
+approved Practice artwork certification ✅
 repository structure migration certification ✅
+shared Feature Header certification ✅
 → physical installed-iPhone/PWA review
-→ verify the four approved Practice artworks by eye
-→ verify exact Home reuse for Écouter / Réviser
-→ verify all four themes without recoloring the artwork
+→ verify Practice + Home artwork identity
+→ verify destination Feature Headers
+→ verify Conversation = Real-Life artwork/title
+→ verify Parler → Répondre à l’oral = Speak artwork/title
+→ verify all four themes
 → verify warm-online → offline reopen
 → verify ZERO flash/remanence regression
 → explicit user FIELD PASS
@@ -163,14 +231,16 @@ repository structure migration certification ✅
 → only then Build 35
 ```
 
-For the Practice-art field review specifically, inspect:
+For the new Feature Header field review specifically inspect:
 
-- **Pratiquer**: Parler / Écouter / Réviser / Dans la vraie vie all use the approved 3D artwork;
-- **Aujourd’hui**: Écouter and Réviser visibly match the exact Practice artwork family;
-- artwork is crisp, optically centered and not buried in an excessive CSS halo;
-- Original / Aurora / Sunset / Nocturne change the host treatment only, not the artwork colors;
-- iPhone has no horizontal overflow;
-- after one warm online launch, the same artwork remains available offline.
+- **Compréhension orale**: Listen artwork on the left, French Trân’quille identity, no old headphone glyph/header gap;
+- **Révision**: Review artwork on the left, same geometry;
+- **Dans la vraie vie → Conversation**: Real-Life artwork, **never Speak**;
+- **Parler → Répondre à l’oral**: Speak artwork only after selecting the real oral-training mode;
+- compact proportions and alignment on iPhone;
+- no Back/Settings/score overlap;
+- no new horizontal overflow;
+- theme changes affect the host, not artwork colors.
 
 ## Resume checklist for a fresh session
 
@@ -179,10 +249,10 @@ For the Practice-art field review specifically, inspect:
 2. Read this PROJECT-STATE.md.
 3. Verify current main HEAD + recent commits.
 4. Check open PRs and issue #114.
-5. Verify CI/Pages for the current main/candidate SHA when relevant.
+5. Verify CI/Pages for current main/candidate SHA.
 6. Read V5.10 in MASTER-ROADMAP.md.
-7. Respect the organized src/ and tests/ layout; do not assume historical files still live at root.
+7. Respect src/ and tests/ layout.
 8. Do NOT start Build 35 before explicit V5.10 field PASS and #114 closure.
-9. For a reproduced V5.10 defect, create one small checkpointed field-fix slice and rerun the relevant tribunals.
-10. Keep learner stores / voice / navigation sanctuaries intact and update this checkpoint before declaring Premium fully closed.
+9. For a reproduced V5.10 defect, create one small checkpointed field-fix slice and rerun relevant tribunals.
+10. Keep learner stores / voice / navigation sanctuaries intact.
 ```
