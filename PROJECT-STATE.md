@@ -9,12 +9,11 @@
 - Reconciled: **2026-08-15**
 - Repository: `shinobione/tran-french-teacher`
 - Default branch: `main`
-- Verified `main` HEAD at reconciliation: **`4019c1b6cb41fee9c36bdb223e255455a0da4b5f`**.
-- That commit is the merge of PR **#134 — V5.9E global Premium QA checkpoint**.
+- Verified `main` HEAD at reconciliation: **`bf196a101e9d444650390e94a9ba8adf5f19009c`**.
+- That commit is the merge of PR **#128 — V5.8 decouple DEBUG FR from visual themes**.
 - Premium gate issue: **#114 OPEN**.
-- **V5.9 is technically closed in git**, split into five independently revertable checkpoints (#130→#134).
-- **V5.10 physical iPhone / Safari / installed-PWA verdict is now the active gate.**
-- Build 35 remains blocked/reserved until that field gate is explicitly passed and #114 is closed.
+- No V5.9 runtime implementation is considered started or durable at this checkpoint.
+- The Codex review panel seen after V5.8 contained V5.8-era changes already merged; do **not** treat that panel as durable V5.9 project state.
 
 **Important:** fresh agents must still verify current HEAD, open PRs, CI and Pages before runtime-affecting work.
 
@@ -23,7 +22,7 @@
 | Area | State |
 |---|---|
 | Product pedagogy | **V2.3.0 · Build 34** |
-| Visual line | **Premium V5.9 technically closed · V5.10 physical field gate active** |
+| Visual line | **Premium V5.8 merged · V5.9 field-coherence specification active** |
 | Curriculum | **52 lessons / 313 items** |
 | Scenario | **44 situations / 132 turns** |
 | Speaking Loop | **52/52 · max 2 moments / lesson** |
@@ -46,74 +45,92 @@
 - Build 35 remains unavailable for CSS/assets/animation/cache/DEBUG/visual QA work.
 - Locked Aurora / Sunset / Nocturne backgrounds must not be silently regenerated.
 
-## Premium V5.9 technical closeout — merged 2026-08-15
+## Premium V5.9 field findings — user screenshots 2026-08-15
 
-The V5.9 field findings were resolved as **shared-system changes**, not four independent theme patch stacks.
+These are the canonical next-field issues. Treat them as **shared-system problems**, not four separate theme patches.
 
-### Rollback chain
+### Confirmed interaction / UI defects
 
-- **V5.9A / PR #130** — interaction coherence — merge `5d25b6079dd8115149356bdf3dcb3133fee606e0`;
-- **V5.9B / PR #131** — shared Lesson/Eiffel layout — merge `45e7d2a62a635b4448ea16250c53e092390e5464`;
-- **V5.9C / PR #132** — shared Premium controls + hidden DEBUG entry — merge `3c6ecce404efa62723bfb0b10c85da6bbbfda1ed`;
-- **V5.9D / PR #133** — Premium goat favicon/PWA icon family — merge `48aed8e2fca0b6dacec8f9a4a5e257b16bad67ef`;
-- **V5.9E / PR #134** — aggregate technical QA checkpoint — merge `4019c1b6cb41fee9c36bdb223e255455a0da4b5f`.
+1. **Speaking Loop duplicate CTA**
+   - the lesson speaking block shows the same self-record button twice;
+   - the local-device explanatory note is also duplicated;
+   - final contract: **one self-record CTA + one explanatory note**.
 
-### Technically delivered
+2. **Settings `Giới thiệu` / About hit target**
+   - the card does not respond across its full surface;
+   - the user must currently hit the chevron/arrow;
+   - final contract: **the whole navigation card is clickable/tappable; the chevron is only an affordance**.
 
-- Speaking Loop duplicate self-record CTA / local-only note guarded to one instance per speaking card;
-- Settings `Giới thiệu` / About promoted to a whole-card hit target while preserving its underlying action;
-- Real Life receives one shared Premium line-icon treatment;
-- Lesson/Today card identity cluster and Eiffel decoration now share one cross-theme geometry contract;
-- shared Premium card / CTA / icon-circle / focus / press grammar added without route crossfade ownership;
-- DEBUG FR remains theme-independent and gains a discreet admin entry (long-press Settings title + desktop fallback), with no permanent learner-facing DEBUG button;
-- new goat-derived favicon / Apple Touch / PWA icon family is stored under `assets/premium/brand/`; historical `assets/Favicon.png` remains intact;
-- aggregate V5.9 QA checkpoint exists separately from the product slices.
+3. **Real Life / `Tình huống thực tế` icon quality**
+   - current icon is visually inconsistent with the Premium icon family;
+   - replace with a cleaner, more coherent Premium symbol rather than a one-off clipart-like treatment.
 
-### What this does **not** certify
+### Shared visual-system issues
 
-Automation does **not** certify the final installed-iPhone visual/gesture experience. V5.9 technical closure is therefore **not** the final Premium user PASS and does not close issue #114.
+4. **Lesson identity cluster overlaps Eiffel artwork on some themes**
+   - icon/badge placement must not cover the theme Eiffel decoration;
+   - the stronger Sunset composition is the structural reference: lesson identity lives in its own predictable zone, Eiffel remains decorative on the opposite/right side;
+   - fix through **one cross-theme lesson-card layout contract**, not per-theme hand positioning.
+
+5. **Buttons/cards are still below approved mockup quality**
+   - V5.9 must consolidate the shared design grammar: CTA heights, radii, borders, glass/material hierarchy, icon circles, spacing, depth, restrained glow, press/hover/focus/active states;
+   - goal is mockup-family coherence, not isolated CSS cosmetics.
+
+6. **App/fav icon is off-brand**
+   - current favicon/PWA identity clashes with the Premium UI;
+   - replacement direction: a simplified Premium French Trân’quille / goat-derived mark, readable at favicon/PWA sizes and coherent with Home branding;
+   - do not touch the current protected `assets/Favicon.png` in a docs-only pass; any replacement requires an explicit asset/runtime slice and cache/PWA validation.
+
+7. **DEBUG access needs a better admin entry pattern**
+   - V5.8 already makes DEBUG FR independent from theme;
+   - the remaining UX requirement is access under **all four themes** while keeping it out of Trân’s normal learner UI;
+   - prefer a discreet admin affordance/gesture or hidden entry rather than a large visible learner-facing DEBUG control;
+   - theme changes must never alter DEBUG state and DEBUG changes must never alter theme.
 
 ## Canonical next action
 
-**Do not start Build 35. Do not auto-chain beyond the field gate.**
+**Do not start Build 35. Do not auto-chain phases.**
 
-The next phase is:
+The next runtime slice is:
 
-### Premium V5.10 — Global Visual QA + Physical iPhone Verdict
+### Premium V5.9 — Shared UI Coherence + Fluidity
 
-Required next action is a **real-device validation**, not another speculative CSS pass:
+Order inside the slice:
 
-1. deploy/refresh current `main` at the V5.9 technical checkpoint;
-2. validate Original / Aurora / Sunset / Nocturne on the installed iPhone/PWA;
-3. verify one self-record CTA + one note in Speaking Loop;
-4. verify full-card `Giới thiệu` tap target;
-5. verify Real Life icon quality;
-6. verify Lesson identity never overlaps Eiffel art;
-7. verify hidden DEBUG entry under every theme without leaking into learner UI;
-8. verify new favicon / home-screen / PWA icon family on-device;
-9. recheck ZERO route flash / ZERO competing facades and reduced-motion functionality;
-10. only after explicit user PASS: close #114, finish Build 34 governance/docs closure, then unlock Build 35.
+1. remove duplicate Speaking Loop CTA/note;
+2. make `Giới thiệu` whole-card clickable;
+3. replace/standardize the Real Life icon treatment;
+4. establish one shared Today/Lesson hero layout contract across Original/Aurora/Sunset/Nocturne;
+5. keep Eiffel art decorative and non-overlapping;
+6. define/implement the shared Premium card/button grammar closer to approved mockups;
+7. provide discreet cross-theme DEBUG/admin access;
+8. define the future app/fav icon replacement asset contract if not safely included in the same coherent slice;
+9. run relevant local/browser tests and create the **V5.9 candidate PR**;
+10. **STOP at candidate PR and return control.**
+
+Do not spend a coding-agent session polling all CI, merging, watching Pages, then automatically starting V5.10.
 
 ```text
 V5.8 merged
-→ V5.9 technical slices #130→#134 merged
-→ V5.10 physical iPhone / PWA verdict  ← ACTIVE NEXT
-→ explicit user PASS
-→ close #114
+→ V5.9 shared-system coherence + local Premium feel
+→ STOP at candidate PR
+→ separate CI/review/merge/Pages checkpoint
+→ V5.10 global visual QA + physical iPhone verdict
 → Build 34 governance/docs closure
+→ close #114 only after explicit final user PASS
 → Build 35
 ```
 
 ## Runtime / asset policy for this checkpoint
 
-This closeout is **docs-only**. The V5.9 runtime already lives on `main` through PRs #130–#134.
+This reconciliation is **docs-only**.
 
-- do not reopen V5.9 with speculative visual patches before the physical V5.10 verdict;
-- no learner-data/store migration;
-- no voice/audio semantic change;
+- no JS/CSS/HTML/service-worker change;
+- no learner-data/store change;
+- no voice/audio change;
 - no Premium background regeneration;
-- keep locked Eiffel/background assets stable unless V5.10 produces a concrete field defect;
-- Build 35 remains unavailable for CSS/assets/animation/cache/DEBUG/visual QA work.
+- no new Eiffel artwork required before the shared lesson-card layout contract is settled;
+- future favicon/PWA icon work must be handled as an explicit asset/runtime change, not silently folded into documentation.
 
 ## Protected sanctuaries
 
@@ -135,7 +152,7 @@ assets/Favicon.png
 3. Verify current main HEAD + recent commits.
 4. Check open PRs and issue #114.
 5. Check CI/Pages for the current candidate SHA if runtime-affecting work is involved.
-6. Read the V5.9 closeout + V5.10 field gate in MASTER-ROADMAP.md.
+6. Read V5.9 + V5.10 in MASTER-ROADMAP.md.
 7. Implement only the named active slice.
 8. Materialize work in git / candidate PR.
 9. STOP before CI-marathon / merge / next-slice auto-chaining unless explicitly instructed.

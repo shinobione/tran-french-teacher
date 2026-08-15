@@ -26,14 +26,6 @@ Ces deux correctifs sont en production mais gardent un **field gate iPhone** jus
 - coût récurrent : **0 €** ;
 - cible principale : **iPhone / Safari / PWA iOS**.
 
-## ✨ Premium V5.9 — technical closeout
-
-La ligne Premium V5.9 est désormais **techniquement fermée** sur `main` **`4019c1b6cb41fee9c36bdb223e255455a0da4b5f`**, en cinq checkpoints indépendamment revertables : **PR #130 → #134**.
-
-Elle couvre la cohérence Speaking/About/Real Life, un layout Lesson/Eiffel commun aux quatre thèmes, une grammaire Premium partagée pour cartes/CTA/icônes, un accès DEBUG discret et indépendant du thème, ainsi qu’une nouvelle famille favicon/Apple Touch/PWA goat-derived sous `assets/premium/brand/`.
-
-**Le verdict produit final n’est pas encore prononcé** : V5.10 doit encore être validée sur le vrai iPhone / Safari / PWA installé. Issue **#114 reste ouverte** et Build 35 reste bloqué jusque-là.
-
 ## 🧩 Build 33 — Foundations Audit
 
 L’audit a classé les **313/313 éléments** :
