@@ -1,0 +1,105 @@
+name: Premium V5.9E Global Technical QA
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  v59e-global:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Static V5.9 chain and sanctuaries
+        run: |
+          set -euo pipefail
+          node --check premium-v59-interactions.js
+          node --check premium-v59-lesson-layout.js
+          node --check premium-v59-system.js
+          node --check theme-controller.js
+          node --check sw.js
+          for f in \
+            premium-v59-interactions-tribunal.html \
+            premium-v59-lesson-layout-tribunal.html \
+            premium-v59-system-tribunal.html \
+            premium-v59-brand-tribunal.html \
+            premium-v59-global-tribunal.html; do test -s "$f"; done
+          grep -q 'premium-v59-interactions.js' theme-controller.js sw.js
+          grep -q 'premium-v59-lesson-layout.js' theme-controller.js sw.js
+          grep -q 'premium-v59-system.js' theme-controller.js sw.js
+          grep -q 'goat-app-icon-maskable-512.webp' manifest.webmanifest sw.js
+          ! grep -E -q 'francais-avec-luc:learner:v1|french-tranquille:learning-memory:v1|french-tranquille:error-intelligence:v1|french-tranquille:scenarios:v1|french-tranquille:listening:v1|french-tranquille:milestones:v1' premium-v59-interactions.js premium-v59-lesson-layout.js premium-v59-system.js
+          test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+          test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
+          test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-v59e-http.log 2>&1 &
+          echo $! >/tmp/ft-v59e-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — aggregate A+B+C+D plus real app
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 55s \
+            google-chrome --headless=new --no-sandbox --disable-gpu \
+            --window-size=1440,1000 --virtual-time-budget=22000 --dump-dom \
+            'http://127.0.0.1:4173/premium-v59-global-tribunal.html' >/tmp/v59e-global.html
+          grep -q 'data-v59e="ok"' /tmp/v59e-global.html || { grep -o 'data-v59e-detail="[^"]*"' /tmp/v59e-global.html || true; exit 1; }
+
+      - name: Chrome — shared Lesson/Eiffel geometry at five viewports
+        run: |
+          set -euo pipefail
+          run_case() {
+            label="$1"; width="$2"; height="$3"
+            file="/tmp/v59e-b-${label}.html"
+            timeout --signal=TERM --kill-after=5s 35s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --window-size="${width},${height}" --virtual-time-budget=6000 --dump-dom \
+              'http://127.0.0.1:4173/premium-v59-lesson-layout-tribunal.html?e=v59e' >"$file"
+            grep -q 'data-v59b="ok"' "$file" || { grep -o 'data-v59b-detail="[^"]*"' "$file" || true; exit 1; }
+          }
+          run_case iphone 390 844
+          run_case iphone-large 430 932
+          run_case tablet 768 1024
+          run_case desktop 1280 800
+          run_case desktop-wide 1440 900
+
+      - name: Chrome — reduced motion keeps function
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 35s \
+            google-chrome --headless=new --no-sandbox --disable-gpu \
+            --force-prefers-reduced-motion --window-size=390,844 \
+            --virtual-time-budget=7000 --dump-dom \
+            'http://127.0.0.1:4173/premium-v59-system-tribunal.html?e=v59e-reduced' >/tmp/v59e-reduced.html
+          grep -q 'data-v59c="ok"' /tmp/v59e-reduced.html || { grep -o 'data-v59c-detail="[^"]*"' /tmp/v59e-reduced.html || true; exit 1; }
+
+      - name: Chrome — real learner shell has no boot error
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 45s \
+            google-chrome --headless=new --no-sandbox --disable-gpu \
+            --window-size=390,844 --virtual-time-budget=16000 --dump-dom \
+            'http://127.0.0.1:4173/?fieldNavV3=1&v59eShell=1' >/tmp/v59e-shell.html
+          grep -q 'data-v59-interactions="1"' /tmp/v59e-shell.html
+          grep -q 'data-v59-lesson-layout="1"' /tmp/v59e-shell.html
+          grep -q 'data-v59-premium-system="1"' /tmp/v59e-shell.html
+          ! grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/v59e-shell.html
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-v59e-server.pid ]; then kill "$(cat /tmp/ft-v59e-server.pid)" || true; fi
