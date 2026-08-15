@@ -355,7 +355,7 @@ No theme may look like “Premium themes + one old skin”.
 - [x] No learner-store mutation in the local four-theme tribunals.
 - [x] 5-viewport screenshot matrix generated for all 4 themes.
 
-Candidate status on 2026-08-15: local tribunals are green, exact runtime-head CI is **35 / 35 SUCCESS**, and the complete 20-shot matrix exists locally and as CI artifact `9239746575`. This is **not** a merge, deployment, physical-device PASS or user visual PASS.
+Candidate status on 2026-08-15: local tribunals are green, exact candidate CI is **35 / 35 SUCCESS**, and the complete 20-shot matrix exists locally and as CI artifact `9239868706`. This is **not** a merge, deployment, physical-device PASS or user visual PASS.
 
 ---
 

@@ -15,6 +15,7 @@
 - Active draft PR: **#127 — V5.7 integrate four-theme Premium artwork**.
 - First verified candidate commit: **`895351ca341c2dd8e49c6b6a04463f53dd9af3f0`**.
 - Latest runtime-bearing candidate commit: **`56e743e7fe0f232b546138a29292952099bd6e8f`**.
+- Latest fully verified candidate/harness checkpoint before this documentation commit: **`f17f275d0dbc557b0c8a5234ec867baac9c3a179`**.
 - V5.7 runtime wiring exists only on the candidate branch; it is not yet merged, deployed or field-approved.
 
 **Important:** this document does not claim that its own commit is the latest `main` SHA. A checkpoint cannot safely self-embed its final commit SHA. Fresh agents must verify current HEAD first.
@@ -84,15 +85,18 @@ For current verified `main` basis `b2b22efbdbef18f4556012171dd42605d80df467`, Gi
 - GitHub Pages run **`31856811221`**: **SUCCESS** on that exact SHA.
 - Current exact-HEAD result: **27 / 27 SUCCESS**.
 
-For PR #127 runtime-bearing candidate `56e743e7fe0f232b546138a29292952099bd6e8f`, GitHub returned **35 / 35 SUCCESS**:
+For PR #127 verified candidate `f17f275d0dbc557b0c8a5234ec867baac9c3a179`, GitHub returned **35 / 35 SUCCESS**:
 
-- V5.7 Theme Art Integration run **`31858356578`**: **SUCCESS**;
-- V5.7 Fidelity + Theme Art run **`31858356530`**: **SUCCESS**;
-- Build 29 iPhone PWA accessibility/offline run **`31858356513`**: **SUCCESS**;
-- Field navigation V3 run **`31858356575`**: **SUCCESS**;
-- visual artifact **`premium-v57-theme-art-visual-review`**, ID **`9239746575`**, contains the 20-shot review matrix.
+- V5.7 Theme Art Integration run **`31858785495`**: **SUCCESS**;
+- V5.7 Fidelity + Theme Art run **`31858785378`**: **SUCCESS**;
+- Build 29 iPhone PWA accessibility/offline run **`31858785461`**: **SUCCESS**;
+- Field navigation V3 run **`31858785640`**: **SUCCESS**;
+- Build 25.2 Session UX run **`31858785398`**: **SUCCESS** with bounded Chrome retries;
+- visual artifact **`premium-v57-theme-art-visual-review`**, ID **`9239868706`**, contains the 20-shot review matrix.
 
 An earlier docs-only candidate head failed Build 29 before browser execution because its workflow asserted a literal cache value where `sw.js` correctly used `${V5F}`. Only the stale assertion was repaired; no product code changed for that failure.
+
+On `f17f275…`, Premium V5 Coherence run **`31858785483`** first observed the already-known underlay-settle timing flake (`original-practice:practice-underlay-not-restored`). The failed job was rerun strictly unchanged and completed **SUCCESS** on attempt 2. No product mutation was made for that flake.
 
 For the previous runtime-bearing `main` checkpoint `2bba5bd06ba14be7286e16a6a9a417fa04ce642a`, issue #114 records:
 
