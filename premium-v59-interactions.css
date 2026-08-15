@@ -1,0 +1,40 @@
+/* French Trân’quille — Premium V5.9A shared interaction ownership */
+html[data-theme] .screen-lesson .lesson-step.ft-v59-speaking-owner .voice-replay-panel{
+  display:none!important;
+}
+
+html[data-theme] #ft-settings-legal .ft-legal-head.ft-v59-about-hit-target{
+  cursor:pointer;
+  border-radius:inherit;
+  outline:none;
+  transition:background-color .14s ease,transform .12s ease,box-shadow .14s ease;
+}
+html[data-theme] #ft-settings-legal .ft-legal-head.ft-v59-about-hit-target:hover{
+  background:color-mix(in srgb,var(--ft-accent) 6%,transparent);
+}
+html[data-theme] #ft-settings-legal .ft-legal-head.ft-v59-about-hit-target:active{
+  transform:scale(.992);
+}
+html[data-theme] #ft-settings-legal .ft-legal-head.ft-v59-about-hit-target:focus-visible{
+  box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--ft-accent) 70%,transparent),0 0 0 3px color-mix(in srgb,var(--ft-accent) 16%,transparent);
+}
+
+html[data-theme] [data-b27-practice-action="real-life"] .b27-practice-icon{
+  color:var(--ft-accent);
+}
+html[data-theme] [data-b27-practice-action="real-life"] .ft-v59-real-life-svg{
+  width:25px;
+  height:25px;
+  display:block;
+  stroke:currentColor;
+  stroke-width:1.75;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  vector-effect:non-scaling-stroke;
+}
+
+@media(prefers-reduced-motion:reduce){
+  html[data-theme] #ft-settings-legal .ft-legal-head.ft-v59-about-hit-target{
+    transition:none!important;
+  }
+}
