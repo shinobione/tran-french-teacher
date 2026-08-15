@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const VERSION = '2.3.34-v510fieldidentity1';
+  const VERSION = '2.3.35-v510lessonidentity1';
   const root = document.documentElement;
   const DEBUG_KEY = 'tran-french-teacher:debug-fr:v1';
   const TYFFANY_ASSET = './assets/premium/brand/tyffany-memory.svg';
@@ -33,12 +33,24 @@
   ].join(',');
 
   const isDebug = () => localStorage.getItem(DEBUG_KEY) === '1';
+  const T = (vi, fr) => isDebug() ? fr : vi;
+  const curriculum = () => window.FrenchTranquilleCurriculum || null;
   const featureAssetId = feature => feature === 'speak' ? 'conversation' : feature;
   const featureAsset = feature => ASSETS[featureAssetId(feature)] || '';
   const featureTitle = feature => {
     const copy = FEATURE_COPY[feature];
     return copy ? (isDebug() ? copy.fr : copy.vi) : '';
   };
+
+  function lessonById(id) {
+    return curriculum()?.lessons?.find(lesson => lesson.id === id) || null;
+  }
+
+  function currentLesson() {
+    const heading = document.querySelector('.screen-lesson .topbar h1');
+    const number = Number(heading?.textContent?.match(/\d+/)?.[0] || 0);
+    return curriculum()?.lessons?.find(lesson => Number(lesson.number) === number) || null;
+  }
 
   function buildArt(id, extraClass = '') {
     const img = document.createElement('img');
@@ -95,8 +107,6 @@
     const copy = document.createElement('span');
     copy.className = 'ft-v510-feature-copy';
     const brand = document.createElement('span');
-    // Deliberately do not inherit the historical `.eyebrow` class: legacy Listening/route
-    // polish is allowed to hide its own old eyebrow, never the shared Premium identity line.
     brand.className = 'ft-v510-feature-brand';
     brand.textContent = 'FRENCH TRÂN’QUILLE';
     const heading = document.createElement('h1');
@@ -143,7 +153,7 @@
   function decorateTyffanyAvatars() {
     document.querySelectorAll('.luc > span').forEach(span => {
       const host = span.closest('.luc');
-      if (!host) return;
+      if (!host || host.closest('.screen-lesson .teacher-line')) return;
       host.dataset.v510TyffanyAvatar = 'canonical-svg-v1';
       span.dataset.v510TyffanyAsset = TYFFANY_ASSET;
       span.textContent = '';
@@ -164,6 +174,67 @@
     root.dataset.v510BrandIdentity = 'goat-v1';
   }
 
+  function decorateHomeLessonIdentity() {
+    const card = document.querySelector('.b27-home .b27-primary-card');
+    if (!card) return;
+    const lessonId = card.querySelector('[data-b27-open-lesson]')?.dataset.b27OpenLesson || '';
+    const lesson = lessonById(lessonId);
+    if (!lesson?.icon) return;
+
+    let icon = card.querySelector(':scope > .ft-v510-home-lesson-icon');
+    if (!icon) {
+      icon = document.createElement('span');
+      icon.className = 'ft-v510-home-lesson-icon';
+      icon.setAttribute('aria-hidden', 'true');
+      const title = card.querySelector(':scope > h2');
+      if (title) title.before(icon);
+      else card.appendChild(icon);
+    }
+    if (icon.textContent !== lesson.icon) icon.textContent = lesson.icon;
+    icon.dataset.v510LessonId = lesson.id;
+    card.dataset.v510LessonIdentity = lesson.id;
+  }
+
+  function decorateLessonDetailIdentity() {
+    const line = document.querySelector('.screen-lesson .teacher-line');
+    const lesson = currentLesson();
+    if (!line || !lesson?.icon) return;
+
+    const legacyTutor = line.querySelector(':scope > .luc');
+    if (legacyTutor) {
+      legacyTutor.classList.add('ft-v510-legacy-tutor-avatar');
+      legacyTutor.removeAttribute('data-v510-tyffany-avatar');
+      legacyTutor.setAttribute('aria-hidden', 'true');
+      const span = legacyTutor.querySelector(':scope > span');
+      if (span) {
+        delete span.dataset.v510TyffanyAsset;
+        span.textContent = '';
+      }
+    }
+
+    let icon = line.querySelector(':scope > .ft-v510-lesson-identity-icon');
+    if (!icon) {
+      icon = document.createElement('span');
+      icon.className = 'ft-v510-lesson-identity-icon';
+      icon.setAttribute('aria-hidden', 'true');
+      line.prepend(icon);
+    }
+    if (icon.textContent !== lesson.icon) icon.textContent = lesson.icon;
+    icon.dataset.v510LessonId = lesson.id;
+
+    const label = line.querySelector(':scope > div > strong');
+    const title = T(lesson.titleVi || '', lesson.titleFr || '');
+    if (label && label.textContent !== title) label.textContent = title;
+
+    line.dataset.v510LessonIdentity = lesson.id;
+    root.dataset.v510LessonIdentity = 'lesson-icon-v1';
+  }
+
+  function decorateLessonIdentities() {
+    decorateHomeLessonIdentity();
+    decorateLessonDetailIdentity();
+  }
+
   function decorateLegacyIdentityAssets() {
     decorateTyffanyAvatars();
     decorateBrandIdentity();
@@ -172,15 +243,11 @@
   function conversationFeature() {
     const screen = document.querySelector('.screen-conversation');
     if (!screen) return null;
-    // A running Scenario is authoritative Real-Life state, even if Session UX has not yet
-    // rewritten an older voice mode flag during the route transition.
     if (screen.querySelector('.scenario-runner,.scenario-done')) return 'real-life';
     if (conversationOwner === 'real-life') return 'real-life';
     const mode = root.dataset.sessionPracticeMode || '';
     if (conversationOwner === 'speak' || mode === 'voice') return 'speak';
     if (screen.querySelector('#free-voice-card:not(.session-mode-hidden)')) return 'speak';
-    // Product mapping is intentional: the page titled Conversation is the Real-Life surface.
-    // Speak owns only the explicit oral-training mode ("Répondre à l’oral").
     return 'real-life';
   }
 
@@ -215,6 +282,7 @@
     decorateFeatureHeaders();
     decorateTyffanyMemory();
     decorateLegacyIdentityAssets();
+    decorateLessonIdentities();
     root.dataset.v510PracticeIcons = 'approved-art-v1';
   }
 
@@ -227,9 +295,6 @@
     });
   }
 
-  // Remember the product route intent before legacy/Session UX layers begin mutating the
-  // shared Conversation DOM. This prevents a stale voice-mode flag from giving Real-Life
-  // the Speak artwork while changing practice modes.
   document.addEventListener('click', event => {
     const practice = event.target.closest('[data-b27-practice-action]');
     if (practice?.dataset.b27PracticeAction === 'real-life') conversationOwner = 'real-life';
@@ -255,10 +320,12 @@
     tyffanyAsset: TYFFANY_ASSET,
     brandIdentityStyle: 'goat-v1',
     brandAsset: BRAND_ASSET,
+    lessonIdentityStyle: 'lesson-icon-v1',
     refresh: decorate,
     refreshFeatureHeaders: decorateFeatureHeaders,
     refreshTyffanyIcons: decorateTyffanyMemory,
     refreshIdentityAssets: decorateLegacyIdentityAssets,
+    refreshLessonIdentities: decorateLessonIdentities,
     assets: ASSETS,
     featureCopy: FEATURE_COPY,
     icons: Object.freeze(Object.keys(ASSETS))
