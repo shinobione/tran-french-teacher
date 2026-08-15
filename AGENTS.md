@@ -74,6 +74,61 @@ Unless `MASTER-ROADMAP.md` explicitly changes them:
 - If a CI failure is clearly a known harness flake, prove that from logs/state before rerunning it unchanged; do not mutate product code to appease a flaky test.
 - Keep the repository in a clean, documented, resumable state.
 
+## Codex / coding-agent budget contract — one slice per session
+
+This rule is mandatory after the V5.8 quota incident.
+
+**One canonical implementation slice = one coding-agent session.**
+
+A coding agent must not turn one prompt into an autonomous marathon across several roadmap phases.
+
+For an implementation slice:
+
+1. reconstruct state from `AGENTS.md` → `PROJECT-STATE.md` → relevant `MASTER-ROADMAP.md` sections → real GitHub state;
+2. implement **only the named active slice**;
+3. run the relevant local/browser tests needed to establish a candidate;
+4. materialize the work in git and open/update the slice PR;
+5. update the checkpoint/documents required for that candidate;
+6. **STOP and return control.**
+
+Unless the user explicitly asks otherwise in the same turn, the coding agent must **not**:
+
+- sit on GitHub Actions waiting for every workflow to finish;
+- spend model quota polling CI;
+- diagnose/rerun unrelated historical flakes after the candidate PR is already published;
+- merge the PR;
+- monitor Pages after merge;
+- perform documentation closeout for a later phase;
+- automatically begin the next roadmap slice.
+
+CI review, flake classification/reruns, merge, Pages verification, issue/checkpoint reconciliation and the decision to start the next slice should be handled in a fresh control session / GitHub review step unless explicitly delegated.
+
+Before starting any next slice, the previous slice must be **materialized in git**. Never rely on an ephemeral review panel, hidden worktree state or uncommitted agent workspace as project memory.
+
+## Premium V5.9 shared-system rule
+
+The active post-V5.8 Premium work is a **shared-system coherence pass**, not a theme-by-theme patch march.
+
+Agents must treat the following as cross-theme system problems:
+
+- lesson-card structure and decoration ownership;
+- button/card visual language;
+- icon family consistency;
+- whole-card hit targets;
+- DEBUG/admin access;
+- interaction feel and motion rules.
+
+Agents must not:
+
+- fix Aurora, Sunset, Nocturne and Original as four disconnected implementations when one shared layout contract can solve the problem;
+- hand-place the lesson identity cluster independently per theme;
+- reintroduce a theme-specific DEBUG dependency;
+- expose a large learner-facing DEBUG button just because the admin feature exists;
+- regenerate locked Premium backgrounds to solve layout problems;
+- start Build 35 while #114 remains open.
+
+The theme may change **palette, background artwork, lesson Eiffel artwork and restrained accents**. The shared component/layout grammar should stay common unless there is a documented product reason to diverge.
+
 ## Fast resume rule
 
 For a new Codex/AI session, the minimal safe boot is:
