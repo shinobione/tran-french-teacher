@@ -37,10 +37,9 @@ jobs:
           grep -q 'singleVoiceRecordControl' tests/browser/single-voice-record-control-smoke.html
           grep -Fq "observeNode('[data-field-audio-record]',6000)" tests/browser/field-audio-browser-smoke.html
           grep -Fq "root.dataset.fieldAudioPhase==='ready'" tests/browser/field-audio-browser-smoke.html
-          grep -q 'nextRender' tests/browser/field-audio-browser-smoke.html
           grep -q 'initial-play-button' tests/browser/field-audio-browser-smoke.html
-          grep -q 'rerender-play-button' tests/browser/field-audio-browser-smoke.html
-          grep -q 'play=observed-after-ready' tests/browser/field-audio-browser-smoke.html
+          grep -q 'recording-lost-after-dom-removal' tests/browser/field-audio-browser-smoke.html
+          grep -q 'state=preserved-after-dom-removal' tests/browser/field-audio-browser-smoke.html
           grep -q "finish(false,'timeout')},18000" tests/browser/field-audio-browser-smoke.html
 
       - name: Sanctuaries remain exact
@@ -67,15 +66,15 @@ jobs:
           grep -Eq 'data-single-voice-visible-count="[01]"' /tmp/single-voice-record.html || { cat /tmp/single-voice-record.html; exit 1; }
           grep -q 'data-single-voice-legacy-display="none"' /tmp/single-voice-record.html || { cat /tmp/single-voice-record.html; exit 1; }
 
-      - name: Chrome — lesson recording survives DOM rerender and creates playback
+      - name: Chrome — lesson recording reaches playback and state survives DOM removal
         run: |
           google-chrome --headless=new --no-sandbox --disable-gpu \
             --autoplay-policy=no-user-gesture-required \
-            --run-all-compositor-stages-before-draw \
             --virtual-time-budget=22000 --dump-dom \
             'http://127.0.0.1:4173/tests/browser/field-audio-browser-smoke.html?fieldAudioV2=1' >/tmp/field-audio-v2.html
           grep -q 'data-field-audio-browser-smoke="ok"' /tmp/field-audio-v2.html || { cat /tmp/field-audio-v2.html; exit 1; }
           grep -Eq 'data-field-audio-blob-bytes="[1-9][0-9]*"' /tmp/field-audio-v2.html || { cat /tmp/field-audio-v2.html; exit 1; }
+          grep -q 'state=preserved-after-dom-removal' /tmp/field-audio-v2.html || { cat /tmp/field-audio-v2.html; exit 1; }
 
       - name: Chrome — repeated Practice Listening Home Progress route transaction
         run: |
