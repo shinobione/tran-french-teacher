@@ -6,6 +6,7 @@ on:
       - 'assets/premium/practice/**'
       - 'src/premium/premium-v510-practice-icons.js'
       - 'src/premium/premium-v510-practice-icons.css'
+      - 'src/premium/premium-v510-lesson-identity.css'
       - 'src/premium/premium-v510-field-shell.css'
       - 'src/premium/premium-theme-polish.css'
       - 'tests/browser/premium-v510-practice-icons-tribunal.html'
@@ -31,11 +32,13 @@ jobs:
           set -euo pipefail
           node --check src/premium/premium-v510-practice-icons.js
           node --check sw.js
-          grep -q 'src/premium/premium-v510-practice-icons.css?v=2.3.31-v510png1' index.html
-          grep -q 'src/premium/premium-v510-practice-icons.js?v=2.3.31-v510png1' index.html
-          grep -q "const V510ICONS='2.3.31-v510png1'" sw.js
+          grep -q 'src/premium/premium-v510-practice-icons.css?v=2.3.35-v510lessonidentity1' index.html
+          grep -q 'src/premium/premium-v510-practice-icons.js?v=2.3.35-v510lessonidentity1' index.html
+          grep -q "const V510ICONS='2.3.35-v510lessonidentity1'" sw.js
+          grep -q 'premium-v510-lesson-identity.css?v=${V510ICONS}' sw.js
           grep -q "style: 'approved-premium-art-v1'" src/premium/premium-v510-practice-icons.js
           grep -q "featureHeaderStyle: 'feature-header-v1'" src/premium/premium-v510-practice-icons.js
+          grep -q "lessonIdentityStyle: 'lesson-icon-v1'" src/premium/premium-v510-practice-icons.js
           grep -q "speak-premium.webp" src/premium/premium-v510-practice-icons.js
           grep -q "listen-premium.webp" src/premium/premium-v510-practice-icons.js
           grep -q "review-premium.webp" src/premium/premium-v510-practice-icons.js
@@ -51,6 +54,7 @@ jobs:
           if grep -q 'ft-v510-3d-' src/premium/premium-v510-practice-icons.js src/premium/premium-v510-practice-icons.css; then echo 'legacy V4 SVG classes still present'; exit 1; fi
           for asset in speak listen review; do test -s "assets/premium/practice/${asset}-premium.webp"; done
           test -s assets/premium/practice/real-life-premium.webp
+          test -s src/premium/premium-v510-lesson-identity.css
           python3 - <<'PY'
           from pathlib import Path
           files=[

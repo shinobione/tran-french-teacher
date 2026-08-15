@@ -30,21 +30,39 @@
         button.click();
       }
 
+      async function openLesson(w,d){
+        d.querySelector('.bottom-nav [data-go="progress"]')?.click();
+        const lesson=await waitFor(()=>d.querySelector('.b27-progress-page [data-b27-open-lesson]'),22000,'lesson launcher');
+        lesson.click();
+        await waitFor(()=>d.querySelector('.screen-lesson .teacher-line'),22000,'lesson');
+        w.FrenchTranquilleV510PracticeIcons.refreshLessonIdentities();
+        await waitFor(()=>d.querySelector('.screen-lesson .teacher-line[data-v510-lesson-identity]'),5000,'lesson identity');
+      }
+
       async function route(w,d){
         w.FrenchTranquilleThemes.apply(theme);
         await waitFor(()=>d.documentElement.dataset.theme===theme,5000,'theme');
-        if(surface==='progress'){
+        if(surface==='home'){
+          w.FrenchTranquilleV510PracticeIcons.refreshLessonIdentities();
+          await waitFor(()=>d.querySelector('.b27-home .ft-v510-home-lesson-icon[data-v510-lesson-id]'),5000,'Home lesson identity');
+        }else if(surface==='progress'){
           d.querySelector('.bottom-nav [data-go="progress"]')?.click();
           await waitFor(()=>d.querySelector('.b27-progress-page .b27-brandline > img'),22000,'Progress');
           w.FrenchTranquilleV510PracticeIcons.refreshIdentityAssets();
           await waitFor(()=>d.querySelector('.b27-progress-page .b27-brandline > img[data-v510-brand-identity="goat-v1"]'),5000,'Progress goat mark');
         }else if(surface==='lesson'){
-          d.querySelector('.bottom-nav [data-go="progress"]')?.click();
-          const lesson=await waitFor(()=>d.querySelector('.b27-progress-page [data-b27-open-lesson]'),22000,'lesson launcher');
-          lesson.click();
-          await waitFor(()=>d.querySelector('.screen-lesson .teacher-line .luc'),22000,'lesson');
-          w.FrenchTranquilleV510PracticeIcons.refreshIdentityAssets();
-          await waitFor(()=>d.querySelector('.screen-lesson .teacher-line .luc[data-v510-tyffany-avatar="canonical-svg-v1"]'),5000,'Tyffany SVG avatar');
+          await openLesson(w,d);
+        }else if(surface==='speaking'){
+          await openLesson(w,d);
+          let model=d.querySelector('.screen-lesson .french-block .listen[data-speaking-model-owner="exercise"]');
+          for(let i=0;!model&&i<8;i++){
+            const prev=d.querySelector('.screen-lesson [data-prev]:not(:disabled)');
+            if(!prev)break;
+            prev.click();
+            await pause(180);
+            model=d.querySelector('.screen-lesson .french-block .listen[data-speaking-model-owner="exercise"]');
+          }
+          await waitFor(()=>d.querySelector('.screen-lesson .french-block .listen[data-speaking-model-owner="exercise"]'),5000,'Tyffany model button');
         }else if(surface==='listening'){
           await openPracticeAndClick(w,d,'listening');
           await waitFor(()=>d.querySelector('.listening-top[data-v510-feature-header="listening"]'),22000,'Listening');
@@ -59,7 +77,7 @@
       app.addEventListener('load',async()=>{
         try{
           const w=app.contentWindow,d=app.contentDocument;
-          await waitFor(()=>w.FrenchTranquilleBuild27Shell?.openPractice&&w.FrenchTranquilleThemes?.apply&&w.FrenchTranquilleV510PracticeIcons?.refreshIdentityAssets,22000,'app APIs');
+          await waitFor(()=>w.FrenchTranquilleBuild27Shell?.openPractice&&w.FrenchTranquilleThemes?.apply&&w.FrenchTranquilleV510PracticeIcons?.refreshIdentityAssets&&w.FrenchTranquilleV510PracticeIcons?.refreshLessonIdentities,22000,'app APIs');
           await route(w,d);
           ready();
         }catch(error){fail(error)}
