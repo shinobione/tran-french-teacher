@@ -170,7 +170,26 @@ Objectif : valider la pédagogie Fondations sur un petit périmètre réel avant
 
 ---
 
-# Build 35 — Memory Evidence v2 / Migration Readiness — NEXT DESIGN
+# Premium gate before Build 35 — V5.10 PHYSICAL FIELD PASS
+
+V5.9 is technically closed through PRs **#130–#134**, ending at `4019c1b6cb41fee9c36bdb223e255455a0da4b5f`.
+
+Before Build 35 can start:
+
+- [ ] real installed-iPhone/PWA pass across Original / Aurora / Sunset / Nocturne;
+- [ ] confirm Speaking Loop has one record CTA + one note;
+- [ ] confirm full-card About tap;
+- [ ] confirm Lesson/Eiffel separation;
+- [ ] confirm hidden DEBUG entry and no learner-facing leak;
+- [ ] confirm new home-screen/PWA icon quality;
+- [ ] explicit final user PASS;
+- [ ] close Premium issue #114.
+
+**Build 35 is reserved and blocked until every gate above is closed.**
+
+---
+
+# Build 35 — Memory Evidence v2 / Migration Readiness — BLOCKED / RESERVED
 
 Objectif : concevoir la future mémoire en sachant désormais distinguer **phrase mémorisée et concept grammatical**.
 
