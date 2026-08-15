@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const VERSION = '2.3.32-v510headers2';
+  const VERSION = '2.3.32-v510headers3';
   const root = document.documentElement;
   const DEBUG_KEY = 'tran-french-teacher:debug-fr:v1';
   let scheduled = false;
@@ -84,7 +84,9 @@
     const copy = document.createElement('span');
     copy.className = 'ft-v510-feature-copy';
     const brand = document.createElement('span');
-    brand.className = 'eyebrow ft-v510-feature-brand';
+    // Deliberately do not inherit the historical `.eyebrow` class: legacy Listening/route
+    // polish is allowed to hide its own old eyebrow, never the shared Premium identity line.
+    brand.className = 'ft-v510-feature-brand';
     brand.textContent = 'FRENCH TRÂN’QUILLE';
     const heading = document.createElement('h1');
     heading.className = 'ft-v510-feature-title';
