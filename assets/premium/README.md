@@ -17,7 +17,7 @@
 
 The first-generation WebP files committed with this manifest are **compact durable staging/reference derivatives**. The V2 human-gate candidates use PNG because the lesson assets must preserve genuine alpha transparency.
 
-The approved V2 files are wired on the V5.7 candidate branch, but are not yet merged, deployed or field-approved.
+The approved V2 files are wired in the user-approved V5.7 delivery. They are not yet physical-device **FIELD PASS**.
 
 When V5.7 integrates the artwork, higher-resolution WebP/AVIF derivatives may replace these compact files **only if they preserve the same LOCKED source visual identity**. A higher-resolution derivative is not permission to invent a different scene or palette.
 
@@ -134,7 +134,7 @@ Theme directions:
 - restrained pink-magenta;
 - calmer flagship identity clearly distinct from Aurora.
 
-All four V2 files have genuine alpha transparency (`RGBA`, alpha range `0..255`), large transparent margins, no opaque sky, no baked card and no visible rectangular border. The user gave a **global PASS on 2026-08-15**; they are wired in the V5.7 candidate but are not yet merged or **FIELD PASS**.
+All four V2 files have genuine alpha transparency (`RGBA`, alpha range `0..255`), large transparent margins, no opaque sky, no baked card and no visible rectangular border. The user gave the assets a **global PASS** and the integrated V5.7 matrix a separate **PASSED** verdict on 2026-08-15. They are not yet physical-device **FIELD PASS**.
 
 Human-review boards:
 

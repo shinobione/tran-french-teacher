@@ -25,7 +25,7 @@
 | Area | State |
 |---|---|
 | Product pedagogy | **V2.3.0 · Build 34** |
-| Visual line | **Premium V5.7 candidate implemented · human visual gate pending** |
+| Visual line | **Premium V5.7 human-approved · merge authorized** |
 | Curriculum | **52 lessons / 313 items** |
 | Scenario | **44 situations / 132 turns** |
 | Speaking Loop | **52/52 · max 2 moments / lesson** |
@@ -74,7 +74,8 @@ V5.6 status from `MASTER-ROADMAP.md`:
 - corrected dark Original V2 candidate: **USER PASS 2026-08-15** ✅
 - four transparent lesson-card Eiffel V2 candidates: **USER PASS 2026-08-15** ✅
 - V5.7 runtime integration implemented on `codex/v5.7-theme-art-integration` ✅
-- V5.7 screenshot/CI/physical-device approval is still pending; none of the assets is yet **FIELD PASS**
+- V5.7 screenshot matrix: **USER PASS 2026-08-15** ✅
+- physical installed-iPhone/PWA validation remains reserved for the later global V5.10 gate; none of the assets is yet **FIELD PASS**
 
 Do not silently regenerate/replace user-locked Aurora, Sunset, or Nocturne backgrounds.
 
@@ -120,10 +121,10 @@ Fresh agents must re-check CI after any newer commit instead of inheriting these
 
 ### NEXT exact slice
 
-1. Review the generated 5-viewport × 4-theme matrix for draft PR **#127**.
-2. Exercise the candidate on the primary iPhone / installed-PWA target.
-3. Do not merge V5.7 or mark its assets **FIELD PASS** without an explicit human verdict.
-4. After V5.7 PASS, merge and continue the canonical sequence only:
+1. Merge PR **#127** after its PASS checkpoint commit is exact-head green.
+2. Reconcile the resulting `main` SHA, Pages deployment and checkpoint.
+3. Continue with **V5.8 — DEBUG FR / Theme Decoupling**.
+4. Do not mark the assets **FIELD PASS** before the later physical installed-iPhone/PWA verdict.
 
 ```text
 V5.7 Theme Art Integration
