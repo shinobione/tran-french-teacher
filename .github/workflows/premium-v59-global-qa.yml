@@ -1,0 +1,101 @@
+name: Premium V5.9 Global QA
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  v59-global-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+
+      - name: Static V5.9 contracts + sanctuaries
+        run: |
+          set -euo pipefail
+          node --check premium-v59-interaction-coherence.js
+          node --check premium-v59-lesson-layout.js
+          node --check premium-v59-premium-system.js
+          grep -q 'premium-v59-interaction-coherence.js' index.html
+          grep -q 'premium-v59-lesson-layout.js' index.html
+          grep -q 'premium-v59-premium-system.js' index.html
+          grep -q "const V59A='2.3.23-v59a1'" sw.js
+          grep -q "const V59B='2.3.24-v59b1'" sw.js
+          grep -q "const V59C='2.3.25-v59c1'" sw.js
+          grep -q "const V59D='2.3.26-v59d1'" sw.js
+          grep -q 'goat-app-icon-maskable-512.png' sw.js
+          ! grep -RIn -E 'old page fades out|new page fades in' premium-v59-*.css premium-v59-*.js
+          test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+          test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
+          test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
+
+      - name: Brand icon geometry
+        run: |
+          python -m pip install --quiet pillow
+          python - <<'PY'
+          from PIL import Image
+          expected={
+            'goat-favicon-64.png':(64,64),
+            'goat-apple-touch-180.png':(180,180),
+            'goat-app-icon-192.png':(192,192),
+            'goat-app-icon-512.png':(512,512),
+            'goat-app-icon-maskable-512.png':(512,512),
+          }
+          for name,size in expected.items():
+              im=Image.open('assets/premium/brand/'+name)
+              assert im.size==size,(name,im.size,size)
+              assert im.mode in ('RGBA','RGB'),(name,im.mode)
+          assert Image.open('assets/premium/brand/v59-brand-icon-review.png').width >= 1000
+          PY
+
+      - name: Chrome V5.9 aggregate tribunals
+        run: |
+          set -euo pipefail
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/v59-http.log 2>&1 &
+          pid=$!
+          trap 'kill $pid || true' EXIT
+          sleep 1
+          run_dom () {
+            name="$1"; page="$2"; extra="${3:-}"
+            timeout --signal=TERM --kill-after=5s 40s google-chrome --headless=new --no-sandbox --disable-gpu --disable-background-timer-throttling --disable-renderer-backgrounding $extra --virtual-time-budget=1800 --dump-dom "http://127.0.0.1:4173/$page" >"/tmp/$name.html"
+          }
+          run_dom v59a premium-v59a-interaction-tribunal.html
+          grep -q 'data-v59a="ok"' /tmp/v59a.html
+          for size in 390,844 430,932 1440,900; do
+            timeout --signal=TERM --kill-after=5s 40s google-chrome --headless=new --no-sandbox --disable-gpu --window-size="$size" --virtual-time-budget=1800 --dump-dom http://127.0.0.1:4173/premium-v59b-lesson-layout-tribunal.html >"/tmp/v59b-${size//,/-}.html"
+            grep -q 'data-v59b="ok"' "/tmp/v59b-${size//,/-}.html"
+          done
+          run_dom v59c premium-v59c-premium-system-tribunal.html
+          grep -q 'data-v59c="ok"' /tmp/v59c.html
+          run_dom v59c-reduced premium-v59c-premium-system-tribunal.html '--force-prefers-reduced-motion'
+          grep -q 'data-v59c="ok"' /tmp/v59c-reduced.html
+
+      - name: PWA generation coherence
+        run: |
+          set -euo pipefail
+          for asset in \
+            premium-v59-interaction-coherence.css \
+            premium-v59-interaction-coherence.js \
+            premium-v59-lesson-layout.css \
+            premium-v59-lesson-layout.js \
+            premium-v59-premium-system.css \
+            premium-v59-premium-system.js \
+            assets/premium/brand/goat-favicon-64.png \
+            assets/premium/brand/goat-apple-touch-180.png \
+            assets/premium/brand/goat-app-icon-192.png \
+            assets/premium/brand/goat-app-icon-512.png \
+            assets/premium/brand/goat-app-icon-maskable-512.png; do
+              test -f "$asset"
+              grep -q "$(basename "$asset")" sw.js
+          done
+          git diff --check
