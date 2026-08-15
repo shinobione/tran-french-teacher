@@ -9,195 +9,145 @@
 - Reconciled: **2026-08-15**
 - Repository: `shinobione/tran-french-teacher`
 - Default branch: `main`
-- Latest runtime-bearing checkpoint at reconciliation: **`9625edc4af69bec4f3c557003c88a59535b28789`** — PR **#152**, V5.10 Feature Header visual closeout + Listening brand fix.
-- Previous V5.10 runtime checkpoint: **`a23dcfa3704802f6f26d8eb5451cabb77847a6cb`** — PR **#151**, shared Premium Feature Header System.
-- Earlier field fix: **`4c4e22470fe976ea604ff672963b132abd34fcee`** — single-visible-record-control fix.
-- Repository layout checkpoint underneath: **`88ca5f32a67d2989fcfb81684079848e67bffad5`** — PR **#149**, `src/` + `tests/` reorganization.
-- PR #151 final head passed **43/43** pull-request workflows.
-- PR #152 final head also passed **43/43** after one historical Field Reliability V2 Chrome/audio flake was rerun **strictly unchanged** and passed; no product patch was made for that flake.
-- Runtime checkpoint `9625edc…` passed **28/28** push workflows with **0 failure / 0 queued / 0 in-progress**.
-- **GitHub Pages #205 SUCCESS** on exact runtime SHA `9625edc4af69bec4f3c557003c88a59535b28789`.
+- Latest runtime-bearing checkpoint: **`deecd20c95e0552302e68548125ccb538c5bad32`** — PR **#159**, V5.10 canonical lesson identity + Tyffany action alignment field closeout.
+- Previous field checkpoint: **`69833c50f1c83ddb03a1df05471f89b759cd30c3`** — PR **#158**, Listening parity + canonical FTQ/Tyffany identity cleanup.
+- Earlier V5.10 headers: PR **#151/#152** established shared Premium Feature Headers and screenshot-driven Listening brand correction.
+- Repository layout checkpoint underneath: PR **#149**, `src/` + `tests/` reorganization.
+- PR #159 final head passed **44/44** pull-request workflows after the historical Build 26.4 Chrome Progress timeout was rerun **strictly unchanged** and passed; no product patch was made for that flake.
+- Runtime checkpoint `deecd20c…` passed **29/29** push workflows with **0 failure / 0 queued / 0 in-progress**.
+- **GitHub Pages #212 SUCCESS** on exact runtime SHA `deecd20c95e0552302e68548125ccb538c5bad32`.
 - Premium gate issue: **#114 OPEN**.
-- **V5.10 remains the active human/physical installed-iPhone/PWA visual field gate.**
+- **V5.10 remains the active human/physical installed-PWA visual field gate.**
 - Build 35 remains **BLOCKED / RESERVED** until explicit user field PASS and #114 closure.
 
-A later docs-only reconciliation commit may advance `main` without changing the runtime-bearing SHA above. Always verify GitHub HEAD before acting.
+A later docs-only reconciliation commit may advance `main` without changing the runtime-bearing SHA above. Always distinguish current Git HEAD from the latest runtime-bearing checkpoint.
 
 ## Current product state
 
 | Area | State |
 |---|---|
 | Product pedagogy | **V2.3.0 · Build 34** |
-| Visual line | **Premium V5.10 · Feature Header System integrated + screenshot-corrected · physical field verdict still required** |
+| Visual line | **Premium V5.10 · field-polished · physical verdict still required** |
 | Curriculum | **52 lessons / 313 items** |
 | Scenario | **44 situations / 132 turns** |
 | Speaking Loop | **52/52 · max 2 moments / lesson** |
 | Listening | **0.88 normal / 0.65 slow** |
 | Durable pedagogical stores | **6** |
 | Foundations | **F01–F04 pilot** |
-| Primary field target | **iPhone / Safari / installed PWA** |
+| Primary field target | **installed mobile PWA / Safari or Chromium mobile** |
 | Premium gate | issue **#114 OPEN** |
 | Build 35 | **BLOCKED / RESERVED** |
 
-## Repository layout — canonical
+## V5.10 canonical identity rules
+
+### Practice artwork
 
 ```text
-src/
-  core/       platform/runtime, Recovery, loaders, debug/theme, contracts
-  pedagogy/   curriculum, Memory, Listening, Scenario, Real Life, Speaking, learner intelligence
-  ui/         app shell, responsive/interaction and historical UX compatibility layers
-  premium/    Premium V4/V5/V5.9/V5.10 runtime layers
-
-tests/
-  browser/    browser tribunals, visual captures, fixtures and field harnesses
-  smoke/      JavaScript smoke/guard harnesses
+Parler            → assets/premium/practice/speak-premium.webp
+Écouter           → assets/premium/practice/listen-premium.webp
+Réviser           → assets/premium/practice/review-premium.webp
+Dans la vraie vie → assets/premium/practice/real-life-premium.webp
 ```
 
-Root intentionally keeps canonical docs, PWA entrypoints and protected sanctuaries, including:
-
-```text
-AGENTS.md
-PROJECT-STATE.md
-MASTER-ROADMAP.md
-index.html
-sw.js
-manifest.webmanifest
-styles.css
-app.js
-voice-ios.js
-free-voice.js
-```
-
-Do not flatten the organized `src/` / `tests/` layout back into repository root.
-
-## V5.10 approved Premium Practice artwork
-
-Runtime assets:
-
-```text
-assets/premium/practice/speak-premium.webp
-assets/premium/practice/listen-premium.webp
-assets/premium/practice/review-premium.webp
-assets/premium/practice/real-life-premium.webp
-```
-
-Practice mapping:
-
-```text
-Parler            → speak-premium.webp
-Écouter           → listen-premium.webp
-Réviser           → review-premium.webp
-Dans la vraie vie → real-life-premium.webp
-```
-
-Permanent artwork rules:
+Permanent rules:
 
 - use the approved files directly;
 - do not redraw them as SVG or emoji;
-- do not recolor/filter the artwork by theme;
-- Original / Aurora / Sunset / Jade may change only the surrounding glass host treatment;
-- Aujourd’hui reuses the **exact same** Listen and Review source files as Pratiquer;
-- all four assets remain in the Service Worker offline core.
+- do not recolor/filter them by theme;
+- Aujourd’hui reuses the exact same Listen and Review source files as Pratiquer;
+- all four remain available offline.
 
-## V5.10 shared Premium Feature Header System — PR #151 + #152
-
-The approved Practice identity now continues into the destination surfaces through one shared compact header contract:
-
-```text
-[ APPROVED ARTWORK ]   FRENCH TRÂN’QUILLE
-                       CANONICAL FEATURE TITLE
-```
-
-Canonical destination mapping:
+### Destination Feature Headers
 
 ```text
 Écouter
 → listen-premium.webp
-→ Compréhension orale
+→ Compréhension orale / Luyện nghe
 
 Réviser
 → review-premium.webp
-→ Révision
+→ Révision / Ôn tập
 
 Dans la vraie vie / Real-Life
 → real-life-premium.webp
-→ Conversation
+→ Conversation / Tình huống thực tế
 
 Parler → explicit oral-training mode only
 → speak-premium.webp
-→ Répondre à l’oral
+→ Répondre à l’oral / Trả lời bằng giọng nói
 ```
 
-### Critical semantic rule
+**Critical semantic rule:** `Conversation` is the Real-Life destination here. It is **not** the Speak header.
 
-**`Conversation` is the Real-Life destination here. It is NOT the Speak header.**
+## V5.10 physical-field fixes now locked
 
-Speak ownership begins only after the user explicitly opens the oral-training mode **`Répondre à l’oral`** from Parler. The V5.10 runtime preserves that distinction across Session UX mode switches so a stale voice-mode flag cannot leak the Speak artwork/title into Real-Life.
+### Listening / destination parity — PR #158
 
-Header owners are deliberately adapted through the Premium layer rather than by rewriting protected historical engines:
+- mobile Listening is a real two-column Feature Header;
+- Settings is removed from grid ownership while remaining usable;
+- redundant `0/0 phiên` no longer squeezes the identity line on mobile;
+- Progress brandline uses the canonical FTQ goat asset instead of the protected historical favicon;
+- generic Tyffany surfaces use `assets/premium/brand/tyffany-memory.svg` instead of legacy favicon paint.
 
-- Listening existing header: `.listening-top`;
-- Review existing header: `.screen-review .topbar`;
-- shared Conversation/Practice host: `.screen-conversation .topbar`, with runtime semantic ownership between Real-Life and explicit Speak mode.
+### Lesson identity + Tyffany action alignment — PR #159
 
-No `app.js`, `voice-ios.js`, `free-voice.js`, curriculum, pedagogy, durable-store schema or migration contract was changed for this work.
+Physical Android screenshots exposed three final ownership defects:
 
-## Screenshot-driven correction in PR #152
+1. the mobile Today lesson card hid the real curriculum icon and painted a hard-coded `▤` pseudo icon;
+2. lesson detail was being captured by the global Tyffany avatar decorator and showed a generic brain where the current lesson identity belongs;
+3. `Nghe Tyffany / Écouter Tyffany` had no explicit icon+label centering contract.
 
-The first generated V5.10 screenshot matrix caught a real visual defect that DOM-only assertions had missed:
+The Premium layer now fixes these without changing curriculum or voice engines:
 
-- Listening already contained the new `FRENCH TRÂN’QUILLE` brand node;
-- a historical `.eyebrow` rule still hid that line visually;
-- therefore the DOM was semantically correct while the rendered screenshot was not.
+- Home uses the exact canonical **`lesson.icon`** from `FrenchTranquilleCurriculum`;
+- lesson detail uses that same canonical **`lesson.icon`** plus the current lesson title;
+- the historical `.luc` node stays in the DOM for compatibility but is hidden only in that lesson-identity row;
+- the global Tyffany decorator deliberately skips the lesson identity row;
+- Tyffany remains the tutor/voice identity everywhere it actually owns the surface;
+- model/replay actions use an explicit centered flex contract.
 
-PR #152 fixed this without touching the protected engines:
-
-- the shared Premium brand no longer inherits the legacy `.eyebrow` class;
-- Feature Header copy/title/brand now own their visibility and width;
-- desktop Listening header geometry was aligned with the Review/Conversation family;
-- mobile responsive geometry remains compact;
-- no new artwork or cache bump was required.
-
-This is now guarded permanently by `tests/browser/v510-feature-header-capture.html`: a capture is not considered READY unless the brand is actually visible by computed `display`, `visibility`, `opacity` and non-zero geometry.
-
-## V5.10 permanent QA
-
-The V5.10 Chrome tribunal performs real navigation and asserts exact semantic ownership:
+Example certified synthetic lesson 8:
 
 ```text
-Pratiquer → Réviser
-Pratiquer → Écouter
-Pratiquer → Parler → Répondre à l’oral
-Pratiquer → Dans la vraie vie → Conversation
+Home lesson identity   → 📍
+Lesson detail identity → 📍 Hỏi đường & tìm địa điểm
+Legacy Tyffany brain   → hidden on this lesson-identity row
 ```
 
-It verifies:
+This contract generalizes from the curriculum data, so restaurant (`🍽️`), pharmacy (`🩺`) and the other lessons reuse their existing canonical icons automatically rather than adding a second icon map.
 
-- exact approved artwork source per destination;
-- `Conversation` never receives the Speak artwork;
-- canonical FR titles under DEBUG FR;
-- `FRENCH TRÂN’QUILLE` identity line;
-- Original / Aurora / Sunset / Jade;
-- **390×844**, **430×932**, **1280×800**;
-- no horizontal overflow;
-- no header collision with Back / Settings / session score;
-- artwork remains centered and unfiltered;
-- exact Home ↔ Practice reuse remains locked;
-- six durable learner stores remain byte-identical during pure visual travel.
+## Permanent V5.10 field QA
 
-The V5.10 workflow also produces an artifact named **`v510-feature-header-captures`** containing **8 screenshots**:
+`V5.10 Field Identity Closeout` now verifies in real Chrome:
 
-- mobile **430×932** + desktop **1280×800**;
-- Listening / Review / Speak oral-training / Real-Life Conversation.
+- Home canonical lesson icon is visible and the generic `▤` pseudo icon is gone;
+- lesson detail uses the same curriculum lesson icon;
+- the lesson identity row is not owned by the Tyffany-brain decorator;
+- `Nghe Tyffany / Écouter Tyffany` is flex-centered;
+- Listening Feature Header parity remains intact;
+- Real-Life mapping remains intact;
+- Progress FTQ brand identity remains canonical;
+- pure Premium visual decorators leave all **6 durable learner stores byte-identical**.
 
-Those captures are QA evidence only; automation still cannot close the physical installed-iPhone field gate.
+The workflow also emits six **430×932** captures:
+
+```text
+Home
+Listening
+Real-Life
+Progress
+Lesson detail
+Speaking / Tyffany model action
+```
+
+The latest PR #159 captures were manually reviewed before merge.
 
 ## PWA/cache choice
 
-- Existing targeted artwork/runtime URL version remains **`2.3.31-v510png1`** in `index.html` / `sw.js`.
-- Existing global Service Worker cache identity deliberately remains unchanged.
-- No new artwork file was introduced by Feature Headers; they reuse the four already-pre-cached approved Practice assets.
-- Therefore the Feature Header work required **no global cache bump and no asset duplication**.
+- V5.10 targeted runtime URL version: **`2.3.35-v510lessonidentity1`**.
+- Global Service Worker cache identity remains deliberately unchanged.
+- `src/premium/premium-v510-lesson-identity.css` is precached offline.
+- No global cache nuke was used for this visual correction.
 
 ## Protected sanctuaries
 
@@ -215,8 +165,7 @@ Also preserve:
 
 - learner progression;
 - six durable stores;
-- lesson IDs;
-- curriculum semantics;
+- lesson IDs and curriculum semantics;
 - Scenario / Listening / Memory semantics;
 - voice / replay semantics;
 - Recovery / migration contracts.
@@ -231,56 +180,33 @@ Also preserve:
 - Approved Practice artwork must not silently fall back to superseded generated SVG/emoji families.
 - Feature Header artwork must remain the exact same approved source file used on Practice.
 - `Conversation` remains Real-Life; Speak remains explicit `Répondre à l’oral` only.
+- **Lesson surfaces use curriculum lesson identity; Tyffany owns tutor/voice surfaces, not generic lesson identity.**
 - Build 35 remains unavailable for CSS/assets/animation/cache/DEBUG/visual QA work.
 
-## Canonical next action — V5.10 physical field gate
+## Canonical next action — physical field verdict
 
 **Do not start Build 35. Do not close #114 from automation alone.**
 
-Next action is the real installed-iPhone/PWA field review of the current V5.10 package:
+The runtime/automation side is currently green:
 
 ```text
-approved Practice artwork certification ✅
-repository structure migration certification ✅
-shared Feature Header certification ✅
-screenshot-driven Listening brand correction ✅
-28/28 main workflows ✅
-Pages #205 exact runtime SHA ✅
-→ physical installed-iPhone/PWA review
-→ verify Practice + Home artwork identity
-→ verify destination Feature Headers
-→ verify Conversation = Real-Life artwork/title
-→ verify Parler → Répondre à l’oral = Speak artwork/title
-→ verify all four themes
-→ verify warm-online → offline reopen
+PR #159                       44/44 SUCCESS
+main runtime deecd20c…        29/29 SUCCESS
+V5.10 Field Identity #7       SUCCESS
+GitHub Pages #212             SUCCESS on deecd20c…
+```
+
+Next action is physical installed-PWA review:
+
+```text
+→ reopen PWA without deleting data
+→ Home: verify current lesson uses its lesson-specific icon
+→ open a lesson: verify same lesson icon + lesson title, no generic Tyffany brain in lesson identity row
+→ verify Tyffany still appears correctly on actual tutor / voice actions
+→ verify “Nghe Tyffany” icon+label is visually centered
+→ spot-check Listening / Real-Life / Progress
 → verify ZERO flash/remanence regression
 → explicit user FIELD PASS
 → close #114 / governance closeout
 → only then Build 35
-```
-
-For the new Feature Header field review specifically inspect:
-
-- **Compréhension orale**: Listen artwork on the left, French Trân’quille identity visible, no old headphone glyph/header gap;
-- **Révision**: Review artwork on the left, same geometry;
-- **Dans la vraie vie → Conversation**: Real-Life artwork, **never Speak**;
-- **Parler → Répondre à l’oral**: Speak artwork only after selecting the real oral-training mode;
-- compact proportions and alignment on iPhone;
-- no Back/Settings/score overlap;
-- no new horizontal overflow;
-- theme changes affect the host, not artwork colors.
-
-## Resume checklist for a fresh session
-
-```text
-1. Read AGENTS.md.
-2. Read this PROJECT-STATE.md.
-3. Verify current main HEAD + recent commits.
-4. Check open PRs and issue #114.
-5. Verify CI/Pages for current main/candidate SHA.
-6. Read V5.10 in MASTER-ROADMAP.md.
-7. Respect src/ and tests/ layout.
-8. Do NOT start Build 35 before explicit V5.10 field PASS and #114 closure.
-9. For a reproduced V5.10 defect, create one small checkpointed field-fix slice and rerun relevant tribunals.
-10. Keep learner stores / voice / navigation sanctuaries intact.
 ```
