@@ -93,9 +93,14 @@ html[data-theme] .ft-v510-feature-identity{
   display:grid!important;
   grid-template-columns:64px minmax(0,1fr)!important;
   align-items:center!important;
+  align-self:center!important;
+  justify-self:stretch!important;
   gap:14px!important;
   min-width:0;
   width:100%;
+  max-width:none;
+  margin:0!important;
+  padding:0!important;
   text-align:left!important;
 }
 html[data-theme] .ft-v510-feature-art-host{
@@ -114,6 +119,7 @@ html[data-theme] .ft-v510-feature-copy{
   min-width:0;
   width:100%!important;
   max-width:none!important;
+  overflow:visible!important;
   text-align:left;
 }
 html[data-theme] .ft-v510-feature-brand{
@@ -141,6 +147,8 @@ html[data-theme] .ft-v510-feature-title{
   letter-spacing:-.025em;
   white-space:normal!important;
   text-wrap:balance;
+  overflow-wrap:normal!important;
+  word-break:normal!important;
 }
 html[data-theme] .listening-top .ft-v510-feature-title{
   font-size:clamp(1.24rem,2.5vw,1.68rem)!important;
@@ -160,6 +168,28 @@ html[data-theme] .listening-top[data-v510-feature-header] > .ft-v510-feature-ide
   max-width:560px;
 }
 
+/* Tyffany memory identity — visual-only replacement for the historical brain emoji.
+   The SVG is used as an alpha mask so it follows the active Premium theme palette. */
+html[data-theme] [data-v510-tyffany-icon="canonical-svg-v1"]{
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:.42em!important;
+}
+html[data-theme] .ft-v510-tyffany-mark{
+  display:inline-block;
+  width:1.08em;
+  height:1.08em;
+  min-width:1.08em;
+  flex:0 0 1.08em;
+  background:linear-gradient(135deg,var(--ft-accent,var(--ux-accent,#7ce7ff)),var(--ft-accent2,var(--ux-accent2,#a98cff)));
+  -webkit-mask:url('../../assets/premium/brand/tyffany-memory.svg') center/contain no-repeat;
+  mask:url('../../assets/premium/brand/tyffany-memory.svg') center/contain no-repeat;
+  filter:drop-shadow(0 0 7px color-mix(in srgb,var(--ft-accent,var(--ux-accent,#7ce7ff)) 22%,transparent));
+}
+html[data-theme] .ft-v510-tyffany-label{
+  min-width:0;
+}
+
 /* Theme coherence lives around the approved artwork; the artwork itself is never recolored. */
 html[data-theme="original"] .b27-practice-icon[data-v510-practice-icon],
 html[data-theme="original"] .b27-quick-icon[data-v510-practice-icon],
@@ -175,6 +205,10 @@ html[data-theme="jade"] .b27-quick-icon[data-v510-practice-icon],
 html[data-theme="jade"] .ft-v510-feature-art-host{--v510-host-accent:#7fe3bd}
 
 @media(max-width:760px){
+  html[data-theme] .topbar[data-v510-feature-header],
+  html[data-theme] .listening-top[data-v510-feature-header]{
+    min-height:64px!important;
+  }
   html[data-theme] .listening-top[data-v510-feature-header]{
     width:100%!important;
     max-width:none!important;
@@ -184,6 +218,8 @@ html[data-theme="jade"] .ft-v510-feature-art-host{--v510-host-accent:#7fe3bd}
   html[data-theme] .ft-v510-feature-identity{
     grid-template-columns:56px minmax(0,1fr)!important;
     gap:10px!important;
+    margin:0!important;
+    padding:0!important;
   }
   html[data-theme] .ft-v510-feature-art-host{
     width:56px;
@@ -240,6 +276,30 @@ html[data-theme="jade"] .ft-v510-feature-art-host{--v510-host-accent:#7fe3bd}
     grid-template-columns:44px minmax(0,1fr) 44px!important;
     gap:8px!important;
   }
+
+  /* Legacy Review/Conversation topbars reserve an invisible Settings button as a third
+     column. On a physical 420px device that phantom column squeezed the Vietnamese title
+     into 3–4 lines. Drop only that invisible placeholder and give the shared identity the
+     full remaining row; Listening keeps its real right-side control/score. */
+  html[data-theme] .screen-review .topbar[data-v510-feature-header],
+  html[data-theme] .screen-conversation .topbar[data-v510-feature-header]{
+    grid-template-columns:44px minmax(0,1fr)!important;
+    gap:10px!important;
+  }
+  html[data-theme] .screen-review .topbar[data-v510-feature-header] > .icon-btn.invisible:last-child,
+  html[data-theme] .screen-conversation .topbar[data-v510-feature-header] > .icon-btn.invisible:last-child{
+    display:none!important;
+  }
+  html[data-theme] .screen-review .topbar[data-v510-feature-header] > .ft-v510-feature-identity,
+  html[data-theme] .screen-conversation .topbar[data-v510-feature-header] > .ft-v510-feature-identity{
+    grid-column:2!important;
+    width:100%!important;
+    max-width:none!important;
+    margin:0!important;
+    padding:0!important;
+    justify-self:stretch!important;
+  }
+
   html[data-theme] .ft-v510-feature-identity{
     grid-template-columns:52px minmax(0,1fr)!important;
     gap:9px!important;
@@ -258,6 +318,13 @@ html[data-theme="jade"] .ft-v510-feature-art-host{--v510-host-accent:#7fe3bd}
   html[data-theme] .ft-v510-feature-title,
   html[data-theme] .listening-top .ft-v510-feature-title{
     font-size:clamp(1rem,4.2vw,1.18rem)!important;
+    line-height:1.04!important;
+  }
+  html[data-theme] .screen-conversation .topbar[data-v510-feature-header="real-life"] .ft-v510-feature-title{
+    font-size:clamp(1.02rem,4.15vw,1.16rem)!important;
+    letter-spacing:-.035em!important;
+    max-width:18ch!important;
+    text-wrap:balance;
   }
   html[data-theme] .listening-session-score{min-width:38px}
 }
