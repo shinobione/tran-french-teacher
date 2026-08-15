@@ -251,11 +251,9 @@ V5.8 solved the **state ownership** problem. V5.9 still owns the quality of the 
 
 # 6. V5.9 — Shared UI Coherence + Fluidity / Premium Feel — TECHNICALLY CLOSED
 
-## Goal reached
+> **Historical execution specification retained below on purpose.** The original field findings, design contracts and DoD remain here as durable evidence; this section is no longer the active next phase.
 
-V5.9 converted the user-reported Premium defects into shared, cross-theme contracts instead of adding four stacks of per-theme patches.
-
-## Rollback checkpoints
+## Technical closeout — 2026-08-15
 
 - **V5.9A / PR #130** — interaction coherence — merge `5d25b6079dd8115149356bdf3dcb3133fee606e0`;
 - **V5.9B / PR #131** — shared Lesson/Eiffel layout — merge `45e7d2a62a635b4448ea16250c53e092390e5464`;
@@ -263,33 +261,255 @@ V5.9 converted the user-reported Premium defects into shared, cross-theme contra
 - **V5.9D / PR #133** — Premium goat favicon/PWA icon family — merge `48aed8e2fca0b6dacec8f9a4a5e257b16bad67ef`;
 - **V5.9E / PR #134** — aggregate technical QA checkpoint — merge `4019c1b6cb41fee9c36bdb223e255455a0da4b5f`.
 
-Each merge is intentionally isolated enough to revert without throwing away the full V5.9 line.
+V5.9 is technically closed. **V5.10 owns the real installed-iPhone / Safari / PWA verdict.** Issue #114 therefore remains OPEN and Build 35 remains BLOCKED / RESERVED.
 
-## Delivered contract
+The earlier “stop at candidate PR” agent policy is retained below as historical phase policy; this run continued through CI/merge only because the user explicitly delegated autonomous execution with rollback checkpoints.
 
-- one Speaking Loop self-record CTA + one local-only note per speaking card;
-- whole-card `Giới thiệu` / About hit target;
-- shared Premium Real Life icon treatment;
-- one cross-theme Lesson/Today identity/Eiffel layout contract;
-- shared Premium card/button/icon interaction language;
-- local-only motion/press/focus polish with **no route crossfade ownership**;
-- discreet DEBUG/admin access under all four themes while V5.8 state decoupling stays intact;
-- goat-derived favicon/Apple Touch/PWA family under `assets/premium/brand/`, without overwriting historical protected `assets/Favicon.png`;
-- aggregate technical QA checkpoint separated from product runtime slices.
+## Goal
 
-## Technical closure vs final product closure
+Move from “good themed app” to a coherent mockup-family product system.
 
-V5.9 is **technically closed**, but the Premium programme is **not yet user-closed**.
+This phase combines:
 
-The following remain V5.10-only physical checks:
+- concrete field defects found on real screens;
+- shared component/layout coherence;
+- premium button/card/icon language;
+- restrained local interaction feel;
+- cleaner DEBUG/admin access.
 
-- installed iPhone / Safari / PWA composition;
-- real tap ergonomics and hidden DEBUG long-press;
-- home-screen/PWA icon appearance;
-- route flash/remanence under physical use;
-- user visual verdict across Original/Aurora/Sunset/Nocturne.
+**It must solve shared-system causes first. Do not patch four themes independently unless a true art-direction difference requires it.**
 
-Therefore issue **#114 remains OPEN** and Build 35 remains **BLOCKED / RESERVED**.
+## 6.1 Field defects to resolve
+
+### A. Speaking Loop duplicate CTA
+
+Observed in lesson speaking UI on the real app:
+
+- same self-record CTA displayed twice;
+- local-device/non-progress note duplicated.
+
+Final contract:
+
+```text
+one model phrase
+→ one self-record CTA
+→ one local-device explanatory note
+```
+
+No duplicate control or explanatory copy.
+
+### B. Settings `Giới thiệu` / About hit target
+
+Observed behaviour:
+
+- card itself does not navigate reliably;
+- user must tap the chevron/arrow.
+
+Final contract:
+
+> **The entire navigation card is clickable/tappable. The chevron is a visual affordance only.**
+
+Apply this rule consistently to same-family navigation cards.
+
+### C. `Tình huống thực tế` / Real Life icon quality
+
+Current icon is visually inconsistent with the Premium icon family.
+
+Required direction:
+
+- cleaner premium symbol;
+- coherent stroke/shape/weight with other Practice icons;
+- no isolated clipart-like treatment;
+- clear at mobile size;
+- one shared component treatment across themes.
+
+### D. Lesson identity cluster overlaps Eiffel art
+
+Observed on some themes: the lesson icon/identity area conflicts with the Eiffel artwork.
+
+Canonical structural reference is the stronger Sunset-style composition:
+
+```text
+lesson identity cluster / badge
+→ predictable shared zone
+
+lesson title / copy / progress / CTA
+→ protected content zone
+
+Eiffel artwork
+→ opposite/right decorative zone
+→ may crop at card edge
+→ never owns the identity cluster
+→ never obscures CTA/title/progress
+```
+
+**One cross-theme Today/Lesson hero layout contract must solve this.**
+
+Do not hand-position the cluster separately for Original, Aurora, Sunset and Nocturne.
+
+## 6.2 Shared lesson-card layout contract
+
+Theme may change:
+
+- background artwork;
+- Eiffel artwork;
+- palette;
+- restrained glow/accent treatment.
+
+Theme should not change without reason:
+
+- semantic placement of lesson identity;
+- content hierarchy;
+- CTA location family;
+- badge/identity ownership;
+- hit targets;
+- responsive breakpoints;
+- basic component geometry.
+
+The layout must be certified at least at:
+
+```text
+390×844
+430×932
+768×1024
+1280×800
+1440×900
+```
+
+## 6.3 Buttons / cards — mockup-level design grammar
+
+The remaining gap is not one bad button. It is the **shared visual language**.
+
+V5.9 must consolidate:
+
+- CTA heights and touch targets;
+- radii;
+- borders / inner highlights;
+- glass/material hierarchy;
+- card depth;
+- icon circles;
+- spacing / rhythm;
+- chevrons;
+- restrained glow;
+- press / hover / focus-visible / active states;
+- contrast across all four themes;
+- same component family across Home / Practice / Progress / Listening / Settings.
+
+“Glassmorphism” alone is not Premium. Mockup fidelity includes composition, proportion, density, hierarchy and interaction feel.
+
+## 6.4 App / favicon / PWA icon direction
+
+Current favicon/app icon is visually off-brand against the Premium UI.
+
+Future replacement direction:
+
+- simplified French Trân’quille / goat-derived brand mark;
+- readable at favicon size;
+- works as Apple Touch / PWA icon;
+- high contrast and simple silhouette;
+- visually related to Home branding;
+- no tiny illustration detail that collapses at 16–32 px.
+
+Current protected `assets/Favicon.png` must not be replaced silently.
+
+If this replacement is included in V5.9, it must be an explicit asset/runtime change with:
+
+- source/master recorded under assets;
+- favicon + Apple Touch + PWA sizes derived coherently;
+- manifest/index references verified;
+- service-worker/cache generation updated;
+- installed-PWA/offline checks included.
+
+If the asset is not ready, document the contract and defer the actual replacement rather than inventing a rushed icon.
+
+## 6.5 DEBUG/admin entry after V5.8
+
+State ownership is already solved by V5.8.
+
+Remaining UX requirement:
+
+- access DEBUG/admin under **all four themes**;
+- keep it out of Trân’s normal learner experience;
+- avoid a large obvious learner-facing DEBUG control;
+- prefer a discreet admin-only affordance/gesture/hidden entry;
+- emergency URL/debug entry may remain;
+- entry method must be documented and discoverable to maintainers;
+- no change of DEBUG state may change theme and vice versa.
+
+## 6.6 Motion / fluidity
+
+### Forbidden
+
+```text
+old page fades out
+while
+new page fades in
+```
+
+### Allowed
+
+```text
+atomic owner switch
+→ one facade only
+→ local settled-owner polish
+```
+
+Premium feel may come from:
+
+- tactile press compression;
+- button highlight/glow response;
+- coherent active-nav motion;
+- card hover on desktop;
+- tiny chevron movement;
+- sheet / About / Recovery open-close polish;
+- success check/pulse;
+- progress movement;
+- theme selection feedback;
+- coherent focus-visible states.
+
+Motion must be short, restrained, interruptible and optional under `prefers-reduced-motion`.
+
+## 6.7 V5.9 Definition of Done
+
+- [x] Speaking block exposes one self-record CTA and one note only.
+- [x] `Giới thiệu` / About whole-card hit target works.
+- [x] Real Life icon belongs to the shared Premium icon family.
+- [x] One shared cross-theme lesson-card layout contract is implemented.
+- [x] No lesson identity / Eiffel overlap in any theme at target viewports.
+- [x] Buttons/cards visibly converge toward the approved mockup family.
+- [x] DEBUG/admin entry works on all themes and remains discreet in learner mode.
+- [x] Local interaction feel is smoother without route crossfades.
+- [x] Reduced-motion keeps full functionality.
+- [x] Navigation/audio/learner-store guards remain green.
+- [x] V5.9 candidate is materialized in git and a PR is opened.
+- [x] **Coding agent STOPS at candidate PR unless explicitly instructed otherwise.**
+
+## 6.8 V5.9 execution policy
+
+The coding-agent session must end at the candidate PR.
+
+```text
+read canonical state
+→ implement V5.9 only
+→ local/browser proof
+→ materialize commit(s)
+→ open candidate PR
+→ update candidate checkpoint
+→ STOP
+```
+
+Do not spend coding-model quota:
+
+- polling all GitHub Actions;
+- waiting for unrelated historical Chrome smokes;
+- rerunning known flakes;
+- merging;
+- watching Pages;
+- automatically starting V5.10.
+
+Those are a separate control/review step unless explicitly delegated.
+
+---
 
 # 7. V5.10 — Final Premium QA / Physical gate
 
