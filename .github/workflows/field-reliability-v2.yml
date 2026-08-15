@@ -33,6 +33,8 @@ jobs:
           grep -q 'requestData' src/core/field-audio-session.js
           grep -q 'new Blob(s.chunks' src/core/field-audio-session.js
           grep -q 'data-field-audio-play' src/core/field-audio-session.js
+          grep -Fq '.speaking-loop-actions[hidden][aria-hidden="true"]{display:none!important}' src/pedagogy/speaking-loop-content.css
+          grep -q 'singleVoiceRecordControl' tests/browser/single-voice-record-control-smoke.html
           grep -q 'limit=3200' tests/browser/field-audio-browser-smoke.html
           grep -q 'observeNode' tests/browser/field-audio-browser-smoke.html
           grep -q 'play=observed' tests/browser/field-audio-browser-smoke.html
@@ -52,6 +54,15 @@ jobs:
           echo $! >/tmp/ft-field-v2-server.pid
           sleep 1
           google-chrome --version
+
+      - name: Chrome — exactly one visible lesson record control
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu \
+            --virtual-time-budget=3000 --dump-dom \
+            'http://127.0.0.1:4173/tests/browser/single-voice-record-control-smoke.html' >/tmp/single-voice-record.html
+          grep -q 'data-single-voice-record-control="ok"' /tmp/single-voice-record.html || { cat /tmp/single-voice-record.html; exit 1; }
+          grep -Eq 'data-single-voice-visible-count="[01]"' /tmp/single-voice-record.html || { cat /tmp/single-voice-record.html; exit 1; }
+          grep -q 'data-single-voice-legacy-display="none"' /tmp/single-voice-record.html || { cat /tmp/single-voice-record.html; exit 1; }
 
       - name: Chrome — lesson recording survives DOM rerender and creates playback
         run: |
