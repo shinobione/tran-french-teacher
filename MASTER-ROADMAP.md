@@ -16,7 +16,7 @@
 |---|---|
 | Product pedagogy | **V2.3.0 · Build 34** |
 | Visual maintenance line | **Premium V5.9 technically closed · V5.10 physical gate active** |
-| Verified `main` checkpoint at reconciliation | **`6477e980ea21f087a9d30a260dbe4630484e4b36`** |
+| Verified V5.9 technical/runtime checkpoint at reconciliation | **`6477e980ea21f087a9d30a260dbe4630484e4b36`** |
 | Curriculum | **52 lessons / 313 items** |
 | Scenario | **44 situations / 132 turns** |
 | Speaking Loop | **52/52 · max 2 moments / lesson** |

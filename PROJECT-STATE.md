@@ -9,8 +9,9 @@
 - Reconciled: **2026-08-15**
 - Repository: `shinobione/tran-french-teacher`
 - Default branch: `main`
-- Verified `main` HEAD at reconciliation: **`6477e980ea21f087a9d30a260dbe4630484e4b36`**.
+- Verified V5.9 technical/runtime checkpoint at reconciliation: **`6477e980ea21f087a9d30a260dbe4630484e4b36`**.
 - That commit is the merge of PR **#141 — V5.9E global technical QA**.
+- Canonical docs closeout: PR **#142** merged after that technical checkpoint.
 - Premium gate issue: **#114 OPEN**.
 - **Premium V5.9 is technically closed by automated QA.**
 - **Premium V5.10 is the active human/physical installed-iPhone/PWA field gate.**
