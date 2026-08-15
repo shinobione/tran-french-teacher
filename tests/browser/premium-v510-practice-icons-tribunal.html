@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>V5.10 approved Practice artwork tribunal</title>
+  <title>V5.10 approved Practice artwork + Feature Header tribunal</title>
   <style>html,body{margin:0;background:#080b12;color:#fff;font-family:system-ui}iframe{position:absolute;left:-9999px;border:0}#result{padding:20px}</style>
 </head>
 <body>
@@ -18,6 +18,18 @@
         review:'./assets/premium/practice/review-premium.webp',
         'real-life':'./assets/premium/practice/real-life-premium.webp'
       };
+      const featureAssets={
+        listening:assets.listening,
+        review:assets.review,
+        speak:assets.conversation,
+        'real-life':assets['real-life']
+      };
+      const featureTitles={
+        listening:'Compréhension orale',
+        review:'Révision',
+        speak:'Répondre à l’oral',
+        'real-life':'Conversation'
+      };
       const storeKeys=[
         'francais-avec-luc:learner:v1',
         'french-tranquille:learning-memory:v1',
@@ -26,11 +38,88 @@
         'french-tranquille:listening:v1',
         'french-tranquille:milestones:v1'
       ];
-      const waitFor=async(fn,timeout=18000)=>{const start=performance.now();while(performance.now()-start<timeout){try{const value=fn();if(value)return value}catch{}await new Promise(r=>setTimeout(r,50))}throw new Error('timeout')};
+      const waitFor=async(fn,timeout=22000)=>{const start=performance.now();while(performance.now()-start<timeout){try{const value=fn();if(value)return value}catch{}await new Promise(r=>setTimeout(r,50))}throw new Error('timeout')};
+      const pause=ms=>new Promise(r=>setTimeout(r,ms));
       const fail=error=>{result.dataset.v510PracticeIcons='fail';result.textContent=`FAIL: ${error?.message||error}`;document.documentElement.dataset.v510PracticeIcons='fail'};
-      const pass=()=>{result.dataset.v510PracticeIcons='ok';result.textContent='V5.10 approved Premium artwork icon system OK';document.documentElement.dataset.v510PracticeIcons='ok'};
+      const pass=()=>{result.dataset.v510PracticeIcons='ok';result.textContent='V5.10 approved Premium artwork + Feature Header System OK';document.documentElement.dataset.v510PracticeIcons='ok'};
       const snapshot=(w)=>Object.fromEntries(storeKeys.map(key=>[key,w.localStorage.getItem(key)]));
       const equal=(a,b)=>storeKeys.every(key=>a[key]===b[key]);
+      const overlaps=(a,b)=>a&&b&&a.width>0&&b.width>0&&a.left<b.right-1&&a.right>b.left+1&&a.top<b.bottom-1&&a.bottom>b.top+1;
+
+      async function openPracticeAndClick(w,d,id){
+        d.querySelector('[data-b27-close-practice]')?.click();
+        w.FrenchTranquilleListening?.close?.();
+        await pause(180);
+        w.FrenchTranquilleBuild27Shell.openPractice();
+        const button=await waitFor(()=>d.querySelector(`.b27-practice-action[data-b27-practice-action="${id}"]`));
+        if(button.disabled)throw new Error(`Practice ${id} unexpectedly disabled`);
+        button.click();
+      }
+
+      async function assertFeatureHeader(w,d,{feature,selector,label}){
+        const header=await waitFor(()=>{
+          w.FrenchTranquilleV510PracticeIcons?.refreshFeatureHeaders?.();
+          const node=d.querySelector(selector);
+          return node?.dataset.v510FeatureHeader===feature?node:null;
+        });
+        const identity=header.querySelector(':scope > .ft-v510-feature-identity');
+        const host=identity?.querySelector('.ft-v510-feature-art-host');
+        const art=host?.querySelector('img.ft-v510-feature-art');
+        const brand=identity?.querySelector('.ft-v510-feature-brand');
+        const title=identity?.querySelector('.ft-v510-feature-title');
+        if(!identity||!host||!art||!brand||!title)throw new Error(`${label}: incomplete Feature Header DOM`);
+        await waitFor(()=>art.complete&&art.naturalWidth>0&&art.naturalHeight>0);
+        if(art.getAttribute('src')!==featureAssets[feature])throw new Error(`${label}: wrong artwork ${art.getAttribute('src')}`);
+        if(feature==='real-life'&&art.getAttribute('src')===assets.conversation)throw new Error(`${label}: Real-Life incorrectly uses Speak artwork`);
+        if(brand.textContent.trim()!=='FRENCH TRÂN’QUILLE')throw new Error(`${label}: brand line mismatch`);
+        if(title.textContent.trim()!==featureTitles[feature])throw new Error(`${label}: title mismatch (${title.textContent.trim()})`);
+        if(title.textContent.includes('🎧')||title.textContent.includes('🎙️')||title.textContent.includes('↻'))throw new Error(`${label}: legacy glyph survived in title`);
+        const style=w.getComputedStyle(art);
+        if(style.filter!=='none')throw new Error(`${label}: artwork recolored/filtered`);
+        const hr=host.getBoundingClientRect();
+        const ar=art.getBoundingClientRect();
+        if(ar.width<44||ar.height<44)throw new Error(`${label}: feature artwork too small`);
+        const dx=Math.abs((hr.left+hr.width/2)-(ar.left+ar.width/2));
+        const dy=Math.abs((hr.top+hr.height/2)-(ar.top+ar.height/2));
+        if(dx>1.5||dy>1.5)throw new Error(`${label}: artwork not optically centered (${dx.toFixed(2)}, ${dy.toFixed(2)})`);
+        const first=header.firstElementChild?.getBoundingClientRect();
+        const last=header.lastElementChild?.getBoundingClientRect();
+        const ir=identity.getBoundingClientRect();
+        if(overlaps(ir,first)||overlaps(ir,last))throw new Error(`${label}: header overlaps Back/Settings/score controls`);
+        if(d.documentElement.scrollWidth>d.documentElement.clientWidth+1)throw new Error(`${label}: horizontal overflow`);
+        for(const theme of themes){
+          w.FrenchTranquilleThemes.apply(theme);
+          w.FrenchTranquilleV510PracticeIcons.refreshFeatureHeaders();
+          await waitFor(()=>d.documentElement.dataset.theme===theme);
+          const themed=d.querySelector(`${selector} img.ft-v510-feature-art`);
+          if(themed?.getAttribute('src')!==featureAssets[feature])throw new Error(`${label}/${theme}: artwork source changed by theme`);
+          if(w.getComputedStyle(themed).filter!=='none')throw new Error(`${label}/${theme}: artwork filtered`);
+        }
+      }
+
+      async function testFeatureDestinations(label,w,d){
+        // Review: Pratiquer -> Réviser.
+        await openPracticeAndClick(w,d,'review');
+        await assertFeatureHeader(w,d,{feature:'review',selector:'.screen-review .topbar',label:`${label}/review`});
+
+        // Listening: Pratiquer -> Écouter.
+        await openPracticeAndClick(w,d,'listening');
+        await assertFeatureHeader(w,d,{feature:'listening',selector:'.listening-top',label:`${label}/listening`});
+        w.FrenchTranquilleListening?.close?.();
+        await pause(180);
+
+        // Speak: Pratiquer -> Parler -> the actual oral-training surface.
+        await openPracticeAndClick(w,d,'conversation');
+        const voiceButton=await waitFor(()=>d.querySelector('[data-session-practice-mode="voice"]'));
+        voiceButton.click();
+        await waitFor(()=>d.documentElement.dataset.sessionPracticeMode==='voice'&&d.querySelector('#free-voice-card:not(.session-mode-hidden)'));
+        await assertFeatureHeader(w,d,{feature:'speak',selector:'.screen-conversation .topbar',label:`${label}/speak`});
+
+        // Real Life: Pratiquer -> Dans la vraie vie. Conversation is deliberately Real-Life, never Speak.
+        await openPracticeAndClick(w,d,'real-life');
+        await waitFor(()=>d.querySelector('.screen-conversation .scenario-runner,.screen-conversation .scenario-done'));
+        await assertFeatureHeader(w,d,{feature:'real-life',selector:'.screen-conversation .topbar',label:`${label}/real-life`});
+      }
 
       async function testViewport(label,width,height){
         const frame=document.createElement('iframe');
@@ -40,12 +129,13 @@
         frame.style.height=`${height}px`;
         frame.src='../../?uxSmoke=lesson8&debug=fr';
         document.body.appendChild(frame);
-        await new Promise((resolve,reject)=>{frame.addEventListener('load',resolve,{once:true});setTimeout(()=>reject(new Error(`${label}: load timeout`)),18000)});
+        await new Promise((resolve,reject)=>{frame.addEventListener('load',resolve,{once:true});setTimeout(()=>reject(new Error(`${label}: load timeout`)),22000)});
 
         const w=frame.contentWindow;
         const d=frame.contentDocument;
         await waitFor(()=>w.FrenchTranquilleBuild27Shell?.openPractice&&w.FrenchTranquilleThemes?.apply&&w.FrenchTranquilleV510PracticeIcons?.refresh);
         if(w.FrenchTranquilleV510PracticeIcons?.style!=='approved-premium-art-v1')throw new Error(`${label}: approved-art runtime marker missing`);
+        if(w.FrenchTranquilleV510PracticeIcons?.featureHeaderStyle!=='feature-header-v1')throw new Error(`${label}: feature-header runtime marker missing`);
 
         const before=snapshot(w);
         w.FrenchTranquilleV510PracticeIcons.refresh();
@@ -96,21 +186,26 @@
             if(ar.width<44||ar.width>54||ar.height<44||ar.height>54)throw new Error(`${label}/${theme}: ${id} bad artwork scale (${ar.width.toFixed(1)}x${ar.height.toFixed(1)})`);
           }
           if(d.documentElement.scrollWidth>d.documentElement.clientWidth+1)throw new Error(`${label}/${theme}: horizontal overflow`);
+          d.querySelector('[data-b27-close-practice]')?.click();
+          await pause(170);
         }
 
-        const after=snapshot(w);
-        if(!equal(before,after))throw new Error(`${label}: learner stores changed during pure icon/theme travel`);
+        const afterPureArtworkTravel=snapshot(w);
+        if(!equal(before,afterPureArtworkTravel))throw new Error(`${label}: learner stores changed during pure icon/theme travel`);
+
+        await testFeatureDestinations(label,w,d);
         frame.remove();
       }
 
       (async()=>{
         try{
           await testViewport('iphone',390,844);
+          await testViewport('iphone-large',430,932);
           await testViewport('desktop',1280,800);
           pass();
         }catch(error){fail(error)}
       })();
-      setTimeout(()=>{if(result.dataset.v510PracticeIcons==='pending')fail(new Error('tribunal watchdog'))},52000);
+      setTimeout(()=>{if(result.dataset.v510PracticeIcons==='pending')fail(new Error('tribunal watchdog'))},110000);
     })();
   </script>
 </body>
