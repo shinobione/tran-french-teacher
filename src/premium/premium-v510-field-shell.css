@@ -58,3 +58,81 @@ html[data-theme]{
     text-wrap:nowrap!important;
   }
 }
+
+/* Physical mobile closeout — late authority after the older V4/V5 layers.
+   Review / Conversation must not reserve the invisible legacy Settings column,
+   and Listening keeps its real session score without sacrificing title width. */
+@media(max-width:520px){
+  html[data-theme] body .screen-review .topbar[data-v510-feature-header],
+  html[data-theme] body .screen-conversation .topbar[data-v510-feature-header]{
+    grid-template-columns:44px minmax(0,1fr)!important;
+    column-gap:10px!important;
+  }
+
+  html[data-theme] body .screen-review .topbar[data-v510-feature-header] > .icon-btn.invisible:last-child,
+  html[data-theme] body .screen-conversation .topbar[data-v510-feature-header] > .icon-btn.invisible:last-child{
+    display:none!important;
+  }
+
+  html[data-theme] body .screen-review .topbar[data-v510-feature-header] > .ft-v510-feature-identity,
+  html[data-theme] body .screen-conversation .topbar[data-v510-feature-header] > .ft-v510-feature-identity{
+    grid-column:2!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    margin:0!important;
+    padding:0!important;
+    justify-self:stretch!important;
+  }
+
+  /* Listening is the only destination with a real session counter. Give the
+     identity the same first row as its siblings, then place the counter below
+     instead of letting it squeeze `Luyện nghe` / the brand into narrow columns. */
+  html[data-theme] body .listening-top[data-v510-feature-header]{
+    display:grid!important;
+    grid-template-columns:44px minmax(0,1fr)!important;
+    grid-template-rows:auto auto!important;
+    column-gap:10px!important;
+    row-gap:6px!important;
+    align-items:center!important;
+  }
+
+  html[data-theme] body .listening-top[data-v510-feature-header] > :first-child{
+    grid-column:1!important;
+    grid-row:1!important;
+  }
+
+  html[data-theme] body .listening-top[data-v510-feature-header] > .ft-v510-feature-identity{
+    grid-column:2!important;
+    grid-row:1!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    margin:0!important;
+    padding:0!important;
+    justify-self:stretch!important;
+  }
+
+  html[data-theme] body .listening-top[data-v510-feature-header] > .listening-session-score{
+    grid-column:2!important;
+    grid-row:2!important;
+    justify-self:end!important;
+    align-self:start!important;
+    margin:0!important;
+  }
+
+  html[data-theme] body .ft-v510-feature-identity{
+    width:100%!important;
+    min-width:0!important;
+  }
+
+  html[data-theme] body .ft-v510-feature-copy{
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+  }
+
+  html[data-theme] body .ft-v510-feature-brand{
+    white-space:nowrap!important;
+  }
+}
