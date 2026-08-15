@@ -22,7 +22,7 @@
 @import url('./premium-v5-fidelity-refine.css?v=2.3.21-v57art1');
 @import url('./premium-v5-fidelity-card-hotfix.css?v=2.3.21-v57art1');
 @import url('./premium-v5-fidelity-settings-hotfix.css?v=2.3.21-v57art1');
-/* P0 navigation geometry remains authoritative for control placement. */
-@import url('./premium-nav-geometry-hotfix.css?v=2.3.21-v57art1');
-/* V5.10 physical-field closeout: final shell/background continuity authority. */
+/* V5.10 physical-field closeout: shell/background continuity, before P0 nav authority. */
 @import url('./premium-v510-field-shell.css?v=2.3.32-v510shell1');
+/* P0 navigation geometry remains the final CSS authority. */
+@import url('./premium-nav-geometry-hotfix.css?v=2.3.21-v57art1');
