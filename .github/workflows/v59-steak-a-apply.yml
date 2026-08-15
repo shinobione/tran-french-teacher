@@ -1,0 +1,322 @@
+name: V5.9A Apply Interaction Coherence
+
+on:
+  push:
+    branches: [agent/v59-steak-a-interactions]
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/v59-steak-a-interactions
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Apply V5.9A shared interaction layer
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > premium-v59-interaction-coherence.js <<'EOF'
+          (() => {
+            'use strict';
+
+            const VERSION = '2.3.23-v59a1';
+            const SELECTOR = '[data-v59-owned="1"]';
+            let queued = false;
+
+            const norm = (value) => String(value || '')
+              .replace(/\s+/g, ' ')
+              .trim()
+              .toLocaleLowerCase('fr');
+
+            const textIs = (el, values) => values.includes(norm(el && el.textContent));
+            const isInteractive = (el) => !!(el && el.closest && el.closest('button, a, input, select, textarea, summary, [role="button"]'));
+
+            function nearestSemanticCard(el, keywords) {
+              let node = el;
+              let fallback = null;
+              for (let depth = 0; node && depth < 8; depth += 1, node = node.parentElement) {
+                if (!fallback && /card|panel|surface|practice|speaking|setting/i.test(String(node.className || ''))) fallback = node;
+                const content = norm(node.textContent);
+                if (keywords.some((keyword) => content.includes(keyword))) {
+                  const buttons = node.querySelectorAll ? node.querySelectorAll('button') : [];
+                  if (buttons.length) return node;
+                }
+              }
+              return fallback || (el && el.parentElement) || null;
+            }
+
+            function reconcileSpeaking() {
+              const labels = ['ghi âm giọng của tôi', 'enregistrer ma voix'];
+              const notes = ['chỉ trên iphone này · không lưu vào tiến độ', 'sur cet iphone uniquement · non enregistré dans la progression'];
+              const buttons = [...document.querySelectorAll('button')].filter((button) => textIs(button, labels));
+              const groups = new Map();
+
+              buttons.forEach((button) => {
+                const card = nearestSemanticCard(button, ['luyện nói', 'je parle', 'speaking']);
+                if (!card) return;
+                const list = groups.get(card) || [];
+                list.push(button);
+                groups.set(card, list);
+              });
+
+              groups.forEach((list, card) => {
+                if (list.length > 1) list.slice(1).forEach((duplicate) => duplicate.remove());
+                const noteNodes = [...card.querySelectorAll('p, small, div, span')]
+                  .filter((node) => textIs(node, notes))
+                  .filter((node) => ![...node.children].some((child) => textIs(child, notes)));
+                if (noteNodes.length > 1) noteNodes.slice(1).forEach((duplicate) => duplicate.remove());
+                if (list[0]) list[0].setAttribute('data-v59-speaking-record', 'primary');
+              });
+            }
+
+            function findLabel(exactValues) {
+              const candidates = [...document.querySelectorAll('h1,h2,h3,h4,p,span,strong,div')];
+              return candidates.find((node) => textIs(node, exactValues)) || null;
+            }
+
+            function reconcileAboutHitTarget() {
+              const label = findLabel(['giới thiệu', 'à propos']);
+              if (!label) return;
+              let row = label;
+              let action = null;
+              for (let depth = 0; row && depth < 7; depth += 1, row = row.parentElement) {
+                if (!row.querySelectorAll) continue;
+                const candidates = [...row.querySelectorAll('button, a, [role="button"]')]
+                  .filter((candidate) => candidate !== row);
+                if (candidates.length) {
+                  action = candidates[candidates.length - 1];
+                  if (/card|row|setting|surface|item/i.test(String(row.className || '')) || row.parentElement === label.parentElement) break;
+                }
+              }
+              if (!row || !action || row.matches('button,a,[role="button"]')) return;
+              row.dataset.v59AboutRow = '1';
+              row.tabIndex = row.tabIndex >= 0 ? row.tabIndex : 0;
+              row.setAttribute('role', 'button');
+              row.setAttribute('aria-label', label.textContent.trim());
+              if (!row.dataset.v59Bound) {
+                row.dataset.v59Bound = '1';
+                const forward = (event) => {
+                  if (event.defaultPrevented) return;
+                  if (event.type === 'click' && isInteractive(event.target)) return;
+                  if (event.type === 'keydown' && !['Enter', ' '].includes(event.key)) return;
+                  event.preventDefault();
+                  event.stopPropagation();
+                  action.click();
+                };
+                row.addEventListener('click', forward);
+                row.addEventListener('keydown', forward);
+              }
+            }
+
+            const REAL_LIFE_ICON = `
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M12 21s6-5.2 6-11a6 6 0 1 0-12 0c0 5.8 6 11 6 11Z"/>
+                <circle cx="12" cy="10" r="2.2"/>
+                <path d="M18.8 4.8l.55-1.35.55 1.35 1.35.55-1.35.55-.55 1.35-.55-1.35-1.35-.55 1.35-.55Z"/>
+              </svg>`;
+
+            function reconcileRealLifeIcon() {
+              const label = findLabel(['tình huống thực tế', 'dans la vraie vie']);
+              if (!label) return;
+              const card = nearestSemanticCard(label, ['tình huống thực tế', 'dans la vraie vie']);
+              if (!card) return;
+              const slots = [...card.querySelectorAll('[class*="icon"], [class*="Icon"], .practice-card__icon, .practice-icon')]
+                .filter((slot) => !slot.contains(label))
+                .filter((slot) => !/chevron|arrow/i.test(String(slot.className || '')));
+              const slot = slots[0];
+              if (!slot || slot.dataset.v59RealLifeIcon === '1') return;
+              slot.innerHTML = REAL_LIFE_ICON;
+              slot.dataset.v59RealLifeIcon = '1';
+              slot.setAttribute('aria-hidden', 'true');
+            }
+
+            function reconcile() {
+              queued = false;
+              reconcileSpeaking();
+              reconcileAboutHitTarget();
+              reconcileRealLifeIcon();
+              document.documentElement.dataset.v59Interaction = VERSION;
+            }
+
+            function schedule() {
+              if (queued) return;
+              queued = true;
+              requestAnimationFrame(reconcile);
+            }
+
+            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', schedule, { once: true });
+            else schedule();
+
+            const observer = new MutationObserver(schedule);
+            observer.observe(document.documentElement, { childList: true, subtree: true });
+
+            window.FrenchTranquilleV59Interaction = Object.freeze({ version: VERSION, reconcile });
+          })();
+          EOF
+
+          cat > premium-v59-interaction-coherence.css <<'EOF'
+          :root { --v59-interaction-duration: 150ms; }
+
+          [data-v59-about-row="1"] {
+            cursor: pointer;
+            transition: transform var(--v59-interaction-duration) ease,
+                        border-color var(--v59-interaction-duration) ease,
+                        background-color var(--v59-interaction-duration) ease;
+          }
+          [data-v59-about-row="1"]:active { transform: scale(.992); }
+          [data-v59-about-row="1"]:focus-visible {
+            outline: 2px solid color-mix(in srgb, currentColor 62%, transparent);
+            outline-offset: 3px;
+          }
+
+          [data-v59-real-life-icon="1"] svg {
+            width: 62%;
+            height: 62%;
+            display: block;
+            margin: auto;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.75;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+          }
+
+          @media (prefers-reduced-motion: reduce) {
+            [data-v59-about-row="1"] { transition: none; }
+          }
+          EOF
+
+          cat > premium-v59a-interaction-tribunal.html <<'EOF'
+          <!doctype html><html lang="vi"><head><meta charset="utf-8"><title>V5.9A tribunal</title></head>
+          <body>
+            <section class="speaking-loop-card"><h2>LUYỆN NÓI</h2><button id="rec1">Ghi âm giọng của tôi</button><button id="rec2">Ghi âm giọng của tôi</button><small>Chỉ trên iPhone này · không lưu vào tiến độ</small><small>Chỉ trên iPhone này · không lưu vào tiến độ</small></section>
+            <div class="settings-card" id="about"><strong>Giới thiệu</strong><button id="about-arrow" aria-label="open">›</button></div>
+            <div class="practice-card" id="real"><span class="practice-icon">♥</span><strong>Tình huống thực tế</strong><button>›</button></div>
+            <script>window.__aboutClicks=0;document.getElementById('about-arrow').addEventListener('click',()=>window.__aboutClicks++);</script>
+            <script src="premium-v59-interaction-coherence.js"></script>
+            <script>
+              setTimeout(()=>{
+                const rec=[...document.querySelectorAll('button')].filter(b=>b.textContent.trim()==='Ghi âm giọng của tôi');
+                const notes=[...document.querySelectorAll('small')].filter(n=>n.textContent.includes('Chỉ trên iPhone này'));
+                const about=document.getElementById('about');
+                const real=document.querySelector('[data-v59-real-life-icon="1"] svg');
+                about.dispatchEvent(new MouseEvent('click',{bubbles:true}));
+                const ok=rec.length===1&&notes.length===1&&window.__aboutClicks===1&&!!real;
+                document.documentElement.dataset.v59a=ok?'ok':'fail';
+                document.documentElement.dataset.v59aDetail=`record=${rec.length};notes=${notes.length};about=${window.__aboutClicks};icon=${!!real}`;
+              },200);
+            </script>
+          </body></html>
+          EOF
+
+          python3 - <<'PY'
+          from pathlib import Path
+          idx=Path('index.html')
+          s=idx.read_text()
+          css='premium-v59-interaction-coherence.css?v=2.3.23-v59a1'
+          js='premium-v59-interaction-coherence.js?v=2.3.23-v59a1'
+          if css not in s:
+              marker='</head>'
+              assert marker in s
+              s=s.replace(marker, f'  <link rel="stylesheet" href="{css}">\n{marker}', 1)
+          if js not in s:
+              marker='</body>'
+              assert marker in s
+              s=s.replace(marker, f'  <script src="{js}"></script>\n{marker}', 1)
+          idx.write_text(s)
+
+          sw=Path('sw.js')
+          s=sw.read_text()
+          old='tran-french-teacher-v2.3.22-b34.14-v58debug1'
+          new='tran-french-teacher-v2.3.23-b34.15-v59a1'
+          assert old in s or new in s
+          s=s.replace(old,new)
+          if "const V59A='2.3.23-v59a1'" not in s:
+              anchor="const DEBUG='2.3.22-v58debug1';"
+              assert anchor in s
+              s=s.replace(anchor, anchor+"\nconst V59A='2.3.23-v59a1';",1)
+          css_entry="'premium-v59-interaction-coherence.css?v=${V59A}',"
+          js_entry="'premium-v59-interaction-coherence.js?v=${V59A}',"
+          if css_entry not in s or js_entry not in s:
+              anchor="'debug-fr.js?v=${DEBUG}',"
+              assert anchor in s
+              insertion=anchor+"\n  "+css_entry+"\n  "+js_entry
+              s=s.replace(anchor,insertion,1)
+          sw.write_text(s)
+
+          old='tran-french-teacher-v2.3.22-b34.14-v58debug1'
+          new='tran-french-teacher-v2.3.23-b34.15-v59a1'
+          for p in Path('.github/workflows').glob('*.yml'):
+              if p.name.startswith('v59-steak-a-'): continue
+              t=p.read_text()
+              if old in t:
+                  p.write_text(t.replace(old,new))
+          PY
+
+          cat > .github/workflows/premium-v59a-interaction-coherence.yml <<'EOF'
+          name: Premium V5.9A Interaction Coherence
+
+          on:
+            pull_request:
+              branches: [main]
+
+          permissions:
+            contents: read
+
+          jobs:
+            interaction-coherence:
+              runs-on: ubuntu-latest
+              timeout-minutes: 12
+              steps:
+                - uses: actions/checkout@v4
+                - uses: actions/setup-node@v4
+                  with:
+                    node-version: '22'
+                - name: Static contracts
+                  run: |
+                    node --check premium-v59-interaction-coherence.js
+                    grep -q 'premium-v59-interaction-coherence.css?v=2.3.23-v59a1' index.html
+                    grep -q 'premium-v59-interaction-coherence.js?v=2.3.23-v59a1' index.html
+                    grep -q "const V59A='2.3.23-v59a1'" sw.js
+                    grep -q 'premium-v59-interaction-coherence.css?v=${V59A}' sw.js
+                    grep -q 'premium-v59-interaction-coherence.js?v=${V59A}' sw.js
+                    test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
+                    test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+                    test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+                    test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
+                    test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
+                - name: Chrome interaction tribunal
+                  run: |
+                    python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/v59a-http.log 2>&1 &
+                    pid=$!
+                    trap 'kill $pid || true' EXIT
+                    sleep 1
+                    timeout --signal=TERM --kill-after=5s 35s google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=1200 --dump-dom http://127.0.0.1:4173/premium-v59a-interaction-tribunal.html >/tmp/v59a.html
+                    grep -q 'data-v59a="ok"' /tmp/v59a.html || { grep -o 'data-v59a-detail="[^"]*"' /tmp/v59a.html || true; exit 1; }
+          EOF
+
+          rm -f .github/workflows/v59-steak-a-diagnostic.yml .github/workflows/v59-steak-a-apply.yml
+
+          node --check premium-v59-interaction-coherence.js
+          git diff --check
+          test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+      - name: Commit V5.9A checkpoint
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'V5.9A interaction coherence checkpoint'
+          git push origin HEAD:agent/v59-steak-a-interactions

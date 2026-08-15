@@ -1,0 +1,32 @@
+name: V5.9A Interaction Ownership Diagnostic
+
+on:
+  push:
+    branches: [agent/v59-steak-a-interactions]
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Locate V5.9A field issues
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo '=== HEAD ==='
+          git rev-parse HEAD
+          echo '=== SPEAKING RECORD COPY ==='
+          grep -RIn -C 8 --exclude-dir=.git -E 'Ghi âm giọng của tôi|Chỉ trên iPhone này|speaking-loop' . | head -n 260 || true
+          echo '=== ABOUT / GIOI THIEU ==='
+          grep -RIn -C 8 --exclude-dir=.git -E 'Giới thiệu|about|About' . | head -n 300 || true
+          echo '=== REAL LIFE CARD ==='
+          grep -RIn -C 8 --exclude-dir=.git -E 'Tình huống thực tế|real-life|Real Life' . | head -n 300 || true
+          echo '=== INDEX GLOBAL MODULES ==='
+          grep -n -E '<script|stylesheet|manifest|icon' index.html | tail -n 220 || true
+          echo '=== DEBUG API ==='
+          grep -RIn -C 6 --exclude-dir=.git -E 'FrenchTranquilleDebugFr|DEBUG_KEY|debug-fr' debug-fr.js index.html sw.js 2>/dev/null | head -n 220 || true
