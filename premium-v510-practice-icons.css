@@ -2,6 +2,22 @@
    Expressive 3D object pictograms inspired by the approved visual references.
    The object palette stays stable; the glass host adapts to each theme. */
 
+/* Reserve final geometry before JS decoration so legacy emoji never flash and layout does not shift. */
+html[data-theme] .b27-practice-action[data-b27-practice-action] .b27-practice-icon{
+  width:58px!important;
+  height:58px!important;
+  flex:0 0 58px;
+  font-size:0!important;
+}
+html[data-theme] .b27-quick-card[data-b27-action="review"] .b27-quick-icon,
+html[data-theme] .b27-quick-card[data-b27-action="listening"] .b27-quick-icon{
+  width:54px!important;
+  height:54px!important;
+  min-width:54px!important;
+  flex:0 0 54px;
+  font-size:0!important;
+}
+
 html[data-theme] .b27-practice-icon[data-v510-practice-icon],
 html[data-theme] .b27-quick-icon[data-v510-practice-icon]{
   --v510-host-accent:var(--ft-accent,var(--ux-accent,#ff9f43));
@@ -42,21 +58,8 @@ html[data-theme] .b27-quick-icon[data-v510-practice-icon]{
     0 0 18px color-mix(in srgb,var(--v510-host-accent) 8%,transparent)!important;
 }
 
-html[data-theme] .b27-practice-icon[data-v510-practice-icon]{
-  width:58px!important;
-  height:58px!important;
-  flex:0 0 58px;
-  border-radius:17px!important;
-}
-
-html[data-theme] .b27-quick-icon[data-v510-practice-icon]{
-  width:54px!important;
-  height:54px!important;
-  min-width:54px!important;
-  flex:0 0 54px;
-  border-radius:16px!important;
-  font-size:0!important;
-}
+html[data-theme] .b27-practice-icon[data-v510-practice-icon]{border-radius:17px!important}
+html[data-theme] .b27-quick-icon[data-v510-practice-icon]{border-radius:16px!important}
 
 html[data-theme] .b27-practice-icon[data-v510-practice-icon]::before,
 html[data-theme] .b27-practice-icon[data-v510-practice-icon]::after,
@@ -134,12 +137,6 @@ html[data-theme] .b27-quick-card[data-b27-action="listening"]{
   grid-template-columns:56px minmax(0,1fr) 22px;
 }
 
-/* Home quick actions use exactly the same Listening and Review pictograms. */
-html[data-theme] .b27-quick-card[data-b27-action="review"] .b27-quick-icon,
-html[data-theme] .b27-quick-card[data-b27-action="listening"] .b27-quick-icon{
-  margin:0!important;
-}
-
 /* Theme coherence lives in the glass host, not by repainting the 3D object. */
 html[data-theme="original"] .b27-practice-icon[data-v510-practice-icon],
 html[data-theme="original"] .b27-quick-icon[data-v510-practice-icon]{--v510-host-accent:#7ce7ff}
@@ -151,24 +148,25 @@ html[data-theme="jade"] .b27-practice-icon[data-v510-practice-icon],
 html[data-theme="jade"] .b27-quick-icon[data-v510-practice-icon]{--v510-host-accent:#7fe3bd}
 
 @media(max-width:520px){
-  html[data-theme] .b27-practice-icon[data-v510-practice-icon]{
+  html[data-theme] .b27-practice-action[data-b27-practice-action] .b27-practice-icon{
     width:56px!important;
     height:56px!important;
     flex-basis:56px;
-    border-radius:16px!important;
   }
+  html[data-theme] .b27-practice-icon[data-v510-practice-icon]{border-radius:16px!important}
   html[data-theme] .b27-practice-icon .ft-v510-practice-glyph{
     width:41px;
     height:41px;
     flex-basis:41px;
   }
-  html[data-theme] .b27-quick-icon[data-v510-practice-icon]{
+  html[data-theme] .b27-quick-card[data-b27-action="review"] .b27-quick-icon,
+  html[data-theme] .b27-quick-card[data-b27-action="listening"] .b27-quick-icon{
     width:52px!important;
     height:52px!important;
     min-width:52px!important;
     flex-basis:52px;
-    border-radius:15px!important;
   }
+  html[data-theme] .b27-quick-icon[data-v510-practice-icon]{border-radius:15px!important}
   html[data-theme] .b27-quick-icon .ft-v510-practice-glyph{
     width:38px;
     height:38px;
