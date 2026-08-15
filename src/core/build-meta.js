@@ -16,13 +16,13 @@ function installSpeakingLoopAssets() {
   if (!document.querySelector('link[data-speaking-loop-style]')) {
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = './speaking-loop-content.css?v=1.22.2-b29.2';
+    link.href = './src/pedagogy/speaking-loop-content.css?v=1.22.2-b29.2';
     link.dataset.speakingLoopStyle = '1';
     document.head.appendChild(link);
   }
   if (document.querySelector('script[data-speaking-loop-script]')) return;
   const script = document.createElement('script');
-  script.src = './speaking-loop-content.js?v=1.22.2-b29.2';
+  script.src = './src/pedagogy/speaking-loop-content.js?v=1.22.2-b29.2';
   script.dataset.speakingLoopScript = '1';
   script.addEventListener('load', () => {
     const api = window.FrenchTranquilleSpeakingLoop;
@@ -34,25 +34,25 @@ function installSpeakingLoopAssets() {
     const params = new URLSearchParams(location.search);
     if (params.has('b291Smoke') && !document.querySelector('script[data-speaking-loop-smoke]')) {
       const smoke = document.createElement('script');
-      smoke.src = './speaking-loop-smoke.js?v=1.22.2-b29.2';
+      smoke.src = './tests/smoke/speaking-loop-smoke.js?v=1.22.2-b29.2';
       smoke.dataset.speakingLoopSmoke = '1';
       document.body.appendChild(smoke);
     }
     if (params.has('b292Smoke') && !document.querySelector('script[data-speaking-loop-variety-smoke]')) {
       const smoke = document.createElement('script');
-      smoke.src = './speaking-loop-variety-smoke.js?v=1.22.2-b29.2';
+      smoke.src = './tests/smoke/speaking-loop-variety-smoke.js?v=1.22.2-b29.2';
       smoke.dataset.speakingLoopVarietySmoke = '1';
       document.body.appendChild(smoke);
     }
     if (params.has('b30Audit') && !document.querySelector('script[data-build30-architecture-smoke]')) {
       const smoke = document.createElement('script');
-      smoke.src = './build30-architecture-smoke.js?v=2.0.0-b30';
+      smoke.src = './tests/smoke/build30-architecture-smoke.js?v=2.0.0-b30';
       smoke.dataset.build30ArchitectureSmoke = '1';
       document.body.appendChild(smoke);
     }
     if (params.has('v2Audit') && !document.querySelector('script[data-v2-release-smoke]')) {
       const smoke = document.createElement('script');
-      smoke.src = './v2-release-smoke.js?v=2.0.0';
+      smoke.src = './tests/smoke/v2-release-smoke.js?v=2.0.0';
       smoke.dataset.v2ReleaseSmoke = '1';
       document.body.appendChild(smoke);
     }

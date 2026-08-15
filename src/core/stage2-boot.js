@@ -17,8 +17,8 @@ if (window.FrenchTranquilleStage2 && !window.__FT_STAGE2_BOOTED__) {
     document.head.appendChild(script);
   };
 
-  if (enableFieldNav && !window.FrenchTranquilleFieldNavigation) load('./field-navigation-runtime.js?v=2.3.7-b34.7', 'fieldNavigationRuntime');
-  if (enableFieldAudio) load('./field-audio-session.js?v=2.3.1-b34.1', 'fieldAudioSessionV2');
+  if (enableFieldNav && !window.FrenchTranquilleFieldNavigation) load('./src/core/field-navigation-runtime.js?v=2.3.7-b34.7', 'fieldNavigationRuntime');
+  if (enableFieldAudio) load('./src/core/field-audio-session.js?v=2.3.1-b34.1', 'fieldAudioSessionV2');
 
   requestAnimationFrame(() => document.querySelector('.bottom-nav [data-go="home"]')?.click());
 }

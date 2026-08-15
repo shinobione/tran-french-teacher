@@ -12,28 +12,28 @@ const valid=id=>IDS.includes(id)?id:'original';
 const current=()=>valid(localStorage.getItem(KEY)||'original');
 function ensureStyle(){
  if(!document.querySelector('link[data-premium-theme-polish]')){
-  const l=document.createElement('link');l.rel='stylesheet';l.href='./premium-theme-polish.css?v=2.3.21-v57art1';l.dataset.premiumThemePolish='1';document.head.appendChild(l);
+  const l=document.createElement('link');l.rel='stylesheet';l.href='./src/premium/premium-theme-polish.css?v=2.3.21-v57art1';l.dataset.premiumThemePolish='1';document.head.appendChild(l);
  }
  if(!document.querySelector('script[data-premium-v55-fidelity-runtime]')){
-  const r=document.createElement('script');r.src='./premium-v5-fidelity-reset.js?v=2.3.21-v57art1';r.dataset.premiumV55FidelityRuntime='1';r.async=false;document.head.appendChild(r);
+  const r=document.createElement('script');r.src='./src/premium/premium-v5-fidelity-reset.js?v=2.3.21-v57art1';r.dataset.premiumV55FidelityRuntime='1';r.async=false;document.head.appendChild(r);
  }
  if(!document.querySelector('link[data-premium-v59-interactions-style]')){
-  const l=document.createElement('link');l.rel='stylesheet';l.href=`./premium-v59-interactions.css?v=${V59A}`;l.dataset.premiumV59InteractionsStyle='1';document.head.appendChild(l);
+  const l=document.createElement('link');l.rel='stylesheet';l.href=`./src/premium/premium-v59-interactions.css?v=${V59A}`;l.dataset.premiumV59InteractionsStyle='1';document.head.appendChild(l);
  }
  if(!document.querySelector('script[data-premium-v59-interactions-runtime]')){
-  const r=document.createElement('script');r.src=`./premium-v59-interactions.js?v=${V59A}`;r.dataset.premiumV59InteractionsRuntime='1';r.async=false;document.head.appendChild(r);
+  const r=document.createElement('script');r.src=`./src/premium/premium-v59-interactions.js?v=${V59A}`;r.dataset.premiumV59InteractionsRuntime='1';r.async=false;document.head.appendChild(r);
  }
  if(!document.querySelector('link[data-premium-v59-lesson-layout-style]')){
-  const l=document.createElement('link');l.rel='stylesheet';l.href=`./premium-v59-lesson-layout.css?v=${V59B}`;l.dataset.premiumV59LessonLayoutStyle='1';document.head.appendChild(l);
+  const l=document.createElement('link');l.rel='stylesheet';l.href=`./src/premium/premium-v59-lesson-layout.css?v=${V59B}`;l.dataset.premiumV59LessonLayoutStyle='1';document.head.appendChild(l);
  }
  if(!document.querySelector('script[data-premium-v59-lesson-layout-runtime]')){
-  const r=document.createElement('script');r.src=`./premium-v59-lesson-layout.js?v=${V59B}`;r.dataset.premiumV59LessonLayoutRuntime='1';r.async=false;document.head.appendChild(r);
+  const r=document.createElement('script');r.src=`./src/premium/premium-v59-lesson-layout.js?v=${V59B}`;r.dataset.premiumV59LessonLayoutRuntime='1';r.async=false;document.head.appendChild(r);
  }
  if(!document.querySelector('link[data-premium-v59-system-style]')){
-  const l=document.createElement('link');l.rel='stylesheet';l.href=`./premium-v59-system.css?v=${V59C}`;l.dataset.premiumV59SystemStyle='1';document.head.appendChild(l);
+  const l=document.createElement('link');l.rel='stylesheet';l.href=`./src/premium/premium-v59-system.css?v=${V59C}`;l.dataset.premiumV59SystemStyle='1';document.head.appendChild(l);
  }
  if(!document.querySelector('script[data-premium-v59-system-runtime]')){
-  const r=document.createElement('script');r.src=`./premium-v59-system.js?v=${V59C}`;r.dataset.premiumV59SystemRuntime='1';r.async=false;document.head.appendChild(r);
+  const r=document.createElement('script');r.src=`./src/premium/premium-v59-system.js?v=${V59C}`;r.dataset.premiumV59SystemRuntime='1';r.async=false;document.head.appendChild(r);
  }
  if(!document.querySelector('style[data-modern-home-brand-fix]')){
   const s=document.createElement('style');s.dataset.modernHomeBrandFix='1';s.textContent='.ft-modern-home-brand::before{display:none!important}';document.head.appendChild(s);

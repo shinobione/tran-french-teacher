@@ -30,12 +30,12 @@
   async function boot() {
     if (root.dataset.build32Ready === '1') return;
     root.dataset.build32Loading = '1';
-    loadStyle(`./curriculum-stage4.css?v=${VERSION}`, 'build32Stage4Style');
-    await loadScript(`./curriculum-stage4.js?v=${VERSION}`, 'build32Stage4');
-    await loadScript(`./build32-shell-extension.js?v=${VERSION}`, 'build32Shell');
-    await loadScript(`./real-life-data-4.js?v=${VERSION}`, 'build32RealLife4');
-    await loadScript(`./listening-data-2.js?v=${VERSION}`, 'build32Listening2');
-    await loadScript(`./learner-intelligence-v2.js?v=${VERSION}`, 'build32Intelligence');
+    loadStyle(`./src/pedagogy/curriculum-stage4.css?v=${VERSION}`, 'build32Stage4Style');
+    await loadScript(`./src/pedagogy/curriculum-stage4.js?v=${VERSION}`, 'build32Stage4');
+    await loadScript(`./src/core/build32-shell-extension.js?v=${VERSION}`, 'build32Shell');
+    await loadScript(`./src/pedagogy/real-life-data-4.js?v=${VERSION}`, 'build32RealLife4');
+    await loadScript(`./src/pedagogy/listening-data-2.js?v=${VERSION}`, 'build32Listening2');
+    await loadScript(`./src/pedagogy/learner-intelligence-v2.js?v=${VERSION}`, 'build32Intelligence');
 
     window.FrenchTranquilleBuild27Shell?.refresh?.();
     window.FrenchTranquilleBuild32Shell?.refresh?.();
@@ -47,12 +47,12 @@
 
     const params = new URLSearchParams(location.search);
     if (params.has('b32Audit')) {
-      await loadScript(`./build32-smoke.js?v=${VERSION}`, 'build32Smoke');
+      await loadScript(`./tests/smoke/build32-smoke.js?v=${VERSION}`, 'build32Smoke');
       return;
     }
 
     const historical = params.has('b31Audit') || params.has('b30Audit') || params.has('v2Audit');
-    if (!historical) await loadScript(`./foundations-pilot.js?v=${FOUNDATIONS}`, 'foundationsPilot');
+    if (!historical) await loadScript(`./src/pedagogy/foundations-pilot.js?v=${FOUNDATIONS}`, 'foundationsPilot');
   }
 
   boot().catch(error => {

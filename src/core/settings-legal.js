@@ -7,7 +7,7 @@
 
   if (!document.querySelector('script[data-build31-loader]')) {
     const loader = document.createElement('script');
-    loader.src = './build31-loader.js?v=2.1.0-b31';
+    loader.src = './src/core/build31-loader.js?v=2.1.0-b31';
     loader.dataset.build31Loader = '1';
     document.body.appendChild(loader);
   }
