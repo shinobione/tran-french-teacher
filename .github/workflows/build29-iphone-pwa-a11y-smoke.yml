@@ -62,7 +62,7 @@ jobs:
           grep -q 'premium-v5-fidelity-reset.css?v=${V5F}' sw.js
           grep -q 'premium-v5-fidelity-refine.css?v=${V5FR}' sw.js
           grep -q 'premium-v5-fidelity-card-hotfix.css?v=${V5FR}' sw.js
-          grep -q 'premium-v4-ownership-hotfix.css?v=2.3.21-v57art1' sw.js
+          grep -q 'premium-v4-ownership-hotfix.css?v=${V5F}' sw.js
           grep -q 'build29-iphone-a11y.css' sw.js
           grep -q 'build29-iphone-a11y.js' sw.js
           grep -q 'build29-smoke.js' sw.js
