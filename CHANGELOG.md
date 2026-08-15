@@ -4,15 +4,16 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ## [Unreleased]
 
-- **Premium V5.8** : préférence DEBUG FR découplée de la préférence visuelle, mode admin utilisable sous Original/Aurora/Sunset/Nocturne, diagnostic masqué en mode apprenant, matrice Chrome 4 thèmes × OFF/ON et six stores learner vérifiés byte-identiques ;
-- **Premium V5.7** : quatre fonds de thème et quatre Eiffel V2 transparents intégrés, Original élevé au même pipeline Premium, cache PWA versionné et matrice 5 viewports × 4 thèmes ; **PASS visuel utilisateur 2026-08-15**, verdict physique iPhone/PWA conservé pour V5.10 ;
-- retour terrain attendu sur :
-  - Listening → **un seul tap** `Aujourd’hui` ;
-  - Bài 11/12 → enregistrement → `▶ Giọng của tôi` ;
-  - pilote Fondations F01–F04 ;
-- prochaine intention de design : **Build 35 — Memory Evidence v2 / Migration Readiness** ;
-- aucune migration Memory v2 ni nouveau store pré-engagés ;
-- ne pas industrialiser F05–F18 avant validation réelle du pilote F01–F04.
+- **Premium V5.9 — TECHNICALLY CLOSED / FIELD PASS PENDING**:
+  - PR #130 / merge `5d25b6079dd8115149356bdf3dcb3133fee606e0` — duplicate Speaking Loop CTA/note guard, whole-card About hit target, shared Real Life icon;
+  - PR #131 / merge `45e7d2a62a635b4448ea16250c53e092390e5464` — shared cross-theme Lesson/Eiffel geometry;
+  - PR #132 / merge `3c6ecce404efa62723bfb0b10c85da6bbbfda1ed` — shared Premium cards/CTA controls + hidden DEBUG entry;
+  - PR #133 / merge `48aed8e2fca0b6dacec8f9a4a5e257b16bad67ef` — goat-derived favicon/Apple Touch/PWA icon family without overwriting historical `assets/Favicon.png`;
+  - PR #134 / merge `4019c1b6cb41fee9c36bdb223e255455a0da4b5f` — aggregate V5.9 technical QA checkpoint;
+- **Premium V5.10 is the active next gate**: physical installed-iPhone/PWA visual + gesture verdict across all four themes;
+- issue **#114 remains OPEN** until explicit final user PASS;
+- Build 35 remains **BLOCKED / RESERVED** until V5.10 PASS + #114 closure;
+- Foundations F01–F04 and the earlier Listening/voice field confirmations remain independent learner-side validation items.
 
 ---
 
