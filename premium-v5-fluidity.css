@@ -1,0 +1,166 @@
+/* French Trân’quille — Premium V5.9 shared UI coherence + local interaction feel.
+   One structural grammar for all four themes. No route/page crossfade ownership. */
+
+html[data-theme]{
+  --v59-fast:120ms;
+  --v59-smooth:180ms;
+  --v59-ease:cubic-bezier(.2,.8,.2,1);
+  --v59-ring:0 0 0 3px color-mix(in srgb,var(--ft-accent) 30%,transparent);
+}
+
+/* --------------------------------------------------------------------------
+   LESSON HERO — one identity layout for Original / Aurora / Sunset / Jade.
+   The lesson identity cluster owns the upper-left; Eiffel remains decoration
+   on the right/bottom and must never become the icon anchor.
+   -------------------------------------------------------------------------- */
+html[data-theme] .b27-primary-card .b27-card-topline{
+  position:relative;
+  z-index:3;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:10px!important;
+  min-height:48px;
+  width:max-content;
+  max-width:calc(100% - 12px);
+}
+html[data-theme] .b27-primary-card .b27-card-topline>b{
+  order:-1;
+  box-sizing:border-box;
+  width:46px;
+  height:46px;
+  min-width:46px;
+  display:grid;
+  place-items:center;
+  margin:0!important;
+  border:1px solid color-mix(in srgb,var(--ft-accent) 46%,var(--ft-border));
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 34% 24%,rgba(255,255,255,.22),transparent 34%),
+    linear-gradient(145deg,color-mix(in srgb,var(--ft-accent) 15%,var(--ft-surface)),color-mix(in srgb,var(--ft-accent2) 11%,var(--ft-surface-2)));
+  color:var(--ft-accent);
+  box-shadow:0 10px 25px rgba(0,0,0,.22),0 0 18px color-mix(in srgb,var(--ft-accent) 10%,transparent),inset 0 1px 0 rgba(255,255,255,.14);
+  font-size:1.15rem!important;
+  line-height:1!important;
+}
+html[data-theme] .b27-primary-card .b27-card-topline>span{
+  display:inline-flex;
+  align-items:center;
+  min-height:30px;
+  padding:6px 10px;
+  border:1px solid color-mix(in srgb,var(--ft-accent) 28%,var(--ft-border));
+  border-radius:999px;
+  background:color-mix(in srgb,var(--ft-surface) 76%,transparent);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+}
+@media(min-width:620px){
+  html[data-theme] .b27-primary-card :is(h2,p){max-width:min(70%,650px)}
+}
+
+/* --------------------------------------------------------------------------
+   PRACTICE ICON FAMILY — SVG glyphs share the same material/token system.
+   -------------------------------------------------------------------------- */
+html[data-theme] .b27-practice-icon{
+  border-radius:50%!important;
+  border:1px solid color-mix(in srgb,var(--ft-accent) 42%,var(--ft-border))!important;
+  background:
+    radial-gradient(circle at 34% 22%,rgba(255,255,255,.18),transparent 36%),
+    linear-gradient(145deg,color-mix(in srgb,var(--ft-accent) 13%,var(--ft-surface)),color-mix(in srgb,var(--ft-accent2) 11%,var(--ft-surface-2)))!important;
+  color:var(--ft-accent)!important;
+  box-shadow:0 9px 22px rgba(0,0,0,.18),0 0 16px color-mix(in srgb,var(--ft-accent) 9%,transparent),inset 0 1px 0 rgba(255,255,255,.12);
+}
+html[data-theme] .b27-practice-icon svg{width:27px;height:27px;display:block;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+html[data-theme] [data-b27-practice-action="real-life"] .b27-practice-icon{color:var(--ft-accent2)!important}
+
+/* --------------------------------------------------------------------------
+   SHARED CARD / CTA LANGUAGE — local feedback only, never route crossfades.
+   -------------------------------------------------------------------------- */
+html[data-theme] :is(
+  .b27-primary-action,.b27-secondary-action,.b27-quick-card,.b27-practice-action,
+  .b27-lesson-row,.theme-option,.ft-v55-recovery-toggle,.ft-legal-head
+){
+  transition:
+    transform var(--v59-fast) var(--v59-ease),
+    filter var(--v59-fast) ease,
+    border-color var(--v59-smooth) ease,
+    box-shadow var(--v59-smooth) ease,
+    background-color var(--v59-smooth) ease!important;
+  -webkit-tap-highlight-color:transparent;
+}
+html[data-theme] :is(.b27-primary-action,.b27-secondary-action){
+  box-shadow:0 12px 26px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.16);
+}
+html[data-theme] .b27-primary-action{
+  border:1px solid color-mix(in srgb,var(--ft-accent) 28%,transparent)!important;
+}
+html[data-theme] :is(.b27-quick-card,.b27-practice-action,.b27-lesson-row){
+  box-shadow:0 12px 34px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.055)!important;
+}
+@media(hover:hover) and (pointer:fine){
+  html[data-theme] :is(.b27-primary-action,.b27-secondary-action,.b27-quick-card,.b27-practice-action,.b27-lesson-row,.theme-option,.ft-v55-recovery-toggle,.ft-legal-head):hover{
+    transform:translateY(-1px);
+    filter:brightness(1.045) saturate(1.03);
+    border-color:color-mix(in srgb,var(--ft-accent) 48%,var(--ft-border))!important;
+  }
+}
+html[data-theme] :is(.b27-primary-action,.b27-secondary-action,.b27-quick-card,.b27-practice-action,.b27-lesson-row,.theme-option,.ft-v55-recovery-toggle,.ft-legal-head):active{
+  transform:translateY(1px) scale(.985)!important;
+  filter:brightness(.985);
+}
+html[data-theme] :is(button,[role="button"],a):focus-visible{
+  outline:2px solid color-mix(in srgb,var(--ft-accent) 72%,white 28%)!important;
+  outline-offset:3px!important;
+  box-shadow:var(--v59-ring)!important;
+}
+
+/* ABOUT is a card-level affordance. The chevron is an indicator, not the
+   only usable hit target. JS adds role/tabindex/aria state to this header. */
+html[data-theme] #ft-settings-legal .ft-legal-head{
+  width:100%;
+  box-sizing:border-box;
+  border-radius:inherit;
+  user-select:none;
+}
+html[data-theme] #ft-settings-legal .ft-legal-head[role="button"]{cursor:pointer}
+html[data-theme] #ft-settings-legal[data-v55-open="1"] .ft-legal-head{border-bottom:1px solid color-mix(in srgb,var(--ft-border) 74%,transparent)}
+
+/* DEBUG FR remains available on every theme but the active marker no longer
+   owns a full-width sticky strip. Learner mode still renders nothing. */
+html.ux-debug-mode[data-theme] .debug-fr-banner{
+  position:fixed!important;
+  top:calc(env(safe-area-inset-top,0px) + 7px)!important;
+  left:50%!important;
+  right:auto!important;
+  width:max-content!important;
+  max-width:min(72vw,420px)!important;
+  transform:translateX(-50%)!important;
+  margin:0!important;
+  padding:5px 10px!important;
+  border:1px solid rgba(247,195,109,.30)!important;
+  border-radius:999px!important;
+  background:rgba(45,29,7,.78)!important;
+  box-shadow:0 8px 24px rgba(0,0,0,.24)!important;
+  backdrop-filter:blur(14px)!important;
+  -webkit-backdrop-filter:blur(14px)!important;
+  font-size:9px!important;
+  line-height:1.2!important;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  pointer-events:none;
+  opacity:.82;
+  z-index:12220!important;
+}
+html.ux-debug-mode[data-theme] .b27-debug-chip{opacity:.56;font-size:.55rem;padding:4px 6px}
+
+/* Speaking Loop uniqueness guard is functional in JS; these styles guarantee
+   any transient duplicate being removed cannot flash as a second full CTA. */
+html[data-theme] .speaking-loop-card[data-v59-sanitized="1"] .speaking-loop-actions{isolation:isolate}
+
+@media(max-width:520px){
+  html[data-theme] .b27-primary-card .b27-card-topline{gap:8px!important}
+  html[data-theme] .b27-primary-card .b27-card-topline>b{width:44px;height:44px;min-width:44px}
+}
+@media(prefers-reduced-motion:reduce){
+  html[data-theme] :is(.b27-primary-action,.b27-secondary-action,.b27-quick-card,.b27-practice-action,.b27-lesson-row,.theme-option,.ft-v55-recovery-toggle,.ft-legal-head){transition:none!important}
+}
