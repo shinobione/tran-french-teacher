@@ -5,6 +5,7 @@ on:
     paths:
       - 'src/premium/premium-v510-practice-icons.js'
       - 'src/premium/premium-v510-field-shell.css'
+      - 'src/premium/premium-v510-lesson-identity.css'
       - 'assets/premium/brand/**'
       - 'tests/browser/v510-field-identity-closeout.html'
       - 'tests/browser/v510-field-identity-capture.html'
@@ -15,6 +16,7 @@ on:
     paths:
       - 'src/premium/premium-v510-practice-icons.js'
       - 'src/premium/premium-v510-field-shell.css'
+      - 'src/premium/premium-v510-lesson-identity.css'
       - 'assets/premium/brand/**'
       - 'tests/browser/v510-field-identity-closeout.html'
       - 'tests/browser/v510-field-identity-capture.html'
@@ -40,6 +42,12 @@ jobs:
           node --check src/premium/premium-v510-practice-icons.js
           grep -q "const TYFFANY_ASSET = './assets/premium/brand/tyffany-memory.svg'" src/premium/premium-v510-practice-icons.js
           grep -q "const BRAND_ASSET = './assets/premium/brand/goat-app-icon-180.png'" src/premium/premium-v510-practice-icons.js
+          grep -q "lessonIdentityStyle: 'lesson-icon-v1'" src/premium/premium-v510-practice-icons.js
+          grep -q 'screen-lesson .teacher-line' src/premium/premium-v510-practice-icons.js
+          grep -q 'ft-v510-home-lesson-icon' src/premium/premium-v510-lesson-identity.css
+          grep -q 'ft-v510-lesson-identity-icon' src/premium/premium-v510-lesson-identity.css
+          grep -q 'data-speaking-model-owner="exercise"' src/premium/premium-v510-lesson-identity.css
+          grep -q 'justify-content:center!important' src/premium/premium-v510-lesson-identity.css
           grep -q "tyffanyAvatarStyle: 'canonical-svg-v1'" src/premium/premium-v510-practice-icons.js
           grep -q "brandIdentityStyle: 'goat-v1'" src/premium/premium-v510-practice-icons.js
           grep -q 'data-v510-tyffany-avatar' src/premium/premium-v510-field-shell.css
@@ -60,7 +68,7 @@ jobs:
           sleep 1
           google-chrome --version
 
-      - name: Chrome — Listening parity + FTQ/Tyffany identity tribunal
+      - name: Chrome — lesson identity + Listening/brand field tribunal
         shell: bash
         run: |
           rm -rf /tmp/ft-v510-field-profile /tmp/ft-v510-field.html
@@ -83,7 +91,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p /tmp/v510-field-identity-captures
-          for surface in listening real-life progress lesson; do
+          for surface in home listening real-life progress lesson speaking; do
             profile="/tmp/v510-field-${surface}-profile"
             out="/tmp/v510-field-identity-captures/mobile-${surface}.png"
             rm -rf "$profile"
@@ -101,12 +109,12 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
           shots=sorted(Path('/tmp/v510-field-identity-captures').glob('*.png'))
-          assert len(shots)==4, f'expected 4 captures, got {len(shots)}'
+          assert len(shots)==6, f'expected 6 captures, got {len(shots)}'
           for shot in shots:
             data=shot.read_bytes()
             assert data[:8]==b'\x89PNG\r\n\x1a\n', f'{shot}: invalid PNG'
             assert len(data)>15000, f'{shot}: suspiciously small capture'
-          print('4/4 field identity mobile captures produced')
+          print('6/6 field identity mobile captures produced')
           PY
 
       - name: Upload field identity captures
