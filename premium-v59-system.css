@@ -1,0 +1,77 @@
+/* French Trân’quille — Premium V5.9C shared material / interaction grammar.
+   Local-only polish: never owns route visibility or navigation correctness. */
+html[data-theme]{
+  --v59-card-radius:22px;
+  --v59-cta-radius:18px;
+  --v59-touch:56px;
+  --v59-soft-border:color-mix(in srgb,var(--ft-border) 64%,var(--ft-accent) 36%);
+  --v59-card-shadow:0 16px 42px rgba(0,0,0,.20),inset 0 1px 0 rgba(255,255,255,.075);
+  --v59-focus:0 0 0 3px color-mix(in srgb,var(--ft-accent) 22%,transparent);
+}
+
+html[data-theme] [data-v59-premium="quick-card"],
+html[data-theme] [data-v59-premium="practice-card"],
+html[data-theme] [data-v59-premium="content-card"],
+html[data-theme] [data-v59-premium="settings-card"]{
+  border-color:var(--v59-soft-border)!important;
+  box-shadow:var(--v59-card-shadow)!important;
+}
+html[data-theme] [data-v59-premium="quick-card"],
+html[data-theme] [data-v59-premium="practice-card"]{
+  border-radius:var(--v59-card-radius)!important;
+  transition:transform .12s ease,border-color .14s ease,box-shadow .14s ease,filter .14s ease;
+}
+html[data-theme] [data-v59-premium="cta"]{
+  min-height:var(--v59-touch)!important;
+  border-radius:var(--v59-cta-radius)!important;
+  transition:transform .12s ease,filter .12s ease,box-shadow .14s ease;
+}
+html[data-theme] [data-v59-premium="icon-circle"]{
+  border-radius:15px!important;
+  border:1px solid color-mix(in srgb,var(--ft-accent) 28%,var(--ft-border));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 8px 20px rgba(0,0,0,.14);
+}
+
+html[data-theme] :is(
+  [data-v59-premium="quick-card"],
+  [data-v59-premium="practice-card"],
+  [data-v59-premium="cta"],
+  #ft-settings-legal .ft-v59-about-hit-target,
+  .ft-v55-recovery-toggle,
+  .theme-option
+):focus-visible{
+  outline:none!important;
+  box-shadow:var(--v59-focus),var(--v59-card-shadow)!important;
+}
+
+html[data-theme] :is(
+  [data-v59-premium="quick-card"],
+  [data-v59-premium="practice-card"],
+  [data-v59-premium="cta"]
+):active{
+  transform:scale(.985)!important;
+  filter:brightness(.98);
+}
+
+@media(hover:hover) and (pointer:fine){
+  html[data-theme] [data-v59-premium="quick-card"]:hover,
+  html[data-theme] [data-v59-premium="practice-card"]:hover{
+    transform:translateY(-1px);
+    border-color:color-mix(in srgb,var(--ft-accent) 48%,var(--ft-border))!important;
+    box-shadow:0 20px 48px rgba(0,0,0,.23),0 0 24px color-mix(in srgb,var(--ft-accent) 7%,transparent),inset 0 1px 0 rgba(255,255,255,.09)!important;
+  }
+  html[data-theme] [data-v59-premium="cta"]:hover{filter:brightness(1.025)}
+}
+
+/* Hidden maintainer affordance only. No visible DEBUG control is introduced. */
+html[data-theme] [data-v59-debug-entry="long-press"]{
+  -webkit-user-select:none;
+  user-select:none;
+  touch-action:manipulation;
+}
+
+@media(prefers-reduced-motion:reduce){
+  html[data-theme] [data-v59-premium]{transition:none!important}
+  html[data-theme] [data-v59-premium]:hover,
+  html[data-theme] [data-v59-premium]:active{transform:none!important}
+}
