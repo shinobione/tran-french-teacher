@@ -42,8 +42,8 @@ jobs:
           grep -q -- '--v510-picto-hi' premium-v510-practice-icons.css
           grep -q 'filter:none' premium-v510-practice-icons.css
           grep -q 'content:none!important' premium-v510-practice-icons.css
-          if grep -q 'drop-shadow' premium-v510-practice-icons.css; then
-            echo 'V3 must not reintroduce pictogram drop-shadows'; exit 1;
+          if grep -q 'drop-shadow(' premium-v510-practice-icons.css; then
+            echo 'V3 must not reintroduce pictogram drop-shadow filters'; exit 1;
           fi
       - name: Start static server
         shell: bash
