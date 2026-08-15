@@ -2,60 +2,50 @@
 
 > **Canonical project handoff / source of truth.**
 >
-> Any future AI/chat/session working on `shinobione/tran-french-teacher` **must read this file before making roadmap or implementation decisions**.
+> Any future AI/chat/session working on `shinobione/tran-french-teacher` **must read `AGENTS.md`, then `PROJECT-STATE.md`, then this file before making roadmap or implementation decisions**.
 >
-> This document supersedes stale V5.1/V5.4 “in progress” wording from older docs and conversations. Historical build documents remain useful evidence, but this file owns the execution order.
+> Historical build documents remain useful evidence. This file owns durable execution order, locked product decisions, human field verdicts and future build gates.
 
 ---
 
 # 0. Canonical checkpoint — 2026-08-15
 
-## Runtime currently served
+## Current line
 
 | Item | Canonical state |
 |---|---|
 | Product pedagogy | **V2.3.0 · Build 34** |
-| Live visual maintenance line | **Premium V5.7 merged · V5.8 active** |
-| Last verified `main` checkpoint | **`1b404b58bd87cad4eb7860c004d48292e550732e`** |
+| Visual maintenance line | **Premium V5.8 merged · V5.9 next** |
+| Verified `main` checkpoint at reconciliation | **`bf196a101e9d444650390e94a9ba8adf5f19009c`** |
 | Curriculum | **52 lessons / 313 items** |
 | Scenario | **44 situations / 132 turns** |
 | Speaking Loop | **52/52 · max 2 moments / lesson** |
 | Listening | **0.88 normal / 0.65 slow** |
 | Durable pedagogical stores | **6** |
-| Foundations | **F01–F04 pilot**, integrated without renumbering the 52 lessons |
+| Foundations | **F01–F04 pilot**, without renumbering the 52 lessons |
 | Frozen architecture baseline | **2.0.0 · Build 30** |
 | Primary target | **iPhone / Safari / installed PWA** |
 | Recurring backend/API cost | **0 €** |
 | Final Premium issue | **#114 — OPEN** |
 | Build 35 | **BLOCKED / RESERVED** |
 
-## User field verdict on V5.5
+## Current interpretation
 
-V5.5 is **technically stable and visibly much better**, but **NOT visually closed**.
-
-The user’s canonical verdict is:
-
-> **“c’est beaucoup mieux, mais il manque encore cette touche de Premium Feel.”**
-
-This explicitly means:
-
-- V5.5 is a good structural/visual base;
-- the zero-flash navigation result must be preserved;
-- the current Paris/Tour Eiffel visuals are still below mockup quality;
-- the Original theme is still visibly weaker than Aurora / Sunset / Nocturne;
-- the Premium phase remains open;
-- **issue #114 must remain open**;
-- **Build 35 must not start yet**.
+- V5.6 asset candidates were produced and user-approved.
+- V5.7 four-theme Premium artwork integration was user-approved, merged and delivered.
+- V5.8 DEBUG FR / theme decoupling was merged as PR #128.
+- The next active runtime slice is **V5.9 — Shared UI Coherence + Fluidity / Premium Feel**.
+- V5.9 is **not** a theme-by-theme patch march.
+- The physical installed-iPhone/PWA final Premium verdict remains reserved for V5.10.
+- Build 35 remains blocked until #114 is explicitly closed after final user PASS.
 
 ---
 
-# 1. What V5.5 already solved — LOCKED BEHAVIOUR
-
-Do not reopen these problems while polishing visuals.
+# 1. Locked behaviour — do not regress while polishing
 
 ## 1.1 Atomic navigation / zero flash
 
-Physical field result remains the most important navigation contract:
+Physical field contract:
 
 **ZERO route flash / ZERO remanence / ZERO competing facades.**
 
@@ -63,63 +53,71 @@ Permanent rule:
 
 > **No route/page crossfade may ever show two competing app facades at the same time.**
 
-A future “fluidity” pass is allowed to animate controls and the entering settled owner, but it must never animate an old route and a new route simultaneously.
+Allowed motion model:
 
-## 1.2 Global chrome coherence
+```text
+atomic ownership switch
+→ old owner gone
+→ new owner is the only facade
+→ short local polish may animate the settled new owner
+```
 
-V5.5 established the baseline to preserve:
+No animation may be required for route correctness.
 
-- Back control in the **top-left**;
-- Settings gear in the **top-right**;
-- same 46×46 control family;
-- Review / Speak / Listen / Real Life all expose coherent Back behaviour;
-- Scenario exit remains semantically correct: scenario → scenario list → Practice;
-- Settings return restores the correct source context.
+## 1.2 Global chrome
 
-## 1.3 Progress logic
+Preserve:
 
-The visible progression must remain logically ordered:
+- Back top-left;
+- Settings top-right;
+- coherent ~46×46 control family;
+- correct semantic Back behaviour across Review / Speak / Listen / Real Life / Settings;
+- no tap-again requirement;
+- no body-empty period.
+
+## 1.3 Progress grammar
+
+Visible progression remains:
 
 ```text
 A0 → progress line → A1
 ```
 
-Never return to the older vertical/stacked A0/A1 presentation where the current level appears visually above a line whose target is elsewhere.
+Do not return to older confusing stacked A0/A1 layouts.
 
 ## 1.4 Settings hierarchy
 
-Learner-facing Settings must stay human:
+Learner-facing Settings stays human and compact.
 
-1. Appearance / Themes
-2. About / Privacy / Rights
-3. Data & Recovery, available but compact / progressive disclosure
+Priority:
 
-Technical diagnostic cards belong to DEBUG FR, not to Trân’s normal learner experience.
+1. Theme / appearance;
+2. About / privacy / rights;
+3. Data & Recovery via progressive disclosure.
 
-## 1.5 Home composition
+Technical diagnostics belong to DEBUG/admin surfaces, not Trân’s normal learner UI.
 
-V5.5 already moved Home away from “old app recoloured” toward a real app composition:
+## 1.5 Learner / pedagogy safety
 
-- brand/hero;
-- current lesson;
-- Practice block;
-- supporting progress context;
-- coherent Premium chrome.
+Visual work must not silently alter:
 
-The next pass upgrades its **art direction and feel**, not its pedagogical meaning.
+- learner stores;
+- lesson IDs;
+- pedagogy;
+- Scenario/Listening/Memory semantics;
+- voice/audio semantics;
+- migration contracts.
 
 ---
 
-# 2. Canonical Premium plan after V5.5
-
-The following sequence is the new canonical order.
+# 2. Canonical Premium sequence
 
 ```text
 V5.5 stable structural base ✅
-→ V5.6 Premium Visual Identity Assets
-→ V5.7 Original Theme Parity + Theme Art Integration
-→ V5.8 DEBUG FR / Theme Decoupling
-→ V5.9 Fluidity + Premium Feel
+→ V5.6 Premium Visual Identity Assets ✅
+→ V5.7 Original Theme Parity + Theme Art Integration ✅
+→ V5.8 DEBUG FR / Theme Decoupling ✅
+→ V5.9 Shared UI Coherence + Fluidity / Premium Feel
 → V5.10 Global Visual QA + Physical iPhone verdict
 → V2.3.x / Build 34 governance + documentation closure
 → close #114 only after explicit user PASS
@@ -134,74 +132,46 @@ V5.5 stable structural base ✅
 
 All V5.6→V5.10 work stays in the **Build 34 maintenance line**.
 
-**Do not steal Build 35 for CSS, imagery, animation, cache work, DEBUG FR, or visual QA.**
+**Do not steal Build 35 for CSS, imagery, animation, cache work, DEBUG FR, icon work or visual QA.**
 
 ---
 
-# 3. V5.6 — Premium Visual Identity Assets
+# 3. V5.6 — Premium Visual Identity Assets — CLOSED
 
-## Goal
-
-Replace the remaining “Paint / placeholder / CSS-art” Paris imagery with **real premium artwork** matching the approved mockup family.
-
-The user explicitly rejected the existing Tour Eiffel graphic as:
-
-> “graph Paint”
-
-The solution is not another CSS silhouette. The solution is a proper asset system.
-
-## 3.1 Canonical full-background assets
-
-Repository destination:
+## Canonical full-background assets
 
 ```text
 assets/premium/themes/aurora/background.webp
 assets/premium/themes/sunset/background.webp
 assets/premium/themes/nocturne/background.webp
-assets/premium/themes/original/background.webp
+assets/premium/themes/original/background-v2.png
 ```
 
-### User-locked backgrounds
-
-These three are **LOCKED visual source choices** from the user on 2026-08-15:
+User-locked directions:
 
 - **Aurora** — blue / cyan / violet / pink Paris night;
 - **Sunset** — orange / coral / violet Paris sunset;
 - **Nocturne** — dark jade / teal / gold Paris night.
 
-They must not be silently regenerated or replaced during implementation.
+Do not silently regenerate those three backgrounds.
 
-### Original background direction
+Original direction:
 
-The Original theme must no longer be the weak legacy witness.
+- deep midnight navy / indigo;
+- cold cyan / cobalt light;
+- silver/blue-white highlights;
+- violet/magenta only as restrained accents;
+- elegant dark Paris night;
+- premium depth from light/material/contrast, not brightness;
+- no Aurora-like pink wash.
 
-Its canonical visual direction is:
+The first Original candidate was rejected as too bright / too Aurora-like. The corrected dark V2 candidate was user-approved.
 
-- deep midnight blue / indigo base;
-- refined cobalt / cold cyan light;
-- blue-white / silver highlights;
-- violet / magenta only as extremely restrained accents;
-- elegant Paris night;
-- Eiffel Tower as premium photographic/illustrative focal point;
-- controlled city lights and Seine reflections;
-- calm flagship identity;
-- sky and negative space remain predominantly midnight navy / near-black blue;
-- Premium quality comes from depth, light, materials, contrast and detail rather than brightness;
-- **no large pink sky or pastel wash**;
-- **no dramatic Aurora ribbons**;
-- **no Sunset orange dominance**;
-- **no Nocturne jade/gold dominance**;
-- generous darker negative space for readable app UI.
+## Lesson-card Eiffel assets
 
-The first archived `background.webp` candidate was explicitly rejected as too bright and too close to Aurora. The corrected dark candidate is stored as `background-v2.png` and must be human-reviewed before any runtime wiring.
+First-generation opaque rectangular `lesson-eiffel.webp` files are rejection evidence only.
 
-## 3.2 Lesson-card Eiffel assets
-
-The current small Eiffel motif inside the **Leçon** card must also be replaced.
-
-The four first-generation `lesson-eiffel.webp` files were explicitly rejected because they are opaque rectangular Paris scenes. They remain only as rejection evidence.
-
-Human-gate candidates:
+Approved V2 assets:
 
 ```text
 assets/premium/themes/aurora/lesson-eiffel-v2.png
@@ -210,167 +180,50 @@ assets/premium/themes/nocturne/lesson-eiffel-v2.png
 assets/premium/themes/original/lesson-eiffel-v2.png
 ```
 
-All four V2 files are RGBA assets with genuine alpha transparency, generous transparent margins and no baked card/sky/UI rectangle.
+Contract:
 
-Each asset must be coherent with its theme:
+- genuine alpha transparency;
+- no opaque rectangular sky;
+- no baked card/UI/text;
+- generous transparent margins;
+- Eiffel as primary silhouette;
+- theme-specific lighting;
+- suitable for absolute decorative placement, cropping and masking.
 
-### Aurora lesson Eiffel
-- deep blue/violet;
-- cyan + pink luminous atmosphere;
-- premium Paris night;
-- recognisable Eiffel Tower;
-- readable at small card size.
-
-### Sunset lesson Eiffel
-- golden/orange tower;
-- coral/pink/violet sky;
-- warm river/city reflections;
-- romantic premium dusk.
-
-### Nocturne lesson Eiffel
-- dark teal/jade night;
-- controlled emerald atmosphere;
-- warm gold Eiffel Tower;
-- optional subtle crescent/night detail;
-- luxury editorial mood.
-
-### Original lesson Eiffel
-- midnight blue / indigo;
-- cool cyan highlights;
-- restrained pink-magenta;
-- flagship calm Paris night;
-- clearly distinct from Aurora.
-
-The new V2 candidates and two review boards are stored now so this chat is no longer the only place they exist:
-
-```text
-assets/premium/v5.6-background-review.png
-assets/premium/v5.6-lesson-eiffel-review.png
-```
-
-## 3.3 Asset rules
-
-- Artwork belongs in `/assets`, not inline base64 CSS.
-- Runtime should prefer WebP assets from the repo.
-- Theme-specific readability overlays may be CSS gradients, but must not flatten the artwork into generic colour soup.
-- Background art must not create layout shift.
-- No image may change learner data, lesson IDs or navigation semantics.
-- When runtime wiring happens, PWA cache/preload versioning must include the new asset generation.
-- Offline mode must retain the active theme artwork after the app has been installed/warmed.
-
-## V5.6 Definition of Done
-
-- [x] 3 user-approved background assets preserved in repo.
-- [x] Rejected first-generation Original background preserved as evidence.
-- [x] Corrected dark Original `background-v2.png` candidate generated.
-- [x] 4 rejected opaque `lesson-eiffel.webp` files preserved as evidence.
-- [x] 4 transparent RGBA `lesson-eiffel-v2.png` candidates generated.
-- [x] Background and lesson-Eiffel review boards generated.
-- [x] Asset manifest documents ownership/status.
-- [x] Human approval of corrected dark Original V2 candidate — **PASS global, 2026-08-15**.
-- [x] Human approval of the 4 transparent lesson-card Eiffel V2 candidates — **PASS global, 2026-08-15**.
-- [ ] Runtime integration — intentionally deferred to V5.7.
+V5.6 user PASS: **2026-08-15**.
 
 ---
 
-# 4. V5.7 — Original Theme Parity + Theme Art Integration
+# 4. V5.7 — Four-theme Premium Art Integration — CLOSED
 
-## Goal
-
-Make all **four** themes feel like deliberate first-class themes.
-
-The previous rule:
-
-> “Original remains the visual witness”
-
-is **SUPERSEDED by explicit user direction on 2026-08-15**.
-
-New rule:
+New permanent rule:
 
 > **Original must reach the same Premium quality level as Aurora, Sunset and Nocturne.**
 
-Original may remain the default theme, but it may not remain the visibly poorer fallback.
+All four themes are first-class identities.
 
-## 4.1 Background integration
+## Shared integration contract
 
 For each theme:
 
-- use its own canonical background asset;
-- tune `background-size`, `background-position` and overlay per viewport;
-- preserve readable text/card contrast;
-- avoid aggressive blur that destroys image quality;
-- avoid giant empty dead zones;
-- preserve mockup-style Paris atmosphere;
-- ensure desktop is composed, not merely a stretched mobile crop.
+- use its canonical background asset;
+- preserve readable card/text contrast;
+- no aggressive blur that destroys artwork;
+- no giant dead zones;
+- desktop must be composed, not simply stretched mobile;
+- correct lesson Eiffel asset must appear where the lesson hero expects it;
+- art remains decorative and must never obscure lesson title, progress, badge or CTA;
+- service-worker/offline asset generation stays coherent.
 
-Target viewports:
+V5.7 user visual PASS: **2026-08-15**.
 
-```text
-390×844
-430×932
-768×1024
-1280×800
-1440×900
-```
-
-## 4.2 Lesson-card art integration
-
-The current Leçon-card “Paint Eiffel” must disappear completely.
-
-The correct approved theme-specific `lesson-eiffel-v2.png` must be visible in:
-
-- Today / current lesson card;
-- any reused lesson hero card that currently owns the old placeholder;
-- responsive mobile/desktop compositions where the mockup language expects the Paris motif.
-
-The art must remain decorative and must never obscure lesson title, progress or CTA.
-
-## 4.3 Theme parity
-
-All four themes need equivalent design depth:
-
-- background art;
-- glass/material hierarchy;
-- card edge treatment;
-- glow restraint;
-- icon/control contrast;
-- CTA hierarchy;
-- lesson art;
-- Settings appearance;
-- bottom navigation;
-- progress surfaces;
-- Listening;
-- Practice.
-
-No theme may look like “Premium themes + one old skin”.
-
-## V5.7 Definition of Done
-
-- [x] 4 backgrounds wired on the V5.7 candidate branch.
-- [x] 4 approved V2 lesson Eiffel assets wired on the V5.7 candidate branch.
-- [x] Original reaches Premium parity — **USER PASS 2026-08-15**.
-- [x] No legacy CSS Eiffel remains visible in the candidate tribunal.
-- [x] No broken/missing asset in automated online/offline coverage — service-worker precache and exact-head PWA smoke green; physical installed-PWA verdict remains pending.
-- [x] No route flash regression in the local navigation tribunal.
-- [x] No learner-store mutation in the local four-theme tribunals.
-- [x] 5-viewport screenshot matrix generated for all 4 themes.
-- [x] Human V5.7 visual verdict — **PASS, 2026-08-15**.
-
-V5.7 gate status on 2026-08-15: local tribunals are green, exact candidate CI is **35 / 35 SUCCESS**, the complete 20-shot matrix exists locally and as CI artifact `9239868706`, and the user explicitly returned **PASSED**. This authorizes the PR #127 merge but is **not** a deployment or physical-device FIELD PASS.
+Physical installed-iPhone FIELD PASS is still reserved for V5.10.
 
 ---
 
-# 5. V5.8 — DEBUG FR must be independent from theme
+# 5. V5.8 — DEBUG FR / Theme Decoupling — CLOSED
 
-## Problem
-
-The user found DEBUG FR effectively tied to the **Original** theme.
-
-That is not a valid final product model.
-
-DEBUG FR is an **admin/debug state**, not an appearance theme.
-
-## Canonical rule
+## Canonical model
 
 ```text
 theme = visual preference
@@ -380,41 +233,196 @@ theme must never own debugFr
 debugFr must never force theme
 ```
 
-## Required behaviour
+Permanent behaviour:
 
-- DEBUG FR can be active while **Original, Aurora, Sunset or Nocturne** is active.
-- Switching theme must preserve DEBUG FR state on Jerry’s browser.
-- Switching DEBUG FR must preserve the selected theme.
-- Trân’s normal learner mode must not be polluted with developer/diagnostic cards.
-- The existing URL/debug mechanism may remain the emergency entry path.
-- The DEBUG rail/diagnostic affordance may appear only when debug mode is active.
-- No learner progress, Memory, Scenario, Listening or Error store may be modified by toggling DEBUG FR.
+- DEBUG FR can coexist with Original, Aurora, Sunset or Nocturne;
+- switching theme preserves DEBUG state;
+- switching DEBUG preserves theme;
+- normal learner mode hides diagnostics;
+- toggling DEBUG must not modify learner progress, Memory, Scenario, Listening, Error or other durable learner stores.
 
-## V5.8 Definition of Done
+PR #128 merged at verified checkpoint:
 
-- [x] Theme and debug state independently persisted.
-- [x] DEBUG FR usable on all four themes.
-- [x] No theme switch exits debug.
-- [x] No debug switch resets theme.
-- [x] Trân normal mode remains clean.
-- [x] Chrome tests cover the full 4-theme matrix.
-- [x] Existing protected learner profile remains byte-safe.
+**`bf196a101e9d444650390e94a9ba8adf5f19009c`**.
 
-V5.8 candidate status on 2026-08-15: the local Chrome tribunal is green across **4 themes × DEBUG OFF/ON**, both preference-preservation directions pass, normal mode hides the admin/diagnostic surfaces, and all six protected learner stores remain byte-identical. The existing utility, fidelity/reset and P0 navigation tribunals also pass unchanged. Merge and deployment evidence must still be recorded from the exact GitHub candidate and resulting `main` SHA.
+V5.8 solved the **state ownership** problem. V5.9 still owns the quality of the **admin entry/access affordance**.
 
 ---
 
-# 6. V5.9 — Fluidity + Premium Feel
+# 6. V5.9 — Shared UI Coherence + Fluidity / Premium Feel — ACTIVE NEXT
 
 ## Goal
 
-After visual parity is established, improve the **feel of interaction** without reopening the zero-flash disaster.
+Move from “good themed app” to a coherent mockup-family product system.
 
-The user explicitly said mobile is already “plutôt OK”, but the app then needs to be **fluidified**.
+This phase combines:
 
-This phase is not permission to add generic page fades.
+- concrete field defects found on real screens;
+- shared component/layout coherence;
+- premium button/card/icon language;
+- restrained local interaction feel;
+- cleaner DEBUG/admin access.
 
-## 6.1 Permanent motion rule
+**It must solve shared-system causes first. Do not patch four themes independently unless a true art-direction difference requires it.**
+
+## 6.1 Field defects to resolve
+
+### A. Speaking Loop duplicate CTA
+
+Observed in lesson speaking UI on the real app:
+
+- same self-record CTA displayed twice;
+- local-device/non-progress note duplicated.
+
+Final contract:
+
+```text
+one model phrase
+→ one self-record CTA
+→ one local-device explanatory note
+```
+
+No duplicate control or explanatory copy.
+
+### B. Settings `Giới thiệu` / About hit target
+
+Observed behaviour:
+
+- card itself does not navigate reliably;
+- user must tap the chevron/arrow.
+
+Final contract:
+
+> **The entire navigation card is clickable/tappable. The chevron is a visual affordance only.**
+
+Apply this rule consistently to same-family navigation cards.
+
+### C. `Tình huống thực tế` / Real Life icon quality
+
+Current icon is visually inconsistent with the Premium icon family.
+
+Required direction:
+
+- cleaner premium symbol;
+- coherent stroke/shape/weight with other Practice icons;
+- no isolated clipart-like treatment;
+- clear at mobile size;
+- one shared component treatment across themes.
+
+### D. Lesson identity cluster overlaps Eiffel art
+
+Observed on some themes: the lesson icon/identity area conflicts with the Eiffel artwork.
+
+Canonical structural reference is the stronger Sunset-style composition:
+
+```text
+lesson identity cluster / badge
+→ predictable shared zone
+
+lesson title / copy / progress / CTA
+→ protected content zone
+
+Eiffel artwork
+→ opposite/right decorative zone
+→ may crop at card edge
+→ never owns the identity cluster
+→ never obscures CTA/title/progress
+```
+
+**One cross-theme Today/Lesson hero layout contract must solve this.**
+
+Do not hand-position the cluster separately for Original, Aurora, Sunset and Nocturne.
+
+## 6.2 Shared lesson-card layout contract
+
+Theme may change:
+
+- background artwork;
+- Eiffel artwork;
+- palette;
+- restrained glow/accent treatment.
+
+Theme should not change without reason:
+
+- semantic placement of lesson identity;
+- content hierarchy;
+- CTA location family;
+- badge/identity ownership;
+- hit targets;
+- responsive breakpoints;
+- basic component geometry.
+
+The layout must be certified at least at:
+
+```text
+390×844
+430×932
+768×1024
+1280×800
+1440×900
+```
+
+## 6.3 Buttons / cards — mockup-level design grammar
+
+The remaining gap is not one bad button. It is the **shared visual language**.
+
+V5.9 must consolidate:
+
+- CTA heights and touch targets;
+- radii;
+- borders / inner highlights;
+- glass/material hierarchy;
+- card depth;
+- icon circles;
+- spacing / rhythm;
+- chevrons;
+- restrained glow;
+- press / hover / focus-visible / active states;
+- contrast across all four themes;
+- same component family across Home / Practice / Progress / Listening / Settings.
+
+“Glassmorphism” alone is not Premium. Mockup fidelity includes composition, proportion, density, hierarchy and interaction feel.
+
+## 6.4 App / favicon / PWA icon direction
+
+Current favicon/app icon is visually off-brand against the Premium UI.
+
+Future replacement direction:
+
+- simplified French Trân’quille / goat-derived brand mark;
+- readable at favicon size;
+- works as Apple Touch / PWA icon;
+- high contrast and simple silhouette;
+- visually related to Home branding;
+- no tiny illustration detail that collapses at 16–32 px.
+
+Current protected `assets/Favicon.png` must not be replaced silently.
+
+If this replacement is included in V5.9, it must be an explicit asset/runtime change with:
+
+- source/master recorded under assets;
+- favicon + Apple Touch + PWA sizes derived coherently;
+- manifest/index references verified;
+- service-worker/cache generation updated;
+- installed-PWA/offline checks included.
+
+If the asset is not ready, document the contract and defer the actual replacement rather than inventing a rushed icon.
+
+## 6.5 DEBUG/admin entry after V5.8
+
+State ownership is already solved by V5.8.
+
+Remaining UX requirement:
+
+- access DEBUG/admin under **all four themes**;
+- keep it out of Trân’s normal learner experience;
+- avoid a large obvious learner-facing DEBUG control;
+- prefer a discreet admin-only affordance/gesture/hidden entry;
+- emergency URL/debug entry may remain;
+- entry method must be documented and discoverable to maintainers;
+- no change of DEBUG state may change theme and vice versa.
+
+## 6.6 Motion / fluidity
 
 ### Forbidden
 
@@ -424,57 +432,68 @@ while
 new page fades in
 ```
 
-That previously created ghosting/remanence and competing visual owners.
-
 ### Allowed
 
 ```text
-atomic ownership switch
-→ old owner is gone
-→ new owner is the only facade
-→ new settled owner may use a short enter polish
+atomic owner switch
+→ one facade only
+→ local settled-owner polish
 ```
 
-The same principle applies to sheets and overlays: never keep two competing route owners visible.
-
-## 6.2 Motion targets
-
-Premium feel should come from local interaction:
+Premium feel may come from:
 
 - tactile press compression;
 - button highlight/glow response;
 - coherent active-nav motion;
 - card hover on desktop;
-- tiny chevron/arrow movement;
-- Settings sheet open/close;
-- About / Recovery progressive disclosure;
+- tiny chevron movement;
+- sheet / About / Recovery open-close polish;
 - success check/pulse;
-- progress bar movement;
+- progress movement;
 - theme selection feedback;
-- optional background/theme transition only if it cannot expose stale app content;
 - coherent focus-visible states.
 
-Motion must be short, restrained and reversible.
+Motion must be short, restrained, interruptible and optional under `prefers-reduced-motion`.
 
-## 6.3 Performance / stability
+## 6.7 V5.9 Definition of Done
 
-- no animation may hold navigation hostage;
-- no MutationObserver may continuously rewrite an already-correct state;
-- animation completion must never be required for route correctness;
-- `prefers-reduced-motion` must preserve all functionality;
-- no body-empty period;
-- no “tap again to make it work” behaviour;
-- no service-worker hybrid generation.
+- [ ] Speaking block exposes one self-record CTA and one note only.
+- [ ] `Giới thiệu` / About whole-card hit target works.
+- [ ] Real Life icon belongs to the shared Premium icon family.
+- [ ] One shared cross-theme lesson-card layout contract is implemented.
+- [ ] No lesson identity / Eiffel overlap in any theme at target viewports.
+- [ ] Buttons/cards visibly converge toward the approved mockup family.
+- [ ] DEBUG/admin entry works on all themes and remains discreet in learner mode.
+- [ ] Local interaction feel is smoother without route crossfades.
+- [ ] Reduced-motion keeps full functionality.
+- [ ] Navigation/audio/learner-store guards remain green.
+- [ ] V5.9 candidate is materialized in git and a PR is opened.
+- [ ] **Coding agent STOPS at candidate PR unless explicitly instructed otherwise.**
 
-## V5.9 Definition of Done
+## 6.8 V5.9 execution policy
 
-- [ ] App feels visibly smoother without route crossfades.
-- [ ] Local controls respond consistently.
-- [ ] Settings/About/Recovery motion coherent.
-- [ ] Success/progress feedback polished.
-- [ ] Reduced-motion matrix passes.
-- [ ] Navigation reliability and field audio guards remain green.
-- [ ] Physical iPhone test confirms no flash/remanence returned.
+The coding-agent session must end at the candidate PR.
+
+```text
+read canonical state
+→ implement V5.9 only
+→ local/browser proof
+→ materialize commit(s)
+→ open candidate PR
+→ update candidate checkpoint
+→ STOP
+```
+
+Do not spend coding-model quota:
+
+- polling all GitHub Actions;
+- waiting for unrelated historical Chrome smokes;
+- rerunning known flakes;
+- merging;
+- watching Pages;
+- automatically starting V5.10.
+
+Those are a separate control/review step unless explicitly delegated.
 
 ---
 
@@ -484,7 +503,7 @@ This is the **actual closure gate for #114**.
 
 Automation alone cannot close this phase.
 
-## 7.1 Automated matrix
+## Automated matrix
 
 Minimum:
 
@@ -500,28 +519,31 @@ Plus targeted captures/tests for:
 - Speak;
 - Listen sub-practice;
 - Real Life;
-- lesson view with theme-specific Eiffel asset;
+- lesson view with theme-specific Eiffel art;
 - About;
 - Data & Recovery compact/expanded;
-- DEBUG FR on all 4 themes;
-- reduced-motion.
+- DEBUG/admin entry on all 4 themes;
+- reduced-motion;
+- app/fav/PWA icon if replaced in V5.9.
 
-## 7.2 Assertions
+Assertions:
 
 - exact requested theme active;
 - correct background asset loaded;
 - correct lesson asset loaded;
 - no horizontal overflow;
 - Back/Settings geometry consistent;
-- A0 → line → A1 geometry intact;
+- A0 → line → A1 intact;
 - no legacy Eiffel placeholder;
 - no technical cards in learner mode;
 - Original is not visually downgraded;
 - no learner-store mutations during pure UI travel;
-- all protected sanctuaries remain intact unless an explicitly approved later change says otherwise;
-- online and offline PWA generations resolve the same asset set.
+- online/offline PWA generations resolve the same asset set;
+- whole-card hit targets behave consistently;
+- no duplicate Speaking CTA;
+- no lesson identity / Eiffel overlap.
 
-## 7.3 Human / physical gate
+## Human / physical gate
 
 Required on installed iPhone/PWA:
 
@@ -543,6 +565,7 @@ close app
 → Settings
 → About
 → Recovery open/close
+→ DEBUG/admin access verification
 → return Home
 ```
 
@@ -551,11 +574,13 @@ Human checks:
 - ZERO flash/remanence;
 - artwork actually looks Premium;
 - Original belongs to the same quality family;
-- Eiffel imagery no longer looks like placeholder/Paint;
-- buttons/chrome feel coherent;
+- Eiffel art reads as integrated decoration, not a pasted image;
+- buttons/cards/chrome feel coherent with mockups;
 - screens feel fluid rather than abrupt;
 - no unreadable text over imagery;
-- no awkward crop on real iPhone.
+- no awkward real-iPhone crop;
+- no duplicated speaking control;
+- admin access is available but not intrusive.
 
 ## Closure rule
 
@@ -563,9 +588,9 @@ Human checks:
 
 Only after that:
 
-1. record exact runtime SHA + Pages run;
+1. record exact runtime SHA + Pages evidence;
 2. record physical verdict;
-3. synchronize README / ROADMAP / CHANGELOG / ARCHITECTURE / MASTER;
+3. synchronize README / ROADMAP / CHANGELOG / ARCHITECTURE / MASTER / PROJECT-STATE;
 4. close #114;
 5. then and only then unblock Build 35.
 
@@ -611,7 +636,7 @@ Premium work must not erase the post-Build34 pedagogy sequence.
 
 **Design and simulation first. No durable adoption yet.**
 
-Evidence dimensions to model:
+Evidence dimensions:
 
 - retrieval;
 - listening;
@@ -705,9 +730,9 @@ Outcome may be:
 
 ---
 
-# 10. Parallel tracks that never steal build numbers
+# 10. Parallel maintenance tracks — no build-number theft
 
-These continue as maintenance tracks when needed:
+These continue when needed:
 
 - iPhone/Safari/PWA compatibility;
 - accessibility;
@@ -718,67 +743,52 @@ These continue as maintenance tracks when needed:
 - CI flake hardening that does not weaken assertions;
 - documentation/governance.
 
-These tracks must not become excuses to rewrite pedagogical architecture.
+These tracks must not become excuses to rewrite pedagogical architecture or consume reserved build numbers.
 
 ---
 
-# 11. Repository asset inventory for the next session
+# 11. Premium asset inventory / status semantics
 
-The canonical Premium asset manifest lives at:
+Canonical Premium asset manifest:
 
 ```text
 assets/premium/README.md
-```
-
-Future sessions must inspect that manifest before generating replacements.
-
-Expected asset tree:
-
-```text
-assets/premium/themes/
-├── aurora/
-│   ├── background.webp
-│   └── lesson-eiffel.webp
-├── sunset/
-│   ├── background.webp
-│   └── lesson-eiffel.webp
-├── nocturne/
-│   ├── background.webp
-│   └── lesson-eiffel.webp
-└── original/
-    ├── background.webp
-    └── lesson-eiffel.webp
 ```
 
 Status semantics:
 
 - **LOCKED** = explicitly selected by the user; do not regenerate silently.
 - **CANDIDATE** = generated and preserved; can be replaced only after human comparison.
-- **APPROVED** = explicitly accepted for integration; not yet wired or field-tested.
+- **APPROVED** = explicitly accepted for integration; not yet necessarily wired/field-tested.
 - **WIRED** = runtime actually uses the asset.
 - **FIELD PASS** = physically validated on the installed iPhone/PWA.
+
+Future sessions must inspect the asset manifest before generating replacements.
 
 ---
 
 # 12. Next-agent checklist
 
-Before touching code:
+Before touching runtime:
 
-1. read `MASTER-ROADMAP.md`;
-2. read `assets/premium/README.md`;
-3. inspect current `main`, open PRs and issue #114;
-4. verify the exact currently deployed Pages SHA;
-5. do not assume an old chat checkpoint is current;
-6. do not start Build35 while #114 is open;
-7. do not regenerate the three locked backgrounds;
-8. preserve zero-flash atomic ownership;
-9. keep DEBUG FR independent from theme;
-10. remember that Original now requires Premium parity;
-11. inspect screenshots/real-device result before declaring visual completion;
-12. merge only after the relevant CI and human gate are satisfied.
+1. read `AGENTS.md`;
+2. read `PROJECT-STATE.md`;
+3. read V5.9 and V5.10 here;
+4. inspect current `main`, open PRs and issue #114;
+5. verify the currently deployed Pages SHA when runtime work is involved;
+6. do not assume an old chat checkpoint is current;
+7. do not start Build35 while #114 is open;
+8. do not regenerate locked backgrounds;
+9. preserve zero-flash atomic ownership;
+10. keep DEBUG independent from theme;
+11. solve shared layout/component problems before per-theme tweaks;
+12. materialize work in git before treating it as project state;
+13. stop the coding-agent session at the V5.9 candidate PR unless the user explicitly asks for further actions;
+14. perform CI/merge/Pages/next-slice control as a separate step;
+15. never declare physical visual completion from automation alone.
 
 ---
 
 # Canonical one-line order
 
-> **Lock assets → integrate four Premium identities → elevate Original → decouple DEBUG FR from theme → fluidify locally without route crossfades → global QA → physical iPhone Premium PASS → governance closure → Build35.**
+> **V5.8 merged → solve V5.9 as one shared-system coherence slice → stop at candidate PR → separately certify/merge → V5.10 global QA + physical iPhone Premium PASS → governance closure → Build35.**
