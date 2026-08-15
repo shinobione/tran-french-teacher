@@ -1,0 +1,174 @@
+name: V5.9D Apply Brand Icon Family
+
+on:
+  push:
+    branches: [agent/v59-steak-d-brand-icons]
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/v59-steak-d-brand-icons
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Derive icons from canonical LOGO without overwriting sanctuary
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet pillow
+          mkdir -p assets/premium/brand
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image,ImageOps,ImageDraw,ImageFont
+          src=Image.open('assets/LOGO.png').convert('RGBA')
+          alpha=src.getchannel('A')
+          bbox=alpha.getbbox()
+          if not bbox: raise SystemExit('LOGO has no visible alpha content')
+          crop=src.crop(bbox)
+          ratio=crop.width/crop.height
+          if not (0.72 <= ratio <= 1.38):
+              raise SystemExit(f'Canonical LOGO visible crop is not app-icon shaped enough: {crop.size}, ratio={ratio:.3f}')
+
+          out=Path('assets/premium/brand')
+          def transparent(size,pad=.10):
+              canvas=Image.new('RGBA',(size,size),(0,0,0,0))
+              box=int(size*(1-2*pad))
+              im=ImageOps.contain(crop,(box,box),Image.Resampling.LANCZOS)
+              canvas.alpha_composite(im,((size-im.width)//2,(size-im.height)//2))
+              return canvas
+          def maskable(size):
+              canvas=Image.new('RGBA',(size,size),(5,24,22,255))
+              d=ImageDraw.Draw(canvas)
+              inset=int(size*.055)
+              d.ellipse((inset,inset,size-inset,size-inset),fill=(7,34,30,255),outline=(196,166,78,210),width=max(2,size//128))
+              box=int(size*.68)
+              im=ImageOps.contain(crop,(box,box),Image.Resampling.LANCZOS)
+              canvas.alpha_composite(im,((size-im.width)//2,(size-im.height)//2))
+              return canvas
+
+          imgs={
+            'goat-favicon-64.png':transparent(64,.08),
+            'goat-apple-touch-180.png':transparent(180,.10),
+            'goat-app-icon-192.png':transparent(192,.10),
+            'goat-app-icon-512.png':transparent(512,.10),
+            'goat-app-icon-maskable-512.png':maskable(512),
+          }
+          for name,im in imgs.items(): im.save(out/name,optimize=True)
+
+          board=Image.new('RGB',(1200,640),(7,18,21));d=ImageDraw.Draw(board)
+          previews=[('Favicon 64',imgs['goat-favicon-64.png'].resize((224,224),Image.Resampling.NEAREST)),('App 512',imgs['goat-app-icon-512.png'].resize((300,300),Image.Resampling.LANCZOS)),('Maskable',imgs['goat-app-icon-maskable-512.png'].resize((300,300),Image.Resampling.LANCZOS))]
+          x=70
+          for label,im in previews:
+              board.paste(im,(x,130),im if im.mode=='RGBA' else None);d.text((x,460),label,fill=(238,221,151));x+=370
+          d.text((70,55),'French Tran’quille — V5.9 brand icon review',fill=(238,221,151))
+          d.text((70,90),f'Source: assets/LOGO.png · visible crop {crop.width}×{crop.height}',fill=(180,195,190))
+          board.save(out/'v59-brand-icon-review.png',optimize=True)
+          PY
+
+          python - <<'PY'
+          from pathlib import Path
+          import json,re
+          idx=Path('index.html');s=idx.read_text()
+          favicon='assets/premium/brand/goat-favicon-64.png'
+          apple='assets/premium/brand/goat-apple-touch-180.png'
+          # Replace existing icon/apple-touch hrefs conservatively; add if absent.
+          if re.search(r'<link[^>]+rel=["\'](?:shortcut )?icon["\'][^>]*>',s,re.I):
+              s=re.sub(r'(<link[^>]+rel=["\'](?:shortcut )?icon["\'][^>]*href=["\'])[^"\']+(["\'])',r'\1'+favicon+r'\2',s,count=1,flags=re.I)
+          else:
+              s=s.replace('</head>',f'  <link rel="icon" type="image/png" href="{favicon}">\n</head>',1)
+          if re.search(r'<link[^>]+rel=["\']apple-touch-icon["\'][^>]*>',s,re.I):
+              s=re.sub(r'(<link[^>]+rel=["\']apple-touch-icon["\'][^>]*href=["\'])[^"\']+(["\'])',r'\1'+apple+r'\2',s,count=1,flags=re.I)
+          else:
+              s=s.replace('</head>',f'  <link rel="apple-touch-icon" href="{apple}">\n</head>',1)
+          idx.write_text(s)
+
+          manifests=[]
+          for p in [Path('manifest.json'),Path('manifest.webmanifest'),Path('site.webmanifest')]:
+              if p.exists(): manifests.append(p)
+          if not manifests:
+              for p in Path('.').glob('*.json'):
+                  try:
+                      data=json.loads(p.read_text())
+                      if isinstance(data,dict) and 'icons' in data and ('name' in data or 'short_name' in data): manifests.append(p)
+                  except Exception: pass
+          if not manifests: raise SystemExit('No PWA manifest found')
+          manifest=manifests[0];data=json.loads(manifest.read_text())
+          data['icons']=[
+              {'src':'assets/premium/brand/goat-app-icon-192.png','sizes':'192x192','type':'image/png','purpose':'any'},
+              {'src':'assets/premium/brand/goat-app-icon-512.png','sizes':'512x512','type':'image/png','purpose':'any'},
+              {'src':'assets/premium/brand/goat-app-icon-maskable-512.png','sizes':'512x512','type':'image/png','purpose':'maskable'},
+          ]
+          manifest.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+
+          sw=Path('sw.js');t=sw.read_text();old='tran-french-teacher-v2.3.25-b34.17-v59c1';new='tran-french-teacher-v2.3.26-b34.18-v59d1';assert old in t or new in t;t=t.replace(old,new)
+          if "const V59D='2.3.26-v59d1'" not in t:
+              anchor="const V59C='2.3.25-v59c1';";assert anchor in t;t=t.replace(anchor,anchor+"\nconst V59D='2.3.26-v59d1';",1)
+          anchor="'premium-v59-premium-system.js?v=${V59C}',";assert anchor in t
+          entries=[
+            "'assets/premium/brand/goat-favicon-64.png',",
+            "'assets/premium/brand/goat-apple-touch-180.png',",
+            "'assets/premium/brand/goat-app-icon-192.png',",
+            "'assets/premium/brand/goat-app-icon-512.png',",
+            "'assets/premium/brand/goat-app-icon-maskable-512.png',",
+          ]
+          if entries[0] not in t:t=t.replace(anchor,anchor+'\n  '+'\n  '.join(entries),1)
+          sw.write_text(t)
+
+          old='tran-french-teacher-v2.3.25-b34.17-v59c1';new='tran-french-teacher-v2.3.26-b34.18-v59d1'
+          for p in Path('.github/workflows').glob('*.yml'):
+              if p.name=='v59-steak-d-apply.yml':continue
+              x=p.read_text()
+              if old in x:p.write_text(x.replace(old,new))
+          PY
+
+          cat > .github/workflows/premium-v59d-brand-icons.yml <<'EOF'
+          name: Premium V5.9D Brand Icon Family
+          on:
+            pull_request:
+              branches: [main]
+          permissions:
+            contents: read
+          jobs:
+            brand-icons:
+              runs-on: ubuntu-latest
+              timeout-minutes: 10
+              steps:
+                - uses: actions/checkout@v4
+                - uses: actions/setup-python@v5
+                  with: { python-version: '3.12' }
+                - run: python -m pip install --quiet pillow
+                - name: Validate icon assets and wiring
+                  run: |
+                    python - <<'PY'
+                    from PIL import Image
+                    expected={'goat-favicon-64.png':(64,64),'goat-apple-touch-180.png':(180,180),'goat-app-icon-192.png':(192,192),'goat-app-icon-512.png':(512,512),'goat-app-icon-maskable-512.png':(512,512)}
+                    for name,size in expected.items():
+                        im=Image.open('assets/premium/brand/'+name);assert im.size==size,(name,im.size)
+                    PY
+                    grep -q 'assets/premium/brand/goat-favicon-64.png' index.html
+                    grep -q 'assets/premium/brand/goat-apple-touch-180.png' index.html
+                    grep -q "const V59D='2.3.26-v59d1'" sw.js
+                    grep -q 'goat-app-icon-maskable-512.png' sw.js
+                    test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
+                    test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
+          EOF
+
+          rm -f .github/workflows/v59-steak-d-apply.yml
+          git diff --check
+      - name: Commit rollback checkpoint D
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'V5.9D premium goat app-icon family checkpoint'
+          git push origin HEAD:agent/v59-steak-d-brand-icons
