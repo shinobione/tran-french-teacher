@@ -43,10 +43,14 @@
               if(host.dataset.v510PracticeIcon!==id)throw new Error(`theme ${theme}: ${id} ownership marker missing`);
               if(glyph.dataset.v510Pictogram!==id)throw new Error(`theme ${theme}: ${id} pictogram identity missing`);
               if(host.textContent.trim())throw new Error(`theme ${theme}: ${id} still exposes text/emoji glyph content`);
-              if(!glyph.querySelector('.ft-v510-picto-primary'))throw new Error(`theme ${theme}: ${id} missing primary filled shape`);
+              const primaryShapes=[...glyph.querySelectorAll('.ft-v510-picto-primary')];
+              if(!primaryShapes.length)throw new Error(`theme ${theme}: ${id} missing primary pictogram shape`);
+              const hasFilledPrimary=primaryShapes.some(node=>{
+                const fill=w.getComputedStyle(node).fill;
+                return Boolean(fill&&fill!=='none'&&fill!=='transparent'&&fill!=='rgba(0, 0, 0, 0)');
+              });
+              if(!hasFilledPrimary)throw new Error(`theme ${theme}: ${id} has no filled primary shape`);
               if(!glyph.querySelector('.ft-v510-picto-secondary,.ft-v510-picto-accent'))throw new Error(`theme ${theme}: ${id} missing secondary pictogram detail`);
-              const primary=w.getComputedStyle(glyph.querySelector('.ft-v510-picto-primary'));
-              if(primary.fill==='none'||primary.fill==='rgba(0, 0, 0, 0)')throw new Error(`theme ${theme}: ${id} primary shape is not filled`);
               const hr=host.getBoundingClientRect();
               const gr=glyph.getBoundingClientRect();
               const dx=Math.abs((hr.left+hr.width/2)-(gr.left+gr.width/2));
