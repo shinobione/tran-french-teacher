@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>V5.10 field identity closeout tribunal</title>
+  <style>html,body{margin:0;background:#080b12;color:#fff;font-family:system-ui}iframe{position:absolute;left:-9999px;border:0}#result{padding:20px}</style>
+</head>
+<body>
+  <div id="result" data-v510-field-identity="pending">pending</div>
+  <script>
+    (()=>{
+      const result=document.getElementById('result');
+      const storeKeys=[
+        'francais-avec-luc:learner:v1',
+        'french-tranquille:learning-memory:v1',
+        'french-tranquille:error-intelligence:v1',
+        'french-tranquille:scenarios:v1',
+        'french-tranquille:listening:v1',
+        'french-tranquille:milestones:v1'
+      ];
+      const waitFor=async(fn,timeout=24000,label='condition')=>{const start=performance.now();while(performance.now()-start<timeout){try{const value=fn();if(value)return value}catch{}await new Promise(r=>setTimeout(r,50))}throw new Error(`timeout: ${label}`)};
+      const pause=ms=>new Promise(r=>setTimeout(r,ms));
+      const snapshot=w=>Object.fromEntries(storeKeys.map(key=>[key,w.localStorage.getItem(key)]));
+      const same=(a,b)=>storeKeys.every(key=>a[key]===b[key]);
+      const fail=error=>{result.dataset.v510FieldIdentity='fail';result.textContent=`FAIL: ${error?.message||error}`;document.documentElement.dataset.v510FieldIdentity='fail'};
+      const pass=()=>{result.dataset.v510FieldIdentity='ok';result.textContent='V5.10 Listening parity + canonical identity assets OK';document.documentElement.dataset.v510FieldIdentity='ok'};
+
+      async function openPracticeAndClick(w,d,id){
+        d.querySelector('[data-b27-close-practice]')?.click();
+        w.FrenchTranquilleListening?.close?.();
+        await pause(150);
+        w.FrenchTranquilleBuild27Shell.openPractice();
+        const button=await waitFor(()=>d.querySelector(`.b27-practice-action[data-b27-practice-action="${id}"]`),24000,`Practice ${id}`);
+        if(button.disabled)throw new Error(`Practice ${id} disabled`);
+        button.click();
+      }
+
+      function assertTyffanyAvatar(w,d){
+        const host=d.querySelector('.screen-lesson .teacher-line .luc[data-v510-tyffany-avatar="canonical-svg-v1"]');
+        const span=host?.querySelector(':scope > span');
+        if(!host||!span)throw new Error('lesson Tyffany canonical avatar missing');
+        const style=w.getComputedStyle(span);
+        const mask=style.webkitMaskImage||style.maskImage||'';
+        if(!mask.includes('tyffany-memory.svg'))throw new Error(`lesson Tyffany SVG mask missing (${mask})`);
+        if((style.backgroundImage||'').includes('Favicon.png'))throw new Error('legacy Favicon still paints lesson Tyffany');
+        if(span.dataset.v510TyffanyAsset!=='./assets/premium/brand/tyffany-memory.svg')throw new Error('lesson Tyffany asset marker mismatch');
+        const teacher=[...d.querySelectorAll('.screen-lesson .teacher-line strong')].map(n=>n.textContent.trim()).join(' ');
+        if(!/Tyffany/i.test(teacher))throw new Error(`lesson tutor name is not Tyffany (${teacher})`);
+      }
+
+      function assertProgressBrand(d){
+        const img=d.querySelector('.b27-progress-page .b27-brandline > img[data-v510-brand-identity="goat-v1"]');
+        if(!img)throw new Error('Progress canonical FTQ brand mark missing');
+        if(img.getAttribute('src')!=='./assets/premium/brand/goat-app-icon-180.png')throw new Error(`Progress still uses wrong brand asset (${img.getAttribute('src')})`);
+        if((img.getAttribute('src')||'').includes('Favicon.png'))throw new Error('legacy Favicon survived on Progress');
+      }
+
+      function assertListeningParity(w,d){
+        const header=d.querySelector('.listening-top[data-v510-feature-header="listening"]');
+        if(!header)throw new Error('Listening Feature Header missing');
+        const identity=header.querySelector(':scope > .ft-v510-feature-identity');
+        const title=identity?.querySelector('.ft-v510-feature-title');
+        const score=header.querySelector(':scope > .listening-session-score');
+        if(!identity||!title||!score)throw new Error('Listening identity/score DOM incomplete');
+        if(title.textContent.trim()!=='Luyện nghe')throw new Error(`wrong Listening title (${title.textContent.trim()})`);
+        if(w.getComputedStyle(score).display!=='none')throw new Error('mobile Listening 0/0 session pill still participates in header');
+        const settings=header.querySelector(':scope > .listening-settings');
+        if(settings){
+          const ss=w.getComputedStyle(settings);
+          if(ss.position!=='absolute')throw new Error(`Listening Settings still owns a grid column (${ss.position})`);
+          const tr=title.getBoundingClientRect();
+          const sr=settings.getBoundingClientRect();
+          if(tr.right>sr.left-5)throw new Error('Listening title collides with floating Settings');
+        }
+        const columns=w.getComputedStyle(header).gridTemplateColumns.trim().split(/\s+/).filter(Boolean);
+        if(columns.length!==2)throw new Error(`Listening mobile header still has ${columns.length} layout columns (${columns.join(' | ')})`);
+        const art=identity.querySelector('.ft-v510-feature-art-host');
+        if(!art||art.getBoundingClientRect().width<50)throw new Error('Listening feature artwork geometry regressed');
+      }
+
+      async function run(){
+        const frame=document.createElement('iframe');
+        frame.width='430';frame.height='932';frame.style.width='430px';frame.style.height='932px';
+        frame.src=`../../?uxSmoke=lesson8&v510FieldIdentity=${Date.now()}`;
+        document.body.appendChild(frame);
+        await new Promise((resolve,reject)=>{frame.addEventListener('load',resolve,{once:true});setTimeout(()=>reject(new Error('app load timeout')),24000)});
+        const w=frame.contentWindow,d=frame.contentDocument;
+        await waitFor(()=>w.FrenchTranquilleBuild27Shell?.openPractice&&w.FrenchTranquilleThemes?.apply&&w.FrenchTranquilleV510PracticeIcons?.refresh,24000,'V5.10 APIs');
+        w.FrenchTranquilleThemes.apply('jade');
+        await waitFor(()=>d.documentElement.dataset.theme==='jade',5000,'Jade theme');
+        const before=snapshot(w);
+
+        d.querySelector('.bottom-nav [data-go="progress"]')?.click();
+        await waitFor(()=>d.querySelector('.b27-progress-page .b27-brandline > img'),24000,'Progress page');
+        w.FrenchTranquilleV510PracticeIcons.refreshIdentityAssets();
+        await waitFor(()=>d.querySelector('.b27-progress-page .b27-brandline > img[data-v510-brand-identity="goat-v1"]'),5000,'Progress brand decoration');
+        assertProgressBrand(d);
+
+        const lessonButton=await waitFor(()=>d.querySelector('.b27-progress-page [data-b27-open-lesson]'),10000,'Progress current lesson button');
+        lessonButton.click();
+        await waitFor(()=>d.querySelector('.screen-lesson .teacher-line .luc'),24000,'lesson tutor avatar');
+        w.FrenchTranquilleV510PracticeIcons.refreshIdentityAssets();
+        await waitFor(()=>d.querySelector('.screen-lesson .teacher-line .luc[data-v510-tyffany-avatar="canonical-svg-v1"]'),5000,'Tyffany avatar decoration');
+        assertTyffanyAvatar(w,d);
+
+        await openPracticeAndClick(w,d,'listening');
+        await waitFor(()=>d.querySelector('.listening-top[data-v510-feature-header="listening"]'),24000,'Listening header');
+        await pause(250);
+        assertListeningParity(w,d);
+        w.FrenchTranquilleListening?.close?.();
+        await pause(160);
+
+        await openPracticeAndClick(w,d,'real-life');
+        const real=await waitFor(()=>d.querySelector('.screen-conversation .topbar[data-v510-feature-header="real-life"]'),24000,'Real-Life header');
+        const realHost=real.querySelector('.ft-v510-feature-art-host')?.getBoundingClientRect();
+        if(!realHost||realHost.width<50)throw new Error('Real-Life comparison header missing');
+
+        const after=snapshot(w);
+        if(!same(before,after))throw new Error('learner stores changed during visual identity tribunal');
+        frame.remove();
+      }
+
+      run().then(pass).catch(fail);
+      setTimeout(()=>{if(result.dataset.v510FieldIdentity==='pending')fail(new Error('tribunal watchdog'))},100000);
+    })();
+  </script>
+</body>
+</html>
