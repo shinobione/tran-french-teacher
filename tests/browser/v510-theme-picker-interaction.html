@@ -1,0 +1,43 @@
+<!doctype html><html><head><meta charset="utf-8"><title>V5.10 theme picker interaction</title><style>body{margin:0}iframe{display:block;border:0}</style></head><body><iframe id="f" src="../../index.html?uxSmoke=lesson8&fieldNavV3=1" style="width:390px;height:844px"></iframe><script>
+(()=>{
+'use strict';
+const R=document.documentElement,F=document.getElementById('f'),wait=ms=>new Promise(r=>setTimeout(r,ms));
+const finish=(ok,detail)=>{R.dataset.v510ThemePickerInteraction=ok?'ok':'fail';R.dataset.v510ThemePickerDetail=detail};
+const vis=(w,node)=>{if(!node)return false;const s=w.getComputedStyle(node),r=node.getBoundingClientRect();return s.display!=='none'&&s.visibility!=='hidden'&&Number(s.opacity)!==0&&r.width>1&&r.height>1};
+const click=(w,node)=>{if(!node)throw Error('missing-click-target');node.dispatchEvent(new w.MouseEvent('click',{bubbles:true,cancelable:true,view:w}))};
+const openSettings=async(w,d)=>{await w.FrenchTranquilleFieldNavigation.go('home');await wait(120);click(w,d.querySelector('.b27-home [data-b27-settings]'));await wait(220);if(!vis(w,d.querySelector('.screen-settings')))throw Error('settings-not-open')};
+const assertPickerOpens=async(w,d,label)=>{const picker=d.querySelector('.screen-settings .ft-theme-settings-inline'),summary=picker?.querySelector(':scope>summary'),body=picker?.querySelector(':scope>.ft-theme-body');if(!picker||!summary||!body)throw Error(`${label}:picker-nodes`);if(vis(w,d.getElementById('ft-theme-settings')))throw Error(`${label}:legacy-template-visible`);if(picker.open||vis(w,body))throw Error(`${label}:picker-not-collapsed`);click(w,summary);await wait(90);if(!picker.open||picker.dataset.themePickerOpen!=='1'||summary.getAttribute('aria-expanded')!=='true'||!vis(w,body))throw Error(`${label}:picker-did-not-open`);return {picker,summary,body}};
+F.onload=()=>setTimeout(async()=>{
+ try{
+  const w=F.contentWindow,d=F.contentDocument;
+  if(!w.FrenchTranquilleThemes||!w.FrenchTranquilleFieldNavigation)throw Error('api-missing');
+  if(w.FrenchTranquilleThemes.interactionVersion!=='2.3.36-v510themeinteraction1')throw Error(`interaction-version:${w.FrenchTranquilleThemes.interactionVersion||'missing'}`);
+  const keys=['francais-avec-luc:learner:v1','french-tranquille:learning-memory:v1','french-tranquille:error-intelligence:v1','french-tranquille:scenarios:v1','french-tranquille:milestones:v1'];
+  const before=Object.fromEntries(keys.map(k=>[k,w.localStorage.getItem(k)]));
+
+  for(const id of ['progress','home','practice','home','progress','home']){await w.FrenchTranquilleFieldNavigation.go(id);await wait(120)}
+  await openSettings(w,d);
+  let state=await assertPickerOpens(w,d,'first-open-after-route-churn');
+  const sunset=state.picker.querySelector('[data-theme-option="sunset"]');
+  click(w,sunset);await wait(120);
+  if(d.documentElement.dataset.theme!=='sunset')throw Error('theme-option-click-did-not-apply');
+  if(!vis(w,d.querySelector('.screen-settings'))||!state.picker.open||!vis(w,state.body))throw Error('theme-change-collapsed-or-left-settings');
+  click(w,state.summary);await wait(70);
+  if(state.picker.open||state.picker.dataset.themePickerOpen!=='0'||state.summary.getAttribute('aria-expanded')!=='false'||vis(w,state.body))throw Error('picker-did-not-close');
+  click(w,d.querySelector('.screen-settings [data-back]'));await wait(200);
+  if(!vis(w,d.querySelector('.b27-home')))throw Error('settings-return-home');
+
+  await w.FrenchTranquilleFieldNavigation.go('progress');await wait(120);
+  await w.FrenchTranquilleFieldNavigation.go('home');await wait(120);
+  await openSettings(w,d);
+  state=await assertPickerOpens(w,d,'second-open-after-settings-remount');
+  const original=state.picker.querySelector('[data-theme-option="original"]');
+  click(w,original);await wait(100);
+  if(d.documentElement.dataset.theme!=='original')throw Error('theme-original-restore-failed');
+  for(const k of keys)if(before[k]!==w.localStorage.getItem(k))throw Error(`learner-store-mutated:${k}`);
+  finish(true,'real-summary-click=open+close;route-churn=8;settings-remount=2;legacy-fixed-template=hidden;theme-option=interactive;stores=unchanged');
+ }catch(e){finish(false,e.message)}
+},3400);
+setTimeout(()=>{if(!R.dataset.v510ThemePickerInteraction)finish(false,'timeout')},22000);
+})();
+</script></body></html>

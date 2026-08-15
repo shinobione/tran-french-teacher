@@ -1,0 +1,38 @@
+name: V5.10 Theme Picker Interaction
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  theme-picker-interaction:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Static interaction contract
+        run: |
+          node --check src/core/theme-controller.js
+          grep -q "interactionVersion:'2.3.36-v510themeinteraction1'" src/core/theme-controller.js
+          grep -q 'setPickerOpen' src/core/theme-controller.js
+          grep -q 'legacy-fixed-template=hidden' tests/browser/v510-theme-picker-interaction.html
+          test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/v510-theme-picker-http.log 2>&1 &
+          echo $! >/tmp/v510-theme-picker-http.pid
+          sleep 1
+      - name: Chrome — real theme card click survives route churn and remount
+        run: |
+          google-chrome --headless=new --no-sandbox --disable-gpu --disable-background-timer-throttling --disable-renderer-backgrounding --virtual-time-budget=21000 --dump-dom 'http://127.0.0.1:4173/tests/browser/v510-theme-picker-interaction.html' >/tmp/v510-theme-picker.html
+          grep -q 'data-v510-theme-picker-interaction="ok"' /tmp/v510-theme-picker.html || { cat /tmp/v510-theme-picker.html; exit 1; }
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/v510-theme-picker-http.pid ]; then kill "$(cat /tmp/v510-theme-picker-http.pid)" || true; fi
