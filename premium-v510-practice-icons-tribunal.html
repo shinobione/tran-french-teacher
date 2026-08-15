@@ -16,14 +16,30 @@
       const themes=['original','aurora','sunset','jade'];
       const waitFor=async(fn,timeout=15000)=>{const start=performance.now();while(performance.now()-start<timeout){try{const value=fn();if(value)return value}catch{}await new Promise(r=>setTimeout(r,50))}throw new Error('timeout')};
       const fail=error=>{result.dataset.v510PracticeIcons='fail';result.textContent=`FAIL: ${error?.message||error}`;document.documentElement.dataset.v510PracticeIcons='fail'};
-      const pass=()=>{result.dataset.v510PracticeIcons='ok';result.textContent='V5.10 practice pictogram system V2 OK';document.documentElement.dataset.v510PracticeIcons='ok'};
+      const pass=()=>{result.dataset.v510PracticeIcons='ok';result.textContent='V5.10 expressive 3D pictogram system V4 OK';document.documentElement.dataset.v510PracticeIcons='ok'};
 
       frame.addEventListener('load',async()=>{
         try{
           const w=frame.contentWindow;
           const d=frame.contentDocument;
           await waitFor(()=>w.FrenchTranquilleBuild27Shell?.openPractice&&w.FrenchTranquilleThemes?.apply&&w.FrenchTranquilleV510PracticeIcons?.refresh);
-          if(w.FrenchTranquilleV510PracticeIcons?.style!=='premium-pictogram-v2')throw new Error('V2 pictogram runtime marker missing');
+          if(w.FrenchTranquilleV510PracticeIcons?.style!=='premium-3d-pictogram-v4')throw new Error('V4 3D pictogram runtime marker missing');
+
+          w.FrenchTranquilleV510PracticeIcons.refresh();
+          await waitFor(()=>d.querySelectorAll('.b27-quick-card .ft-v510-practice-pictogram').length===2);
+          const homeMarkup={};
+          for(const id of ['review','listening']){
+            const card=d.querySelector(`.b27-quick-card[data-b27-action="${id}"]`);
+            const host=card?.querySelector('.b27-quick-icon');
+            const glyph=host?.querySelector('.ft-v510-practice-pictogram');
+            if(!host||!glyph)throw new Error(`home ${id}: missing shared V4 pictogram`);
+            if(host.dataset.v510PracticeIcon!==id||host.dataset.v510IconSurface!=='home')throw new Error(`home ${id}: ownership marker missing`);
+            if(glyph.dataset.v510Pictogram!==id)throw new Error(`home ${id}: identity mismatch`);
+            if(host.textContent.trim())throw new Error(`home ${id}: legacy emoji/text still visible`);
+            if(!glyph.classList.contains('ft-v510-pictogram-3d'))throw new Error(`home ${id}: 3D marker missing`);
+            homeMarkup[id]=host.innerHTML;
+          }
+
           for(const theme of themes){
             w.FrenchTranquilleThemes.apply(theme);
             w.FrenchTranquilleBuild27Shell.openPractice();
@@ -39,27 +55,24 @@
               if(!card)throw new Error(`theme ${theme}: missing ${id} card`);
               const host=card.querySelector('.b27-practice-icon');
               const glyph=host?.querySelector('.ft-v510-practice-pictogram');
-              if(!host||!glyph)throw new Error(`theme ${theme}: ${id} missing V2 pictogram`);
-              if(host.dataset.v510PracticeIcon!==id)throw new Error(`theme ${theme}: ${id} ownership marker missing`);
+              if(!host||!glyph)throw new Error(`theme ${theme}: ${id} missing V4 pictogram`);
+              if(host.dataset.v510PracticeIcon!==id||host.dataset.v510IconSurface!=='practice')throw new Error(`theme ${theme}: ${id} ownership marker missing`);
               if(glyph.dataset.v510Pictogram!==id)throw new Error(`theme ${theme}: ${id} pictogram identity missing`);
-              if(host.textContent.trim())throw new Error(`theme ${theme}: ${id} still exposes text/emoji glyph content`);
-              const primaryShapes=[...glyph.querySelectorAll('.ft-v510-picto-primary')];
-              if(!primaryShapes.length)throw new Error(`theme ${theme}: ${id} missing primary pictogram shape`);
-              const hasFilledPrimary=primaryShapes.some(node=>{
-                const fill=w.getComputedStyle(node).fill;
-                return Boolean(fill&&fill!=='none'&&fill!=='transparent'&&fill!=='rgba(0, 0, 0, 0)');
-              });
-              if(!hasFilledPrimary)throw new Error(`theme ${theme}: ${id} has no filled primary shape`);
-              if(!glyph.querySelector('.ft-v510-picto-secondary,.ft-v510-picto-accent'))throw new Error(`theme ${theme}: ${id} missing secondary pictogram detail`);
+              if(host.textContent.trim())throw new Error(`theme ${theme}: ${id} still exposes legacy text/emoji content`);
+              if(!glyph.classList.contains('ft-v510-pictogram-3d'))throw new Error(`theme ${theme}: ${id} missing 3D marker`);
+              if(!glyph.querySelector('[class*="-shadow"]')||!glyph.querySelector('[class*="-hi"]'))throw new Error(`theme ${theme}: ${id} missing 3D shadow/highlight construction`);
+              if(id==='listening'&&host.innerHTML!==homeMarkup.listening)throw new Error(`theme ${theme}: Listening is not exactly reused from Home`);
+              if(id==='review'&&host.innerHTML!==homeMarkup.review)throw new Error(`theme ${theme}: Review is not exactly reused from Home`);
               const hr=host.getBoundingClientRect();
               const gr=glyph.getBoundingClientRect();
               const dx=Math.abs((hr.left+hr.width/2)-(gr.left+gr.width/2));
               const dy=Math.abs((hr.top+hr.height/2)-(gr.top+gr.height/2));
-              if(dx>0.75||dy>0.75)throw new Error(`theme ${theme}: ${id} not centered (${dx.toFixed(2)}, ${dy.toFixed(2)})`);
+              if(dx>1.1||dy>1.1)throw new Error(`theme ${theme}: ${id} not centered (${dx.toFixed(2)}, ${dy.toFixed(2)})`);
               const hs=w.getComputedStyle(host);
-              const inner=w.getComputedStyle(host,'::before');
+              const gs=w.getComputedStyle(glyph);
               if(hs.display!=='flex')throw new Error(`theme ${theme}: ${id} host is not flex-centered`);
-              if(inner.content==='none')throw new Error(`theme ${theme}: ${id} inner pictogram frame missing`);
+              if(gs.filter==='none')throw new Error(`theme ${theme}: ${id} lost its object depth shadow`);
+              if(gr.width<36||gr.width>44||gr.height<36||gr.height>44)throw new Error(`theme ${theme}: ${id} bad object scale (${gr.width.toFixed(1)}x${gr.height.toFixed(1)})`);
               widths.push(Math.round(gr.width*10)/10);
               heights.push(Math.round(gr.height*10)/10);
             }

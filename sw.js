@@ -38,7 +38,7 @@ const DEBUG='2.3.22-v58debug1';
 const V59A='2.3.23-v59a1';
 const V59B='2.3.24-v59b1';
 const V59C='2.3.25-v59c1';
-const V510ICONS='2.3.28-v510icons2';
+const V510ICONS='2.3.30-v510icons4';
 const CORE=[
   './','./index.html',
   `./styles.css?v=${V}`,`./brand.css?v=${V}`,`./learning-memory.css?v=${V}`,`./visual-pass.css?v=${V}`,`./lucie-avatar.css?v=${V}`,

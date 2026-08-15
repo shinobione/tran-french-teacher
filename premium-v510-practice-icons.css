@@ -1,112 +1,185 @@
-/* French Trân’quille — V5.10 Practice pictogram system V2.
-   Shared across all themes. Emoji-like premium pictograms, not generic wireframe icons. */
-html[data-theme] .b27-practice-icon[data-v510-practice-icon]{
-  --v510-picto-a:var(--ft-accent,var(--ux-accent,var(--b27-mint,#58dfb4)));
-  --v510-picto-b:var(--ft-accent2,var(--ux-accent2,var(--b27-lilac,#f2c85b)));
-  --v510-picto-ink:color-mix(in srgb,var(--ft-bg-1,#07140f) 82%,#000 18%);
+/* French Trân’quille — V5.10 Practice pictogram system V4.
+   Expressive 3D object pictograms inspired by the approved visual references.
+   The object palette stays stable; the glass host adapts to each theme. */
+
+/* Reserve final geometry before JS decoration so legacy emoji never flash and layout does not shift. */
+html[data-theme] .b27-practice-action[data-b27-practice-action] .b27-practice-icon{
+  width:58px!important;
+  height:58px!important;
+  flex:0 0 58px;
+  font-size:0!important;
+}
+html[data-theme] .b27-quick-card[data-b27-action="review"] .b27-quick-icon,
+html[data-theme] .b27-quick-card[data-b27-action="listening"] .b27-quick-icon{
+  width:54px!important;
+  height:54px!important;
+  min-width:54px!important;
+  flex:0 0 54px;
+  font-size:0!important;
+}
+
+html[data-theme] .b27-practice-icon[data-v510-practice-icon],
+html[data-theme] .b27-quick-icon[data-v510-practice-icon]{
+  --v510-host-accent:var(--ft-accent,var(--ux-accent,#ff9f43));
+  --v510-host-accent2:var(--ft-accent2,var(--ux-accent2,#8f3dff));
+  --v510-icon-orange:#ff7a28;
+  --v510-icon-orange-shadow:#b93b15;
+  --v510-icon-orange-hi:#ffd16b;
+  --v510-icon-purple:#812cff;
+  --v510-icon-purple-shadow:#43149e;
+  --v510-icon-purple-hi:#c793ff;
+  --v510-icon-blue:#178dff;
+  --v510-icon-blue-shadow:#0b4ea7;
+  --v510-icon-blue-hi:#83d4ff;
+  --v510-icon-cyan:#20c8ef;
+  --v510-icon-cyan-shadow:#087893;
+  --v510-icon-cyan-hi:#a7f0ff;
+  --v510-icon-gold:#ffbd3d;
+  --v510-icon-gold-shadow:#c66b12;
+  --v510-icon-gold-hi:#fff0a4;
+  --v510-icon-cutout:color-mix(in srgb,var(--ft-bg-1,#14101c) 88%,#000 12%);
   position:relative;
   isolation:isolate;
-  width:56px!important;
-  height:56px!important;
   display:flex!important;
   align-items:center!important;
   justify-content:center!important;
-  flex:0 0 56px;
   padding:0!important;
   line-height:0!important;
-  overflow:hidden;
-  color:var(--v510-picto-a)!important;
-  background:
-    radial-gradient(circle at 26% 20%,color-mix(in srgb,var(--v510-picto-a) 17%,transparent),transparent 45%),
-    linear-gradient(145deg,color-mix(in srgb,var(--ft-surface,#13251f) 86%,var(--v510-picto-a) 14%),color-mix(in srgb,var(--ft-surface-2,#071913) 91%,var(--v510-picto-b) 9%))!important;
-  border:1px solid color-mix(in srgb,var(--v510-picto-a) 46%,var(--ft-border,rgba(255,255,255,.16)))!important;
-  border-radius:16px!important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.12),
-    inset 0 0 22px color-mix(in srgb,var(--v510-picto-a) 7%,transparent),
-    0 9px 22px rgba(0,0,0,.17),
-    0 0 20px color-mix(in srgb,var(--v510-picto-a) 10%,transparent)!important;
-}
-
-html[data-theme] .b27-practice-icon[data-v510-practice-icon]::before{
-  content:"";
-  position:absolute;
-  z-index:0;
-  inset:5px;
-  border-radius:11px;
-  border:1px solid color-mix(in srgb,var(--v510-picto-a) 30%,transparent);
-  background:linear-gradient(145deg,rgba(255,255,255,.035),transparent 68%);
-  box-shadow:inset 0 0 12px color-mix(in srgb,var(--v510-picto-a) 6%,transparent);
-  pointer-events:none;
-}
-
-html[data-theme] .b27-practice-icon[data-v510-practice-icon]::after{
-  content:"";
-  position:absolute;
-  z-index:0;
-  width:24px;
-  height:24px;
-  left:4px;
-  top:3px;
-  border-radius:50%;
-  background:radial-gradient(circle,color-mix(in srgb,var(--v510-picto-b) 13%,transparent),transparent 70%);
-  pointer-events:none;
-}
-
-html[data-theme] .b27-practice-icon .ft-v510-practice-glyph{
-  position:relative;
-  z-index:2;
-  width:34px;
-  height:34px;
-  display:block;
-  flex:0 0 34px;
   overflow:visible;
-  transform:translateY(-.15px);
-  filter:drop-shadow(0 2px 5px rgba(0,0,0,.22)) drop-shadow(0 0 7px color-mix(in srgb,var(--v510-picto-a) 15%,transparent));
+  color:inherit!important;
+  background:
+    radial-gradient(circle at 24% 18%,color-mix(in srgb,var(--v510-host-accent) 18%,transparent),transparent 52%),
+    linear-gradient(145deg,color-mix(in srgb,var(--ft-surface,#24162d) 86%,#fff 4%),color-mix(in srgb,var(--ft-surface-2,#160d1e) 92%,#000 8%))!important;
+  border:1px solid color-mix(in srgb,var(--v510-host-accent) 42%,var(--ft-border,rgba(255,255,255,.15)))!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.14),
+    inset 0 -8px 18px rgba(0,0,0,.10),
+    0 9px 22px rgba(0,0,0,.18),
+    0 0 18px color-mix(in srgb,var(--v510-host-accent) 8%,transparent)!important;
 }
 
-html[data-theme] .ft-v510-picto-primary{
-  fill:color-mix(in srgb,var(--v510-picto-a) 84%,#fff 16%);
-  stroke:color-mix(in srgb,var(--v510-picto-a) 86%,#fff 14%);
+html[data-theme] .b27-practice-icon[data-v510-practice-icon]{border-radius:17px!important}
+html[data-theme] .b27-quick-icon[data-v510-practice-icon]{border-radius:16px!important}
+
+html[data-theme] .b27-practice-icon[data-v510-practice-icon]::before,
+html[data-theme] .b27-practice-icon[data-v510-practice-icon]::after,
+html[data-theme] .b27-quick-icon[data-v510-practice-icon]::before,
+html[data-theme] .b27-quick-icon[data-v510-practice-icon]::after{
+  content:none!important;
 }
-html[data-theme] .ft-v510-picto-secondary{
-  fill:color-mix(in srgb,var(--v510-picto-b) 80%,#fff 20%);
-  stroke:color-mix(in srgb,var(--v510-picto-b) 84%,#fff 16%);
+
+html[data-theme] .b27-practice-icon .ft-v510-practice-glyph,
+html[data-theme] .b27-quick-icon .ft-v510-practice-glyph{
+  position:relative;
+  z-index:1;
+  width:43px;
+  height:43px;
+  display:block;
+  flex:0 0 43px;
+  overflow:visible;
+  transform:translateY(-.3px);
+  filter:drop-shadow(0 2.5px 2px rgba(0,0,0,.30)) drop-shadow(0 5px 7px rgba(0,0,0,.16));
 }
-html[data-theme] .ft-v510-picto-accent{
-  fill:color-mix(in srgb,var(--v510-picto-b) 88%,#fff 12%);
-  stroke:color-mix(in srgb,var(--v510-picto-b) 88%,#fff 12%);
+
+html[data-theme] .b27-quick-icon .ft-v510-practice-glyph{
+  width:40px;
+  height:40px;
+  flex-basis:40px;
 }
-html[data-theme] .ft-v510-picto-cutout{
-  fill:var(--v510-picto-ink);
-  stroke:none;
-}
-html[data-theme] .ft-v510-picto-soft{
-  fill:color-mix(in srgb,var(--v510-picto-b) 23%,transparent);
-}
-html[data-theme] .ft-v510-picto-stroke{
+
+html[data-theme] .ft-v510-3d-orange{fill:var(--v510-icon-orange);stroke:var(--v510-icon-orange)}
+html[data-theme] .ft-v510-3d-orange-shadow{fill:var(--v510-icon-orange-shadow);stroke:var(--v510-icon-orange-shadow)}
+html[data-theme] .ft-v510-3d-orange-hi{fill:var(--v510-icon-orange-hi);stroke:var(--v510-icon-orange-hi)}
+html[data-theme] .ft-v510-3d-purple{fill:var(--v510-icon-purple);stroke:var(--v510-icon-purple)}
+html[data-theme] .ft-v510-3d-purple-shadow{fill:var(--v510-icon-purple-shadow);stroke:var(--v510-icon-purple-shadow)}
+html[data-theme] .ft-v510-3d-purple-hi{fill:var(--v510-icon-purple-hi);stroke:var(--v510-icon-purple-hi)}
+html[data-theme] .ft-v510-3d-blue{fill:var(--v510-icon-blue);stroke:var(--v510-icon-blue)}
+html[data-theme] .ft-v510-3d-blue-shadow{fill:var(--v510-icon-blue-shadow);stroke:var(--v510-icon-blue-shadow)}
+html[data-theme] .ft-v510-3d-blue-hi{fill:var(--v510-icon-blue-hi);stroke:var(--v510-icon-blue-hi)}
+html[data-theme] .ft-v510-3d-cyan{fill:var(--v510-icon-cyan);stroke:var(--v510-icon-cyan)}
+html[data-theme] .ft-v510-3d-cyan-shadow{fill:var(--v510-icon-cyan-shadow);stroke:var(--v510-icon-cyan-shadow)}
+html[data-theme] .ft-v510-3d-cyan-hi{fill:var(--v510-icon-cyan-hi);stroke:var(--v510-icon-cyan-hi)}
+html[data-theme] .ft-v510-3d-gold{fill:var(--v510-icon-gold);stroke:var(--v510-icon-gold)}
+html[data-theme] .ft-v510-3d-gold-shadow{fill:var(--v510-icon-gold-shadow);stroke:var(--v510-icon-gold-shadow)}
+html[data-theme] .ft-v510-3d-gold-hi{fill:var(--v510-icon-gold-hi);stroke:var(--v510-icon-gold-hi)}
+html[data-theme] .ft-v510-3d-cutout{fill:var(--v510-icon-cutout);stroke:none}
+
+html[data-theme] .ft-v510-3d-stroke{
   fill:none;
-  stroke-width:2.35;
+  stroke-width:2.1;
   stroke-linecap:round;
   stroke-linejoin:round;
 }
-html[data-theme] .ft-v510-picto-heavy-stroke{
+html[data-theme] .ft-v510-3d-heavy-stroke{
   fill:none;
-  stroke-width:3.8;
+  stroke-width:4.6;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+html[data-theme] .ft-v510-3d-band{
+  fill:none;
+  stroke-width:7;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+html[data-theme] .ft-v510-3d-arrow{
+  fill:none;
+  stroke-width:7.2;
   stroke-linecap:round;
   stroke-linejoin:round;
 }
 
 html[data-theme] .b27-practice-action[data-b27-practice-action]{
-  grid-template-columns:58px minmax(0,1fr) 24px;
+  grid-template-columns:60px minmax(0,1fr) 24px;
+}
+html[data-theme] .b27-quick-card[data-b27-action="review"],
+html[data-theme] .b27-quick-card[data-b27-action="listening"]{
+  grid-template-columns:56px minmax(0,1fr) 22px;
 }
 
+/* Theme coherence lives in the glass host, not by repainting the 3D object. */
+html[data-theme="original"] .b27-practice-icon[data-v510-practice-icon],
+html[data-theme="original"] .b27-quick-icon[data-v510-practice-icon]{--v510-host-accent:#7ce7ff}
+html[data-theme="aurora"] .b27-practice-icon[data-v510-practice-icon],
+html[data-theme="aurora"] .b27-quick-icon[data-v510-practice-icon]{--v510-host-accent:#72cfff}
+html[data-theme="sunset"] .b27-practice-icon[data-v510-practice-icon],
+html[data-theme="sunset"] .b27-quick-icon[data-v510-practice-icon]{--v510-host-accent:#ff9d55}
+html[data-theme="jade"] .b27-practice-icon[data-v510-practice-icon],
+html[data-theme="jade"] .b27-quick-icon[data-v510-practice-icon]{--v510-host-accent:#7fe3bd}
+
 @media(max-width:520px){
-  html[data-theme] .b27-practice-icon[data-v510-practice-icon]{width:54px!important;height:54px!important;flex-basis:54px}
-  html[data-theme] .b27-practice-icon .ft-v510-practice-glyph{width:32px;height:32px;flex-basis:32px}
-  html[data-theme] .b27-practice-action[data-b27-practice-action]{grid-template-columns:56px minmax(0,1fr) 24px}
+  html[data-theme] .b27-practice-action[data-b27-practice-action] .b27-practice-icon{
+    width:56px!important;
+    height:56px!important;
+    flex-basis:56px;
+  }
+  html[data-theme] .b27-practice-icon[data-v510-practice-icon]{border-radius:16px!important}
+  html[data-theme] .b27-practice-icon .ft-v510-practice-glyph{
+    width:41px;
+    height:41px;
+    flex-basis:41px;
+  }
+  html[data-theme] .b27-quick-card[data-b27-action="review"] .b27-quick-icon,
+  html[data-theme] .b27-quick-card[data-b27-action="listening"] .b27-quick-icon{
+    width:52px!important;
+    height:52px!important;
+    min-width:52px!important;
+    flex-basis:52px;
+  }
+  html[data-theme] .b27-quick-icon[data-v510-practice-icon]{border-radius:15px!important}
+  html[data-theme] .b27-quick-icon .ft-v510-practice-glyph{
+    width:38px;
+    height:38px;
+    flex-basis:38px;
+  }
+  html[data-theme] .b27-practice-action[data-b27-practice-action]{grid-template-columns:58px minmax(0,1fr) 24px}
+  html[data-theme] .b27-quick-card[data-b27-action="review"],
+  html[data-theme] .b27-quick-card[data-b27-action="listening"]{grid-template-columns:54px minmax(0,1fr) 22px}
 }
 
 @media(prefers-reduced-motion:reduce){
-  html[data-theme] .b27-practice-icon .ft-v510-practice-glyph{filter:drop-shadow(0 2px 5px rgba(0,0,0,.20))}
+  html[data-theme] .b27-practice-icon .ft-v510-practice-glyph,
+  html[data-theme] .b27-quick-icon .ft-v510-practice-glyph{
+    filter:drop-shadow(0 2px 2px rgba(0,0,0,.25));
+  }
 }
