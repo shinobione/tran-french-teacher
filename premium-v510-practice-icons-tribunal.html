@@ -2,86 +2,115 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>V5.10 Practice pictogram tribunal</title>
-  <style>html,body{margin:0;background:#080b12;color:#fff;font-family:system-ui}iframe{position:absolute;left:-9999px;width:390px;height:844px;border:0}#result{padding:20px}</style>
+  <title>V5.10 approved Practice artwork tribunal</title>
+  <style>html,body{margin:0;background:#080b12;color:#fff;font-family:system-ui}iframe{position:absolute;left:-9999px;border:0}#result{padding:20px}</style>
 </head>
 <body>
   <div id="result" data-v510-practice-icons="pending">pending</div>
-  <iframe id="app" src="./?uxSmoke=lesson8&debug=fr"></iframe>
   <script>
     (()=>{
       const result=document.getElementById('result');
-      const frame=document.getElementById('app');
       const expected=['conversation','listening','review','real-life'];
       const themes=['original','aurora','sunset','jade'];
-      const waitFor=async(fn,timeout=15000)=>{const start=performance.now();while(performance.now()-start<timeout){try{const value=fn();if(value)return value}catch{}await new Promise(r=>setTimeout(r,50))}throw new Error('timeout')};
+      const assets={
+        conversation:'./assets/premium/practice/speak-premium.webp',
+        listening:'./assets/premium/practice/listen-premium.webp',
+        review:'./assets/premium/practice/review-premium.webp',
+        'real-life':'./assets/premium/practice/real-life-premium.webp'
+      };
+      const storeKeys=[
+        'francais-avec-luc:learner:v1',
+        'french-tranquille:learning-memory:v1',
+        'french-tranquille:error-intelligence:v1',
+        'french-tranquille:scenarios:v1',
+        'french-tranquille:listening:v1',
+        'french-tranquille:milestones:v1'
+      ];
+      const waitFor=async(fn,timeout=18000)=>{const start=performance.now();while(performance.now()-start<timeout){try{const value=fn();if(value)return value}catch{}await new Promise(r=>setTimeout(r,50))}throw new Error('timeout')};
       const fail=error=>{result.dataset.v510PracticeIcons='fail';result.textContent=`FAIL: ${error?.message||error}`;document.documentElement.dataset.v510PracticeIcons='fail'};
-      const pass=()=>{result.dataset.v510PracticeIcons='ok';result.textContent='V5.10 expressive 3D pictogram system V4 OK';document.documentElement.dataset.v510PracticeIcons='ok'};
+      const pass=()=>{result.dataset.v510PracticeIcons='ok';result.textContent='V5.10 approved Premium artwork icon system OK';document.documentElement.dataset.v510PracticeIcons='ok'};
+      const snapshot=(w)=>Object.fromEntries(storeKeys.map(key=>[key,w.localStorage.getItem(key)]));
+      const equal=(a,b)=>storeKeys.every(key=>a[key]===b[key]);
 
-      frame.addEventListener('load',async()=>{
-        try{
-          const w=frame.contentWindow;
-          const d=frame.contentDocument;
-          await waitFor(()=>w.FrenchTranquilleBuild27Shell?.openPractice&&w.FrenchTranquilleThemes?.apply&&w.FrenchTranquilleV510PracticeIcons?.refresh);
-          if(w.FrenchTranquilleV510PracticeIcons?.style!=='premium-3d-pictogram-v4')throw new Error('V4 3D pictogram runtime marker missing');
+      async function testViewport(label,width,height){
+        const frame=document.createElement('iframe');
+        frame.width=String(width);
+        frame.height=String(height);
+        frame.style.width=`${width}px`;
+        frame.style.height=`${height}px`;
+        frame.src='./?uxSmoke=lesson8&debug=fr';
+        document.body.appendChild(frame);
+        await new Promise((resolve,reject)=>{frame.addEventListener('load',resolve,{once:true});setTimeout(()=>reject(new Error(`${label}: load timeout`)),18000)});
 
+        const w=frame.contentWindow;
+        const d=frame.contentDocument;
+        await waitFor(()=>w.FrenchTranquilleBuild27Shell?.openPractice&&w.FrenchTranquilleThemes?.apply&&w.FrenchTranquilleV510PracticeIcons?.refresh);
+        if(w.FrenchTranquilleV510PracticeIcons?.style!=='approved-premium-art-v1')throw new Error(`${label}: approved-art runtime marker missing`);
+
+        const before=snapshot(w);
+        w.FrenchTranquilleV510PracticeIcons.refresh();
+        await waitFor(()=>d.querySelectorAll('.b27-quick-card .ft-v510-practice-art').length===2);
+        const homeSrc={};
+        for(const id of ['review','listening']){
+          const card=d.querySelector(`.b27-quick-card[data-b27-action="${id}"]`);
+          const host=card?.querySelector('.b27-quick-icon');
+          const art=host?.querySelector('img.ft-v510-practice-art');
+          if(!host||!art)throw new Error(`${label}: home ${id} missing approved artwork`);
+          await waitFor(()=>art.complete&&art.naturalWidth>0&&art.naturalHeight>0);
+          if(art.getAttribute('src')!==assets[id])throw new Error(`${label}: home ${id} wrong source`);
+          if(art.naturalWidth<128||art.naturalHeight<128)throw new Error(`${label}: home ${id} source too small`);
+          if(host.querySelector('svg'))throw new Error(`${label}: home ${id} still contains legacy SVG`);
+          if(host.textContent.trim())throw new Error(`${label}: home ${id} still exposes legacy emoji/text`);
+          homeSrc[id]=art.getAttribute('src');
+        }
+
+        for(const theme of themes){
+          w.FrenchTranquilleThemes.apply(theme);
+          w.FrenchTranquilleBuild27Shell.openPractice();
           w.FrenchTranquilleV510PracticeIcons.refresh();
-          await waitFor(()=>d.querySelectorAll('.b27-quick-card .ft-v510-practice-pictogram').length===2);
-          const homeMarkup={};
-          for(const id of ['review','listening']){
-            const card=d.querySelector(`.b27-quick-card[data-b27-action="${id}"]`);
-            const host=card?.querySelector('.b27-quick-icon');
-            const glyph=host?.querySelector('.ft-v510-practice-pictogram');
-            if(!host||!glyph)throw new Error(`home ${id}: missing shared V4 pictogram`);
-            if(host.dataset.v510PracticeIcon!==id||host.dataset.v510IconSurface!=='home')throw new Error(`home ${id}: ownership marker missing`);
-            if(glyph.dataset.v510Pictogram!==id)throw new Error(`home ${id}: identity mismatch`);
-            if(host.textContent.trim())throw new Error(`home ${id}: legacy emoji/text still visible`);
-            if(!glyph.classList.contains('ft-v510-pictogram-3d'))throw new Error(`home ${id}: 3D marker missing`);
-            homeMarkup[id]=host.innerHTML;
+          await waitFor(()=>d.querySelectorAll('.b27-practice-action img.ft-v510-practice-art').length===4);
+          if(d.documentElement.dataset.theme!==theme)throw new Error(`${label}: theme ${theme} did not apply`);
+          const cards=[...d.querySelectorAll('.b27-practice-action[data-b27-practice-action]')];
+          if(cards.length!==4)throw new Error(`${label}/${theme}: expected 4 Practice cards, got ${cards.length}`);
+          for(const id of expected){
+            const card=cards.find(node=>node.dataset.b27PracticeAction===id);
+            const host=card?.querySelector('.b27-practice-icon');
+            const art=host?.querySelector('img.ft-v510-practice-art');
+            if(!host||!art)throw new Error(`${label}/${theme}: ${id} missing approved artwork`);
+            await waitFor(()=>art.complete&&art.naturalWidth>0&&art.naturalHeight>0);
+            if(art.getAttribute('src')!==assets[id])throw new Error(`${label}/${theme}: ${id} wrong source`);
+            if(art.naturalWidth<128||art.naturalHeight<128)throw new Error(`${label}/${theme}: ${id} source too small`);
+            if(host.querySelector('svg'))throw new Error(`${label}/${theme}: ${id} legacy SVG survived`);
+            if(host.textContent.trim())throw new Error(`${label}/${theme}: ${id} legacy emoji/text survived`);
+            if(id==='listening'&&art.getAttribute('src')!==homeSrc.listening)throw new Error(`${label}/${theme}: Listening source not exactly reused from Home`);
+            if(id==='review'&&art.getAttribute('src')!==homeSrc.review)throw new Error(`${label}/${theme}: Review source not exactly reused from Home`);
+            const hr=host.getBoundingClientRect();
+            const ar=art.getBoundingClientRect();
+            const dx=Math.abs((hr.left+hr.width/2)-(ar.left+ar.width/2));
+            const dy=Math.abs((hr.top+hr.height/2)-(ar.top+ar.height/2));
+            if(dx>1.2||dy>1.2)throw new Error(`${label}/${theme}: ${id} not centered (${dx.toFixed(2)}, ${dy.toFixed(2)})`);
+            const hs=w.getComputedStyle(host);
+            const as=w.getComputedStyle(art);
+            if(hs.display!=='flex')throw new Error(`${label}/${theme}: ${id} host is not flex-centered`);
+            if(as.filter!=='none')throw new Error(`${label}/${theme}: ${id} artwork was CSS-filtered/recolored`);
+            if(ar.width<44||ar.width>54||ar.height<44||ar.height>54)throw new Error(`${label}/${theme}: ${id} bad artwork scale (${ar.width.toFixed(1)}x${ar.height.toFixed(1)})`);
           }
+          if(d.documentElement.scrollWidth>d.documentElement.clientWidth+1)throw new Error(`${label}/${theme}: horizontal overflow`);
+        }
 
-          for(const theme of themes){
-            w.FrenchTranquilleThemes.apply(theme);
-            w.FrenchTranquilleBuild27Shell.openPractice();
-            w.FrenchTranquilleV510PracticeIcons.refresh();
-            await waitFor(()=>d.querySelectorAll('.b27-practice-action .ft-v510-practice-pictogram').length===4);
-            if(d.documentElement.dataset.theme!==theme)throw new Error(`theme ${theme} did not apply`);
-            const cards=[...d.querySelectorAll('.b27-practice-action[data-b27-practice-action]')];
-            if(cards.length!==4)throw new Error(`theme ${theme}: expected 4 practice cards, got ${cards.length}`);
-            const widths=[];
-            const heights=[];
-            for(const id of expected){
-              const card=cards.find(node=>node.dataset.b27PracticeAction===id);
-              if(!card)throw new Error(`theme ${theme}: missing ${id} card`);
-              const host=card.querySelector('.b27-practice-icon');
-              const glyph=host?.querySelector('.ft-v510-practice-pictogram');
-              if(!host||!glyph)throw new Error(`theme ${theme}: ${id} missing V4 pictogram`);
-              if(host.dataset.v510PracticeIcon!==id||host.dataset.v510IconSurface!=='practice')throw new Error(`theme ${theme}: ${id} ownership marker missing`);
-              if(glyph.dataset.v510Pictogram!==id)throw new Error(`theme ${theme}: ${id} pictogram identity missing`);
-              if(host.textContent.trim())throw new Error(`theme ${theme}: ${id} still exposes legacy text/emoji content`);
-              if(!glyph.classList.contains('ft-v510-pictogram-3d'))throw new Error(`theme ${theme}: ${id} missing 3D marker`);
-              if(!glyph.querySelector('[class*="-shadow"]')||!glyph.querySelector('[class*="-hi"]'))throw new Error(`theme ${theme}: ${id} missing 3D shadow/highlight construction`);
-              if(id==='listening'&&host.innerHTML!==homeMarkup.listening)throw new Error(`theme ${theme}: Listening is not exactly reused from Home`);
-              if(id==='review'&&host.innerHTML!==homeMarkup.review)throw new Error(`theme ${theme}: Review is not exactly reused from Home`);
-              const hr=host.getBoundingClientRect();
-              const gr=glyph.getBoundingClientRect();
-              const dx=Math.abs((hr.left+hr.width/2)-(gr.left+gr.width/2));
-              const dy=Math.abs((hr.top+hr.height/2)-(gr.top+gr.height/2));
-              if(dx>1.1||dy>1.1)throw new Error(`theme ${theme}: ${id} not centered (${dx.toFixed(2)}, ${dy.toFixed(2)})`);
-              const hs=w.getComputedStyle(host);
-              const gs=w.getComputedStyle(glyph);
-              if(hs.display!=='flex')throw new Error(`theme ${theme}: ${id} host is not flex-centered`);
-              if(gs.filter==='none')throw new Error(`theme ${theme}: ${id} lost its object depth shadow`);
-              if(gr.width<36||gr.width>44||gr.height<36||gr.height>44)throw new Error(`theme ${theme}: ${id} bad object scale (${gr.width.toFixed(1)}x${gr.height.toFixed(1)})`);
-              widths.push(Math.round(gr.width*10)/10);
-              heights.push(Math.round(gr.height*10)/10);
-            }
-            if(new Set(widths).size!==1||new Set(heights).size!==1)throw new Error(`theme ${theme}: inconsistent pictogram geometry`);
-          }
+        const after=snapshot(w);
+        if(!equal(before,after))throw new Error(`${label}: learner stores changed during pure icon/theme travel`);
+        frame.remove();
+      }
+
+      (async()=>{
+        try{
+          await testViewport('iphone',390,844);
+          await testViewport('desktop',1280,800);
           pass();
         }catch(error){fail(error)}
-      },{once:true});
-      setTimeout(()=>{if(result.dataset.v510PracticeIcons==='pending')fail(new Error('tribunal watchdog'))},22000);
+      })();
+      setTimeout(()=>{if(result.dataset.v510PracticeIcons==='pending')fail(new Error('tribunal watchdog'))},52000);
     })();
   </script>
 </body>
