@@ -2,6 +2,8 @@
   'use strict';
 
   const VERSION = '2.3.35-v510lessonidentity1';
+  const LESSON_STYLE_VERSION = '2.3.35-v510lessonidentity1';
+  const LESSON_STYLE_HREF = `./src/premium/premium-v510-lesson-identity.css?v=${LESSON_STYLE_VERSION}`;
   const root = document.documentElement;
   const DEBUG_KEY = 'tran-french-teacher:debug-fr:v1';
   const TYFFANY_ASSET = './assets/premium/brand/tyffany-memory.svg';
@@ -41,6 +43,18 @@
     const copy = FEATURE_COPY[feature];
     return copy ? (isDebug() ? copy.fr : copy.vi) : '';
   };
+
+  function ensureLessonIdentityStyle() {
+    let link = document.head?.querySelector('link[data-v510-lesson-identity-style]');
+    if (link?.getAttribute('href') === LESSON_STYLE_HREF) return;
+    if (!link) {
+      link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.dataset.v510LessonIdentityStyle = '1';
+      document.head?.appendChild(link);
+    }
+    link.href = LESSON_STYLE_HREF;
+  }
 
   function lessonById(id) {
     return curriculum()?.lessons?.find(lesson => lesson.id === id) || null;
@@ -268,6 +282,8 @@
   }
 
   function decorate() {
+    ensureLessonIdentityStyle();
+
     document.querySelectorAll('.b27-practice-action[data-b27-practice-action]').forEach(card => {
       const id = card.dataset.b27PracticeAction;
       decorateHost(card.querySelector('.b27-practice-icon'), id, 'practice');
@@ -307,6 +323,7 @@
     schedule();
   }, true);
 
+  ensureLessonIdentityStyle();
   new MutationObserver(schedule).observe(document.body, { childList: true, subtree: true });
   window.addEventListener('focus', schedule);
   schedule();
@@ -321,6 +338,7 @@
     brandIdentityStyle: 'goat-v1',
     brandAsset: BRAND_ASSET,
     lessonIdentityStyle: 'lesson-icon-v1',
+    lessonStyleHref: LESSON_STYLE_HREF,
     refresh: decorate,
     refreshFeatureHeaders: decorateFeatureHeaders,
     refreshTyffanyIcons: decorateTyffanyMemory,
