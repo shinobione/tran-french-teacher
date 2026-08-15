@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>V5.10 field identity capture</title>
+  <style>html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050813}iframe{display:block;width:100%;height:100%;border:0;background:#050813}#status{position:fixed;inset:auto 8px 8px 8px;z-index:99;padding:8px 10px;border-radius:10px;background:#9f1d35;color:#fff;font:600 12px/1.35 system-ui;display:none}html[data-capture-state="fail"] #status{display:block}</style>
+</head>
+<body>
+  <iframe id="app" title="French Trân’quille field identity capture"></iframe>
+  <div id="status"></div>
+  <script>
+    (()=>{
+      const params=new URLSearchParams(location.search);
+      const surface=params.get('surface')||'listening';
+      const theme=params.get('theme')||'jade';
+      const app=document.getElementById('app');
+      const status=document.getElementById('status');
+      const pause=ms=>new Promise(r=>setTimeout(r,ms));
+      const waitFor=async(fn,timeout=22000,label='condition')=>{const start=performance.now();while(performance.now()-start<timeout){try{const value=fn();if(value)return value}catch{}await pause(50)}throw new Error(`timeout: ${label}`)};
+      const fail=error=>{document.documentElement.dataset.captureState='fail';status.textContent=`CAPTURE FAIL · ${surface} · ${error?.message||error}`};
+      const ready=()=>{document.documentElement.dataset.captureState='ready';document.documentElement.dataset.captureSurface=surface;document.documentElement.dataset.captureTheme=theme};
+
+      async function openPracticeAndClick(w,d,id){
+        d.querySelector('[data-b27-close-practice]')?.click();
+        w.FrenchTranquilleListening?.close?.();
+        await pause(140);
+        w.FrenchTranquilleBuild27Shell.openPractice();
+        const button=await waitFor(()=>d.querySelector(`.b27-practice-action[data-b27-practice-action="${id}"]`),22000,`Practice ${id}`);
+        button.click();
+      }
+
+      async function route(w,d){
+        w.FrenchTranquilleThemes.apply(theme);
+        await waitFor(()=>d.documentElement.dataset.theme===theme,5000,'theme');
+        if(surface==='progress'){
+          d.querySelector('.bottom-nav [data-go="progress"]')?.click();
+          await waitFor(()=>d.querySelector('.b27-progress-page .b27-brandline > img'),22000,'Progress');
+          w.FrenchTranquilleV510PracticeIcons.refreshIdentityAssets();
+          await waitFor(()=>d.querySelector('.b27-progress-page .b27-brandline > img[data-v510-brand-identity="goat-v1"]'),5000,'Progress goat mark');
+        }else if(surface==='lesson'){
+          d.querySelector('.bottom-nav [data-go="progress"]')?.click();
+          const lesson=await waitFor(()=>d.querySelector('.b27-progress-page [data-b27-open-lesson]'),22000,'lesson launcher');
+          lesson.click();
+          await waitFor(()=>d.querySelector('.screen-lesson .teacher-line .luc'),22000,'lesson');
+          w.FrenchTranquilleV510PracticeIcons.refreshIdentityAssets();
+          await waitFor(()=>d.querySelector('.screen-lesson .teacher-line .luc[data-v510-tyffany-avatar="canonical-svg-v1"]'),5000,'Tyffany SVG avatar');
+        }else if(surface==='listening'){
+          await openPracticeAndClick(w,d,'listening');
+          await waitFor(()=>d.querySelector('.listening-top[data-v510-feature-header="listening"]'),22000,'Listening');
+        }else if(surface==='real-life'){
+          await openPracticeAndClick(w,d,'real-life');
+          await waitFor(()=>d.querySelector('.screen-conversation .topbar[data-v510-feature-header="real-life"]'),22000,'Real-Life');
+        }else throw new Error(`unknown surface ${surface}`);
+        await pause(650);
+      }
+
+      app.src=`../../?uxSmoke=lesson8&v510FieldCapture=${encodeURIComponent(surface)}-${Date.now()}`;
+      app.addEventListener('load',async()=>{
+        try{
+          const w=app.contentWindow,d=app.contentDocument;
+          await waitFor(()=>w.FrenchTranquilleBuild27Shell?.openPractice&&w.FrenchTranquilleThemes?.apply&&w.FrenchTranquilleV510PracticeIcons?.refreshIdentityAssets,22000,'app APIs');
+          await route(w,d);
+          ready();
+        }catch(error){fail(error)}
+      },{once:true});
+      setTimeout(()=>{if(!document.documentElement.dataset.captureState)fail(new Error('capture watchdog'))},28000);
+    })();
+  </script>
+</body>
+</html>

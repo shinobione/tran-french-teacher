@@ -1,0 +1,124 @@
+name: V5.10 Field Identity Closeout
+
+on:
+  pull_request:
+    paths:
+      - 'src/premium/premium-v510-practice-icons.js'
+      - 'src/premium/premium-v510-field-shell.css'
+      - 'assets/premium/brand/**'
+      - 'tests/browser/v510-field-identity-closeout.html'
+      - 'tests/browser/v510-field-identity-capture.html'
+      - '.github/workflows/v510-field-identity-closeout.yml'
+      - 'sw.js'
+  push:
+    branches: [main]
+    paths:
+      - 'src/premium/premium-v510-practice-icons.js'
+      - 'src/premium/premium-v510-field-shell.css'
+      - 'assets/premium/brand/**'
+      - 'tests/browser/v510-field-identity-closeout.html'
+      - 'tests/browser/v510-field-identity-capture.html'
+      - '.github/workflows/v510-field-identity-closeout.yml'
+      - 'sw.js'
+
+permissions:
+  contents: read
+
+jobs:
+  field-identity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Static residual identity contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check src/premium/premium-v510-practice-icons.js
+          grep -q "const TYFFANY_ASSET = './assets/premium/brand/tyffany-memory.svg'" src/premium/premium-v510-practice-icons.js
+          grep -q "const BRAND_ASSET = './assets/premium/brand/goat-app-icon-180.png'" src/premium/premium-v510-practice-icons.js
+          grep -q "tyffanyAvatarStyle: 'canonical-svg-v1'" src/premium/premium-v510-practice-icons.js
+          grep -q "brandIdentityStyle: 'goat-v1'" src/premium/premium-v510-practice-icons.js
+          grep -q 'data-v510-tyffany-avatar' src/premium/premium-v510-field-shell.css
+          grep -q 'tyffany-memory.svg' src/premium/premium-v510-field-shell.css
+          grep -q 'listening-session-score' src/premium/premium-v510-field-shell.css
+          grep -q 'display:none!important' src/premium/premium-v510-field-shell.css
+          test -s assets/premium/brand/tyffany-memory.svg
+          test -s assets/premium/brand/goat-app-icon-180.png
+          # Protected historical owners stay untouched; Premium runtime supersedes them visually.
+          grep -q "assets/Favicon.png?v=1.7.1-b14-avatar1" src/ui/lucie-avatar.css
+          grep -q 'src="./assets/Favicon.png"' src/ui/build27-app-shell.js
+
+      - name: Start static server
+        shell: bash
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-v510-field-identity-http.log 2>&1 &
+          echo $! >/tmp/ft-v510-field-identity-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — Listening parity + FTQ/Tyffany identity tribunal
+        shell: bash
+        run: |
+          rm -rf /tmp/ft-v510-field-profile /tmp/ft-v510-field.html
+          timeout --signal=TERM --kill-after=5s 105s google-chrome \
+            --headless=new --no-sandbox --disable-gpu \
+            --user-data-dir=/tmp/ft-v510-field-profile \
+            --window-size=1280,1000 \
+            --virtual-time-budget=90000 \
+            --dump-dom 'http://127.0.0.1:4173/tests/browser/v510-field-identity-closeout.html' \
+            >/tmp/ft-v510-field.html
+          if ! grep -q 'data-v510-field-identity="ok"' /tmp/ft-v510-field.html; then
+            echo '--- V5.10 field identity tribunal failure ---'
+            grep -o 'FAIL: [^<]*' /tmp/ft-v510-field.html || true
+            tail -n 140 /tmp/ft-v510-field.html || true
+            exit 1
+          fi
+
+      - name: Chrome — physical mobile comparison captures
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/v510-field-identity-captures
+          for surface in listening real-life progress lesson; do
+            profile="/tmp/v510-field-${surface}-profile"
+            out="/tmp/v510-field-identity-captures/mobile-${surface}.png"
+            rm -rf "$profile"
+            timeout --signal=TERM --kill-after=5s 45s google-chrome \
+              --headless=new --no-sandbox --disable-gpu \
+              --hide-scrollbars \
+              --run-all-compositor-stages-before-draw \
+              --user-data-dir="$profile" \
+              --window-size=430,932 \
+              --virtual-time-budget=20000 \
+              --screenshot="$out" \
+              "http://127.0.0.1:4173/tests/browser/v510-field-identity-capture.html?theme=jade&surface=${surface}"
+            test -s "$out"
+          done
+          python3 - <<'PY'
+          from pathlib import Path
+          shots=sorted(Path('/tmp/v510-field-identity-captures').glob('*.png'))
+          assert len(shots)==4, f'expected 4 captures, got {len(shots)}'
+          for shot in shots:
+            data=shot.read_bytes()
+            assert data[:8]==b'\x89PNG\r\n\x1a\n', f'{shot}: invalid PNG'
+            assert len(data)>15000, f'{shot}: suspiciously small capture'
+          print('4/4 field identity mobile captures produced')
+          PY
+
+      - name: Upload field identity captures
+        uses: actions/upload-artifact@v4
+        with:
+          name: v510-field-identity-captures
+          path: /tmp/v510-field-identity-captures/*.png
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Stop static server
+        if: always()
+        shell: bash
+        run: |
+          if [ -f /tmp/ft-v510-field-identity-server.pid ]; then kill "$(cat /tmp/ft-v510-field-identity-server.pid)" || true; fi
