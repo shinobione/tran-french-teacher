@@ -218,7 +218,7 @@
   window.FrenchTranquilleV510PracticeIcons = Object.freeze({
     version: VERSION,
     style: 'approved-premium-art-v1',
-    featureHeaderStyle: 'feature-header-v2-mobile',
+    featureHeaderStyle: 'feature-header-v1',
     tyffanyIconStyle: 'canonical-svg-v1',
     tyffanyAsset: TYFFANY_ASSET,
     refresh: decorate,
