@@ -1,0 +1,44 @@
+/* French Trân’quille — V5.10 Practice icon system.
+   Shared across all themes. Replaces emoji/glyph rendering with one geometric line-icon family. */
+html[data-theme] .b27-practice-icon[data-v510-practice-icon]{
+  width:54px!important;
+  height:54px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  flex:0 0 54px;
+  padding:0!important;
+  line-height:0!important;
+  color:var(--ft-accent,#f0b45d)!important;
+  background:
+    radial-gradient(circle at 35% 28%,rgba(255,255,255,.09),transparent 46%),
+    linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018))!important;
+  border:1px solid color-mix(in srgb,var(--ft-accent,#f0b45d) 42%,var(--ft-border,rgba(255,255,255,.16)))!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.09),
+    0 8px 20px rgba(0,0,0,.14),
+    0 0 18px color-mix(in srgb,var(--ft-accent,#f0b45d) 8%,transparent)!important;
+}
+
+html[data-theme] .b27-practice-icon .ft-v510-practice-glyph{
+  width:29px;
+  height:29px;
+  display:block;
+  flex:0 0 29px;
+  overflow:visible;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  transform:translateY(-.25px);
+  filter:drop-shadow(0 0 5px color-mix(in srgb,var(--ft-accent,#f0b45d) 15%,transparent));
+}
+
+html[data-theme] .b27-practice-action[data-b27-practice-action]{
+  grid-template-columns:56px minmax(0,1fr) 24px;
+}
+
+@media(prefers-reduced-motion:reduce){
+  html[data-theme] .b27-practice-icon .ft-v510-practice-glyph{filter:none}
+}

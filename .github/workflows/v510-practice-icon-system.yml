@@ -1,0 +1,64 @@
+name: V5.10 Practice Icon System
+
+on:
+  pull_request:
+    paths:
+      - 'premium-v510-practice-icons.js'
+      - 'premium-v510-practice-icons.css'
+      - 'premium-v510-practice-icons-tribunal.html'
+      - 'index.html'
+      - 'sw.js'
+      - '.github/workflows/v510-practice-icon-system.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  practice-icons:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Static icon-system contract
+        shell: bash
+        run: |
+          node --check premium-v510-practice-icons.js
+          node --check sw.js
+          grep -q 'premium-v510-practice-icons.css?v=2.3.27-v510icons1' index.html
+          grep -q 'premium-v510-practice-icons.js?v=2.3.27-v510icons1' index.html
+          grep -q "const V510ICONS='2.3.27-v510icons1'" sw.js
+          grep -q 'premium-v510-practice-icons.css?v=${V510ICONS}' sw.js
+          grep -q 'premium-v510-practice-icons.js?v=${V510ICONS}' sw.js
+          grep -q "conversation: svg" premium-v510-practice-icons.js
+          grep -q "listening: svg" premium-v510-practice-icons.js
+          grep -q "review: svg" premium-v510-practice-icons.js
+          grep -q "'real-life': svg" premium-v510-practice-icons.js
+          grep -q 'display:flex!important' premium-v510-practice-icons.css
+          grep -q 'stroke-width:1.8' premium-v510-practice-icons.css
+      - name: Start static server
+        shell: bash
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-v510-icons-http.log 2>&1 &
+          echo $! >/tmp/ft-v510-icons-server.pid
+          sleep 1
+          google-chrome --version
+      - name: Chrome — four themes, four SVGs, optical centering
+        shell: bash
+        run: |
+          rm -rf /tmp/ft-v510-icons-profile /tmp/ft-v510-icons.html
+          timeout --signal=TERM --kill-after=5s 45s google-chrome \
+            --headless=new --no-sandbox --disable-gpu \
+            --user-data-dir=/tmp/ft-v510-icons-profile \
+            --window-size=430,932 \
+            --virtual-time-budget=30000 \
+            --dump-dom 'http://127.0.0.1:4173/premium-v510-practice-icons-tribunal.html' \
+            >/tmp/ft-v510-icons.html
+          grep -q 'data-v510-practice-icons="ok"' /tmp/ft-v510-icons.html
+          grep -q 'V5.10 practice icon system OK' /tmp/ft-v510-icons.html
+      - name: Stop static server
+        if: always()
+        shell: bash
+        run: |
+          if [ -f /tmp/ft-v510-icons-server.pid ]; then kill "$(cat /tmp/ft-v510-icons-server.pid)" || true; fi
