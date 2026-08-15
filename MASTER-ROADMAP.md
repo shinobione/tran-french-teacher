@@ -16,7 +16,7 @@
 |---|---|
 | Product pedagogy | **V2.3.0 · Build 34** |
 | Live visual maintenance line | **Premium V5.5 · Build 34 maintenance** |
-| Live `main` checkpoint | **`2bba5bd06ba14be7286e16a6a9a417fa04ce642a`** |
+| Last runtime-bearing checkpoint | **`2bba5bd06ba14be7286e16a6a9a417fa04ce642a`** |
 | Curriculum | **52 lessons / 313 items** |
 | Scenario | **44 situations / 132 turns** |
 | Speaking Loop | **52/52 · max 2 moments / lesson** |
@@ -178,31 +178,39 @@ The Original theme must no longer be the weak legacy witness.
 Its canonical visual direction is:
 
 - deep midnight blue / indigo base;
-- refined cobalt / electric cyan light;
-- restrained pink / violet / soft magenta highlights;
+- refined cobalt / cold cyan light;
+- blue-white / silver highlights;
+- violet / magenta only as extremely restrained accents;
 - elegant Paris night;
 - Eiffel Tower as premium photographic/illustrative focal point;
-- subtle stars and Seine reflections;
+- controlled city lights and Seine reflections;
 - calm flagship identity;
+- sky and negative space remain predominantly midnight navy / near-black blue;
+- Premium quality comes from depth, light, materials, contrast and detail rather than brightness;
+- **no large pink sky or pastel wash**;
 - **no dramatic Aurora ribbons**;
 - **no Sunset orange dominance**;
 - **no Nocturne jade/gold dominance**;
 - generous darker negative space for readable app UI.
 
-A generated candidate is stored in the repository and must be human-reviewed before runtime wiring is considered final.
+The first archived `background.webp` candidate was explicitly rejected as too bright and too close to Aurora. The corrected dark candidate is stored as `background-v2.png` and must be human-reviewed before any runtime wiring.
 
 ## 3.2 Lesson-card Eiffel assets
 
 The current small Eiffel motif inside the **Leçon** card must also be replaced.
 
-Repository destination:
+The four first-generation `lesson-eiffel.webp` files were explicitly rejected because they are opaque rectangular Paris scenes. They remain only as rejection evidence.
+
+Human-gate candidates:
 
 ```text
-assets/premium/themes/aurora/lesson-eiffel.webp
-assets/premium/themes/sunset/lesson-eiffel.webp
-assets/premium/themes/nocturne/lesson-eiffel.webp
-assets/premium/themes/original/lesson-eiffel.webp
+assets/premium/themes/aurora/lesson-eiffel-v2.png
+assets/premium/themes/sunset/lesson-eiffel-v2.png
+assets/premium/themes/nocturne/lesson-eiffel-v2.png
+assets/premium/themes/original/lesson-eiffel-v2.png
 ```
+
+All four V2 files are RGBA assets with genuine alpha transparency, generous transparent margins and no baked card/sky/UI rectangle.
 
 Each asset must be coherent with its theme:
 
@@ -233,7 +241,12 @@ Each asset must be coherent with its theme:
 - flagship calm Paris night;
 - clearly distinct from Aurora.
 
-Generated candidates are stored now so this chat is no longer the only place they exist.
+The new V2 candidates and two review boards are stored now so this chat is no longer the only place they exist:
+
+```text
+assets/premium/v5.6-background-review.png
+assets/premium/v5.6-lesson-eiffel-review.png
+```
 
 ## 3.3 Asset rules
 
@@ -248,11 +261,14 @@ Generated candidates are stored now so this chat is no longer the only place the
 ## V5.6 Definition of Done
 
 - [x] 3 user-approved background assets preserved in repo.
-- [x] Original background candidate preserved in repo.
-- [x] 4 lesson-card Eiffel candidates preserved in repo.
+- [x] Rejected first-generation Original background preserved as evidence.
+- [x] Corrected dark Original `background-v2.png` candidate generated.
+- [x] 4 rejected opaque `lesson-eiffel.webp` files preserved as evidence.
+- [x] 4 transparent RGBA `lesson-eiffel-v2.png` candidates generated.
+- [x] Background and lesson-Eiffel review boards generated.
 - [x] Asset manifest documents ownership/status.
-- [ ] Human approval of Original background candidate.
-- [ ] Human approval of the 4 lesson-card Eiffel candidates.
+- [ ] Human approval of corrected dark Original V2 candidate.
+- [ ] Human approval of the 4 transparent lesson-card Eiffel V2 candidates.
 - [ ] Runtime integration — intentionally deferred to V5.7.
 
 ---
