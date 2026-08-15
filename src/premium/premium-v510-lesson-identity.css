@@ -1,0 +1,102 @@
+/* French Trân’quille — V5.10 physical field closeout: canonical lesson identity.
+   Visual-only authority: lesson-specific icons own lesson surfaces; Tyffany remains tutor/voice identity elsewhere. */
+
+/* Lesson detail: the historical tutor row is now lesson metadata. Keep the legacy
+   .luc node in the DOM for compatibility, but do not paint a generic Tyffany brain
+   where the learner expects the current lesson identity. */
+html[data-theme] body .screen-lesson .teacher-line[data-v510-lesson-identity]{
+  display:flex!important;
+  align-items:center!important;
+  gap:10px!important;
+}
+html[data-theme] body .screen-lesson .teacher-line[data-v510-lesson-identity] > .ft-v510-legacy-tutor-avatar{
+  display:none!important;
+}
+html[data-theme] body .screen-lesson .ft-v510-lesson-identity-icon{
+  width:48px;
+  height:48px;
+  min-width:48px;
+  flex:0 0 48px;
+  display:grid;
+  place-items:center;
+  border-radius:16px;
+  border:1px solid color-mix(in srgb,var(--ft-accent,var(--ux-accent,#7ce7ff)) 38%,var(--ft-border,rgba(255,255,255,.16)));
+  background:
+    radial-gradient(circle at 28% 20%,rgba(255,255,255,.22),transparent 34%),
+    linear-gradient(145deg,color-mix(in srgb,var(--ft-accent,var(--ux-accent,#7ce7ff)) 18%,var(--ft-surface,#14251f)),color-mix(in srgb,var(--ft-accent2,var(--ux-accent2,#a98cff)) 14%,var(--ft-surface-2,#0a1714)));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 8px 22px rgba(0,0,0,.18);
+  font-size:1.45rem;
+  line-height:1;
+}
+html[data-theme] body .screen-lesson .teacher-line[data-v510-lesson-identity] > div{
+  min-width:0;
+}
+html[data-theme] body .screen-lesson .teacher-line[data-v510-lesson-identity] > div > strong{
+  display:block;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+/* Mobile Today card: V5.5 used a hard-coded ▤ pseudo icon and explicitly hid the
+   real lesson icon. Replace that placeholder with the exact curriculum icon used
+   by desktop and lesson detail. */
+html[data-theme] body .b27-home .b27-primary-card > .ft-v510-home-lesson-icon{
+  display:none;
+}
+@media(max-width:759px){
+  html[data-theme] body .b27-home .b27-primary-card::before{
+    content:none!important;
+    display:none!important;
+  }
+  html[data-theme] body .b27-home .b27-primary-card > .ft-v510-home-lesson-icon{
+    grid-area:art!important;
+    width:58px;
+    height:58px;
+    min-width:58px;
+    align-self:center;
+    display:grid!important;
+    place-items:center;
+    border-radius:50%;
+    border:1px solid color-mix(in srgb,var(--ft-accent,var(--ux-accent,#7ce7ff)) 58%,rgba(255,255,255,.18));
+    background:
+      radial-gradient(circle at 30% 22%,rgba(255,255,255,.26),transparent 31%),
+      linear-gradient(145deg,color-mix(in srgb,var(--ft-accent,var(--ux-accent,#7ce7ff)) 28%,var(--ft-surface,#14251f)),color-mix(in srgb,var(--ft-accent2,var(--ux-accent2,#a98cff)) 26%,var(--ft-surface-2,#0a1714)));
+    color:var(--ft-accent,var(--ux-accent,#7ce7ff));
+    font-size:1.52rem;
+    line-height:1;
+    box-shadow:0 0 0 7px color-mix(in srgb,var(--ft-accent,var(--ux-accent,#7ce7ff)) 4%,transparent),0 8px 24px rgba(0,0,0,.22),0 0 20px color-mix(in srgb,var(--ft-accent2,var(--ux-accent2,#a98cff)) 10%,transparent);
+    position:relative;
+    z-index:3;
+  }
+}
+
+/* Speaking model / replay actions: center the complete icon+label run as one
+   visual unit. The buttons remain the existing semantic controls. */
+html[data-theme] body .screen-lesson .french-block .listen[data-speaking-model-owner="exercise"],
+html[data-theme] body .screen-lesson .speaking-loop-model,
+html[data-theme] body .screen-lesson .speaking-loop-actions button{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:8px!important;
+  text-align:center!important;
+  line-height:1.15!important;
+  padding-inline:16px!important;
+}
+
+@media(max-width:520px){
+  html[data-theme] body .screen-lesson .ft-v510-lesson-identity-icon{
+    width:46px;
+    height:46px;
+    min-width:46px;
+    flex-basis:46px;
+    border-radius:15px;
+    font-size:1.38rem;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  html[data-theme] body .screen-lesson .ft-v510-lesson-identity-icon,
+  html[data-theme] body .b27-home .ft-v510-home-lesson-icon{transition:none!important;animation:none!important}
+}
