@@ -15,8 +15,8 @@
 | Item | Canonical state |
 |---|---|
 | Product pedagogy | **V2.3.0 · Build 34** |
-| Live visual maintenance line | **Premium V5.5 · Build 34 maintenance** |
-| Last runtime-bearing checkpoint | **`2bba5bd06ba14be7286e16a6a9a417fa04ce642a`** |
+| Live visual maintenance line | **Premium V5.6 assets approved · V5.7 candidate under review** |
+| Last verified `main` checkpoint | **`b2b22efbdbef18f4556012171dd42605d80df467`** |
 | Curriculum | **52 lessons / 313 items** |
 | Scenario | **44 situations / 132 turns** |
 | Speaking Loop | **52/52 · max 2 moments / lesson** |
@@ -317,7 +317,7 @@ Target viewports:
 
 The current Leçon-card “Paint Eiffel” must disappear completely.
 
-The correct theme-specific `lesson-eiffel.webp` must be visible in:
+The correct approved theme-specific `lesson-eiffel-v2.png` must be visible in:
 
 - Today / current lesson card;
 - any reused lesson hero card that currently owns the old placeholder;
@@ -346,14 +346,16 @@ No theme may look like “Premium themes + one old skin”.
 
 ## V5.7 Definition of Done
 
-- [ ] 4 backgrounds actually wired.
-- [ ] 4 lesson Eiffel assets actually wired.
-- [ ] Original reaches Premium parity.
-- [ ] No legacy CSS Eiffel remains visible.
-- [ ] No broken/missing asset online or offline.
-- [ ] No route flash regression.
-- [ ] No learner-store mutation.
-- [ ] 5-viewport screenshot matrix generated for all 4 themes.
+- [x] 4 backgrounds wired on the V5.7 candidate branch.
+- [x] 4 approved V2 lesson Eiffel assets wired on the V5.7 candidate branch.
+- [ ] Original reaches Premium parity — implementation present; human visual verdict pending.
+- [x] No legacy CSS Eiffel remains visible in the candidate tribunal.
+- [ ] No broken/missing asset online or offline — service-worker contract present; exact-head CI/deployed PWA evidence pending.
+- [x] No route flash regression in the local navigation tribunal.
+- [x] No learner-store mutation in the local four-theme tribunals.
+- [x] 5-viewport screenshot matrix generated for all 4 themes.
+
+Candidate status on 2026-08-15: local tribunals are green and the complete 20-shot matrix exists. This is **not** a merge, deployment, physical-device PASS or user visual PASS.
 
 ---
 

@@ -4,6 +4,7 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ## [Unreleased]
 
+- candidat **Premium V5.7** : quatre fonds de thème et quatre Eiffel V2 transparents intégrés, Original élevé au même pipeline Premium, cache PWA versionné et matrice 5 viewports × 4 thèmes ; validation humaine/terrain encore requise avant livraison ;
 - retour terrain attendu sur :
   - Listening → **un seul tap** `Aujourd’hui` ;
   - Bài 11/12 → enregistrement → `▶ Giọng của tôi` ;

@@ -22,12 +22,12 @@ jobs:
           grep -q '.session-success' premium-v5-islands.css
           grep -q '.scenario-lab-card' premium-v5-islands.css
           grep -q 'prefers-reduced-motion:reduce' premium-v5-islands.css
-          grep -q 'premium-v5-islands.css?v=2.3.18-v5islands1' premium-theme-polish.css
-          grep -q 'premium-v5-utility.css?v=2.3.17-v5utility1' premium-theme-polish.css
-          test "$(tail -n 1 premium-theme-polish.css)" = "@import url('./premium-nav-geometry-hotfix.css?v=2.3.4-p0nav1');"
+          grep -q 'premium-v5-islands.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v5-utility.css?v=2.3.21-v57art1' premium-theme-polish.css
+          test "$(tail -n 1 premium-theme-polish.css)" = "@import url('./premium-nav-geometry-hotfix.css?v=2.3.21-v57art1');"
           # Historical V5.3 owns its island layer and precache survivability.
           # The newest Premium slice owns the active cache/controller identity.
-          grep -q "const V5I='2.3.18-v5islands1'" sw.js
+          grep -q "const V5I='2.3.21-v57art1'" sw.js
           grep -q 'premium-v5-islands.css?v=${V5I}' sw.js
           grep -q 'premiumV5Islands' premium-v5-islands-tribunal.html
           grep -q 'scenario=real-runner-themed' premium-v5-islands-tribunal.html
@@ -59,7 +59,7 @@ jobs:
           grep -q 'session=themed' /tmp/v53-islands.html
           grep -q 'scenario=real-runner-themed' /tmp/v53-islands.html
           grep -q 'stores=unchanged' /tmp/v53-islands.html
-          grep -q 'original=witness' /tmp/v53-islands.html
+          grep -q 'original=parity' /tmp/v53-islands.html
 
       - name: Chrome — V5.3 reduced-motion tribunal
         run: |

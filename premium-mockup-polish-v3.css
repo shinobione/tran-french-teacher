@@ -1,8 +1,8 @@
 /* French Trân’quille — Premium Mockup Alignment V3
    Visual-only layer based on the three approved mockups supplied on 2026-08-13.
-   Original is deliberately untouched. No learner, voice, audio or routing behavior. */
+   V5.7 extends this visual grammar to Original. No learner, voice, audio or routing behavior. */
 
-html[data-theme]:not([data-theme="original"]){
+html[data-theme]{
   --pm3-ready:1;
   --pm3-radius:26px;
   --pm3-hairline:rgba(255,255,255,.07);
@@ -11,43 +11,43 @@ html[data-theme]:not([data-theme="original"]){
 }
 
 /* Shared mockup language: logo as hero, jewel cards, atmospheric page, compact native nav. */
-html[data-theme]:not([data-theme="original"]) .b27-home{position:relative;overflow:hidden}
-html[data-theme]:not([data-theme="original"]) .b27-home::before{
+html[data-theme] .b27-home{position:relative;overflow:hidden}
+html[data-theme] .b27-home::before{
   content:"";position:absolute;z-index:-1;pointer-events:none;inset:-180px -120px auto;height:650px;
   opacity:.95;filter:saturate(1.12);transform:translateZ(0)
 }
-html[data-theme]:not([data-theme="original"]) .b27-home::after{
+html[data-theme] .b27-home::after{
   content:"";position:absolute;z-index:-1;pointer-events:none;left:-18%;right:-18%;top:320px;height:460px;
   background:radial-gradient(ellipse at 50% 0%,color-mix(in srgb,var(--ft-accent2) 12%,transparent),transparent 64%);
   filter:blur(18px);opacity:.78
 }
-html[data-theme]:not([data-theme="original"]) .ft-modern-home-logo{
+html[data-theme] .ft-modern-home-logo{
   width:min(440px,92vw)!important;max-height:260px!important;margin:0 auto 16px!important;
   filter:drop-shadow(0 18px 28px rgba(0,0,0,.36)) drop-shadow(0 0 28px color-mix(in srgb,var(--ft-accent) 22%,transparent)) drop-shadow(0 0 36px color-mix(in srgb,var(--ft-accent2) 18%,transparent))
 }
-html[data-theme]:not([data-theme="original"]) .b27-home-grid{position:relative;z-index:1}
-html[data-theme]:not([data-theme="original"]) .b27-primary-card,
-html[data-theme]:not([data-theme="original"]) .b27-quick-card,
-html[data-theme]:not([data-theme="original"]) .b27-today-note{
+html[data-theme] .b27-home-grid{position:relative;z-index:1}
+html[data-theme] .b27-primary-card,
+html[data-theme] .b27-quick-card,
+html[data-theme] .b27-today-note{
   border-radius:var(--pm3-radius);backdrop-filter:blur(26px) saturate(1.2);-webkit-backdrop-filter:blur(26px) saturate(1.2)
 }
-html[data-theme]:not([data-theme="original"]) .b27-card-topline>b{
+html[data-theme] .b27-card-topline>b{
   width:58px;height:58px;display:grid;place-items:center;flex:0 0 58px;border-radius:50%;
   border:1px solid color-mix(in srgb,var(--ft-accent) 35%,var(--ft-border));
   background:radial-gradient(circle at 34% 25%,rgba(255,255,255,.22),transparent 26%),linear-gradient(145deg,color-mix(in srgb,var(--ft-accent) 24%,transparent),color-mix(in srgb,var(--ft-accent2) 22%,transparent));
   box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 0 30px color-mix(in srgb,var(--ft-accent) 16%,transparent),0 12px 26px rgba(0,0,0,.20)
 }
-html[data-theme]:not([data-theme="original"]) .b27-progress,
-html[data-theme]:not([data-theme="original"]) .b27-level-track{height:8px;background:rgba(0,0,0,.28);box-shadow:inset 0 1px 4px rgba(0,0,0,.36),0 1px 0 rgba(255,255,255,.035)}
-html[data-theme]:not([data-theme="original"]) .b27-primary-action>b,
-html[data-theme]:not([data-theme="original"]) .b27-secondary-action>b{
+html[data-theme] .b27-progress,
+html[data-theme] .b27-level-track{height:8px;background:rgba(0,0,0,.28);box-shadow:inset 0 1px 4px rgba(0,0,0,.36),0 1px 0 rgba(255,255,255,.035)}
+html[data-theme] .b27-primary-action>b,
+html[data-theme] .b27-secondary-action>b{
   width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.18)
 }
-html[data-theme]:not([data-theme="original"]) .ux-bottom-nav{
+html[data-theme] .ux-bottom-nav{
   margin:0 10px max(8px,env(safe-area-inset-bottom));width:calc(100% - 20px);left:0;right:0;border:1px solid color-mix(in srgb,var(--ft-border) 74%,var(--ft-accent2) 26%);border-radius:28px;
   box-shadow:0 -8px 34px rgba(0,0,0,.28),0 18px 46px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.07)
 }
-html[data-theme]:not([data-theme="original"]) .ux-bottom-nav button{border-radius:20px}
+html[data-theme] .ux-bottom-nav button{border-radius:20px}
 
 /* AURORA BLEU / ROSE — navy glass + cyan/magenta neon, matching mockup 1. */
 html[data-theme="aurora"]{
@@ -143,18 +143,18 @@ html[data-theme="jade"] .b27-today-note{background:linear-gradient(145deg,rgba(6
 html[data-theme="jade"] .ux-bottom-nav button.active{color:#f4d98f;background:linear-gradient(145deg,rgba(48,207,157,.16),rgba(232,197,106,.10));box-shadow:inset 0 0 0 1px rgba(77,214,165,.14),0 0 26px rgba(62,203,158,.12)}
 
 /* Settings/theme chooser: turn palette chips into glossy theme orbs, closer to the mockups. */
-html[data-theme]:not([data-theme="original"]) .ft-theme-settings-inline{
+html[data-theme] .ft-theme-settings-inline{
   border-radius:28px;background:radial-gradient(circle at 90% 0%,color-mix(in srgb,var(--ux-accent2) 13%,transparent),transparent 36%),linear-gradient(150deg,color-mix(in srgb,var(--ux-panel) 97%,black 3%),color-mix(in srgb,var(--ux-panel) 88%,var(--ux-accent2) 12%));
   border-color:color-mix(in srgb,var(--ux-border) 58%,var(--ux-accent2) 42%);box-shadow:0 30px 86px rgba(0,0,0,.34),0 0 44px color-mix(in srgb,var(--ux-accent2) 10%,transparent),inset 0 1px 0 rgba(255,255,255,.07)
 }
-html[data-theme]:not([data-theme="original"]) .ft-theme-settings-inline summary{min-height:72px}
-html[data-theme]:not([data-theme="original"]) .ft-theme-settings-inline summary::before{border-radius:50%;box-shadow:0 0 24px color-mix(in srgb,var(--ux-accent) 13%,transparent),inset 0 1px 0 rgba(255,255,255,.10)}
-html[data-theme]:not([data-theme="original"]) .ft-theme-settings-inline .ft-theme-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-html[data-theme]:not([data-theme="original"]) .ft-theme-settings-inline .theme-option{min-height:88px;padding:11px;border-radius:19px;box-shadow:inset 0 1px 0 rgba(255,255,255,.045)}
-html[data-theme]:not([data-theme="original"]) .ft-theme-settings-inline .theme-swatch{width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.16);box-shadow:inset 8px 8px 16px rgba(255,255,255,.10),inset -8px -10px 18px rgba(0,0,0,.22),0 8px 22px rgba(0,0,0,.20)}
-html[data-theme]:not([data-theme="original"]) .ft-theme-settings-inline .theme-swatch.aurora{background:radial-gradient(circle at 30% 25%,#6cf1ff,transparent 23%),linear-gradient(145deg,#113ee8,#3fc7ff 44%,#ff4fb7 78%,#8c47ff)}
-html[data-theme]:not([data-theme="original"]) .ft-theme-settings-inline .theme-swatch.sunset{background:radial-gradient(circle at 31% 25%,#ffc06f,transparent 22%),linear-gradient(145deg,#ff8e2e,#ef5c4a 38%,#b23cff 76%,#5320a4)}
-html[data-theme]:not([data-theme="original"]) .ft-theme-settings-inline .theme-swatch.jade{background:radial-gradient(circle at 31% 25%,#a1f3cf,transparent 21%),linear-gradient(145deg,#0b8f74,#41d0a0 48%,#d9b653 82%,#5e4a1c)}
+html[data-theme] .ft-theme-settings-inline summary{min-height:72px}
+html[data-theme] .ft-theme-settings-inline summary::before{border-radius:50%;box-shadow:0 0 24px color-mix(in srgb,var(--ux-accent) 13%,transparent),inset 0 1px 0 rgba(255,255,255,.10)}
+html[data-theme] .ft-theme-settings-inline .ft-theme-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+html[data-theme] .ft-theme-settings-inline .theme-option{min-height:88px;padding:11px;border-radius:19px;box-shadow:inset 0 1px 0 rgba(255,255,255,.045)}
+html[data-theme] .ft-theme-settings-inline .theme-swatch{width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.16);box-shadow:inset 8px 8px 16px rgba(255,255,255,.10),inset -8px -10px 18px rgba(0,0,0,.22),0 8px 22px rgba(0,0,0,.20)}
+html[data-theme] .ft-theme-settings-inline .theme-swatch.aurora{background:radial-gradient(circle at 30% 25%,#6cf1ff,transparent 23%),linear-gradient(145deg,#113ee8,#3fc7ff 44%,#ff4fb7 78%,#8c47ff)}
+html[data-theme] .ft-theme-settings-inline .theme-swatch.sunset{background:radial-gradient(circle at 31% 25%,#ffc06f,transparent 22%),linear-gradient(145deg,#ff8e2e,#ef5c4a 38%,#b23cff 76%,#5320a4)}
+html[data-theme] .ft-theme-settings-inline .theme-swatch.jade{background:radial-gradient(circle at 31% 25%,#a1f3cf,transparent 21%),linear-gradient(145deg,#0b8f74,#41d0a0 48%,#d9b653 82%,#5e4a1c)}
 html[data-theme="aurora"] .ft-theme-settings-inline [data-theme-option="aurora"],
 html[data-theme="sunset"] .ft-theme-settings-inline [data-theme-option="sunset"],
 html[data-theme="jade"] .ft-theme-settings-inline [data-theme-option="jade"]{
@@ -162,29 +162,29 @@ html[data-theme="jade"] .ft-theme-settings-inline [data-theme-option="jade"]{
 }
 
 /* Progress + Practice inherit the selected mockup identity too, not just Home. */
-html[data-theme]:not([data-theme="original"]) :is(.b27-level-card,.b27-current-card,.b27-stage-card,.b27-practice-action,.b27-lesson-row,.b27-stage-tab){border-radius:22px}
+html[data-theme] :is(.b27-level-card,.b27-current-card,.b27-stage-card,.b27-practice-action,.b27-lesson-row,.b27-stage-tab){border-radius:22px}
 html[data-theme="jade"] :is(.b27-level-card,.b27-current-card,.b27-stage-card,.b27-practice-action,.b27-lesson-row,.b27-stage-tab){border-color:rgba(224,188,91,.34);background:linear-gradient(145deg,rgba(7,37,31,.90),rgba(4,26,22,.95))}
 html[data-theme="sunset"] :is(.b27-level-card,.b27-current-card,.b27-stage-card,.b27-practice-action,.b27-lesson-row,.b27-stage-tab){border-color:rgba(204,72,255,.34);background:linear-gradient(145deg,rgba(78,20,89,.88),rgba(39,10,57,.95))}
 html[data-theme="aurora"] :is(.b27-level-card,.b27-current-card,.b27-stage-card,.b27-practice-action,.b27-lesson-row,.b27-stage-tab){border-color:rgba(83,166,255,.34);background:linear-gradient(145deg,rgba(10,31,82,.90),rgba(8,18,55,.96))}
 
 @media(max-width:520px){
-  html[data-theme]:not([data-theme="original"]) .b27-page{padding-inline:14px}
-  html[data-theme]:not([data-theme="original"]) .ft-modern-home-logo{width:min(342px,92vw)!important;max-height:218px!important;margin-bottom:10px!important}
-  html[data-theme]:not([data-theme="original"]) .b27-home::before{inset:-135px -90px auto;height:530px}
-  html[data-theme]:not([data-theme="original"]) .b27-welcome{border-radius:21px}
-  html[data-theme]:not([data-theme="original"]) .b27-primary-card{padding:18px 16px}
-  html[data-theme]:not([data-theme="original"]) .b27-card-topline>b{width:52px;height:52px;flex-basis:52px}
-  html[data-theme]:not([data-theme="original"]) .b27-primary-card h2{font-size:clamp(1.45rem,7.5vw,2rem)}
-  html[data-theme]:not([data-theme="original"]) .ft-theme-settings-inline .ft-theme-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  html[data-theme]:not([data-theme="original"]) .ft-theme-settings-inline .theme-option{min-width:0}
-  html[data-theme]:not([data-theme="original"]) .ux-bottom-nav{margin-left:8px;margin-right:8px;width:calc(100% - 16px)}
+  html[data-theme] .b27-page{padding-inline:14px}
+  html[data-theme] .ft-modern-home-logo{width:min(342px,92vw)!important;max-height:218px!important;margin-bottom:10px!important}
+  html[data-theme] .b27-home::before{inset:-135px -90px auto;height:530px}
+  html[data-theme] .b27-welcome{border-radius:21px}
+  html[data-theme] .b27-primary-card{padding:18px 16px}
+  html[data-theme] .b27-card-topline>b{width:52px;height:52px;flex-basis:52px}
+  html[data-theme] .b27-primary-card h2{font-size:clamp(1.45rem,7.5vw,2rem)}
+  html[data-theme] .ft-theme-settings-inline .ft-theme-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  html[data-theme] .ft-theme-settings-inline .theme-option{min-width:0}
+  html[data-theme] .ux-bottom-nav{margin-left:8px;margin-right:8px;width:calc(100% - 16px)}
 }
 
 @media(max-width:360px){
-  html[data-theme]:not([data-theme="original"]) .ft-theme-settings-inline .ft-theme-grid{grid-template-columns:1fr}
-  html[data-theme]:not([data-theme="original"]) .b27-welcome{padding:15px 16px}
+  html[data-theme] .ft-theme-settings-inline .ft-theme-grid{grid-template-columns:1fr}
+  html[data-theme] .b27-welcome{padding:15px 16px}
 }
 
 @media(prefers-reduced-motion:reduce){
-  html[data-theme]:not([data-theme="original"]) .ft-theme-settings-inline [data-theme-option]{transform:none!important}
+  html[data-theme] .ft-theme-settings-inline [data-theme-option]{transform:none!important}
 }

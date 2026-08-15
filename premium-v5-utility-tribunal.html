@@ -16,7 +16,7 @@ F.onload=()=>setTimeout(async()=>{try{
  await seed(w);
  const fixture=d.createElement('section');fixture.id='pv5-utility-fixture';fixture.style.cssText='position:fixed;left:12px;top:90px;z-index:13000;display:flex;gap:8px;align-items:center;padding:8px;background:rgba(0,0,0,.2)';fixture.innerHTML='<button class="scenario-close" aria-label="scenario close">×</button><button class="scenario-mic" aria-label="mic">🎙</button><div class="progress-detail-panel-head"><button aria-label="detail close">×</button></div><button class="scenario-listen">🔊 Écouter</button>';d.body.appendChild(fixture);
  w.FrenchTranquilleThemes.apply('original');await wait(60);
- if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv5-utility-ready').trim())throw Error('original-utility-leak');
+ if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv5-utility-ready').trim()!=='1')throw Error('original-utility-parity-missing');
  for(const[width,height]of sizes){
   F.style.width=`${width}px`;F.style.height=`${height}px`;await wait(90);
   for(const theme of themes){
@@ -41,8 +41,8 @@ F.onload=()=>setTimeout(async()=>{try{
    d.querySelector('[data-listening-close]')?.click();await wait(80);fixture.hidden=false;
   }
  }
- fixture.remove();w.FrenchTranquilleThemes.apply('original');await wait(50);if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv5-utility-ready').trim())throw Error('original-utility-leak-after');
- finish(true,'viewports=2;themes=3;legacy-utility=filled;ux-close=real-context;touch=44plus;debug-rail=reserved;listening=no-overlap;original=witness');
+ fixture.remove();w.FrenchTranquilleThemes.apply('original');await wait(50);if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv5-utility-ready').trim()!=='1')throw Error('original-utility-parity-missing-after');
+ finish(true,'viewports=2;themes=3;legacy-utility=filled;ux-close=real-context;touch=44plus;debug-rail=reserved;listening=no-overlap;original=parity');
 }catch(e){finish(false,e.message)}},120);
 setTimeout(()=>{if(!R.dataset.premiumV5Utility)finish(false,'timeout')},48000);
 })();

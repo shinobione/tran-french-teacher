@@ -26,14 +26,14 @@ jobs:
           grep -q '.debug-fr-banner' premium-v5-utility.css
           grep -q 'body > .listening-overlay' premium-v5-utility.css
           grep -q 'prefers-reduced-motion:reduce' premium-v5-utility.css
-          grep -q 'premium-v5-utility.css?v=2.3.17-v5utility1' premium-theme-polish.css
-          grep -q 'premium-v5-coherence.css?v=2.3.16-v5coherence1' premium-theme-polish.css
-          grep -q 'premium-v5-islands.css?v=2.3.18-v5islands1' premium-theme-polish.css
-          test "$(tail -n 1 premium-theme-polish.css)" = "@import url('./premium-nav-geometry-hotfix.css?v=2.3.4-p0nav1');"
+          grep -q 'premium-v5-utility.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v5-coherence.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v5-islands.css?v=2.3.21-v57art1' premium-theme-polish.css
+          test "$(tail -n 1 premium-theme-polish.css)" = "@import url('./premium-nav-geometry-hotfix.css?v=2.3.21-v57art1');"
           # Historical V5.2 owns its layer and precache survivability. The latest
           # Premium workflow owns the active theme-controller / PWA generation.
-          grep -q "const V5U='2.3.17-v5utility1'" sw.js
-          grep -q "const V5I='2.3.18-v5islands1'" sw.js
+          grep -q "const V5U='2.3.21-v57art1'" sw.js
+          grep -q "const V5I='2.3.21-v57art1'" sw.js
           grep -q 'premium-v5-utility.css?v=${V5U}' sw.js
           grep -q 'premium-v5-islands.css?v=${V5I}' sw.js
           grep -q 'premiumV5Utility' premium-v5-utility-tribunal.html
@@ -65,7 +65,7 @@ jobs:
           grep -q 'touch=44plus' /tmp/v52-utility.html
           grep -q 'debug-rail=reserved' /tmp/v52-utility.html
           grep -q 'listening=no-overlap' /tmp/v52-utility.html
-          grep -q 'original=witness' /tmp/v52-utility.html
+          grep -q 'original=parity' /tmp/v52-utility.html
 
       - name: Upload V5.2 browser diagnostic
         if: failure()

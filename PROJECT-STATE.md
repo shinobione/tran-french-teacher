@@ -9,14 +9,11 @@
 - Reconciled: **2026-08-15**
 - Repository: `shinobione/tran-french-teacher`
 - Default branch: `main`
-- Git state used as the basis of this checkpoint: **`1465ba69171a0c885e6cf603fb535c806715eeda`**
-- That basis commit is the merge of PR **#125**, which added the durable AI/Codex project handoff.
-- Product/runtime-bearing checkpoint immediately before those docs/assets: **`2bba5bd06ba14be7286e16a6a9a417fa04ce642a`**.
-- PR #123 explicitly introduced **no runtime wiring**.
-- Active V5.6 review branch: **`codex/v5.6-asset-finalization`**.
-- Active draft PR: **#126 — V5.6 Premium asset finalization candidates**.
-- Verified asset-package commit inside that PR: **`2cbb070f70c494707e7a19a665bf5746e3e56c39`**.
-- PR #126 is intentionally blocked at the V5.6 human visual gate; it contains no runtime wiring.
+- Git state used as the basis of this checkpoint: **`b2b22efbdbef18f4556012171dd42605d80df467`**.
+- That basis commit is the squash merge of PR **#126 — V5.6 Premium asset finalization candidates** after the user’s global PASS.
+- Active V5.7 candidate branch: **`codex/v5.7-theme-art-integration`**.
+- Active draft PR: **pending creation at this checkpoint commit**.
+- V5.7 runtime wiring exists only on the candidate branch; it is not yet merged, deployed or field-approved.
 
 **Important:** this document does not claim that its own commit is the latest `main` SHA. A checkpoint cannot safely self-embed its final commit SHA. Fresh agents must verify current HEAD first.
 
@@ -25,7 +22,7 @@
 | Area | State |
 |---|---|
 | Product pedagogy | **V2.3.0 · Build 34** |
-| Visual line | **Premium V5.6 assets human-approved · V5.7 next** |
+| Visual line | **Premium V5.7 candidate implemented · human visual gate pending** |
 | Curriculum | **52 lessons / 313 items** |
 | Scenario | **44 situations / 132 turns** |
 | Speaking Loop | **52/52 · max 2 moments / lesson** |
@@ -73,18 +70,16 @@ V5.6 status from `MASTER-ROADMAP.md`:
 - asset manifest/ownership preserved ✅
 - corrected dark Original V2 candidate: **USER PASS 2026-08-15** ✅
 - four transparent lesson-card Eiffel V2 candidates: **USER PASS 2026-08-15** ✅
-- runtime integration deliberately deferred to **V5.7**
+- V5.7 runtime integration implemented on `codex/v5.7-theme-art-integration` ✅
+- V5.7 screenshot/CI/physical-device approval is still pending; none of the assets is yet **FIELD PASS**
 
 Do not silently regenerate/replace user-locked Aurora, Sunset, or Nocturne backgrounds.
 
 ## CI / deployment evidence at last reconciliation
 
-For current verified `main` basis `1465ba69171a0c885e6cf603fb535c806715eeda`, GitHub returned **27 workflow runs** for that exact SHA.
+For current verified `main` basis `b2b22efbdbef18f4556012171dd42605d80df467`, GitHub returned **27 workflow runs** for that exact SHA.
 
-- GitHub Pages run **`31853500070`**: **SUCCESS** on that exact SHA.
-- Build 26.5 run **`31853500062`** initially failed in Chrome-headless at the Progress layout step.
-- The failed job was rerun strictly unchanged and completed **SUCCESS** on attempt 2.
-- No runtime patch was made for that historical browser flake.
+- GitHub Pages run **`31856811221`**: **SUCCESS** on that exact SHA.
 - Current exact-HEAD result: **27 / 27 SUCCESS**.
 
 For the previous runtime-bearing `main` checkpoint `2bba5bd06ba14be7286e16a6a9a417fa04ce642a`, issue #114 records:
@@ -101,6 +96,7 @@ Fresh agents must re-check CI after any newer commit instead of inheriting these
 ### OPEN
 
 - issue **#114 — Premium Fidelity V5 — final post-V5.5 polish gate before Build 35**.
+- branch **`codex/v5.7-theme-art-integration`** — four-theme art integration candidate, awaiting PR CI and human review.
 
 ### BLOCKED
 
@@ -108,15 +104,10 @@ Fresh agents must re-check CI after any newer commit instead of inheriting these
 
 ### NEXT exact slice
 
-1. Merge draft PR **#126** only after its PASS checkpoint CI is green.
-2. Execute **V5.7 — Original Theme Parity + Theme Art Integration**:
-   - wire all four local background assets;
-   - wire all four lesson Eiffel assets;
-   - remove the visible legacy/CSS “Paint Eiffel” treatment;
-   - preserve offline/PWA asset availability;
-   - preserve zero-flash navigation and learner-state safety;
-   - generate the required multi-viewport/theme visual matrix.
-3. Then follow the canonical sequence only:
+1. Open the V5.7 draft PR from **`codex/v5.7-theme-art-integration`** and let exact-head CI complete.
+2. Review the generated 5-viewport × 4-theme matrix and exercise the candidate on the primary iPhone / installed-PWA target.
+3. Do not merge V5.7 or mark its assets **FIELD PASS** without an explicit human verdict.
+4. After V5.7 PASS + green CI, merge and continue the canonical sequence only:
 
 ```text
 V5.7 Theme Art Integration

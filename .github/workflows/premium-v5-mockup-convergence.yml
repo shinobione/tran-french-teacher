@@ -22,10 +22,10 @@ jobs:
           grep -q '.ux-settings-note' premium-v5-mockup-convergence.css
           grep -q '.listening-shell' premium-v5-mockup-convergence.css
           grep -q 'prefers-reduced-motion:reduce' premium-v5-mockup-convergence.css
-          grep -q 'premium-v5-mockup-convergence.css?v=2.3.19-v5mockup1' premium-theme-polish.css
-          grep -q 'premium-v5-islands.css?v=2.3.18-v5islands1' premium-theme-polish.css
-          test "$(tail -n 1 premium-theme-polish.css)" = "@import url('./premium-nav-geometry-hotfix.css?v=2.3.4-p0nav1');"
-          grep -q '2.3.19-v5mockup1' theme-controller.js
+          grep -q 'premium-v5-mockup-convergence.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v5-islands.css?v=2.3.21-v57art1' premium-theme-polish.css
+          test "$(tail -n 1 premium-theme-polish.css)" = "@import url('./premium-nav-geometry-hotfix.css?v=2.3.21-v57art1');"
+          grep -q '2.3.21-v57art1' theme-controller.js
           grep -q 'premiumV5Mockup' premium-v5-mockup-convergence-tribunal.html
           grep -q 'practice=3plus1' premium-v5-mockup-convergence-tribunal.html
           grep -q 'settings=intro-wide' premium-v5-mockup-convergence-tribunal.html
@@ -33,8 +33,8 @@ jobs:
           if [ -f premium-v5-fidelity-reset.css ]; then
             grep -q -- '--pv55-ready:1' premium-v5-fidelity-reset.css
             grep -q -- '--pv55-refine-ready:1' premium-v5-fidelity-refine.css
-            v54="$(grep -n 'premium-v5-mockup-convergence.css?v=2.3.19-v5mockup1' premium-theme-polish.css | cut -d: -f1)"
-            v55="$(grep -n 'premium-v5-fidelity-reset.css?v=2.3.20-v5fidelity1' premium-theme-polish.css | cut -d: -f1)"
+            v54="$(grep -n 'premium-v5-mockup-convergence.css?v=2.3.21-v57art1' premium-theme-polish.css | cut -d: -f1)"
+            v55="$(grep -n 'premium-v5-fidelity-reset.css?v=2.3.21-v57art1' premium-theme-polish.css | cut -d: -f1)"
             test "$v54" -lt "$v55"
           fi
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
@@ -68,7 +68,7 @@ jobs:
           grep -q 'settings=intro-wide' /tmp/v54-mockup.html
           grep -q 'mobile=preserved' /tmp/v54-mockup.html
           grep -q 'stores=unchanged' /tmp/v54-mockup.html
-          grep -q 'original=witness' /tmp/v54-mockup.html
+          grep -q 'original=parity' /tmp/v54-mockup.html
 
       - name: Chrome — V5.4 reduced-motion geometry tribunal
         run: |

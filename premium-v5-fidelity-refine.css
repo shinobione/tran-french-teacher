@@ -1,19 +1,19 @@
 /* French Trân’quille — Premium V5.5 / physical-review refinements
    Successor layer: one chrome anchor + learner-first Settings hierarchy. */
-html[data-theme]:not([data-theme="original"]){--pv55-refine-ready:1}
+html[data-theme]{--pv55-refine-ready:1}
 
 /* Build 27 keeps transform:translateY(0) on settled route owners. Even though it
    looks neutral, any non-none transform creates a containing block for fixed
    descendants, so a "fixed" Settings/Back control gets anchored to the padded
    page instead of the phone viewport. Premium V5.5 releases that containing
    block only after the route has settled; entering/leaving transforms stay live. */
-html[data-theme]:not([data-theme="original"]) .b27-page:not(.b27-entering):not(.b27-leaving),
-html[data-theme]:not([data-theme="original"]) body>.b27-overlay:not(.b27-entering):not(.b27-leaving){
+html[data-theme] .b27-page:not(.b27-entering):not(.b27-leaving),
+html[data-theme] body>.b27-overlay:not(.b27-entering):not(.b27-leaving){
   transform:none!important;
 }
 
 /* One physical chrome coordinate system everywhere. */
-html[data-theme]:not([data-theme="original"]) .ft-v55-settings-gear{
+html[data-theme] .ft-v55-settings-gear{
   position:fixed!important;
   top:var(--pv55-top)!important;
   right:max(14px,env(safe-area-inset-right,0px))!important;
@@ -21,7 +21,7 @@ html[data-theme]:not([data-theme="original"]) .ft-v55-settings-gear{
   margin:0!important;
   z-index:12120!important;
 }
-html[data-theme]:not([data-theme="original"]) :is(
+html[data-theme] :is(
   .b27-practice-page .b27-back,
   .screen-review .ft-v55-subview-back,
   .screen-conversation .ft-v55-subview-back,
@@ -34,14 +34,14 @@ html[data-theme]:not([data-theme="original"]) :is(
    that trapped the real Scenario Back at runner-local 14/12 instead of viewport
    14/12. Keep the card/panel premium material, but the runner itself must not
    own a filtering containing block. */
-html[data-theme]:not([data-theme="original"]) .scenario-runner{
+html[data-theme] .scenario-runner{
   backdrop-filter:none!important;
   -webkit-backdrop-filter:none!important;
 }
 
 /* The Scenario engine owns its real [data-scenario-close] node. Do not require a
    cosmetic runtime class for its geometry: the actual exit is the V5.5 Back. */
-html[data-theme]:not([data-theme="original"]) .scenario-runner .scenario-close{
+html[data-theme] .scenario-runner .scenario-close{
   position:fixed!important;
   top:var(--pv55-top)!important;
   left:var(--pv55-side)!important;
@@ -51,23 +51,23 @@ html[data-theme]:not([data-theme="original"]) .scenario-runner .scenario-close{
 /* Real Life has two legitimate hierarchy levels: active scenario → scenario list
    → Practice. While the runner is active, suppress the underlying Conversation
    Back so there is exactly one visible control at the canonical top-left anchor. */
-html[data-theme]:not([data-theme="original"]) .screen-conversation:has(.scenario-runner) .topbar .ft-v55-subview-back{
+html[data-theme] .screen-conversation:has(.scenario-runner) .topbar .ft-v55-subview-back{
   visibility:hidden!important;
   pointer-events:none!important;
 }
 
 /* Practice: controls occupy the corners; content starts below their rail. */
-html[data-theme]:not([data-theme="original"]) .b27-practice-page .b27-overlay-header{
+html[data-theme] .b27-practice-page .b27-overlay-header{
   display:block!important;
   padding:calc(var(--pv55-top) + 58px) 18px 6px!important;
   min-height:0!important;
 }
-html[data-theme]:not([data-theme="original"]) .b27-practice-page .b27-overlay-header>div:nth-child(2)>span{display:none!important}
-html[data-theme]:not([data-theme="original"]) .b27-practice-page .b27-overlay-header h1{margin:0!important;font-size:1.55rem!important;line-height:1.05!important}
-html[data-theme]:not([data-theme="original"]) .b27-practice-page .b27-practice-main{padding-top:4px!important}
+html[data-theme] .b27-practice-page .b27-overlay-header>div:nth-child(2)>span{display:none!important}
+html[data-theme] .b27-practice-page .b27-overlay-header h1{margin:0!important;font-size:1.55rem!important;line-height:1.05!important}
+html[data-theme] .b27-practice-page .b27-practice-main{padding-top:4px!important}
 
 /* Legacy Review / Conversation get the same reserved chrome rail. */
-html[data-theme]:not([data-theme="original"]) :is(.screen-review,.screen-conversation) .topbar{
+html[data-theme] :is(.screen-review,.screen-conversation) .topbar{
   min-height:calc(var(--pv55-top) + 58px)!important;
   padding-top:calc(var(--pv55-top) + 54px)!important;
   padding-left:18px!important;
@@ -75,53 +75,53 @@ html[data-theme]:not([data-theme="original"]) :is(.screen-review,.screen-convers
 }
 
 /* Listening keeps content but removes release-engine language from learner chrome. */
-html[data-theme]:not([data-theme="original"]) .listening-top .eyebrow{display:none!important}
-html[data-theme]:not([data-theme="original"]) .listening-top{
+html[data-theme] .listening-top .eyebrow{display:none!important}
+html[data-theme] .listening-top{
   min-height:calc(var(--pv55-top) + 72px)!important;
   padding:calc(var(--pv55-top) + 8px) 72px 10px!important;
   text-align:center!important;
 }
-html[data-theme]:not([data-theme="original"]) .listening-top>div:nth-child(2){min-width:0}
-html[data-theme]:not([data-theme="original"]) .listening-top h1{margin:0!important;line-height:1.1!important}
-html[data-theme]:not([data-theme="original"]) .listening-session-score{margin:8px auto 0!important}
+html[data-theme] .listening-top>div:nth-child(2){min-width:0}
+html[data-theme] .listening-top h1{margin:0!important;line-height:1.1!important}
+html[data-theme] .listening-session-score{margin:8px auto 0!important}
 
 /* Scenario runner title clears the fixed Back rail too. */
-html[data-theme]:not([data-theme="original"]) .scenario-runner-head{padding:calc(var(--pv55-top) + 58px) 14px 10px!important}
+html[data-theme] .scenario-runner-head{padding:calc(var(--pv55-top) + 58px) 14px 10px!important}
 
 /* Settings: learner-facing surfaces only. Technical plumbing never competes with
    Appearance / Recovery / About in the normal product view. */
-html[data-theme]:not([data-theme="original"]):not(.ux-debug-mode) .screen-settings :is(#debug-fr-card,.ft-v55-diagnostics-card,.ft-v55-technical-card){display:none!important}
-html.ux-debug-mode[data-theme]:not([data-theme="original"]) .screen-settings :is(#debug-fr-card,.ft-v55-diagnostics-card,.ft-v55-technical-card){display:none!important}
+html[data-theme]:not(.ux-debug-mode) .screen-settings :is(#debug-fr-card,.ft-v55-diagnostics-card,.ft-v55-technical-card){display:none!important}
+html.ux-debug-mode[data-theme] .screen-settings :is(#debug-fr-card,.ft-v55-diagnostics-card,.ft-v55-technical-card){display:none!important}
 
 /* Mockup information hierarchy: Theme first, About next (credits/privacy/rights),
    then recovery. Credits no longer live below a long technical/recovery section. */
-html[data-theme]:not([data-theme="original"]) .screen-settings .ft-theme-settings-inline{order:10}
-html[data-theme]:not([data-theme="original"]) #ft-settings-legal{order:20}
-html[data-theme]:not([data-theme="original"]) .screen-settings :is(.ft-v55-recovery-card,.danger-zone){order:30;display:block!important}
-html[data-theme]:not([data-theme="original"]) .screen-settings .ux-settings-note{order:0}
+html[data-theme] .screen-settings .ft-theme-settings-inline{order:10}
+html[data-theme] #ft-settings-legal{order:20}
+html[data-theme] .screen-settings :is(.ft-v55-recovery-card,.danger-zone){order:30;display:block!important}
+html[data-theme] .screen-settings .ux-settings-note{order:0}
 
 /* Recovery remains a real existing product surface. It is visually subordinate,
    never silently hidden behind a synthetic V5-only router. */
-html[data-theme]:not([data-theme="original"]) .screen-settings .ft-v55-recovery-card{
+html[data-theme] .screen-settings .ft-v55-recovery-card{
   border-radius:20px!important;
   background:linear-gradient(145deg,color-mix(in srgb,var(--ft-surface) 82%,transparent),color-mix(in srgb,var(--ft-surface-2) 90%,transparent))!important;
   box-shadow:0 14px 36px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.06)!important;
 }
-html[data-theme]:not([data-theme="original"]) .screen-settings .danger-zone{opacity:.88}
+html[data-theme] .screen-settings .danger-zone{opacity:.88}
 
 /* The theme disclosure acts like the first calm Settings destination. */
-html[data-theme]:not([data-theme="original"]) .screen-settings .ft-theme-settings-inline>summary{
+html[data-theme] .screen-settings .ft-theme-settings-inline>summary{
   min-height:68px!important;border-bottom:0!important;padding:11px 14px!important;cursor:pointer!important
 }
-html[data-theme]:not([data-theme="original"]) .screen-settings .ft-theme-settings-inline[open]>summary{border-bottom:1px solid color-mix(in srgb,var(--ft-border) 68%,transparent)!important}
+html[data-theme] .screen-settings .ft-theme-settings-inline[open]>summary{border-bottom:1px solid color-mix(in srgb,var(--ft-border) 68%,transparent)!important}
 
 /* About reads like one destination until intentionally opened. */
-html[data-theme]:not([data-theme="original"]) #ft-settings-legal .ft-legal-head{border-bottom:0!important}
-html[data-theme]:not([data-theme="original"]) #ft-settings-legal[data-v55-open="1"] .ft-legal-head{border-bottom:1px solid color-mix(in srgb,var(--ft-border) 68%,transparent)!important}
+html[data-theme] #ft-settings-legal .ft-legal-head{border-bottom:0!important}
+html[data-theme] #ft-settings-legal[data-v55-open="1"] .ft-legal-head{border-bottom:1px solid color-mix(in srgb,var(--ft-border) 68%,transparent)!important}
 
 /* Normal learner screenshot should not look like a debugging console. */
-html[data-theme]:not([data-theme="original"]) .screen-settings .narrow{display:flex!important;flex-direction:column!important}
-html[data-theme]:not([data-theme="original"]) .screen-settings .narrow>*{width:100%}
+html[data-theme] .screen-settings .narrow{display:flex!important;flex-direction:column!important}
+html[data-theme] .screen-settings .narrow>*{width:100%}
 
 /* --------------------------------------------------------------------------
    HOME — MOBILE MOCKUP COMPOSITION
@@ -131,38 +131,38 @@ html[data-theme]:not([data-theme="original"]) .screen-settings .narrow>*{width:1
    lesson hero → Practice actions → calm daily note.
    -------------------------------------------------------------------------- */
 @media(max-width:759px){
-  html[data-theme]:not([data-theme="original"]) .b27-home{
+  html[data-theme] .b27-home{
     padding-top:calc(env(safe-area-inset-top,0px) + 8px)!important;
   }
-  html[data-theme]:not([data-theme="original"]) .b27-home>.b27-header{
+  html[data-theme] .b27-home>.b27-header{
     min-height:46px!important;
     margin-bottom:0!important;
   }
-  html[data-theme]:not([data-theme="original"]) .ft-modern-home-logo{
+  html[data-theme] .ft-modern-home-logo{
     width:min(76vw,300px)!important;
     max-height:178px!important;
     margin:-2px auto 0!important;
   }
-  html[data-theme]:not([data-theme="original"]) .b27-home-grid,
-  html[data-theme]:not([data-theme="original"]) .b27-home-main,
-  html[data-theme]:not([data-theme="original"]) .b27-home-side{
+  html[data-theme] .b27-home-grid,
+  html[data-theme] .b27-home-main,
+  html[data-theme] .b27-home-side{
     gap:9px!important;
   }
-  html[data-theme]:not([data-theme="original"]) .b27-welcome{
+  html[data-theme] .b27-welcome{
     min-height:0!important;
     padding:10px 12px 11px!important;
     border-radius:18px!important;
   }
-  html[data-theme]:not([data-theme="original"]) .b27-welcome>span{
+  html[data-theme] .b27-welcome>span{
     font-size:.58rem!important;
     letter-spacing:.13em!important;
   }
-  html[data-theme]:not([data-theme="original"]) .b27-welcome h1{
+  html[data-theme] .b27-welcome h1{
     margin:5px 0 3px!important;
     font-size:clamp(1.58rem,7.4vw,2.05rem)!important;
     line-height:1.02!important;
   }
-  html[data-theme]:not([data-theme="original"]) .b27-welcome p{
+  html[data-theme] .b27-welcome p{
     margin:0!important;
     font-size:.76rem!important;
     line-height:1.35!important;
@@ -170,7 +170,7 @@ html[data-theme]:not([data-theme="original"]) .screen-settings .narrow>*{width:1
 
   /* Daily lesson becomes the wide illustrated mockup card instead of a tall
      stack. Its actual curriculum title/progress/CTA remain untouched. */
-  html[data-theme]:not([data-theme="original"]) .b27-primary-card{
+  html[data-theme] .b27-primary-card{
     position:relative!important;
     overflow:hidden!important;
     min-height:188px!important;
@@ -188,11 +188,11 @@ html[data-theme]:not([data-theme="original"]) .screen-settings .narrow>*{width:1
     align-items:center!important;
     border-radius:22px!important;
   }
-  html[data-theme]:not([data-theme="original"]) .b27-primary-card>*{
+  html[data-theme] .b27-primary-card>*{
     position:relative;
     z-index:2;
   }
-  html[data-theme]:not([data-theme="original"]) .b27-primary-card::before{
+  html[data-theme] .b27-primary-card::before{
     content:'▤';
     grid-area:art;
     width:58px;
@@ -211,59 +211,57 @@ html[data-theme]:not([data-theme="original"]) .screen-settings .narrow>*{width:1
     box-shadow:0 0 0 7px color-mix(in srgb,var(--ft-accent) 4%,transparent),0 8px 24px rgba(0,0,0,.22),0 0 20px color-mix(in srgb,var(--ft-accent2) 10%,transparent);
     z-index:2;
   }
-  html[data-theme]:not([data-theme="original"]) .b27-primary-card::after{
+  html[data-theme] .b27-primary-card::after{
     content:'';
     position:absolute;
     z-index:0;
     right:-8px;
     bottom:37px;
-    width:104px;
-    height:142px;
-    background:linear-gradient(180deg,var(--ft-accent),var(--ft-accent2));
-    -webkit-mask:url('./assets/eiffel-premium-mask.svg') center/contain no-repeat;
-    mask:url('./assets/eiffel-premium-mask.svg') center/contain no-repeat;
-    opacity:.14;
+    width:142px;
+    height:168px;
+    background:var(--pv55-lesson-art) right bottom/contain no-repeat;
+    -webkit-mask:none;
+    mask:none;
+    opacity:.96;
     pointer-events:none;
   }
-  html[data-theme="sunset"] .b27-primary-card::after{opacity:.18}
-  html[data-theme="jade"] .b27-primary-card::after{opacity:.27;background:linear-gradient(180deg,var(--ft-accent2),var(--ft-accent))}
-  html[data-theme]:not([data-theme="original"]) .b27-primary-card .b27-card-topline{
+  html[data-theme] .b27-primary-card .b27-card-topline{
     grid-area:top!important;
     margin:0!important;
     min-height:20px!important;
   }
-  html[data-theme]:not([data-theme="original"]) .b27-primary-card .b27-card-topline>b{display:none!important}
-  html[data-theme]:not([data-theme="original"]) .b27-primary-card h2{
+  html[data-theme] .b27-primary-card .b27-card-topline>b{display:none!important}
+  html[data-theme] .b27-primary-card h2{
     grid-area:title!important;
     margin:0!important;
     font-size:1.18rem!important;
     line-height:1.08!important;
     padding-right:22px;
   }
-  html[data-theme]:not([data-theme="original"]) .b27-primary-card>p{
+  html[data-theme] .b27-primary-card>p{
     grid-area:copy!important;
     margin:0!important;
     font-size:.72rem!important;
     line-height:1.35!important;
     padding-right:18px;
   }
-  html[data-theme]:not([data-theme="original"]) .b27-primary-card>.b27-progress{
+  html[data-theme] .b27-primary-card>.b27-progress{
     grid-area:progress!important;
     margin:2px 0 0!important;
     height:6px!important;
   }
-  html[data-theme]:not([data-theme="original"]) .b27-primary-card>.b27-primary-action{
+  html[data-theme] .b27-primary-card>.b27-primary-action{
     grid-area:action!important;
     min-height:46px!important;
     margin-top:2px!important;
   }
 
   /* Make the Practice area explicit, as in every approved mockup. */
-  html[data-theme]:not([data-theme="original"]) .b27-home-side{
+  html[data-theme] .b27-home-side{
     position:relative!important;
     padding-top:24px!important;
   }
-  html[data-theme]:not([data-theme="original"]) .b27-home-side::before{
+  html[data-theme] .b27-home-side::before{
     content:'LUYỆN TẬP';
     position:absolute;
     left:4px;
@@ -274,30 +272,30 @@ html[data-theme]:not([data-theme="original"]) .screen-settings .narrow>*{width:1
     font-weight:900;
     letter-spacing:.12em;
   }
-  html.ux-debug-mode[data-theme]:not([data-theme="original"]) .b27-home-side::before{content:'PRATIQUER'}
-  html[data-theme]:not([data-theme="original"]) .b27-home-side .b27-quick-card{
+  html.ux-debug-mode[data-theme] .b27-home-side::before{content:'PRATIQUER'}
+  html[data-theme] .b27-home-side .b27-quick-card{
     min-height:62px!important;
     padding:9px 12px!important;
     border-radius:18px!important;
   }
-  html[data-theme]:not([data-theme="original"]) .b27-home-side .b27-quick-icon{
+  html[data-theme] .b27-home-side .b27-quick-icon{
     width:42px!important;
     height:42px!important;
     min-width:42px!important;
   }
-  html[data-theme]:not([data-theme="original"]) .b27-home-side .b27-quick-card strong{font-size:.82rem!important}
-  html[data-theme]:not([data-theme="original"]) .b27-home-side .b27-quick-card small{font-size:.65rem!important}
-  html[data-theme]:not([data-theme="original"]) .b27-today-note{
+  html[data-theme] .b27-home-side .b27-quick-card strong{font-size:.82rem!important}
+  html[data-theme] .b27-home-side .b27-quick-card small{font-size:.65rem!important}
+  html[data-theme] .b27-today-note{
     min-height:52px!important;
     padding:9px 11px!important;
     border-radius:17px!important;
   }
-  html[data-theme]:not([data-theme="original"]) .b27-today-note strong{font-size:.74rem!important}
-  html[data-theme]:not([data-theme="original"]) .b27-today-note small{font-size:.62rem!important}
+  html[data-theme] .b27-today-note strong{font-size:.74rem!important}
+  html[data-theme] .b27-today-note small{font-size:.62rem!important}
 
   /* Existing subview chrome refinements. */
-  html[data-theme]:not([data-theme="original"]) .b27-practice-page .b27-practice-intro{padding-top:2px!important}
-  html[data-theme]:not([data-theme="original"]) .listening-top{padding-inline:68px!important}
-  html[data-theme]:not([data-theme="original"]) .screen-settings .topbar{padding-top:calc(var(--pv55-top) + 50px)!important;padding-right:12px!important;padding-left:12px!important}
-  html[data-theme]:not([data-theme="original"]) .screen-settings .topbar .brandline{display:none!important}
+  html[data-theme] .b27-practice-page .b27-practice-intro{padding-top:2px!important}
+  html[data-theme] .listening-top{padding-inline:68px!important}
+  html[data-theme] .screen-settings .topbar{padding-top:calc(var(--pv55-top) + 50px)!important;padding-right:12px!important;padding-left:12px!important}
+  html[data-theme] .screen-settings .topbar .brandline{display:none!important}
 }

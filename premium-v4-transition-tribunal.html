@@ -38,7 +38,7 @@ F.onload=()=>setTimeout(async()=>{try{
   const toHome=async()=>{nav('home')?.click();await wait(260);checkFrame('settled-home')};
 
   w.FrenchTranquilleThemes.apply('original');await wait(80);
-  if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv4-route-coherence-ready').trim())throw Error('original-leak');
+  if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv4-route-coherence-ready').trim()!=='1')throw Error('original-route-parity-missing');
 
   for(const [width,height] of sizes){
     F.style.width=width+'px';F.style.height=height+'px';await wait(80);
@@ -104,7 +104,7 @@ F.onload=()=>setTimeout(async()=>{try{
 
   for(const k of keys)if(before[k]!==w.localStorage.getItem(k))throw Error('store:'+k);
   w.FrenchTranquilleThemes.apply('original');await wait(70);
-  if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv4-route-coherence-ready').trim())throw Error('original-leak-after');
+  if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv4-route-coherence-ready').trim()!=='1')throw Error('original-route-parity-missing-after');
   done(true,'frames=sampled-16ms;viewports=5;themes=3;home-practice=atomic;practice-home=atomic;practice-home-hop=0;progress-practice-host-swap=covered;practice-listening=atomic;conversation=themed;scenario=themed;v5-islands=forward-compatible;intermediate-opacity=0;underlay-bleed=0;stores=unchanged');
 }catch(e){done(false,e.message)}},3400);
 setTimeout(()=>{if(!R.dataset.premiumV4TransitionTribunal)done(false,'timeout')},52000);

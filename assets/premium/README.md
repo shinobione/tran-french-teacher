@@ -17,7 +17,7 @@
 
 The first-generation WebP files committed with this manifest are **compact durable staging/reference derivatives**. The V2 human-gate candidates use PNG because the lesson assets must preserve genuine alpha transparency.
 
-None of these candidates are yet approved runtime deliveries.
+The approved V2 files are wired on the V5.7 candidate branch, but are not yet merged, deployed or field-approved.
 
 When V5.7 integrates the artwork, higher-resolution WebP/AVIF derivatives may replace these compact files **only if they preserve the same LOCKED source visual identity**. A higher-resolution derivative is not permission to invent a different scene or palette.
 
@@ -38,11 +38,11 @@ assets/premium/themes/original/background.webp
 
 | Theme | Status | Staging size | SHA-256 | Canonical direction |
 |---|---|---:|---|---|
-| Aurora | **LOCKED** | 320×569 | `f5a9945614dac98076bec0e25dd106d2b98a5612ebc1b58933c450fb715e94f6` | Blue/cyan/violet/pink luminous Paris night |
-| Sunset | **LOCKED** | 240×426 | `0dbbaa5334a79fb5e15cce2fee1526ddfe75606106bad24723b6c4cff0c1414c` | Orange/coral/violet Paris sunset |
-| Nocturne | **LOCKED** | 320×569 | `71bed3c1df77c7bd23ea6cbc46f25a948b67750cead56298301b6184c41a4303` | Dark jade/teal/gold Paris night |
+| Aurora | **LOCKED · WIRED in V5.7 candidate** | 320×569 | `f5a9945614dac98076bec0e25dd106d2b98a5612ebc1b58933c450fb715e94f6` | Blue/cyan/violet/pink luminous Paris night |
+| Sunset | **LOCKED · WIRED in V5.7 candidate** | 240×426 | `0dbbaa5334a79fb5e15cce2fee1526ddfe75606106bad24723b6c4cff0c1414c` | Orange/coral/violet Paris sunset |
+| Nocturne | **LOCKED · WIRED in V5.7 candidate** | 320×569 | `71bed3c1df77c7bd23ea6cbc46f25a948b67750cead56298301b6184c41a4303` | Dark jade/teal/gold Paris night |
 | Original V1 (`background.webp`) | **REJECTED** | 240×426 | `6cfe0a3fc3c8f2fe23da84cc9dd20590ba4322f78a6f7a855b5967da337f6372` | Too bright, too blue/pink and too close to Aurora |
-| Original V2 (`background-v2.png`) | **APPROVED** | 864×1821 | `9e221bb6be7d879937226725c0ca9732ab932216092e70e23eec56f6df9d1305` | Near-black midnight navy, cold cyan/silver, restrained accents, dark flagship Paris night |
+| Original V2 (`background-v2.png`) | **APPROVED · WIRED in V5.7 candidate** | 864×1821 | `9e221bb6be7d879937226725c0ca9732ab932216092e70e23eec56f6df9d1305` | Near-black midnight navy, cold cyan/silver, restrained accents, dark flagship Paris night |
 
 ## 1.1 The three user-locked sources
 
@@ -104,10 +104,10 @@ assets/premium/themes/original/lesson-eiffel-v2.png
 | Sunset V1 WebP | **REJECTED** | 320×240 | `e62b14f58ab33828181e6c1e1e68f963f8818a81fa28d8d481d078b3da99d312` |
 | Nocturne V1 WebP | **REJECTED** | 320×240 | `9a514af23cdb1aa325ccd32a9b10c31b6bf3a80a0d059fb821ee042fb0141a7f` |
 | Original V1 WebP | **REJECTED** | 320×240 | `a2e5170d06b157ba6916e79b77ca981ea3b034bc19238c63bea6c744ad70254f` |
-| Aurora V2 PNG | **APPROVED** | 1254×1254 RGBA | `fd58d88a750149e19a0c690677ade88edb2e6d842e751d3de1306fa234210256` |
-| Sunset V2 PNG | **APPROVED** | 1254×1254 RGBA | `c8984e8b6be34dd46e6eade2b7726b43266f1fbf21e42be98a3ac68d68482787` |
-| Nocturne V2 PNG | **APPROVED** | 1254×1254 RGBA | `64c295e207d4de164edec27153c6c2b2d42051186f560639f6a8de343d46cd24` |
-| Original V2 PNG | **APPROVED** | 1254×1254 RGBA | `b067b85e208bb3bda16196376982beae731ddd1bb52bfa7e8ae2a17e33fd6831` |
+| Aurora V2 PNG | **APPROVED · WIRED in V5.7 candidate** | 1254×1254 RGBA | `fd58d88a750149e19a0c690677ade88edb2e6d842e751d3de1306fa234210256` |
+| Sunset V2 PNG | **APPROVED · WIRED in V5.7 candidate** | 1254×1254 RGBA | `c8984e8b6be34dd46e6eade2b7726b43266f1fbf21e42be98a3ac68d68482787` |
+| Nocturne V2 PNG | **APPROVED · WIRED in V5.7 candidate** | 1254×1254 RGBA | `64c295e207d4de164edec27153c6c2b2d42051186f560639f6a8de343d46cd24` |
+| Original V2 PNG | **APPROVED · WIRED in V5.7 candidate** | 1254×1254 RGBA | `b067b85e208bb3bda16196376982beae731ddd1bb52bfa7e8ae2a17e33fd6831` |
 
 Theme directions:
 
@@ -134,7 +134,7 @@ Theme directions:
 - restrained pink-magenta;
 - calmer flagship identity clearly distinct from Aurora.
 
-All four V2 files have genuine alpha transparency (`RGBA`, alpha range `0..255`), large transparent margins, no opaque sky, no baked card and no visible rectangular border. The user gave a **global PASS on 2026-08-15**; they are approved for V5.7 integration but are not yet `WIRED` or `FIELD PASS`.
+All four V2 files have genuine alpha transparency (`RGBA`, alpha range `0..255`), large transparent margins, no opaque sky, no baked card and no visible rectangular border. The user gave a **global PASS on 2026-08-15**; they are wired in the V5.7 candidate but are not yet merged or **FIELD PASS**.
 
 Human-review boards:
 
@@ -147,7 +147,7 @@ assets/premium/v5.6-lesson-eiffel-review.png
 
 # 3. Runtime integration contract — V5.7
 
-A later runtime PR may wire these assets only after reading the current `main`, this manifest and `MASTER-ROADMAP.md`.
+The V5.7 runtime candidate wires these assets under the following contract. Any follow-up must first read current `main`, this manifest and `MASTER-ROADMAP.md`.
 
 Required rules:
 

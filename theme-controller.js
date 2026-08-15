@@ -1,5 +1,4 @@
-/* Cosmetic appearance preference only.
-   Historical V5.4 active identity witness: 2.3.19-v5mockup1. */
+/* Cosmetic appearance preference only. V5.7 gives all four themes parity. */
 (()=>{
 'use strict';
 const KEY='french-tranquille:appearance-theme:v1';
@@ -10,10 +9,10 @@ const valid=id=>IDS.includes(id)?id:'original';
 const current=()=>valid(localStorage.getItem(KEY)||'original');
 function ensureStyle(){
  if(!document.querySelector('link[data-premium-theme-polish]')){
-  const l=document.createElement('link');l.rel='stylesheet';l.href='./premium-theme-polish.css?v=2.3.20-v5fidelity1';l.dataset.premiumThemePolish='1';document.head.appendChild(l);
+  const l=document.createElement('link');l.rel='stylesheet';l.href='./premium-theme-polish.css?v=2.3.21-v57art1';l.dataset.premiumThemePolish='1';document.head.appendChild(l);
  }
  if(!document.querySelector('script[data-premium-v55-fidelity-runtime]')){
-  const r=document.createElement('script');r.src='./premium-v5-fidelity-reset.js?v=2.3.20-v5fidelity1';r.dataset.premiumV55FidelityRuntime='1';r.async=false;document.head.appendChild(r);
+  const r=document.createElement('script');r.src='./premium-v5-fidelity-reset.js?v=2.3.21-v57art1';r.dataset.premiumV55FidelityRuntime='1';r.async=false;document.head.appendChild(r);
  }
  if(!document.querySelector('style[data-modern-home-brand-fix]')){
   const s=document.createElement('style');s.dataset.modernHomeBrandFix='1';s.textContent='.ft-modern-home-brand::before{display:none!important}';document.head.appendChild(s);
@@ -25,5 +24,5 @@ function brand(){const h=document.querySelector('.b27-home');if(!h)return;h.clas
 function picker(){const host=document.querySelector('.screen-settings .narrow'),tpl=document.getElementById('ft-theme-settings');if(!host||!tpl)return;let p=host.querySelector(':scope>.ft-theme-settings-inline');if(!p){p=tpl.cloneNode(true);p.removeAttribute('id');p.classList.add('ft-theme-settings-inline');p.open=true;const v=p.querySelector('summary>span:last-child');if(v)v.dataset.themeCurrent='1';host.prepend(p)}sync(current())}
 function mount(){brand();picker();sync(current());window.FrenchTranquillePremiumV55?.refresh?.()}
 ensureStyle();document.documentElement.dataset.theme=current();const app=document.getElementById('app');if(app)new MutationObserver(mount).observe(app,{childList:true,subtree:true});mount();
-window.FrenchTranquilleThemes=Object.freeze({version:'1.2.2-v5fidelity',key:KEY,themes:IDS,current,apply,mountBrand:brand,mountSettingsPicker:picker,mount});
+window.FrenchTranquilleThemes=Object.freeze({version:'1.3.0-v57art',key:KEY,themes:IDS,current,apply,mountBrand:brand,mountSettingsPicker:picker,mount});
 })();

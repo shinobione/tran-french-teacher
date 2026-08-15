@@ -1,0 +1,108 @@
+name: Premium V5.7 Theme Art Integration
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  theme-art-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Static V5.7 contracts and sanctuaries
+        run: |
+          node --check theme-controller.js
+          node --check premium-v5-fidelity-reset.js
+          node --check sw.js
+          grep -q "version:'1.3.0-v57art'" theme-controller.js
+          grep -q 'premium/themes/original/background-v2.png' premium-v5-fidelity-reset.css
+          grep -q 'premium/themes/aurora/background.webp' premium-v5-fidelity-reset.css
+          grep -q 'premium/themes/sunset/background.webp' premium-v5-fidelity-reset.css
+          grep -q 'premium/themes/nocturne/background.webp' premium-v5-fidelity-reset.css
+          grep -q 'premium/themes/original/lesson-eiffel-v2.png' premium-v5-fidelity-reset.css
+          grep -q 'premium/themes/aurora/lesson-eiffel-v2.png' premium-v5-fidelity-reset.css
+          grep -q 'premium/themes/sunset/lesson-eiffel-v2.png' premium-v5-fidelity-reset.css
+          grep -q 'premium/themes/nocturne/lesson-eiffel-v2.png' premium-v5-fidelity-reset.css
+          ! grep -q 'eiffel-premium-mask.svg' premium-v5-fidelity-reset.css premium-v5-fidelity-refine.css sw.js
+          ! grep -q 'theme-aurora-paris.svg\|theme-sunset-paris.svg\|theme-jade-paris.svg' premium-v5-fidelity-reset.css sw.js
+          grep -q "const CACHE='tran-french-teacher-v2.3.21-b34.13-v57art1'" sw.js
+          for asset in \
+            assets/premium/themes/original/background-v2.png \
+            assets/premium/themes/aurora/background.webp \
+            assets/premium/themes/sunset/background.webp \
+            assets/premium/themes/nocturne/background.webp \
+            assets/premium/themes/original/lesson-eiffel-v2.png \
+            assets/premium/themes/aurora/lesson-eiffel-v2.png \
+            assets/premium/themes/sunset/lesson-eiffel-v2.png \
+            assets/premium/themes/nocturne/lesson-eiffel-v2.png; do test -s "$asset"; done
+          test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+          test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
+          test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-v57-http.log 2>&1 &
+          echo $! >/tmp/ft-v57-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — four themes across five viewports
+        run: |
+          timeout --signal=TERM --kill-after=5s 70s \
+            google-chrome --headless=new --no-sandbox --disable-gpu \
+            --disable-background-timer-throttling --disable-renderer-backgrounding \
+            --virtual-time-budget=46000 --dump-dom \
+            'http://127.0.0.1:4173/premium-v5-theme-art-tribunal.html' >/tmp/v57.html
+          grep -q 'data-premium-v57="ok"' /tmp/v57.html || { grep -o 'data-premium-v57-detail="[^"]*"' /tmp/v57.html || true; exit 1; }
+
+      - name: Capture V5.7 five-viewport by four-theme matrix
+        run: |
+          mkdir -p artifacts/premium-v57-theme-art
+          capture() {
+            label="$1"; width="$2"; height="$3"; theme="$4"
+            profile="/tmp/ft-v57-${label}-${theme}"
+            png="artifacts/premium-v57-theme-art/${label}-${theme}-home.png"
+            dom="/tmp/v57-${label}-${theme}.html"
+            target="http://127.0.0.1:4173/premium-v4-visual-capture.html?theme=${theme}&screen=home"
+            rm -rf "$profile" "$png" "$dom"
+            timeout --signal=TERM --kill-after=5s 45s \
+              google-chrome --headless=new --no-sandbox --disable-gpu --hide-scrollbars \
+              --disable-background-timer-throttling --disable-renderer-backgrounding \
+              --user-data-dir="$profile" --window-size="${width},${height}" --virtual-time-budget=20000 \
+              --screenshot="$png" --dump-dom "$target" >"$dom"
+            test -s "$png"
+            grep -q 'data-capture-ready="1"' "$dom" || { grep -o 'data-capture-error="[^"]*"' "$dom" || true; exit 1; }
+            grep -q "data-capture-theme=\"${theme}\"" "$dom"
+          }
+          while read -r label width height; do
+            for theme in original aurora sunset jade; do capture "$label" "$width" "$height" "$theme"; done
+          done <<'EOF'
+          iphone390 390 844
+          iphone430 430 932
+          tablet768 768 1024
+          desktop1280 1280 800
+          desktop1440 1440 900
+          EOF
+          test "$(find artifacts/premium-v57-theme-art -name '*.png' | wc -l)" -eq 20
+
+      - name: Upload V5.7 visual matrix
+        uses: actions/upload-artifact@v4
+        with:
+          name: premium-v57-theme-art-visual-review
+          path: artifacts/premium-v57-theme-art/*.png
+          retention-days: 14
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-v57-server.pid ]; then kill "$(cat /tmp/ft-v57-server.pid)" || true; fi

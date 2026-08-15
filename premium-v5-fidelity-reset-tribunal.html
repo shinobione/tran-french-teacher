@@ -31,12 +31,12 @@
       const learnerKey = 'francais-avec-luc:learner:v1';
       const learnerBefore = w.localStorage.getItem(learnerKey);
 
-      for (const [theme, asset] of [['aurora','theme-aurora-paris.svg'],['sunset','theme-sunset-paris.svg'],['jade','theme-jade-paris.svg']]) {
+      for (const [theme, asset] of [['original','premium/themes/original/background-v2.png'],['aurora','premium/themes/aurora/background.webp'],['sunset','premium/themes/sunset/background.webp'],['jade','premium/themes/nocturne/background.webp']]) {
         themes.apply(theme); await wait(160);
         const bg = w.getComputedStyle(d.body).backgroundImage || '';
         if (!bg.includes(asset)) throw Error(`scene-${theme}`);
       }
-      root.dataset.v55Scenes='aurora+sunset+jade';
+      root.dataset.v55Scenes='original+aurora+sunset+nocturne';
 
       themes.apply('aurora'); await nav.go('home'); await wait(180);
       const gear = await until(() => d.querySelector('.b27-home [data-b27-settings].ft-v55-settings-gear'));
@@ -99,11 +99,11 @@
       root.dataset.v55Overflow='0';
 
       themes.apply('original'); fidelity.refresh(); await wait(180);
-      if ((w.getComputedStyle(d.body).backgroundImage || '').includes('theme-aurora-paris.svg')) throw Error('original-scene-leak');
-      if (settings.querySelector('.memory-backup-card [data-v55-recovery-toggle],.memory-backup-card>.ft-v55-recovery-body')) throw Error('original-recovery-structure-leak');
-      root.dataset.v55Original='witness';
+      if (!(w.getComputedStyle(d.body).backgroundImage || '').includes('premium/themes/original/background-v2.png')) throw Error('original-scene-missing');
+      if (!settings.querySelector('.memory-backup-card [data-v55-recovery-toggle],.memory-backup-card>.ft-v55-recovery-body')) throw Error('original-recovery-structure-missing');
+      root.dataset.v55Original='parity';
 
-      ok('scenes=3;controls=unified;progress=A0-line-A1;settings=learner-first;recovery=collapsed-accessible;about=contained;learner=unchanged;original=witness');
+      ok('scenes=4;controls=unified;progress=A0-line-A1;settings=learner-first;recovery=collapsed-accessible;about=contained;learner=unchanged;original=parity');
     } catch (error) { fail(error?.message || String(error)); }
   }, 2400));
 

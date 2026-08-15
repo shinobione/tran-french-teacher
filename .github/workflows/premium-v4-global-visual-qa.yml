@@ -31,20 +31,20 @@ jobs:
           grep -q 'captureReady' premium-v4-visual-capture.html
           grep -q 'captureTheme' premium-v4-visual-capture.html
           grep -q 'captureScreen' premium-v4-visual-capture.html
-          grep -q 'premium-v4-motion.css?v=2.3.14-v4motion1' premium-theme-polish.css
-          grep -q 'premium-v4-contrast.css?v=2.3.15-v4contrast1' premium-theme-polish.css
-          grep -q 'premium-v4-route-coherence.css?v=2.3.12-v4coherence1' premium-theme-polish.css
+          grep -q 'premium-v4-motion.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v4-contrast.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v4-route-coherence.css?v=2.3.21-v57art1' premium-theme-polish.css
           grep -q -- '--pv4-contrast-ready:1' premium-v4-contrast.css
           grep -q 'color:#071531' premium-v4-contrast.css
           grep -q 'color:#140b28' premium-v4-contrast.css
           grep -q 'color:#041511' premium-v4-contrast.css
-          grep -q 'premium-nav-geometry-hotfix.css?v=2.3.4-p0nav1' premium-theme-polish.css
-          test "$(tail -n 1 premium-theme-polish.css)" = "@import url('./premium-nav-geometry-hotfix.css?v=2.3.4-p0nav1');"
+          grep -q 'premium-nav-geometry-hotfix.css?v=2.3.21-v57art1' premium-theme-polish.css
+          test "$(tail -n 1 premium-theme-polish.css)" = "@import url('./premium-nav-geometry-hotfix.css?v=2.3.21-v57art1');"
           if [ -f premium-v5-fidelity-reset.css ]; then
             grep -q -- '--pv55-ready:1' premium-v5-fidelity-reset.css
             grep -q -- '--pv55-refine-ready:1' premium-v5-fidelity-refine.css
-            v4="$(grep -n 'premium-v4-contrast.css?v=2.3.15-v4contrast1' premium-theme-polish.css | cut -d: -f1)"
-            v55="$(grep -n 'premium-v5-fidelity-reset.css?v=2.3.20-v5fidelity1' premium-theme-polish.css | cut -d: -f1)"
+            v4="$(grep -n 'premium-v4-contrast.css?v=2.3.21-v57art1' premium-theme-polish.css | cut -d: -f1)"
+            v55="$(grep -n 'premium-v5-fidelity-reset.css?v=2.3.21-v57art1' premium-theme-polish.css | cut -d: -f1)"
             test "$v4" -lt "$v55"
           fi
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"

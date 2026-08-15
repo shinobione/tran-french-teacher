@@ -34,22 +34,22 @@ jobs:
           grep -q 'safe-area-inset-bottom' premium-nav-geometry-hotfix.css
           grep -q 'translate3d(-50%,0,0)' premium-nav-geometry-hotfix.css
           grep -q 'z-index:10020' premium-nav-geometry-hotfix.css
-          grep -q '2.3.4-p0nav1' premium-theme-polish.css
-          grep -q '2.3.19-v5mockup1' theme-controller.js
-          grep -q 'premium-v4-home.css?v=2.3.6-v4home2' premium-theme-polish.css
-          grep -q 'premium-v4-progress.css?v=2.3.7-v4progress1' premium-theme-polish.css
-          grep -q 'premium-v4-practice.css?v=2.3.8-v4practice1' premium-theme-polish.css
-          grep -q 'premium-v4-listening.css?v=2.3.9-v4listening1' premium-theme-polish.css
-          grep -q 'premium-v4-settings.css?v=2.3.10-v4settings1' premium-theme-polish.css
-          grep -q 'premium-v4-ownership-hotfix.css?v=2.3.11-v4ownership1' premium-theme-polish.css
-          grep -q 'premium-v4-route-coherence.css?v=2.3.12-v4coherence1' premium-theme-polish.css
-          grep -q 'premium-v4-motion.css?v=2.3.14-v4motion1' premium-theme-polish.css
-          grep -q 'premium-v4-contrast.css?v=2.3.15-v4contrast1' premium-theme-polish.css
-          grep -q 'premium-v5-coherence.css?v=2.3.16-v5coherence1' premium-theme-polish.css
-          grep -q 'premium-v5-listening-settings.css?v=2.3.16-v5coherence1' premium-theme-polish.css
-          grep -q 'premium-v5-utility.css?v=2.3.17-v5utility1' premium-theme-polish.css
-          grep -q 'premium-v5-islands.css?v=2.3.18-v5islands1' premium-theme-polish.css
-          grep -q 'premium-v5-mockup-convergence.css?v=2.3.19-v5mockup1' premium-theme-polish.css
+          grep -q '2.3.21-v57art1' premium-theme-polish.css
+          grep -q '2.3.21-v57art1' theme-controller.js
+          grep -q 'premium-v4-home.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v4-progress.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v4-practice.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v4-listening.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v4-settings.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v4-ownership-hotfix.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v4-route-coherence.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v4-motion.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v4-contrast.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v5-coherence.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v5-listening-settings.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v5-utility.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v5-islands.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v5-mockup-convergence.css?v=2.3.21-v57art1' premium-theme-polish.css
           grep -q 'route/page containers' premium-v4-motion.css
       - name: Sanctuaries remain exact
         run: |

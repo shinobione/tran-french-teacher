@@ -15,25 +15,25 @@ jobs:
       - name: Static contracts
         run: |
           node --check theme-controller.js
-          grep -q 'theme-controller.js?v=2.3.20-v5fidelity1' index.html
-          grep -q "version:'1.2.2-v5fidelity'" theme-controller.js
-          grep -q 'premium-v4-home.css?v=2.3.6-v4home2' premium-theme-polish.css
-          grep -q 'premium-v4-progress.css?v=2.3.7-v4progress1' premium-theme-polish.css
-          grep -q 'premium-v4-practice.css?v=2.3.8-v4practice1' premium-theme-polish.css
-          grep -q 'premium-v4-listening.css?v=2.3.9-v4listening1' premium-theme-polish.css
-          grep -q 'premium-v4-settings.css?v=2.3.10-v4settings1' premium-theme-polish.css
-          grep -q 'premium-v4-ownership-hotfix.css?v=2.3.11-v4ownership1' premium-theme-polish.css
-          grep -q 'premium-v4-route-coherence.css?v=2.3.12-v4coherence1' premium-theme-polish.css
-          grep -q 'premium-v4-motion.css?v=2.3.14-v4motion1' premium-theme-polish.css
-          grep -q 'premium-v4-contrast.css?v=2.3.15-v4contrast1' premium-theme-polish.css
-          grep -q 'premium-v5-coherence.css?v=2.3.16-v5coherence1' premium-theme-polish.css
-          grep -q 'premium-v5-listening-settings.css?v=2.3.16-v5coherence1' premium-theme-polish.css
-          grep -q 'premium-v5-utility.css?v=2.3.17-v5utility1' premium-theme-polish.css
-          grep -q 'premium-v5-islands.css?v=2.3.18-v5islands1' premium-theme-polish.css
-          grep -q 'premium-v5-mockup-convergence.css?v=2.3.19-v5mockup1' premium-theme-polish.css
-          grep -q 'premium-v5-fidelity-reset.css?v=2.3.20-v5fidelity1' premium-theme-polish.css
-          grep -q 'premium-v5-fidelity-refine.css?v=2.3.20-v5fidelity2' premium-theme-polish.css
-          grep -q 'premium-v5-fidelity-card-hotfix.css?v=2.3.20-v5fidelity2' premium-theme-polish.css
+          grep -q 'theme-controller.js?v=2.3.21-v57art1' index.html
+          grep -q "version:'1.3.0-v57art'" theme-controller.js
+          grep -q 'premium-v4-home.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v4-progress.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v4-practice.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v4-listening.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v4-settings.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v4-ownership-hotfix.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v4-route-coherence.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v4-motion.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v4-contrast.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v5-coherence.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v5-listening-settings.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v5-utility.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v5-islands.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v5-mockup-convergence.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v5-fidelity-reset.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v5-fidelity-refine.css?v=2.3.21-v57art1' premium-theme-polish.css
+          grep -q 'premium-v5-fidelity-card-hotfix.css?v=2.3.21-v57art1' premium-theme-polish.css
           grep -q -- '--pv4-home-ready:1' premium-v4-home.css
           grep -q -- '--pv4-progress-ready:1' premium-v4-progress.css
           grep -q -- '--pv4-practice-ready:1' premium-v4-practice.css
@@ -82,8 +82,8 @@ jobs:
           grep -q "listeningSlowRate!=='0.65'" premium-v4-listening-tribunal.html
           grep -q "listeningEngineSlowRate!=='0.68'" premium-v4-listening-tribunal.html
           test "$(git hash-object premium-theme-polish-v2-base.css)" = "b5578b1fae55426f06eac30e227d94cf4dfb2491"
-          grep -q 'Original is intentionally untouched' premium-depth-pass.css
-          grep -q 'Original remains the visual witness' premium-v4-route-coherence.css
+          grep -q 'V5.7 extends the same depth grammar to Original' premium-depth-pass.css
+          grep -q 'V5.7 extends the same atomic route ownership to Original' premium-v4-route-coherence.css
           ! grep -q 'francais-avec-luc:learner:v1' theme-controller.js
           ! grep -q 'francais-avec-luc:learner:v1' premium-v4-settings.css
           ! grep -q 'francais-avec-luc:learner:v1' premium-v4-ownership-hotfix.css

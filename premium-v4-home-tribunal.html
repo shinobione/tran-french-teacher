@@ -16,7 +16,7 @@
 
       w.FrenchTranquilleThemes.apply('original');
       await wait(120);
-      if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv4-home-ready').trim())throw Error('original-v4-leak');
+      if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv4-home-ready').trim()!=='1')throw Error('original-v4-parity-missing');
 
       for(const [width,height] of sizes){
         frame.style.width=`${width}px`;
@@ -70,8 +70,8 @@
       for(const k of keys)if(before[k]!==w.localStorage.getItem(k))throw Error(`store-mutated:${k}`);
       w.FrenchTranquilleThemes.apply('original');
       await wait(80);
-      if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv4-home-ready').trim())throw Error('original-v4-leak-after');
-      finish(true,'viewports=390,430,768,1280,1440;themes=aurora,sunset,jade;overflow=0;hero=flat;logo=contained;cta>=54;quick-actions=contained;desktop=two-column;stores=unchanged;original=witness');
+      if(w.getComputedStyle(d.documentElement).getPropertyValue('--pv4-home-ready').trim()!=='1')throw Error('original-v4-parity-missing-after');
+      finish(true,'viewports=390,430,768,1280,1440;themes=aurora,sunset,jade;overflow=0;hero=flat;logo=contained;cta>=54;quick-actions=contained;desktop=two-column;stores=unchanged;original=parity');
     }catch(e){finish(false,e.message)}
   },3000);
   setTimeout(()=>{if(!root.dataset.premiumV4HomeTribunal)finish(false,'timeout')},26000);
