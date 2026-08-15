@@ -15,8 +15,8 @@
 | Item | Canonical state |
 |---|---|
 | Product pedagogy | **V2.3.0 · Build 34** |
-| Visual maintenance line | **Premium V5.8 merged · V5.9 next** |
-| Verified `main` checkpoint at reconciliation | **`bf196a101e9d444650390e94a9ba8adf5f19009c`** |
+| Visual maintenance line | **Premium V5.9 technically closed · V5.10 physical gate active** |
+| Verified `main` checkpoint at reconciliation | **`6477e980ea21f087a9d30a260dbe4630484e4b36`** |
 | Curriculum | **52 lessons / 313 items** |
 | Scenario | **44 situations / 132 turns** |
 | Speaking Loop | **52/52 · max 2 moments / lesson** |
@@ -34,10 +34,10 @@
 - V5.6 asset candidates were produced and user-approved.
 - V5.7 four-theme Premium artwork integration was user-approved, merged and delivered.
 - V5.8 DEBUG FR / theme decoupling was merged as PR #128.
-- The next active runtime slice is **V5.9 — Shared UI Coherence + Fluidity / Premium Feel**.
-- V5.9 is **not** a theme-by-theme patch march.
-- The physical installed-iPhone/PWA final Premium verdict remains reserved for V5.10.
-- Build 35 remains blocked until #114 is explicitly closed after final user PASS.
+- V5.9 shared-system coherence was implemented as real rollback checkpoints **#137 → #141** and is **technically closed by automated QA**.
+- V5.9 solved the field findings as shared-system contracts rather than a theme-by-theme patch march.
+- The **active gate is V5.10**: physical installed-iPhone/PWA human field verdict.
+- Automation does **not** close #114; Build 35 remains blocked until explicit final user FIELD PASS and #114 closure.
 
 ---
 
@@ -117,8 +117,8 @@ V5.5 stable structural base ✅
 → V5.6 Premium Visual Identity Assets ✅
 → V5.7 Original Theme Parity + Theme Art Integration ✅
 → V5.8 DEBUG FR / Theme Decoupling ✅
-→ V5.9 Shared UI Coherence + Fluidity / Premium Feel
-→ V5.10 Global Visual QA + Physical iPhone verdict
+→ V5.9 Shared UI Coherence + Fluidity / Premium Feel ✅
+→ V5.10 Global Visual QA + Physical iPhone verdict **← ACTIVE FIELD GATE**
 → V2.3.x / Build 34 governance + documentation closure
 → close #114 only after explicit user PASS
 → Build 35 Memory Evidence v2 / Migration Readiness
@@ -249,7 +249,46 @@ V5.8 solved the **state ownership** problem. V5.9 still owns the quality of the 
 
 ---
 
-# 6. V5.9 — Shared UI Coherence + Fluidity / Premium Feel — ACTIVE NEXT
+# 6. V5.9 — Shared UI Coherence + Fluidity / Premium Feel — TECHNICALLY CLOSED
+
+## 6.0 Technical closeout — 2026-08-15
+
+V5.9 is **technically closed by automated QA**. This does not replace the V5.10 physical installed-iPhone/PWA user verdict.
+
+Real independently revertable checkpoint chain:
+
+```text
+V5.9A interactions / ownership
+PR #137 → 7176b8e53808a6178ac935ddba6da372b26b37f6
+
+V5.9B shared Lesson/Eiffel layout
+PR #138 → 89a5a4892a2ab3f89524f18cd4aa0ee0f6a56e6e
+
+V5.9C shared Premium system + hidden DEBUG
+PR #139 → 2a2e845ea4fe144aae3a62a98f301539a8d2d989
+
+V5.9D goat brand icons + PWA wiring
+PR #140 → ef0449b704b2eb130a3550d162433b27e248a86f
+
+V5.9E global technical QA
+PR #141 → 6477e980ea21f087a9d30a260dbe4630484e4b36
+```
+
+The earlier scaffold-only PRs **#130–#134 are not product checkpoints**; that false attempt was tree-rolled back before the real chain above.
+
+V5.9E clean candidate passed the complete historical workflow suite. Its global proof covers A+B+C+D together, real-app four-theme travel, six learner stores unchanged, the shared Lesson/Eiffel geometry at all five target viewports, reduced-motion, no learner-shell boot error, and deterministic same-browser Service-Worker-controlled offline PWA boot via Chrome DevTools Protocol.
+
+Resolved implementation map:
+
+- duplicate Speaking self-record ownership → **V5.9A**;
+- whole-card `Giới thiệu` hit target → **V5.9A**;
+- shared Premium Real Life icon → **V5.9A**;
+- one cross-theme Lesson/Eiffel geometry → **V5.9B**;
+- shared button/card/interaction grammar + discreet cross-theme DEBUG entry → **V5.9C**;
+- goat favicon / Apple Touch / PWA any + maskable identity and offline wiring → **V5.9D**;
+- aggregate technical tribunal + deterministic PWA offline harness → **V5.9E**.
+
+**Canonical next step: V5.10 physical installed-iPhone/PWA field gate. Build 35 remains blocked.**
 
 ## Goal
 
@@ -457,18 +496,18 @@ Motion must be short, restrained, interruptible and optional under `prefers-redu
 
 ## 6.7 V5.9 Definition of Done
 
-- [ ] Speaking block exposes one self-record CTA and one note only.
-- [ ] `Giới thiệu` / About whole-card hit target works.
-- [ ] Real Life icon belongs to the shared Premium icon family.
-- [ ] One shared cross-theme lesson-card layout contract is implemented.
-- [ ] No lesson identity / Eiffel overlap in any theme at target viewports.
-- [ ] Buttons/cards visibly converge toward the approved mockup family.
-- [ ] DEBUG/admin entry works on all themes and remains discreet in learner mode.
-- [ ] Local interaction feel is smoother without route crossfades.
-- [ ] Reduced-motion keeps full functionality.
-- [ ] Navigation/audio/learner-store guards remain green.
-- [ ] V5.9 candidate is materialized in git and a PR is opened.
-- [ ] **Coding agent STOPS at candidate PR unless explicitly instructed otherwise.**
+- [x] Speaking block exposes one self-record CTA and one note only.
+- [x] `Giới thiệu` / About whole-card hit target works.
+- [x] Real Life icon belongs to the shared Premium icon family.
+- [x] One shared cross-theme lesson-card layout contract is implemented.
+- [x] No lesson identity / Eiffel overlap in any theme at target viewports.
+- [x] Buttons/cards visibly converge toward the approved mockup family.
+- [x] DEBUG/admin entry works on all themes and remains discreet in learner mode.
+- [x] Local interaction feel is smoother without route crossfades.
+- [x] Reduced-motion keeps full functionality.
+- [x] Navigation/audio/learner-store guards remain green.
+- [x] V5.9 candidate is materialized in git and a PR is opened.
+- [x] **Coding agent STOPS at candidate PR unless explicitly instructed otherwise.**
 
 ## 6.8 V5.9 execution policy
 
@@ -497,11 +536,11 @@ Those are a separate control/review step unless explicitly delegated.
 
 ---
 
-# 7. V5.10 — Final Premium QA / Physical gate
+# 7. V5.10 — Final Premium QA / Physical gate — ACTIVE
 
-This is the **actual closure gate for #114**.
+This is the **active actual closure gate for #114**.
 
-Automation alone cannot close this phase.
+V5.9 automated technical QA is green. **Automation alone cannot close this phase:** the installed-iPhone/PWA human field verdict is still required.
 
 ## Automated matrix
 
