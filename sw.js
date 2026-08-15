@@ -38,7 +38,7 @@ const DEBUG='2.3.22-v58debug1';
 const V59A='2.3.23-v59a1';
 const V59B='2.3.24-v59b1';
 const V59C='2.3.25-v59c1';
-const V510ICONS='2.3.31-v510png1';
+const V510ICONS='2.3.35-v510lessonidentity1';
 const CORE=[
   './','./index.html',
   `./styles.css?v=${V}`,`./src/ui/brand.css?v=${V}`,`./src/pedagogy/learning-memory.css?v=${V}`,`./src/ui/visual-pass.css?v=${V}`,`./src/ui/lucie-avatar.css?v=${V}`,
@@ -47,7 +47,7 @@ const CORE=[
   './src/ui/appearance-themes.css?v=1.1.0-v57art1',
   `./src/premium/premium-theme-polish-v2-base.css?v=${V5F}`,`./src/premium/premium-depth-pass.css?v=${V5F}`,`./src/premium/premium-depth-mobile-geometry.css?v=${V5F}`,`./src/premium/premium-mockup-polish-v3.css?v=${V5F}`,
   `./src/premium/premium-v4-home.css?v=${V5F}`,`./src/premium/premium-v4-progress.css?v=${V5F}`,`./src/premium/premium-v4-practice.css?v=${V5F}`,`./src/premium/premium-v4-listening.css?v=${V5F}`,`./src/premium/premium-v4-settings.css?v=${V5F}`,`./src/premium/premium-v4-ownership-hotfix.css?v=${V5F}`,`./src/premium/premium-v4-route-coherence.css?v=${COHERENCE}`,`./src/premium/premium-v4-motion.css?v=${MOTION}`,`./src/premium/premium-v4-contrast.css?v=${V4}`,`./src/premium/premium-v5-coherence.css?v=${V5}`,`./src/premium/premium-v5-listening-settings.css?v=${V5}`,`./src/premium/premium-v5-utility.css?v=${V5U}`,`./src/premium/premium-v5-islands.css?v=${V5I}`,`./src/premium/premium-v5-mockup-convergence.css?v=${V5M}`,`./src/premium/premium-v5-fidelity-reset.css?v=${V5F}`,`./src/premium/premium-v5-fidelity-refine.css?v=${V5FR}`,`./src/premium/premium-v5-fidelity-card-hotfix.css?v=${V5FR}`,`./src/premium/premium-v5-fidelity-settings-hotfix.css?v=${V5FR}`,`./src/premium/premium-nav-geometry-hotfix.css?v=${V5F}`,`./src/premium/premium-theme-polish.css?v=${V5F}`,
-  `./src/premium/premium-v59-interactions.css?v=${V59A}`,`./src/premium/premium-v59-lesson-layout.css?v=${V59B}`,`./src/premium/premium-v59-system.css?v=${V59C}`,`./src/premium/premium-v510-practice-icons.css?v=${V510ICONS}`,
+  `./src/premium/premium-v59-interactions.css?v=${V59A}`,`./src/premium/premium-v59-lesson-layout.css?v=${V59B}`,`./src/premium/premium-v59-system.css?v=${V59C}`,`./src/premium/premium-v510-practice-icons.css?v=${V510ICONS}`,`./src/premium/premium-v510-lesson-identity.css?v=${V510ICONS}`,
   `./src/core/data-recovery-core.js?v=${B28}`,`./src/core/data-recovery.js?v=${B28}`,
   `./src/core/progress-safety.js?v=${V}`,`./app.js?v=${V}`,`./src/pedagogy/curriculum-stage2.js?v=${V}`,`./src/pedagogy/curriculum-stage3.js?v=${V}`,`./src/core/stage2-boot.js?v=${NAV}`,`./src/core/field-navigation-runtime.js?v=${NAV}`,`./src/core/field-audio-session.js?v=${AUDIO}`,`./src/core/theme-controller.js?v=${V5F}`,`./src/premium/premium-v5-fidelity-reset.js?v=${V5F}`,`./src/premium/premium-v59-interactions.js?v=${V59A}`,`./src/premium/premium-v59-lesson-layout.js?v=${V59B}`,`./src/premium/premium-v59-system.js?v=${V59C}`,`./src/premium/premium-v510-practice-icons.js?v=${V510ICONS}`,
   `./src/core/debug-fr.js?v=${DEBUG}`,`./voice-ios.js?v=${V}`,`./free-voice.js?v=${V}`,`./src/pedagogy/learning-memory.js?v=${V}`,`./src/pedagogy/error-intelligence.js?v=${V}`,
