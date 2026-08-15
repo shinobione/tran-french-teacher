@@ -59,8 +59,12 @@ jobs:
             --virtual-time-budget=30000 \
             --dump-dom 'http://127.0.0.1:4173/premium-v510-practice-icons-tribunal.html' \
             >/tmp/ft-v510-icons.html
-          grep -q 'data-v510-practice-icons="ok"' /tmp/ft-v510-icons.html
-          grep -q 'V5.10 practice pictogram system V2 OK' /tmp/ft-v510-icons.html
+          if ! grep -q 'data-v510-practice-icons="ok"' /tmp/ft-v510-icons.html || ! grep -q 'V5.10 practice pictogram system V2 OK' /tmp/ft-v510-icons.html; then
+            echo '--- V5.10 pictogram tribunal failure ---'
+            grep -o 'FAIL: [^<]*' /tmp/ft-v510-icons.html || true
+            tail -n 80 /tmp/ft-v510-icons.html || true
+            exit 1
+          fi
       - name: Stop static server
         if: always()
         shell: bash
