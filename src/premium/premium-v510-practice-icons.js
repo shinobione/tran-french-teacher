@@ -1,10 +1,11 @@
 (() => {
   'use strict';
 
-  const VERSION = '2.3.32-v510headers1';
+  const VERSION = '2.3.32-v510headers2';
   const root = document.documentElement;
   const DEBUG_KEY = 'tran-french-teacher:debug-fr:v1';
   let scheduled = false;
+  let conversationOwner = 'real-life';
 
   const ASSETS = Object.freeze({
     conversation: './assets/premium/practice/speak-premium.webp',
@@ -100,8 +101,12 @@
   function conversationFeature() {
     const screen = document.querySelector('.screen-conversation');
     if (!screen) return null;
+    // A running Scenario is authoritative Real-Life state, even if Session UX has not yet
+    // rewritten an older voice mode flag during the route transition.
+    if (screen.querySelector('.scenario-runner,.scenario-done')) return 'real-life';
+    if (conversationOwner === 'real-life') return 'real-life';
     const mode = root.dataset.sessionPracticeMode || '';
-    if (mode === 'voice') return 'speak';
+    if (conversationOwner === 'speak' || mode === 'voice') return 'speak';
     if (screen.querySelector('#free-voice-card:not(.session-mode-hidden)')) return 'speak';
     // Product mapping is intentional: the page titled Conversation is the Real-Life surface.
     // Speak owns only the explicit oral-training mode ("Répondre à l’oral").
@@ -148,6 +153,21 @@
       decorate();
     });
   }
+
+  // Remember the product route intent before legacy/Session UX layers begin mutating the
+  // shared Conversation DOM. This prevents a stale voice-mode flag from giving Real-Life
+  // the Speak artwork while changing practice modes.
+  document.addEventListener('click', event => {
+    const practice = event.target.closest('[data-b27-practice-action]');
+    if (practice?.dataset.b27PracticeAction === 'real-life') conversationOwner = 'real-life';
+    if (practice?.dataset.b27PracticeAction === 'conversation') conversationOwner = 'real-life';
+
+    const mode = event.target.closest('[data-session-practice-mode]')?.dataset.sessionPracticeMode;
+    if (mode === 'voice') conversationOwner = 'speak';
+    if (mode === 'scenario' || mode === 'guided') conversationOwner = 'real-life';
+    if (event.target.closest('[data-session-practice-back]')) conversationOwner = 'real-life';
+    schedule();
+  }, true);
 
   new MutationObserver(schedule).observe(document.body, { childList: true, subtree: true });
   window.addEventListener('focus', schedule);
