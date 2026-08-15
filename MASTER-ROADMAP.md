@@ -267,8 +267,8 @@ assets/premium/v5.6-lesson-eiffel-review.png
 - [x] 4 transparent RGBA `lesson-eiffel-v2.png` candidates generated.
 - [x] Background and lesson-Eiffel review boards generated.
 - [x] Asset manifest documents ownership/status.
-- [ ] Human approval of corrected dark Original V2 candidate.
-- [ ] Human approval of the 4 transparent lesson-card Eiffel V2 candidates.
+- [x] Human approval of corrected dark Original V2 candidate — **PASS global, 2026-08-15**.
+- [x] Human approval of the 4 transparent lesson-card Eiffel V2 candidates — **PASS global, 2026-08-15**.
 - [ ] Runtime integration — intentionally deferred to V5.7.
 
 ---
@@ -749,6 +749,7 @@ Status semantics:
 
 - **LOCKED** = explicitly selected by the user; do not regenerate silently.
 - **CANDIDATE** = generated and preserved; can be replaced only after human comparison.
+- **APPROVED** = explicitly accepted for integration; not yet wired or field-tested.
 - **WIRED** = runtime actually uses the asset.
 - **FIELD PASS** = physically validated on the installed iPhone/PWA.
 

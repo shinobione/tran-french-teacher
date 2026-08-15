@@ -25,7 +25,7 @@
 | Area | State |
 |---|---|
 | Product pedagogy | **V2.3.0 · Build 34** |
-| Visual line | **Premium V5.5 structural base** |
+| Visual line | **Premium V5.6 assets human-approved · V5.7 next** |
 | Curriculum | **52 lessons / 313 items** |
 | Scenario | **44 situations / 132 turns** |
 | Speaking Loop | **52/52 · max 2 moments / lesson** |
@@ -71,8 +71,8 @@ V5.6 status from `MASTER-ROADMAP.md`:
 - 4 genuine-alpha `lesson-eiffel-v2.png` candidates generated ✅
 - comparison boards generated under `assets/premium/v5.6-*-review.png` ✅
 - asset manifest/ownership preserved ✅
-- **human approval of corrected dark Original V2 candidate pending**
-- **human approval of the 4 transparent lesson-card Eiffel V2 candidates pending**
+- corrected dark Original V2 candidate: **USER PASS 2026-08-15** ✅
+- four transparent lesson-card Eiffel V2 candidates: **USER PASS 2026-08-15** ✅
 - runtime integration deliberately deferred to **V5.7**
 
 Do not silently regenerate/replace user-locked Aurora, Sunset, or Nocturne backgrounds.
@@ -108,12 +108,8 @@ Fresh agents must re-check CI after any newer commit instead of inheriting these
 
 ### NEXT exact slice
 
-1. **Human-review the new V5.6 V2 candidates** still awaiting approval:
-   - `assets/premium/v5.6-background-review.png`;
-   - `assets/premium/v5.6-lesson-eiffel-review.png`;
-   - corrected dark Original `background-v2.png`;
-   - four transparent `lesson-eiffel-v2.png` assets.
-2. After approval, execute **V5.7 — Original Theme Parity + Theme Art Integration**:
+1. Merge draft PR **#126** only after its PASS checkpoint CI is green.
+2. Execute **V5.7 — Original Theme Parity + Theme Art Integration**:
    - wire all four local background assets;
    - wire all four lesson Eiffel assets;
    - remove the visible legacy/CSS “Paint Eiffel” treatment;

@@ -9,6 +9,7 @@
 - **LOCKED** — visual source identity explicitly selected by the user. Do not silently regenerate or replace it.
 - **REJECTED** — preserved only as historical/rejection evidence; never wire it as a final asset.
 - **CANDIDATE** — generated and preserved in the repository, pending human visual approval.
+- **APPROVED** — explicitly accepted by the user for the next integration phase; not yet wired or field-tested.
 - **WIRED** — the runtime actually references this asset.
 - **FIELD PASS** — physically validated on the installed iPhone/PWA.
 
@@ -41,7 +42,7 @@ assets/premium/themes/original/background.webp
 | Sunset | **LOCKED** | 240×426 | `0dbbaa5334a79fb5e15cce2fee1526ddfe75606106bad24723b6c4cff0c1414c` | Orange/coral/violet Paris sunset |
 | Nocturne | **LOCKED** | 320×569 | `71bed3c1df77c7bd23ea6cbc46f25a948b67750cead56298301b6184c41a4303` | Dark jade/teal/gold Paris night |
 | Original V1 (`background.webp`) | **REJECTED** | 240×426 | `6cfe0a3fc3c8f2fe23da84cc9dd20590ba4322f78a6f7a855b5967da337f6372` | Too bright, too blue/pink and too close to Aurora |
-| Original V2 (`background-v2.png`) | **CANDIDATE** | 864×1821 | `9e221bb6be7d879937226725c0ca9732ab932216092e70e23eec56f6df9d1305` | Near-black midnight navy, cold cyan/silver, restrained accents, dark flagship Paris night |
+| Original V2 (`background-v2.png`) | **APPROVED** | 864×1821 | `9e221bb6be7d879937226725c0ca9732ab932216092e70e23eec56f6df9d1305` | Near-black midnight navy, cold cyan/silver, restrained accents, dark flagship Paris night |
 
 ## 1.1 The three user-locked sources
 
@@ -73,7 +74,7 @@ Canonical Original direction:
 - **no Sunset orange dominance**;
 - **no Nocturne jade/gold dominance**.
 
-The first `background.webp` image is explicitly **REJECTED**. The corrected `background-v2.png` is the only Original candidate in the V5.6 human gate.
+The first `background.webp` image is explicitly **REJECTED**. The corrected `background-v2.png` received the user’s **global PASS on 2026-08-15** and is approved for V5.7 integration.
 
 ---
 
@@ -103,10 +104,10 @@ assets/premium/themes/original/lesson-eiffel-v2.png
 | Sunset V1 WebP | **REJECTED** | 320×240 | `e62b14f58ab33828181e6c1e1e68f963f8818a81fa28d8d481d078b3da99d312` |
 | Nocturne V1 WebP | **REJECTED** | 320×240 | `9a514af23cdb1aa325ccd32a9b10c31b6bf3a80a0d059fb821ee042fb0141a7f` |
 | Original V1 WebP | **REJECTED** | 320×240 | `a2e5170d06b157ba6916e79b77ca981ea3b034bc19238c63bea6c744ad70254f` |
-| Aurora V2 PNG | **CANDIDATE** | 1254×1254 RGBA | `fd58d88a750149e19a0c690677ade88edb2e6d842e751d3de1306fa234210256` |
-| Sunset V2 PNG | **CANDIDATE** | 1254×1254 RGBA | `c8984e8b6be34dd46e6eade2b7726b43266f1fbf21e42be98a3ac68d68482787` |
-| Nocturne V2 PNG | **CANDIDATE** | 1254×1254 RGBA | `64c295e207d4de164edec27153c6c2b2d42051186f560639f6a8de343d46cd24` |
-| Original V2 PNG | **CANDIDATE** | 1254×1254 RGBA | `b067b85e208bb3bda16196376982beae731ddd1bb52bfa7e8ae2a17e33fd6831` |
+| Aurora V2 PNG | **APPROVED** | 1254×1254 RGBA | `fd58d88a750149e19a0c690677ade88edb2e6d842e751d3de1306fa234210256` |
+| Sunset V2 PNG | **APPROVED** | 1254×1254 RGBA | `c8984e8b6be34dd46e6eade2b7726b43266f1fbf21e42be98a3ac68d68482787` |
+| Nocturne V2 PNG | **APPROVED** | 1254×1254 RGBA | `64c295e207d4de164edec27153c6c2b2d42051186f560639f6a8de343d46cd24` |
+| Original V2 PNG | **APPROVED** | 1254×1254 RGBA | `b067b85e208bb3bda16196376982beae731ddd1bb52bfa7e8ae2a17e33fd6831` |
 
 Theme directions:
 
@@ -133,7 +134,7 @@ Theme directions:
 - restrained pink-magenta;
 - calmer flagship identity clearly distinct from Aurora.
 
-All four V2 files have genuine alpha transparency (`RGBA`, alpha range `0..255`), large transparent margins, no opaque sky, no baked card and no visible rectangular border. They remain **CANDIDATES** until human approval.
+All four V2 files have genuine alpha transparency (`RGBA`, alpha range `0..255`), large transparent margins, no opaque sky, no baked card and no visible rectangular border. The user gave a **global PASS on 2026-08-15**; they are approved for V5.7 integration but are not yet `WIRED` or `FIELD PASS`.
 
 Human-review boards:
 
@@ -171,20 +172,20 @@ assets/premium/themes/
 ├── aurora/
 │   ├── background.webp
 │   ├── lesson-eiffel.webp          # REJECTED evidence
-│   └── lesson-eiffel-v2.png        # CANDIDATE, alpha
+│   └── lesson-eiffel-v2.png        # APPROVED, alpha
 ├── sunset/
 │   ├── background.webp
 │   ├── lesson-eiffel.webp          # REJECTED evidence
-│   └── lesson-eiffel-v2.png        # CANDIDATE, alpha
+│   └── lesson-eiffel-v2.png        # APPROVED, alpha
 ├── nocturne/
 │   ├── background.webp
 │   ├── lesson-eiffel.webp          # REJECTED evidence
-│   └── lesson-eiffel-v2.png        # CANDIDATE, alpha
+│   └── lesson-eiffel-v2.png        # APPROVED, alpha
 └── original/
     ├── background.webp             # REJECTED evidence
-    ├── background-v2.png           # CANDIDATE
+    ├── background-v2.png           # APPROVED
     ├── lesson-eiffel.webp          # REJECTED evidence
-    └── lesson-eiffel-v2.png        # CANDIDATE, alpha
+    └── lesson-eiffel-v2.png        # APPROVED, alpha
 ```
 
 ---
