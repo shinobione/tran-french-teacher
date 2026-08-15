@@ -1,0 +1,60 @@
+/* French Trân’quille — V5.10 physical-field shell coherence.
+   Fixes the desktop split-scene / narrow legacy-column mismatch seen in the real field video.
+   Visual geometry only: no pedagogy, stores, navigation semantics, voice or audio behavior. */
+
+html[data-theme]{
+  --v510-feature-shell:980px;
+  --v510-feature-content:1036px;
+}
+
+@media(min-width:1024px){
+  /* V5.7's desktop art crop pushed the Paris scene into a right-side strip.
+     Keep both background layers full-viewport so Practice and its destinations
+     read as one continuous Premium surface. */
+  html[data-theme] body.notranslate,
+  html[data-theme] body > :is(.b27-overlay,.listening-overlay),
+  html[data-theme] body .screen-settings{
+    background-position:center top,center top!important;
+    background-size:cover,cover!important;
+  }
+
+  /* Review / Conversation were still inheriting the historical 720px `.narrow`
+     column while Listening already owns a 980px Premium shell. Normalize only
+     these Practice destinations to that existing Listening width. */
+  html[data-theme] body .screen-review .content,
+  html[data-theme] body .screen-conversation .content{
+    width:min(var(--v510-feature-content),100%)!important;
+    max-width:var(--v510-feature-content)!important;
+    margin-inline:auto!important;
+    padding-inline:28px!important;
+  }
+
+  html[data-theme] body .screen-review .narrow,
+  html[data-theme] body .screen-conversation .narrow,
+  html[data-theme] body .listening-shell{
+    width:min(var(--v510-feature-shell),100%)!important;
+    max-width:var(--v510-feature-shell)!important;
+    margin-inline:auto!important;
+  }
+
+  /* One Feature Header canvas across Review / Conversation / Listening. */
+  html[data-theme] body .screen-review .topbar[data-v510-feature-header],
+  html[data-theme] body .screen-conversation .topbar[data-v510-feature-header],
+  html[data-theme] body .listening-top[data-v510-feature-header]{
+    width:min(var(--v510-feature-shell),100%)!important;
+    max-width:var(--v510-feature-shell)!important;
+    margin-inline:auto!important;
+  }
+
+  /* V5.10's first header pass capped the identity at 560px. On real desktop
+     that made Listening wrap while the sibling destinations stayed one-line. */
+  html[data-theme] body .topbar[data-v510-feature-header] > .ft-v510-feature-identity,
+  html[data-theme] body .listening-top[data-v510-feature-header] > .ft-v510-feature-identity{
+    max-width:none!important;
+  }
+
+  html[data-theme] body .ft-v510-feature-title{
+    white-space:nowrap!important;
+    text-wrap:nowrap!important;
+  }
+}
