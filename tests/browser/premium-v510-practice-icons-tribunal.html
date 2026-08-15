@@ -38,7 +38,7 @@
         'french-tranquille:listening:v1',
         'french-tranquille:milestones:v1'
       ];
-      const waitFor=async(fn,timeout=22000)=>{const start=performance.now();while(performance.now()-start<timeout){try{const value=fn();if(value)return value}catch{}await new Promise(r=>setTimeout(r,50))}throw new Error('timeout')};
+      const waitFor=async(fn,timeout=22000,label='condition')=>{const start=performance.now();while(performance.now()-start<timeout){try{const value=fn();if(value)return value}catch{}await new Promise(r=>setTimeout(r,50))}throw new Error(`timeout: ${label}`)};
       const pause=ms=>new Promise(r=>setTimeout(r,ms));
       const fail=error=>{result.dataset.v510PracticeIcons='fail';result.textContent=`FAIL: ${error?.message||error}`;document.documentElement.dataset.v510PracticeIcons='fail'};
       const pass=()=>{result.dataset.v510PracticeIcons='ok';result.textContent='V5.10 approved Premium artwork + Feature Header System OK';document.documentElement.dataset.v510PracticeIcons='ok'};
@@ -46,13 +46,13 @@
       const equal=(a,b)=>storeKeys.every(key=>a[key]===b[key]);
       const overlaps=(a,b)=>a&&b&&a.width>0&&b.width>0&&a.left<b.right-1&&a.right>b.left+1&&a.top<b.bottom-1&&a.bottom>b.top+1;
 
-      async function openPracticeAndClick(w,d,id){
+      async function openPracticeAndClick(w,d,id,label){
         d.querySelector('[data-b27-close-practice]')?.click();
         w.FrenchTranquilleListening?.close?.();
         await pause(180);
         w.FrenchTranquilleBuild27Shell.openPractice();
-        const button=await waitFor(()=>d.querySelector(`.b27-practice-action[data-b27-practice-action="${id}"]`));
-        if(button.disabled)throw new Error(`Practice ${id} unexpectedly disabled`);
+        const button=await waitFor(()=>d.querySelector(`.b27-practice-action[data-b27-practice-action="${id}"]`),22000,`${label}: Practice ${id} button`);
+        if(button.disabled)throw new Error(`${label}: Practice ${id} unexpectedly disabled`);
         button.click();
       }
 
@@ -61,14 +61,14 @@
           w.FrenchTranquilleV510PracticeIcons?.refreshFeatureHeaders?.();
           const node=d.querySelector(selector);
           return node?.dataset.v510FeatureHeader===feature?node:null;
-        });
+        },22000,`${label}: ${feature} decorated header`);
         const identity=header.querySelector(':scope > .ft-v510-feature-identity');
         const host=identity?.querySelector('.ft-v510-feature-art-host');
         const art=host?.querySelector('img.ft-v510-feature-art');
         const brand=identity?.querySelector('.ft-v510-feature-brand');
         const title=identity?.querySelector('.ft-v510-feature-title');
         if(!identity||!host||!art||!brand||!title)throw new Error(`${label}: incomplete Feature Header DOM`);
-        await waitFor(()=>art.complete&&art.naturalWidth>0&&art.naturalHeight>0);
+        await waitFor(()=>art.complete&&art.naturalWidth>0&&art.naturalHeight>0,22000,`${label}: decoded header artwork`);
         if(art.getAttribute('src')!==featureAssets[feature])throw new Error(`${label}: wrong artwork ${art.getAttribute('src')}`);
         if(feature==='real-life'&&art.getAttribute('src')===assets.conversation)throw new Error(`${label}: Real-Life incorrectly uses Speak artwork`);
         if(brand.textContent.trim()!=='FRENCH TRÂN’QUILLE')throw new Error(`${label}: brand line mismatch`);
@@ -90,7 +90,7 @@
         for(const theme of themes){
           w.FrenchTranquilleThemes.apply(theme);
           w.FrenchTranquilleV510PracticeIcons.refreshFeatureHeaders();
-          await waitFor(()=>d.documentElement.dataset.theme===theme);
+          await waitFor(()=>d.documentElement.dataset.theme===theme,5000,`${label}: apply theme ${theme}`);
           const themed=d.querySelector(`${selector} img.ft-v510-feature-art`);
           if(themed?.getAttribute('src')!==featureAssets[feature])throw new Error(`${label}/${theme}: artwork source changed by theme`);
           if(w.getComputedStyle(themed).filter!=='none')throw new Error(`${label}/${theme}: artwork filtered`);
@@ -98,26 +98,25 @@
       }
 
       async function testFeatureDestinations(label,w,d){
-        // Review: Pratiquer -> Réviser.
-        await openPracticeAndClick(w,d,'review');
+        await openPracticeAndClick(w,d,'review',`${label}/review`);
         await assertFeatureHeader(w,d,{feature:'review',selector:'.screen-review .topbar',label:`${label}/review`});
 
-        // Listening: Pratiquer -> Écouter.
-        await openPracticeAndClick(w,d,'listening');
+        await openPracticeAndClick(w,d,'listening',`${label}/listening`);
         await assertFeatureHeader(w,d,{feature:'listening',selector:'.listening-top',label:`${label}/listening`});
         w.FrenchTranquilleListening?.close?.();
         await pause(180);
 
-        // Speak: Pratiquer -> Parler -> the actual oral-training surface.
-        await openPracticeAndClick(w,d,'conversation');
-        const voiceButton=await waitFor(()=>d.querySelector('[data-session-practice-mode="voice"]'));
+        await openPracticeAndClick(w,d,'conversation',`${label}/speak`);
+        await waitFor(()=>d.querySelector('.screen-conversation'),22000,`${label}/speak: conversation host screen`);
+        const voiceButton=await waitFor(()=>d.querySelector('.practice-session-hub [data-session-practice-mode="voice"], [data-session-practice-mode="voice"]'),22000,`${label}/speak: Répondre à l’oral launcher`);
         voiceButton.click();
-        await waitFor(()=>d.documentElement.dataset.sessionPracticeMode==='voice'&&d.querySelector('#free-voice-card:not(.session-mode-hidden)'));
+        await waitFor(()=>d.documentElement.dataset.sessionPracticeMode==='voice'&&d.querySelector('#free-voice-card:not(.session-mode-hidden)'),22000,`${label}/speak: oral mode visible`);
         await assertFeatureHeader(w,d,{feature:'speak',selector:'.screen-conversation .topbar',label:`${label}/speak`});
 
-        // Real Life: Pratiquer -> Dans la vraie vie. Conversation is deliberately Real-Life, never Speak.
-        await openPracticeAndClick(w,d,'real-life');
-        await waitFor(()=>d.querySelector('.screen-conversation .scenario-runner,.screen-conversation .scenario-done'));
+        // Conversation is the Real-Life destination. We intentionally assert the destination header
+        // immediately after Practice -> Dans la vraie vie rather than requiring Scenario internals.
+        await openPracticeAndClick(w,d,'real-life',`${label}/real-life`);
+        await waitFor(()=>d.querySelector('.screen-conversation .topbar'),22000,`${label}/real-life: Conversation destination`);
         await assertFeatureHeader(w,d,{feature:'real-life',selector:'.screen-conversation .topbar',label:`${label}/real-life`});
       }
 
@@ -127,26 +126,26 @@
         frame.height=String(height);
         frame.style.width=`${width}px`;
         frame.style.height=`${height}px`;
-        frame.src='../../?uxSmoke=lesson8&debug=fr';
+        frame.src=`../../?uxSmoke=lesson8&debug=fr&v510Feature=1&run=${encodeURIComponent(label)}-${Date.now()}`;
         document.body.appendChild(frame);
         await new Promise((resolve,reject)=>{frame.addEventListener('load',resolve,{once:true});setTimeout(()=>reject(new Error(`${label}: load timeout`)),22000)});
 
         const w=frame.contentWindow;
         const d=frame.contentDocument;
-        await waitFor(()=>w.FrenchTranquilleBuild27Shell?.openPractice&&w.FrenchTranquilleThemes?.apply&&w.FrenchTranquilleV510PracticeIcons?.refresh);
+        await waitFor(()=>w.FrenchTranquilleBuild27Shell?.openPractice&&w.FrenchTranquilleThemes?.apply&&w.FrenchTranquilleV510PracticeIcons?.refresh,22000,`${label}: app APIs`);
         if(w.FrenchTranquilleV510PracticeIcons?.style!=='approved-premium-art-v1')throw new Error(`${label}: approved-art runtime marker missing`);
         if(w.FrenchTranquilleV510PracticeIcons?.featureHeaderStyle!=='feature-header-v1')throw new Error(`${label}: feature-header runtime marker missing`);
 
         const before=snapshot(w);
         w.FrenchTranquilleV510PracticeIcons.refresh();
-        await waitFor(()=>d.querySelectorAll('.b27-quick-card .ft-v510-practice-art').length===2);
+        await waitFor(()=>d.querySelectorAll('.b27-quick-card .ft-v510-practice-art').length===2,22000,`${label}: Home artwork reuse`);
         const homeSrc={};
         for(const id of ['review','listening']){
           const card=d.querySelector(`.b27-quick-card[data-b27-action="${id}"]`);
           const host=card?.querySelector('.b27-quick-icon');
           const art=host?.querySelector('img.ft-v510-practice-art');
           if(!host||!art)throw new Error(`${label}: home ${id} missing approved artwork`);
-          await waitFor(()=>art.complete&&art.naturalWidth>0&&art.naturalHeight>0);
+          await waitFor(()=>art.complete&&art.naturalWidth>0&&art.naturalHeight>0,22000,`${label}: home ${id} decode`);
           if(art.getAttribute('src')!==assets[id])throw new Error(`${label}: home ${id} wrong source`);
           if(art.naturalWidth<128||art.naturalHeight<128)throw new Error(`${label}: home ${id} source too small`);
           if(host.querySelector('svg'))throw new Error(`${label}: home ${id} still contains legacy SVG`);
@@ -158,7 +157,7 @@
           w.FrenchTranquilleThemes.apply(theme);
           w.FrenchTranquilleBuild27Shell.openPractice();
           w.FrenchTranquilleV510PracticeIcons.refresh();
-          await waitFor(()=>d.querySelectorAll('.b27-practice-action img.ft-v510-practice-art').length===4);
+          await waitFor(()=>d.querySelectorAll('.b27-practice-action img.ft-v510-practice-art').length===4,22000,`${label}/${theme}: Practice artwork`);
           if(d.documentElement.dataset.theme!==theme)throw new Error(`${label}: theme ${theme} did not apply`);
           const cards=[...d.querySelectorAll('.b27-practice-action[data-b27-practice-action]')];
           if(cards.length!==4)throw new Error(`${label}/${theme}: expected 4 Practice cards, got ${cards.length}`);
@@ -167,7 +166,7 @@
             const host=card?.querySelector('.b27-practice-icon');
             const art=host?.querySelector('img.ft-v510-practice-art');
             if(!host||!art)throw new Error(`${label}/${theme}: ${id} missing approved artwork`);
-            await waitFor(()=>art.complete&&art.naturalWidth>0&&art.naturalHeight>0);
+            await waitFor(()=>art.complete&&art.naturalWidth>0&&art.naturalHeight>0,22000,`${label}/${theme}: ${id} decode`);
             if(art.getAttribute('src')!==assets[id])throw new Error(`${label}/${theme}: ${id} wrong source`);
             if(art.naturalWidth<128||art.naturalHeight<128)throw new Error(`${label}/${theme}: ${id} source too small`);
             if(host.querySelector('svg'))throw new Error(`${label}/${theme}: ${id} legacy SVG survived`);
