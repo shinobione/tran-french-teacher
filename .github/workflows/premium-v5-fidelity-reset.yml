@@ -42,7 +42,7 @@ jobs:
           grep -q 'premium-v5-fidelity-card-hotfix.css?v=2.3.21-v57art1' premium-theme-polish.css
           grep -q 'premium-v5-fidelity-settings-hotfix.css?v=2.3.21-v57art1' premium-theme-polish.css
           grep -q 'premium-v5-fidelity-reset.js?v=2.3.21-v57art1' theme-controller.js
-          grep -q "const CACHE='tran-french-teacher-v2.3.21-b34.13-v57art1'" sw.js
+          grep -q "const CACHE='tran-french-teacher-v2.3.22-b34.14-v58debug1'" sw.js
           grep -q "const V5F='2.3.21-v57art1'" sw.js
           grep -q "const V5FR='2.3.21-v57art1'" sw.js
           grep -q 'premium-v5-fidelity-reset.css?v=${V5F}' sw.js

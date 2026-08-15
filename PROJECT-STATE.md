@@ -9,14 +9,12 @@
 - Reconciled: **2026-08-15**
 - Repository: `shinobione/tran-french-teacher`
 - Default branch: `main`
-- Git state used as the basis of this checkpoint: **`b2b22efbdbef18f4556012171dd42605d80df467`**.
-- That basis commit is the squash merge of PR **#126 — V5.6 Premium asset finalization candidates** after the user’s global PASS.
-- Active V5.7 candidate branch: **`codex/v5.7-theme-art-integration`**.
-- Active draft PR: **#127 — V5.7 integrate four-theme Premium artwork**.
-- First verified candidate commit: **`895351ca341c2dd8e49c6b6a04463f53dd9af3f0`**.
-- Latest runtime-bearing candidate commit: **`56e743e7fe0f232b546138a29292952099bd6e8f`**.
-- Latest fully verified candidate/harness checkpoint before this documentation commit: **`f17f275d0dbc557b0c8a5234ec867baac9c3a179`**.
-- V5.7 runtime wiring exists only on the candidate branch; it is not yet merged, deployed or field-approved.
+- Git state used as the basis of this checkpoint: **`1b404b58bd87cad4eb7860c004d48292e550732e`**.
+- That basis commit is the squash merge of PR **#127 — V5.7 integrate four-theme Premium artwork** after the explicit user PASS.
+- Active V5.8 branch: **`codex/v5.8-debug-theme-decoupling`**.
+- Active V5.8 draft PR: **#128 — V5.8 decouple DEBUG FR from visual themes**.
+- First V5.8 candidate commit: **`622aaa04a0e7493a048adbe63552357c82773c92`**.
+- V5.7 is merged, deployed by Pages and technically green; its visual PASS remains distinct from the later V5.10 physical-device FIELD PASS.
 
 **Important:** this document does not claim that its own commit is the latest `main` SHA. A checkpoint cannot safely self-embed its final commit SHA. Fresh agents must verify current HEAD first.
 
@@ -25,7 +23,7 @@
 | Area | State |
 |---|---|
 | Product pedagogy | **V2.3.0 · Build 34** |
-| Visual line | **Premium V5.7 human-approved · merge authorized** |
+| Visual line | **Premium V5.7 merged · V5.8 DEBUG/theme decoupling active** |
 | Curriculum | **52 lessons / 313 items** |
 | Scenario | **44 situations / 132 turns** |
 | Speaking Loop | **52/52 · max 2 moments / lesson** |
@@ -73,7 +71,7 @@ V5.6 status from `MASTER-ROADMAP.md`:
 - asset manifest/ownership preserved ✅
 - corrected dark Original V2 candidate: **USER PASS 2026-08-15** ✅
 - four transparent lesson-card Eiffel V2 candidates: **USER PASS 2026-08-15** ✅
-- V5.7 runtime integration implemented on `codex/v5.7-theme-art-integration` ✅
+- V5.7 runtime integration merged to `main` by PR #127 ✅
 - V5.7 screenshot matrix: **USER PASS 2026-08-15** ✅
 - physical installed-iPhone/PWA validation remains reserved for the later global V5.10 gate; none of the assets is yet **FIELD PASS**
 
@@ -81,10 +79,12 @@ Do not silently regenerate/replace user-locked Aurora, Sunset, or Nocturne backg
 
 ## CI / deployment evidence at last reconciliation
 
-For current verified `main` basis `b2b22efbdbef18f4556012171dd42605d80df467`, GitHub returned **27 workflow runs** for that exact SHA.
+For current verified `main` basis `1b404b58bd87cad4eb7860c004d48292e550732e`, GitHub returned **27 workflow runs** for that exact SHA.
 
-- GitHub Pages run **`31856811221`**: **SUCCESS** on that exact SHA.
+- GitHub Pages run **`31859562112`**: **SUCCESS** on that exact SHA.
 - Current exact-HEAD result: **27 / 27 SUCCESS**.
+
+Field reliability V2 run **`31859562186`** initially observed the known headless audio-rerender timing flake: the recording was complete with a non-empty Blob, but the playback button missed the observer deadline. The failed job was rerun strictly unchanged and completed **SUCCESS** on attempt 2. No voice/audio product code changed.
 
 For PR #127 verified candidate `f17f275d0dbc557b0c8a5234ec867baac9c3a179`, GitHub returned **35 / 35 SUCCESS**:
 
@@ -113,7 +113,7 @@ Fresh agents must re-check CI after any newer commit instead of inheriting these
 ### OPEN
 
 - issue **#114 — Premium Fidelity V5 — final post-V5.5 polish gate before Build 35**.
-- branch **`codex/v5.7-theme-art-integration`** — four-theme art integration candidate, awaiting PR CI and human review.
+- draft PR **#128** on branch **`codex/v5.8-debug-theme-decoupling`** — independent DEBUG FR/theme state and 4-theme × OFF/ON matrix.
 
 ### BLOCKED
 
@@ -121,10 +121,10 @@ Fresh agents must re-check CI after any newer commit instead of inheriting these
 
 ### NEXT exact slice
 
-1. Merge PR **#127** after its PASS checkpoint commit is exact-head green.
-2. Reconcile the resulting `main` SHA, Pages deployment and checkpoint.
-3. Continue with **V5.8 — DEBUG FR / Theme Decoupling**.
-4. Do not mark the assets **FIELD PASS** before the later physical installed-iPhone/PWA verdict.
+1. Complete **V5.8 — DEBUG FR / Theme Decoupling** on the active branch.
+2. Prove four themes × DEBUG OFF/ON, normal-mode cleanliness and six-store byte safety.
+3. Open one V5.8 PR, obtain exact-head CI, merge, then verify exact `main` + Pages.
+4. Continue automatically with **V5.9 — Fluidity + Premium Feel**.
 
 ```text
 V5.7 Theme Art Integration

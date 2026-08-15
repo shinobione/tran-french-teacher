@@ -15,8 +15,8 @@
 | Item | Canonical state |
 |---|---|
 | Product pedagogy | **V2.3.0 · Build 34** |
-| Live visual maintenance line | **Premium V5.6 assets approved · V5.7 candidate under review** |
-| Last verified `main` checkpoint | **`b2b22efbdbef18f4556012171dd42605d80df467`** |
+| Live visual maintenance line | **Premium V5.7 merged · V5.8 active** |
+| Last verified `main` checkpoint | **`1b404b58bd87cad4eb7860c004d48292e550732e`** |
 | Curriculum | **52 lessons / 313 items** |
 | Scenario | **44 situations / 132 turns** |
 | Speaking Loop | **52/52 · max 2 moments / lesson** |
@@ -392,13 +392,15 @@ debugFr must never force theme
 
 ## V5.8 Definition of Done
 
-- [ ] Theme and debug state independently persisted.
-- [ ] DEBUG FR usable on all four themes.
-- [ ] No theme switch exits debug.
-- [ ] No debug switch resets theme.
-- [ ] Trân normal mode remains clean.
-- [ ] Chrome tests cover the full 4-theme matrix.
-- [ ] Existing protected learner profile remains byte-safe.
+- [x] Theme and debug state independently persisted.
+- [x] DEBUG FR usable on all four themes.
+- [x] No theme switch exits debug.
+- [x] No debug switch resets theme.
+- [x] Trân normal mode remains clean.
+- [x] Chrome tests cover the full 4-theme matrix.
+- [x] Existing protected learner profile remains byte-safe.
+
+V5.8 candidate status on 2026-08-15: the local Chrome tribunal is green across **4 themes × DEBUG OFF/ON**, both preference-preservation directions pass, normal mode hides the admin/diagnostic surfaces, and all six protected learner stores remain byte-identical. The existing utility, fidelity/reset and P0 navigation tribunals also pass unchanged. Merge and deployment evidence must still be recorded from the exact GitHub candidate and resulting `main` SHA.
 
 ---
 
