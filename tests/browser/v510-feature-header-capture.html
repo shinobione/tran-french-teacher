@@ -48,9 +48,17 @@
           voice.click();
           await waitFor(()=>d.documentElement.dataset.sessionPracticeMode==='voice');
         }
-        await waitFor(()=>{
+        const header=await waitFor(()=>{
           w.FrenchTranquilleV510PracticeIcons?.refreshFeatureHeaders?.();
-          return d.querySelector(`[data-v510-feature-header="${expected[feature]}"] .ft-v510-feature-title`);
+          return d.querySelector(`[data-v510-feature-header="${expected[feature]}"]`);
+        });
+        await waitFor(()=>{
+          const brand=header.querySelector('.ft-v510-feature-brand');
+          const title=header.querySelector('.ft-v510-feature-title');
+          if(!brand||!title)return false;
+          const style=w.getComputedStyle(brand);
+          const rect=brand.getBoundingClientRect();
+          return style.display!=='none'&&style.visibility!=='hidden'&&Number.parseFloat(style.opacity)>0&&rect.width>0&&rect.height>0;
         });
         await pause(550);
       }
