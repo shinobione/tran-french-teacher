@@ -22,5 +22,7 @@
 @import url('./premium-v5-fidelity-refine.css?v=2.3.21-v57art1');
 @import url('./premium-v5-fidelity-card-hotfix.css?v=2.3.21-v57art1');
 @import url('./premium-v5-fidelity-settings-hotfix.css?v=2.3.21-v57art1');
+/* V5.9 is one shared structural/interaction layer across all themes. */
+@import url('./premium-v5-fluidity.css?v=2.3.23-v59ui1');
 /* P0 navigation geometry remains the final CSS authority. */
 @import url('./premium-nav-geometry-hotfix.css?v=2.3.21-v57art1');
