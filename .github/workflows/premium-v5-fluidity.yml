@@ -1,0 +1,93 @@
+name: Premium V5.9 Shared UI Coherence
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  shared-ui-coherence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Static V5.9 contracts and sanctuaries
+        run: |
+          node --check premium-v5-fluidity.js
+          node --check theme-controller.js
+          node --check sw.js
+          grep -q "const VERSION = '2.3.23-v59ui1'" premium-v5-fluidity.js
+          grep -q 'premium-v5-fluidity.css?v=2.3.23-v59ui1' premium-theme-polish.css
+          grep -q 'premium-v5-fluidity.js?v=2.3.23-v59ui1' theme-controller.js
+          grep -q "const V59='2.3.23-v59ui1'" sw.js
+          grep -q 'premium-v5-fluidity.css?v=${V59}' sw.js
+          grep -q 'premium-v5-fluidity.js?v=${V59}' sw.js
+          grep -q 'data-b27-practice-action' premium-v5-fluidity.js
+          grep -q 'data-v59-debug-entry' premium-v5-fluidity.js
+          grep -q 'sanitizeSpeakingLoop' premium-v5-fluidity.js
+          grep -q 'ft-settings-legal .ft-legal-head' premium-v5-fluidity.css
+          grep -q 'b27-primary-card .b27-card-topline' premium-v5-fluidity.css
+          grep -q "version:'1.3.0-v57art'" theme-controller.js
+          test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+          test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
+          test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-v59-http.log 2>&1 &
+          echo $! >/tmp/ft-v59-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — field findings tribunal
+        run: |
+          timeout --signal=TERM --kill-after=5s 60s \
+            google-chrome --headless=new --no-sandbox --disable-gpu \
+            --disable-background-timer-throttling --disable-renderer-backgrounding \
+            --virtual-time-budget=38000 --dump-dom \
+            'http://127.0.0.1:4173/premium-v5-fluidity-tribunal.html' >/tmp/v59.html
+          grep -q 'data-premium-v59="ok"' /tmp/v59.html || { grep -o 'data-premium-v59-detail="[^"]*"' /tmp/v59.html || true; exit 1; }
+          grep -q 'data-premium-v59-detail="themes=4;lesson-layout=shared-left;practice-icons=svg;about=whole-card;speaking=unique;debug=hidden-entry+all-themes;stores=6-unchanged"' /tmp/v59.html
+
+      - name: Capture 4-theme Home Practice Settings matrix
+        run: |
+          mkdir -p artifacts/premium-v59
+          for theme in original aurora sunset jade; do
+            for view in home practice settings; do
+              profile="/tmp/ft-v59-${theme}-${view}"
+              png="artifacts/premium-v59/${theme}-${view}-390x844.png"
+              dom="/tmp/v59-${theme}-${view}.html"
+              rm -rf "$profile" "$png" "$dom"
+              timeout --signal=TERM --kill-after=5s 48s \
+                google-chrome --headless=new --no-sandbox --disable-gpu --hide-scrollbars \
+                --disable-background-timer-throttling --disable-renderer-backgrounding \
+                --user-data-dir="$profile" --window-size=390,844 --virtual-time-budget=21000 \
+                --screenshot="$png" --dump-dom \
+                "http://127.0.0.1:4173/premium-v5-fluidity-capture.html?theme=${theme}&view=${view}" >"$dom"
+              test -s "$png"
+              grep -q 'data-capture-ready="1"' "$dom"
+              grep -q "data-capture-theme=\"${theme}\"" "$dom"
+              grep -q "data-capture-view=\"${view}\"" "$dom"
+            done
+          done
+          test "$(find artifacts/premium-v59 -name '*.png' | wc -l)" -eq 12
+
+      - name: Upload V5.9 visual matrix
+        uses: actions/upload-artifact@v4
+        with:
+          name: premium-v59-shared-ui-review
+          path: artifacts/premium-v59/*.png
+          retention-days: 14
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-v59-server.pid ]; then kill "$(cat /tmp/ft-v59-server.pid)" || true; fi
