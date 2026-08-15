@@ -1,0 +1,53 @@
+name: TEMP Repo layout CI semantics
+
+on:
+  push:
+    branches: [tmp/repo-layout-ci-fix]
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: tmp/repo-layout-ci-fix
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Repair path semantics and verify static contracts
+        run: python3 tools/_repo_layout_ci_semantics_temp.py
+      - name: Targeted browser verification
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-layout-ci-http.log 2>&1 &
+          pid=$!
+          trap 'kill "$pid" 2>/dev/null || true' EXIT
+          sleep 1
+          timeout --signal=TERM --kill-after=5s 70s google-chrome \
+            --headless=new --no-sandbox --disable-gpu --virtual-time-budget=40000 --dump-dom \
+            'http://127.0.0.1:4173/tests/browser/field-navigation-v2-smoke.html' >/tmp/field-navigation-v2.html
+          grep -q 'data-field-navigation-v2-smoke="ok"' /tmp/field-navigation-v2.html || { cat /tmp/field-navigation-v2.html; exit 1; }
+          rm -rf /tmp/ft-layout-icons-profile
+          timeout --signal=TERM --kill-after=5s 80s google-chrome \
+            --headless=new --no-sandbox --disable-gpu \
+            --user-data-dir=/tmp/ft-layout-icons-profile \
+            --window-size=1440,900 --virtual-time-budget=65000 --dump-dom \
+            'http://127.0.0.1:4173/tests/browser/premium-v510-practice-icons-tribunal.html' >/tmp/v510-icons.html
+          grep -q 'data-v510-practice-icons="ok"' /tmp/v510-icons.html || { grep -o 'FAIL: [^<]*' /tmp/v510-icons.html || true; tail -n 80 /tmp/v510-icons.html; exit 1; }
+      - name: Commit non-workflow fixes and staged workflows
+        shell: bash
+        run: |
+          set -euo pipefail
+          git checkout HEAD -- .github/workflows
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add tools tests .repo-layout-ci-workflows
+          git commit -m 'fix: preserve path semantics after repository reorganization'
+          git push origin HEAD:tmp/repo-layout-ci-fix
