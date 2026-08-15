@@ -33,7 +33,7 @@ jobs:
           grep -q 'premium/themes/nocturne/lesson-eiffel-v2.png' premium-v5-fidelity-reset.css
           ! grep -q 'eiffel-premium-mask.svg' premium-v5-fidelity-reset.css premium-v5-fidelity-refine.css sw.js
           ! grep -q 'theme-aurora-paris.svg\|theme-sunset-paris.svg\|theme-jade-paris.svg' premium-v5-fidelity-reset.css sw.js
-          grep -q "const CACHE='tran-french-teacher-v2.3.21-b34.13-v57art1'" sw.js
+          grep -q "const CACHE='tran-french-teacher-v2.3.22-b34.14-v58debug1'" sw.js
           for asset in \
             assets/premium/themes/original/background-v2.png \
             assets/premium/themes/aurora/background.webp \

@@ -1,4 +1,4 @@
-const CACHE='tran-french-teacher-v2.3.21-b34.13-v57art1';
+const CACHE='tran-french-teacher-v2.3.22-b34.14-v58debug1';
 const V='1.17.0-b24';
 const UX='1.17.5-b24.5';
 const P25='1.18.0-b25';
@@ -34,6 +34,7 @@ const V5I='2.3.21-v57art1';
 const V5M='2.3.21-v57art1';
 const V5F='2.3.21-v57art1';
 const V5FR='2.3.21-v57art1';
+const DEBUG='2.3.22-v58debug1';
 const CORE=[
   './','./index.html',
   `./styles.css?v=${V}`,`./brand.css?v=${V}`,`./learning-memory.css?v=${V}`,`./visual-pass.css?v=${V}`,`./lucie-avatar.css?v=${V}`,
@@ -44,7 +45,7 @@ const CORE=[
   `./premium-v4-home.css?v=${V5F}`,`./premium-v4-progress.css?v=${V5F}`,`./premium-v4-practice.css?v=${V5F}`,`./premium-v4-listening.css?v=${V5F}`,`./premium-v4-settings.css?v=${V5F}`,`./premium-v4-ownership-hotfix.css?v=${V5F}`,`./premium-v4-route-coherence.css?v=${COHERENCE}`,`./premium-v4-motion.css?v=${MOTION}`,`./premium-v4-contrast.css?v=${V4}`,`./premium-v5-coherence.css?v=${V5}`,`./premium-v5-listening-settings.css?v=${V5}`,`./premium-v5-utility.css?v=${V5U}`,`./premium-v5-islands.css?v=${V5I}`,`./premium-v5-mockup-convergence.css?v=${V5M}`,`./premium-v5-fidelity-reset.css?v=${V5F}`,`./premium-v5-fidelity-refine.css?v=${V5FR}`,`./premium-v5-fidelity-card-hotfix.css?v=${V5FR}`,`./premium-v5-fidelity-settings-hotfix.css?v=${V5FR}`,`./premium-nav-geometry-hotfix.css?v=${V5F}`,`./premium-theme-polish.css?v=${V5F}`,
   `./data-recovery-core.js?v=${B28}`,`./data-recovery.js?v=${B28}`,
   `./progress-safety.js?v=${V}`,`./app.js?v=${V}`,`./curriculum-stage2.js?v=${V}`,`./curriculum-stage3.js?v=${V}`,`./stage2-boot.js?v=${NAV}`,`./field-navigation-runtime.js?v=${NAV}`,`./field-audio-session.js?v=${AUDIO}`,`./theme-controller.js?v=${V5F}`,`./premium-v5-fidelity-reset.js?v=${V5F}`,
-  `./debug-fr.js?v=${V}`,`./voice-ios.js?v=${V}`,`./free-voice.js?v=${V}`,`./learning-memory.js?v=${V}`,`./error-intelligence.js?v=${V}`,
+  `./debug-fr.js?v=${DEBUG}`,`./voice-ios.js?v=${V}`,`./free-voice.js?v=${V}`,`./learning-memory.js?v=${V}`,`./error-intelligence.js?v=${V}`,
   `./language-ratio-core.js?v=${V}`,`./language-ratio.js?v=${V}`,`./daily-coach.js?v=${V}`,`./mastery-engine.js?v=${V}`,`./mastery-stage3.js?v=${V}`,
   `./scenario-data.js?v=${V}`,`./real-life-data.js?v=${V}`,`./real-life-data-2.js?v=${V}`,`./real-life-data-3.js?v=${B26}`,`./scenario-host.js?v=${V}`,`./scenario-engine.js?v=${V}`,`./real-life-ux.js?v=${V}`,`./real-life-coach.js?v=${B26}`,
   `./listening-data.js?v=${V}`,`./listening-engine.js?v=${V}`,`./ux-shell.js?v=${UX}`,`./interaction-ux.js?v=${UX}`,`./progression-ux.js?v=${B266}`,`./session-ux.js?v=${B265}`,`./session-ux-adapter.js?v=${P252}`,`./voice-replay.js?v=${B261}`,`./progress-details-dashboard.js?v=${B266}`,`./build26-3-ux.js?v=${B263}`,`./build26-4-ux.js?v=${B264}`,`./build26-5-ux.js?v=${B265}`,`./build26-6-ux.js?v=${B266}`,`./build26-7-ux.js?v=${B267}`,`./build26-8-ux.js?v=${B268}`,`./build26-9-ux.js?v=${B269}`,`./build27-app-shell.js?v=${B27}`,`./build27-smoke.js?v=${B27}`,`./data-recovery-smoke.js?v=${B28}`,`./build29-iphone-a11y.js?v=${B29}`,`./build29-smoke.js?v=${B29}`,`./speaking-loop-content.js?v=${B292}`,`./speaking-loop-smoke.js?v=${B292}`,`./speaking-loop-variety-smoke.js?v=${B292}`,`./runtime-contracts.js?v=${B30}`,`./runtime-bridge.js?v=${B30}`,`./build30-architecture-smoke.js?v=${B30}`,`./v2-release-smoke.js?v=${V2}`,'./release-v2.json',`./build-meta.js?v=${B29}`,`./settings-legal.js?v=${LEGAL}`,`./build31-loader.js?v=${B31}`,`./learner-intelligence.js?v=${B31}`,`./learner-intelligence-smoke.js?v=${B31}`,`./build32-loader.js?v=${B32}`,`./curriculum-stage4.js?v=${B32}`,`./build32-shell-extension.js?v=${B32}`,`./real-life-data-4.js?v=${B32}`,`./listening-data-2.js?v=${B32}`,`./learner-intelligence-v2.js?v=${B32}`,`./build32-smoke.js?v=${B32}`,`./manifest.webmanifest?v=${B29}`,

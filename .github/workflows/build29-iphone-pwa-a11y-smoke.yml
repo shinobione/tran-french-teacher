@@ -36,7 +36,8 @@ jobs:
           const match=text.match(/const META = \{ version: '[^']+', build: '([^']+)'/);
           if(!match || Number(match[1]) < 29) throw new Error('Build 29 contract cannot run on a pre-29 build');
           NODE
-          grep -q 'tran-french-teacher-v2.3.21-b34.13-v57art1' index.html sw.js
+          grep -q 'tran-french-teacher-v2.3.22-b34.14-v58debug1' index.html sw.js
+          grep -q "const DEBUG='2.3.22-v58debug1'" sw.js
           grep -q "const NAV='2.3.7-b34.7'" sw.js
           grep -q "const COHERENCE='2.3.21-v57art1'" sw.js
           grep -q "const MOTION='2.3.21-v57art1'" sw.js

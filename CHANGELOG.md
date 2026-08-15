@@ -4,6 +4,7 @@ Ce fichier conserve l’historique réellement livré. Les intentions futures vi
 
 ## [Unreleased]
 
+- **Premium V5.8** : préférence DEBUG FR découplée de la préférence visuelle, mode admin utilisable sous Original/Aurora/Sunset/Nocturne, diagnostic masqué en mode apprenant, matrice Chrome 4 thèmes × OFF/ON et six stores learner vérifiés byte-identiques ;
 - **Premium V5.7** : quatre fonds de thème et quatre Eiffel V2 transparents intégrés, Original élevé au même pipeline Premium, cache PWA versionné et matrice 5 viewports × 4 thèmes ; **PASS visuel utilisateur 2026-08-15**, verdict physique iPhone/PWA conservé pour V5.10 ;
 - retour terrain attendu sur :
   - Listening → **un seul tap** `Aujourd’hui` ;
