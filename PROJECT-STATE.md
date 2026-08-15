@@ -9,24 +9,26 @@
 - Reconciled: **2026-08-15**
 - Repository: `shinobione/tran-french-teacher`
 - Default branch: `main`
-- Latest runtime-bearing checkpoint at reconciliation: **`a23dcfa3704802f6f26d8eb5451cabb77847a6cb`** — PR **#151**, V5.10 shared Premium Feature Header System.
-- Immediately previous runtime checkpoint: **`4c4e22470fe976ea604ff672963b132abd34fcee`** — single-visible-record-control field fix.
+- Latest runtime-bearing checkpoint at reconciliation: **`9625edc4af69bec4f3c557003c88a59535b28789`** — PR **#152**, V5.10 Feature Header visual closeout + Listening brand fix.
+- Previous V5.10 runtime checkpoint: **`a23dcfa3704802f6f26d8eb5451cabb77847a6cb`** — PR **#151**, shared Premium Feature Header System.
+- Earlier field fix: **`4c4e22470fe976ea604ff672963b132abd34fcee`** — single-visible-record-control fix.
 - Repository layout checkpoint underneath: **`88ca5f32a67d2989fcfb81684079848e67bffad5`** — PR **#149**, `src/` + `tests/` reorganization.
 - PR #151 final head passed **43/43** pull-request workflows.
-- Runtime checkpoint `a23dcfa…` passed **28/28** push workflows with **0 failure / 0 queued / 0 in-progress**.
-- **GitHub Pages #204 SUCCESS** on exact runtime SHA `a23dcfa3704802f6f26d8eb5451cabb77847a6cb`.
+- PR #152 final head also passed **43/43** after one historical Field Reliability V2 Chrome/audio flake was rerun **strictly unchanged** and passed; no product patch was made for that flake.
+- Runtime checkpoint `9625edc…` passed **28/28** push workflows with **0 failure / 0 queued / 0 in-progress**.
+- **GitHub Pages #205 SUCCESS** on exact runtime SHA `9625edc4af69bec4f3c557003c88a59535b28789`.
 - Premium gate issue: **#114 OPEN**.
 - **V5.10 remains the active human/physical installed-iPhone/PWA visual field gate.**
 - Build 35 remains **BLOCKED / RESERVED** until explicit user field PASS and #114 closure.
 
-A later docs/test-only reconciliation commit may advance `main` without changing the runtime-bearing SHA above. Always verify GitHub HEAD before acting.
+A later docs-only reconciliation commit may advance `main` without changing the runtime-bearing SHA above. Always verify GitHub HEAD before acting.
 
 ## Current product state
 
 | Area | State |
 |---|---|
 | Product pedagogy | **V2.3.0 · Build 34** |
-| Visual line | **Premium V5.10 · Feature Header System integrated · physical field verdict still required** |
+| Visual line | **Premium V5.10 · Feature Header System integrated + screenshot-corrected · physical field verdict still required** |
 | Curriculum | **52 lessons / 313 items** |
 | Scenario | **44 situations / 132 turns** |
 | Speaking Loop | **52/52 · max 2 moments / lesson** |
@@ -97,7 +99,7 @@ Permanent artwork rules:
 - Aujourd’hui reuses the **exact same** Listen and Review source files as Pratiquer;
 - all four assets remain in the Service Worker offline core.
 
-## V5.10 shared Premium Feature Header System — PR #151
+## V5.10 shared Premium Feature Header System — PR #151 + #152
 
 The approved Practice identity now continues into the destination surfaces through one shared compact header contract:
 
@@ -138,11 +140,29 @@ Header owners are deliberately adapted through the Premium layer rather than by 
 - Review existing header: `.screen-review .topbar`;
 - shared Conversation/Practice host: `.screen-conversation .topbar`, with runtime semantic ownership between Real-Life and explicit Speak mode.
 
-No `app.js`, `voice-ios.js`, `free-voice.js`, curriculum, pedagogy, durable-store schema or migration contract was changed for this slice.
+No `app.js`, `voice-ios.js`, `free-voice.js`, curriculum, pedagogy, durable-store schema or migration contract was changed for this work.
 
-## V5.10 permanent QA after PR #151
+## Screenshot-driven correction in PR #152
 
-The V5.10 Chrome tribunal now performs real navigation and asserts exact semantic ownership:
+The first generated V5.10 screenshot matrix caught a real visual defect that DOM-only assertions had missed:
+
+- Listening already contained the new `FRENCH TRÂN’QUILLE` brand node;
+- a historical `.eyebrow` rule still hid that line visually;
+- therefore the DOM was semantically correct while the rendered screenshot was not.
+
+PR #152 fixed this without touching the protected engines:
+
+- the shared Premium brand no longer inherits the legacy `.eyebrow` class;
+- Feature Header copy/title/brand now own their visibility and width;
+- desktop Listening header geometry was aligned with the Review/Conversation family;
+- mobile responsive geometry remains compact;
+- no new artwork or cache bump was required.
+
+This is now guarded permanently by `tests/browser/v510-feature-header-capture.html`: a capture is not considered READY unless the brand is actually visible by computed `display`, `visibility`, `opacity` and non-zero geometry.
+
+## V5.10 permanent QA
+
+The V5.10 Chrome tribunal performs real navigation and asserts exact semantic ownership:
 
 ```text
 Pratiquer → Réviser
@@ -165,14 +185,19 @@ It verifies:
 - exact Home ↔ Practice reuse remains locked;
 - six durable learner stores remain byte-identical during pure visual travel.
 
-A dedicated capture harness also produces visual field-review screenshots for the four destination headers at mobile and desktop sizes when the V5.10 workflow is exercised.
+The V5.10 workflow also produces an artifact named **`v510-feature-header-captures`** containing **8 screenshots**:
+
+- mobile **430×932** + desktop **1280×800**;
+- Listening / Review / Speak oral-training / Real-Life Conversation.
+
+Those captures are QA evidence only; automation still cannot close the physical installed-iPhone field gate.
 
 ## PWA/cache choice
 
 - Existing targeted artwork/runtime URL version remains **`2.3.31-v510png1`** in `index.html` / `sw.js`.
 - Existing global Service Worker cache identity deliberately remains unchanged.
 - No new artwork file was introduced by Feature Headers; they reuse the four already-pre-cached approved Practice assets.
-- Therefore PR #151 required **no global cache bump and no asset duplication**.
+- Therefore the Feature Header work required **no global cache bump and no asset duplication**.
 
 ## Protected sanctuaries
 
@@ -218,6 +243,9 @@ Next action is the real installed-iPhone/PWA field review of the current V5.10 p
 approved Practice artwork certification ✅
 repository structure migration certification ✅
 shared Feature Header certification ✅
+screenshot-driven Listening brand correction ✅
+28/28 main workflows ✅
+Pages #205 exact runtime SHA ✅
 → physical installed-iPhone/PWA review
 → verify Practice + Home artwork identity
 → verify destination Feature Headers
@@ -233,7 +261,7 @@ shared Feature Header certification ✅
 
 For the new Feature Header field review specifically inspect:
 
-- **Compréhension orale**: Listen artwork on the left, French Trân’quille identity, no old headphone glyph/header gap;
+- **Compréhension orale**: Listen artwork on the left, French Trân’quille identity visible, no old headphone glyph/header gap;
 - **Révision**: Review artwork on the left, same geometry;
 - **Dans la vraie vie → Conversation**: Real-Life artwork, **never Speak**;
 - **Parler → Répondre à l’oral**: Speak artwork only after selecting the real oral-training mode;
