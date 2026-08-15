@@ -6,6 +6,8 @@ on:
       - 'assets/premium/practice/**'
       - 'src/premium/premium-v510-practice-icons.js'
       - 'src/premium/premium-v510-practice-icons.css'
+      - 'src/premium/premium-v510-field-shell.css'
+      - 'src/premium/premium-theme-polish.css'
       - 'tests/browser/premium-v510-practice-icons-tribunal.html'
       - 'tests/browser/v510-feature-header-capture.html'
       - 'index.html'
@@ -42,6 +44,9 @@ jobs:
           grep -q "fr: 'Révision'" src/premium/premium-v510-practice-icons.js
           grep -q "fr: 'Conversation'" src/premium/premium-v510-practice-icons.js
           grep -q "fr: 'Répondre à l’oral'" src/premium/premium-v510-practice-icons.js
+          grep -q "premium-v510-field-shell.css?v=2.3.32-v510shell1" src/premium/premium-theme-polish.css
+          grep -q 'background-size:cover,cover!important' src/premium/premium-v510-field-shell.css
+          grep -q -- '--v510-feature-shell:980px' src/premium/premium-v510-field-shell.css
           if grep -q '<svg\|svg(' src/premium/premium-v510-practice-icons.js; then echo 'legacy SVG generator still present'; exit 1; fi
           if grep -q 'ft-v510-3d-' src/premium/premium-v510-practice-icons.js src/premium/premium-v510-practice-icons.css; then echo 'legacy V4 SVG classes still present'; exit 1; fi
           for asset in speak listen review; do test -s "assets/premium/practice/${asset}-premium.webp"; done
