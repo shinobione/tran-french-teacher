@@ -23,7 +23,7 @@
       const snapshot=w=>Object.fromEntries(storeKeys.map(key=>[key,w.localStorage.getItem(key)]));
       const same=(a,b)=>storeKeys.every(key=>a[key]===b[key]);
       const fail=error=>{result.dataset.v510FieldIdentity='fail';result.textContent=`FAIL: ${error?.message||error}`;document.documentElement.dataset.v510FieldIdentity='fail'};
-      const pass=()=>{result.dataset.v510FieldIdentity='ok';result.textContent='V5.10 Listening parity + canonical identity assets OK';document.documentElement.dataset.v510FieldIdentity='ok'};
+      const pass=()=>{result.dataset.v510FieldIdentity='ok';result.textContent='V5.10 lesson identity + Listening/brand field closeout OK';document.documentElement.dataset.v510FieldIdentity='ok'};
 
       async function assertDecoratorStoreSafe(w,action,label){
         const before=snapshot(w);
@@ -43,17 +43,27 @@
         button.click();
       }
 
-      function assertTyffanyAvatar(w,d){
-        const host=d.querySelector('.screen-lesson .teacher-line .luc[data-v510-tyffany-avatar="canonical-svg-v1"]');
-        const span=host?.querySelector(':scope > span');
-        if(!host||!span)throw new Error('lesson Tyffany canonical avatar missing');
-        const style=w.getComputedStyle(span);
-        const mask=style.webkitMaskImage||style.maskImage||'';
-        if(!mask.includes('tyffany-memory.svg'))throw new Error(`lesson Tyffany SVG mask missing (${mask})`);
-        if((style.backgroundImage||'').includes('Favicon.png'))throw new Error('legacy Favicon still paints lesson Tyffany');
-        if(span.dataset.v510TyffanyAsset!=='./assets/premium/brand/tyffany-memory.svg')throw new Error('lesson Tyffany asset marker mismatch');
-        const teacher=[...d.querySelectorAll('.screen-lesson .teacher-line strong')].map(n=>n.textContent.trim()).join(' ');
-        if(!/Tyffany/i.test(teacher))throw new Error(`lesson tutor name is not Tyffany (${teacher})`);
+      function assertHomeLessonIdentity(w,d){
+        const card=d.querySelector('.b27-home .b27-primary-card[data-v510-lesson-identity="l8"]');
+        const icon=card?.querySelector(':scope > .ft-v510-home-lesson-icon[data-v510-lesson-id="l8"]');
+        if(!card||!icon)throw new Error('Home canonical lesson identity missing');
+        if(icon.textContent.trim()!=='📍')throw new Error(`Home lesson icon is not curriculum l8 icon (${icon.textContent.trim()})`);
+        if(w.getComputedStyle(icon).display==='none')throw new Error('Home canonical lesson icon is hidden');
+        const pseudo=w.getComputedStyle(card,'::before');
+        if(!['none','normal','""'].includes(pseudo.content))throw new Error(`legacy generic Home lesson pseudo icon survived (${pseudo.content})`);
+      }
+
+      function assertLessonIdentity(w,d){
+        const line=d.querySelector('.screen-lesson .teacher-line[data-v510-lesson-identity="l8"]');
+        const icon=line?.querySelector(':scope > .ft-v510-lesson-identity-icon[data-v510-lesson-id="l8"]');
+        const legacy=line?.querySelector(':scope > .luc');
+        const label=line?.querySelector(':scope > div > strong');
+        if(!line||!icon||!legacy||!label)throw new Error('lesson canonical identity DOM incomplete');
+        if(icon.textContent.trim()!=='📍')throw new Error(`lesson icon is not curriculum l8 icon (${icon.textContent.trim()})`);
+        if(label.textContent.trim()!=='Hỏi đường & tìm địa điểm')throw new Error(`lesson identity label mismatch (${label.textContent.trim()})`);
+        if(w.getComputedStyle(icon).display==='none')throw new Error('lesson canonical icon is hidden');
+        if(w.getComputedStyle(legacy).display!=='none')throw new Error('legacy tutor/brain avatar still visible in lesson identity row');
+        if(legacy.hasAttribute('data-v510-tyffany-avatar'))throw new Error('lesson identity still owned by Tyffany avatar decorator');
       }
 
       function assertProgressBrand(d){
@@ -86,6 +96,22 @@
         if(!art||art.getBoundingClientRect().width<50)throw new Error('Listening feature artwork geometry regressed');
       }
 
+      async function assertTyffanyButtonCentered(w,d){
+        let button=d.querySelector('.screen-lesson .french-block .listen[data-speaking-model-owner="exercise"]');
+        for(let i=0;!button&&i<8;i++){
+          const prev=d.querySelector('.screen-lesson [data-prev]:not(:disabled)');
+          if(!prev)break;
+          prev.click();
+          await pause(180);
+          button=d.querySelector('.screen-lesson .french-block .listen[data-speaking-model-owner="exercise"]');
+        }
+        if(!button)return;
+        const style=w.getComputedStyle(button);
+        if(style.display!=='flex')throw new Error(`Nghe Tyffany button is not flex-centered (${style.display})`);
+        if(style.alignItems!=='center')throw new Error(`Nghe Tyffany vertical alignment regressed (${style.alignItems})`);
+        if(style.justifyContent!=='center')throw new Error(`Nghe Tyffany horizontal alignment regressed (${style.justifyContent})`);
+      }
+
       async function run(){
         const frame=document.createElement('iframe');
         frame.width='430';frame.height='932';frame.style.width='430px';frame.style.height='932px';
@@ -97,6 +123,10 @@
         w.FrenchTranquilleThemes.apply('jade');
         await waitFor(()=>d.documentElement.dataset.theme==='jade',5000,'Jade theme');
 
+        await assertDecoratorStoreSafe(w,()=>w.FrenchTranquilleV510PracticeIcons.refreshLessonIdentities(),'Home lesson identity');
+        await waitFor(()=>d.querySelector('.b27-home .ft-v510-home-lesson-icon[data-v510-lesson-id="l8"]'),5000,'Home lesson icon');
+        assertHomeLessonIdentity(w,d);
+
         d.querySelector('.bottom-nav [data-go="progress"]')?.click();
         await waitFor(()=>d.querySelector('.b27-progress-page .b27-brandline > img'),24000,'Progress page');
         await assertDecoratorStoreSafe(w,()=>w.FrenchTranquilleV510PracticeIcons.refreshIdentityAssets(),'Progress identity');
@@ -105,10 +135,11 @@
 
         const lessonButton=await waitFor(()=>d.querySelector('.b27-progress-page [data-b27-open-lesson]'),10000,'Progress current lesson button');
         lessonButton.click();
-        await waitFor(()=>d.querySelector('.screen-lesson .teacher-line .luc'),24000,'lesson tutor avatar');
-        await assertDecoratorStoreSafe(w,()=>w.FrenchTranquilleV510PracticeIcons.refreshIdentityAssets(),'Lesson Tyffany identity');
-        await waitFor(()=>d.querySelector('.screen-lesson .teacher-line .luc[data-v510-tyffany-avatar="canonical-svg-v1"]'),5000,'Tyffany avatar decoration');
-        assertTyffanyAvatar(w,d);
+        await waitFor(()=>d.querySelector('.screen-lesson .teacher-line'),24000,'lesson identity row');
+        await assertDecoratorStoreSafe(w,()=>w.FrenchTranquilleV510PracticeIcons.refreshLessonIdentities(),'Lesson identity');
+        await waitFor(()=>d.querySelector('.screen-lesson .teacher-line[data-v510-lesson-identity="l8"]'),5000,'canonical lesson identity');
+        assertLessonIdentity(w,d);
+        await assertTyffanyButtonCentered(w,d);
 
         await openPracticeAndClick(w,d,'listening');
         await waitFor(()=>d.querySelector('.listening-top[data-v510-feature-header="listening"]'),24000,'Listening header');
