@@ -9,7 +9,7 @@ const valid=id=>IDS.includes(id)?id:'original';
 const current=()=>valid(localStorage.getItem(KEY)||'original');
 function ensureStyle(){
  if(!document.querySelector('link[data-premium-theme-polish]')){
-  const l=document.createElement('link');l.rel='stylesheet';l.href='./premium-theme-polish.css?v=2.3.23-v59ui1';l.dataset.premiumThemePolish='1';document.head.appendChild(l);
+  const l=document.createElement('link');l.rel='stylesheet';l.href='./premium-theme-polish.css?v=2.3.21-v57art1';l.dataset.premiumThemePolish='1';document.head.appendChild(l);
  }
  if(!document.querySelector('script[data-premium-v55-fidelity-runtime]')){
   const r=document.createElement('script');r.src='./premium-v5-fidelity-reset.js?v=2.3.21-v57art1';r.dataset.premiumV55FidelityRuntime='1';r.async=false;document.head.appendChild(r);
