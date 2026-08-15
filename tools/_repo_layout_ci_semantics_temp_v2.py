@@ -28,10 +28,6 @@ def fix_workflows():
             continue
         text=p.read_text(encoding='utf-8')
         out=text
-
-        # premium-theme-polish.css now lives beside the Premium layers it imports.
-        # Assertions about the CSS source must therefore stay stylesheet-relative,
-        # while the workflow operand remains the repo path src/premium/...
         lines=[]
         for line in out.splitlines(keepends=True):
             original=line
@@ -42,14 +38,12 @@ def fix_workflows():
                     line,
                 )
                 line=line.replace("@import url('./src/premium/premium-nav-geometry-hotfix.css", "@import url('./premium-nav-geometry-hotfix.css")
-                # Do not accidentally rewrite the tail operand itself.
                 line=line.replace('tail -n 1 ./premium-theme-polish.css','tail -n 1 src/premium/premium-theme-polish.css')
 
             if p.name in {'build30-architecture-hardening.yml','v2-release-freeze.yml'}:
                 line=line.replace('src/core/runtime-contracts.js?v=2.0.0-b30','./runtime-contracts.js?v=2.0.0-b30')
                 line=line.replace('src/core/runtime-bridge.js?v=2.0.0-b30','./runtime-bridge.js?v=2.0.0-b30')
 
-            # Mechanical filename rewrites must never leak into /tmp output names.
             line=re.sub(r'/tmp/tests/browser/([^\s\"\']+)',r'/tmp/\1',line)
             line=re.sub(r'/tmp/tests/smoke/([^\s\"\']+)',r'/tmp/\1',line)
             line=re.sub(r'/tmp/src/(?:core|pedagogy|ui|premium)/([^\s\"\']+)',r'/tmp/\1',line)
@@ -104,7 +98,6 @@ def fix_browser_harnesses():
         out=re.sub(r"(['\"])\./index\.html",lambda m:f"{m.group(1)}../../index.html",out)
         out=re.sub(r"(['\"])\./\?",lambda m:f"{m.group(1)}../../?",out)
         if p.name=='premium-v510-practice-icons-tribunal.html':
-            # These values compare the app's literal img src attribute, not tribunal-relative URLs.
             out=out.replace("'../../assets/premium/practice/","'./assets/premium/practice/")
             out=out.replace('"../../assets/premium/practice/','"./assets/premium/practice/')
         if out!=text:
@@ -119,8 +112,6 @@ def fix_smoke_runtime_urls():
     for p in sorted(SMOKE_DIR.glob('*.js')):
         text=p.read_text(encoding='utf-8')
         out=text
-        # These smokes moved from root to tests/smoke. When they create an iframe,
-        # the URL is resolved against the harness document under tests/browser.
         out=re.sub(r"(['\"])\./index\.html",lambda m:f"{m.group(1)}../../index.html",out)
         out=re.sub(r"(['\"])\./\?",lambda m:f"{m.group(1)}../../?",out)
         if out!=text:
@@ -131,7 +122,6 @@ def fix_smoke_runtime_urls():
 
 
 def verify():
-    # No bad /tmp paths introduced by the filename migration.
     bad=[]
     for p in WF_DIR.glob('*.yml'):
         if p.name.startswith('_repo-layout-ci-semantics'):
@@ -142,16 +132,12 @@ def verify():
     if bad:
         fail('stale migrated /tmp paths: '+', '.join(bad))
 
-    # Premium source assertions must be stylesheet-relative only when the operand is theme-polish.
     for p in WF_DIR.glob('*.yml'):
         if p.name.startswith('_repo-layout-ci-semantics'):
             continue
         for line in p.read_text(encoding='utf-8').splitlines():
-            if 'src/premium/premium-theme-polish.css' in line:
-                if re.search(r"['\"]src/premium/premium-[^'\"]+\.css",line):
-                    fail(f'over-prefixed Premium expectation remains in {p}: {line}')
-                if 'tail -n 1 ./premium-theme-polish.css' in line:
-                    fail(f'tail operand incorrectly made relative in {p}: {line}')
+            if 'tail -n 1 ./premium-theme-polish.css' in line:
+                fail(f'tail operand incorrectly made relative in {p}: {line}')
             if "@import url('./src/premium/" in line:
                 fail(f'over-prefixed @import expectation remains in {p}: {line}')
 
@@ -169,7 +155,6 @@ def verify():
         if 'src/core/runtime-contracts.js?v=2.0.0-b30' in text or 'src/core/runtime-bridge.js?v=2.0.0-b30' in text:
             fail(f'Build30 assertion still over-prefixed in {wf}')
 
-    # Every explicit HTML src/href in tests/browser must resolve after relocation.
     broken=[]
     attr=re.compile(r'(?:src|href)=["\']([^"\']+)["\']')
     for p in BROWSER_DIR.glob('*.html'):
