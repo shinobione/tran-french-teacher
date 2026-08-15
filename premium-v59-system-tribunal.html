@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="fr" data-theme="sunset">
+<head>
+  <meta charset="utf-8">
+  <title>V5.9C Premium System Tribunal</title>
+  <style>
+    :root{--ft-accent:#ff9b6b;--ft-accent2:#c98cff;--ft-border:#594269;--ft-surface:#211428;--ft-surface-2:#17101f}
+    body{background:#100915;color:white;font-family:system-ui}.topbar{padding:12px}.card,button{margin:8px;padding:12px}
+  </style>
+  <link rel="stylesheet" href="./premium-v59-system.css?v=2.3.25-v59c1">
+</head>
+<body>
+  <div id="app">
+    <div class="app-shell screen-settings">
+      <div class="topbar"><h1>Cài đặt</h1></div>
+      <div class="narrow">
+        <details class="ft-theme-settings-inline"><summary>Theme</summary></details>
+        <section id="ft-settings-legal" class="card"><div class="ft-legal-head">About</div></section>
+        <section class="memory-backup-card card"><span class="ft-v55-recovery-icon">↥</span></section>
+      </div>
+    </div>
+    <button class="b27-quick-card"><span class="b27-quick-icon">Q</span>Quick</button>
+    <button class="b27-practice-action"><span class="b27-practice-icon">P</span>Practice</button>
+    <button class="b27-primary-action">CTA</button>
+    <section class="b27-level-card">Level</section>
+    <section class="listening-audio-card">Listen</section>
+  </div>
+  <script>
+    (()=>{
+      const learnerKeys=['francais-avec-luc:learner:v1','french-tranquille:learning-memory:v1','french-tranquille:error-intelligence:v1','french-tranquille:scenarios:v1','french-tranquille:listening:v1','french-tranquille:milestones:v1'];
+      learnerKeys.forEach((key,index)=>localStorage.setItem(key,`sentinel-${index}`));
+      localStorage.setItem('french-tranquille:appearance-theme:v1','sunset');
+      localStorage.setItem('tran-french-teacher:debug-fr:v1','0');
+      window.__v59LearnerBefore=Object.fromEntries(learnerKeys.map(key=>[key,localStorage.getItem(key)]));
+      window.FrenchTranquilleDebugFr={
+        toggle(){const key='tran-french-teacher:debug-fr:v1';localStorage.setItem(key,localStorage.getItem(key)==='1'?'0':'1');return localStorage.getItem(key)==='1';}
+      };
+    })();
+  </script>
+  <script src="./premium-v59-system.js?v=2.3.25-v59c1"></script>
+  <script>
+    (()=>{
+      const root=document.documentElement,wait=ms=>new Promise(r=>setTimeout(r,ms));
+      const fail=m=>{root.dataset.v59c='fail';root.dataset.v59cDetail=m};
+      setTimeout(async()=>{try{
+        if(root.dataset.v59PremiumSystem!=='1')throw Error('system-not-ready');
+        for(const selector of ['.b27-quick-card','.b27-practice-action','.b27-primary-action','.b27-level-card','.listening-audio-card','#ft-settings-legal','.memory-backup-card']){
+          if(!document.querySelector(selector)?.dataset.v59Premium)throw Error(`surface-unmarked:${selector}`);
+        }
+        const title=document.querySelector('.screen-settings .topbar h1');
+        if(title.dataset.v59DebugEntry!=='long-press')throw Error('debug-entry-missing');
+        const beforeTheme=localStorage.getItem('french-tranquille:appearance-theme:v1');
+        window.FrenchTranquillePremiumV59System.toggleDebug();
+        if(localStorage.getItem('tran-french-teacher:debug-fr:v1')!=='1')throw Error('api-debug-toggle');
+        if(localStorage.getItem('french-tranquille:appearance-theme:v1')!==beforeTheme)throw Error('api-theme-mutated');
+        const before=window.__v59LearnerBefore;
+        for(const [key,value] of Object.entries(before))if(localStorage.getItem(key)!==value)throw Error(`store-mutated:${key}`);
+
+        title.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true,button:0}));
+        await wait(900);
+        if(root.dataset.v59DebugEntryUsed!=='long-press')throw Error('long-press-not-fired');
+        if(localStorage.getItem('french-tranquille:appearance-theme:v1')!==beforeTheme)throw Error('long-press-theme-mutated');
+
+        document.dispatchEvent(new KeyboardEvent('keydown',{bubbles:true,altKey:true,shiftKey:true,code:'KeyD'}));
+        await wait(0);
+        if(root.dataset.v59DebugEntryUsed!=='keyboard')throw Error('keyboard-not-fired');
+        if(localStorage.getItem('french-tranquille:appearance-theme:v1')!==beforeTheme)throw Error('keyboard-theme-mutated');
+        for(const [key,value] of Object.entries(before))if(localStorage.getItem(key)!==value)throw Error(`store-mutated-after:${key}`);
+
+        root.dataset.v59c='ok';root.dataset.v59cDetail='surfaces=shared;debug=hidden-longpress+keyboard;theme=stable;stores=6-unchanged';
+      }catch(e){fail(e.message||String(e));}},100);
+      setTimeout(()=>{if(!root.dataset.v59c)fail('timeout')},3500);
+    })();
+  </script>
+</body>
+</html>
