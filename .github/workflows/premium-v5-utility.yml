@@ -26,10 +26,10 @@ jobs:
           grep -q '.debug-fr-banner' src/premium/premium-v5-utility.css
           grep -q 'body > .listening-overlay' src/premium/premium-v5-utility.css
           grep -q 'prefers-reduced-motion:reduce' src/premium/premium-v5-utility.css
-          grep -q 'src/premium/premium-v5-utility.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v5-coherence.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v5-islands.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          test "$(tail -n 1 src/premium/premium-theme-polish.css)" = "@import url('./src/premium/premium-nav-geometry-hotfix.css?v=2.3.21-v57art1');"
+          grep -q './premium-v5-utility.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v5-coherence.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v5-islands.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          test "$(tail -n 1 src/premium/premium-theme-polish.css)" = "@import url('./premium-nav-geometry-hotfix.css?v=2.3.21-v57art1');"
           # Historical V5.2 owns its layer and precache survivability. The latest
           # Premium workflow owns the active theme-controller / PWA generation.
           grep -q "const V5U='2.3.21-v57art1'" sw.js

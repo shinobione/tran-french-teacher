@@ -1,5 +1,5 @@
 const assert = require('node:assert/strict');
-const Core = require('../data-recovery-core.js');
+const Core = require('../src/core/data-recovery-core.js');
 
 class MemoryStorage {
   constructor(seed = {}) { this.map = new Map(Object.entries(seed)); this.failKey = null; }

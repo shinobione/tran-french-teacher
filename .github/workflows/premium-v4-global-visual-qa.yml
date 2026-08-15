@@ -31,20 +31,20 @@ jobs:
           grep -q 'captureReady' tests/browser/premium-v4-visual-capture.html
           grep -q 'captureTheme' tests/browser/premium-v4-visual-capture.html
           grep -q 'captureScreen' tests/browser/premium-v4-visual-capture.html
-          grep -q 'src/premium/premium-v4-motion.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v4-contrast.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v4-route-coherence.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v4-motion.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v4-contrast.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v4-route-coherence.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
           grep -q -- '--pv4-contrast-ready:1' src/premium/premium-v4-contrast.css
           grep -q 'color:#071531' src/premium/premium-v4-contrast.css
           grep -q 'color:#140b28' src/premium/premium-v4-contrast.css
           grep -q 'color:#041511' src/premium/premium-v4-contrast.css
-          grep -q 'src/premium/premium-nav-geometry-hotfix.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          test "$(tail -n 1 src/premium/premium-theme-polish.css)" = "@import url('./src/premium/premium-nav-geometry-hotfix.css?v=2.3.21-v57art1');"
+          grep -q './premium-nav-geometry-hotfix.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          test "$(tail -n 1 src/premium/premium-theme-polish.css)" = "@import url('./premium-nav-geometry-hotfix.css?v=2.3.21-v57art1');"
           if [ -f src/premium/premium-v5-fidelity-reset.css ]; then
             grep -q -- '--pv55-ready:1' src/premium/premium-v5-fidelity-reset.css
             grep -q -- '--pv55-refine-ready:1' src/premium/premium-v5-fidelity-refine.css
-            v4="$(grep -n 'src/premium/premium-v4-contrast.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css | cut -d: -f1)"
-            v55="$(grep -n 'src/premium/premium-v5-fidelity-reset.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css | cut -d: -f1)"
+            v4="$(grep -n './premium-v4-contrast.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css | cut -d: -f1)"
+            v55="$(grep -n './premium-v5-fidelity-reset.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css | cut -d: -f1)"
             test "$v4" -lt "$v55"
           fi
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"

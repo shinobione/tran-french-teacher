@@ -37,9 +37,9 @@ jobs:
           if(cv[1] !== '2.0.0' || Number(cb[1]) !== 30) throw new Error('Frozen Build 30 runtime contract moved');
           const parts=mm[1].split('.').map(Number);
           if(parts.length!==3 || parts[0]!==2 || Number(mm[2])<30) throw new Error('Current product release is not compatible with Build 30 baseline');
-          if(!meta.includes('src/core/runtime-contracts.js?v=2.0.0-b30')) throw new Error('build-meta frozen contract import mismatch');
-          if(!meta.includes('src/core/runtime-bridge.js?v=2.0.0-b30')) throw new Error('build-meta frozen bridge import mismatch');
-          if(!bridge.includes('src/core/runtime-contracts.js?v=2.0.0-b30')) throw new Error('bridge frozen contract import mismatch');
+          if(!meta.includes('./runtime-contracts.js?v=2.0.0-b30')) throw new Error('build-meta frozen contract import mismatch');
+          if(!meta.includes('./runtime-bridge.js?v=2.0.0-b30')) throw new Error('build-meta frozen bridge import mismatch');
+          if(!bridge.includes('./runtime-contracts.js?v=2.0.0-b30')) throw new Error('bridge frozen contract import mismatch');
           console.log(`Build 30 architecture frozen under current product ${mm[1]} / Build ${mm[2]}`);
           NODE
           grep -Fq 'src/core/runtime-contracts.js?v=${B30}' sw.js

@@ -36,20 +36,20 @@ jobs:
           grep -q 'z-index:10020' src/premium/premium-nav-geometry-hotfix.css
           grep -q '2.3.21-v57art1' src/premium/premium-theme-polish.css
           grep -q '2.3.21-v57art1' src/core/theme-controller.js
-          grep -q 'src/premium/premium-v4-home.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v4-progress.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v4-practice.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v4-listening.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v4-settings.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v4-ownership-hotfix.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v4-route-coherence.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v4-motion.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v4-contrast.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v5-coherence.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v5-listening-settings.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v5-utility.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v5-islands.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v5-mockup-convergence.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v4-home.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v4-progress.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v4-practice.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v4-listening.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v4-settings.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v4-ownership-hotfix.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v4-route-coherence.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v4-motion.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v4-contrast.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v5-coherence.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v5-listening-settings.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v5-utility.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v5-islands.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v5-mockup-convergence.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
           grep -q 'route/page containers' src/premium/premium-v4-motion.css
       - name: Sanctuaries remain exact
         run: |
@@ -70,8 +70,8 @@ jobs:
           grep -q 'data-field-navigation-v2-smoke="ok"' /tmp/field-nav-v3.html || { cat /tmp/field-nav-v3.html; exit 1; }
       - name: Chrome — P0 global path and geometry tribunal
         run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=34000 --dump-dom 'http://127.0.0.1:4173/tests/browser/p0-navigation-tribunal.html' >/tmp/tests/browser/p0-navigation-tribunal.html
-          grep -q 'data-p0-navigation-tribunal="ok"' /tmp/tests/browser/p0-navigation-tribunal.html || { cat /tmp/tests/browser/p0-navigation-tribunal.html; exit 1; }
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=34000 --dump-dom 'http://127.0.0.1:4173/tests/browser/p0-navigation-tribunal.html' >/tmp/p0-navigation-tribunal.html
+          grep -q 'data-p0-navigation-tribunal="ok"' /tmp/p0-navigation-tribunal.html || { cat /tmp/p0-navigation-tribunal.html; exit 1; }
       - name: Stop static server
         if: always()
         run: |

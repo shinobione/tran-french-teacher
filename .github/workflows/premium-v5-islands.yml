@@ -22,9 +22,9 @@ jobs:
           grep -q '.session-success' src/premium/premium-v5-islands.css
           grep -q '.scenario-lab-card' src/premium/premium-v5-islands.css
           grep -q 'prefers-reduced-motion:reduce' src/premium/premium-v5-islands.css
-          grep -q 'src/premium/premium-v5-islands.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v5-utility.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          test "$(tail -n 1 src/premium/premium-theme-polish.css)" = "@import url('./src/premium/premium-nav-geometry-hotfix.css?v=2.3.21-v57art1');"
+          grep -q './premium-v5-islands.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v5-utility.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          test "$(tail -n 1 src/premium/premium-theme-polish.css)" = "@import url('./premium-nav-geometry-hotfix.css?v=2.3.21-v57art1');"
           # Historical V5.3 owns its island layer and precache survivability.
           # The newest Premium slice owns the active cache/controller identity.
           grep -q "const V5I='2.3.21-v57art1'" sw.js

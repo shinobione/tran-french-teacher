@@ -2,7 +2,7 @@
   const root=document.documentElement;
   root.dataset.fieldNavigationV2Started='1';
   const frame=document.createElement('iframe');
-  frame.src='./index.html?uxSmoke=lesson8&fieldNavV3=1';
+  frame.src='../../index.html?uxSmoke=lesson8&fieldNavV3=1';
   frame.style.cssText='width:390px;height:844px;border:0';
   document.body.appendChild(frame);
   const wait=ms=>new Promise(r=>setTimeout(r,ms));

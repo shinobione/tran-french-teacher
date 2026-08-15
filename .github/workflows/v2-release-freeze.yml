@@ -51,8 +51,8 @@ jobs:
           PY
           grep -q "const VERSION = '2.0.0'" src/core/runtime-contracts.js
           grep -q 'const BUILD = 30' src/core/runtime-contracts.js
-          grep -q "src/core/runtime-contracts.js?v=2.0.0-b30" src/core/build-meta.js src/core/runtime-bridge.js
-          grep -q "src/core/runtime-bridge.js?v=2.0.0-b30" src/core/build-meta.js
+          grep -q "./runtime-contracts.js?v=2.0.0-b30" src/core/build-meta.js src/core/runtime-bridge.js
+          grep -q "./runtime-bridge.js?v=2.0.0-b30" src/core/build-meta.js
           grep -q "tests/smoke/v2-release-smoke.js?v=2.0.0" src/core/build-meta.js
           grep -q "const B30='2.0.0-b30'" sw.js
           grep -q "const V2='2.0.0'" sw.js

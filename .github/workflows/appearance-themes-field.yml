@@ -17,23 +17,23 @@ jobs:
           node --check src/core/theme-controller.js
           grep -q 'src/core/theme-controller.js?v=2.3.21-v57art1' index.html
           grep -q "version:'1.3.0-v57art'" src/core/theme-controller.js
-          grep -q 'src/premium/premium-v4-home.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v4-progress.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v4-practice.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v4-listening.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v4-settings.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v4-ownership-hotfix.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v4-route-coherence.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v4-motion.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v4-contrast.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v5-coherence.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v5-listening-settings.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v5-utility.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v5-islands.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v5-mockup-convergence.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v5-fidelity-reset.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v5-fidelity-refine.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
-          grep -q 'src/premium/premium-v5-fidelity-card-hotfix.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v4-home.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v4-progress.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v4-practice.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v4-listening.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v4-settings.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v4-ownership-hotfix.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v4-route-coherence.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v4-motion.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v4-contrast.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v5-coherence.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v5-listening-settings.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v5-utility.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v5-islands.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v5-mockup-convergence.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v5-fidelity-reset.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v5-fidelity-refine.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
+          grep -q './premium-v5-fidelity-card-hotfix.css?v=2.3.21-v57art1' src/premium/premium-theme-polish.css
           grep -q -- '--pv4-home-ready:1' src/premium/premium-v4-home.css
           grep -q -- '--pv4-progress-ready:1' src/premium/premium-v4-progress.css
           grep -q -- '--pv4-practice-ready:1' src/premium/premium-v4-practice.css
@@ -128,11 +128,11 @@ jobs:
             google-chrome --headless=new --no-sandbox --disable-gpu --disable-background-timer-throttling --disable-renderer-backgrounding --virtual-time-budget="$budget" --dump-dom "http://127.0.0.1:4173/$page" >"$out"
             grep -q "$marker" "$out" || { cat "$out"; exit 1; }
           done
-          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=52000 --dump-dom 'http://127.0.0.1:4173/tests/browser/premium-v4-transition-tribunal.html' >/tmp/tests/browser/premium-v4-transition-tribunal.html
-          grep -q 'data-premium-v4-transition-tribunal="ok"' /tmp/tests/browser/premium-v4-transition-tribunal.html || { cat /tmp/tests/browser/premium-v4-transition-tribunal.html; exit 1; }
-          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=30000 --dump-dom 'http://127.0.0.1:4173/tests/browser/premium-v4-motion-tribunal.html' >/tmp/tests/browser/premium-v4-motion-tribunal.html
-          grep -q 'data-premium-v4-motion-tribunal="ok"' /tmp/tests/browser/premium-v4-motion-tribunal.html
-          grep -q 'local-motion=enabled' /tmp/tests/browser/premium-v4-motion-tribunal.html
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=52000 --dump-dom 'http://127.0.0.1:4173/tests/browser/premium-v4-transition-tribunal.html' >/tmp/premium-v4-transition-tribunal.html
+          grep -q 'data-premium-v4-transition-tribunal="ok"' /tmp/premium-v4-transition-tribunal.html || { cat /tmp/premium-v4-transition-tribunal.html; exit 1; }
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=30000 --dump-dom 'http://127.0.0.1:4173/tests/browser/premium-v4-motion-tribunal.html' >/tmp/premium-v4-motion-tribunal.html
+          grep -q 'data-premium-v4-motion-tribunal="ok"' /tmp/premium-v4-motion-tribunal.html
+          grep -q 'local-motion=enabled' /tmp/premium-v4-motion-tribunal.html
           google-chrome --headless=new --no-sandbox --disable-gpu --force-prefers-reduced-motion --virtual-time-budget=30000 --dump-dom 'http://127.0.0.1:4173/tests/browser/premium-v4-motion-tribunal.html' >/tmp/premium-v4-motion-reduced.html
           grep -q 'data-premium-v4-motion-tribunal="ok"' /tmp/premium-v4-motion-reduced.html
           grep -q 'local-motion=disabled' /tmp/premium-v4-motion-reduced.html
