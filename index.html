@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="google" content="notranslate" />
   <meta http-equiv="Content-Language" content="vi" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
   <meta name="theme-color" content="#171026" />
   <meta name="color-scheme" content="dark" />
   <meta name="format-detection" content="telephone=no" />
@@ -50,6 +50,15 @@
   <link rel="stylesheet" href="./appearance-themes.css?v=1.1.0-v57art1" />
   <title>French Trân’quille</title>
   <style>
+    /* V5.10 prep — mobile app lock: keep the learner surface app-like on touch devices. */
+    @media (pointer:coarse), (hover:none) {
+      html,body,#app{
+        -webkit-user-select:none!important;
+        user-select:none!important;
+        -webkit-touch-callout:none!important;
+      }
+      html,body{touch-action:pan-x pan-y;}
+    }
     .boot-status{width:min(560px,calc(100% - 32px));margin:18vh auto 0;padding:22px;border:1px solid rgba(180,199,224,.16);border-radius:20px;background:rgba(14,26,42,.86);color:#f7f3eb;text-align:center;font-family:Inter,system-ui,sans-serif;box-shadow:0 18px 50px rgba(0,0,0,.22)}
     .boot-status strong{display:block;font-size:1.05rem;margin-bottom:8px}.boot-status small{display:block;color:#91a4bc;line-height:1.5}.boot-status.error{border-color:rgba(240,90,105,.38)}.boot-status code{display:block;margin-top:12px;padding:10px;border-radius:10px;background:#08111d;color:#ffc0c7;text-align:left;white-space:pre-wrap;word-break:break-word;font-size:.72rem}
     html.listening-open .listening-overlay{bottom:calc(70px + env(safe-area-inset-bottom,0px));padding-bottom:18px}
@@ -74,6 +83,18 @@
   </style>
 </head>
 <body translate="no" class="notranslate">
+  <script>
+    (()=>{
+      const coarse=matchMedia('(pointer: coarse)').matches||matchMedia('(hover: none)').matches;
+      const touch=coarse||navigator.maxTouchPoints>0||('ontouchstart' in window);
+      if(!touch)return;
+      document.documentElement.dataset.mobileInteractionLock='1';
+      const block=event=>event.preventDefault();
+      ['copy','cut','paste','contextmenu','selectstart','dragstart'].forEach(type=>document.addEventListener(type,block,true));
+      ['gesturestart','gesturechange','gestureend'].forEach(type=>document.addEventListener(type,block,{capture:true,passive:false}));
+      document.addEventListener('touchmove',event=>{if(event.touches&&event.touches.length>1)event.preventDefault();},{capture:true,passive:false});
+    })();
+  </script>
   <div id="app" translate="no" class="notranslate"><div class="boot-status" id="boot-status"><strong>French Trân’quille</strong><small>Đang khởi động… • Démarrage…</small></div></div>
   <details id="ft-theme-settings">
     <summary>🎨 <strong><span class="ft-theme-vi">Chủ đề</span><span class="ft-theme-fr">Thèmes</span></strong><span>Original + 3</span></summary>
