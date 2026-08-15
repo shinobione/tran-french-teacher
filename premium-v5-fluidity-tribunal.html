@@ -1,0 +1,68 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Premium V5.9 shared UI tribunal</title><style>body{margin:0}iframe{display:block;border:0}</style></head><body>
+<iframe id="appframe" src="./index.html?fieldNavV3=1" style="width:390px;height:844px"></iframe><script>
+(()=>{'use strict';
+const R=document.documentElement,F=document.getElementById('appframe'),wait=ms=>new Promise(r=>setTimeout(r,ms));
+const waitFor=async(fn,limit=18000)=>{for(let t=0;t<limit;t+=50){try{const v=fn();if(v)return v}catch{}await wait(50)}return null};
+const themes=['original','aurora','sunset','jade'];
+const learnerKeys=['francais-avec-luc:learner:v1','french-tranquille:learning-memory:v1','french-tranquille:error-intelligence:v1','french-tranquille:scenarios:v1','french-tranquille:listening:v1','french-tranquille:milestones:v1'];
+const finish=(ok,msg)=>{R.dataset.premiumV59=ok?'ok':'fail';R.dataset.premiumV59Detail=msg};
+F.addEventListener('load',()=>setTimeout(async()=>{try{
+ const w=F.contentWindow,d=F.contentDocument;
+ const ready=await waitFor(()=>w.FrenchTranquilleThemes&&w.FrenchTranquillePremiumV59&&w.FrenchTranquilleBuild27Shell&&w.FrenchTranquilleDebugFr&&d.querySelector('.b27-home'));
+ if(!ready)throw Error('api-missing');
+ const before=Object.fromEntries(learnerKeys.map(k=>[k,w.localStorage.getItem(k)]));
+ if(d.documentElement.dataset.v59Ready!=='1')throw Error('v59-not-ready');
+
+ for(const theme of themes){
+   w.FrenchTranquilleThemes.apply(theme);w.FrenchTranquillePremiumV59.refresh();await wait(80);
+   if(d.documentElement.dataset.theme!==theme)throw Error(`${theme}:theme`);
+   const line=d.querySelector('.b27-primary-card .b27-card-topline'),glyph=line?.querySelector(':scope > b'),badge=line?.querySelector(':scope > span');
+   if(!line||!glyph||!badge)throw Error(`${theme}:lesson-identity-missing`);
+   const ls=w.getComputedStyle(line),gr=glyph.getBoundingClientRect(),br=badge.getBoundingClientRect(),cr=line.closest('.b27-primary-card').getBoundingClientRect();
+   if(ls.justifyContent!=='flex-start')throw Error(`${theme}:lesson-identity-not-shared-left`);
+   if(!(gr.left<br.left&&gr.left<cr.left+110))throw Error(`${theme}:lesson-glyph-position`);
+ }
+
+ w.FrenchTranquilleBuild27Shell.openPractice();
+ const practice=await waitFor(()=>d.querySelector('.b27-practice-page'));
+ if(!practice)throw Error('practice-missing');
+ for(const id of ['conversation','listening','review','real-life']){
+   const action=practice.querySelector(`[data-b27-practice-action="${id}"]`),icon=action?.querySelector('.b27-practice-icon');
+   if(!action||!icon?.querySelector('svg')||icon.dataset.v59Icon!==id)throw Error(`practice-icon:${id}`);
+ }
+ practice.querySelector('.b27-back')?.click();await wait(120);
+
+ const settingsButton=d.querySelector('.b27-home [data-b27-settings]');
+ if(!settingsButton)throw Error('settings-button-missing');
+ settingsButton.click();
+ const legal=await waitFor(()=>d.getElementById('ft-settings-legal'));
+ if(!legal)throw Error('about-missing');
+ w.FrenchTranquillePremiumV59.refresh();await wait(80);
+ const head=legal.querySelector('.ft-legal-head');
+ if(!head||head.getAttribute('role')!=='button'||head.getAttribute('tabindex')!=='0')throw Error('about-hit-area-not-card');
+ const beforeOpen=legal.dataset.v55Open==='1';
+ head.dispatchEvent(new w.MouseEvent('click',{bubbles:true}));await wait(90);
+ const afterOpen=legal.dataset.v55Open==='1';
+ if(beforeOpen===afterOpen)throw Error('about-card-click-no-toggle');
+ if(head.getAttribute('aria-expanded')!==(afterOpen?'true':'false'))throw Error('about-aria-state');
+ const debugEntry=d.querySelector('[data-v59-debug-entry="1"]');
+ if(!debugEntry||w.FrenchTranquillePremiumV59.debugEntry!=='settings-title-5-taps')throw Error('hidden-debug-entry-missing');
+
+ const host=d.createElement('div');
+ host.innerHTML='<section class="speaking-loop-card" data-speaking-loop="teach" data-speaking-loop-phrase="Je préfère"><div class="speaking-loop-actions"><button data-speaking-record>A</button><button data-speaking-record>B</button></div><div class="speaking-loop-actions"><button data-speaking-record>C</button></div><small class="speaking-loop-note">N1</small><small class="speaking-loop-note">N2</small></section>';
+ d.body.appendChild(host);w.FrenchTranquillePremiumV59.sanitizeSpeakingLoop();
+ const fake=host.querySelector('.speaking-loop-card');
+ if(!fake||fake.querySelectorAll(':scope > .speaking-loop-actions').length!==1||fake.querySelectorAll('[data-speaking-record]').length!==1||fake.querySelectorAll(':scope > .speaking-loop-note').length!==1)throw Error('speaking-loop-dedupe');
+ host.remove();
+
+ for(const theme of themes){
+   w.FrenchTranquilleThemes.apply(theme);w.FrenchTranquilleDebugFr.apply(true);await wait(45);
+   if(!w.FrenchTranquilleDebugFr.current()||d.documentElement.dataset.theme!==theme)throw Error(`${theme}:debug-independence`);
+ }
+ w.FrenchTranquilleDebugFr.apply(false);await wait(45);
+ for(const k of learnerKeys)if(before[k]!==w.localStorage.getItem(k))throw Error(`store-mutated:${k}`);
+ finish(true,'themes=4;lesson-layout=shared-left;practice-icons=svg;about=whole-card;speaking=unique;debug=hidden-entry+all-themes;stores=6-unchanged');
+ }catch(e){finish(false,e.message)}},3200),{once:true});
+setTimeout(()=>{if(!R.dataset.premiumV59)finish(false,'timeout')},36000);
+})();
+</script></body></html>
