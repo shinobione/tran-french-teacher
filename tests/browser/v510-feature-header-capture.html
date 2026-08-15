@@ -89,6 +89,21 @@
           throw new Error(`wrong Vietnamese Real-Life title (${title.textContent.trim()})`);
         }
 
+        if(feature==='listening'&&!debugFr){
+          if(title.textContent.trim()!=='Luyện nghe')throw new Error(`wrong Vietnamese Listening title (${title.textContent.trim()})`);
+          if(lines>1.35)throw new Error(`Vietnamese Listening title still wrapped (${lines.toFixed(2)} lines)`);
+          const identity=header.querySelector('.ft-v510-feature-identity');
+          const score=header.querySelector('.listening-session-score');
+          if(!identity||!score)throw new Error('Listening identity/score missing');
+          const ir=identity.getBoundingClientRect();
+          const sr=score.getBoundingClientRect();
+          if(sr.top<ir.bottom-1)throw new Error('Listening score still squeezes the title row');
+          const brand=header.querySelector('.ft-v510-feature-brand');
+          const bs=w.getComputedStyle(brand);
+          const brandLineHeight=Number.parseFloat(bs.lineHeight)||Number.parseFloat(bs.fontSize)*1.2;
+          if(brand.getBoundingClientRect().height>brandLineHeight*1.35)throw new Error('Listening brand line still wraps');
+        }
+
         if(feature==='review'){
           w.FrenchTranquilleV510PracticeIcons?.refreshTyffanyIcons?.();
           const memory=await waitFor(()=>d.querySelector('.screen-review [data-v510-tyffany-icon="canonical-svg-v1"]'));
