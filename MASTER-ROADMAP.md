@@ -15,8 +15,8 @@
 | Item | Canonical state |
 |---|---|
 | Product pedagogy | **V2.3.0 · Build 34** |
-| Visual maintenance line | **Premium V5.9 technically closed · V5.10 physical field gate next** |
-| Verified `main` checkpoint at reconciliation | **`4019c1b6cb41fee9c36bdb223e255455a0da4b5f`** |
+| Visual maintenance line | **Premium V5.8 merged · V5.9 next** |
+| Verified `main` checkpoint at reconciliation | **`bf196a101e9d444650390e94a9ba8adf5f19009c`** |
 | Curriculum | **52 lessons / 313 items** |
 | Scenario | **44 situations / 132 turns** |
 | Speaking Loop | **52/52 · max 2 moments / lesson** |
@@ -34,9 +34,9 @@
 - V5.6 asset candidates were produced and user-approved.
 - V5.7 four-theme Premium artwork integration was user-approved, merged and delivered.
 - V5.8 DEBUG FR / theme decoupling was merged as PR #128.
-- V5.9 shared UI coherence was delivered as independently revertable PRs **#130–#134**.
-- V5.9 technical work is closed at `4019c1b6cb41fee9c36bdb223e255455a0da4b5f`.
-- The next active gate is **V5.10 — physical installed-iPhone/PWA Premium verdict**.
+- The next active runtime slice is **V5.9 — Shared UI Coherence + Fluidity / Premium Feel**.
+- V5.9 is **not** a theme-by-theme patch march.
+- The physical installed-iPhone/PWA final Premium verdict remains reserved for V5.10.
 - Build 35 remains blocked until #114 is explicitly closed after final user PASS.
 
 ---
@@ -117,7 +117,7 @@ V5.5 stable structural base ✅
 → V5.6 Premium Visual Identity Assets ✅
 → V5.7 Original Theme Parity + Theme Art Integration ✅
 → V5.8 DEBUG FR / Theme Decoupling ✅
-→ V5.9 Shared UI Coherence + Fluidity / Premium Feel ✅
+→ V5.9 Shared UI Coherence + Fluidity / Premium Feel
 → V5.10 Global Visual QA + Physical iPhone verdict
 → V2.3.x / Build 34 governance + documentation closure
 → close #114 only after explicit user PASS
@@ -249,21 +249,7 @@ V5.8 solved the **state ownership** problem. V5.9 still owns the quality of the 
 
 ---
 
-# 6. V5.9 — Shared UI Coherence + Fluidity / Premium Feel — TECHNICALLY CLOSED
-
-> **Historical execution specification retained below on purpose.** The original field findings, design contracts and DoD remain here as durable evidence; this section is no longer the active next phase.
-
-## Technical closeout — 2026-08-15
-
-- **V5.9A / PR #130** — interaction coherence — merge `5d25b6079dd8115149356bdf3dcb3133fee606e0`;
-- **V5.9B / PR #131** — shared Lesson/Eiffel layout — merge `45e7d2a62a635b4448ea16250c53e092390e5464`;
-- **V5.9C / PR #132** — shared Premium controls + hidden DEBUG entry — merge `3c6ecce404efa62723bfb0b10c85da6bbbfda1ed`;
-- **V5.9D / PR #133** — Premium goat favicon/PWA icon family — merge `48aed8e2fca0b6dacec8f9a4a5e257b16bad67ef`;
-- **V5.9E / PR #134** — aggregate technical QA checkpoint — merge `4019c1b6cb41fee9c36bdb223e255455a0da4b5f`.
-
-V5.9 is technically closed. **V5.10 owns the real installed-iPhone / Safari / PWA verdict.** Issue #114 therefore remains OPEN and Build 35 remains BLOCKED / RESERVED.
-
-The earlier “stop at candidate PR” agent policy is retained below as historical phase policy; this run continued through CI/merge only because the user explicitly delegated autonomous execution with rollback checkpoints.
+# 6. V5.9 — Shared UI Coherence + Fluidity / Premium Feel — ACTIVE NEXT
 
 ## Goal
 
@@ -471,18 +457,18 @@ Motion must be short, restrained, interruptible and optional under `prefers-redu
 
 ## 6.7 V5.9 Definition of Done
 
-- [x] Speaking block exposes one self-record CTA and one note only.
-- [x] `Giới thiệu` / About whole-card hit target works.
-- [x] Real Life icon belongs to the shared Premium icon family.
-- [x] One shared cross-theme lesson-card layout contract is implemented.
-- [x] No lesson identity / Eiffel overlap in any theme at target viewports.
-- [x] Buttons/cards visibly converge toward the approved mockup family.
-- [x] DEBUG/admin entry works on all themes and remains discreet in learner mode.
-- [x] Local interaction feel is smoother without route crossfades.
-- [x] Reduced-motion keeps full functionality.
-- [x] Navigation/audio/learner-store guards remain green.
-- [x] V5.9 candidate is materialized in git and a PR is opened.
-- [x] **Coding agent STOPS at candidate PR unless explicitly instructed otherwise.**
+- [ ] Speaking block exposes one self-record CTA and one note only.
+- [ ] `Giới thiệu` / About whole-card hit target works.
+- [ ] Real Life icon belongs to the shared Premium icon family.
+- [ ] One shared cross-theme lesson-card layout contract is implemented.
+- [ ] No lesson identity / Eiffel overlap in any theme at target viewports.
+- [ ] Buttons/cards visibly converge toward the approved mockup family.
+- [ ] DEBUG/admin entry works on all themes and remains discreet in learner mode.
+- [ ] Local interaction feel is smoother without route crossfades.
+- [ ] Reduced-motion keeps full functionality.
+- [ ] Navigation/audio/learner-store guards remain green.
+- [ ] V5.9 candidate is materialized in git and a PR is opened.
+- [ ] **Coding agent STOPS at candidate PR unless explicitly instructed otherwise.**
 
 ## 6.8 V5.9 execution policy
 
