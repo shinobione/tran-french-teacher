@@ -36,6 +36,42 @@
         button.click();
       }
 
+      function assertDesktopFieldGeometry(w,d,header){
+        if(w.innerWidth<1024)return;
+
+        const painted=[d.body];
+        if(feature==='listening'){
+          const overlay=d.querySelector('.listening-overlay');
+          if(overlay)painted.push(overlay);
+        }
+        for(const node of painted){
+          const sizes=w.getComputedStyle(node).backgroundSize.split(',').map(value=>value.trim());
+          if(sizes.length<2||sizes.some(value=>value!=='cover')){
+            throw new Error(`split Premium scene survived (${sizes.join(' | ')})`);
+          }
+        }
+
+        const shell=feature==='listening'
+          ? d.querySelector('.listening-shell')
+          : feature==='review'
+            ? d.querySelector('.screen-review .narrow')
+            : d.querySelector('.screen-conversation .narrow');
+        if(!shell)throw new Error('feature shell missing');
+        const shellWidth=shell.getBoundingClientRect().width;
+        if(shellWidth<920||shellWidth>1005)throw new Error(`desktop feature shell width ${shellWidth.toFixed(1)}px`);
+
+        const headerWidth=header.getBoundingClientRect().width;
+        if(headerWidth<920||headerWidth>1005)throw new Error(`desktop Feature Header width ${headerWidth.toFixed(1)}px`);
+
+        const title=header.querySelector('.ft-v510-feature-title');
+        const titleStyle=w.getComputedStyle(title);
+        const lineHeight=Number.parseFloat(titleStyle.lineHeight)||Number.parseFloat(titleStyle.fontSize)*1.1;
+        const titleHeight=title.getBoundingClientRect().height;
+        if(titleHeight>lineHeight*1.35)throw new Error(`desktop title wrapped (${titleHeight.toFixed(1)}px / ${lineHeight.toFixed(1)}px)`);
+
+        document.documentElement.dataset.captureShellWidth=String(Math.round(shellWidth));
+      }
+
       async function route(w,d){
         w.FrenchTranquilleThemes.apply(theme);
         await waitFor(()=>d.documentElement.dataset.theme===theme);
@@ -61,6 +97,7 @@
           return style.display!=='none'&&style.visibility!=='hidden'&&Number.parseFloat(style.opacity)>0&&rect.width>0&&rect.height>0;
         });
         await pause(550);
+        assertDesktopFieldGeometry(w,d,header);
       }
 
       app.src=`../../?uxSmoke=lesson8&debug=fr&v510Capture=${encodeURIComponent(feature)}-${Date.now()}`;
