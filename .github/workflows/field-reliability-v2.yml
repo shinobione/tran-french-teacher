@@ -35,7 +35,7 @@ jobs:
           grep -q 'data-field-audio-play' src/core/field-audio-session.js
           grep -Fq '.speaking-loop-actions[hidden][aria-hidden="true"]{display:none!important}' src/pedagogy/speaking-loop-content.css
           grep -q 'singleVoiceRecordControl' tests/browser/single-voice-record-control-smoke.html
-          grep -q 'limit=3200' tests/browser/field-audio-browser-smoke.html
+          grep -Fq "observeNode('[data-field-audio-record]',6000)" tests/browser/field-audio-browser-smoke.html
           grep -q 'observeNode' tests/browser/field-audio-browser-smoke.html
           grep -q 'play=observed' tests/browser/field-audio-browser-smoke.html
           grep -q "finish(false,'timeout')},14000" tests/browser/field-audio-browser-smoke.html
