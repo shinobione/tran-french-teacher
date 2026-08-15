@@ -7,6 +7,7 @@ on:
       - 'src/premium/premium-v510-practice-icons.js'
       - 'src/premium/premium-v510-practice-icons.css'
       - 'tests/browser/premium-v510-practice-icons-tribunal.html'
+      - 'tests/browser/v510-feature-header-capture.html'
       - 'index.html'
       - 'sw.js'
       - '.github/workflows/v510-practice-icon-system.yml'
@@ -85,6 +86,46 @@ jobs:
             tail -n 120 /tmp/ft-v510-icons.html || true
             exit 1
           fi
+      - name: Chrome — Feature Header visual captures
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/v510-feature-header-captures
+          for size in mobile desktop; do
+            if [ "$size" = mobile ]; then dims='430,932'; else dims='1280,800'; fi
+            for feature in listening review speak real-life; do
+              profile="/tmp/v510-capture-${size}-${feature}-profile"
+              out="/tmp/v510-feature-header-captures/${size}-${feature}.png"
+              rm -rf "$profile"
+              timeout --signal=TERM --kill-after=5s 45s google-chrome \
+                --headless=new --no-sandbox --disable-gpu \
+                --hide-scrollbars \
+                --run-all-compositor-stages-before-draw \
+                --user-data-dir="$profile" \
+                --window-size="$dims" \
+                --virtual-time-budget=18000 \
+                --screenshot="$out" \
+                "http://127.0.0.1:4173/tests/browser/v510-feature-header-capture.html?theme=aurora&feature=${feature}"
+              test -s "$out"
+            done
+          done
+          python3 - <<'PY'
+          from pathlib import Path
+          shots=sorted(Path('/tmp/v510-feature-header-captures').glob('*.png'))
+          assert len(shots)==8, f'expected 8 captures, got {len(shots)}'
+          for shot in shots:
+            data=shot.read_bytes()
+            assert data[:8]==b'\x89PNG\r\n\x1a\n', f'{shot}: invalid PNG'
+            assert len(data)>15000, f'{shot}: suspiciously small capture'
+          print('8/8 V5.10 Feature Header visual captures produced')
+          PY
+      - name: Upload Feature Header visual captures
+        uses: actions/upload-artifact@v4
+        with:
+          name: v510-feature-header-captures
+          path: /tmp/v510-feature-header-captures/*.png
+          if-no-files-found: error
+          retention-days: 14
       - name: Stop static server
         if: always()
         shell: bash
