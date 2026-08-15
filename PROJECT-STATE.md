@@ -13,7 +13,10 @@
 - That basis commit is the merge of PR **#125**, which added the durable AI/Codex project handoff.
 - Product/runtime-bearing checkpoint immediately before those docs/assets: **`2bba5bd06ba14be7286e16a6a9a417fa04ce642a`**.
 - PR #123 explicitly introduced **no runtime wiring**.
-- Open implementation PRs at that reconciliation point: **none**.
+- Active V5.6 review branch: **`codex/v5.6-asset-finalization`**.
+- Active draft PR: **#126 — V5.6 Premium asset finalization candidates**.
+- Verified asset-package commit inside that PR: **`2cbb070f70c494707e7a19a665bf5746e3e56c39`**.
+- PR #126 is intentionally blocked at the V5.6 human visual gate; it contains no runtime wiring.
 
 **Important:** this document does not claim that its own commit is the latest `main` SHA. A checkpoint cannot safely self-embed its final commit SHA. Fresh agents must verify current HEAD first.
 
