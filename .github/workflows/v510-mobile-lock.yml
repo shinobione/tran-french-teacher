@@ -1,0 +1,49 @@
+name: V5.10 Mobile Lock Guard
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  mobile-lock:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Static mobile lock contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -Fq 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover' index.html
+          grep -Fq -- '-webkit-user-select:none!important' index.html
+          grep -Fq -- '-webkit-touch-callout:none!important' index.html
+          grep -Fq 'touch-action:pan-x pan-y' index.html
+          grep -Fq "['copy','cut','paste','contextmenu','selectstart','dragstart']" index.html
+          grep -Fq "['gesturestart','gesturechange','gestureend']" index.html
+          grep -Fq 'event.touches&&event.touches.length>1' index.html
+          grep -Fq "dataset.mobileInteractionLock='1'" index.html
+
+      - name: Boot app after lock wiring
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-v510-lock-http.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          sleep 1
+          timeout --signal=TERM --kill-after=5s 45s \
+            google-chrome --headless=new --no-sandbox --disable-gpu \
+            --window-size=390,844 --virtual-time-budget=16000 --dump-dom \
+            'http://127.0.0.1:4173/?fieldNavV3=1' >/tmp/v510-lock-app.html
+          ! grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/v510-lock-app.html
+          grep -q 'data-v59-interactions="1"' /tmp/v510-lock-app.html
+          grep -q 'data-v59-lesson-layout="1"' /tmp/v510-lock-app.html
+          grep -q 'data-v59-premium-system="1"' /tmp/v510-lock-app.html
