@@ -26,25 +26,28 @@ jobs:
         run: |
           node --check premium-v510-practice-icons.js
           node --check sw.js
-          grep -q 'premium-v510-practice-icons.css?v=2.3.29-v510icons3' index.html
-          grep -q 'premium-v510-practice-icons.js?v=2.3.29-v510icons3' index.html
-          grep -q "const V510ICONS='2.3.29-v510icons3'" sw.js
+          grep -q 'premium-v510-practice-icons.css?v=2.3.30-v510icons4' index.html
+          grep -q 'premium-v510-practice-icons.js?v=2.3.30-v510icons4' index.html
+          grep -q "const V510ICONS='2.3.30-v510icons4'" sw.js
           grep -q 'premium-v510-practice-icons.css?v=${V510ICONS}' sw.js
           grep -q 'premium-v510-practice-icons.js?v=${V510ICONS}' sw.js
-          grep -q "style: 'premium-pictogram-v3'" premium-v510-practice-icons.js
+          grep -q "style: 'premium-3d-pictogram-v4'" premium-v510-practice-icons.js
           grep -q "conversation: svg('conversation'" premium-v510-practice-icons.js
           grep -q "listening: svg('listening'" premium-v510-practice-icons.js
           grep -q "review: svg('review'" premium-v510-practice-icons.js
           grep -q "'real-life': svg('real-life'" premium-v510-practice-icons.js
-          grep -q 'ft-v510-picto-primary' premium-v510-practice-icons.js
-          grep -q 'ft-v510-picto-secondary' premium-v510-practice-icons.js
-          grep -q 'ft-v510-picto-highlight' premium-v510-practice-icons.js
-          grep -q -- '--v510-picto-hi' premium-v510-practice-icons.css
-          grep -q 'filter:none' premium-v510-practice-icons.css
-          grep -q 'content:none!important' premium-v510-practice-icons.css
-          if grep -q 'drop-shadow(' premium-v510-practice-icons.css; then
-            echo 'V3 must not reintroduce pictogram drop-shadow filters'; exit 1;
-          fi
+          grep -q 'b27-quick-card\[data-b27-action\]' premium-v510-practice-icons.js
+          grep -q "id !== 'review' && id !== 'listening'" premium-v510-practice-icons.js
+          grep -q 'ft-v510-3d-orange-shadow' premium-v510-practice-icons.js
+          grep -q 'ft-v510-3d-purple-hi' premium-v510-practice-icons.js
+          grep -q 'ft-v510-3d-blue-shadow' premium-v510-practice-icons.js
+          grep -q 'ft-v510-3d-cyan-hi' premium-v510-practice-icons.js
+          grep -q 'b27-quick-icon\[data-v510-practice-icon\]' premium-v510-practice-icons.css
+          grep -q -- '--v510-icon-orange' premium-v510-practice-icons.css
+          grep -q -- '--v510-icon-purple' premium-v510-practice-icons.css
+          grep -q -- '--v510-icon-blue' premium-v510-practice-icons.css
+          grep -q -- '--v510-icon-cyan' premium-v510-practice-icons.css
+          grep -q 'drop-shadow(' premium-v510-practice-icons.css
       - name: Start static server
         shell: bash
         run: |
@@ -52,7 +55,7 @@ jobs:
           echo $! >/tmp/ft-v510-icons-server.pid
           sleep 1
           google-chrome --version
-      - name: Chrome — four themes, four crisp premium pictograms, optical centering
+      - name: Chrome — four themes, four expressive 3D pictograms, exact Home reuse
         shell: bash
         run: |
           rm -rf /tmp/ft-v510-icons-profile /tmp/ft-v510-icons.html
@@ -63,7 +66,7 @@ jobs:
             --virtual-time-budget=30000 \
             --dump-dom 'http://127.0.0.1:4173/premium-v510-practice-icons-tribunal.html' \
             >/tmp/ft-v510-icons.html
-          if ! grep -q 'data-v510-practice-icons="ok"' /tmp/ft-v510-icons.html || ! grep -q 'V5.10 practice pictogram system V3 OK' /tmp/ft-v510-icons.html; then
+          if ! grep -q 'data-v510-practice-icons="ok"' /tmp/ft-v510-icons.html || ! grep -q 'V5.10 expressive 3D pictogram system V4 OK' /tmp/ft-v510-icons.html; then
             echo '--- V5.10 pictogram tribunal failure ---'
             grep -o 'FAIL: [^<]*' /tmp/ft-v510-icons.html || true
             tail -n 80 /tmp/ft-v510-icons.html || true
