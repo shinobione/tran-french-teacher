@@ -1,0 +1,106 @@
+/* French Trân’quille — Premium V5.9B shared Lesson/Today geometry.
+   One semantic composition across Original / Aurora / Sunset / Nocturne. */
+html[data-theme] .b27-primary-card.ft-v59-lesson-hero{
+  --v59-hero-art-w:clamp(132px,31%,218px);
+  --v59-hero-art-gap:clamp(94px,24%,168px);
+  isolation:isolate;
+}
+
+/* Badge + lesson icon are one identity cluster on the LEFT. The decorative
+   Eiffel keeps the opposite/right zone instead of competing with the icon. */
+html[data-theme] .ft-v59-lesson-hero>.ft-v59-lesson-identity{
+  width:max-content;
+  max-width:calc(100% - var(--v59-hero-art-gap));
+  min-height:42px;
+  display:flex!important;
+  justify-content:flex-start!important;
+  align-items:center!important;
+  gap:10px!important;
+  margin:0!important;
+}
+html[data-theme] .ft-v59-lesson-identity>.ft-v59-lesson-identity-icon{
+  order:-1;
+  flex:0 0 auto;
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  margin:0!important;
+  border:1px solid color-mix(in srgb,var(--ft-accent) 34%,var(--ft-border));
+  border-radius:13px;
+  background:linear-gradient(145deg,color-mix(in srgb,var(--ft-accent) 11%,var(--ft-surface)),color-mix(in srgb,var(--ft-accent2) 8%,var(--ft-surface-2)));
+  color:var(--ft-accent);
+  font-size:1.05rem!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 8px 20px rgba(0,0,0,.16);
+}
+html[data-theme] .ft-v59-lesson-identity>.ft-v59-lesson-identity-badge{
+  flex:0 1 auto;
+  min-width:0;
+}
+
+html[data-theme] .ft-v59-lesson-hero>.ft-v59-lesson-title,
+html[data-theme] .ft-v59-lesson-hero>.ft-v59-lesson-copy{
+  max-width:calc(100% - var(--v59-hero-art-gap))!important;
+}
+html[data-theme] .ft-v59-lesson-hero>.ft-v59-lesson-progress{
+  width:auto!important;
+  margin-right:clamp(48px,14%,94px)!important;
+}
+
+/* Approved Eiffel V2 art remains decorative, but now owns a predictable
+   right-side zone above the CTA instead of floating through the identity row. */
+html[data-theme] .ft-v59-lesson-hero::after{
+  width:var(--v59-hero-art-w)!important;
+  height:clamp(154px,29vw,248px)!important;
+  right:clamp(-10px,-1vw,4px)!important;
+  bottom:clamp(76px,9vw,94px)!important;
+  top:auto!important;
+  opacity:.88!important;
+  background-position:right bottom!important;
+  background-size:contain!important;
+  pointer-events:none!important;
+}
+html[data-theme] .ft-v59-lesson-hero>.ft-v59-lesson-action{
+  position:relative;
+  z-index:3;
+}
+
+@media(max-width:520px){
+  html[data-theme] .b27-primary-card.ft-v59-lesson-hero{
+    --v59-hero-art-w:clamp(116px,34vw,148px);
+    --v59-hero-art-gap:clamp(96px,31vw,126px);
+  }
+  html[data-theme] .ft-v59-lesson-hero>.ft-v59-lesson-identity{
+    max-width:calc(100% - 72px);
+  }
+  html[data-theme] .ft-v59-lesson-hero>.ft-v59-lesson-title{
+    max-width:calc(100% - var(--v59-hero-art-gap))!important;
+    min-height:2.05em;
+  }
+  html[data-theme] .ft-v59-lesson-hero>.ft-v59-lesson-copy{
+    max-width:100%!important;
+    padding-right:clamp(68px,21vw,92px);
+  }
+  html[data-theme] .ft-v59-lesson-hero::after{
+    height:clamp(140px,42vw,178px)!important;
+    right:-8px!important;
+    bottom:82px!important;
+    opacity:.80!important;
+  }
+}
+
+@media(min-width:900px){
+  html[data-theme] .b27-primary-card.ft-v59-lesson-hero{
+    --v59-hero-art-w:clamp(190px,25%,270px);
+    --v59-hero-art-gap:clamp(172px,24%,252px);
+  }
+  html[data-theme] .ft-v59-lesson-hero::after{
+    bottom:84px!important;
+    opacity:.92!important;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  html[data-theme] .ft-v59-lesson-hero,
+  html[data-theme] .ft-v59-lesson-hero *{scroll-behavior:auto!important}
+}
