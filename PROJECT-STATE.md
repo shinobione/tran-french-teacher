@@ -9,9 +9,8 @@
 - Reconciled: **2026-08-16**
 - Repository: `shinobione/tran-french-teacher`
 - Default branch: `main`
-- Current deployed `main`: **`f40ea317803a1ab2398b6855340c74977d7cc619`** — PR **#175**, Build 37.3 Foundations Pilot Adapter / Renderer Convergence.
-- GitHub Pages deployment on that exact SHA: **SUCCESS**.
-- Post-merge main matrix on `f40ea317…`: **33 SUCCESS / 4 inherited failures / 0 queued / 0 in-progress**.
+- Current runtime-bearing `main`: **`c609aafe0517053178270af4bc9dcb78c94b8084`** — PR **#176**, Build **37.4 · F11 Negation**.
+- GitHub Pages **#229** on that exact SHA: **SUCCESS**.
 - Visible application runtime metadata: **v2.4.0 · Build 36**.
 - Pedagogy baseline: **v2.3.0 · Build 34**.
 - Premium V5.10: **CLOSED / physical FIELD PASS**; issue **#114 CLOSED**.
@@ -20,9 +19,8 @@
 - **Build 37 ACTIVE — Foundations Core.**
 - **37.1 MERGED / CERTIFIED** — pure F01–F18 ownership registry.
 - **37.2 MERGED / CERTIFIED** — pure generic capsule engine + exact F01–F04 mirror spec.
-- **37.3 MERGED / CERTIFIED** — existing F01–F04 learner pilot converged onto the generic engine with strict visual/behavior/storage parity.
-- Active implementation slice: **37.4 · F11 Negation narrow learner expansion**.
-- Active branch: `build37/f11-negation-capsule`.
+- **37.3 MERGED / CERTIFIED** — F01–F04 pilot converged onto the generic engine with strict learner-facing parity.
+- **37.4 MERGED / DEPLOYED** — F11 negation narrow learner expansion in lessons 17–20.
 
 ## Current durable data contract — LOCKED
 
@@ -37,32 +35,22 @@
 | Product read-path cutover to Evidence | **NONE** |
 | Foundations persistence | **NONE / ephemeral only** |
 
-Build 36.3 merged as PR #170 and closed durability/adoption. PR #171 opened Build 37. PR #172 corrected runtime-version ownership only. PR #173 established the F01–F18 registry. PR #174 merged the pure capsule engine/spec. PR #175 then migrated the existing F01–F04 learner pilot onto that engine without changing its learner-facing contract.
+Recognition failure remains recognition-system evidence, never a pronunciation diagnosis.
 
-## Current main CI baseline
-
-Current deployed `main` `f40ea317…` completed **37 push workflows**:
-
-- **33 SUCCESS**;
-- **4 inherited failures**;
-- **0 queued**;
-- **0 in-progress**.
-
-Inherited failures still present:
-
-1. `Build 36.2 Evidence shadow adoption`;
-2. `V2.0.0 Freeze tribunal`;
-3. `Build 36.3 Recovery v3 durability tribunal`;
-4. `Build 28 Data recovery smoke`.
-
-These failures predate Build 37 and are baseline CI debt, not evidence of a Foundations regression by themselves.
-
-## Build 37.3 certified contract
+## Build 37 certified chain
 
 ```text
-Build 37.2 engine + exact F01–F04 spec
-→ build32 loader loads engine → spec → renderer
-→ lessons 8–13 keep the existing optional F01–F04 entry
+37.1 registry F01–F18
+→ 37.2 generic pure capsule engine
+→ 37.3 F01–F04 pilot adapter parity
+→ 37.4 F11 negation narrow expansion
+```
+
+### 37.3 locked predecessor contract
+
+```text
+lessons 8–13
+→ F01–F04 optional capsule
 → same texts / choices / answers / feedback
 → same VI / DEBUG FR behavior
 → same 0/20/40/60/80/100 progress rhythm
@@ -71,11 +59,7 @@ Build 37.2 engine + exact F01–F04 spec
 → NO Evidence product read
 ```
 
-PR #175 merged at **`f40ea317803a1ab2398b6855340c74977d7cc619`**. Its PR matrix introduced no new failure beyond the inherited four. Two isolated Chrome flakes passed on strict unchanged reruns. Post-merge Build 26.4 later completed successfully, leaving the final 33/4/0/0 main baseline above.
-
-## Build 37.4 candidate scope
-
-37.4 is the first **new** learner-facing Foundations content after the validated F01–F04 pilot.
+### 37.4 merged contract
 
 Selected concept:
 
@@ -83,13 +67,7 @@ Selected concept:
 F11 — negation
 ```
 
-Why F11:
-
-- Build 33 classifies it as **PARTIAL / recurrent but fragmented**;
-- Trân already sees negative forms in real curriculum chunks;
-- the missing piece is one short transferable key, not another vocabulary lesson.
-
-Contextual learner scope:
+Context:
 
 ```text
 lessons 17–20 only
@@ -106,31 +84,51 @@ Teaching key:
 ne / n’ + verb + pas
 ```
 
-37.4 also explains the `ne → n’` elision and notes that spoken French may omit `ne`, while the full form remains the safe beginner/writing baseline.
+The capsule also explains `ne → n’` before a vowel / silent h and notes that natural spoken French may omit `ne`, while the full form remains the safe beginner/writing baseline.
 
-Architecture:
+Architecture remains deliberately narrow:
 
 ```text
 same Build 37.2 pure engine
-→ add compiled F11 capsule to foundations-capsules.js
-→ same Build 37.3 renderer/adapter routes by lesson context
+→ compiled F11 capsule in foundations-capsules.js
+→ same Build 37.3 renderer routes by lesson context
 → F01–F04 stays on lessons 8–13
 → F11 stays on lessons 17–20
-→ no new runtime file
-→ no sw.js / loader / index change
+→ no loader / index / SW change
 → no durable write
+→ no Evidence product read
 ```
 
-Dedicated Build 37.4 guard already passed its first branch run on the code candidate:
+PR #176 final matrix completed with **50 SUCCESS + exactly the four inherited failures**, with no queued/in-progress jobs. An isolated Build 26.4 Chrome timeout passed on strict unchanged rerun. The PR introduced no new product regression beyond the inherited baseline.
 
-- generic engine contract PASS;
-- existing F01–F04 browser parity PASS;
-- F11 VI/FR desktop PASS;
-- F11 VI/FR 390×844 PASS;
-- storage unchanged;
-- protected owners untouched.
+Post-merge `main` deployment is live on Pages. One unrelated historical `Build 26 Real Life French III smoke` run on `c609aafe…` became stuck for hours in Chrome after its lesson 20 and lesson 35 steps passed. Treat that run as a **zombie runner pending fresh unchanged execution**, not as evidence of a Foundations failure. This docs-only reconciliation intentionally creates a fresh CI checkpoint without modifying runtime.
 
-Final branch-head guard must pass again after documentation checkpoint before PR opening.
+## Current inherited CI debt
+
+The four pre-Build37 failures remain baseline debt unless separately repaired:
+
+1. `Build 36.2 Evidence shadow adoption`;
+2. `V2.0.0 Freeze tribunal`;
+3. `Build 36.3 Recovery v3 durability tribunal`;
+4. `Build 28 Data recovery smoke`.
+
+Do not hide these failures, but do not misclassify them as a new Foundations regression either.
+
+## Next Foundations selection
+
+Build 33 + the 37.1 registry classify the remaining partial Core candidates as:
+
+```text
+F05 subject pronouns          — PARTIAL / consolidate / medium
+F08 regular -er present       — PARTIAL / consolidate
+F12 questions                 — PARTIAL / system weak
+F13 adjective agreement       — PARTIAL / later core
+F16 à/de contractions         — PARTIAL / later core
+```
+
+The next smallest candidate is **F05 subject pronouns consolidation** because lessons 16–20 already expose `je / tu / il / elle / vous` in real language, making a short consolidation possible without adding a parallel grammar curriculum or new vocabulary.
+
+This is a **candidate selection**, not permission for a mass rollout. Inspect the exact lesson anchors before implementing 37.5.
 
 ## Protected boundaries
 
@@ -149,20 +147,20 @@ Listening / Scenario / Mastery / Learner Intelligence owners
 V5.10 field-accepted navigation / visual identities
 ```
 
-Recognition failure remains recognition-system evidence, never a pronunciation diagnosis.
-
 ## NEXT
 
 ```text
-finish Build 37.4 final branch checkpoint
-→ dedicated 37.4 tribunal must remain green on final head
-→ open PR
-→ classify full PR matrix against the four inherited main failures
-→ merge only if there is no new regression
-→ certify exact merged main + Pages
-→ then choose the next smallest Foundations concept from Build 33 + 37.1 registry
+fresh CI on this docs-only checkpoint
+→ confirm Build 37.4 guard remains green
+→ confirm fresh Real Life III smoke is no longer zombie / passes unchanged
+→ keep the four inherited failures classified separately
+→ then open Build 37.5 as ONE narrow Foundations concept
+→ preferred candidate: F05 subject-pronoun consolidation, only after exact curriculum-anchor check
+→ dedicated tribunal must replay F01–F04 + F11 before testing the new concept
+→ VI / DEBUG FR × desktop / iPhone-size
+→ storage byte-identical
+→ NO Evidence product read
 → do NOT mass-rollout F05–F18
-→ do NOT use Evidence as product truth without a separate explicit gate
 ```
 
 **Build 36 is CLOSED. Do not reopen it without a concrete regression.**
