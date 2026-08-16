@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Runtime version meta tribunal</title></head>
+<body data-runtime-meta="pending">
+<script>
+(async()=>{
+  const body=document.body;
+  const fail=message=>{body.dataset.runtimeMeta='fail';body.dataset.runtimeMetaDetail=message;};
+  const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+  const waitFor=async(predicate,timeout=15000)=>{const start=performance.now();while(performance.now()-start<timeout){try{if(predicate())return true}catch{}await wait(50)}return false};
+  try{
+    const frame=document.createElement('iframe');
+    frame.src='../../?runtimeMetaTribunal=1';
+    frame.style.width='430px';frame.style.height='932px';
+    document.body.appendChild(frame);
+    await new Promise((resolve,reject)=>{frame.addEventListener('load',resolve,{once:true});setTimeout(()=>reject(new Error('frame-load-timeout')),15000)});
+    const w=frame.contentWindow,d=frame.contentDocument;
+    if(!await waitFor(()=>w.FrenchTranquilleFoundationsPilot&&w.FrenchTranquilleRuntimeMeta&&w.FrenchTranquilleBuildMeta))throw new Error('runtime-meta-not-ready');
+
+    const runtime=w.FrenchTranquilleRuntimeMeta;
+    const pedagogy=w.FrenchTranquillePedagogyBaseline;
+    if(runtime.version!=='2.4.0'||String(runtime.build)!=='36')throw new Error(`runtime-meta:${runtime.version}/${runtime.build}`);
+    if(pedagogy?.version!=='2.3.0'||String(pedagogy?.build)!=='34')throw new Error(`pedagogy-baseline:${pedagogy?.version}/${pedagogy?.build}`);
+    if(w.FrenchTranquilleBuildMeta.version!=='2.4.0'||String(w.FrenchTranquilleBuildMeta.build)!=='36')throw new Error('legacy-meta-not-runtime-owned');
+
+    w.FrenchTranquilleFoundationsPilot.refresh();
+    await wait(120);
+    if(w.FrenchTranquilleBuildMeta.version!=='2.4.0'||String(w.FrenchTranquilleBuildMeta.build)!=='36')throw new Error('foundations-reclaimed-runtime-meta');
+
+    const settings=d.querySelector('[data-go="settings"]');
+    if(!settings)throw new Error('settings-button-missing');
+    settings.click();
+    if(!await waitFor(()=>d.querySelector('.screen-settings .diagnostics')))throw new Error('settings-diagnostics-missing');
+    const versionRow=[...d.querySelectorAll('.screen-settings .diagnostics > div')].find(row=>['version','phiên bản'].includes(row.querySelector('span')?.textContent?.trim()?.toLocaleLowerCase()));
+    const visible=versionRow?.querySelector('strong')?.textContent?.trim();
+    if(visible!=='v2.4.0 • Build 36')throw new Error(`visible-version:${visible||'missing'}`);
+
+    const root=d.documentElement;
+    if(root.dataset.runtimeVersion!=='2.4.0'||root.dataset.runtimeBuild!=='36')throw new Error('runtime-dataset-mismatch');
+    if(root.dataset.pedagogyVersion!=='2.3.0'||root.dataset.pedagogyBuild!=='34')throw new Error('pedagogy-dataset-mismatch');
+
+    body.dataset.runtimeMeta='ok';
+    body.dataset.runtimeMetaVisible=visible;
+  }catch(error){fail(error?.message||String(error));}
+})();
+</script>
+</body>
+</html>
