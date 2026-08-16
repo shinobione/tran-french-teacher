@@ -1,0 +1,114 @@
+name: Build 38.1 Generalization subject substitution
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [build38/subject-substitution]
+
+permissions:
+  contents: read
+
+jobs:
+  subject-substitution:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax + Build 37 predecessor + 38.1 contract
+        run: |
+          set -euo pipefail
+          node --check src/pedagogy/generalization-transfer-core.js
+          node --check tools/test-build38-1-subject-substitution.cjs
+          node tools/test-build37-8-foundations-adjective-agreement.cjs
+          node tools/test-build38-1-subject-substitution.cjs
+
+      - name: Subject substitution stays narrow and deterministic
+        run: |
+          set -euo pipefail
+          grep -q "id:'subject-substitution-regular-er'" src/pedagogy/generalization-transfer-core.js
+          grep -q "slice:'38.1'" src/pedagogy/generalization-transfer-core.js
+          grep -q "status:'pure-non-wired'" src/pedagogy/generalization-transfer-core.js
+          grep -q "travailler:freeze" src/pedagogy/generalization-transfer-core.js
+          grep -q "habiter:freeze" src/pedagogy/generalization-transfer-core.js
+          grep -q "aimer:freeze" src/pedagogy/generalization-transfer-core.js
+          grep -q "excluded:freeze(\['aller','vouloir','pouvoir','devoir'\])" src/pedagogy/generalization-transfer-core.js
+          ! grep -q 'Math.random' src/pedagogy/generalization-transfer-core.js
+          ! grep -q 'localStorage' src/pedagogy/generalization-transfer-core.js
+          ! grep -q 'sessionStorage' src/pedagogy/generalization-transfer-core.js
+          ! grep -q 'indexedDB' src/pedagogy/generalization-transfer-core.js
+          ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/generalization-transfer-core.js
+
+      - name: Runtime, storage, voice, curriculum and Build 37 owners stay untouched
+        run: |
+          set -euo pipefail
+          git fetch origin main --quiet
+          changed="$(git diff --name-only origin/main...HEAD)"
+          forbidden='^(app\.js|voice-ios\.js|free-voice\.js|index\.html|sw\.js|manifest\.webmanifest|src/core/|src/ui/|src/premium/|src/pedagogy/curriculum-stage[234]\.js|src/pedagogy/learning-memory\.js|src/pedagogy/error-intelligence\.js|src/pedagogy/listening-engine\.js|src/pedagogy/scenario-engine\.js|src/pedagogy/mastery-engine\.js|src/pedagogy/learner-intelligence.*\.js|src/pedagogy/foundations-core\.js|src/pedagogy/foundations-capsule-engine\.js|src/pedagogy/foundations-capsules\.js|src/pedagogy/foundations-pilot\.js|assets/LOGO\.png|assets/Favicon\.png)$'
+          if printf '%s\n' "$changed" | grep -E "$forbidden"; then
+            echo 'Build 38.1 must stay pure/non-wired and preserve runtime + Build 37 ownership' >&2
+            exit 1
+          fi
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-b381-http.log 2>&1 &
+          echo $! >/tmp/ft-b381-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — Build 37.8 predecessor remains healthy
+        run: |
+          set -euo pipefail
+          passed=0
+          for attempt in 1 2; do
+            profile="/tmp/ft-b381-b378-$attempt"; file="/tmp/b381-b378-$attempt.html"
+            rm -rf "$profile" "$file"
+            if timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=390,844 --virtual-time-budget=11000 --dump-dom \
+              'http://127.0.0.1:4173/tests/browser/build37-8-foundations-adjective-agreement.html?debug=fr' >"$file" \
+              && grep -q 'data-b378-done="1"' "$file" \
+              && grep -q 'data-b378-f13="1"' "$file" \
+              && grep -q 'data-b378-storage-unchanged="1"' "$file" \
+              && ! grep -q 'data-b378-error=' "$file"; then passed=1; break; fi
+          done
+          test "$passed" -eq 1
+
+      - name: Chrome — 38.1 VI/FR desktop + iPhone parity
+        run: |
+          set -euo pipefail
+          for spec in 'vi 1280 900' 'fr 1280 900' 'vi 390 844' 'fr 390 844'; do
+            set -- $spec; locale="$1"; width="$2"; height="$3"; passed=0; file=''
+            for attempt in 1 2; do
+              profile="/tmp/ft-b381-${locale}-${width}-$attempt"
+              file="/tmp/b381-${locale}-${width}-$attempt.html"
+              rm -rf "$profile" "$file"
+              if timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
+                --user-data-dir="$profile" --window-size="$width,$height" --virtual-time-budget=9000 --dump-dom \
+                "http://127.0.0.1:4173/tests/browser/build38-1-subject-substitution.html?debug=$locale" >"$file" \
+                && grep -q 'data-b381-done="1"' "$file" \
+                && grep -q "data-b381-locale=\"$locale\"" "$file" \
+                && grep -q 'data-b381-family="subject-substitution-regular-er"' "$file" \
+                && grep -q 'data-b381-exercises="6"' "$file" \
+                && grep -q 'data-b381-storage-unchanged="1"' "$file" \
+                && grep -q 'data-b381-no-overflow="1"' "$file" \
+                && ! grep -q 'data-b381-error=' "$file"; then passed=1; break; fi
+            done
+            if [ "$passed" -ne 1 ]; then
+              echo "38.1 tribunal failed for $locale ${width}x${height}" >&2
+              grep -o 'data-b381-[^ >]*="[^"]*"' "$file" >&2 || true
+              grep -o 'data-b381-error="[^"]*"' "$file" >&2 || true
+              exit 1
+            fi
+          done
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-b381-server.pid ]; then kill "$(cat /tmp/ft-b381-server.pid)" || true; fi
