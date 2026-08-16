@@ -62,8 +62,18 @@ assert.equal(indexSource.includes('src/pedagogy/foundations-core.js'), false, '3
 assert.equal(swSource.includes('src/pedagogy/foundations-core.js'), false, '37.1 must not precache the new core');
 
 assert.equal(pilotSource.includes("concepts:['F01','F02','F03','F04']"), true);
-assert.equal(pilotSource.includes('if(n<8||n>13)return'), true);
 assert.equal(pilotSource.includes('persistent:false'), true);
 assert.equal(pilotSource.includes('localStorage.setItem'), false);
+
+if (pilotSource.includes("expansion:'37.4'")) {
+  assert.equal(pilotSource.includes("adapter:'37.3'"), true, '37.4 must keep the certified 37.3 adapter owner');
+  assert.equal(pilotSource.includes("id:'F01_F04',capsule:primaryCapsule,min:8,max:13"), true, '37.4 must preserve F01–F04 lessons 8–13');
+  assert.equal(pilotSource.includes("id:'F11',capsule:negationCapsule,min:17,max:20"), true, '37.4 F11 expansion must stay lessons 17–20');
+  assert.equal(pilotSource.includes("expansionConcepts:['F11']"), true, '37.4 must expose only F11 as the new learner expansion');
+  assert.equal(fs.existsSync(path.join(root, 'tests/browser/build37-4-foundations-negation.html')), true, '37.4 browser tribunal missing');
+  assert.equal(fs.existsSync(path.join(root, '.github/workflows/build37-4-foundations-negation.yml')), true, '37.4 workflow missing');
+} else {
+  assert.equal(pilotSource.includes('if(n<8||n>13)return'), true, 'pre-37.4 pilot must stay scoped to lessons 8–13');
+}
 
 console.log('Build 37.1 Foundations Core contract: PASS');
