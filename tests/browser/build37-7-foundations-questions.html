@@ -64,15 +64,12 @@
         ],
         conclusion:'Phản xạ cần giữ: với người thân, câu bình thường + ngữ điệu hỏi thường đủ; từ để hỏi cho biết bạn cần thông tin gì; với người lạ, Pouvez-vous… ? giúp giữ sự lịch sự. Chưa cần học đảo động từ. Một mini-check đúng chưa có nghĩa là đã “thành thạo”.'
       };
-      const nextFrame=()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
-      const setLesson=async number=>{
+      const setLesson=number=>{
         document.querySelector('.topbar h1').textContent=`Bài ${number} — routing tribunal`;
         document.querySelector('.lesson-step').innerHTML='<p data-existing-lesson>Existing lesson content</p>';
         window.FrenchTranquilleFoundationsPilot.refresh();
-        await nextFrame();
       };
-      (async()=>{
-        await nextFrame();
+      try{
         ok(window.FrenchTranquilleFoundationsCapsules?.F08?.concepts?.join(',')==='F08','F08 predecessor capsule missing');
         ok(window.FrenchTranquilleFoundationsCapsules?.F12?.concepts?.join(',')==='F12','F12 capsule missing');
         ok(window.FrenchTranquilleFoundationsPilot?.adapter==='37.3','37.3 adapter must remain owner');
@@ -118,28 +115,31 @@
         ok(document.activeElement?.matches('[data-foundation-open]'),'focus must return to F12 entry CTA');
         ok(document.querySelector('[data-existing-lesson]'),'lesson content must survive round trip');
 
-        await setLesson(42);
+        setLesson(42);
         ok(document.querySelector('[data-foundation-entry]')?.dataset.foundationCapsule==='F12','lesson 42 must remain F12');
-        await setLesson(43);
+        setLesson(43);
         ok(document.querySelector('[data-foundation-entry]')?.dataset.foundationCapsule==='F12','lesson 43 must remain F12');
-        await setLesson(44);
+        setLesson(44);
         ok(!document.querySelector('[data-foundation-entry]'),'lesson 44 must not expose F12');
-        await setLesson(40);
+        setLesson(40);
         ok(!document.querySelector('[data-foundation-entry]'),'lesson 40 must not expose F12');
-        await setLesson(32);
+        setLesson(32);
         ok(document.querySelector('[data-foundation-entry]')?.dataset.foundationCapsule==='F08','lesson 32 must remain owned by F08');
         click('[data-foundation-open]');
         ok(document.querySelector('.ft-foundation-dialog')?.dataset.foundationActiveCapsule==='F08','F08 predecessor dialog must still open');
         ok(text('.ft-foundation-top h2')===expected.f08Title,'F08 predecessor title changed');
         click('[data-foundation-close]');
-        await setLesson(34);
+        setLesson(34);
         ok(document.querySelector('[data-foundation-entry]')?.dataset.foundationCapsule==='F05','lesson 34 must remain owned by F05');
 
         ok(JSON.stringify(Object.keys(localStorage).sort().map(k=>[k,localStorage.getItem(k)]))===window.__b377StorageBefore,'localStorage changed during F12 capsule');
         ok(document.documentElement.scrollWidth<=innerWidth+1,'horizontal overflow detected');
         ok(document.querySelector('[data-foundation-open]').getBoundingClientRect().height>=44,'entry target below 44px');
         root.dataset.b377Done='1';root.dataset.b377Locale=window.__b377Debug?'fr':'vi';root.dataset.b377F08='1';root.dataset.b377F12='1';root.dataset.b377Routing='1';root.dataset.b377StorageUnchanged='1';root.dataset.b377NoOverflow='1';
-      })().catch(error=>{root.dataset.b377Error=error.message;console.error(error)});
+      }catch(error){
+        if(!root.dataset.b377Error)root.dataset.b377Error=error.message;
+        console.error(error);
+      }
     })();
   </script>
 </body>
