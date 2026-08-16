@@ -21,13 +21,14 @@
 | Scenario | **44 situations / 132 turns** |
 | Speaking Loop | **52/52 · max 2 moments / lesson** |
 | Listening | **0.88 normal / 0.65 slow** |
-| Durable pedagogical stores | **6** |
+| Durable pedagogical stores | **6 current runtime stores** |
 | Foundations | **F01–F04 pilot**, without renumbering the 52 lessons |
 | Frozen architecture baseline | **2.0.0 · Build 30** |
 | Primary target | **iPhone / Safari / installed PWA** |
 | Recurring backend/API cost | **0 €** |
 | Final Premium issue | **#114 — CLOSED / completed** |
-| Build 35 | **UNBLOCKED · NEXT CANONICAL BUILD** |
+| Build 35 | **CLOSED · migration readiness proven** |
+| Build 36 | **UNBLOCKED · NEXT CANONICAL BUILD — Memory Evidence v2 Adoption Candidate** |
 
 ## Current interpretation
 
@@ -40,7 +41,9 @@
 - PR #161 passed **44/44** pull-request workflows; the runtime passed **29/29** push workflows; **GitHub Pages #214** succeeded on the exact runtime SHA.
 - On **2026-08-16**, the user gave the explicit physical verdict: **`ça a l'air OK, TEST SMOKED`**.
 - That verdict is the canonical V5.10 **FIELD PASS**. Issue **#114 is CLOSED**.
-- **Build 35 is now unblocked**, but only for its reserved scope: **Memory Evidence v2 / Migration Readiness**. Premium polish must not steal the build number.
+- Build 35 then completed its reserved **Memory Evidence v2 / Migration Readiness** scope without adopting a new durable schema: deterministic projection in PR #164, isolated transactional migration proof in PR #165, and closeout/adoption-readiness contract in PR #166.
+- Build 35 closeout is certified on **`1e3209d70cd9eebc3eb7dd4bb8df6047d9d029a7`** with **32/32 push workflows**, **0 failure**, and **GitHub Pages #219 SUCCESS**.
+- **Build 36 is now the next canonical build**, beginning with **36.1 — Recovery v3 + seventh-store contract**. Initial Evidence v2 adoption must be a derived shadow store; no product read-path cutover is allowed in 36.1.
 
 ---
 
@@ -50,7 +53,7 @@
 
 Physical field contract:
 
-**ZERO route flash / ZERO remanence / ZERO competing facades.**
+**ZERO route flash / ZERO remANENCE / ZERO competing facades.**
 
 Permanent rule:
 
@@ -124,8 +127,8 @@ V5.5 stable structural base ✅
 → V5.10 Global Visual QA + Physical installed-PWA verdict ✅ FIELD PASS
 → V2.3.x / Build 34 governance + documentation closure ✅
 → issue #114 CLOSED after explicit user PASS ✅
-→ Build 35 Memory Evidence v2 / Migration Readiness **← NEXT CANONICAL BUILD**
-→ Build 36 Adoption Candidate only if migration proof is complete
+→ Build 35 Memory Evidence v2 / Migration Readiness ✅ CLOSED
+→ Build 36 Memory Evidence v2 Adoption Candidate **← NEXT CANONICAL BUILD**
 → Build 37 Foundations Core
 → Build 38 Generalization & Transfer
 → Build 39 Learner Intelligence 3
@@ -291,7 +294,7 @@ Resolved implementation map:
 - goat favicon / Apple Touch / PWA any + maskable identity and offline wiring → **V5.9D**;
 - aggregate technical tribunal + deterministic PWA offline harness → **V5.9E**.
 
-Historical next step from V5.9 was V5.10 physical validation. That gate is now complete; the current next build is Build 35.
+Historical next step from V5.9 was V5.10 physical validation. That gate is complete; Build 35 migration readiness is also now closed, and the current next build is Build 36.
 
 ## Goal
 
@@ -641,7 +644,7 @@ This is the explicit final Premium **FIELD PASS** required by the gate.
 5. physical verdict recorded above;
 6. PROJECT-STATE / MASTER ROADMAP reconciled;
 7. issue **#114 CLOSED / completed**;
-8. **Build 35 UNBLOCKED**.
+8. Build 35 was unblocked by this field PASS and has since completed/closed its migration-readiness scope.
 
 Future visual defects may be fixed as maintenance regressions, but V5.10 must not be silently reopened or Build 35 repurposed for Premium polish.
 
@@ -683,11 +686,11 @@ Voice rules remain:
 
 Premium work must not erase the post-Build34 pedagogy sequence.
 
-## Build 35 — Memory Evidence v2 / Migration Readiness — NEXT / UNBLOCKED
+## Build 35 — Memory Evidence v2 / Migration Readiness — CLOSED
 
-**Design and simulation first. No durable adoption yet.**
+**Design and simulation first. No durable adoption inside Build 35.**
 
-Build 35 became eligible only after the explicit V5.10 FIELD PASS and issue #114 closure on **2026-08-16**. Its scope is reserved for Memory Evidence v2 / migration readiness; it is not a continuation of Premium visual polish.
+Build 35 became eligible only after the explicit V5.10 FIELD PASS and issue #114 closure on **2026-08-16**. Its scope was reserved for Memory Evidence v2 / migration readiness; it was not a continuation of Premium visual polish.
 
 Evidence dimensions:
 
@@ -737,11 +740,80 @@ Build 35 Definition of Done:
 - migration simulable and reversible;
 - **no new durable schema adopted yet**.
 
-## Build 36 — Memory Evidence v2 Adoption Candidate
+### Build 35 certified evidence
 
-Only allowed if Build35 migration proof is complete.
+```text
+35.1 · PR #164
+→ deterministic Evidence v2 projection
+→ main 68b24c8a541992085309bc4a53f46e3a0f21eb97
+→ 30/30 push workflows · 0 failure
+→ Pages #217 SUCCESS
 
-Requires transactional migration through Recovery and explicit rollback.
+35.2 · PR #165
+→ isolated transactional write/reread/compare/rollback simulation
+→ PR 45/45 · 0 failure
+→ main c972bdc44d272c30601d73509c6e8a39c72f57cf
+→ 31/31 push workflows · 0 failure
+→ Pages #218 SUCCESS
+
+closeout · PR #166
+→ explicit Build 36 adoption-readiness contract
+→ PR 46/46 · 0 failure
+→ main 1e3209d70cd9eebc3eb7dd4bb8df6047d9d029a7
+→ 32/32 push workflows · 0 failure
+→ Pages #219 SUCCESS
+```
+
+Build 35 therefore closes with the six existing durable stores and backup envelope v2 still intact. The proposed `french-tranquille:memory-evidence:v2` key is not runtime-wired or persisted by Build 35.
+
+## Build 36 — Memory Evidence v2 Adoption Candidate — NEXT / UNBLOCKED
+
+Build 36 is now allowed because Build 35 migration proof is complete and certified.
+
+Initial adoption contract:
+
+> **Evidence v2 enters first as a derived shadow store. The existing six stores remain canonical for current product behaviour until a later explicit read-path decision.**
+
+Required adoption sequence:
+
+```text
+36.1 Recovery v3 + seventh-store contract
+→ 36.2 Evidence shadow adoption runtime
+→ 36.3 backup / restore / reset / rollback browser tribunal
+```
+
+### Build 36.1 — canonical next slice
+
+Recovery/backup design only before live Evidence persistence:
+
+- add the Evidence v2 seventh-store validator/contract;
+- target Recovery store set: learner, memory, errors, scenarios, listening, milestones, evidence;
+- bump backup envelope **v2 → v3** rather than silently redefining v2;
+- define v1/v2/v3 migration ownership explicitly;
+- distinguish historical missing stores from derived stores requiring rebuild, using semantics such as `preserveMissingIds` and `rebuildDerivedIds`;
+- preserve all six current store schemas and current product writers;
+- prove planning/normalization/restore semantics in pure tests;
+- **no live Evidence store write and no product read-path cutover in 36.1**.
+
+Locked old-backup semantics:
+
+```text
+v3
+→ owns seven stores directly
+
+v2
+→ owns the historical six stores
+→ rebuild Evidence from the restored six
+→ never preserve a newer device's Evidence shadow
+
+v1
+→ owns learner + memory
+→ preserve historically absent errors/scenarios/listening/milestones
+→ do not preserve Evidence
+→ rebuild Evidence from the resulting six-store target
+```
+
+Build 36 adoption/rollback details are locked in `docs/BUILD-35-CLOSEOUT-ADOPTION-READINESS.md`.
 
 ## Build 37 — Foundations Core
 
@@ -826,22 +898,23 @@ Before touching runtime:
 
 1. read `AGENTS.md`;
 2. read `PROJECT-STATE.md`;
-3. read the V5.10 closure and Build 35 sections here;
+3. read the Build 35 closeout and Build 36 sections here;
 4. inspect current `main`, open PRs and confirm issue #114 remains closed;
 5. verify the currently deployed Pages SHA when runtime work is involved;
 6. do not assume an old chat checkpoint is current;
-7. Build 35 is now allowed **only for Memory Evidence v2 / Migration Readiness**; do not use it for visual maintenance;
+7. Build 35 is closed; do not reopen or repurpose it for visual maintenance;
 8. do not regenerate locked backgrounds;
 9. preserve zero-flash atomic ownership;
 10. keep DEBUG independent from theme;
 11. preserve the accepted Premium identity/Feature Header/lesson/Tyffany/Theme contracts while doing pedagogy work;
 12. materialize work in git before treating it as project state;
-13. for Build 35, design and migration simulation come before any durable schema adoption;
-14. Build 36 remains blocked until Build 35 migration proof is complete;
-15. never declare a future physical/device gate complete from automation alone.
+13. Build 36 must begin with **36.1 Recovery v3 + seventh-store contract**, not direct runtime adoption;
+14. Evidence v2 must initially be a derived shadow store and the current six sources remain canonical for product behaviour;
+15. backup v3 / v1-v2-v3 restore ownership must be proven before 36.2 runtime persistence;
+16. never declare a future physical/device gate complete from automation alone.
 
 ---
 
 # Canonical one-line order
 
-> **Premium V5.10 FIELD PASS → #114 CLOSED → Build 35 Memory Evidence v2 / Migration Readiness NEXT → Build 36 only after complete migration proof → Builds 37–40 → A2 only after Build 40 decision.**
+> **Premium V5.10 FIELD PASS → #114 CLOSED → Build 35 Memory Evidence v2 / Migration Readiness CLOSED → Build 36 Memory Evidence v2 Adoption Candidate NEXT (36.1 Recovery v3 first) → Builds 37–40 → A2 only after Build 40 decision.**
