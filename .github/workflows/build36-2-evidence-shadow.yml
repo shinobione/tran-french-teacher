@@ -1,0 +1,154 @@
+name: Build 36.2 Evidence shadow adoption
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  evidence-shadow-adoption:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax and pure/runtime contract chain
+        run: |
+          node --check src/core/data-recovery-v3-contract.js
+          node --check src/core/data-recovery-v3-runtime-core.js
+          node --check src/core/data-recovery.js
+          node --check src/core/memory-evidence-v2-runtime.js
+          node --check tests/smoke/build36-recovery-v3-smoke.js
+          node --check tests/smoke/build36-shadow-runtime-core-smoke.js
+          node --check tests/smoke/build36-shadow-adoption-smoke.js
+          node --check tests/smoke/data-recovery-smoke.js
+          node tests/smoke/build36-recovery-v3-smoke.js
+          node tests/smoke/build36-shadow-runtime-core-smoke.js
+          node tools/test-build28-data-recovery.cjs
+          node tests/smoke/build35-memory-evidence-v2-smoke.js
+          node tests/smoke/build35-memory-evidence-v2-transaction-smoke.js
+          node tests/smoke/build35-closeout-smoke.js
+
+      - name: Recovery v3 boot order and Service Worker wiring are explicit
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          html=Path('index.html').read_text()
+          ordered=[
+            'src/core/data-recovery-core.js?v=1.21.0-b28',
+            'src/pedagogy/memory-evidence-v2-core.js?v=2.4.0-b36.2',
+            'src/core/data-recovery-v3-contract.js?v=2.4.0-b36.2',
+            'src/core/data-recovery-v3-runtime-core.js?v=2.4.0-b36.2',
+            'src/core/data-recovery.js?v=2.4.0-b36.2',
+            'src/core/memory-evidence-v2-runtime.js?v=2.4.0-b36.2',
+            'app.js?v=1.17.0-b24',
+            'src/pedagogy/learning-memory.js?v=1.17.0-b24'
+          ]
+          positions=[html.index(token) for token in ordered]
+          assert positions == sorted(positions), (ordered, positions)
+          PY
+          for token in \
+            'src/pedagogy/memory-evidence-v2-core.js' \
+            'src/core/data-recovery-v3-contract.js' \
+            'src/core/data-recovery-v3-runtime-core.js' \
+            'src/core/data-recovery.js' \
+            'src/core/memory-evidence-v2-runtime.js' \
+            'tests/smoke/build36-shadow-adoption-smoke.js'; do
+            grep -q "$token" sw.js
+          done
+          grep -q "const B362='2.4.0-b36.2'" sw.js
+          grep -q "const CACHE='tran-french-teacher-v2.3.22-b34.14-v58debug1'" sw.js
+          ! grep -q 'memory-evidence-v2-migration-sim.js' index.html
+          ! grep -q 'memory-evidence-v2-migration-sim.js' sw.js
+
+      - name: Evidence is shadow-only — product read owners remain untouched
+        run: |
+          test "$(git hash-object src/core/data-recovery-core.js)" = "10dc84bb71b82c62b5f169f52c6bd95c88b308f9"
+          test "$(git hash-object src/pedagogy/memory-evidence-v2-core.js)" = "b85bea27be07289902df76079a9ace76451c720d"
+          test "$(git hash-object src/pedagogy/learning-memory.js)" = "be19abde268a78b8bfd140a0d94e99a4990dda65"
+          test "$(git hash-object src/pedagogy/error-intelligence.js)" = "060a7db49b72a58c8a6a6c0055efa484f9d9f604"
+          test "$(git hash-object src/pedagogy/listening-engine.js)" = "3d4b63212498d5a49cc5e6c48a0795c44555f06d"
+          test "$(git hash-object src/pedagogy/scenario-engine.js)" = "8bd6d67fa87cb2fd41fa44d0e48dbd342c137a53"
+          test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+          ! grep -R -q 'FrenchTranquilleEvidenceShadow\|french-tranquille:memory-evidence:v2' \
+            app.js \
+            src/pedagogy/learning-memory.js \
+            src/pedagogy/error-intelligence.js \
+            src/pedagogy/listening-engine.js \
+            src/pedagogy/scenario-engine.js \
+            src/pedagogy/mastery-engine.js \
+            src/pedagogy/learner-intelligence.js \
+            src/pedagogy/learner-intelligence-v2.js
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-b36-shadow-http.log 2>&1 &
+          echo $! >/tmp/ft-b36-shadow-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — first live shadow adoption owns snapshot and stays coherent
+        run: |
+          profile="/tmp/ft-b36-shadow-profile"
+          first="/tmp/b36-shadow-first.html"
+          rm -rf "$profile" "$first"
+          timeout --signal=TERM --kill-after=5s 60s \
+            google-chrome --headless=new --no-sandbox --disable-gpu \
+            --user-data-dir="$profile" --window-size=1280,900 \
+            --virtual-time-budget=18000 --dump-dom \
+            'http://127.0.0.1:4173/?uxSmoke=lesson8&debug=fr&b36ShadowSmoke=first' >"$first"
+          for marker in \
+            'data-b36-shadow-smoke-done="1"' \
+            'data-b36-shadow-mode="first"' \
+            'data-b36-shadow-runtime-contract="1"' \
+            'data-b36-shadow-initial-coherent="1"' \
+            'data-b36-shadow-lifecycle="1"' \
+            'data-b36-shadow-pre-migration="1"' \
+            'data-b36-shadow-refresh="1"' \
+            'data-b36-shadow-restore="1"' \
+            'data-b36-shadow-corrupt-blocked="1"' \
+            'data-b36-shadow-backup-v3="1"' \
+            'data-b36-shadow-last-good="1"' \
+            'data-b36-shadow-sources-untouched="1"'; do
+            grep -q "$marker" "$first"
+          done
+          grep -q 'screen-home' "$first"
+
+      - name: Chrome — same profile reopens existing shadow without remigration
+        run: |
+          profile="/tmp/ft-b36-shadow-profile"
+          reopen="/tmp/b36-shadow-reopen.html"
+          timeout --signal=TERM --kill-after=5s 60s \
+            google-chrome --headless=new --no-sandbox --disable-gpu \
+            --user-data-dir="$profile" --window-size=1280,900 \
+            --virtual-time-budget=18000 --dump-dom \
+            'http://127.0.0.1:4173/?debug=fr&b36ShadowSmoke=reopen' >"$reopen"
+          for marker in \
+            'data-b36-shadow-smoke-done="1"' \
+            'data-b36-shadow-mode="reopen"' \
+            'data-b36-shadow-runtime-contract="1"' \
+            'data-b36-shadow-initial-coherent="1"' \
+            'data-b36-shadow-lifecycle="1"' \
+            'data-b36-shadow-pre-migration="1"' \
+            'data-b36-shadow-refresh="1"' \
+            'data-b36-shadow-restore="1"' \
+            'data-b36-shadow-corrupt-blocked="1"' \
+            'data-b36-shadow-backup-v3="1"' \
+            'data-b36-shadow-last-good="1"' \
+            'data-b36-shadow-sources-untouched="1"'; do
+            grep -q "$marker" "$reopen"
+          done
+          grep -q 'screen-home' "$reopen"
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-b36-shadow-server.pid ]; then kill "$(cat /tmp/ft-b36-shadow-server.pid)" || true; fi
