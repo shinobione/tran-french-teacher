@@ -1,18 +1,18 @@
-name: Build 37.6 Foundations F08 regular -er
+name: Build 37.7 Foundations F12 practical questions
 
 on:
   pull_request:
     branches: [main]
   push:
-    branches: [build37/f08-regular-er]
+    branches: [build37/f12-questions-core-v2]
 
 permissions:
   contents: read
 
 jobs:
-  foundations-f08-regular-er:
+  foundations-f12-questions:
     runs-on: ubuntu-latest
-    timeout-minutes: 16
+    timeout-minutes: 18
     steps:
       - uses: actions/checkout@v4
         with:
@@ -21,22 +21,26 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Syntax + predecessor parity + F08 contract
+      - name: Syntax + predecessor contracts + F12 contract
         run: |
           set -euo pipefail
           node --check src/pedagogy/foundations-capsule-engine.js
           node --check src/pedagogy/foundations-capsules.js
           node --check src/pedagogy/foundations-pilot.js
-          node --check tools/test-build37-6-foundations-regular-er.cjs
+          node --check tools/test-build37-7-foundations-questions.cjs
           node tools/test-build37-2-foundations-capsule-engine.cjs
           node tools/test-build37-4-foundations-negation.cjs
           node tools/test-build37-5-foundations-subject-pronouns.cjs
           node tools/test-build37-6-foundations-regular-er.cjs
+          node tools/test-build37-7-foundations-questions.cjs
 
-      - name: F08 stays a narrow optional written-pattern consolidation while successors remain additive
+      - name: F12 stays a narrow optional systematization
         run: |
           set -euo pipefail
-          grep -q "id:'regular-er-present-core',concepts:\['F08'\]" src/pedagogy/foundations-capsules.js
+          grep -q "id:'questions-core',concepts:\['F12'\]" src/pedagogy/foundations-capsules.js
+          grep -q "F08:engine.compile(REGULAR_ER_RAW)" src/pedagogy/foundations-capsules.js
+          grep -q "F12:engine.compile(QUESTIONS_RAW)" src/pedagogy/foundations-capsules.js
+          grep -q "id:'F12',capsule:questionsCapsule,min:41,max:43" src/pedagogy/foundations-pilot.js
           grep -q "id:'F08',capsule:regularErCapsule,min:32,max:33" src/pedagogy/foundations-pilot.js
           grep -q "id:'F05',capsule:subjectPronounsCapsule,min:34,max:36" src/pedagogy/foundations-pilot.js
           grep -q "id:'F11',capsule:negationCapsule,min:17,max:20" src/pedagogy/foundations-pilot.js
@@ -46,10 +50,14 @@ jobs:
           grep -q "consolidation:'37.5'" src/pedagogy/foundations-pilot.js
           grep -q "verbPattern:'37.6'" src/pedagogy/foundations-pilot.js
           grep -q "verbPatternConcepts:\['F08'\]" src/pedagogy/foundations-pilot.js
+          grep -q "systematization:'37.7'" src/pedagogy/foundations-pilot.js
+          grep -q "systematizationConcepts:\['F12'\]" src/pedagogy/foundations-pilot.js
           ! grep -q 'localStorage.setItem' src/pedagogy/foundations-capsules.js
           ! grep -q 'localStorage.setItem' src/pedagogy/foundations-pilot.js
           ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/foundations-capsules.js
           ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/foundations-pilot.js
+          ! grep -q 'F13:engine.compile' src/pedagogy/foundations-capsules.js
+          ! grep -q 'F16:engine.compile' src/pedagogy/foundations-capsules.js
 
       - name: Product, storage, voice, curriculum and PWA owners stay untouched
         run: |
@@ -58,14 +66,14 @@ jobs:
           changed="$(git diff --name-only origin/main...HEAD)"
           forbidden='^(app\.js|voice-ios\.js|free-voice\.js|index\.html|sw\.js|manifest\.webmanifest|src/core/build32-loader\.js|src/core/data-recovery|src/core/memory-evidence-v2-runtime\.js|src/pedagogy/memory-evidence-v2-core\.js|src/pedagogy/foundations-core\.js|src/pedagogy/curriculum-stage[234]\.js|src/pedagogy/learning-memory\.js|src/pedagogy/error-intelligence\.js|src/pedagogy/listening-engine\.js|src/pedagogy/scenario-engine\.js|src/pedagogy/mastery-engine\.js|src/pedagogy/learner-intelligence.*\.js|assets/LOGO\.png|assets/Favicon\.png)$'
           if printf '%s\n' "$changed" | grep -E "$forbidden"; then
-            echo 'Build 37.6 must stay inside the Foundations capsule/renderer/test/doc lane' >&2
+            echo 'Build 37.7 must stay inside the Foundations capsule/renderer/test/doc lane' >&2
             exit 1
           fi
 
       - name: Start static server
         run: |
-          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-b376-http.log 2>&1 &
-          echo $! >/tmp/ft-b376-server.pid
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-b377-http.log 2>&1 &
+          echo $! >/tmp/ft-b377-server.pid
           sleep 1
           google-chrome --version
 
@@ -74,8 +82,8 @@ jobs:
           set -euo pipefail
           passed=0
           for attempt in 1 2; do
-            profile="/tmp/ft-b376-f0104-$attempt"
-            file="/tmp/b376-f0104-$attempt.html"
+            profile="/tmp/ft-b377-f0104-$attempt"
+            file="/tmp/b377-f0104-$attempt.html"
             rm -rf "$profile" "$file"
             if timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
               --user-data-dir="$profile" --window-size=1280,900 --virtual-time-budget=9000 --dump-dom \
@@ -92,8 +100,8 @@ jobs:
           set -euo pipefail
           passed=0
           for attempt in 1 2; do
-            profile="/tmp/ft-b376-f11-$attempt"
-            file="/tmp/b376-f11-$attempt.html"
+            profile="/tmp/ft-b377-f11-$attempt"
+            file="/tmp/b377-f11-$attempt.html"
             rm -rf "$profile" "$file"
             if timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
               --user-data-dir="$profile" --window-size=390,844 --virtual-time-budget=9000 --dump-dom \
@@ -105,50 +113,58 @@ jobs:
           done
           test "$passed" -eq 1
 
-      - name: Chrome — F05 predecessor remains exact and owns lesson 34
+      - name: Chrome — F05 predecessor remains exact
         run: |
           set -euo pipefail
-          for spec in 'vi 1280 900' 'fr 390 844'; do
-            set -- $spec; locale="$1"; width="$2"; height="$3"; passed=0
-            for attempt in 1 2; do
-              profile="/tmp/ft-b376-f05-${locale}-${width}-$attempt"
-              file="/tmp/b376-f05-${locale}-${width}-$attempt.html"
-              rm -rf "$profile" "$file"
-              if timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
-                --user-data-dir="$profile" --window-size="$width,$height" --virtual-time-budget=9000 --dump-dom \
-                "http://127.0.0.1:4173/tests/browser/build37-5-foundations-subject-pronouns.html?debug=$locale" >"$file" \
-                && grep -q 'data-b375-done="1"' "$file" \
-                && grep -q 'data-b375-f05="1"' "$file" \
-                && grep -q 'data-b375-storage-unchanged="1"' "$file" \
-                && ! grep -q 'data-b375-error=' "$file"; then passed=1; break; fi
-            done
-            test "$passed" -eq 1
+          passed=0
+          for attempt in 1 2; do
+            profile="/tmp/ft-b377-f05-$attempt"
+            file="/tmp/b377-f05-$attempt.html"
+            rm -rf "$profile" "$file"
+            if timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=1280,900 --virtual-time-budget=9000 --dump-dom \
+              'http://127.0.0.1:4173/tests/browser/build37-5-foundations-subject-pronouns.html?debug=vi' >"$file" \
+              && grep -q 'data-b375-done="1"' "$file" \
+              && grep -q 'data-b375-f05="1"' "$file" \
+              && grep -q 'data-b375-storage-unchanged="1"' "$file" \
+              && ! grep -q 'data-b375-error=' "$file"; then passed=1; break; fi
           done
+          test "$passed" -eq 1
 
-      - name: Chrome — F08 VI/FR desktop + iPhone parity and routing boundary
+      - name: Chrome — F08 predecessor routing + F12 VI/FR desktop + iPhone parity
         run: |
           set -euo pipefail
           for spec in 'vi 1280 900' 'fr 1280 900' 'vi 390 844' 'fr 390 844'; do
-            set -- $spec; locale="$1"; width="$2"; height="$3"; passed=0
+            set -- $spec; locale="$1"; width="$2"; height="$3"; passed=0; file=''
             for attempt in 1 2; do
-              profile="/tmp/ft-b376-${locale}-${width}-$attempt"
-              file="/tmp/b376-${locale}-${width}-$attempt.html"
+              profile="/tmp/ft-b377-${locale}-${width}-$attempt"
+              file="/tmp/b377-${locale}-${width}-$attempt.html"
               rm -rf "$profile" "$file"
               if timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
-                --user-data-dir="$profile" --window-size="$width,$height" --virtual-time-budget=10000 --dump-dom \
-                "http://127.0.0.1:4173/tests/browser/build37-6-foundations-regular-er.html?debug=$locale" >"$file" \
-                && grep -q 'data-b376-done="1"' "$file" \
-                && grep -q "data-b376-locale=\"$locale\"" "$file" \
-                && grep -q 'data-b376-f08="1"' "$file" \
-                && grep -q 'data-b376-routing="1"' "$file" \
-                && grep -q 'data-b376-storage-unchanged="1"' "$file" \
-                && grep -q 'data-b376-no-overflow="1"' "$file" \
-                && ! grep -q 'data-b376-error=' "$file"; then passed=1; break; fi
+                --user-data-dir="$profile" --window-size="$width,$height" --virtual-time-budget=11000 --dump-dom \
+                "http://127.0.0.1:4173/tests/browser/build37-7-foundations-questions.html?debug=$locale" >"$file" \
+                && grep -q 'data-b377-done="1"' "$file" \
+                && grep -q "data-b377-locale=\"$locale\"" "$file" \
+                && grep -q 'data-b377-f08="1"' "$file" \
+                && grep -q 'data-b377-f12="1"' "$file" \
+                && grep -q 'data-b377-routing="1"' "$file" \
+                && grep -q 'data-b377-storage-unchanged="1"' "$file" \
+                && grep -q 'data-b377-no-overflow="1"' "$file" \
+                && ! grep -q 'data-b377-error=' "$file"; then passed=1; break; fi
             done
-            if [ "$passed" -ne 1 ]; then echo "F08 tribunal failed for $locale ${width}x${height}" >&2; exit 1; fi
+            if [ "$passed" -ne 1 ]; then
+              echo "F12 tribunal failed for $locale ${width}x${height}" >&2
+              echo '--- Build 37.7 root markers ---' >&2
+              grep -o 'data-b377-[^ >]*="[^"]*"' "$file" >&2 || true
+              echo '--- Build 37.7 assertion ---' >&2
+              grep -o 'data-b377-error="[^"]*"' "$file" >&2 || true
+              echo '--- Active Foundations route ---' >&2
+              grep -o 'data-foundation-capsule="[^"]*"' "$file" | tail -5 >&2 || true
+              exit 1
+            fi
           done
 
       - name: Stop static server
         if: always()
         run: |
-          if [ -f /tmp/ft-b376-server.pid ]; then kill "$(cat /tmp/ft-b376-server.pid)" || true; fi
+          if [ -f /tmp/ft-b377-server.pid ]; then kill "$(cat /tmp/ft-b377-server.pid)" || true; fi

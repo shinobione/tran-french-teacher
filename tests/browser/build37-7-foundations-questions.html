@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Build 37.7 F12 practical questions tribunal</title>
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#07111e;color:#eef5ff;font-family:system-ui,-apple-system,sans-serif}button{font:inherit;color:inherit;background:#20314a;border:1px solid #5f7595;border-radius:12px;padding:8px 12px}.primary{background:#315d74}.secondary{background:#253852}.muted{color:#9fb0c5}.screen-lesson{width:min(760px,calc(100% - 24px));margin:20px auto}.topbar{padding:10px 2px}.topbar h1{font-size:1.25rem}.lesson-step{padding:18px;border:1px solid #23364d;border-radius:20px;background:#0d1928}
+  </style>
+  <script>
+    (()=>{
+      const debug=new URLSearchParams(location.search).get('debug')==='fr';
+      localStorage.clear();
+      localStorage.setItem('tran-french-teacher:debug-fr:v1',debug?'1':'0');
+      localStorage.setItem('b37.7:sentinel','unchanged');
+      window.__b377Debug=debug;
+      window.__b377StorageBefore=JSON.stringify(Object.keys(localStorage).sort().map(k=>[k,localStorage.getItem(k)]));
+    })();
+  </script>
+</head>
+<body>
+  <main id="app">
+    <section class="screen-lesson">
+      <div class="topbar"><h1>Bài 41 — Hỏi lại &amp; làm rõ</h1></div>
+      <div class="lesson-step"><p data-existing-lesson>Existing lesson content</p></div>
+    </section>
+  </main>
+  <script src="../../src/pedagogy/foundations-capsule-engine.js?v=2.4.0-b37.3"></script>
+  <script src="../../src/pedagogy/foundations-capsules.js?v=2.4.0-b37.7"></script>
+  <script src="../../src/pedagogy/foundations-pilot.js?v=2.4.0-b37.7"></script>
+  <script>
+    (()=>{
+      const root=document.documentElement;
+      const fail=message=>{root.dataset.b377Error=message;throw new Error(message)};
+      const ok=(value,message)=>{if(!value)fail(message)};
+      const text=selector=>document.querySelector(selector)?.textContent?.trim()||'';
+      const texts=selector=>[...document.querySelectorAll(selector)].map(node=>node.textContent.trim());
+      const click=selector=>{const node=document.querySelector(selector);ok(node,`missing ${selector}`);node.click();return node};
+      const clickChoice=choice=>{const node=[...document.querySelectorAll('[data-foundation-choice]')].find(button=>button.textContent.trim()===choice);ok(node,`missing choice ${choice}`);node.click();return node};
+      const expected=window.__b377Debug?{
+        title:'Poser une question : intonation • mot interrogatif • politesse',
+        f08Title:'Le présent régulier en -er : je • tu • il/elle',
+        entry:'Environ 5 minutes pour relier les questions déjà rencontrées : intonation, mot interrogatif et demande polie. Pas besoin d’inversion.',
+        intro:'Tu as déjà rencontré beaucoup de vraies questions. Le but est de reconnaître quelques façons simples de demander quelque chose et de choisir celle qui convient.',
+        prompts:[
+          'Tu veux demander à Jerry s’il travaille. Quelle phrase est naturelle ?',
+          'Tu veux demander où Jerry habite. Quelle forme as-tu déjà rencontrée ?',
+          'Jerry dit qu’il rentre tard. Tu veux demander la raison avec un mot très court.',
+          'Tu ne comprends pas le sens d’une expression. Quelle question permet de clarifier ?',
+          'Tu veux demander poliment à une personne inconnue de reformuler.'
+        ],
+        conclusion:'Le réflexe : avec un proche, la phrase normale + l’intonation suffit souvent ; le mot interrogatif indique l’information recherchée ; avec une personne inconnue, Pouvez-vous… ? garde une demande polie. Pas besoin d’apprendre l’inversion maintenant. Un mini-check réussi ne signifie pas que la règle est « maîtrisée ».'
+      }:{
+        title:'Hỏi tự nhiên: ngữ điệu • từ để hỏi • lịch sự',
+        f08Title:'Hiện tại với động từ -er: je • tu • il/elle',
+        entry:'Khoảng 5 phút để nối các kiểu câu hỏi bạn đã gặp: ngữ điệu, từ để hỏi và câu lịch sự. Chưa cần đảo động từ.',
+        intro:'Bạn đã gặp nhiều câu hỏi thật trong các bài trước. Mục tiêu là nhận ra vài cách hỏi đơn giản và chọn cách phù hợp với tình huống.',
+        prompts:[
+          'Bạn muốn hỏi Jerry có đang làm việc không. Câu nào tự nhiên?',
+          'Bạn muốn hỏi Jerry sống ở đâu. Câu nào bạn đã gặp?',
+          'Jerry nói anh ấy về muộn. Bạn muốn hỏi lý do bằng một từ ngắn.',
+          'Bạn không hiểu nghĩa của một cách nói. Câu nào giúp làm rõ?',
+          'Bạn muốn lịch sự nhờ một người lạ nói lại theo cách khác.'
+        ],
+        conclusion:'Phản xạ cần giữ: với người thân, câu bình thường + ngữ điệu hỏi thường đủ; từ để hỏi cho biết bạn cần thông tin gì; với người lạ, Pouvez-vous… ? giúp giữ sự lịch sự. Chưa cần học đảo động từ. Một mini-check đúng chưa có nghĩa là đã “thành thạo”.'
+      };
+      const setLesson=number=>{
+        document.querySelector('.topbar h1').textContent=`Bài ${number} — routing tribunal`;
+        document.querySelector('.lesson-step').innerHTML='<p data-existing-lesson>Existing lesson content</p>';
+        window.FrenchTranquilleFoundationsPilot.refresh();
+      };
+      try{
+        ok(window.FrenchTranquilleFoundationsCapsules?.F08?.concepts?.join(',')==='F08','F08 predecessor capsule missing');
+        ok(window.FrenchTranquilleFoundationsCapsules?.F12?.concepts?.join(',')==='F12','F12 capsule missing');
+        ok(window.FrenchTranquilleFoundationsPilot?.adapter==='37.3','37.3 adapter must remain owner');
+        ok(window.FrenchTranquilleFoundationsPilot?.expansion==='37.4','F11 37.4 expansion ownership changed');
+        ok(window.FrenchTranquilleFoundationsPilot?.consolidation==='37.5','F05 37.5 consolidation ownership changed');
+        ok(window.FrenchTranquilleFoundationsPilot?.verbPattern==='37.6','F08 37.6 ownership changed');
+        ok(window.FrenchTranquilleFoundationsPilot?.systematization==='37.7','37.7 systematization marker missing');
+        ok(window.FrenchTranquilleFoundationsPilot?.persistent===false,'Foundations must remain ephemeral');
+        ok(root.dataset.foundationsExpansion==='37.4','root F11 expansion marker changed');
+        ok(root.dataset.foundationsConsolidation==='37.5','root F05 consolidation marker changed');
+        ok(root.dataset.foundationsVerbPattern==='37.6','root F08 marker changed');
+        ok(root.dataset.foundationsSystematization==='37.7','root F12 systematization marker missing');
+        ok(document.querySelectorAll('[data-foundation-entry]').length===1,'F12 entry count must be 1');
+        ok(document.querySelector('[data-foundation-entry]')?.dataset.foundationCapsule==='F12','wrong lesson/capsule routing');
+        ok(text('.ft-foundation-entry h3')==='Tu… ? • Où ? • Pouvez-vous… ?','entry title mismatch');
+        ok(text('.ft-foundation-entry p')===expected.entry,'entry copy mismatch');
+        click('[data-foundation-open]');
+        ok(document.querySelector('.ft-foundation-dialog')?.dataset.foundationActiveCapsule==='F12','F12 dialog ownership missing');
+        ok(text('.ft-foundation-top .ft-foundation-eyebrow')==='F12 • CORE','F12 label mismatch');
+        ok(text('.ft-foundation-top h2')===expected.title,'F12 title mismatch');
+        ok(text('.ft-foundation-copy strong')===expected.intro,'F12 intro mismatch');
+        ok(JSON.stringify(texts('.ft-foundation-examples b'))===JSON.stringify(['Tu travailles ?','Tu habites où ?','Pourquoi ?',"Qu'est-ce que ça veut dire ?",'Pouvez-vous reformuler ?']),'F12 examples mismatch');
+        click('[data-foundation-next]');
+        const choices=[
+          ['Tu travailles ?','Tu travaille où.','Travail tu ?'],
+          ['Tu habites où ?','Où tu habite.','Tu où habites ?'],
+          ['Pourquoi ?','Quand ?','Quoi ?'],
+          ["Qu'est-ce que ça veut dire ?",'Quelle est la date ?','Ça va ?'],
+          ['Pouvez-vous reformuler ?','Tu reformules ?','Pourquoi reformuler.']
+        ];
+        const answers=['Tu travailles ?','Tu habites où ?','Pourquoi ?',"Qu'est-ce que ça veut dire ?",'Pouvez-vous reformuler ?'];
+        for(let index=0;index<answers.length;index+=1){
+          ok(text('.ft-foundation-q h3')===expected.prompts[index],`question ${index+1} prompt mismatch`);
+          ok(JSON.stringify(texts('[data-foundation-choice]'))===JSON.stringify(choices[index]),`question ${index+1} choices mismatch`);
+          clickChoice(answers[index]);
+          const correct=[...document.querySelectorAll('[data-foundation-choice]')].find(button=>button.textContent.trim()===answers[index]);
+          ok(correct?.classList.contains('ok'),`question ${index+1} correct marking missing`);
+          click('[data-foundation-next]');
+        }
+        ok(text('.ft-foundation-done p')===expected.conclusion,'F12 conclusion mismatch');
+        click('.ft-foundation-done [data-foundation-close]');
+        ok(!document.querySelector('.ft-foundation-overlay'),'overlay must close');
+        ok(document.activeElement?.matches('[data-foundation-open]'),'focus must return to F12 entry CTA');
+        ok(document.querySelector('[data-existing-lesson]'),'lesson content must survive round trip');
+
+        setLesson(42);
+        ok(document.querySelector('[data-foundation-entry]')?.dataset.foundationCapsule==='F12','lesson 42 must remain F12');
+        setLesson(43);
+        ok(document.querySelector('[data-foundation-entry]')?.dataset.foundationCapsule==='F12','lesson 43 must remain F12');
+        setLesson(44);
+        ok(!document.querySelector('[data-foundation-entry]'),'lesson 44 must not expose F12');
+        setLesson(40);
+        ok(!document.querySelector('[data-foundation-entry]'),'lesson 40 must not expose F12');
+        setLesson(32);
+        ok(document.querySelector('[data-foundation-entry]')?.dataset.foundationCapsule==='F08','lesson 32 must remain owned by F08');
+        click('[data-foundation-open]');
+        ok(document.querySelector('.ft-foundation-dialog')?.dataset.foundationActiveCapsule==='F08','F08 predecessor dialog must still open');
+        ok(text('.ft-foundation-top h2')===expected.f08Title,'F08 predecessor title changed');
+        click('[data-foundation-close]');
+        setLesson(34);
+        ok(document.querySelector('[data-foundation-entry]')?.dataset.foundationCapsule==='F05','lesson 34 must remain owned by F05');
+
+        ok(JSON.stringify(Object.keys(localStorage).sort().map(k=>[k,localStorage.getItem(k)]))===window.__b377StorageBefore,'localStorage changed during F12 capsule');
+        ok(document.documentElement.scrollWidth<=innerWidth+1,'horizontal overflow detected');
+        ok(document.querySelector('[data-foundation-open]').getBoundingClientRect().height>=44,'entry target below 44px');
+        root.dataset.b377Done='1';root.dataset.b377Locale=window.__b377Debug?'fr':'vi';root.dataset.b377F08='1';root.dataset.b377F12='1';root.dataset.b377Routing='1';root.dataset.b377StorageUnchanged='1';root.dataset.b377NoOverflow='1';
+      }catch(error){
+        if(!root.dataset.b377Error)root.dataset.b377Error=error.message;
+        console.error(error);
+      }
+    })();
+  </script>
+</body>
+</html>

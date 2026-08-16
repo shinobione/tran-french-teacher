@@ -50,9 +50,7 @@
         prompts:['Trân nói về mình: Je travaill___ .','Bạn hỏi Jerry: Tu travaill___ ?','Bạn nói về một phụ nữ: Elle travaill___ .','Chọn câu đúng để hỏi Jerry sống ở đâu:','Câu nào giữ dạng riêng và không dùng mẫu -er này?'],
         conclusion:'Phản xạ viết cần giữ: với nhiều động từ -er, je = -e, tu = -es, il/elle = -e. Khi nói, các dạng này thường nghe giống nhau, vì vậy hãy nghe cả đại từ. Đây là một mẫu hữu ích, không phải quy tắc cho mọi động từ. Một mini-check đúng chưa có nghĩa là đã “thành thạo”.'
       };
-      const nextFrame=()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
-      (async()=>{
-        await nextFrame();
+      try{
         ok(window.FrenchTranquilleFoundationsCapsules?.F08?.concepts?.join(',')==='F08','F08 capsule missing');
         ok(window.FrenchTranquilleFoundationsPilot?.adapter==='37.3','37.3 adapter must remain owner');
         ok(window.FrenchTranquilleFoundationsPilot?.expansion==='37.4','F11 37.4 expansion ownership changed');
@@ -91,19 +89,20 @@
 
         document.querySelector('.topbar h1').textContent='Bài 33 — Il / elle ở hiện tại';
         window.FrenchTranquilleFoundationsPilot.refresh();
-        await nextFrame();
         ok(document.querySelector('[data-foundation-entry]')?.dataset.foundationCapsule==='F08','lesson 33 must remain F08');
 
         document.querySelector('.topbar h1').textContent='Bài 34 — Nous — nói “chúng ta”';
         window.FrenchTranquilleFoundationsPilot.refresh();
-        await nextFrame();
         ok(document.querySelector('[data-foundation-entry]')?.dataset.foundationCapsule==='F05','lesson 34 must remain owned by F05');
 
         ok(JSON.stringify(Object.keys(localStorage).sort().map(k=>[k,localStorage.getItem(k)]))===window.__b376StorageBefore,'localStorage changed during F08 capsule');
         ok(document.documentElement.scrollWidth<=innerWidth+1,'horizontal overflow detected');
         ok(document.querySelector('[data-foundation-open]').getBoundingClientRect().height>=44,'entry target below 44px');
         root.dataset.b376Done='1';root.dataset.b376Locale=window.__b376Debug?'fr':'vi';root.dataset.b376F08='1';root.dataset.b376Routing='1';root.dataset.b376StorageUnchanged='1';root.dataset.b376NoOverflow='1';
-      })().catch(error=>{root.dataset.b376Error=error.message;console.error(error)});
+      }catch(error){
+        if(!root.dataset.b376Error)root.dataset.b376Error=error.message;
+        console.error(error);
+      }
     })();
   </script>
 </body>
