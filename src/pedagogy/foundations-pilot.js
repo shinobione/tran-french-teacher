@@ -2,16 +2,18 @@
   'use strict';
   const VERSION='2.3.0',BUILD='34',DEBUG='tran-french-teacher:debug-fr:v1';
   const T=(vi,fr)=>localStorage.getItem(DEBUG)==='1'?fr:vi;
+  const locale=()=>localStorage.getItem(DEBUG)==='1'?'fr':'vi';
   const esc=(v='')=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const root=document.documentElement;
-  let offered=false,overlay=null,stepIndex=0,answered=false,lastTrigger=null,scheduled=false;
+  const engine=window.FrenchTranquilleFoundationsCapsuleEngine;
+  const capsule=window.FrenchTranquilleFoundationsCapsules?.F01_F04;
+  if(!engine||!capsule){
+    root.dataset.foundationsAdapter='missing';
+    console.error('[French Trân’quille] Foundations 37.3 adapter dependencies are missing');
+    return;
+  }
 
-  const questions=[
-    {vi:'Chọn từ đúng: ___ gare',fr:'Choisis : ___ gare',choices:['le','la','les'],answer:'la',whyVi:'“gare” là danh từ giống cái: la gare.',whyFr:'« gare » est féminin : la gare.'},
-    {vi:'Bạn nói về một vé chưa xác định: ___ billet',fr:'Tu parles d’un billet non encore identifié : ___ billet',choices:['un','une','des'],answer:'un',whyVi:'“billet” là giống đực: un billet.',whyFr:'« billet » est masculin : un billet.'},
-    {vi:'Bạn xin một cái bàn: ___ table',fr:'Tu demandes une table : ___ table',choices:['un','une','des'],answer:'une',whyVi:'“table” là giống cái: une table.',whyFr:'« table » est féminin : une table.'},
-    {vi:'Số nhiều: la pharmacie → ___ pharmacies',fr:'Au pluriel : la pharmacie → ___ pharmacies',choices:['le','la','les'],answer:'les',whyVi:'Ở số nhiều, le/la trở thành les.',whyFr:'Au pluriel, le/la devient les.'}
-  ];
+  let offered=false,overlay=null,lastTrigger=null,scheduled=false,session=null;
 
   function installStyle(){
     if(document.getElementById('ft-foundations-pilot-style'))return;
@@ -31,7 +33,7 @@
     if(params.has('b32Audit')||params.has('b31Audit')||params.has('b30Audit')||params.has('v2Audit'))return;
     const meta=window.FrenchTranquilleBuildMeta;
     if(meta){meta.version=VERSION;meta.build=BUILD}
-    root.dataset.foundationsPilot='1';root.dataset.foundationsVersion=VERSION;root.dataset.foundationsBuild=BUILD;
+    root.dataset.foundationsPilot='1';root.dataset.foundationsVersion=VERSION;root.dataset.foundationsBuild=BUILD;root.dataset.foundationsAdapter='37.3';
   }
 
   function entryMarkup(){return `<section class="ft-foundation-entry" data-foundation-entry><span class="ft-foundation-eyebrow">🧩 ${esc(T('NỀN TẢNG NHỎ','PETITE BASE UTILE'))}</span><h3>${esc(T('le / la / les • un / une','le / la / les • un / une'))}</h3><p>${esc(T('5 phút để hiểu vì sao tiếng Pháp đổi “từ nhỏ” trước danh từ. Không bắt buộc để tiếp tục bài.','5 minutes pour comprendre pourquoi le petit mot devant le nom change. Cette base reste facultative pour continuer la leçon.'))}</p><button type="button" class="secondary" data-foundation-open>${esc(T('Mở nền tảng • khoảng 5 phút','Ouvrir la base • ≈ 5 min'))} ›</button></section>`}
@@ -45,35 +47,49 @@
     const wrap=document.createElement('div');wrap.innerHTML=entryMarkup();const entry=wrap.firstElementChild;step.appendChild(entry);offered=true;lastTrigger=entry.querySelector('[data-foundation-open]');lastTrigger.addEventListener('click',open);
   }
 
-  function open(){stepIndex=0;answered=false;renderOverlay()}
-  function close(){overlay?.remove();overlay=null;lastTrigger?.focus?.()}
+  function open(){session=engine.initialState(capsule);renderOverlay()}
+  function close(){overlay?.remove();overlay=null;session=null;lastTrigger?.focus?.()}
+
+  function legacyProgress(state){
+    const total=capsule.checks.length+1;
+    if(state.phase==='intro')return 0;
+    if(state.phase==='done')return 100;
+    return Math.round(((state.questionIndex+1)/total)*100);
+  }
 
   function renderOverlay(){
     installStyle();
+    if(!session)session=engine.initialState(capsule);
     if(!overlay){overlay=document.createElement('div');overlay.className='ft-foundation-overlay';overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');document.body.appendChild(overlay)}
-    const total=questions.length+1,pct=Math.round((Math.min(stepIndex,total)/total)*100);
+    const lang=locale(),view=engine.view(capsule,session,lang),pct=legacyProgress(session);
     let body='';
-    if(stepIndex===0){
-      body=`<div class="ft-foundation-copy"><strong>${esc(T('Trong tiếng Pháp, hãy học danh từ cùng với “người bạn nhỏ” đứng trước nó.','En français, apprends le nom avec son petit compagnon placé devant.'))}</strong><p>${esc(T('Danh từ thường có giống ngữ pháp: giống đực hoặc giống cái. Không phải lúc nào cũng đoán được, vì vậy học “la gare”, không chỉ học “gare”.','Les noms ont généralement un genre grammatical, masculin ou féminin. On ne peut pas toujours le deviner : apprends « la gare », pas seulement « gare ».'))}</p><p>${esc(T('Số nhiều dùng “les” cho cả hai giống. Với một thứ chưa xác định: un (đực), une (cái), des (số nhiều).','Au pluriel, « les » fonctionne pour les deux genres. Pour une chose non identifiée : un (masculin), une (féminin), des (pluriel).'))}</p></div><div class="ft-foundation-examples"><b>🚉 la gare</b><b>🎫 un billet</b><b>🍽️ une table</b><b>🚻 les toilettes</b></div><button class="primary ft-foundation-next" data-foundation-next>${esc(T('Thử 4 câu ngắn','Essayer 4 mini-questions'))} ›</button>`;
-    }else if(stepIndex<=questions.length){
-      const q=questions[stepIndex-1];body=`<div class="ft-foundation-q"><span class="muted">${stepIndex}/${questions.length}</span><h3>${esc(T(q.vi,q.fr))}</h3><div class="ft-foundation-options">${q.choices.map(c=>`<button type="button" data-foundation-choice="${esc(c)}">${esc(c)}</button>`).join('')}</div><p class="ft-foundation-feedback" data-foundation-feedback></p><button class="primary ft-foundation-next" data-foundation-next hidden>${esc(stepIndex===questions.length?T('Kết thúc','Terminer'):T('Tiếp tục','Continuer'))} ›</button></div>`;
+    if(session.phase==='intro'){
+      body=`<div class="ft-foundation-copy"><strong>${esc(view.intro[0])}</strong><p>${esc(view.intro[1])}</p><p>${esc(view.intro[2])}</p></div><div class="ft-foundation-examples">${view.examples.map(example=>`<b>${esc(example)}</b>`).join('')}</div><button class="primary ft-foundation-next" data-foundation-next>${esc(T('Thử 4 câu ngắn','Essayer 4 mini-questions'))} ›</button>`;
+    }else if(session.phase==='question'){
+      const answer=session.answers[session.answers.length-1];
+      body=`<div class="ft-foundation-q"><span class="muted">${view.questionNumber}/${view.questionTotal}</span><h3>${esc(view.prompt)}</h3><div class="ft-foundation-options">${view.choices.map(choice=>{const classes=[];if(session.answered&&choice===view.correctAnswer)classes.push('ok');if(session.answered&&answer?.choice===choice&&!answer.correct)classes.push('bad');return `<button type="button"${classes.length?` class="${classes.join(' ')}"`:''} data-foundation-choice="${esc(choice)}"${session.answered?' disabled':''}>${esc(choice)}</button>`}).join('')}</div><p class="ft-foundation-feedback" data-foundation-feedback>${session.answered?`${view.correct?'✓':'→'} ${esc(view.feedback)}`:''}</p><button class="primary ft-foundation-next" data-foundation-next${session.answered?'':' hidden'}>${esc(view.questionNumber===view.questionTotal?T('Kết thúc','Terminer'):T('Tiếp tục','Continuer'))} ›</button></div>`;
     }else{
-      body=`<div class="ft-foundation-done"><div class="mark">✓</div><h3>${esc(T('Xong nền tảng nhỏ','Petite base terminée'))}</h3><p>${esc(T('Điểm quan trọng: học danh từ cùng với mạo từ — la gare, un billet, une table. Khi chuyển sang số nhiều, le/la → les. Một bài kiểm tra đúng chưa có nghĩa là đã “thành thạo”; Tyffany sẽ cho các mẫu này quay lại sau.','L’idée clé : apprends le nom avec son article — la gare, un billet, une table. Au pluriel, le/la → les. Une bonne réponse ne signifie pas que la règle est « maîtrisée » ; Tyffany la fera revenir plus tard.'))}</p><button class="primary ft-foundation-next" data-foundation-close>${esc(T('Quay lại bài học','Retour à la leçon'))} ›</button></div>`;
+      body=`<div class="ft-foundation-done"><div class="mark">✓</div><h3>${esc(T('Xong nền tảng nhỏ','Petite base terminée'))}</h3><p>${esc(view.conclusion)}</p><button class="primary ft-foundation-next" data-foundation-close>${esc(T('Quay lại bài học','Retour à la leçon'))} ›</button></div>`;
     }
-    overlay.innerHTML=`<section class="ft-foundation-dialog"><div class="ft-foundation-top"><div><span class="ft-foundation-eyebrow">F01–F04 • PILOT</span><h2>${esc(T('Mạo từ, giống & số nhiều','Articles, genre & pluriel'))}</h2></div><button type="button" class="ft-foundation-close" data-foundation-close aria-label="${esc(T('Đóng','Fermer'))}">×</button></div><div class="ft-foundation-bar"><i style="width:${pct}%"></i></div>${body}</section>`;
-    overlay.querySelectorAll('[data-foundation-close]').forEach(b=>b.addEventListener('click',close));
-    overlay.querySelector('[data-foundation-next]')?.addEventListener('click',()=>{stepIndex++;answered=false;renderOverlay()});
-    overlay.querySelectorAll('[data-foundation-choice]').forEach(b=>b.addEventListener('click',()=>answer(b)));
+    overlay.innerHTML=`<section class="ft-foundation-dialog"><div class="ft-foundation-top"><div><span class="ft-foundation-eyebrow">F01–F04 • PILOT</span><h2>${esc(view.title)}</h2></div><button type="button" class="ft-foundation-close" data-foundation-close aria-label="${esc(T('Đóng','Fermer'))}">×</button></div><div class="ft-foundation-bar"><i style="width:${pct}%"></i></div>${body}</section>`;
+    overlay.querySelectorAll('[data-foundation-close]').forEach(button=>button.addEventListener('click',close));
+    overlay.querySelector('[data-foundation-next]')?.addEventListener('click',next);
+    overlay.querySelectorAll('[data-foundation-choice]').forEach(button=>button.addEventListener('click',()=>answer(button)));
+  }
+
+  function next(){
+    session=engine.reduce(capsule,session,{type:'NEXT'});
+    renderOverlay();
   }
 
   function answer(button){
-    if(answered)return;answered=true;const q=questions[stepIndex-1],value=button.dataset.foundationChoice,ok=value===q.answer;
-    overlay.querySelectorAll('[data-foundation-choice]').forEach(b=>{b.disabled=true;if(b.dataset.foundationChoice===q.answer)b.classList.add('ok')});
-    if(!ok)button.classList.add('bad');const feedback=overlay.querySelector('[data-foundation-feedback]');if(feedback)feedback.textContent=`${ok?'✓':'→'} ${T(q.whyVi,q.whyFr)}`;const next=overlay.querySelector('[data-foundation-next]');if(next)next.hidden=false;
+    if(session?.answered)return;
+    session=engine.reduce(capsule,session,{type:'ANSWER',choice:button.dataset.foundationChoice});
+    renderOverlay();
   }
 
   function decorate(){updateMeta();mountEntry()}
   function schedule(){if(scheduled)return;scheduled=true;queueMicrotask(()=>{scheduled=false;decorate()})}
   installStyle();const app=document.getElementById('app');if(app)new MutationObserver(schedule).observe(app,{childList:true,subtree:true});window.addEventListener('pagehide',close);decorate();
-  window.FrenchTranquilleFoundationsPilot=Object.freeze({version:VERSION,build:BUILD,concepts:['F01','F02','F03','F04'],persistent:false,refresh:decorate,open});
+  window.FrenchTranquilleFoundationsPilot=Object.freeze({version:VERSION,build:BUILD,concepts:['F01','F02','F03','F04'],persistent:false,adapter:'37.3',engineSchema:engine.schema,refresh:decorate,open});
 })();
