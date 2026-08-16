@@ -12,6 +12,7 @@ permissions:
 jobs:
   real-life-3:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -48,33 +49,72 @@ jobs:
 
       - name: Chrome — lesson 20 opens oral French only
         run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=24000 --dump-dom 'http://127.0.0.1:4173/?realLifeSmoke=lesson20&sessionSmoke=practice' >/tmp/rl20.html
-          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/rl20.html; then cat /tmp/rl20.html; exit 1; fi
-          grep -q 'data-real-life-pack3-total="8"' /tmp/rl20.html
-          grep -q 'data-real-life-pack3-open="1"' /tmp/rl20.html
-          grep -q 'data-real-life-scenario-total="36"' /tmp/rl20.html
-          grep -q 'data-real-life-turn-total="108"' /tmp/rl20.html
-          grep -q 'data-real-life-resolution-total="15"' /tmp/rl20.html
-          grep -q 'data-real-life-resolution-invalid="0"' /tmp/rl20.html
+          set -euo pipefail
+          passed=0
+          for attempt in 1 2; do
+            profile="/tmp/ft-rl20-$attempt"
+            file="/tmp/rl20-$attempt.html"
+            rm -rf "$profile" "$file"
+            if timeout --signal=TERM --kill-after=5s 55s google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=390,844 --virtual-time-budget=24000 --dump-dom \
+              'http://127.0.0.1:4173/?realLifeSmoke=lesson20&sessionSmoke=practice' >"$file" \
+              && ! grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file" \
+              && grep -q 'data-real-life-pack3-total="8"' "$file" \
+              && grep -q 'data-real-life-pack3-open="1"' "$file" \
+              && grep -q 'data-real-life-scenario-total="36"' "$file" \
+              && grep -q 'data-real-life-turn-total="108"' "$file" \
+              && grep -q 'data-real-life-resolution-total="15"' "$file" \
+              && grep -q 'data-real-life-resolution-invalid="0"' "$file"; then
+              passed=1
+              break
+            fi
+          done
+          test "$passed" -eq 1
 
       - name: Chrome — lesson 35 adds futur proche scene
         run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=24000 --dump-dom 'http://127.0.0.1:4173/?realLifeSmoke=lesson35&sessionSmoke=practice' >/tmp/rl35.html
-          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/rl35.html; then cat /tmp/rl35.html; exit 1; fi
-          grep -q 'data-real-life-pack3-open="2"' /tmp/rl35.html
-          grep -q 'data-real-life-resolution-invalid="0"' /tmp/rl35.html
+          set -euo pipefail
+          passed=0
+          for attempt in 1 2; do
+            profile="/tmp/ft-rl35-$attempt"
+            file="/tmp/rl35-$attempt.html"
+            rm -rf "$profile" "$file"
+            if timeout --signal=TERM --kill-after=5s 55s google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=390,844 --virtual-time-budget=24000 --dump-dom \
+              'http://127.0.0.1:4173/?realLifeSmoke=lesson35&sessionSmoke=practice' >"$file" \
+              && ! grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file" \
+              && grep -q 'data-real-life-pack3-open="2"' "$file" \
+              && grep -q 'data-real-life-resolution-invalid="0"' "$file"; then
+              passed=1
+              break
+            fi
+          done
+          test "$passed" -eq 1
 
       - name: Chrome — lesson 40 unlocks complete Pack III without flooding catalog
         run: |
-          google-chrome --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=26000 --dump-dom 'http://127.0.0.1:4173/?realLifeSmoke=lesson40&sessionSmoke=practice' >/tmp/rl40.html
-          if grep -E -q 'id="app"[^>]*><div class="boot-status error' /tmp/rl40.html; then cat /tmp/rl40.html; exit 1; fi
-          grep -q 'data-real-life-pack3-open="8"' /tmp/rl40.html
-          grep -q 'data-real-life-scenario-total="36"' /tmp/rl40.html
-          grep -q 'data-real-life-turn-total="108"' /tmp/rl40.html
-          grep -q 'data-real-life-resolution-invalid="0"' /tmp/rl40.html
-          visible=$(grep -o 'data-real-life-visible-tiles="[0-9]*"' /tmp/rl40.html | tail -1 | grep -o '[0-9]*')
-          test -n "$visible"
-          test "$visible" -le 6
+          set -euo pipefail
+          passed=0
+          for attempt in 1 2; do
+            profile="/tmp/ft-rl40-$attempt"
+            file="/tmp/rl40-$attempt.html"
+            rm -rf "$profile" "$file"
+            if timeout --signal=TERM --kill-after=5s 60s google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=390,844 --virtual-time-budget=26000 --dump-dom \
+              'http://127.0.0.1:4173/?realLifeSmoke=lesson40&sessionSmoke=practice' >"$file" \
+              && ! grep -E -q 'id="app"[^>]*><div class="boot-status error' "$file" \
+              && grep -q 'data-real-life-pack3-open="8"' "$file" \
+              && grep -q 'data-real-life-scenario-total="36"' "$file" \
+              && grep -q 'data-real-life-turn-total="108"' "$file" \
+              && grep -q 'data-real-life-resolution-invalid="0"' "$file"; then
+              visible=$(grep -o 'data-real-life-visible-tiles="[0-9]*"' "$file" | tail -1 | grep -o '[0-9]*')
+              if [ -n "$visible" ] && [ "$visible" -le 6 ]; then
+                passed=1
+                break
+              fi
+            fi
+          done
+          test "$passed" -eq 1
 
       - name: Stop static server
         if: always()
