@@ -1,0 +1,59 @@
+name: Build 37.2 Foundations capsule engine
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [build37/foundations-capsule-engine]
+
+permissions:
+  contents: read
+
+jobs:
+  foundations-capsule-engine:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Pure capsule contract and F01-F04 parity
+        run: |
+          set -euo pipefail
+          node --check src/pedagogy/foundations-capsule-engine.js
+          node --check src/pedagogy/foundations-capsules.js
+          node --check tools/test-build37-2-foundations-capsule-engine.cjs
+          node tools/test-build37-2-foundations-capsule-engine.cjs
+
+      - name: Build 37.2 remains non-wired and ephemeral
+        run: |
+          set -euo pipefail
+          ! grep -q 'src/pedagogy/foundations-capsule-engine.js' index.html
+          ! grep -q 'src/pedagogy/foundations-capsules.js' index.html
+          ! grep -q 'src/pedagogy/foundations-capsule-engine.js' sw.js
+          ! grep -q 'src/pedagogy/foundations-capsules.js' sw.js
+          ! grep -q 'localStorage.setItem' src/pedagogy/foundations-capsule-engine.js
+          ! grep -q 'localStorage.setItem' src/pedagogy/foundations-capsules.js
+          ! grep -q 'FrenchTranquilleRecovery' src/pedagogy/foundations-capsule-engine.js
+          ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/foundations-capsule-engine.js
+          grep -q "persistence:'ephemeral-only'" src/pedagogy/foundations-capsule-engine.js
+          grep -q 'masteryClaim:false' src/pedagogy/foundations-capsule-engine.js
+
+      - name: Build 34 pilot and Build 37.1 registry remain unchanged
+        run: |
+          set -euo pipefail
+          test "$(git hash-object src/pedagogy/foundations-pilot.js)" = 'f3acc701b72c110b5f4c4cb1f33f286de4538a2a'
+          git diff --exit-code origin/main...HEAD -- src/pedagogy/foundations-pilot.js src/pedagogy/foundations-core.js
+
+      - name: Product, durability and voice owners stay untouched
+        run: |
+          set -euo pipefail
+          changed="$(git diff --name-only origin/main...HEAD)"
+          if printf '%s\n' "$changed" | grep -E '^(app\.js|voice-ios\.js|free-voice\.js|index\.html|sw\.js|src/core/data-recovery|src/core/memory-evidence-v2-runtime\.js|src/pedagogy/learning-memory\.js|src/pedagogy/error-intelligence\.js|src/pedagogy/listening-engine\.js|src/pedagogy/scenario-engine\.js|src/pedagogy/mastery-engine\.js|src/pedagogy/learner-intelligence.*\.js)$'; then
+            echo 'Build 37.2 must not change product/storage/voice owners' >&2
+            exit 1
+          fi
