@@ -9,25 +9,48 @@ const MigrationSim = require('../../src/pedagogy/memory-evidence-v2-migration-si
 
 const root = path.resolve(__dirname, '../..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
+const exists = file => fs.existsSync(path.join(root, file));
 
-assert.equal(Recovery.BACKUP_VERSION, 2, 'Build 35 must close before backup v3 adoption');
-assert.equal(Recovery.STORE_SPECS.length, 6, 'Build 35 must close with exactly six durable Recovery stores');
-assert.equal(Recovery.specForKey(Evidence.PROPOSED_STORE_KEY), null, 'Evidence v2 must not be a Recovery store during Build 35');
+// The certified Build 35 baseline remains immutable evidence even after a
+// later Build 36 successor deliberately adopts the shadow store.
+assert.equal(Recovery.BACKUP_VERSION, 2, 'legacy Build 35 Recovery core remains backup v2');
+assert.equal(Recovery.STORE_SPECS.length, 6, 'legacy Build 35 Recovery core remains six-store');
+assert.equal(Recovery.specForKey(Evidence.PROPOSED_STORE_KEY), null, 'legacy Build 35 Recovery core still does not own Evidence');
 
 const ids = Recovery.STORE_SPECS.map(spec => spec.id).sort();
 assert.deepEqual(ids, ['errors', 'learner', 'listening', 'memory', 'milestones', 'scenarios']);
 
 const index = read('index.html');
 const sw = read('sw.js');
-for (const forbidden of [
-  'src/pedagogy/memory-evidence-v2-core.js',
-  'src/pedagogy/memory-evidence-v2-migration-sim.js'
-]) {
-  assert(!index.includes(forbidden), `${forbidden} must not be runtime-wired in Build 35`);
-  assert(!sw.includes(forbidden), `${forbidden} must not be Service Worker wired in Build 35`);
+const successorAdopted = exists('src/core/data-recovery-v3-runtime-core.js') && exists('src/core/memory-evidence-v2-runtime.js');
+
+if (!successorAdopted) {
+  for (const forbidden of [
+    'src/pedagogy/memory-evidence-v2-core.js',
+    'src/pedagogy/memory-evidence-v2-migration-sim.js'
+  ]) {
+    assert(!index.includes(forbidden), `${forbidden} must not be runtime-wired in Build 35`);
+    assert(!sw.includes(forbidden), `${forbidden} must not be Service Worker wired in Build 35`);
+  }
+  assert(!index.includes(Evidence.PROPOSED_STORE_KEY));
+  assert(!sw.includes(Evidence.PROPOSED_STORE_KEY));
+} else {
+  const Contract = require('../../src/core/data-recovery-v3-contract.js');
+  assert.equal(Contract.BACKUP_VERSION, 3, 'Build 36 successor must explicitly own backup v3');
+  assert.equal(Contract.STORE_SPECS.length, 7, 'Build 36 successor must explicitly own seven-store target');
+  assert.equal(Contract.specForKey(Evidence.PROPOSED_STORE_KEY).id, 'evidence');
+  for (const required of [
+    'src/pedagogy/memory-evidence-v2-core.js',
+    'src/core/data-recovery-v3-contract.js',
+    'src/core/data-recovery-v3-runtime-core.js',
+    'src/core/memory-evidence-v2-runtime.js'
+  ]) {
+    assert(index.includes(required), `${required} must be explicit successor runtime wiring`);
+    assert(sw.includes(required), `${required} must be explicit successor Service Worker wiring`);
+  }
+  assert(!index.includes('src/pedagogy/memory-evidence-v2-migration-sim.js'), 'Build 35 migration simulator must stay test-only');
+  assert(!sw.includes('src/pedagogy/memory-evidence-v2-migration-sim.js'), 'Build 35 migration simulator must stay out of Service Worker');
 }
-assert(!index.includes(Evidence.PROPOSED_STORE_KEY));
-assert(!sw.includes(Evidence.PROPOSED_STORE_KEY));
 
 assert.equal(typeof Evidence.simulate, 'function');
 assert.equal(typeof MigrationSim.simulateTransaction, 'function');
@@ -47,4 +70,4 @@ for (const contract of [
   assert(closeout.includes(contract), `missing Build 36 readiness contract: ${contract}`);
 }
 
-console.log('Build 35 closeout / Build 36 readiness smoke: PASS');
+console.log(`Build 35 closeout / Build 36 readiness smoke: PASS (${successorAdopted ? 'successor-adopted' : 'pre-adoption'})`);
