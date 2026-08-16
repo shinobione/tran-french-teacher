@@ -9,7 +9,7 @@
 - Reconciled: **2026-08-17**.
 - Repository: `shinobione/tran-french-teacher`.
 - Default branch: `main`.
-- Current governance `main`: **`f0a0df73a249e2c2014120e8a8e39ee0a30f53c1`** — documentation closeout after Build 38.2.
+- Current governance `main`: **`27e6b4e49d2a493ba5477efa998bd0f2c07213e5`** — post-38.2 documentation checkpoint.
 - Current runtime-bearing product commit: **`694988e6299c7d25ca9e019f275c473422fd983e`** — PR **#188**, Build **38.2 · learner-facing subject substitution**.
 - GitHub Pages **#241 / run `31978687464` — SUCCESS** on runtime commit `694988e…`.
 - Post-merge product matrix on `694988e…`: **37 runs = 33 SUCCESS + exactly the 4 inherited historical failures**, **0 queued**, **0 in-progress**.
