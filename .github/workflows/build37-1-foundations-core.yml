@@ -1,0 +1,57 @@
+name: Build 37.1 Foundations Core contract
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [build37/foundations-core-contract]
+
+permissions:
+  contents: read
+
+jobs:
+  foundations-core-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Foundations Core pure contract
+        run: |
+          set -euo pipefail
+          node --check src/pedagogy/foundations-core.js
+          node --check tools/test-build37-foundations-core.cjs
+          node tools/test-build37-foundations-core.cjs
+
+      - name: Build 37.1 stays non-wired and storage-neutral
+        run: |
+          set -euo pipefail
+          ! grep -q 'src/pedagogy/foundations-core.js' index.html
+          ! grep -q 'src/pedagogy/foundations-core.js' sw.js
+          ! grep -q 'localStorage.setItem' src/pedagogy/foundations-core.js
+          ! grep -q 'sessionStorage.setItem' src/pedagogy/foundations-core.js
+          ! grep -q 'FrenchTranquilleRecovery' src/pedagogy/foundations-core.js
+          ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/foundations-core.js
+
+      - name: Existing F01-F04 pilot remains byte-identical
+        run: |
+          set -euo pipefail
+          test "$(git hash-object src/pedagogy/foundations-pilot.js)" = 'f3acc701b72c110b5f4c4cb1f33f286de4538a2a'
+          grep -q "concepts:\['F01','F02','F03','F04'\]" src/pedagogy/foundations-pilot.js
+          grep -q 'if(n<8||n>13)return' src/pedagogy/foundations-pilot.js
+          grep -q 'persistent:false' src/pedagogy/foundations-pilot.js
+          ! grep -q 'localStorage.setItem' src/pedagogy/foundations-pilot.js
+
+      - name: Product and durability owners are untouched
+        run: |
+          set -euo pipefail
+          git fetch origin main --depth=1
+          if git diff --name-only origin/main...HEAD | grep -E '^(app\.js|voice-ios\.js|free-voice\.js|src/core/data-recovery|src/core/memory-evidence-v2-runtime\.js|src/pedagogy/learning-memory\.js|src/pedagogy/error-intelligence\.js|src/pedagogy/listening-engine\.js|src/pedagogy/scenario-engine\.js|index\.html|sw\.js)$'; then
+            echo 'Build 37.1 must not change runtime/storage/product owners' >&2
+            exit 1
+          fi

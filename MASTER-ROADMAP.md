@@ -14,39 +14,35 @@
 
 | Item | Canonical state |
 |---|---|
-| Product pedagogy | **V2.3.0 · Build 34** |
-| Visual maintenance line | **Premium V5.10 CLOSED · physical FIELD PASS** |
-| Verified final V5.10 runtime checkpoint | **`54209392d3a349a1aefab14615dcecf24a59fcea`** — PR #161 |
+| Application runtime metadata | **V2.4.0 · Build 36** |
+| Product pedagogy baseline | **V2.3.0 · Build 34** |
+| Current deployed main | **`bac91ad285b5f1950ed43db67283ceb42ebb3374`** — PR #172 |
 | Curriculum | **52 lessons / 313 items** |
 | Scenario | **44 situations / 132 turns** |
 | Speaking Loop | **52/52 · max 2 moments / lesson** |
 | Listening | **0.88 normal / 0.65 slow** |
-| Durable pedagogical stores | **6 current runtime stores** |
-| Foundations | **F01–F04 pilot**, without renumbering the 52 lessons |
-| Frozen architecture baseline | **2.0.0 · Build 30** |
+| Recovery durable stores | **7** |
+| Backup envelope | **v3** |
+| Evidence v2 | **derived shadow only; six source stores remain product truth** |
+| Foundations | **Build 37 ACTIVE · 37.1 contract/registry candidate** |
+| Visual maintenance line | **Premium V5.10 CLOSED · physical FIELD PASS** |
 | Primary target | **iPhone / Safari / installed PWA** |
-| Recurring backend/API cost | **0 €** |
-| Final Premium issue | **#114 — CLOSED / completed** |
 | Build 35 | **CLOSED · migration readiness proven** |
-| Build 36 | **UNBLOCKED · NEXT CANONICAL BUILD — Memory Evidence v2 Adoption Candidate** |
+| Build 36 | **CLOSED · seven-store derived-shadow adoption certified** |
+| Build 37 | **ACTIVE · Foundations Core** |
 
 ## Current interpretation
 
-- V5.6 asset candidates were produced and user-approved.
-- V5.7 four-theme Premium artwork integration was user-approved, merged and delivered.
-- V5.8 DEBUG FR / theme decoupling was merged as PR #128.
-- V5.9 shared-system coherence was implemented as real rollback checkpoints **#137 → #141** and is technically closed.
-- V5.10 completed the full global/physical Premium gate, including later field fixes for destination identity, lesson/Tyffany ownership and the Settings Theme interaction.
-- Final runtime-bearing Premium checkpoint is **PR #161 / `54209392d3a349a1aefab14615dcecf24a59fcea`**.
-- PR #161 passed **44/44** pull-request workflows; the runtime passed **29/29** push workflows; **GitHub Pages #214** succeeded on the exact runtime SHA.
-- On **2026-08-16**, the user gave the explicit physical verdict: **`ça a l'air OK, TEST SMOKED`**.
-- That verdict is the canonical V5.10 **FIELD PASS**. Issue **#114 is CLOSED**.
-- Build 35 then completed its reserved **Memory Evidence v2 / Migration Readiness** scope without adopting a new durable schema: deterministic projection in PR #164, isolated transactional migration proof in PR #165, and closeout/adoption-readiness contract in PR #166.
-- Build 35 closeout is certified on **`1e3209d70cd9eebc3eb7dd4bb8df6047d9d029a7`** with **32/32 push workflows**, **0 failure**, and **GitHub Pages #219 SUCCESS**.
-- **Build 36 is now the next canonical build**, beginning with **36.1 — Recovery v3 + seventh-store contract**. Initial Evidence v2 adoption must be a derived shadow store; no product read-path cutover is allowed in 36.1.
+- V5.10 is closed after explicit physical FIELD PASS; issue #114 is closed.
+- Build 35 proved deterministic Memory Evidence v2 projection and transactional migration readiness.
+- Build 36 adopted Evidence as a seventh **derived shadow** under Recovery v3 / backup v3, while the original six stores remain canonical product truth.
+- Build 36.3 merged as PR #170 at `f37561f46016918fffc750e69a6e728c27b9144a`; PR #171 formally closed Build 36 and opened Build 37.
+- PR #172 corrected visible application-version ownership to **v2.4.0 · Build 36** without changing pedagogy/storage ownership.
+- Build 37 must industrialize the Build 33 Foundations syllabus without renumbering the 52 lessons, duplicating existing explicit grammar teaching, or treating Evidence as product truth.
+- **37.1 is the smallest safe first slice:** a pure F01–F18 contract/registry, with the current F01–F04 pilot kept byte-identical and no runtime wiring.
+- Current main has inherited historical CI debt; classify baseline failures separately from any new Build 37 regression.
 
 ---
-
 # 1. Locked behaviour — do not regress while polishing
 
 ## 1.1 Atomic navigation / zero flash
