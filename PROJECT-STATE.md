@@ -6,23 +6,73 @@
 
 ## Last reconciliation
 
-- Reconciled: **2026-08-16**
-- Repository: `shinobione/tran-french-teacher`
-- Default branch: `main`
-- Current runtime-bearing `main`: **`9acce0b2b644fe5a14135085c4de0f7a64ec16b3`** — PR **#178**, Build **37.5 · F05 Subject-Pronoun Consolidation**.
-- GitHub Pages **#231** on that exact SHA: **SUCCESS**.
-- Runtime push matrix on that exact SHA: **32 SUCCESS + exactly the four inherited failures**, **0 queued / 0 in-progress**.
+- Reconciled: **2026-08-16**.
+- Repository: `shinobione/tran-french-teacher`.
+- Default branch: `main`.
+- Current runtime-bearing `main`: **`e017f7a041d147569ee0d47c93586b2c17f97a83`** — PR **#180**, PWA identity/cache isolation maintenance.
+- Last pedagogy-bearing runtime: **`9acce0b2b644fe5a14135085c4de0f7a64ec16b3`** — PR **#178**, Build **37.5 · F05 Subject-Pronoun Consolidation**.
+- Build 37.5 closeout checkpoint: **`02f70a2964eafdfa3e87aa22c22d25aa235a16cb`**.
+- GitHub Pages **#233** on current `main` `e017f7a…`: **SUCCESS**.
+- Current `main` matrix after one strict unchanged rerun of the legacy Build 26.1 Chrome job: **33 SUCCESS + exactly the four inherited failures**, **0 new regression**.
 - Visible application runtime metadata: **v2.4.0 · Build 36**.
 - Pedagogy baseline: **v2.3.0 · Build 34**.
 - Premium V5.10: **CLOSED / physical FIELD PASS**; issue **#114 CLOSED**.
 - **Build 35 CLOSED — Memory Evidence v2 / Migration Readiness.**
 - **Build 36 CLOSED — Memory Evidence v2 derived-shadow adoption.**
 - **Build 37 ACTIVE — Foundations Core.**
-- **37.1 MERGED / CERTIFIED** — pure F01–F18 ownership registry.
-- **37.2 MERGED / CERTIFIED** — pure generic capsule engine + exact F01–F04 mirror spec.
-- **37.3 MERGED / CERTIFIED** — F01–F04 pilot converged onto the generic engine with strict learner-facing parity.
-- **37.4 MERGED / CERTIFIED** — F11 negation narrow learner expansion in lessons 17–20.
-- **37.5 MERGED / CERTIFIED / DEPLOYED** — F05 subject-pronoun consolidation in lessons 34–36.
+
+## Current maintenance checkpoint — PWA identity isolation
+
+PR #180 changed only the PWA identity/cache lane after Build 37.5.
+
+Locked maintenance contract:
+
+```text
+scope / identity → /tran-french-teacher/
+cache cleanup    → only cache names prefixed tran-french-teacher-
+sibling caches   → must never be deleted
+pedagogy         → unchanged
+learner data     → unchanged
+voice            → unchanged
+Premium field UX→ unchanged
+```
+
+A post-merge `Build 26.1 Voice replay + Details dashboard smoke` initially timed out in Chrome headless before its dashboard assertions. Static wiring/sanctuary checks had passed. The exact same job was rerun unchanged and completed **SUCCESS**, including Learning Details, Real Life III and Voice Replay. Treat this as a harness flake, not a PWA regression; no product patch was made.
+
+## Build 37 certified chain
+
+```text
+37.1 registry F01–F18                         ✅ MERGED / CERTIFIED
+37.2 generic pure capsule engine              ✅ MERGED / CERTIFIED
+37.3 F01–F04 pilot adapter parity             ✅ MERGED / CERTIFIED
+37.4 F11 negation narrow expansion            ✅ MERGED / CERTIFIED
+37.5 F05 subject-pronoun consolidation        ✅ MERGED / CERTIFIED / DEPLOYED
+37.6 F08 regular -er present consolidation    🚧 CURRENT CANDIDATE
+```
+
+### Shared Foundations ownership — LOCKED
+
+```text
+37.2 → generic pure capsule engine
+37.3 → shared learner-facing adapter / renderer
+37.4 → F11 expansion ownership
+37.5 → F05 consolidation ownership
+37.6 → F08 narrow verb-pattern consolidation candidate
+```
+
+Historical ownership markers must not be overwritten by later slices.
+
+Current/candidate metadata:
+
+```text
+adapter: '37.3'
+expansion: '37.4'
+expansionConcepts: ['F11']
+consolidation: '37.5'
+consolidationConcepts: ['F05']
+verbPattern: '37.6'                    # candidate branch only until merge
+verbPatternConcepts: ['F08']           # candidate branch only until merge
+```
 
 ## Current durable data contract — LOCKED
 
@@ -39,117 +89,103 @@
 
 Recognition failure remains recognition-system evidence, never a pronunciation diagnosis.
 
-## Build 37 certified chain
+## Certified predecessor contracts
 
-```text
-37.1 registry F01–F18
-→ 37.2 generic pure capsule engine
-→ 37.3 F01–F04 pilot adapter parity
-→ 37.4 F11 negation narrow expansion
-→ 37.5 F05 subject-pronoun consolidation
-```
-
-### Shared Foundations ownership — LOCKED
-
-```text
-37.2 → generic pure capsule engine
-37.3 → shared learner-facing adapter / renderer
-37.4 → F11 expansion ownership
-37.5 → F05 consolidation ownership
-```
-
-Current adapter metadata intentionally preserves historical ownership instead of overwriting it:
-
-```text
-adapter: '37.3'
-expansion: '37.4'
-expansionConcepts: ['F11']
-consolidation: '37.5'
-consolidationConcepts: ['F05']
-```
-
-### F01–F04 predecessor contract
+### F01–F04
 
 ```text
 lessons 8–13
-→ F01–F04 optional capsule
-→ same texts / choices / answers / feedback
+→ optional article / gender / number capsule
 → same VI / DEBUG FR behavior
-→ same visible progress rhythm
 → same return-to-lesson focus behavior
 → NO durable write
 → NO Evidence product read
 ```
 
-### 37.4 — F11 negation
+### F11
 
 ```text
 lessons 17–20 only
-→ Je n'ai pas de monnaie.
-→ Je ne peux pas.
-→ Il n'y a pas d'eau chaude.
-→ Mon téléphone ne marche pas.
-→ reconnect earlier Je ne comprends pas.
+→ ne / n’ + verb + pas
+→ reconnects already-known negative chunks
+→ natural spoken-French note without making dropped ne the beginner baseline
 ```
+
+### F05
+
+```text
+lessons 34–36 only
+→ who is doing the action / who is in the state?
+→ je / tu / il-elle / nous / vous
+→ on remains owned by F18 / lesson 52
+→ no full conjugation table
+```
+
+## Build 37.6 candidate — F08 regular `-er` present
+
+A fresh anchor audit was performed before implementation, as required after 37.5.
+
+Remaining partial candidates were:
+
+```text
+F08 regular -er present       — PARTIAL / consolidate
+F12 questions                 — PARTIAL / system weak
+F13 adjective agreement       — PARTIAL / later core
+F16 à/de contractions         — PARTIAL / later core
+```
+
+F08 was selected because it has the smallest contiguous explicit curriculum scaffold:
+
+```text
+lesson 32 → je travaille → tu travailles
+            Tu travailles ? / Tu habites où ? / Tu aimes ça ?
+lesson 33 → Il travaille. / Elle travaille.
+            Il habite ici. / Elle habite ici.
+lesson 34 → nous / -ons exists, BUT remains outside 37.6 to preserve F05 ownership
+```
+
+### 37.6 learner scope
+
+Route **lessons 32–33 only**.
 
 Teaching key:
 
 ```text
-ne / n’ + verb + pas
+many regular -er verbs, written present:
+je       → -e
+tu       → -es
+il/elle  → -e
 ```
 
-The capsule explains `ne → n’` before a vowel / silent h and notes that natural spoken French may omit `ne`, while the full form remains the safe beginner/writing baseline.
+The capsule explicitly says these three forms often sound identical in speech, so the subject pronoun matters. It also prevents overgeneralization by reconnecting the known exception `aller → tu vas` and mentioning `vouloir / pouvoir` as frequent verbs with their own forms.
 
-### 37.5 — F05 subject pronouns
-
-Build 33 classified F05 as **PARTIAL / distributed / consolidate**. Exact curriculum anchors were inspected before implementation:
+Out of scope for 37.6:
 
 ```text
-je       → already widespread earlier
-tu       → explicit lesson 32 ownership
-il/elle  → explicit lesson 33 ownership
-nous     → explicit lesson 34 ownership
-vous     → already present in polite survival language
-on       → remains owned by F18 / lesson 52
+nous / vous / ils full table
+F12 questions
+F13 adjective agreement
+F16 à/de contractions
+persistent mastery
+Evidence product read
+Build 38 transfer/generalization
+A2
 ```
 
-Therefore the capsule is deliberately offered only in **lessons 34–36**, after Trân has already encountered the main perspectives needed for consolidation.
-
-Pedagogical key:
-
-```text
-Who is doing the action / who is in the state?
-```
-
-Examples reuse curriculum language:
-
-```text
-Je suis prête.
-Tu veux manger ?
-Elle travaille.
-Nous avons le temps.
-Vous pouvez m’aider ?
-```
-
-It does **not** teach a full conjugation table and does not steal `on` from F18.
-
-Architecture remains narrow:
+Candidate architecture:
 
 ```text
 same Build 37.2 pure engine
-→ compiled F05 capsule in foundations-capsules.js
+→ compiled F08 capsule in foundations-capsules.js
 → same Build 37.3 renderer routes by lesson context
-→ F01–F04 stays on lessons 8–13
-→ F11 stays on lessons 17–20
-→ F05 stays on lessons 34–36
-→ no loader / index / SW change
+→ F08 lessons 32–33
+→ F05 still lessons 34–36
+→ no loader / index / SW / manifest change
 → no durable write
 → no Evidence product read
 ```
 
-PR #178 final matrix completed with all non-inherited workflows green. `Premium V5.3 Pedagogical Islands` initially failed only during its screenshot-capture loop after static/functional/reduced-motion tribunals passed; strict unchanged rerun completed **SUCCESS**, including the visual artifact. No product patch was made for that flake.
-
-Post-merge runtime `9acce0b2…` is fully settled at **32 SUCCESS + exactly the four inherited failures**, with Pages **#231 SUCCESS**, 0 queued and 0 in-progress.
+Dedicated 37.6 tribunal must replay **F01–F04 + F11 + F05** before F08, then certify F08 in **VI / DEBUG FR × desktop / iPhone-size**, storage byte-identical, no horizontal overflow and the lesson 33 → lesson 34 routing boundary.
 
 ## Current inherited CI debt
 
@@ -160,20 +196,7 @@ The four pre-Build37 failures remain baseline debt unless separately repaired:
 3. `Build 36.3 Recovery v3 durability tribunal`;
 4. `Build 28 Data recovery smoke`.
 
-Do not hide these failures, but do not misclassify them as a new Foundations regression either.
-
-## Remaining Foundations candidates
-
-Build 33 + the 37.1 registry still classify these partial Core candidates as unresolved:
-
-```text
-F08 regular -er present       — PARTIAL / consolidate
-F12 questions                 — PARTIAL / system weak
-F13 adjective agreement       — PARTIAL / later core
-F16 à/de contractions         — PARTIAL / later core
-```
-
-**Do not infer the next slice from this list alone.** Before 37.6, inspect the exact curriculum anchors and choose one narrow concept only. Do not mass-rollout F08/F12/F13/F16 together.
+Do not hide these failures, but do not misclassify them as a new Foundations or PWA regression either.
 
 ## Protected boundaries
 
@@ -185,6 +208,7 @@ voice-ios.js
 free-voice.js
 assets/LOGO.png
 assets/Favicon.png
+manifest / SW PWA identity contract from PR #180
 Recovery v3 seven-store ownership
 Evidence derived-shadow role
 52 / 313 curriculum semantics
@@ -195,15 +219,14 @@ V5.10 field-accepted navigation / visual identities
 ## NEXT
 
 ```text
-Build 37.5 is CLOSED / CERTIFIED
-→ do NOT reopen F05 without a concrete regression
-→ fresh audit of exact curriculum anchors for ONE remaining partial concept
-→ choose the smallest pedagogically justified 37.6 slice
-→ dedicated tribunal must replay F01–F04 + F11 + F05 before testing the new concept
-→ VI / DEBUG FR × desktop / iPhone-size
-→ storage byte-identical
-→ NO Evidence product read
-→ do NOT mass-rollout remaining Foundations concepts
+37.6 candidate branch: build37/f08-regular-er
+→ finish dedicated guard + docs
+→ open ONE PR
+→ inspect PR diff and CI against current main e017f7a…
+→ exactly four inherited failures may remain baseline
+→ any new non-baseline failure must be explained/fixed or proven flaky by unchanged rerun
+→ do NOT merge silently in an implementation session
+→ do NOT begin F12/F13/F16 in the same slice
 ```
 
 **Build 36 is CLOSED. Do not reopen it without a concrete regression.**
