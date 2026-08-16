@@ -1,0 +1,197 @@
+name: Build 37.8 Foundations F13 adjective agreement
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [build37/f13-adjective-agreement]
+
+permissions:
+  contents: read
+
+jobs:
+  foundations-f13-adjective-agreement:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax + predecessor contracts + F13 contract
+        run: |
+          set -euo pipefail
+          node --check src/pedagogy/foundations-capsule-engine.js
+          node --check src/pedagogy/foundations-capsules.js
+          node --check src/pedagogy/foundations-pilot.js
+          node --check tools/test-build37-8-foundations-adjective-agreement.cjs
+          node tools/test-build37-2-foundations-capsule-engine.cjs
+          node tools/test-build37-4-foundations-negation.cjs
+          node tools/test-build37-5-foundations-subject-pronouns.cjs
+          node tools/test-build37-6-foundations-regular-er.cjs
+          node tools/test-build37-7-foundations-questions.cjs
+          node tools/test-build37-8-foundations-adjective-agreement.cjs
+
+      - name: F13 stays narrow and ownership remains additive
+        run: |
+          set -euo pipefail
+          grep -q "id:'adjective-agreement-core',concepts:\['F13'\]" src/pedagogy/foundations-capsules.js
+          grep -q "F13:engine.compile(ADJECTIVE_AGREEMENT_RAW)" src/pedagogy/foundations-capsules.js
+          grep -q "id:'F13',capsule:adjectiveAgreementCapsule,min:40,max:40" src/pedagogy/foundations-pilot.js
+          grep -q "id:'F12',capsule:questionsCapsule,min:41,max:43" src/pedagogy/foundations-pilot.js
+          grep -q "id:'F08',capsule:regularErCapsule,min:32,max:33" src/pedagogy/foundations-pilot.js
+          grep -q "id:'F05',capsule:subjectPronounsCapsule,min:34,max:36" src/pedagogy/foundations-pilot.js
+          grep -q "id:'F11',capsule:negationCapsule,min:17,max:20" src/pedagogy/foundations-pilot.js
+          grep -q "id:'F01_F04',capsule:primaryCapsule,min:8,max:13" src/pedagogy/foundations-pilot.js
+          grep -q "adapter:'37.3'" src/pedagogy/foundations-pilot.js
+          grep -q "expansion:'37.4'" src/pedagogy/foundations-pilot.js
+          grep -q "consolidation:'37.5'" src/pedagogy/foundations-pilot.js
+          grep -q "verbPattern:'37.6'" src/pedagogy/foundations-pilot.js
+          grep -q "systematization:'37.7'" src/pedagogy/foundations-pilot.js
+          grep -q "agreement:'37.8'" src/pedagogy/foundations-pilot.js
+          grep -q "agreementConcepts:\['F13'\]" src/pedagogy/foundations-pilot.js
+          ! grep -q 'localStorage.setItem' src/pedagogy/foundations-capsules.js
+          ! grep -q 'localStorage.setItem' src/pedagogy/foundations-pilot.js
+          ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/foundations-capsules.js
+          ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/foundations-pilot.js
+
+      - name: Product, storage, voice, curriculum and PWA owners stay untouched
+        run: |
+          set -euo pipefail
+          git fetch origin main --quiet
+          changed="$(git diff --name-only origin/main...HEAD)"
+          forbidden='^(app\.js|voice-ios\.js|free-voice\.js|index\.html|sw\.js|manifest\.webmanifest|src/core/build32-loader\.js|src/core/data-recovery|src/core/memory-evidence-v2-runtime\.js|src/pedagogy/memory-evidence-v2-core\.js|src/pedagogy/foundations-core\.js|src/pedagogy/curriculum-stage[234]\.js|src/pedagogy/learning-memory\.js|src/pedagogy/error-intelligence\.js|src/pedagogy/listening-engine\.js|src/pedagogy/scenario-engine\.js|src/pedagogy/mastery-engine\.js|src/pedagogy/learner-intelligence.*\.js|assets/LOGO\.png|assets/Favicon\.png)$'
+          if printf '%s\n' "$changed" | grep -E "$forbidden"; then
+            echo 'Build 37.8 must stay inside the Foundations capsule/renderer/test/doc lane' >&2
+            exit 1
+          fi
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-b378-http.log 2>&1 &
+          echo $! >/tmp/ft-b378-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — F01-F04 predecessor ownership
+        run: |
+          set -euo pipefail
+          passed=0
+          for attempt in 1 2; do
+            profile="/tmp/ft-b378-f0104-$attempt"; file="/tmp/b378-f0104-$attempt.html"
+            rm -rf "$profile" "$file"
+            if timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=1280,900 --virtual-time-budget=9000 --dump-dom \
+              'http://127.0.0.1:4173/tests/browser/build37-foundations-pilot-adapter.html?debug=vi' >"$file" \
+              && grep -q 'data-b373-done="1"' "$file" \
+              && grep -q 'data-b373-parity="1"' "$file" \
+              && grep -q 'data-b373-storage-unchanged="1"' "$file" \
+              && ! grep -q 'data-b373-error=' "$file"; then passed=1; break; fi
+          done
+          test "$passed" -eq 1
+
+      - name: Chrome — F11 predecessor ownership
+        run: |
+          set -euo pipefail
+          passed=0
+          for attempt in 1 2; do
+            profile="/tmp/ft-b378-f11-$attempt"; file="/tmp/b378-f11-$attempt.html"
+            rm -rf "$profile" "$file"
+            if timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=390,844 --virtual-time-budget=9000 --dump-dom \
+              'http://127.0.0.1:4173/tests/browser/build37-4-foundations-negation.html?debug=fr' >"$file" \
+              && grep -q 'data-b374-done="1"' "$file" \
+              && grep -q 'data-b374-f11="1"' "$file" \
+              && grep -q 'data-b374-storage-unchanged="1"' "$file" \
+              && ! grep -q 'data-b374-error=' "$file"; then passed=1; break; fi
+          done
+          test "$passed" -eq 1
+
+      - name: Chrome — F08 predecessor ownership
+        run: |
+          set -euo pipefail
+          passed=0
+          for attempt in 1 2; do
+            profile="/tmp/ft-b378-f08-$attempt"; file="/tmp/b378-f08-$attempt.html"
+            rm -rf "$profile" "$file"
+            if timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=1280,900 --virtual-time-budget=10000 --dump-dom \
+              'http://127.0.0.1:4173/tests/browser/build37-6-foundations-regular-er.html?debug=vi' >"$file" \
+              && grep -q 'data-b376-done="1"' "$file" \
+              && grep -q 'data-b376-f08="1"' "$file" \
+              && grep -q 'data-b376-routing="1"' "$file" \
+              && ! grep -q 'data-b376-error=' "$file"; then passed=1; break; fi
+          done
+          test "$passed" -eq 1
+
+      - name: Chrome — F05 predecessor ownership
+        run: |
+          set -euo pipefail
+          passed=0
+          for attempt in 1 2; do
+            profile="/tmp/ft-b378-f05-$attempt"; file="/tmp/b378-f05-$attempt.html"
+            rm -rf "$profile" "$file"
+            if timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=390,844 --virtual-time-budget=9000 --dump-dom \
+              'http://127.0.0.1:4173/tests/browser/build37-5-foundations-subject-pronouns.html?debug=fr' >"$file" \
+              && grep -q 'data-b375-done="1"' "$file" \
+              && grep -q 'data-b375-f05="1"' "$file" \
+              && ! grep -q 'data-b375-error=' "$file"; then passed=1; break; fi
+          done
+          test "$passed" -eq 1
+
+      - name: Chrome — F12 predecessor ownership
+        run: |
+          set -euo pipefail
+          passed=0
+          for attempt in 1 2; do
+            profile="/tmp/ft-b378-f12-$attempt"; file="/tmp/b378-f12-$attempt.html"
+            rm -rf "$profile" "$file"
+            if timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=1280,900 --virtual-time-budget=11000 --dump-dom \
+              'http://127.0.0.1:4173/tests/browser/build37-7-foundations-questions.html?debug=vi' >"$file" \
+              && grep -q 'data-b377-done="1"' "$file" \
+              && grep -q 'data-b377-f12="1"' "$file" \
+              && grep -q 'data-b377-routing="1"' "$file" \
+              && ! grep -q 'data-b377-error=' "$file"; then passed=1; break; fi
+          done
+          test "$passed" -eq 1
+
+      - name: Chrome — F13 VI/FR desktop + iPhone parity and routing
+        run: |
+          set -euo pipefail
+          for spec in 'vi 1280 900' 'fr 1280 900' 'vi 390 844' 'fr 390 844'; do
+            set -- $spec; locale="$1"; width="$2"; height="$3"; passed=0; file=''
+            for attempt in 1 2; do
+              profile="/tmp/ft-b378-${locale}-${width}-$attempt"
+              file="/tmp/b378-${locale}-${width}-$attempt.html"
+              rm -rf "$profile" "$file"
+              if timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
+                --user-data-dir="$profile" --window-size="$width,$height" --virtual-time-budget=11000 --dump-dom \
+                "http://127.0.0.1:4173/tests/browser/build37-8-foundations-adjective-agreement.html?debug=$locale" >"$file" \
+                && grep -q 'data-b378-done="1"' "$file" \
+                && grep -q "data-b378-locale=\"$locale\"" "$file" \
+                && grep -q 'data-b378-f05="1"' "$file" \
+                && grep -q 'data-b378-f08="1"' "$file" \
+                && grep -q 'data-b378-f12="1"' "$file" \
+                && grep -q 'data-b378-f13="1"' "$file" \
+                && grep -q 'data-b378-routing="1"' "$file" \
+                && grep -q 'data-b378-storage-unchanged="1"' "$file" \
+                && grep -q 'data-b378-no-overflow="1"' "$file" \
+                && ! grep -q 'data-b378-error=' "$file"; then passed=1; break; fi
+            done
+            if [ "$passed" -ne 1 ]; then
+              echo "F13 tribunal failed for $locale ${width}x${height}" >&2
+              grep -o 'data-b378-[^ >]*="[^"]*"' "$file" >&2 || true
+              grep -o 'data-b378-error="[^"]*"' "$file" >&2 || true
+              exit 1
+            fi
+          done
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-b378-server.pid ]; then kill "$(cat /tmp/ft-b378-server.pid)" || true; fi
