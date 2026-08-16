@@ -21,7 +21,7 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Syntax + predecessor chain + F12 contract
+      - name: Syntax + predecessor contracts + F12 contract
         run: |
           set -euo pipefail
           node --check src/pedagogy/foundations-capsule-engine.js
@@ -113,25 +113,6 @@ jobs:
           done
           test "$passed" -eq 1
 
-      - name: Chrome — F08 predecessor remains exact
-        run: |
-          set -euo pipefail
-          passed=0
-          for attempt in 1 2; do
-            profile="/tmp/ft-b377-f08-$attempt"
-            file="/tmp/b377-f08-$attempt.html"
-            rm -rf "$profile" "$file"
-            if timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
-              --user-data-dir="$profile" --window-size=390,844 --virtual-time-budget=10000 --dump-dom \
-              'http://127.0.0.1:4173/tests/browser/build37-6-foundations-regular-er.html?debug=fr' >"$file" \
-              && grep -q 'data-b376-done="1"' "$file" \
-              && grep -q 'data-b376-f08="1"' "$file" \
-              && grep -q 'data-b376-routing="1"' "$file" \
-              && grep -q 'data-b376-storage-unchanged="1"' "$file" \
-              && ! grep -q 'data-b376-error=' "$file"; then passed=1; break; fi
-          done
-          test "$passed" -eq 1
-
       - name: Chrome — F05 predecessor remains exact
         run: |
           set -euo pipefail
@@ -150,7 +131,7 @@ jobs:
           done
           test "$passed" -eq 1
 
-      - name: Chrome — F12 VI/FR desktop + iPhone parity and routing
+      - name: Chrome — F08 predecessor routing + F12 VI/FR desktop + iPhone parity
         run: |
           set -euo pipefail
           for spec in 'vi 1280 900' 'fr 1280 900' 'vi 390 844' 'fr 390 844'; do
@@ -164,6 +145,7 @@ jobs:
                 "http://127.0.0.1:4173/tests/browser/build37-7-foundations-questions.html?debug=$locale" >"$file" \
                 && grep -q 'data-b377-done="1"' "$file" \
                 && grep -q "data-b377-locale=\"$locale\"" "$file" \
+                && grep -q 'data-b377-f08="1"' "$file" \
                 && grep -q 'data-b377-f12="1"' "$file" \
                 && grep -q 'data-b377-routing="1"' "$file" \
                 && grep -q 'data-b377-storage-unchanged="1"' "$file" \
