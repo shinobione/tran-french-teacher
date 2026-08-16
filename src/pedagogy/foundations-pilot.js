@@ -3,7 +3,7 @@
   const VERSION='2.3.0',BUILD='34',DEBUG='tran-french-teacher:debug-fr:v1';
   const T=(vi,fr)=>localStorage.getItem(DEBUG)==='1'?fr:vi;
   const locale=()=>localStorage.getItem(DEBUG)==='1'?'fr':'vi';
-  const esc=(v='')=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]));
+  const esc=(v='')=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const root=document.documentElement;
   const engine=window.FrenchTranquilleFoundationsCapsuleEngine;
   const primaryCapsule=window.FrenchTranquilleFoundationsCapsules?.F01_F04;
