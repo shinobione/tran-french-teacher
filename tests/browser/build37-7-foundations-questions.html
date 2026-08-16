@@ -65,6 +65,7 @@
       const nextFrame=()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
       const setLesson=async number=>{
         document.querySelector('.topbar h1').textContent=`Bài ${number} — routing tribunal`;
+        document.querySelector('.lesson-step').innerHTML='<p data-existing-lesson>Existing lesson content</p>';
         window.FrenchTranquilleFoundationsPilot.refresh();
         await nextFrame();
       };
