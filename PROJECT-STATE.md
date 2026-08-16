@@ -9,9 +9,10 @@
 - Reconciled: **2026-08-16**
 - Repository: `shinobione/tran-french-teacher`
 - Default branch: `main`
-- Current runtime-bearing `main`: **`9acce0b2b644fe5a14135085c4de0f7a64ec16b3`** — PR **#178**, Build **37.5 · F05 Subject-Pronoun Consolidation**.
-- GitHub Pages **#231** on that exact SHA: **SUCCESS**.
-- Runtime push matrix on that exact SHA: **32 SUCCESS + exactly the four inherited failures**, **0 queued / 0 in-progress**.
+- Current `main`: **`e017f7a041d147569ee0d47c93586b2c17f97a83`** — PR **#180**, PWA identity/cache namespace isolation layered on top of the certified Build 37.5 checkpoint.
+- GitHub Pages **#233** on that exact SHA: **SUCCESS**.
+- Current-main push matrix: **33 SUCCESS + exactly the four inherited historical failures**, **0 queued / 0 in-progress**.
+- Last certified Foundations runtime before the PWA-only maintenance layer: **`9acce0b2b644fe5a14135085c4de0f7a64ec16b3`** — PR **#178**, Build **37.5 · F05 Subject-Pronoun Consolidation**.
 - Visible application runtime metadata: **v2.4.0 · Build 36**.
 - Pedagogy baseline: **v2.3.0 · Build 34**.
 - Premium V5.10: **CLOSED / physical FIELD PASS**; issue **#114 CLOSED**.
@@ -23,6 +24,7 @@
 - **37.3 MERGED / CERTIFIED** — F01–F04 pilot converged onto the generic engine with strict learner-facing parity.
 - **37.4 MERGED / CERTIFIED** — F11 negation narrow learner expansion in lessons 17–20.
 - **37.5 MERGED / CERTIFIED / DEPLOYED** — F05 subject-pronoun consolidation in lessons 34–36.
+- **37.6 CANDIDATE / PR #182 OPEN** — F12 practical-question systematization in lessons 41–43. Implementation candidate commit **`c54ea540b11e8e40fef0784bb6806e17d5ac575c`** passed its dedicated predecessor + VI/FR desktop/iPhone tribunal before PR opening.
 
 ## Current durable data contract — LOCKED
 
@@ -39,7 +41,7 @@
 
 Recognition failure remains recognition-system evidence, never a pronunciation diagnosis.
 
-## Build 37 certified chain
+## Build 37 certified chain + active candidate
 
 ```text
 37.1 registry F01–F18
@@ -47,18 +49,20 @@ Recognition failure remains recognition-system evidence, never a pronunciation d
 → 37.3 F01–F04 pilot adapter parity
 → 37.4 F11 negation narrow expansion
 → 37.5 F05 subject-pronoun consolidation
+→ 37.6 F12 practical-question systematization CANDIDATE
 ```
 
-### Shared Foundations ownership — LOCKED
+### Shared Foundations ownership — LOCKED through 37.5; 37.6 candidate adds one disjoint owner
 
 ```text
 37.2 → generic pure capsule engine
 37.3 → shared learner-facing adapter / renderer
 37.4 → F11 expansion ownership
 37.5 → F05 consolidation ownership
+37.6 → F12 systematization ownership CANDIDATE
 ```
 
-Current adapter metadata intentionally preserves historical ownership instead of overwriting it:
+Candidate adapter metadata preserves every historical owner instead of overwriting it:
 
 ```text
 adapter: '37.3'
@@ -66,6 +70,8 @@ expansion: '37.4'
 expansionConcepts: ['F11']
 consolidation: '37.5'
 consolidationConcepts: ['F05']
+systematization: '37.6'
+systematizationConcepts: ['F12']
 ```
 
 ### F01–F04 predecessor contract
@@ -149,7 +155,70 @@ same Build 37.2 pure engine
 
 PR #178 final matrix completed with all non-inherited workflows green. `Premium V5.3 Pedagogical Islands` initially failed only during its screenshot-capture loop after static/functional/reduced-motion tribunals passed; strict unchanged rerun completed **SUCCESS**, including the visual artifact. No product patch was made for that flake.
 
-Post-merge runtime `9acce0b2…` is fully settled at **32 SUCCESS + exactly the four inherited failures**, with Pages **#231 SUCCESS**, 0 queued and 0 in-progress.
+Post-merge Foundations runtime `9acce0b2…` settled at **32 SUCCESS + exactly the four inherited failures**, with Pages **#231 SUCCESS**, 0 queued and 0 in-progress. PR #180 later advanced `main` only for PWA identity/cache isolation; current `main` `e017f7a…` is settled at **33 SUCCESS + the same four inherited failures**, with Pages **#233 SUCCESS**.
+
+### 37.6 candidate — F12 practical questions
+
+The remaining partial concepts were re-audited against the real curriculum before selecting 37.6.
+
+F12 was chosen because it has a clean distributed progression and a disjoint learner-facing route:
+
+```text
+lesson 25 → Où ? / Quand ? / Pourquoi ? / Avec qui ? / Quoi ?
+lesson 32 → Tu travailles ? / Tu habites où ? / Tu veux manger ?
+lesson 39 → Pouvez-vous m'expliquer ? / Quelle est l'adresse ?
+lesson 41 → Qu'est-ce que ça veut dire ? / Pouvez-vous reformuler ?
+lesson 42 → Combien il vous faut ?
+lesson 43 → Lequel est mieux ?
+```
+
+The candidate capsule is offered only in **lessons 41–43** and systematizes:
+
+```text
+ordinary sentence + question intonation
+question words
+polite Pouvez-vous… ? blocks
+```
+
+It deliberately does **not** introduce subject-verb inversion or a broad new `Est-ce que…` system.
+
+Other candidates remain deferred for concrete reasons:
+
+```text
+F08 regular -er present → pedagogically mature, but best route overlaps certified F05 around lessons 34–36
+F13 adjective agreement → later core; avoid mixing adjective agreement with feminine passé-composé forms
+F16 à/de contractions → later core; current anchors mix contraction, partitive and quantity semantics
+```
+
+Candidate architecture remains narrow:
+
+```text
+same Build 37.2 pure engine
+→ compiled F12 capsule in foundations-capsules.js
+→ same Build 37.3 renderer
+→ F01–F04 stays on lessons 8–13
+→ F11 stays on lessons 17–20
+→ F05 stays on lessons 34–36
+→ F12 candidate on lessons 41–43
+→ no curriculum / loader / index / SW / voice / PWA change
+→ no durable write
+→ no Evidence product read
+```
+
+Dedicated branch workflow on implementation commit `c54ea540…` completed **SUCCESS** before PR opening and replayed:
+
+```text
+F01–F04 browser parity
+→ F11 browser parity
+→ F05 browser parity
+→ F12 VI/FR × desktop/390×844
+→ localStorage byte-identical
+→ no horizontal overflow
+→ ≥44 px entry target
+→ protected owners untouched
+```
+
+PR **#182** is now the active candidate. Per `AGENTS.md`, full PR-matrix classification, merge and Pages certification are a separate control step unless explicitly delegated.
 
 ## Current inherited CI debt
 
@@ -162,18 +231,15 @@ The four pre-Build37 failures remain baseline debt unless separately repaired:
 
 Do not hide these failures, but do not misclassify them as a new Foundations regression either.
 
-## Remaining Foundations candidates
-
-Build 33 + the 37.1 registry still classify these partial Core candidates as unresolved:
+## Remaining Foundations candidates after selecting 37.6
 
 ```text
-F08 regular -er present       — PARTIAL / consolidate
-F12 questions                 — PARTIAL / system weak
+F08 regular -er present       — PARTIAL / consolidate — deferred due route overlap with F05
 F13 adjective agreement       — PARTIAL / later core
 F16 à/de contractions         — PARTIAL / later core
 ```
 
-**Do not infer the next slice from this list alone.** Before 37.6, inspect the exact curriculum anchors and choose one narrow concept only. Do not mass-rollout F08/F12/F13/F16 together.
+Do not mass-rollout these concepts. 37.6 must be certified or rejected before any next Foundations concept is selected.
 
 ## Protected boundaries
 
@@ -190,20 +256,20 @@ Evidence derived-shadow role
 52 / 313 curriculum semantics
 Listening / Scenario / Mastery / Learner Intelligence owners
 V5.10 field-accepted navigation / visual identities
+PWA identity/cache isolation from PR #180
 ```
 
 ## NEXT
 
 ```text
-Build 37.5 is CLOSED / CERTIFIED
-→ do NOT reopen F05 without a concrete regression
-→ fresh audit of exact curriculum anchors for ONE remaining partial concept
-→ choose the smallest pedagogically justified 37.6 slice
-→ dedicated tribunal must replay F01–F04 + F11 + F05 before testing the new concept
-→ VI / DEBUG FR × desktop / iPhone-size
-→ storage byte-identical
-→ NO Evidence product read
-→ do NOT mass-rollout remaining Foundations concepts
+PR #182 / Build 37.6 F12 is the only active implementation candidate
+→ do NOT start F08/F13/F16
+→ next control step: inspect full PR #182 matrix against current-main baseline
+→ require no new failure beyond the four inherited historical failures
+→ classify any isolated Chrome timeout before touching product
+→ if certified and explicitly authorized: merge #182
+→ certify exact merge SHA + Pages
+→ reconcile this checkpoint after merge
 ```
 
 **Build 36 is CLOSED. Do not reopen it without a concrete regression.**
