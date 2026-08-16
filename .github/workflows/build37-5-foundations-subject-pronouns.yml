@@ -39,9 +39,11 @@ jobs:
           grep -q "id:'F05',capsule:subjectPronounsCapsule,min:34,max:36" src/pedagogy/foundations-pilot.js
           grep -q "id:'F11',capsule:negationCapsule,min:17,max:20" src/pedagogy/foundations-pilot.js
           grep -q "id:'F01_F04',capsule:primaryCapsule,min:8,max:13" src/pedagogy/foundations-pilot.js
-          grep -q "expansion:'37.5'" src/pedagogy/foundations-pilot.js
-          grep -q "expansionConcepts:\['F11','F05'\]" src/pedagogy/foundations-pilot.js
           grep -q "adapter:'37.3'" src/pedagogy/foundations-pilot.js
+          grep -q "expansion:'37.4'" src/pedagogy/foundations-pilot.js
+          grep -q "expansionConcepts:\['F11'\]" src/pedagogy/foundations-pilot.js
+          grep -q "consolidation:'37.5'" src/pedagogy/foundations-pilot.js
+          grep -q "consolidationConcepts:\['F05'\]" src/pedagogy/foundations-pilot.js
           ! grep -q 'localStorage.setItem' src/pedagogy/foundations-capsules.js
           ! grep -q 'localStorage.setItem' src/pedagogy/foundations-pilot.js
           ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/foundations-capsules.js
