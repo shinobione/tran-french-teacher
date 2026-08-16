@@ -38,11 +38,28 @@ jobs:
           ! grep -q 'FrenchTranquilleRecovery' src/pedagogy/foundations-core.js
           ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/foundations-core.js
 
-      - name: F01-F04 pilot contract remains exact or certified successor adapter
+      - name: F01-F04 pilot contract remains exact through certified successors
         run: |
           set -euo pipefail
           pilot='src/pedagogy/foundations-pilot.js'
-          if grep -q "adapter:'37.3'" "$pilot"; then
+          if grep -q "expansion:'37.4'" "$pilot"; then
+            grep -q "adapter:'37.3'" "$pilot"
+            grep -q 'FrenchTranquilleFoundationsCapsuleEngine' "$pilot"
+            grep -q 'FrenchTranquilleFoundationsCapsules' "$pilot"
+            grep -q "concepts:\['F01','F02','F03','F04'\]" "$pilot"
+            grep -q "id:'F01_F04',capsule:primaryCapsule,min:8,max:13" "$pilot"
+            grep -q "id:'F11',capsule:negationCapsule,min:17,max:20" "$pilot"
+            grep -q "expansionConcepts:\['F11'\]" "$pilot"
+            grep -q 'persistent:false' "$pilot"
+            ! grep -q 'const questions=' "$pilot"
+            ! grep -q 'localStorage.setItem' "$pilot"
+            test -f tests/browser/build37-foundations-pilot-adapter.html
+            test -f tests/browser/build37-4-foundations-negation.html
+            test -f .github/workflows/build37-3-foundations-pilot-adapter.yml
+            test -f .github/workflows/build37-4-foundations-negation.yml
+            node tools/test-build37-2-foundations-capsule-engine.cjs
+            node tools/test-build37-4-foundations-negation.cjs
+          elif grep -q "adapter:'37.3'" "$pilot"; then
             grep -q 'FrenchTranquilleFoundationsCapsuleEngine' "$pilot"
             grep -q 'FrenchTranquilleFoundationsCapsules' "$pilot"
             grep -q "concepts:\['F01','F02','F03','F04'\]" "$pilot"
