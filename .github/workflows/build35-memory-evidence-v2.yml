@@ -1,0 +1,77 @@
+name: Build 35 Memory Evidence v2 projection
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  evidence-v2-projection:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax and pure projection contract
+        run: |
+          node --check src/pedagogy/memory-evidence-v2-core.js
+          node --check tests/smoke/build35-memory-evidence-v2-smoke.js
+          node tests/smoke/build35-memory-evidence-v2-smoke.js
+          grep -q "french-tranquille:memory-evidence:v2" src/pedagogy/memory-evidence-v2-core.js
+          grep -q "dry-run-only" src/pedagogy/memory-evidence-v2-core.js
+          grep -q "voice-unrecognized" tests/smoke/build35-memory-evidence-v2-smoke.js
+          grep -q "backup-normalization-required" tests/smoke/build35-memory-evidence-v2-smoke.js
+
+      - name: Slice 35.1 is not runtime-adopted
+        run: |
+          ! grep -q 'memory-evidence-v2-core.js' index.html
+          ! grep -q 'memory-evidence-v2-core.js' sw.js
+          ! grep -q 'french-tranquille:memory-evidence:v2' index.html
+          ! grep -q 'french-tranquille:memory-evidence:v2' sw.js
+          grep -q 'No durable schema adoption' docs/BUILD-35-MEMORY-EVIDENCE-V2.md
+
+      - name: Recovery and learner writers remain byte-identical
+        run: |
+          test "$(git hash-object src/core/data-recovery-core.js)" = "10dc84bb71b82c62b5f169f52c6bd95c88b308f9"
+          test "$(git hash-object src/core/data-recovery.js)" = "ef0c1d414133e71076a35c3a8bcc079b94a074a1"
+          test "$(git hash-object src/pedagogy/learning-memory.js)" = "be19abde268a78b8bfd140a0d94e99a4990dda65"
+          test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-b35-http.log 2>&1 &
+          echo $! >/tmp/ft-b35-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — six-store dry run is deterministic and write-free
+        run: |
+          profile="/tmp/ft-b35-projection"
+          file="/tmp/b35-projection.html"
+          rm -rf "$profile" "$file"
+          timeout --signal=TERM --kill-after=5s 45s \
+            google-chrome --headless=new --no-sandbox --disable-gpu \
+            --user-data-dir="$profile" --window-size=1280,900 \
+            --virtual-time-budget=10000 --dump-dom \
+            'http://127.0.0.1:4173/tests/browser/build35-memory-evidence-v2-projection.html' >"$file"
+          grep -q 'data-b35-projection-done="1"' "$file"
+          grep -q 'data-b35-projection-ok="1"' "$file"
+          grep -q 'data-b35-deterministic="1"' "$file"
+          grep -q 'data-b35-source-untouched="1"' "$file"
+          grep -q 'data-b35-no-adoption="1"' "$file"
+          grep -q 'data-b35-dimensions-complete="1"' "$file"
+          grep -q 'data-b35-recognition-safe="1"' "$file"
+          grep -q 'data-b35-legacy-projection="1"' "$file"
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-b35-server.pid ]; then kill "$(cat /tmp/ft-b35-server.pid)" || true; fi
