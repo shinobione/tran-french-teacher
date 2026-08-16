@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Build 38.3 negation transfer tribunal</title>
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#07111e;color:#eef5ff;font-family:system-ui,-apple-system,sans-serif}body{padding:16px}.card{width:min(680px,100%);margin:18px auto;padding:20px;border:1px solid #2c4665;border-radius:22px;background:#0d1928;display:grid;gap:14px}.eyebrow{font-size:.75rem;font-weight:850;letter-spacing:.12em;color:#7ee9c9}.source{padding:14px;border-radius:15px;background:#081421;font-size:1.08rem;font-weight:800}.choices{display:grid;gap:9px}.choices button{min-height:48px;border:1px solid #5f7595;border-radius:13px;background:#20314a;color:#eef5ff;font:inherit;font-weight:750;padding:10px 12px}.choices button.ok{outline:2px solid #74e8c6}.feedback{min-height:24px;color:#b7c8dd}.done{font-weight:850;color:#7ee9c9}@media(max-width:520px){.card{padding:16px;border-radius:18px}}
+  </style>
+  <script>
+    (()=>{
+      const debug=new URLSearchParams(location.search).get('debug')==='fr';
+      localStorage.clear();
+      localStorage.setItem('tran-french-teacher:debug-fr:v1',debug?'1':'0');
+      localStorage.setItem('b38.3:sentinel','unchanged');
+      window.__b383Debug=debug;
+      window.__b383StorageBefore=JSON.stringify(Object.keys(localStorage).sort().map(key=>[key,localStorage.getItem(key)]));
+    })();
+  </script>
+</head>
+<body>
+  <main class="card" id="tribunal">
+    <span class="eyebrow">BUILD 38.3 · NEGATION TRANSFER</span>
+    <h1 data-title></h1>
+    <p data-instruction></p>
+    <p data-cue></p>
+    <div class="source" data-source></div>
+    <div class="choices" data-choices></div>
+    <p class="feedback" data-feedback></p>
+  </main>
+  <script src="../../src/pedagogy/generalization-transfer-core.js?v=2.4.0-b38.1"></script>
+  <script src="../../src/pedagogy/generalization-negation-core.js?v=2.4.0-b38.3"></script>
+  <script>
+    (()=>{
+      const root=document.documentElement;
+      const fail=message=>{root.dataset.b383Error=message;throw new Error(message)};
+      const ok=(value,message)=>{if(!value)fail(message)};
+      const transfer=window.FrenchTranquilleGeneralizationTransfer;
+      const negation=window.FrenchTranquilleGeneralizationNegation;
+      const locale=window.__b383Debug?'fr':'vi';
+      const exercises=negation?.catalog||[];
+      let index=0;
+      const title=document.querySelector('[data-title]');
+      const instruction=document.querySelector('[data-instruction]');
+      const cue=document.querySelector('[data-cue]');
+      const source=document.querySelector('[data-source]');
+      const choices=document.querySelector('[data-choices]');
+      const feedback=document.querySelector('[data-feedback]');
+
+      function rotated(values,shift){
+        const copy=[...values];
+        const amount=shift%copy.length;
+        return [...copy.slice(amount),...copy.slice(0,amount)];
+      }
+
+      function render(){
+        const exercise=exercises[index];
+        const view=negation.view(exercise,locale);
+        title.textContent=view.title;
+        instruction.textContent=view.instruction;
+        cue.textContent=view.cue;
+        source.textContent=view.source;
+        feedback.textContent='';
+        choices.innerHTML='';
+        rotated(view.choices,index+1).forEach(value=>{
+          const button=document.createElement('button');
+          button.type='button';
+          button.textContent=value;
+          button.dataset.choice=value;
+          button.addEventListener('click',()=>answer(button,exercise));
+          choices.appendChild(button);
+        });
+      }
+
+      function answer(button,exercise){
+        ok(negation.verify(exercise,button.dataset.choice),'selected answer should be correct in tribunal');
+        button.classList.add('ok');
+        feedback.textContent=locale==='fr'?'✓ Négation reconstruite.':'✓ Đã xây lại câu phủ định.';
+        index+=1;
+        if(index<exercises.length){render();return;}
+        document.querySelector('#tribunal').insertAdjacentHTML('beforeend',`<p class="done" data-done>${locale==='fr'?'Transfert de négation terminé.':'Hoàn thành chuyển đổi phủ định.'}</p>`);
+      }
+
+      try{
+        ok(transfer?.slice==='38.1','38.1 predecessor missing');
+        ok(transfer?.family?.id==='subject-substitution-regular-er','38.1 family changed');
+        ok(negation?.schema==='french-tranquille-generalization-negation/v1','38.3 API missing');
+        ok(negation?.slice==='38.3','38.3 slice marker missing');
+        ok(negation?.status==='pure-non-wired','38.3 must remain non-wired');
+        ok(negation?.family?.id==='affirmation-negation-regular-er-je','wrong negation family');
+        ok(negation?.family?.subject==='je','38.3 subject must remain je only');
+        ok(negation?.family?.persistence==='ephemeral-only','38.3 must remain ephemeral');
+        ok(negation?.family?.masteryClaim===false,'38.3 must not claim mastery');
+        ok(exercises.length===3,'38.3 catalog must contain exactly 3 exercises');
+        ok(JSON.stringify(exercises.map(x=>x.source))===JSON.stringify(['Je travaille.',"J'habite ici.","J'aime ça."]),'source catalog changed');
+        ok(JSON.stringify(exercises.map(x=>x.target))===JSON.stringify(['Je ne travaille pas.',"Je n'habite pas ici.","Je n'aime pas ça."]),'target catalog changed');
+        render();
+        for(let step=0;step<exercises.length;step+=1){
+          const exercise=exercises[step];
+          const button=[...document.querySelectorAll('[data-choice]')].find(node=>node.dataset.choice===exercise.target);
+          ok(button,`missing target choice ${exercise.target}`);
+          ok(button.getBoundingClientRect().height>=44,'choice target below 44px');
+          button.click();
+        }
+        ok(document.querySelector('[data-done]'),'completion marker missing');
+        ok(JSON.stringify(Object.keys(localStorage).sort().map(key=>[key,localStorage.getItem(key)]))===window.__b383StorageBefore,'localStorage changed during 38.3 tribunal');
+        ok(document.documentElement.scrollWidth<=innerWidth+1,'horizontal overflow detected');
+        root.dataset.b383Done='1';
+        root.dataset.b383Locale=locale;
+        root.dataset.b383Family='affirmation-negation-regular-er-je';
+        root.dataset.b383Exercises='3';
+        root.dataset.b383StorageUnchanged='1';
+        root.dataset.b383NoOverflow='1';
+      }catch(error){
+        if(!root.dataset.b383Error)root.dataset.b383Error=error.message;
+        console.error(error);
+      }
+    })();
+  </script>
+</body>
+</html>
