@@ -9,8 +9,9 @@
 - Reconciled: **2026-08-16**
 - Repository: `shinobione/tran-french-teacher`
 - Default branch: `main`
-- Current deployed `main`: **`5168b3b42d71a059d14e68ddf1c41831b5ef969b`** — PR **#174**, Build 37.2 Generic Foundations Capsule Engine.
+- Current deployed `main`: **`f40ea317803a1ab2398b6855340c74977d7cc619`** — PR **#175**, Build 37.3 Foundations Pilot Adapter / Renderer Convergence.
 - GitHub Pages deployment on that exact SHA: **SUCCESS**.
+- Post-merge main matrix on `f40ea317…`: **33 SUCCESS / 4 inherited failures / 0 queued / 0 in-progress**.
 - Visible application runtime metadata: **v2.4.0 · Build 36**.
 - Pedagogy baseline: **v2.3.0 · Build 34**.
 - Premium V5.10: **CLOSED / physical FIELD PASS**; issue **#114 CLOSED**.
@@ -19,8 +20,9 @@
 - **Build 37 ACTIVE — Foundations Core.**
 - **37.1 MERGED / CERTIFIED** — pure F01–F18 ownership registry.
 - **37.2 MERGED / CERTIFIED** — pure generic capsule engine + exact F01–F04 mirror spec.
-- Active implementation slice: **37.3 · F01–F04 Pilot Adapter / Renderer Convergence**.
-- Active branch: `build37/foundations-pilot-adapter`.
+- **37.3 MERGED / CERTIFIED** — existing F01–F04 learner pilot converged onto the generic engine with strict visual/behavior/storage parity.
+- Active implementation slice: **37.4 · F11 Negation narrow learner expansion**.
+- Active branch: `build37/f11-negation-capsule`.
 
 ## Current durable data contract — LOCKED
 
@@ -35,13 +37,13 @@
 | Product read-path cutover to Evidence | **NONE** |
 | Foundations persistence | **NONE / ephemeral only** |
 
-Build 36.3 merged as PR #170 and closed durability/adoption. PR #171 opened Build 37. PR #172 corrected runtime-version ownership only. PR #173 established the F01–F18 registry. PR #174 then merged the pure capsule engine/spec without learner-facing wiring.
+Build 36.3 merged as PR #170 and closed durability/adoption. PR #171 opened Build 37. PR #172 corrected runtime-version ownership only. PR #173 established the F01–F18 registry. PR #174 merged the pure capsule engine/spec. PR #175 then migrated the existing F01–F04 learner pilot onto that engine without changing its learner-facing contract.
 
 ## Current main CI baseline
 
-Current `main` `5168b3b…` completed **36 push workflows**:
+Current deployed `main` `f40ea317…` completed **37 push workflows**:
 
-- **32 SUCCESS**;
+- **33 SUCCESS**;
 - **4 inherited failures**;
 - **0 queued**;
 - **0 in-progress**.
@@ -55,38 +57,80 @@ Inherited failures still present:
 
 These failures predate Build 37 and are baseline CI debt, not evidence of a Foundations regression by themselves.
 
-## Build 37.3 candidate scope
-
-37.3 is the first learner-facing Build 37 refactor, but it is intentionally a **strict parity migration** rather than new content.
+## Build 37.3 certified contract
 
 ```text
 Build 37.2 engine + exact F01–F04 spec
-→ build32 loader loads engine → spec → pilot
-→ existing Build 34 pilot renderer consumes engine/session state
-→ same lessons 8–13
-→ same entry card / overlay / texts / choices / answers / feedback
+→ build32 loader loads engine → spec → renderer
+→ lessons 8–13 keep the existing optional F01–F04 entry
+→ same texts / choices / answers / feedback
 → same VI / DEBUG FR behavior
 → same 0/20/40/60/80/100 progress rhythm
 → same return-to-lesson focus behavior
 → NO durable write
 → NO Evidence product read
-→ NO F05–F18 learner rollout
 ```
 
-Intentional runtime files in this candidate:
+PR #175 merged at **`f40ea317803a1ab2398b6855340c74977d7cc619`**. Its PR matrix introduced no new failure beyond the inherited four. Two isolated Chrome flakes passed on strict unchanged reruns. Post-merge Build 26.4 later completed successfully, leaving the final 33/4/0/0 main baseline above.
 
-- `src/pedagogy/foundations-pilot.js` — renderer/adapter, no duplicate question state machine;
-- `src/core/build32-loader.js` — ordered engine → capsule → pilot dependency loading;
-- `sw.js` — targeted precache for the three Foundations dependencies without global cache identity change.
+## Build 37.4 candidate scope
 
-QA/docs files:
+37.4 is the first **new** learner-facing Foundations content after the validated F01–F04 pilot.
 
-- `tests/browser/build37-foundations-pilot-adapter.html`;
-- `.github/workflows/build37-3-foundations-pilot-adapter.yml`;
-- `tools/test-build37-2-foundations-capsule-engine.cjs` — successor-aware parity proof;
-- `docs/BUILD-37-3-FOUNDATIONS-PILOT-ADAPTER.md`.
+Selected concept:
 
-The dedicated Build 37.3 guard has already passed real-app boot plus VI/FR parity on desktop and 390×844 before PR opening.
+```text
+F11 — negation
+```
+
+Why F11:
+
+- Build 33 classifies it as **PARTIAL / recurrent but fragmented**;
+- Trân already sees negative forms in real curriculum chunks;
+- the missing piece is one short transferable key, not another vocabulary lesson.
+
+Contextual learner scope:
+
+```text
+lessons 17–20 only
+→ Je n'ai pas de monnaie.
+→ Je ne peux pas.
+→ Il n'y a pas d'eau chaude.
+→ Mon téléphone ne marche pas.
+→ reconnect earlier Je ne comprends pas.
+```
+
+Teaching key:
+
+```text
+ne / n’ + verb + pas
+```
+
+37.4 also explains the `ne → n’` elision and notes that spoken French may omit `ne`, while the full form remains the safe beginner/writing baseline.
+
+Architecture:
+
+```text
+same Build 37.2 pure engine
+→ add compiled F11 capsule to foundations-capsules.js
+→ same Build 37.3 renderer/adapter routes by lesson context
+→ F01–F04 stays on lessons 8–13
+→ F11 stays on lessons 17–20
+→ no new runtime file
+→ no sw.js / loader / index change
+→ no durable write
+```
+
+Dedicated Build 37.4 guard already passed its first branch run on the code candidate:
+
+- generic engine contract PASS;
+- existing F01–F04 browser parity PASS;
+- F11 VI/FR desktop PASS;
+- F11 VI/FR 390×844 PASS;
+- storage unchanged;
+- protected owners untouched.
+
+Final branch-head guard must pass again after documentation checkpoint before PR opening.
 
 ## Protected boundaries
 
@@ -110,12 +154,13 @@ Recognition failure remains recognition-system evidence, never a pronunciation d
 ## NEXT
 
 ```text
-finish Build 37.3 candidate PR
-→ dedicated 37.3 parity tribunal must remain green
+finish Build 37.4 final branch checkpoint
+→ dedicated 37.4 tribunal must remain green on final head
+→ open PR
 → classify full PR matrix against the four inherited main failures
 → merge only if there is no new regression
 → certify exact merged main + Pages
-→ only then select the next small learner-facing Foundations expansion from Build 33 + the 37.1 registry
+→ then choose the next smallest Foundations concept from Build 33 + 37.1 registry
 → do NOT mass-rollout F05–F18
 → do NOT use Evidence as product truth without a separate explicit gate
 ```

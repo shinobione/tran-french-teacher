@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Build 37.4 F11 negation tribunal</title>
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#07111e;color:#eef5ff;font-family:system-ui,-apple-system,sans-serif}button{font:inherit;color:inherit;background:#20314a;border:1px solid #5f7595;border-radius:12px;padding:8px 12px}.primary{background:#315d74}.secondary{background:#253852}.muted{color:#9fb0c5}.screen-lesson{width:min(760px,calc(100% - 24px));margin:20px auto}.topbar{padding:10px 2px}.topbar h1{font-size:1.25rem}.lesson-step{padding:18px;border:1px solid #23364d;border-radius:20px;background:#0d1928}
+  </style>
+  <script>
+    (()=>{
+      const debug=new URLSearchParams(location.search).get('debug')==='fr';
+      const key='tran-french-teacher:debug-fr:v1';
+      localStorage.clear();
+      localStorage.setItem(key,debug?'1':'0');
+      localStorage.setItem('b37.4:sentinel','unchanged');
+      window.__b374Debug=debug;
+      window.__b374StorageBefore=JSON.stringify(Object.keys(localStorage).sort().map(k=>[k,localStorage.getItem(k)]));
+    })();
+  </script>
+</head>
+<body>
+  <main id="app">
+    <section class="screen-lesson">
+      <div class="topbar"><h1>Bài 17 — Động từ avoir & những gì mình có</h1></div>
+      <div class="lesson-step"><p data-existing-lesson>Existing lesson content</p></div>
+    </section>
+  </main>
+  <script src="../../src/pedagogy/foundations-capsule-engine.js?v=2.4.0-b37.3"></script>
+  <script src="../../src/pedagogy/foundations-capsules.js?v=2.4.0-b37.3"></script>
+  <script src="../../src/pedagogy/foundations-pilot.js?v=2.4.0-b37.3"></script>
+  <script>
+    (()=>{
+      const root=document.documentElement;
+      const fail=message=>{root.dataset.b374Error=message;throw new Error(message)};
+      const ok=(value,message)=>{if(!value)fail(message)};
+      const text=selector=>document.querySelector(selector)?.textContent?.trim()||'';
+      const texts=selector=>[...document.querySelectorAll(selector)].map(node=>node.textContent.trim());
+      const click=selector=>{const node=document.querySelector(selector);ok(node,`missing ${selector}`);node.click();return node};
+      const clickChoice=choice=>{const node=[...document.querySelectorAll('[data-foundation-choice]')].find(button=>button.textContent.trim()===choice);ok(node,`missing choice ${choice}`);node.click();return node};
+      const width=()=>Math.round(parseFloat(document.querySelector('.ft-foundation-bar i')?.style.width||'-1'));
+      const expected=window.__b374Debug?{
+        entryCopy:'Environ 5 minutes pour relier des formes déjà rencontrées : ne / n’ avant le verbe, pas après. Cette base reste facultative pour continuer la leçon.',
+        title:'La négation : ne / n’ ... pas',
+        intro:'En français soigné, la négation entoure généralement le verbe : ne ... pas.',
+        prompts:[
+          'Complète : Je ___ comprends pas.',
+          'Devant « ai », quelle forme de ne utilise-t-on ?',
+          'Complète : Je ne peux ___ .',
+          'Choisis la phrase correcte :'
+        ],
+        feedback:[
+          '→ Avec « comprends », ne vient avant le verbe et pas après : Je ne comprends pas.',
+          '✓ Devant une voyelle, ne s’élide en n’ : Je n’ai pas de monnaie.',
+          '✓ pas vient après le verbe : Je ne peux pas.',
+          '✓ « Il y a » devient « Il n’y a pas ... » à la forme négative.'
+        ],
+        conclusion:'Le réflexe à garder : ne / n’ avant le verbe, pas après — Je ne comprends pas, Je n’ai pas, Je ne peux pas. À l’oral naturel, « ne » peut parfois disparaître, mais la forme complète reste la base la plus sûre. Un mini-check réussi ne signifie pas que la règle est « maîtrisée ».'
+      }:{
+        entryCopy:'Khoảng 5 phút để nối các mẫu bạn đã gặp: ne / n’ trước động từ, pas sau động từ. Không bắt buộc để tiếp tục bài.',
+        title:'Phủ định: ne / n’ ... pas',
+        intro:'Trong tiếng Pháp viết cẩn thận, “không” thường bao quanh động từ: ne ... pas.',
+        prompts:[
+          'Điền từ: Je ___ comprends pas.',
+          'Trước “ai”, dùng dạng nào của ne?',
+          'Điền từ: Je ne peux ___ .',
+          'Chọn câu đúng:'
+        ],
+        feedback:[
+          '→ Với “comprends”, dùng ne trước động từ và pas sau: Je ne comprends pas.',
+          '✓ Trước nguyên âm, ne rút gọn thành n’: Je n’ai pas de monnaie.',
+          '✓ pas đứng sau động từ: Je ne peux pas.',
+          '✓ “Il y a” trở thành “Il n’y a pas ...” ở dạng phủ định.'
+        ],
+        conclusion:'Phản xạ cần giữ: ne / n’ trước động từ, pas sau động từ — Je ne comprends pas, Je n’ai pas, Je ne peux pas. Trong lời nói tự nhiên, “ne” đôi khi biến mất, nhưng mẫu đầy đủ vẫn là nền tảng an toàn. Một mini-check đúng chưa có nghĩa là đã “thành thạo”.'
+      };
+
+      const nextFrame=()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+      (async()=>{
+        await nextFrame();
+        ok(window.FrenchTranquilleFoundationsCapsuleEngine?.slice==='37.2','engine 37.2 missing');
+        ok(window.FrenchTranquilleFoundationsCapsules?.F11?.concepts?.join(',')==='F11','F11 capsule missing');
+        ok(window.FrenchTranquilleFoundationsPilot?.adapter==='37.3','37.3 adapter must remain owner');
+        ok(window.FrenchTranquilleFoundationsPilot?.expansion==='37.4','37.4 expansion marker missing');
+        ok(window.FrenchTranquilleFoundationsPilot?.persistent===false,'Foundations must remain ephemeral');
+        ok(root.dataset.foundationsAdapter==='37.3','root adapter marker changed');
+        ok(root.dataset.foundationsExpansion==='37.4','root expansion marker missing');
+        ok(document.querySelectorAll('[data-foundation-entry]').length===1,'F11 entry count must be 1');
+        ok(document.querySelector('[data-foundation-entry]')?.dataset.foundationCapsule==='F11','wrong lesson/capsule routing');
+        ok(text('.ft-foundation-entry .ft-foundation-eyebrow')===(window.__b374Debug?'🧩 PETITE BASE UTILE':'🧩 NỀN TẢNG NHỎ'),'entry eyebrow mismatch');
+        ok(text('.ft-foundation-entry h3')==='ne / n’ … pas','entry title mismatch');
+        ok(text('.ft-foundation-entry p')===expected.entryCopy,'entry copy mismatch');
+
+        click('[data-foundation-open]');
+        ok(document.querySelector('.ft-foundation-dialog')?.dataset.foundationActiveCapsule==='F11','F11 dialog ownership missing');
+        ok(text('.ft-foundation-top .ft-foundation-eyebrow')==='F11 • CORE','F11 dialog label mismatch');
+        ok(text('.ft-foundation-top h2')===expected.title,'F11 dialog title mismatch');
+        ok(width()===0,'intro progress must be 0');
+        ok(text('.ft-foundation-copy strong')===expected.intro,'F11 intro mismatch');
+        ok(JSON.stringify(texts('.ft-foundation-examples b'))===JSON.stringify(['Je ne comprends pas.',"Je n\'ai pas de monnaie.",'Je ne peux pas.',"Il n\'y a pas d\'eau chaude."]),'F11 examples mismatch');
+        ok(text('[data-foundation-next]')===(window.__b374Debug?'Essayer 4 mini-questions ›':'Thử 4 câu ngắn ›'),'F11 intro CTA mismatch');
+
+        click('[data-foundation-next]');
+        const choices=[
+          ['ne','n’','pas'],
+          ['ne','n’','pas'],
+          ['pas','ne','n’'],
+          ["Il n'y a pas d'eau chaude.","Il ne y a pas d'eau chaude.","Il y a ne pas d'eau chaude."]
+        ];
+        const answers=['pas','n’','pas',"Il n'y a pas d'eau chaude."];
+        const correct=['ne','n’','pas',"Il n'y a pas d'eau chaude."];
+        for(let index=0;index<4;index+=1){
+          ok(width()===(index+1)*20,`question ${index+1} progress mismatch`);
+          ok(text('.ft-foundation-q h3')===expected.prompts[index],`question ${index+1} prompt mismatch`);
+          ok(JSON.stringify(texts('[data-foundation-choice]'))===JSON.stringify(choices[index]),`question ${index+1} choices mismatch`);
+          clickChoice(answers[index]);
+          ok(text('[data-foundation-feedback]')===expected.feedback[index],`question ${index+1} feedback mismatch`);
+          const correctButton=[...document.querySelectorAll('[data-foundation-choice]')].find(button=>button.textContent.trim()===correct[index]);
+          ok(correctButton?.classList.contains('ok'),`question ${index+1} correct marking missing`);
+          if(index===0){
+            const wrong=[...document.querySelectorAll('[data-foundation-choice]')].find(button=>button.textContent.trim()==='pas');
+            ok(wrong?.classList.contains('bad'),'wrong-choice marking missing');
+          }
+          ok([...document.querySelectorAll('[data-foundation-choice]')].every(button=>button.disabled),'answered choices must be disabled');
+          click('[data-foundation-next]');
+        }
+
+        ok(width()===100,'done progress must be 100');
+        ok(text('.ft-foundation-done p')===expected.conclusion,'F11 conclusion mismatch');
+        click('.ft-foundation-done [data-foundation-close]');
+        ok(!document.querySelector('.ft-foundation-overlay'),'overlay must close');
+        ok(document.activeElement?.matches('[data-foundation-open]'),'focus must return to F11 entry CTA');
+        ok(document.querySelector('[data-existing-lesson]'),'lesson content must survive round trip');
+        ok(JSON.stringify(Object.keys(localStorage).sort().map(k=>[k,localStorage.getItem(k)]))===window.__b374StorageBefore,'localStorage changed during F11 capsule');
+        ok(document.documentElement.scrollWidth<=innerWidth+1,'horizontal overflow detected');
+        ok(document.querySelector('[data-foundation-open]').getBoundingClientRect().height>=44,'entry target below 44px');
+
+        root.dataset.b374Done='1';
+        root.dataset.b374Locale=window.__b374Debug?'fr':'vi';
+        root.dataset.b374F11='1';
+        root.dataset.b374StorageUnchanged='1';
+        root.dataset.b374NoOverflow='1';
+      })().catch(error=>{root.dataset.b374Error=error.message;console.error(error)});
+    })();
+  </script>
+</body>
+</html>
