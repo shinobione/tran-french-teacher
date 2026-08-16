@@ -60,6 +60,26 @@
     optional:true,persistence:'ephemeral-only',masteryClaim:false
   };
 
+  const REGULAR_ER_RAW = {
+    id:'regular-er-present-core',concepts:['F08'],
+    title:{vi:'Hiện tại với động từ -er: je • tu • il/elle',fr:'Le présent régulier en -er : je • tu • il/elle'},
+    intro:[
+      {vi:'Bạn đã gặp “travaille”, “habite” và “aime” trong nhiều câu. Bây giờ ta nối chúng thành một mẫu viết đơn giản.',fr:'Tu as déjà rencontré « travaille », « habite » et « aime » dans plusieurs phrases. On relie maintenant ces formes avec un petit modèle écrit.'},
+      {vi:'Với nhiều động từ kết thúc bằng -er: bỏ -er, rồi dùng je = -e • tu = -es • il/elle = -e.',fr:'Pour beaucoup de verbes en -er : enlève -er, puis utilise je = -e • tu = -es • il/elle = -e.'},
+      {vi:'Ba dạng này thường nghe giống nhau khi nói. Đại từ giúp biết ai làm hành động. Các động từ rất thường gặp như aller, vouloir, pouvoir có dạng riêng: tu vas, tu veux, tu peux.',fr:'À l’oral, ces trois formes se prononcent souvent pareil. Le pronom aide à savoir qui fait l’action. Des verbes très fréquents comme aller, vouloir, pouvoir gardent leurs formes particulières : tu vas, tu veux, tu peux.'}
+    ],
+    examples:['Je travaille.','Tu travailles ?','Elle travaille.','J’habite ici.','Tu habites où ?'],
+    checks:[
+      {id:'er-je-travaille',prompt:{vi:'Trân nói về mình: Je travaill___ .',fr:'Trân parle d’elle-même : Je travaill___ .'},choices:['e','es','ent'],answer:'e',feedback:{vi:'Với je, động từ -er thường có -e: Je travaille.',fr:'Avec je, un verbe régulier en -er prend souvent -e : Je travaille.'}},
+      {id:'er-tu-travailles',prompt:{vi:'Bạn hỏi Jerry: Tu travaill___ ?',fr:'Tu demandes à Jerry : Tu travaill___ ?'},choices:['e','es','ons'],answer:'es',feedback:{vi:'Với tu, mẫu -er thường có -es: Tu travailles ?',fr:'Avec tu, le modèle régulier en -er prend -es : Tu travailles ?'}},
+      {id:'er-elle-travaille',prompt:{vi:'Bạn nói về một phụ nữ: Elle travaill___ .',fr:'Tu parles d’une femme : Elle travaill___ .'},choices:['e','es','ent'],answer:'e',feedback:{vi:'Với il/elle, mẫu -er thường có -e: Elle travaille.',fr:'Avec il/elle, le modèle régulier en -er prend -e : Elle travaille.'}},
+      {id:'er-tu-habites',prompt:{vi:'Chọn câu đúng để hỏi Jerry sống ở đâu:',fr:'Choisis la bonne phrase pour demander à Jerry où il habite :'},choices:['Tu habites où ?','Tu habite où ?','Tu habiter où ?'],answer:'Tu habites où ?',feedback:{vi:'Với tu + habiter: Tu habites où ?',fr:'Avec tu + habiter : Tu habites où ?'}},
+      {id:'er-exception-aller',prompt:{vi:'Câu nào giữ dạng riêng và không dùng mẫu -er này?',fr:'Quelle phrase garde une forme particulière et ne suit pas ce petit modèle en -er ?'},choices:['Tu vas où ?','Tu travailles ?','Tu habites où ?'],answer:'Tu vas où ?',feedback:{vi:'aller là động từ rất thường gặp nhưng có dạng riêng: tu vas. Đừng tạo “tu alles”.',fr:'aller est très fréquent mais garde une forme particulière : tu vas. Ne fabrique pas « tu alles ».'}}
+    ],
+    conclusion:{vi:'Phản xạ viết cần giữ: với nhiều động từ -er, je = -e, tu = -es, il/elle = -e. Khi nói, các dạng này thường nghe giống nhau, vì vậy hãy nghe cả đại từ. Đây là một mẫu hữu ích, không phải quy tắc cho mọi động từ. Một mini-check đúng chưa có nghĩa là đã “thành thạo”.',fr:'Le réflexe écrit : pour beaucoup de verbes en -er, je = -e, tu = -es, il/elle = -e. À l’oral, ces formes sonnent souvent pareil : écoute aussi le pronom. C’est un modèle utile, pas une règle pour tous les verbes. Un mini-check réussi ne signifie pas que la règle est « maîtrisée ».'},
+    optional:true,persistence:'ephemeral-only',masteryClaim:false
+  };
+
   const engine = typeof module === 'object' && module.exports
     ? require('./foundations-capsule-engine.js')
     : window.FrenchTranquilleFoundationsCapsuleEngine;
@@ -68,7 +88,8 @@
   const CAPSULES = Object.freeze({
     F01_F04:engine.compile(RAW),
     F11:engine.compile(NEGATION_RAW),
-    F05:engine.compile(SUBJECT_PRONOUNS_RAW)
+    F05:engine.compile(SUBJECT_PRONOUNS_RAW),
+    F08:engine.compile(REGULAR_ER_RAW)
   });
 
   if (typeof module === 'object' && module.exports) module.exports = CAPSULES;
