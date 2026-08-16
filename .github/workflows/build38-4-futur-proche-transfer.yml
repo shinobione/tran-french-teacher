@@ -1,0 +1,139 @@
+name: Build 38.4 Generalization futur proche transfer
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [build38/futur-proche-transfer-core]
+
+permissions:
+  contents: read
+
+jobs:
+  futur-proche-transfer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax + 38.1 + 38.3 predecessors + 38.4 contract
+        run: |
+          set -euo pipefail
+          node --check src/pedagogy/generalization-transfer-core.js
+          node --check src/pedagogy/generalization-negation-core.js
+          node --check src/pedagogy/generalization-futur-proche-core.js
+          node --check tools/test-build38-1-subject-substitution.cjs
+          node --check tools/test-build38-3-negation-transfer.cjs
+          node --check tools/test-build38-4-futur-proche-transfer.cjs
+          node tools/test-build38-1-subject-substitution.cjs
+          node tools/test-build38-3-negation-transfer.cjs
+          node tools/test-build38-4-futur-proche-transfer.cjs
+
+      - name: 38.4 stays narrow, deterministic and pure
+        run: |
+          set -euo pipefail
+          grep -q "id:'present-futur-proche-travailler-singular'" src/pedagogy/generalization-futur-proche-core.js
+          grep -q "slice:'38.4'" src/pedagogy/generalization-futur-proche-core.js
+          grep -q "status:'pure-non-wired'" src/pedagogy/generalization-futur-proche-core.js
+          grep -q "verb:'travailler'" src/pedagogy/generalization-futur-proche-core.js
+          grep -q "subjects:freeze(Object.keys(SUBJECTS))" src/pedagogy/generalization-futur-proche-core.js
+          grep -q "aller:'vais'" src/pedagogy/generalization-futur-proche-core.js
+          grep -q "aller:'vas'" src/pedagogy/generalization-futur-proche-core.js
+          grep -q "aller:'va'" src/pedagogy/generalization-futur-proche-core.js
+          ! grep -q 'Math.random' src/pedagogy/generalization-futur-proche-core.js
+          ! grep -q 'localStorage' src/pedagogy/generalization-futur-proche-core.js
+          ! grep -q 'sessionStorage' src/pedagogy/generalization-futur-proche-core.js
+          ! grep -q 'indexedDB' src/pedagogy/generalization-futur-proche-core.js
+          ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/generalization-futur-proche-core.js
+
+      - name: Runtime, curriculum, Foundations and prior transfer owners stay untouched
+        run: |
+          set -euo pipefail
+          git fetch origin main --quiet
+          changed="$(git diff --name-only origin/main...HEAD)"
+          forbidden='^(app\.js|voice-ios\.js|free-voice\.js|index\.html|sw\.js|manifest\.webmanifest|src/core/|src/ui/|src/premium/|src/pedagogy/curriculum-stage[234]\.js|src/pedagogy/learning-memory\.js|src/pedagogy/error-intelligence\.js|src/pedagogy/listening-engine\.js|src/pedagogy/scenario-engine\.js|src/pedagogy/mastery-engine\.js|src/pedagogy/learner-intelligence.*\.js|src/pedagogy/foundations-core\.js|src/pedagogy/foundations-capsule-engine\.js|src/pedagogy/foundations-capsules\.js|src/pedagogy/foundations-pilot\.js|src/pedagogy/generalization-transfer-core\.js|src/pedagogy/generalization-transfer-lesson\.js|src/pedagogy/generalization-negation-core\.js|assets/LOGO\.png|assets/Favicon\.png)$'
+          if printf '%s\n' "$changed" | grep -E "$forbidden"; then
+            echo 'Build 38.4 must remain a new pure/non-wired future core and preserve prior owners' >&2
+            exit 1
+          fi
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-b384-http.log 2>&1 &
+          echo $! >/tmp/ft-b384-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — 38.1 predecessor remains exact
+        run: |
+          set -euo pipefail
+          passed=0
+          for attempt in 1 2; do
+            profile="/tmp/ft-b384-b381-$attempt"; file="/tmp/b384-b381-$attempt.html"
+            rm -rf "$profile" "$file"
+            if timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=1280,900 --virtual-time-budget=10000 --dump-dom \
+              'http://127.0.0.1:4173/tests/browser/build38-1-subject-substitution.html?debug=vi' >"$file" \
+              && grep -q 'data-b381-done="1"' "$file" \
+              && grep -q 'data-b381-family="subject-substitution-regular-er"' "$file" \
+              && grep -q 'data-b381-exercises="6"' "$file" \
+              && grep -q 'data-b381-storage-unchanged="1"' "$file" \
+              && ! grep -q 'data-b381-error=' "$file"; then passed=1; break; fi
+          done
+          test "$passed" -eq 1
+
+      - name: Chrome — 38.3 predecessor remains exact
+        run: |
+          set -euo pipefail
+          passed=0
+          for attempt in 1 2; do
+            profile="/tmp/ft-b384-b383-$attempt"; file="/tmp/b384-b383-$attempt.html"
+            rm -rf "$profile" "$file"
+            if timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=390,844 --virtual-time-budget=10000 --dump-dom \
+              'http://127.0.0.1:4173/tests/browser/build38-3-negation-transfer.html?debug=fr' >"$file" \
+              && grep -q 'data-b383-done="1"' "$file" \
+              && grep -q 'data-b383-family="affirmation-negation-regular-er-je"' "$file" \
+              && grep -q 'data-b383-exercises="3"' "$file" \
+              && grep -q 'data-b383-storage-unchanged="1"' "$file" \
+              && ! grep -q 'data-b383-error=' "$file"; then passed=1; break; fi
+          done
+          test "$passed" -eq 1
+
+      - name: Chrome — 38.4 VI/FR desktop + iPhone parity
+        run: |
+          set -euo pipefail
+          for spec in 'vi 1280 900' 'fr 1280 900' 'vi 390 844' 'fr 390 844'; do
+            set -- $spec; locale="$1"; width="$2"; height="$3"; passed=0; file=''
+            for attempt in 1 2; do
+              profile="/tmp/ft-b384-${locale}-${width}-$attempt"
+              file="/tmp/b384-${locale}-${width}-$attempt.html"
+              rm -rf "$profile" "$file"
+              if timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
+                --user-data-dir="$profile" --window-size="$width,$height" --virtual-time-budget=10000 --dump-dom \
+                "http://127.0.0.1:4173/tests/browser/build38-4-futur-proche-transfer.html?debug=$locale" >"$file" \
+                && grep -q 'data-b384-done="1"' "$file" \
+                && grep -q "data-b384-locale=\"$locale\"" "$file" \
+                && grep -q 'data-b384-family="present-futur-proche-travailler-singular"' "$file" \
+                && grep -q 'data-b384-exercises="4"' "$file" \
+                && grep -q 'data-b384-storage-unchanged="1"' "$file" \
+                && grep -q 'data-b384-no-overflow="1"' "$file" \
+                && ! grep -q 'data-b384-error=' "$file"; then passed=1; break; fi
+            done
+            if [ "$passed" -ne 1 ]; then
+              echo "38.4 tribunal failed for $locale ${width}x${height}" >&2
+              grep -o 'data-b384-[^ >]*="[^"]*"' "$file" >&2 || true
+              grep -o 'data-b384-error="[^"]*"' "$file" >&2 || true
+              exit 1
+            fi
+          done
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-b384-server.pid ]; then kill "$(cat /tmp/ft-b384-server.pid)" || true; fi
