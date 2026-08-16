@@ -34,7 +34,7 @@ jobs:
           node tools/test-build37-6-foundations-regular-er.cjs
           node tools/test-build37-7-foundations-questions.cjs
 
-      - name: F12 stays a narrow optional systematization
+      - name: F12 stays a narrow optional systematization while successors remain additive
         run: |
           set -euo pipefail
           grep -q "id:'questions-core',concepts:\['F12'\]" src/pedagogy/foundations-capsules.js
@@ -56,8 +56,6 @@ jobs:
           ! grep -q 'localStorage.setItem' src/pedagogy/foundations-pilot.js
           ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/foundations-capsules.js
           ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/foundations-pilot.js
-          ! grep -q 'F13:engine.compile' src/pedagogy/foundations-capsules.js
-          ! grep -q 'F16:engine.compile' src/pedagogy/foundations-capsules.js
 
       - name: Product, storage, voice, curriculum and PWA owners stay untouched
         run: |
