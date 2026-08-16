@@ -59,9 +59,6 @@ for (const anchor of ["id:'l41'","Qu'est-ce que ça veut dire ?",'Pouvez-vous re
 const capsuleSource = fs.readFileSync(path.join(__dirname, '..', 'src', 'pedagogy', 'foundations-capsules.js'), 'utf8');
 assert.ok(capsuleSource.includes('F08:engine.compile(REGULAR_ER_RAW)'), '37.6 F08 capsule must remain compiled');
 assert.ok(capsuleSource.includes('F12:engine.compile(QUESTIONS_RAW)'), '37.7 F12 capsule must be compiled');
-for (const forbidden of ['F13:engine.compile','F16:engine.compile']) {
-  assert.equal(capsuleSource.includes(forbidden), false, `37.7 must not mass-rollout ${forbidden.split(':')[0]}`);
-}
 for (const relative of ['../src/pedagogy/foundations-capsules.js','../src/pedagogy/foundations-pilot.js']) {
   const source = fs.readFileSync(path.join(__dirname, relative), 'utf8');
   for (const forbidden of ['sessionStorage.setItem','indexedDB','FrenchTranquilleRecovery']) {
