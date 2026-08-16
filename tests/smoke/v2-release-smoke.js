@@ -4,6 +4,10 @@
   const params = new URLSearchParams(location.search);
   if (!params.has('v2Audit')) return;
 
+  const EXPECTED_LESSONS = 40;
+  const EXPECTED_ITEMS = 241;
+  const EXPECTED_SCENARIOS = 36;
+  const EXPECTED_SCENARIO_TURNS = 108;
   const root = document.documentElement;
   const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
   const waitFor = async (predicate, timeout = 12000) => {
@@ -17,6 +21,8 @@
   const mark = (name,value) => { root.dataset[`v2${name}`] = String(value); };
 
   function rawStores(contracts) {
+    // Frozen V2 compatibility intentionally observes only the six stores that
+    // belonged to the V2.0.0 contract. A later derived shadow may exist beside them.
     return Object.fromEntries(Object.entries(contracts.stores).map(([id,key]) => [id,localStorage.getItem(key)]));
   }
   function sameRaw(a,b) {
@@ -62,6 +68,7 @@
     const snap = runtime.snapshot();
     const backup = window.FrenchTranquilleRecovery.backupObject();
     const recoverySpecs = window.FrenchTranquilleRecovery.core?.STORE_SPECS || [];
+    const successorEvidence = recoverySpecs.some(spec => spec.id === 'evidence');
 
     mark('Version',meta.version || 'missing');
     mark('Build',meta.build || 'missing');
@@ -70,13 +77,11 @@
     mark('ReleaseFormat',release.format === 'french-tranquille-release-contract' ? 1 : 0);
     mark('ReleaseVersion',release.version);
     mark('ReleaseBuild',release.architectureBuild);
-    // Historical markers deliberately describe the frozen V2 product contract.
     mark('Lessons',releaseProduct.curriculumLessons);
     mark('Items',releaseProduct.curriculumItems);
-    // Successor markers describe the live V2.x product above that baseline.
     mark('CurrentLessons',snap.curriculum.lessons);
     mark('CurrentItems',snap.curriculum.items);
-    mark('CurrentSuperset',snap.curriculum.lessons >= releaseProduct.curriculumLessons && snap.curriculum.items >= releaseProduct.curriculumItems ? 1 : 0);
+    mark('CurrentSuperset',snap.curriculum.lessons >= EXPECTED_LESSONS && snap.curriculum.items >= EXPECTED_ITEMS ? 1 : 0);
     mark('Scenarios',contracts.product.scenarios);
     mark('ScenarioTurns',contracts.product.scenarioTurns);
     mark('ListeningNormal',contracts.product.listeningNormal);
@@ -84,6 +89,7 @@
     mark('SpeakingMax',contracts.product.maxSpeakingMomentsPerLesson);
     mark('DurableStores',Object.keys(contracts.stores).length);
     mark('RecoverySpecs',recoverySpecs.length);
+    mark('RecoverySuperset',successorEvidence ? 1 : recoverySpecs.length === Object.keys(contracts.stores).length ? 1 : 0);
     mark('BackupVersion',backup.version);
     mark('BackupStores',Object.keys(backup.stores || {}).length);
     mark('BackupAppVersion',backup.app?.version || 'missing');
@@ -92,8 +98,13 @@
 
     const expectedStoreKeys = Object.values(contracts.stores);
     const recoveryKeys = recoverySpecs.map(spec => spec.key);
-    const storeAgreement = expectedStoreKeys.length === recoveryKeys.length && expectedStoreKeys.every(key => recoveryKeys.includes(key));
+    // Frozen V2 store ownership must remain a subset of every compatible successor.
+    const storeAgreement = expectedStoreKeys.length === 6 && expectedStoreKeys.every(key => recoveryKeys.includes(key));
+    const recoveryShapeOk = successorEvidence
+      ? recoverySpecs.length === 7 && Number(backup.version) === 3 && Object.keys(backup.stores || {}).length === 7
+      : recoverySpecs.length === 6 && Number(backup.version) === 2 && Object.keys(backup.stores || {}).length === 6;
     mark('StoreAgreement',storeAgreement ? 1 : 0);
+    mark('SuccessorRecovery',successorEvidence ? 1 : 0);
 
     if (params.get('uxSmoke') === 'lesson8') {
       mark('OldUserCompleted',snap.learner.completedLessons);
@@ -120,8 +131,8 @@
     const storesUnchanged = sameRaw(before,after);
     const optionsExpected = `v${meta.version} • Build ${meta.build}`;
     const backupMatchesRuntime = backup.app?.version === meta.version && String(backup.app?.build) === String(meta.build);
-    const successorContainsBaseline = snap.curriculum.lessons >= releaseProduct.curriculumLessons && snap.curriculum.items >= releaseProduct.curriculumItems;
-    const currentCompatible = currentReleaseCompatible(meta.version,meta.build) && backupMatchesRuntime && versionLabel === optionsExpected && successorContainsBaseline;
+    const successorContainsBaseline = snap.curriculum.lessons >= EXPECTED_LESSONS && snap.curriculum.items >= EXPECTED_ITEMS;
+    const currentCompatible = currentReleaseCompatible(meta.version,meta.build) && backupMatchesRuntime && versionLabel === optionsExpected && successorContainsBaseline && storeAgreement && recoveryShapeOk;
     mark('StoresUnchanged',storesUnchanged ? 1 : 0);
     mark('BackupMatchesRuntime',backupMatchesRuntime ? 1 : 0);
     mark('OptionsMatchesRuntime',versionLabel === optionsExpected ? 1 : 0);
@@ -132,15 +143,15 @@
       currentReleaseCompatible(meta.version,meta.build),
       contracts.version === '2.0.0',contracts.build === 30,
       release.version === '2.0.0',release.architectureBuild === 30,
-      releaseProduct.curriculumLessons === 40,releaseProduct.curriculumItems === 241,
+      releaseProduct.curriculumLessons === EXPECTED_LESSONS,releaseProduct.curriculumItems === EXPECTED_ITEMS,
       successorContainsBaseline,
-      contracts.product.scenarios === 36,contracts.product.scenarioTurns === 108,
+      contracts.product.scenarios === EXPECTED_SCENARIOS,contracts.product.scenarioTurns === EXPECTED_SCENARIO_TURNS,
       contracts.product.listeningNormal === 0.88,contracts.product.listeningSlow === 0.65,
       contracts.product.maxSpeakingMomentsPerLesson === 2,
-      releaseProduct.scenarioSituations === 36,releaseProduct.scenarioTurns === 108,
+      releaseProduct.scenarioSituations === EXPECTED_SCENARIOS,releaseProduct.scenarioTurns === EXPECTED_SCENARIO_TURNS,
       releaseProduct.listeningNormal === 0.88,releaseProduct.listeningSlow === 0.65,
-      Object.keys(contracts.stores).length === 6,recoverySpecs.length === 6,storeAgreement,
-      backup.version === 2,Object.keys(backup.stores || {}).length === 6,backupMatchesRuntime,
+      Object.keys(contracts.stores).length === 6,storeAgreement,recoveryShapeOk,
+      backupMatchesRuntime,
       snap.missingRequired.length === 0,
       Boolean(window.FrenchTranquilleSpeakingLoop),Boolean(window.FrenchTranquilleBuild27Shell),Boolean(window.FrenchTranquilleRecovery),
       progressReady,todayReady,practiceReady,versionLabel === optionsExpected,storesUnchanged,
