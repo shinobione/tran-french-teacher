@@ -3,12 +3,13 @@
   const VERSION='2.3.0',BUILD='34',DEBUG='tran-french-teacher:debug-fr:v1';
   const T=(vi,fr)=>localStorage.getItem(DEBUG)==='1'?fr:vi;
   const locale=()=>localStorage.getItem(DEBUG)==='1'?'fr':'vi';
-  const esc=(v='')=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const esc=(v='')=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]));
   const root=document.documentElement;
   const engine=window.FrenchTranquilleFoundationsCapsuleEngine;
   const primaryCapsule=window.FrenchTranquilleFoundationsCapsules?.F01_F04;
   const negationCapsule=window.FrenchTranquilleFoundationsCapsules?.F11;
-  if(!engine||!primaryCapsule||!negationCapsule){
+  const subjectPronounsCapsule=window.FrenchTranquilleFoundationsCapsules?.F05;
+  if(!engine||!primaryCapsule||!negationCapsule||!subjectPronounsCapsule){
     root.dataset.foundationsAdapter='missing';
     console.error('[French Trân’quille] Foundations adapter dependencies are missing');
     return;
@@ -26,6 +27,12 @@
       entryTitle:'ne / n’ … pas',
       entryCopyVi:'Khoảng 5 phút để nối các mẫu bạn đã gặp: ne / n’ trước động từ, pas sau động từ. Không bắt buộc để tiếp tục bài.',
       entryCopyFr:'Environ 5 minutes pour relier des formes déjà rencontrées : ne / n’ avant le verbe, pas après. Cette base reste facultative pour continuer la leçon.'
+    }),
+    Object.freeze({
+      id:'F05',capsule:subjectPronounsCapsule,min:34,max:36,overlayLabel:'F05 • CONSOLIDATION',
+      entryTitle:'je • tu • il/elle • nous • vous',
+      entryCopyVi:'Khoảng 5 phút để nối những đại từ bạn đã gặp và nhìn ngay “ai làm hành động?”. Không cần học bảng chia động từ.',
+      entryCopyFr:'Environ 5 minutes pour relier les pronoms déjà rencontrés et repérer immédiatement « qui fait l’action ? ». Pas de tableau de conjugaison.'
     })
   ]);
 
@@ -52,7 +59,7 @@
     if(params.has('b32Audit')||params.has('b31Audit')||params.has('b30Audit')||params.has('v2Audit'))return;
     const meta=window.FrenchTranquilleBuildMeta;
     if(meta){meta.version=VERSION;meta.build=BUILD}
-    root.dataset.foundationsPilot='1';root.dataset.foundationsVersion=VERSION;root.dataset.foundationsBuild=BUILD;root.dataset.foundationsAdapter='37.3';root.dataset.foundationsExpansion='37.4';
+    root.dataset.foundationsPilot='1';root.dataset.foundationsVersion=VERSION;root.dataset.foundationsBuild=BUILD;root.dataset.foundationsAdapter='37.3';root.dataset.foundationsExpansion='37.5';
   }
 
   function entryMarkup(rule){return `<section class="ft-foundation-entry" data-foundation-entry data-foundation-capsule="${esc(rule.id)}"><span class="ft-foundation-eyebrow">🧩 ${esc(T('NỀN TẢNG NHỎ','PETITE BASE UTILE'))}</span><h3>${esc(rule.entryTitle)}</h3><p>${esc(T(rule.entryCopyVi,rule.entryCopyFr))}</p><button type="button" class="secondary" data-foundation-open>${esc(T('Mở nền tảng • khoảng 5 phút','Ouvrir la base • ≈ 5 min'))} ›</button></section>`}
@@ -100,19 +107,10 @@
     overlay.querySelectorAll('[data-foundation-choice]').forEach(button=>button.addEventListener('click',()=>answer(button)));
   }
 
-  function next(){
-    session=engine.reduce(activeCapsule,session,{type:'NEXT'});
-    renderOverlay();
-  }
-
-  function answer(button){
-    if(session?.answered)return;
-    session=engine.reduce(activeCapsule,session,{type:'ANSWER',choice:button.dataset.foundationChoice});
-    renderOverlay();
-  }
-
+  function next(){session=engine.reduce(activeCapsule,session,{type:'NEXT'});renderOverlay()}
+  function answer(button){if(session?.answered)return;session=engine.reduce(activeCapsule,session,{type:'ANSWER',choice:button.dataset.foundationChoice});renderOverlay()}
   function decorate(){updateMeta();mountEntry()}
   function schedule(){if(scheduled)return;scheduled=true;queueMicrotask(()=>{scheduled=false;decorate()})}
   installStyle();const app=document.getElementById('app');if(app)new MutationObserver(schedule).observe(app,{childList:true,subtree:true});window.addEventListener('pagehide',close);decorate();
-  window.FrenchTranquilleFoundationsPilot=Object.freeze({version:VERSION,build:BUILD,concepts:['F01','F02','F03','F04'],expansionConcepts:['F11'],persistent:false,adapter:'37.3',expansion:'37.4',engineSchema:engine.schema,refresh:decorate,open});
+  window.FrenchTranquilleFoundationsPilot=Object.freeze({version:VERSION,build:BUILD,concepts:['F01','F02','F03','F04'],expansionConcepts:['F11','F05'],persistent:false,adapter:'37.3',expansion:'37.5',engineSchema:engine.schema,refresh:decorate,open});
 })();
