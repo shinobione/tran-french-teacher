@@ -9,8 +9,9 @@
 - Reconciled: **2026-08-17**.
 - Repository: `shinobione/tran-french-teacher`.
 - Default branch: `main`.
-- Current canonical `main`: **`20c7a39f5c72849955aece0c5463cdbd377dd7d6`** — PR **#187**, Build **38.1 closeout / handoff to 38.2**.
-- GitHub Pages **#240 / run `31976539443` — SUCCESS** on that exact SHA.
+- Current runtime-bearing `main`: **`694988e6299c7d25ca9e019f275c473422fd983e`** — PR **#188**, Build **38.2 · learner-facing subject substitution**.
+- GitHub Pages **#241 / run `31978687464` — SUCCESS** on that exact SHA.
+- Post-merge matrix on `694988e…`: **37 runs = 33 SUCCESS + exactly the 4 inherited historical failures**, **0 queued**, **0 in-progress**.
 - Visible application runtime metadata remains **v2.4.0 · Build 36**.
 - Pedagogy baseline: **v2.3.0 · Build 34**.
 - Curriculum: **52 lessons / 313 items**.
@@ -20,21 +21,86 @@
 - **Build 35 CLOSED. Build 36 CLOSED. Build 37 CLOSED.**
 - **Build 38 ACTIVE — Generalization & Transfer.**
 - **Build 38.1 CLOSED / CERTIFIED / MERGED.**
-- **Build 38.2 ACTIVE / CANDIDATE — learner-facing integration.**
+- **Build 38.2 CLOSED / CERTIFIED / MERGED / DEPLOYED.**
+- **Build 38.3 NEXT — audit + one narrow deterministic transfer family.**
 
-Current candidate:
+## Build 38.2 — certified learner-facing integration
+
+Placement is intentionally narrow:
 
 ```text
-branch build38/learner-facing-substitution
-PR #188 — Build 38.2 · learner-facing subject substitution
-base main 20c7a39f5c72849955aece0c5463cdbd377dd7d6
+lesson 33 normal content
+→ existing F08 optional card
+→ optional “build a sentence” transfer card
+→ 3 deterministic exercises
+→ no mastery claim
+→ return to lesson
+→ normal Continue remains available
 ```
 
-Legacy note: PR **#182** is still open from an older Build 37 line and is not part of the current Build 38.2 slice. Do not merge or reuse it without a separate reconciliation.
+Certified learner-facing exercises:
 
-## Build 38.1 — locked predecessor
+```text
+Je travaille. → Tu travailles.
+J'habite ici. → Tu habites ici.
+Tu aimes ça. → Elle aime ça.
+```
 
-Certified family:
+38.2 reuses the 38.1 `subject-substitution-regular-er` core. It adds no new transfer family, vocabulary, irregular verb or permanent navigation route.
+
+### 38.2 proof
+
+Candidate head:
+
+```text
+0e3e0e58e244faec4394d915f1bc2b937e9c5064
+```
+
+Dedicated PR workflow:
+
+```text
+Build 38.2 Learner-facing subject substitution
+run 31977528558 — SUCCESS on final candidate head
+```
+
+The earlier code-bearing candidate run `31977464288` was also SUCCESS.
+
+PR-matrix review classified temporary Build 37 / 38.1 reds as predecessor implementation-slice scope guards, not product regressions: their semantic contracts passed and their guard rejected successor wiring such as `sw.js`. Post-merge on `main`, those successor-scope false positives disappear.
+
+Final deployment:
+
+```text
+PR #188 MERGED
+main 694988e6299c7d25ca9e019f275c473422fd983e
+Pages #241 / run 31978687464 — SUCCESS
+post-merge: 33 SUCCESS + exactly 4 inherited failures
+0 queued / 0 in-progress
+```
+
+Automated browser proof certifies:
+
+```text
+F08 predecessor PASS
+38.1 pure predecessor PASS
+VI × 1280×900 PASS
+FR × 1280×900 PASS
+VI × 390×844 PASS
+FR × 390×844 PASS
+F08 + Transfer coexist in lesson 33 in that order
+3 real transfer answer clicks
+return focus + normal lesson Continue survives
+lesson 32 remains F08-only
+lesson 34 remains F05-only
+localStorage byte-identical
+no horizontal overflow
+entry/choice targets >=44 px
+```
+
+No new physical-device gate is required merely to close this bounded 38.2 integration; future iPhone defects remain real maintenance regressions if observed.
+
+## Build 38.1 — locked predecessor semantics
+
+Family:
 
 ```text
 subject-substitution-regular-er
@@ -42,7 +108,7 @@ subjects je / tu / il / elle
 verbs    travailler / habiter / aimer
 ```
 
-Certified catalog:
+Canonical catalog:
 
 ```text
 Je travaille.  → Tu travailles.
@@ -53,136 +119,15 @@ J'aime ça.     → Tu aimes ça.
 Tu aimes ça.   → Elle aime ça.
 ```
 
-38.1 remains:
+Core remains deterministic and ephemeral:
 
 ```text
 src/pedagogy/generalization-transfer-core.js
-status = pure-non-wired
 persistence = ephemeral-only
 masteryClaim = false
 ```
 
-Do not broaden or rewrite the 38.1 matrix inside 38.2.
-
-## Build 38.2 — candidate contract
-
-### Placement
-
-**Lesson 33 only**, after the existing optional F08 Foundations entry.
-
-Reason:
-
-```text
-lesson 32 → tu anchors already encountered
-lesson 33 → il / elle anchors already encountered
-F08       → already owns lessons 32–33
-```
-
-38.2 therefore asks Trân to **reconstruct** from known material instead of adding a new conjugation lesson or a permanent Transfer route.
-
-### Fixed learner-facing sequence
-
-```text
-normal lesson 33 content
-→ existing F08 optional card
-→ Build 38.2 optional “build a sentence” card
-→ 3 deterministic exercises
-→ completion with NO mastery claim
-→ return focus to lesson
-→ normal Continue remains available
-```
-
-The three learner-facing exercises reuse certified 38.1 catalog indexes `[0,2,5]`:
-
-```text
-Je travaille. → Tu travailles.
-J'habite ici. → Tu habites ici.
-Tu aimes ça. → Elle aime ça.
-```
-
-Choice order is rotated deterministically per exercise. There is **no random generation** and no new source/target content.
-
-### Runtime files
-
-```text
-src/pedagogy/generalization-transfer-lesson.js
-src/core/build32-loader.js
-sw.js
-tools/test-build38-2-learner-integration.cjs
-tests/browser/build38-2-learner-integration.html
-.github/workflows/build38-2-learner-integration.yml
-docs/BUILD-38-2-LEARNER-INTEGRATION.md
-PROJECT-STATE.md
-```
-
-Wiring order:
-
-```text
-Foundations capsule engine / capsules / pilot
-→ generalization-transfer-core.js
-→ generalization-transfer-lesson.js
-```
-
-The service worker pre-cache contains both Transfer scripts for installed-PWA/offline parity.
-
-## 38.2 certified code-bearing checkpoint
-
-Code/test/doc head before this handoff-only follow-up:
-
-```text
-4d312c5737e0efa8908e3e70bfe292b33831023e
-```
-
-Dedicated workflow:
-
-```text
-Build 38.2 Learner-facing subject substitution
-run 31977464288
-SUCCESS
-```
-
-That run certifies:
-
-```text
-syntax PASS
-38.1 Node predecessor PASS
-38.2 Node contract PASS
-F08 browser predecessor PASS
-38.1 pure browser predecessor PASS
-VI × 1280×900 PASS
-FR × 1280×900 PASS
-VI × 390×844 PASS
-FR × 390×844 PASS
-F08 + Transfer coexist in lesson 33 in that order
-3 certified exercises through real clicks
-return focus + existing lesson Continue survives
-lesson 32 remains F08-only
-lesson 34 remains F05-only
-localStorage byte-identical
-no horizontal overflow
-learner entry target >=44 px
-```
-
-## 38.2 explicit exclusions — LOCKED
-
-```text
-new vocabulary
-random generation
-nous / vous / ils / elles
-aller / vouloir / pouvoir / devoir
-negation transformation
-plural transformation
-futur proche transformation
-agreement transformation
-new permanent navigation tab
-new learner store
-durable writes
-Evidence product reads
-mastery scoring
-curriculum renumbering
-```
-
-The adapter may read the existing DEBUG-FR preference only for localization; it performs no learner-state write.
+38.2 wires this core learner-facing but does not broaden its certified matrix.
 
 ## Build 37 ownership — LOCKED
 
@@ -195,48 +140,93 @@ F13     → lesson 40 only
 F12     → lessons 41–43
 ```
 
-38.2 is additive after F08 in lesson 33; it does not overwrite any Build 37 owner.
-
 F16 remains **deferred / not completed**; Build 37 stays closed.
-
-## Protected boundaries
-
-Untouched by 38.2 and still protected:
-
-```text
-index.html
-app.js
-voice-ios.js
-free-voice.js
-assets/LOGO.png
-assets/Favicon.png
-curriculum-stage2/3/4 semantics and IDs
-Foundations implementation/routes
-Recovery v3 seven-store ownership
-Evidence derived-shadow role
-Listening / Scenario / Mastery / Learner Intelligence owners
-V5.10 field-accepted navigation / visual identities
-38.1 deterministic transfer semantics
-```
 
 ## Inherited CI debt
 
-Exactly four historical failures remain the known baseline debt unless separately repaired:
+Exactly four historical failures remain baseline debt unless separately repaired:
 
 1. `Build 36.2 Evidence shadow adoption`;
 2. `V2.0.0 Freeze tribunal`;
 3. `Build 36.3 Recovery v3 durability tribunal`;
 4. `Build 28 Data recovery smoke`.
 
-A new 38.2 failure is **not** baseline merely because those four exist.
+A future Build 38 failure is **not** baseline merely because these four exist.
 
-## NEXT — control review only
+## Protected boundaries
+
+Do not silently change:
 
 ```text
-→ verify PR #188 current head
-→ require dedicated Build 38.2 workflow green on that head
-→ inspect PR diff against main
-→ STOP
+app.js
+voice-ios.js
+free-voice.js
+assets/LOGO.png
+assets/Favicon.png
+manifest / service-worker PWA identity contract from PR #180
+Recovery v3 seven-store ownership
+backup envelope v3
+Evidence derived-shadow role
+original six stores as product truth
+52 / 313 curriculum semantics
+Listening / Scenario / Mastery / Learner Intelligence owners
+V5.10 field-accepted navigation / visual identities
+Build 37 Foundations ownership/routes
+38.1 deterministic subject-substitution semantics
+38.2 lesson-33 placement/round-trip contract
 ```
 
-Per `AGENTS.md`, this implementation slice does **not** merge PR #188, monitor the full PR matrix, certify Pages, expand the transfer family, start 38.3, or start Build 39 unless explicitly delegated in a later user turn.
+## NEXT — Build 38.3
+
+Fresh audit after 38.2 identifies **affirmation → negation** as the cleanest next transfer candidate, ahead of singular → plural.
+
+Why:
+
+```text
+F11 already teaches ne / n’ ... pas
+lesson 17 → Je n'ai pas de monnaie.
+lesson 18 → Je ne peux pas.
+lesson 19 → Il n'y a pas d'eau chaude.
+lesson 20 → Mon téléphone ne marche pas.
+38.1/F08 already owns travailler / habiter / aimer regular-er forms
+```
+
+The first implementation slice must stay narrower than the full negation system. Preferred candidate:
+
+```text
+Je travaille. → Je ne travaille pas.
+J'habite ici. → Je n'habite pas ici.
+J'aime ça. → Je n'aime pas ça.
+```
+
+This deliberately avoids:
+
+```text
+avoir / article de-after-negation changes
+pouvoir / aller / être / irregular verbs
+il y a special case
+questions
+spoken ne-dropping
+plural
+futur proche
+agreement transformations
+new vocabulary
+learner-facing wiring
+durable writes
+Evidence product reads
+mastery claims
+```
+
+Canonical execution order:
+
+```text
+→ create one pure/non-wired deterministic 38.3 negation-transfer core
+→ reuse only already-known regular-er material
+→ replay F11 + 38.1 predecessors
+→ VI / DEBUG FR × desktop / 390×844 browser tribunal
+→ learner stores byte-identical
+→ one candidate PR
+→ control review / merge only after dedicated proof
+```
+
+Do **not** start Build 39 inside Build 38.
