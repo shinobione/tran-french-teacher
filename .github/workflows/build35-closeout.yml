@@ -1,0 +1,59 @@
+name: Build 35 closeout — Memory Evidence v2 readiness
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build35-closeout:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Build 35 proof chain and no-adoption boundary
+        run: |
+          node --check src/pedagogy/memory-evidence-v2-core.js
+          node --check src/pedagogy/memory-evidence-v2-migration-sim.js
+          node --check tests/smoke/build35-memory-evidence-v2-smoke.js
+          node --check tests/smoke/build35-memory-evidence-v2-transaction-smoke.js
+          node --check tests/smoke/build35-closeout-smoke.js
+          node tests/smoke/build35-memory-evidence-v2-smoke.js
+          node tests/smoke/build35-memory-evidence-v2-transaction-smoke.js
+          node tests/smoke/build35-closeout-smoke.js
+          node tools/test-build28-data-recovery.cjs
+
+      - name: Runtime adoption remains forbidden in Build 35
+        run: |
+          ! grep -q 'memory-evidence-v2-core.js' index.html
+          ! grep -q 'memory-evidence-v2-migration-sim.js' index.html
+          ! grep -q 'memory-evidence-v2-core.js' sw.js
+          ! grep -q 'memory-evidence-v2-migration-sim.js' sw.js
+          ! grep -q 'french-tranquille:memory-evidence:v2' src/core/data-recovery-core.js
+          grep -q 'const BACKUP_VERSION = 2' src/core/data-recovery-core.js
+          grep -q 'derived shadow store' docs/BUILD-35-CLOSEOUT-ADOPTION-READINESS.md
+          grep -q 'backup envelope from v2 to v3' docs/BUILD-35-CLOSEOUT-ADOPTION-READINESS.md
+
+      - name: Existing runtime owners remain byte-identical
+        run: |
+          test "$(git hash-object src/core/data-recovery-core.js)" = "10dc84bb71b82c62b5f169f52c6bd95c88b308f9"
+          test "$(git hash-object src/core/data-recovery.js)" = "ef0c1d414133e71076a35c3a8bcc079b94a074a1"
+          test "$(git hash-object src/pedagogy/learning-memory.js)" = "be19abde268a78b8bfd140a0d94e99a4990dda65"
+          test "$(git hash-object src/pedagogy/error-intelligence.js)" = "060a7db49b72a58c8a6a6c0055efa484f9d9f604"
+          test "$(git hash-object src/pedagogy/listening-engine.js)" = "3d4b63212498d5a49cc5e6c48a0795c44555f06d"
+          test "$(git hash-object src/pedagogy/scenario-engine.js)" = "8bd6d67fa87cb2fd41fa44d0e48dbd342c137a53"
+          test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+
+      - name: Certified Build 35 cores remain byte-identical
+        run: |
+          test "$(git hash-object src/pedagogy/memory-evidence-v2-core.js)" = "b85bea27be07289902df76079a9ace76451c720d"
+          node -e "const fs=require('fs'); const s=fs.readFileSync('src/pedagogy/memory-evidence-v2-migration-sim.js','utf8'); if(!s.includes('sandbox-required')) process.exit(1)"
