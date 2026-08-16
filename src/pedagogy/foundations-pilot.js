@@ -3,7 +3,7 @@
   const VERSION='2.3.0',BUILD='34',DEBUG='tran-french-teacher:debug-fr:v1';
   const T=(vi,fr)=>localStorage.getItem(DEBUG)==='1'?fr:vi;
   const locale=()=>localStorage.getItem(DEBUG)==='1'?'fr':'vi';
-  const esc=(v='')=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]));
+  const esc=(v='')=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const root=document.documentElement;
   const engine=window.FrenchTranquilleFoundationsCapsuleEngine;
   const primaryCapsule=window.FrenchTranquilleFoundationsCapsules?.F01_F04;
@@ -59,7 +59,7 @@
     if(params.has('b32Audit')||params.has('b31Audit')||params.has('b30Audit')||params.has('v2Audit'))return;
     const meta=window.FrenchTranquilleBuildMeta;
     if(meta){meta.version=VERSION;meta.build=BUILD}
-    root.dataset.foundationsPilot='1';root.dataset.foundationsVersion=VERSION;root.dataset.foundationsBuild=BUILD;root.dataset.foundationsAdapter='37.3';root.dataset.foundationsExpansion='37.5';
+    root.dataset.foundationsPilot='1';root.dataset.foundationsVersion=VERSION;root.dataset.foundationsBuild=BUILD;root.dataset.foundationsAdapter='37.3';root.dataset.foundationsExpansion='37.4';root.dataset.foundationsConsolidation='37.5';
   }
 
   function entryMarkup(rule){return `<section class="ft-foundation-entry" data-foundation-entry data-foundation-capsule="${esc(rule.id)}"><span class="ft-foundation-eyebrow">🧩 ${esc(T('NỀN TẢNG NHỎ','PETITE BASE UTILE'))}</span><h3>${esc(rule.entryTitle)}</h3><p>${esc(T(rule.entryCopyVi,rule.entryCopyFr))}</p><button type="button" class="secondary" data-foundation-open>${esc(T('Mở nền tảng • khoảng 5 phút','Ouvrir la base • ≈ 5 min'))} ›</button></section>`}
@@ -112,5 +112,5 @@
   function decorate(){updateMeta();mountEntry()}
   function schedule(){if(scheduled)return;scheduled=true;queueMicrotask(()=>{scheduled=false;decorate()})}
   installStyle();const app=document.getElementById('app');if(app)new MutationObserver(schedule).observe(app,{childList:true,subtree:true});window.addEventListener('pagehide',close);decorate();
-  window.FrenchTranquilleFoundationsPilot=Object.freeze({version:VERSION,build:BUILD,concepts:['F01','F02','F03','F04'],expansionConcepts:['F11','F05'],persistent:false,adapter:'37.3',expansion:'37.5',engineSchema:engine.schema,refresh:decorate,open});
+  window.FrenchTranquilleFoundationsPilot=Object.freeze({version:VERSION,build:BUILD,concepts:['F01','F02','F03','F04'],expansionConcepts:['F11'],consolidationConcepts:['F05'],persistent:false,adapter:'37.3',expansion:'37.4',consolidation:'37.5',engineSchema:engine.schema,refresh:decorate,open});
 })();
