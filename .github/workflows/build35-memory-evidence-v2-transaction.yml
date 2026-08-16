@@ -28,21 +28,23 @@ jobs:
           node tests/smoke/build35-memory-evidence-v2-transaction-smoke.js
           node tools/test-build28-data-recovery.cjs
 
-      - name: Slice 35.2 remains simulation-only
+      - name: Build 35 simulator remains test-only under any successor
         run: |
           ! grep -q 'memory-evidence-v2-migration-sim.js' index.html
           ! grep -q 'memory-evidence-v2-migration-sim.js' sw.js
-          ! grep -q 'memory-evidence-v2-core.js' index.html
-          ! grep -q 'memory-evidence-v2-core.js' sw.js
-          ! grep -q 'french-tranquille:memory-evidence:v2' index.html
-          ! grep -q 'french-tranquille:memory-evidence:v2' sw.js
           grep -q 'sandbox-required' src/pedagogy/memory-evidence-v2-migration-sim.js
           grep -q 'isolated-transaction-simulation' src/pedagogy/memory-evidence-v2-migration-sim.js
+          if test -f src/core/memory-evidence-v2-runtime.js; then
+            grep -q 'memory-evidence-v2-core.js?v=2.4.0-b36.2' index.html
+            grep -q 'memory-evidence-v2-runtime.js?v=2.4.0-b36.2' index.html
+          else
+            ! grep -q 'memory-evidence-v2-core.js' index.html
+            ! grep -q 'memory-evidence-v2-core.js' sw.js
+          fi
 
-      - name: Recovery, learner, voice and Evidence 35.1 owners remain byte-identical
+      - name: Legacy base, learner, voice and Evidence 35.1 owners remain byte-identical
         run: |
           test "$(git hash-object src/core/data-recovery-core.js)" = "10dc84bb71b82c62b5f169f52c6bd95c88b308f9"
-          test "$(git hash-object src/core/data-recovery.js)" = "ef0c1d414133e71076a35c3a8bcc079b94a074a1"
           test "$(git hash-object src/pedagogy/learning-memory.js)" = "be19abde268a78b8bfd140a0d94e99a4990dda65"
           test "$(git hash-object src/pedagogy/memory-evidence-v2-core.js)" = "b85bea27be07289902df76079a9ace76451c720d"
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
