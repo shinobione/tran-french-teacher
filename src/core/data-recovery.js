@@ -1,11 +1,12 @@
 (() => {
   'use strict';
 
-  const Core = window.FrenchTranquilleRecoveryCore;
+  const LegacyCore = window.FrenchTranquilleRecoveryCore;
+  const Core = window.FrenchTranquilleRecoveryV3Core || LegacyCore;
   if (!Core || typeof Storage === 'undefined' || !window.localStorage) return;
 
-  const VERSION = '1.21.0';
-  const BUILD = 28;
+  const VERSION = Core.BACKUP_VERSION >= 3 ? '2.4.0' : '1.21.0';
+  const BUILD = Core.BACKUP_VERSION >= 3 ? 36 : 28;
   const DEBUG_KEY = 'tran-french-teacher:debug-fr:v1';
   const LAST_GOOD_KEY = 'french-tranquille:recovery:last-good:v1';
   const PRE_RESTORE_KEY = 'french-tranquille:recovery:pre-restore:v1';
@@ -25,11 +26,14 @@
   const nowIso = () => new Date().toISOString();
 
   const runtimeStatus = {
+    contractVersion: Number(Core.BACKUP_VERSION || 0),
+    storeCount: Number(Core.STORE_SPECS?.length || 0),
     repairedAtBoot: [],
     blockedWrites: 0,
     quarantineCount: 0,
     lastRestore: null,
-    lastSnapshotAt: null
+    lastSnapshotAt: null,
+    lastShadowRefresh: null
   };
 
   function nativeWriter() {
@@ -37,6 +41,20 @@
       set: (key, value) => nativeSetItem.call(localStorage, key, value),
       remove: key => nativeRemoveItem.call(localStorage, key)
     };
+  }
+
+  function refreshExistingShadow(reason = 'recovery-snapshot') {
+    if (typeof Core.ensureEvidenceFresh !== 'function') return { ok: true, unsupported: true };
+    const result = Core.ensureEvidenceFresh(localStorage, nativeWriter(), { createIfMissing: false });
+    runtimeStatus.lastShadowRefresh = {
+      at: nowIso(),
+      reason,
+      ok: Boolean(result?.ok),
+      changed: Boolean(result?.changed),
+      missing: Boolean(result?.missing),
+      error: result?.error ? String(result.error?.message || result.error) : null
+    };
+    return result;
   }
 
   function writeMeta(key, value) {
@@ -59,15 +77,17 @@
         version: window.FrenchTranquilleBuildMeta?.version || VERSION,
         build: window.FrenchTranquilleBuildMeta?.build || BUILD
       },
+      recovery: { backupVersion: Core.BACKUP_VERSION, storeCount: Core.STORE_SPECS.length },
       values,
       ...extra
     };
   }
 
   function snapshot(key, kind, extra = {}) {
+    const shadowRefresh = refreshExistingShadow(`snapshot:${kind}`);
     const values = Core.collectRaw(localStorage);
     const validation = Core.validateRawMap(values, { allowMissing: true });
-    const envelope = snapshotEnvelope(kind, values, { validation, ...extra });
+    const envelope = snapshotEnvelope(kind, values, { validation, shadowRefresh: { ok:Boolean(shadowRefresh?.ok), changed:Boolean(shadowRefresh?.changed), missing:Boolean(shadowRefresh?.missing) }, ...extra });
     if (writeMeta(key, envelope)) runtimeStatus.lastSnapshotAt = envelope.capturedAt;
     return envelope;
   }
@@ -86,8 +106,10 @@
   }
 
   function saveLastGood(reason = 'runtime') {
+    const shadowRefresh = refreshExistingShadow(`last-good:${reason}`);
+    if (shadowRefresh && shadowRefresh.ok === false) return false;
     const values = Core.collectRaw(localStorage);
-    const validation = Core.validateRawMap(values, { allowMissing: true });
+    const validation = Core.validateRawMap(values, { allowMissing: true, requireEvidenceCoherence: true });
     if (!validation.ok) return false;
     return writeMeta(LAST_GOOD_KEY, snapshotEnvelope('last-good', values, { reason }));
   }
@@ -182,7 +204,7 @@
       snapshot(PRE_RESET_KEY, 'pre-reset');
       Core.STORE_SPECS.forEach(spec => nativeRemoveItem.call(localStorage, spec.key));
       saveLastGood('reset-all');
-      if (!params.has('b28Smoke')) setTimeout(() => location.reload(), 0);
+      if (!params.has('b28Smoke') && !params.has('b36ShadowSmoke')) setTimeout(() => location.reload(), 0);
       return;
     }
     const result = nativeRemoveItem.call(this, key);
@@ -191,6 +213,8 @@
   };
 
   function backupObject() {
+    const shadowRefresh = refreshExistingShadow('backup');
+    if (shadowRefresh && shadowRefresh.ok === false) throw new Error('evidence-shadow-refresh-failed');
     return Core.buildBackup(localStorage, {
       version: window.FrenchTranquilleBuildMeta?.version || VERSION,
       build: window.FrenchTranquilleBuildMeta?.build || BUILD
@@ -208,7 +232,7 @@
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement('a');
     anchor.href = url;
-    anchor.download = `french-tranquille-backup-v2-${new Date().toISOString().slice(0,10)}.json`;
+    anchor.download = `french-tranquille-backup-v${Core.BACKUP_VERSION}-${new Date().toISOString().slice(0,10)}.json`;
     document.body.appendChild(anchor);
     anchor.click();
     anchor.remove();
@@ -218,9 +242,9 @@
 
   function restoreObject(payload, { reload = true } = {}) {
     if (payload?.version && Number(payload.version) < Core.BACKUP_VERSION) {
-      snapshot(PRE_MIGRATION_KEY, 'pre-migration', { incomingBackupVersion: payload.version });
+      snapshot(PRE_MIGRATION_KEY, 'pre-migration', { incomingBackupVersion: payload.version, targetBackupVersion: Core.BACKUP_VERSION });
     }
-    snapshot(PRE_RESTORE_KEY, 'pre-restore', { incomingBackupVersion: payload?.version ?? null });
+    snapshot(PRE_RESTORE_KEY, 'pre-restore', { incomingBackupVersion: payload?.version ?? null, targetBackupVersion: Core.BACKUP_VERSION });
 
     let result;
     try { result = Core.restore(localStorage, payload, nativeWriter()); }
@@ -230,6 +254,9 @@
       ok: Boolean(result.ok),
       at: nowIso(),
       migratedFrom: result.migratedFrom ?? null,
+      sourceVersion: result.sourceVersion ?? null,
+      preserveMissingIds: result.preserveMissingIds || [],
+      rebuildDerivedIds: result.rebuildDerivedIds || [],
       rolledBack: result.rolledBack ?? null,
       error: result.error ? String(result.error.message || result.error) : null
     };
@@ -284,16 +311,20 @@
 
   function decorateBackupCard() {
     const card = document.querySelector('.memory-backup-card');
-    if (!card || card.dataset.recoveryV2 === '1') return;
-    card.dataset.recoveryV2 = '1';
+    if (!card || card.dataset.recoveryV3 === '1') return;
+    card.dataset.recoveryV3 = '1';
     const pill = card.querySelector('.pill');
     const title = card.querySelector('h2');
     const copy = card.querySelector('p');
-    if (pill) pill.textContent = 'COFFRE V2';
+    if (pill) pill.textContent = Core.BACKUP_VERSION >= 3 ? 'COFFRE V3' : 'COFFRE V2';
     if (title) title.textContent = `💾 ${T('Sao lưu đầy đủ', 'Sauvegarde complète')}`;
     if (copy) copy.textContent = T(
-      'Bản sao lưu chứa tiến độ, trí nhớ, lỗi đã quan sát, bài nghe, tình huống thực tế và các cột mốc. Trước khi nhập hoặc di chuyển dữ liệu, ứng dụng tự tạo ảnh chụp để có thể quay lại.',
-      'La sauvegarde contient progression, mémoire, erreurs observées, écoute, situations réelles et jalons. Avant tout import ou migration, l’app crée automatiquement un snapshot de retour.'
+      Core.BACKUP_VERSION >= 3
+        ? 'Bản sao lưu chứa tiến độ, trí nhớ, bằng chứng học tập, lỗi đã quan sát, bài nghe, tình huống thực tế và các cột mốc. Trước khi nhập hoặc di chuyển dữ liệu, ứng dụng tự tạo ảnh chụp để có thể quay lại.'
+        : 'Bản sao lưu chứa tiến độ, trí nhớ, lỗi đã quan sát, bài nghe, tình huống thực tế và các cột mốc. Trước khi nhập hoặc di chuyển dữ liệu, ứng dụng tự tạo ảnh chụp để có thể quay lại.',
+      Core.BACKUP_VERSION >= 3
+        ? 'La sauvegarde contient progression, mémoire, preuves d’apprentissage, erreurs observées, écoute, situations réelles et jalons. Avant tout import ou migration, l’app crée automatiquement un snapshot de retour.'
+        : 'La sauvegarde contient progression, mémoire, erreurs observées, écoute, situations réelles et jalons. Avant tout import ou migration, l’app crée automatiquement un snapshot de retour.'
     );
   }
 
@@ -330,6 +361,7 @@
     version: VERSION,
     build: BUILD,
     core: Core,
+    legacyCore: LegacyCore,
     keys: {
       lastGood: LAST_GOOD_KEY,
       preRestore: PRE_RESTORE_KEY,
@@ -343,6 +375,8 @@
     importBackup,
     restoreObject,
     restoreSnapshot,
+    capturePreMigration: extra => snapshot(PRE_MIGRATION_KEY, 'pre-migration', extra || {}),
+    saveLastGood: reason => saveLastGood(reason || 'manual'),
     snapshot: () => snapshotEnvelope('manual-preview'),
     status: () => ({ ...runtimeStatus, quarantineCount: Array.isArray(readMeta(QUARANTINE_KEY)) ? readMeta(QUARANTINE_KEY).length : 0 }),
     lastGood: () => validSnapshot(LAST_GOOD_KEY),
