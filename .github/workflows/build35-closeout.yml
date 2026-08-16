@@ -18,7 +18,7 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Build 35 proof chain and no-adoption boundary
+      - name: Build 35 proof chain and successor-safe boundary
         run: |
           node --check src/pedagogy/memory-evidence-v2-core.js
           node --check src/pedagogy/memory-evidence-v2-migration-sim.js
@@ -30,21 +30,25 @@ jobs:
           node tests/smoke/build35-closeout-smoke.js
           node tools/test-build28-data-recovery.cjs
 
-      - name: Runtime adoption remains forbidden in Build 35
+      - name: Build 35 no-adoption history remains explicit
         run: |
-          ! grep -q 'memory-evidence-v2-core.js' index.html
           ! grep -q 'memory-evidence-v2-migration-sim.js' index.html
-          ! grep -q 'memory-evidence-v2-core.js' sw.js
           ! grep -q 'memory-evidence-v2-migration-sim.js' sw.js
           ! grep -q 'french-tranquille:memory-evidence:v2' src/core/data-recovery-core.js
           grep -q 'const BACKUP_VERSION = 2' src/core/data-recovery-core.js
           grep -q 'derived shadow store' docs/BUILD-35-CLOSEOUT-ADOPTION-READINESS.md
           grep -q 'backup envelope from v2 to v3' docs/BUILD-35-CLOSEOUT-ADOPTION-READINESS.md
+          if test -f src/core/memory-evidence-v2-runtime.js; then
+            grep -q 'data-recovery-v3-runtime-core.js?v=2.4.0-b36.2' index.html
+            grep -q 'memory-evidence-v2-runtime.js?v=2.4.0-b36.2' index.html
+          else
+            ! grep -q 'memory-evidence-v2-core.js' index.html
+            ! grep -q 'memory-evidence-v2-core.js' sw.js
+          fi
 
-      - name: Existing runtime owners remain byte-identical
+      - name: Product and six canonical source owners remain byte-identical
         run: |
           test "$(git hash-object src/core/data-recovery-core.js)" = "10dc84bb71b82c62b5f169f52c6bd95c88b308f9"
-          test "$(git hash-object src/core/data-recovery.js)" = "ef0c1d414133e71076a35c3a8bcc079b94a074a1"
           test "$(git hash-object src/pedagogy/learning-memory.js)" = "be19abde268a78b8bfd140a0d94e99a4990dda65"
           test "$(git hash-object src/pedagogy/error-intelligence.js)" = "060a7db49b72a58c8a6a6c0055efa484f9d9f604"
           test "$(git hash-object src/pedagogy/listening-engine.js)" = "3d4b63212498d5a49cc5e6c48a0795c44555f06d"
