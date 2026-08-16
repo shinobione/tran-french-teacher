@@ -41,6 +41,8 @@
       memory: backup.stores.memory
     };
     const migrated = recovery.core.normalizeBackup(legacyPayload);
+    const legacyVersionOk = migrated.migratedFrom === 1 && migrated.backup.version === recovery.core.BACKUP_VERSION;
+    const successorDerivedOk = recovery.core.BACKUP_VERSION < 3 || (migrated.rebuildDerivedIds || []).includes('evidence');
 
     const beforeReset = recovery.backupObject();
     localStorage.removeItem(LEARNER_KEY);
@@ -56,10 +58,11 @@
     root.dataset.b28BlockedWrite = blockedDelta >= 1 ? '1' : '0';
     root.dataset.b28BackupComplete = backupIds === expectedIds ? '1' : '0';
     root.dataset.b28RestoreOk = restoreResult.ok && restoredLearner === originalLearner ? '1' : '0';
-    root.dataset.b28LegacyMigration = migrated.migratedFrom === 1 && migrated.backup.version === 2 ? '1' : '0';
+    root.dataset.b28LegacyMigration = legacyVersionOk && successorDerivedOk ? '1' : '0';
     root.dataset.b28ResetAtomic = allCleared && resetSnapshotPresent ? '1' : '0';
     root.dataset.b28ResetRestore = resetRestore.ok && lesson8Preserved ? '1' : '0';
     root.dataset.b28Quarantine = recovery.status().quarantineCount >= 1 ? '1' : '0';
+    root.dataset.b28RecoveryVersion = String(recovery.core.BACKUP_VERSION || '');
   }
 
   if (document.readyState === 'complete') run().catch(error => {
