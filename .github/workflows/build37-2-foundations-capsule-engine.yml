@@ -29,13 +29,11 @@ jobs:
           node --check tools/test-build37-2-foundations-capsule-engine.cjs
           node tools/test-build37-2-foundations-capsule-engine.cjs
 
-      - name: Build 37.2 remains non-wired and ephemeral
+      - name: Build 37.2 remains ephemeral; successor wiring is explicit
         run: |
           set -euo pipefail
           ! grep -q 'src/pedagogy/foundations-capsule-engine.js' index.html
           ! grep -q 'src/pedagogy/foundations-capsules.js' index.html
-          ! grep -q 'src/pedagogy/foundations-capsule-engine.js' sw.js
-          ! grep -q 'src/pedagogy/foundations-capsules.js' sw.js
           ! grep -q 'localStorage.setItem' src/pedagogy/foundations-capsule-engine.js
           ! grep -q 'localStorage.setItem' src/pedagogy/foundations-capsules.js
           ! grep -q 'FrenchTranquilleRecovery' src/pedagogy/foundations-capsule-engine.js
@@ -43,17 +41,60 @@ jobs:
           grep -q "persistence:'ephemeral-only'" src/pedagogy/foundations-capsule-engine.js
           grep -q 'masteryClaim:false' src/pedagogy/foundations-capsule-engine.js
 
-      - name: Build 34 pilot and Build 37.1 registry remain unchanged
+          if grep -q "adapter:'37.3'" src/pedagogy/foundations-pilot.js; then
+            python3 - <<'PY'
+          from pathlib import Path
+          loader=Path('src/core/build32-loader.js').read_text()
+          sw=Path('sw.js').read_text()
+          engine='foundations-capsule-engine.js'
+          capsules='foundations-capsules.js'
+          pilot='foundations-pilot.js'
+          assert loader.index(engine) < loader.index(capsules) < loader.index(pilot)
+          assert "const FOUNDATIONS = '2.4.0-b37.3'" in loader
+          assert "const B373='2.4.0-b37.3'" in sw
+          for name in (engine,capsules,pilot):
+              assert f'./src/pedagogy/{name}' in sw
+          assert "const CACHE='tran-french-teacher-v2.3.22-b34.14-v58debug1'" in sw
+          PY
+          else
+            ! grep -q 'src/pedagogy/foundations-capsule-engine.js' sw.js
+            ! grep -q 'src/pedagogy/foundations-capsules.js' sw.js
+          fi
+
+      - name: Build 34 pilot parity and Build 37.1 registry survive successors
         run: |
           set -euo pipefail
-          test "$(git hash-object src/pedagogy/foundations-pilot.js)" = 'f3acc701b72c110b5f4c4cb1f33f286de4538a2a'
-          git diff --exit-code origin/main...HEAD -- src/pedagogy/foundations-pilot.js src/pedagogy/foundations-core.js
+          git fetch origin main --quiet
+          git diff --exit-code origin/main...HEAD -- src/pedagogy/foundations-core.js
+
+          pilot='src/pedagogy/foundations-pilot.js'
+          if grep -q "adapter:'37.3'" "$pilot"; then
+            grep -q 'FrenchTranquilleFoundationsCapsuleEngine' "$pilot"
+            grep -q 'FrenchTranquilleFoundationsCapsules' "$pilot"
+            grep -q "concepts:\['F01','F02','F03','F04'\]" "$pilot"
+            grep -q 'if(n<8||n>13)return' "$pilot"
+            grep -q 'persistent:false' "$pilot"
+            ! grep -q 'const questions=' "$pilot"
+            ! grep -q 'localStorage.setItem' "$pilot"
+            test -f tests/browser/build37-foundations-pilot-adapter.html
+            test -f .github/workflows/build37-3-foundations-pilot-adapter.yml
+            node tools/test-build37-2-foundations-capsule-engine.cjs
+          else
+            test "$(git hash-object "$pilot")" = 'f3acc701b72c110b5f4c4cb1f33f286de4538a2a'
+            git diff --exit-code origin/main...HEAD -- "$pilot"
+          fi
 
       - name: Product, durability and voice owners stay untouched
         run: |
           set -euo pipefail
           changed="$(git diff --name-only origin/main...HEAD)"
-          if printf '%s\n' "$changed" | grep -E '^(app\.js|voice-ios\.js|free-voice\.js|index\.html|sw\.js|src/core/data-recovery|src/core/memory-evidence-v2-runtime\.js|src/pedagogy/learning-memory\.js|src/pedagogy/error-intelligence\.js|src/pedagogy/listening-engine\.js|src/pedagogy/scenario-engine\.js|src/pedagogy/mastery-engine\.js|src/pedagogy/learner-intelligence.*\.js)$'; then
-            echo 'Build 37.2 must not change product/storage/voice owners' >&2
+          forbidden='^(app\.js|voice-ios\.js|free-voice\.js|index\.html|src/core/data-recovery|src/core/memory-evidence-v2-runtime\.js|src/pedagogy/learning-memory\.js|src/pedagogy/error-intelligence\.js|src/pedagogy/listening-engine\.js|src/pedagogy/scenario-engine\.js|src/pedagogy/mastery-engine\.js|src/pedagogy/learner-intelligence.*\.js)$'
+          if printf '%s\n' "$changed" | grep -E "$forbidden"; then
+            echo 'Build 37 Foundations work must not change product/storage/voice owners' >&2
             exit 1
+          fi
+          if printf '%s\n' "$changed" | grep -qx 'sw.js'; then
+            grep -q "adapter:'37.3'" src/pedagogy/foundations-pilot.js
+            grep -q "const B373='2.4.0-b37.3'" sw.js
+            grep -q "const CACHE='tran-french-teacher-v2.3.22-b34.14-v58debug1'" sw.js
           fi
