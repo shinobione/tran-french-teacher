@@ -2,7 +2,7 @@
   'use strict';
 
   const VERSION = '2.2.0-b32';
-  const FOUNDATIONS = '2.3.0-b34';
+  const FOUNDATIONS = '2.4.0-b37.3';
   const RUNTIME_META = Object.freeze({
     version:'2.4.0',
     build:'36',
@@ -99,6 +99,8 @@
 
     const historical = params.has('b31Audit') || params.has('b30Audit') || params.has('v2Audit');
     if (!historical) {
+      await loadScript(`./src/pedagogy/foundations-capsule-engine.js?v=${FOUNDATIONS}`, 'foundationsCapsuleEngine');
+      await loadScript(`./src/pedagogy/foundations-capsules.js?v=${FOUNDATIONS}`, 'foundationsCapsules');
       await loadScript(`./src/pedagogy/foundations-pilot.js?v=${FOUNDATIONS}`, 'foundationsPilot');
       installRuntimeMeta();
       window.FrenchTranquilleBuild27Shell?.refresh?.();
