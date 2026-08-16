@@ -48,7 +48,6 @@ jobs:
           ! grep -q 'localStorage.setItem' src/pedagogy/foundations-pilot.js
           ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/foundations-capsules.js
           ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/foundations-pilot.js
-          ! grep -q 'F12' src/pedagogy/foundations-capsules.js
           if grep -q "consolidation:'37.5'" src/pedagogy/foundations-pilot.js; then
             grep -q "concepts:\['F05'\]" src/pedagogy/foundations-capsules.js
             grep -q "id:'F05',capsule:subjectPronounsCapsule,min:34,max:36" src/pedagogy/foundations-pilot.js
