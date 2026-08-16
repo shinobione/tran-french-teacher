@@ -28,18 +28,28 @@ jobs:
           grep -q "voice-unrecognized" tests/smoke/build35-memory-evidence-v2-smoke.js
           grep -q "backup-normalization-required" tests/smoke/build35-memory-evidence-v2-smoke.js
 
-      - name: Slice 35.1 is not runtime-adopted
+      - name: Build 35 boundary or explicit Build 36 successor wiring
         run: |
-          ! grep -q 'memory-evidence-v2-core.js' index.html
-          ! grep -q 'memory-evidence-v2-core.js' sw.js
-          ! grep -q 'french-tranquille:memory-evidence:v2' index.html
-          ! grep -q 'french-tranquille:memory-evidence:v2' sw.js
+          if test -f src/core/memory-evidence-v2-runtime.js; then
+            grep -q 'memory-evidence-v2-core.js?v=2.4.0-b36.2' index.html
+            grep -q 'memory-evidence-v2-runtime.js?v=2.4.0-b36.2' index.html
+            grep -q 'data-recovery-v3-runtime-core.js?v=2.4.0-b36.2' index.html
+            grep -q 'memory-evidence-v2-core.js' sw.js
+            grep -q 'memory-evidence-v2-runtime.js' sw.js
+            ! grep -q 'memory-evidence-v2-migration-sim.js' index.html
+            ! grep -q 'memory-evidence-v2-migration-sim.js' sw.js
+          else
+            ! grep -q 'memory-evidence-v2-core.js' index.html
+            ! grep -q 'memory-evidence-v2-core.js' sw.js
+            ! grep -q 'french-tranquille:memory-evidence:v2' index.html
+            ! grep -q 'french-tranquille:memory-evidence:v2' sw.js
+          fi
           grep -q 'No durable schema adoption' docs/BUILD-35-MEMORY-EVIDENCE-V2.md
 
-      - name: Recovery and learner writers remain byte-identical
+      - name: Legacy Recovery base and learner writers remain byte-identical
         run: |
           test "$(git hash-object src/core/data-recovery-core.js)" = "10dc84bb71b82c62b5f169f52c6bd95c88b308f9"
-          test "$(git hash-object src/core/data-recovery.js)" = "ef0c1d414133e71076a35c3a8bcc079b94a074a1"
+          test "$(git hash-object src/pedagogy/memory-evidence-v2-core.js)" = "b85bea27be07289902df76079a9ace76451c720d"
           test "$(git hash-object src/pedagogy/learning-memory.js)" = "be19abde268a78b8bfd140a0d94e99a4990dda65"
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
           test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
