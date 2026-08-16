@@ -1,0 +1,135 @@
+name: Build 38.3 Generalization negation transfer
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [build38/negation-transfer-core]
+
+permissions:
+  contents: read
+
+jobs:
+  negation-transfer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax + F11 + 38.1 predecessors + 38.3 contract
+        run: |
+          set -euo pipefail
+          node --check src/pedagogy/generalization-transfer-core.js
+          node --check src/pedagogy/generalization-negation-core.js
+          node --check tools/test-build38-1-subject-substitution.cjs
+          node --check tools/test-build38-3-negation-transfer.cjs
+          node tools/test-build37-4-foundations-negation.cjs
+          node tools/test-build38-1-subject-substitution.cjs
+          node tools/test-build38-3-negation-transfer.cjs
+
+      - name: 38.3 stays narrow, deterministic and pure
+        run: |
+          set -euo pipefail
+          grep -q "id:'affirmation-negation-regular-er-je'" src/pedagogy/generalization-negation-core.js
+          grep -q "slice:'38.3'" src/pedagogy/generalization-negation-core.js
+          grep -q "status:'pure-non-wired'" src/pedagogy/generalization-negation-core.js
+          grep -q "subject:'je'" src/pedagogy/generalization-negation-core.js
+          grep -q "target:'Je ne travaille pas.'" src/pedagogy/generalization-negation-core.js
+          grep -q "target:\"Je n'habite pas ici.\"" src/pedagogy/generalization-negation-core.js
+          grep -q "target:\"Je n'aime pas ça.\"" src/pedagogy/generalization-negation-core.js
+          ! grep -q 'Math.random' src/pedagogy/generalization-negation-core.js
+          ! grep -q 'localStorage' src/pedagogy/generalization-negation-core.js
+          ! grep -q 'sessionStorage' src/pedagogy/generalization-negation-core.js
+          ! grep -q 'indexedDB' src/pedagogy/generalization-negation-core.js
+          ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/generalization-negation-core.js
+
+      - name: Runtime, curriculum, Foundations, storage and 38.1 owners stay untouched
+        run: |
+          set -euo pipefail
+          git fetch origin main --quiet
+          changed="$(git diff --name-only origin/main...HEAD)"
+          forbidden='^(app\.js|voice-ios\.js|free-voice\.js|index\.html|sw\.js|manifest\.webmanifest|src/core/|src/ui/|src/premium/|src/pedagogy/curriculum-stage[234]\.js|src/pedagogy/learning-memory\.js|src/pedagogy/error-intelligence\.js|src/pedagogy/listening-engine\.js|src/pedagogy/scenario-engine\.js|src/pedagogy/mastery-engine\.js|src/pedagogy/learner-intelligence.*\.js|src/pedagogy/foundations-core\.js|src/pedagogy/foundations-capsule-engine\.js|src/pedagogy/foundations-capsules\.js|src/pedagogy/foundations-pilot\.js|src/pedagogy/generalization-transfer-core\.js|src/pedagogy/generalization-transfer-lesson\.js|assets/LOGO\.png|assets/Favicon\.png)$'
+          if printf '%s\n' "$changed" | grep -E "$forbidden"; then
+            echo 'Build 38.3 must remain a new pure/non-wired negation core and preserve prior owners' >&2
+            exit 1
+          fi
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-b383-http.log 2>&1 &
+          echo $! >/tmp/ft-b383-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — F11 predecessor remains exact
+        run: |
+          set -euo pipefail
+          passed=0
+          for attempt in 1 2; do
+            profile="/tmp/ft-b383-f11-$attempt"; file="/tmp/b383-f11-$attempt.html"
+            rm -rf "$profile" "$file"
+            if timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=390,844 --virtual-time-budget=10000 --dump-dom \
+              'http://127.0.0.1:4173/tests/browser/build37-4-foundations-negation.html?debug=fr' >"$file" \
+              && grep -q 'data-b374-done="1"' "$file" \
+              && grep -q 'data-b374-f11="1"' "$file" \
+              && grep -q 'data-b374-storage-unchanged="1"' "$file" \
+              && ! grep -q 'data-b374-error=' "$file"; then passed=1; break; fi
+          done
+          test "$passed" -eq 1
+
+      - name: Chrome — 38.1 predecessor remains exact
+        run: |
+          set -euo pipefail
+          passed=0
+          for attempt in 1 2; do
+            profile="/tmp/ft-b383-b381-$attempt"; file="/tmp/b383-b381-$attempt.html"
+            rm -rf "$profile" "$file"
+            if timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=1280,900 --virtual-time-budget=10000 --dump-dom \
+              'http://127.0.0.1:4173/tests/browser/build38-1-subject-substitution.html?debug=vi' >"$file" \
+              && grep -q 'data-b381-done="1"' "$file" \
+              && grep -q 'data-b381-family="subject-substitution-regular-er"' "$file" \
+              && grep -q 'data-b381-exercises="6"' "$file" \
+              && grep -q 'data-b381-storage-unchanged="1"' "$file" \
+              && ! grep -q 'data-b381-error=' "$file"; then passed=1; break; fi
+          done
+          test "$passed" -eq 1
+
+      - name: Chrome — 38.3 VI/FR desktop + iPhone parity
+        run: |
+          set -euo pipefail
+          for spec in 'vi 1280 900' 'fr 1280 900' 'vi 390 844' 'fr 390 844'; do
+            set -- $spec; locale="$1"; width="$2"; height="$3"; passed=0; file=''
+            for attempt in 1 2; do
+              profile="/tmp/ft-b383-${locale}-${width}-$attempt"
+              file="/tmp/b383-${locale}-${width}-$attempt.html"
+              rm -rf "$profile" "$file"
+              if timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
+                --user-data-dir="$profile" --window-size="$width,$height" --virtual-time-budget=10000 --dump-dom \
+                "http://127.0.0.1:4173/tests/browser/build38-3-negation-transfer.html?debug=$locale" >"$file" \
+                && grep -q 'data-b383-done="1"' "$file" \
+                && grep -q "data-b383-locale=\"$locale\"" "$file" \
+                && grep -q 'data-b383-family="affirmation-negation-regular-er-je"' "$file" \
+                && grep -q 'data-b383-exercises="3"' "$file" \
+                && grep -q 'data-b383-storage-unchanged="1"' "$file" \
+                && grep -q 'data-b383-no-overflow="1"' "$file" \
+                && ! grep -q 'data-b383-error=' "$file"; then passed=1; break; fi
+            done
+            if [ "$passed" -ne 1 ]; then
+              echo "38.3 tribunal failed for $locale ${width}x${height}" >&2
+              grep -o 'data-b383-[^ >]*="[^"]*"' "$file" >&2 || true
+              grep -o 'data-b383-error="[^"]*"' "$file" >&2 || true
+              exit 1
+            fi
+          done
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-b383-server.pid ]; then kill "$(cat /tmp/ft-b383-server.pid)" || true; fi
