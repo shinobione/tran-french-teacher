@@ -31,10 +31,8 @@ jobs:
           node tests/smoke/build35-memory-evidence-v2-transaction-smoke.js
           node tests/smoke/build35-closeout-smoke.js
 
-      - name: Build 36.1 remains pure and non-wired
+      - name: Build 36.1 contract remains explicit under successor adoption
         run: |
-          ! grep -q 'data-recovery-v3-contract.js' index.html
-          ! grep -q 'data-recovery-v3-contract.js' sw.js
           ! grep -q 'french-tranquille:memory-evidence:v2' src/core/data-recovery-core.js
           grep -q 'const BACKUP_VERSION = 2' src/core/data-recovery-core.js
           grep -q 'const BACKUP_VERSION = 3' src/core/data-recovery-v3-contract.js
@@ -42,11 +40,19 @@ jobs:
           grep -q 'evidence-source-mismatch' src/core/data-recovery-v3-contract.js
           grep -q 'preserveMissingIds' src/core/data-recovery-v3-contract.js
           grep -q 'rebuildDerivedIds' src/core/data-recovery-v3-contract.js
+          if test -f src/core/data-recovery-v3-runtime-core.js && grep -q 'data-recovery-v3-runtime-core.js' index.html; then
+            grep -q 'data-recovery-v3-contract.js?v=2.4.0-b36.2' index.html
+            grep -q 'data-recovery-v3-runtime-core.js?v=2.4.0-b36.2' index.html
+            grep -q 'data-recovery-v3-contract.js' sw.js
+            grep -q 'data-recovery-v3-runtime-core.js' sw.js
+          else
+            ! grep -q 'data-recovery-v3-contract.js' index.html
+            ! grep -q 'data-recovery-v3-contract.js' sw.js
+          fi
 
-      - name: Live Recovery and product writers remain byte-identical
+      - name: Legacy source validators and product writers remain byte-identical
         run: |
           test "$(git hash-object src/core/data-recovery-core.js)" = "10dc84bb71b82c62b5f169f52c6bd95c88b308f9"
-          test "$(git hash-object src/core/data-recovery.js)" = "ef0c1d414133e71076a35c3a8bcc079b94a074a1"
           test "$(git hash-object src/pedagogy/memory-evidence-v2-core.js)" = "b85bea27be07289902df76079a9ace76451c720d"
           test "$(git hash-object src/pedagogy/learning-memory.js)" = "be19abde268a78b8bfd140a0d94e99a4990dda65"
           test "$(git hash-object src/pedagogy/error-intelligence.js)" = "060a7db49b72a58c8a6a6c0055efa484f9d9f604"
