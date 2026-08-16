@@ -9,9 +9,13 @@
 - Reconciled: **2026-08-17**.
 - Repository: `shinobione/tran-french-teacher`.
 - Default branch: `main`.
-- Runtime-bearing `main`: **`cb37b4a6bdd9451a07e83deeae2544a407d78844`** — PR **#184**, Build **37.8 · F13 adjective agreement**.
-- GitHub Pages **#236 / run `31975143562`** on that exact SHA: **SUCCESS**.
-- Post-merge matrix on `cb37b4a6…`: **32 SUCCESS + exactly 4 inherited historical failures**, **0 queued**, **0 in-progress**.
+- Runtime-bearing checkpoint: **`cb37b4a6bdd9451a07e83deeae2544a407d78844`** — PR **#184**, Build **37.8 · F13 adjective agreement**.
+- Runtime Pages **#236 / run `31975143562`** on that exact SHA: **SUCCESS**.
+- Runtime post-merge matrix on `cb37b4a6…`: **32 SUCCESS + exactly 4 inherited historical failures**, **0 queued**, **0 in-progress**.
+- Build 37 closeout PR: **#185 — MERGED**.
+- Build 37 closeout merge: **`56895589fed9922f3beb7d05910b1ec9791a3362`**.
+- Closeout GitHub Pages: **#237 / run `31975848626` — SUCCESS** on `56895589…`.
+- No active Build 37 implementation PR remains.
 - Visible application runtime metadata: **v2.4.0 · Build 36**.
 - Pedagogy baseline: **v2.3.0 · Build 34**.
 - Premium V5.10: **CLOSED / physical FIELD PASS**; issue **#114 CLOSED**.
@@ -19,8 +23,6 @@
 - **Build 36 CLOSED — Memory Evidence v2 derived-shadow adoption.**
 - **Build 37 CLOSED — Foundations Core.**
 - **Build 38 NEXT / UNBLOCKED — Generalization & Transfer.**
-- Current closeout branch: **`docs/build37-closeout`** — documentation/governance only; no runtime change.
-- Current closeout PR: **#185 — Build 37 closeout · handoff to Build 38**.
 
 ## Build 37 closeout — certified chain
 
@@ -178,7 +180,7 @@ The four pre-Build37 failures remain baseline debt unless separately repaired:
 3. `Build 36.3 Recovery v3 durability tribunal`;
 4. `Build 28 Data recovery smoke`.
 
-These same four failures are present on the post-37.8 `main` matrix; there is no new Build 37 failure.
+These same four failures are present on the post-37.8 runtime matrix; there is no new Build 37 failure.
 
 ## Protected boundaries
 
@@ -213,6 +215,17 @@ present → futur proche
 agreement transformations
 recombination across known vocabulary / structures
 ```
+
+Initial audit finding for 38.1:
+
+```text
+strongest current candidate = subject substitution on already-known regular -er verbs
+clean scaffold = F05 + F08 + lessons 32–34
+example family = travailler / habiter with je → tu → il/elle
+irregular aller / vouloir / pouvoir stay excluded
+```
+
+This remains an audit conclusion until the Build 38.1 candidate itself defines and proves its exact contract.
 
 First Build 38 action:
 
