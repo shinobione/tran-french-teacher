@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Build 36.3 Recovery v3 tribunal</title>
+  <style>html,body,iframe{width:100%;height:100%;margin:0;border:0}iframe{display:block}</style>
+</head>
+<body>
+  <iframe id="app" title="French Tranquille Build 36.3 tribunal"></iframe>
+  <script>
+  (() => {
+    'use strict';
+    const root = document.documentElement;
+    const params = new URLSearchParams(location.search);
+    const mode = params.get('mode') || 'adopt';
+    const iframe = document.getElementById('app');
+    const timeoutMs = 30000;
+    const started = performance.now();
+    let injected = false;
+
+    function mirror() {
+      try {
+        const child = iframe.contentDocument?.documentElement;
+        if (!child) return false;
+        [...child.attributes].forEach(attr => {
+          if (attr.name.startsWith('data-b36t-')) root.setAttribute(attr.name,attr.value);
+        });
+        if (child.dataset.b36tDone === '1' || child.dataset.b36tDone === '0') {
+          root.dataset.b36HostDone = child.dataset.b36tDone;
+          root.dataset.b36HostMode = mode;
+          return true;
+        }
+      } catch (error) {
+        root.dataset.b36HostError = String(error?.message || error);
+      }
+      return false;
+    }
+
+    function inject() {
+      if (injected) return;
+      const doc = iframe.contentDocument;
+      if (!doc?.body) return;
+      injected = true;
+      const script = doc.createElement('script');
+      script.src = './tests/smoke/build36-recovery-v3-tribunal-smoke.js?v=2.4.0-b36.3';
+      script.onerror = () => {
+        root.dataset.b36HostDone='0';
+        root.dataset.b36HostError='tribunal-script-load-failed';
+      };
+      doc.body.appendChild(script);
+    }
+
+    iframe.addEventListener('load',() => {
+      inject();
+      const timer = setInterval(() => {
+        if (mirror()) { clearInterval(timer); return; }
+        if (performance.now() - started > timeoutMs) {
+          clearInterval(timer);
+          root.dataset.b36HostDone='0';
+          root.dataset.b36HostError='tribunal-timeout';
+        }
+      },50);
+    });
+
+    iframe.src = `../../?b36RecoveryTribunal=${encodeURIComponent(mode)}`;
+  })();
+  </script>
+</body>
+</html>
