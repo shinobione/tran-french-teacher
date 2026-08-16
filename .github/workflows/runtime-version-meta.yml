@@ -1,0 +1,58 @@
+name: Runtime version metadata
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  runtime-version-meta:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Static ownership contract
+        run: |
+          set -euo pipefail
+          node --check src/core/build32-loader.js
+          grep -q "version:'2.4.0'" src/core/build32-loader.js
+          grep -q "build:'36'" src/core/build32-loader.js
+          grep -q "pedagogyBaseline:Object.freeze({ version:'2.3.0', build:'34' })" src/core/build32-loader.js
+          grep -q "Object.defineProperty(meta, 'version'" src/core/build32-loader.js
+          grep -q "Object.defineProperty(meta, 'build'" src/core/build32-loader.js
+          test -s tests/browser/runtime-version-meta-tribunal.html
+          ! git diff origin/main...HEAD -- app.js voice-ios.js free-voice.js src/pedagogy/foundations-pilot.js src/core/data-recovery.js sw.js index.html | grep -q '^[-+]'
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-runtime-meta-http.log 2>&1 &
+          echo $! >/tmp/ft-runtime-meta-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — runtime version survives Foundations refresh and Settings render
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 45s \
+            google-chrome --headless=new --no-sandbox --disable-gpu \
+            --window-size=520,980 --virtual-time-budget=18000 --dump-dom \
+            'http://127.0.0.1:4173/tests/browser/runtime-version-meta-tribunal.html' \
+            >/tmp/runtime-meta.html
+          grep -q 'data-runtime-meta="ok"' /tmp/runtime-meta.html || {
+            grep -o 'data-runtime-meta-detail="[^"]*"' /tmp/runtime-meta.html || true
+            exit 1
+          }
+          grep -q 'data-runtime-meta-visible="v2.4.0 • Build 36"' /tmp/runtime-meta.html
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-runtime-meta-server.pid ]; then kill "$(cat /tmp/ft-runtime-meta-server.pid)" || true; fi
