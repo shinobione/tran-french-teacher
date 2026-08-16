@@ -76,7 +76,7 @@ assert.deepEqual(chosen.map(x=>[x.source,x.target]),[
 assert(chosen.every(x=>x.durableWrite===false&&x.masteryClaim===false));
 
 // Historical browser tribunal assertions remain intact; only the additive dependency was added.
-assert.match(legacyBrowser,/data-b382-done/);
+assert.match(legacyBrowser,/b382Done/);
 assert.match(legacyBrowser,/generalization-futur-proche-core\.js\?v=2\.4\.0-b38\.5/);
 assert.match(legacyBrowser,/lesson 33 needs exactly one transfer entry/);
 assert.match(legacyBrowser,/lesson 32 must not expose 38\.2 transfer/);
