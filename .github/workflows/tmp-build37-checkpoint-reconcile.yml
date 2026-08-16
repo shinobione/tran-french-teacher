@@ -2,8 +2,8 @@ name: Temporary Build 37.1 checkpoint reconciler
 
 on:
   push:
-    branches: [build37/foundations-core-contract]
-    paths: [.github/workflows/tmp-build37-checkpoint-reconcile.yml]
+    branches:
+      - 'build37/foundations-core-contract'
 
 permissions:
   contents: write
@@ -17,167 +17,13 @@ jobs:
           ref: build37/foundations-core-contract
           fetch-depth: 0
           persist-credentials: true
-
-      - name: Reconcile canonical checkpoint from verified state
-        run: |
-          python3 - <<'PY'
-          import re
-          from pathlib import Path
-
-          state='''# French Trân’quille — CURRENT PROJECT STATE
-
-> **Short volatile handoff. Read this before `MASTER-ROADMAP.md`.**
->
-> Always verify current GitHub / CI reality before acting. Repository reality wins over stale historical wording.
-
-## Last reconciliation
-
-- Reconciled: **2026-08-16**
-- Repository: `shinobione/tran-french-teacher`
-- Default branch: `main`
-- Current deployed `main`: **`bac91ad285b5f1950ed43db67283ceb42ebb3374`** — PR **#172**, runtime metadata maintenance.
-- GitHub Pages **#225 SUCCESS** on that exact SHA.
-- Visible application runtime metadata: **v2.4.0 · Build 36**.
-- Pedagogy baseline: **v2.3.0 · Build 34**.
-- Premium V5.10: **CLOSED / physical FIELD PASS**; issue **#114 CLOSED**.
-- **Build 35 CLOSED — Memory Evidence v2 / Migration Readiness.**
-- **Build 36 CLOSED — Memory Evidence v2 derived-shadow adoption.**
-- **Build 37 ACTIVE — Foundations Core.**
-- Active implementation slice: **37.1 · Foundations Core Contract / Registry**.
-- Active branch: `build37/foundations-core-contract`.
-
-## Current durable data contract — LOCKED
-
-| Area | State |
-|---|---|
-| Curriculum | **52 lessons / 313 items** |
-| Recovery durable stores | **7** |
-| Backup envelope | **v3** |
-| Evidence key | `french-tranquille:memory-evidence:v2` |
-| Evidence role | **derived shadow only** |
-| Product truth | **original six source stores remain canonical** |
-| Product read-path cutover to Evidence | **NONE** |
-| F01–F04 pilot persistence | **NONE / ephemeral only** |
-
-Build 36.3 merged as PR #170 at `f37561f46016918fffc750e69a6e728c27b9144a` and closed the durability/adoption phase. PR #171 then formally opened Build 37. PR #172 only corrected runtime version ownership; it did not reopen Build 36.
-
-## Current main CI debt
-
-Current deployed main `bac91ad…` has **37 push workflow runs, including 5 inherited failures**:
-
-1. `Build 36.2 Evidence shadow adoption`;
-2. `V2.0.0 Freeze tribunal`;
-3. `Build 36.3 Recovery v3 durability tribunal`;
-4. `Build 28 Data recovery smoke`;
-5. stale `.github/workflows/tmp-build36-closeout-reconcile.yml`.
-
-These failures predate Build 37.1 and must not be misclassified as regressions caused by the Foundations candidate. The stale temporary Build 36 reconciler is removed in the 37.1 branch.
-
-## Build 37.1 candidate scope
-
-The first Foundations Core slice is deliberately **contract-only / non-wired**:
-
-```text
-Build 33 F01–F18 audit
-+ Build 34 validated F01–F04 pilot
-+ Build 36 seven-store durability boundary
-→ pure Foundations registry
-→ explicit teach / consolidate / reuse ownership
-→ no runtime wiring
-→ no durable write
-→ no Evidence product read
-```
-
-Candidate files:
-
-- `src/pedagogy/foundations-core.js` — pure F01–F18 registry;
-- `tools/test-build37-foundations-core.cjs` — pure contract test;
-- `.github/workflows/build37-1-foundations-core.yml` — dedicated guard;
-- `docs/BUILD-37-1-FOUNDATIONS-CORE-CONTRACT.md` — slice contract.
-
-`src/pedagogy/foundations-pilot.js` remains byte-identical in 37.1.
-
-## Protected boundaries
-
-Do not silently change:
-
-```text
-app.js
-voice-ios.js
-free-voice.js
-assets/LOGO.png
-assets/Favicon.png
-Recovery v3 seven-store ownership
-Evidence derived-shadow role
-V5.10 field-accepted navigation / visual identities
-```
-
-Recognition failure remains recognition-system evidence, never a pronunciation diagnosis.
-
-## NEXT
-
-```text
-Finish Build 37.1 candidate PR
-→ run/classify its dedicated guard and PR matrix
-→ merge only in a separate control step if it introduces no new regressions
-→ after 37.1 certification, design 37.2 generic capsule engine from the registry
-→ do NOT start learner-facing F05–F18 rollout yet
-→ do NOT use Evidence as product truth without a separate explicit gate
-```
-
-**Build 36 is CLOSED. Do not reopen it without a concrete regression.**
-'''
-          Path('PROJECT-STATE.md').write_text(state,encoding='utf-8')
-
-          roadmap_path=Path('MASTER-ROADMAP.md')
-          roadmap=roadmap_path.read_text(encoding='utf-8')
-          replacement='''# 0. Canonical checkpoint — 2026-08-16
-
-## Current line
-
-| Item | Canonical state |
-|---|---|
-| Application runtime metadata | **V2.4.0 · Build 36** |
-| Product pedagogy baseline | **V2.3.0 · Build 34** |
-| Current deployed main | **`bac91ad285b5f1950ed43db67283ceb42ebb3374`** — PR #172 |
-| Curriculum | **52 lessons / 313 items** |
-| Scenario | **44 situations / 132 turns** |
-| Speaking Loop | **52/52 · max 2 moments / lesson** |
-| Listening | **0.88 normal / 0.65 slow** |
-| Recovery durable stores | **7** |
-| Backup envelope | **v3** |
-| Evidence v2 | **derived shadow only; six source stores remain product truth** |
-| Foundations | **Build 37 ACTIVE · 37.1 contract/registry candidate** |
-| Visual maintenance line | **Premium V5.10 CLOSED · physical FIELD PASS** |
-| Primary target | **iPhone / Safari / installed PWA** |
-| Build 35 | **CLOSED · migration readiness proven** |
-| Build 36 | **CLOSED · seven-store derived-shadow adoption certified** |
-| Build 37 | **ACTIVE · Foundations Core** |
-
-## Current interpretation
-
-- V5.10 is closed after explicit physical FIELD PASS; issue #114 is closed.
-- Build 35 proved deterministic Memory Evidence v2 projection and transactional migration readiness.
-- Build 36 adopted Evidence as a seventh **derived shadow** under Recovery v3 / backup v3, while the original six stores remain canonical product truth.
-- Build 36.3 merged as PR #170 at `f37561f46016918fffc750e69a6e728c27b9144a`; PR #171 formally closed Build 36 and opened Build 37.
-- PR #172 corrected visible application-version ownership to **v2.4.0 · Build 36** without changing pedagogy/storage ownership.
-- Build 37 must industrialize the Build 33 Foundations syllabus without renumbering the 52 lessons, duplicating existing explicit grammar teaching, or treating Evidence as product truth.
-- **37.1 is the smallest safe first slice:** a pure F01–F18 contract/registry, with the current F01–F04 pilot kept byte-identical and no runtime wiring.
-- Current main has inherited historical CI debt; classify baseline failures separately from any new Build 37 regression.
-
----
-'''
-          pattern=r'# 0\. Canonical checkpoint — 2026-08-16.*?(?=\n# 1\.)'
-          updated,count=re.subn(pattern,replacement.rstrip(),roadmap,flags=re.S)
-          assert count==1, f'expected one canonical checkpoint, got {count}'
-          roadmap_path.write_text(updated,encoding='utf-8')
-          PY
-
-      - name: Commit reconciled docs and remove temporary workflow
+      - name: Reconcile docs
+        run: python3 tools/tmp-reconcile-build37-checkpoint.py
+      - name: Commit docs and remove temporary helpers
         run: |
           git config user.name 'French Trân’quille CI'
           git config user.email 'actions@users.noreply.github.com'
-          git rm .github/workflows/tmp-build37-checkpoint-reconcile.yml
+          git rm .github/workflows/tmp-build37-checkpoint-reconcile.yml tools/tmp-reconcile-build37-checkpoint.py
           git add PROJECT-STATE.md MASTER-ROADMAP.md
           git commit -m 'Docs: reconcile Build 37.1 active checkpoint'
           git push origin HEAD:build37/foundations-core-contract
