@@ -2,74 +2,154 @@
 
 > **Short volatile handoff. Read this before `MASTER-ROADMAP.md`.**
 >
-> Always verify current GitHub / CI reality before acting. Repository reality wins over stale historical wording.
+> Always verify current GitHub / CI reality before acting. Repository reality wins over stale wording.
 
-## Last reconciliation
+## Current checkpoint
 
 - Reconciled: **2026-08-17**.
 - Repository: `shinobione/tran-french-teacher`.
 - Default branch: `main`.
+- Current closeout/docs line before Build 38 branch: **`4731dd1c7dba77714739b0fd58784acac3bfbc7a`**.
 - Runtime-bearing checkpoint: **`cb37b4a6bdd9451a07e83deeae2544a407d78844`** — PR **#184**, Build **37.8 · F13 adjective agreement**.
-- Runtime Pages **#236 / run `31975143562`** on that exact SHA: **SUCCESS**.
-- Runtime post-merge matrix on `cb37b4a6…`: **32 SUCCESS + exactly 4 inherited historical failures**, **0 queued**, **0 in-progress**.
-- Build 37 closeout PR: **#185 — MERGED**.
-- Build 37 closeout merge: **`56895589fed9922f3beb7d05910b1ec9791a3362`**.
-- Closeout GitHub Pages: **#237 / run `31975848626` — SUCCESS** on `56895589…`.
-- No active Build 37 implementation PR remains.
+- Runtime Pages: **#236 / `31975143562` SUCCESS**.
+- Build 37 closeout: **PR #185 MERGED** → **`56895589fed9922f3beb7d05910b1ec9791a3362`**.
+- Closeout Pages: **#237 / `31975848626` SUCCESS**.
+- Runtime post-37.8 signature: **32 SUCCESS + exactly 4 inherited historical failures**, 0 queued / 0 in-progress.
 - Visible application runtime metadata: **v2.4.0 · Build 36**.
 - Pedagogy baseline: **v2.3.0 · Build 34**.
+- Curriculum: **52 lessons / 313 items**.
+- Recovery: **7 durable stores / backup v3**.
+- Evidence v2: **derived shadow only; original six stores remain product truth**.
 - Premium V5.10: **CLOSED / physical FIELD PASS**; issue **#114 CLOSED**.
-- **Build 35 CLOSED — Memory Evidence v2 / Migration Readiness.**
-- **Build 36 CLOSED — Memory Evidence v2 derived-shadow adoption.**
-- **Build 37 CLOSED — Foundations Core.**
-- **Build 38 NEXT / UNBLOCKED — Generalization & Transfer.**
+- **Build 35 CLOSED. Build 36 CLOSED. Build 37 CLOSED.**
+- **Build 38 ACTIVE — Generalization & Transfer.**
 
-## Build 37 closeout — certified chain
+## Active slice — Build 38.1
 
-```text
-37.1 registry F01–F18                         ✅ MERGED / CERTIFIED
-37.2 generic pure capsule engine              ✅ MERGED / CERTIFIED
-37.3 F01–F04 pilot adapter parity             ✅ MERGED / CERTIFIED
-37.4 F11 negation narrow expansion            ✅ MERGED / CERTIFIED / DEPLOYED
-37.5 F05 subject-pronoun consolidation        ✅ MERGED / CERTIFIED / DEPLOYED
-37.6 F08 regular -er present consolidation    ✅ MERGED / CERTIFIED / DEPLOYED
-37.7 F12 practical question system            ✅ MERGED / CERTIFIED / DEPLOYED
-37.8 F13 adjective agreement                  ✅ MERGED / CERTIFIED / DEPLOYED
-```
-
-Build 37 satisfied its mandate by industrializing the validated Foundations system and a deliberately selected set of transferable Core concepts. It did **not** require implementing every registry concept merely to complete F01→F18 as a checklist.
-
-## Shared Foundations ownership — LOCKED
-
-Ownership is additive; successors must not overwrite predecessors.
+Branch:
 
 ```text
-37.2 → generic pure capsule engine
-37.3 → shared learner-facing adapter / renderer
-37.4 → F11 negation expansion
-37.5 → F05 subject-pronoun consolidation
-37.6 → F08 regular -er verb-pattern consolidation
-37.7 → F12 practical-question systematization
-37.8 → F13 adjective-agreement consolidation
+build38/subject-substitution
 ```
 
-Runtime metadata:
+Goal:
+
+> Prove one deterministic transfer primitive: change who performs a known regular `-er` action, then reconstruct the whole sentence.
+
+Family:
 
 ```text
-adapter: '37.3'
-expansion: '37.4'
-expansionConcepts: ['F11']
-consolidation: '37.5'
-consolidationConcepts: ['F05']
-verbPattern: '37.6'
-verbPatternConcepts: ['F08']
-systematization: '37.7'
-systematizationConcepts: ['F12']
-agreement: '37.8'
-agreementConcepts: ['F13']
+subject-substitution-regular-er
 ```
 
-Runtime routes:
+Allowed subjects:
+
+```text
+je / tu / il / elle
+```
+
+Allowed verbs:
+
+```text
+travailler
+habiter
+aimer
+```
+
+Explicitly excluded:
+
+```text
+nous / vous / ils / elles
+questions as a separate family
+negation transformation
+futur proche
+agreement transformation
+plural transformation
+aller / vouloir / pouvoir / devoir
+random generation
+new vocabulary
+runtime/PWA wiring
+durable writes
+Evidence product reads
+mastery claims
+```
+
+Current implementation files:
+
+```text
+src/pedagogy/generalization-transfer-core.js
+tools/test-build38-1-subject-substitution.cjs
+tests/browser/build38-1-subject-substitution.html
+.github/workflows/build38-1-subject-substitution.yml
+docs/BUILD-38-1-SUBJECT-SUBSTITUTION.md
+PROJECT-STATE.md
+```
+
+## 38.1 certified code-bearing checkpoint
+
+Code/test head before documentation-only follow-up:
+
+```text
+065d035e1ee7b9b6bfa4e1037136d8fe4862be54
+```
+
+Dedicated workflow:
+
+```text
+Build 38.1 Generalization subject substitution
+run 31976022804
+SUCCESS
+```
+
+That run certifies:
+
+```text
+Node contract PASS
+Build 37.8 predecessor Node PASS
+Build 37.8 F13 browser predecessor PASS
+38.1 VI × 1280×900 PASS
+38.1 FR × 1280×900 PASS
+38.1 VI × 390×844 PASS
+38.1 FR × 390×844 PASS
+6 deterministic transfer exercises
+localStorage byte-identical
+no horizontal overflow
+choice targets >=44 px
+```
+
+The branch is still **pure / non-wired**. Trân does not see 38.1 in the PWA yet.
+
+## Transfer anchors already verified
+
+Build 38.1 is grounded in existing material rather than invented vocabulary:
+
+```text
+F05 → identify who acts
+F08 → regular -er je / tu / il-elle pattern
+lesson 3 → J'habite à Hô Chi Minh-Ville.
+lesson 5 → J'aime…
+lesson 32 → Tu travailles ? / Tu habites où ? / Tu aimes ça ?
+lesson 33 → Il/Elle travaille. / Il/Elle habite ici.
+```
+
+Deterministic candidate transformations include:
+
+```text
+Je travaille.  → Tu travailles.
+Tu travailles. → Elle travaille.
+J'habite ici.  → Tu habites ici.
+Il habite ici. → Elle habite ici.
+J'aime ça.     → Tu aimes ça.
+Tu aimes ça.   → Elle aime ça.
+```
+
+Pedagogical action:
+
+> keep the meaning and verb → change the person → rebuild the sentence.
+
+This is transfer, not another conjugation table.
+
+## Build 37 ownership — LOCKED
 
 ```text
 F01–F04 → lessons 8–13
@@ -80,107 +160,9 @@ F13     → lesson 40 only
 F12     → lessons 41–43
 ```
 
-## Durable data contract — LOCKED
+Build 38 must not overwrite those owners.
 
-| Area | State |
-|---|---|
-| Curriculum | **52 lessons / 313 items** |
-| Recovery durable stores | **7** |
-| Backup envelope | **v3** |
-| Evidence key | `french-tranquille:memory-evidence:v2` |
-| Evidence role | **derived shadow only** |
-| Product truth | **original six source stores remain canonical** |
-| Product read-path cutover to Evidence | **NONE** |
-| Foundations persistence | **NONE / ephemeral only** |
-
-Recognition failure remains recognition-system evidence, never a pronunciation diagnosis.
-
-## Build 37.8 — F13 certified contract
-
-Build 33 / 37.1 classify F13 as **PARTIAL / later core / teach-core**.
-
-Exact anchors:
-
-```text
-lesson 16 → Je suis prête. / Il est français. / Elle est française.
-lesson 38 → feminine written forms already noticed: allée / arrivée / rentrée…
-lesson 40 → Je suis contente. / inquiète. / stressée. / très fatiguée.
-```
-
-Runtime route is deliberately **lesson 40 only**. Lesson 38 is only a prior visual bridge; lesson 39 is administrative and remains outside F13.
-
-Teaching reflex:
-
-```text
-Who does the adjective describe?
-→ when Trân speaks about herself, use the familiar feminine form
-→ common patterns, not a fake universal “just add -e” rule
-```
-
-Known examples:
-
-```text
-prêt → prête
-content → contente
-fatigué → fatiguée
-stressé → stressée
-français → française
-inquiet → inquiète
-```
-
-Critical boundary: 37.8 does **not** merge adjective agreement with passé-composé / past-participle agreement. Lesson 38 is context only.
-
-Dedicated 37.8 tribunal certified:
-
-```text
-F01–F04 → F11 → F08 → F05 → F12 → F13
-VI / DEBUG FR × desktop / 390×844
-39 ≠ F13
-40 = F13
-41 = F12
-32 = F08
-34 = F05
-localStorage byte-identical
-no Evidence product read
-no horizontal overflow
-touch target ≥44 px
-```
-
-## Build 37 closeout decision — F16 intentionally deferred
-
-F16 is **not marked complete** and is **not required for Build 37 closeout**.
-
-Its cleanest current anchor remains:
-
-```text
-lesson 45 → à la tête ↔ au ventre
-```
-
-But a broad `à / au / à la / aux / de / du / de la / des` capsule would currently mix multiple meanings already encountered through articles/partitives, while the curriculum does not expose an equally clean `aux` scaffold.
-
-Canonical decision:
-
-- do **not** implement F16 merely to complete a registry checklist;
-- keep F16 available for a later pedagogy slice if future curriculum/evidence gives it a clean transferable need;
-- Build 38 begins from the already certified Foundations owners above.
-
-## Historical harness hardening retained
-
-PR #184 also left two useful CI reliability fixes without weakening assertions:
-
-- Build 26.4 / Details scroll flake classified by strict unchanged reruns; no product patch.
-- Real Life III Chrome commands are bounded/retryable with the same URLs, virtual-time budgets and assertions; no Real Life product source changed.
-
-## Current inherited CI debt
-
-The four pre-Build37 failures remain baseline debt unless separately repaired:
-
-1. `Build 36.2 Evidence shadow adoption`;
-2. `V2.0.0 Freeze tribunal`;
-3. `Build 36.3 Recovery v3 durability tribunal`;
-4. `Build 28 Data recovery smoke`.
-
-These same four failures are present on the post-37.8 runtime matrix; there is no new Build 37 failure.
+F16 remains **deferred / not completed**; Build 37 does not reopen merely to complete an F01→F18 checklist.
 
 ## Protected boundaries
 
@@ -192,54 +174,36 @@ voice-ios.js
 free-voice.js
 assets/LOGO.png
 assets/Favicon.png
-manifest / SW PWA identity contract from PR #180
+index.html / sw.js / manifest during pure 38.1
 Recovery v3 seven-store ownership
 Evidence derived-shadow role
 52 / 313 curriculum semantics
 Listening / Scenario / Mastery / Learner Intelligence owners
 V5.10 field-accepted navigation / visual identities
-Build 37 Foundations ownership/routes above
+Build 37 Foundations ownership/routes
 ```
 
-## NEXT — Build 38 · Generalization & Transfer
+## Inherited CI debt
 
-Build 38 owns **construction of unseen phrases**, not another round of Foundation-card accumulation.
+Exactly four historical failures remain baseline debt unless separately repaired:
 
-Canonical transfer families from `MASTER-ROADMAP.md`:
+1. `Build 36.2 Evidence shadow adoption`;
+2. `V2.0.0 Freeze tribunal`;
+3. `Build 36.3 Recovery v3 durability tribunal`;
+4. `Build 28 Data recovery smoke`.
+
+Do not classify a new 38.1 failure as baseline merely because these exist.
+
+## NEXT
 
 ```text
-singular → plural
-subject substitution
-affirmation → negation
-present → futur proche
-agreement transformations
-recombination across known vocabulary / structures
+→ verify latest 38.1 branch head / dedicated run
+→ inspect final diff against main
+→ open ONE candidate PR for 38.1
+→ require the dedicated 38.1 tribunal green
+→ let full PR matrix classify any new red against the four historical failures
+→ do not wire 38.1 into the PWA inside this slice
+→ do not start 38.2 or Build 39 inside the candidate PR
 ```
 
-Initial audit finding for 38.1:
-
-```text
-strongest current candidate = subject substitution on already-known regular -er verbs
-clean scaffold = F05 + F08 + lessons 32–34
-example family = travailler / habiter with je → tu → il/elle
-irregular aller / vouloir / pouvoir stay excluded
-```
-
-This remains an audit conclusion until the Build 38.1 candidate itself defines and proves its exact contract.
-
-First Build 38 action:
-
-```text
-→ audit the existing 52 lessons / 313 items for clean transfer pairs
-→ choose ONE narrow transformation family for 38.1
-→ define deterministic source/target generation using only already-known vocabulary/structures
-→ keep Foundations owners unchanged
-→ keep learner stores byte-identical unless a later Build 38 slice explicitly earns persistence
-→ add a real VI/DEBUG FR desktop+iPhone tribunal
-→ materialize one candidate PR, then stop for control review
-```
-
-Do **not** start Build 39 inside Build 38.
-Do **not** reopen Build 37 merely because a registry concept remains unimplemented.
-
-**Build 37 is CLOSED. Build 38 is NEXT / UNBLOCKED.**
+If 38.1 is accepted, the likely next slice is **38.2 learner-facing integration** using this certified core with no new permanent navigation tab.
