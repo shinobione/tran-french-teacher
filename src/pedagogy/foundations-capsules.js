@@ -100,6 +100,26 @@
     optional:true,persistence:'ephemeral-only',masteryClaim:false
   };
 
+  const ADJECTIVE_AGREEMENT_RAW = {
+    id:'adjective-agreement-core',concepts:['F13'],
+    title:{vi:'Tính từ nói về Trân — dạng nữ',fr:'L’adjectif avec Trân — forme féminine'},
+    intro:[
+      {vi:'Bạn đã dùng “je suis + tính từ” để nói mình sẵn sàng, vui, lo hoặc mệt. Bây giờ ta nhìn vào hình thức của tính từ khi nó mô tả Trân.',fr:'Tu utilises déjà « je suis + adjectif » pour dire que tu es prête, contente, inquiète ou fatiguée. On regarde maintenant la forme de l’adjectif quand il décrit Trân.'},
+      {vi:'Trong tiếng Pháp, tính từ thường hòa hợp với người hoặc vật mà nó mô tả. Khi Trân nói về chính mình, ta dùng dạng nữ: prête, contente, fatiguée, stressée.',fr:'En français, l’adjectif s’accorde souvent avec la personne ou la chose qu’il décrit. Quand Trân parle d’elle-même, on utilise la forme féminine : prête, contente, fatiguée, stressée.'},
+      {vi:'Không có một mẹo duy nhất cho mọi tính từ. Nhiều từ thêm -e; -é thường thành -ée; nhưng một số từ đổi nhiều hơn: français → française, inquiet → inquiète. Khi nói, có cặp nghe khác nhau và có cặp nghe giống nhau.',fr:'Il n’existe pas une seule astuce pour tous les adjectifs. Beaucoup ajoutent -e ; -é devient souvent -ée ; mais certaines formes changent davantage : français → française, inquiet → inquiète. À l’oral, certaines paires s’entendent différemment et d’autres non.'}
+    ],
+    examples:['Je suis prête.','Je suis contente.','Je suis très fatiguée.','Je suis stressée.','Elle est française.'],
+    checks:[
+      {id:'adj-prete',prompt:{vi:'Trân nói “Tôi sẵn sàng”: Je suis ___ .',fr:'Trân dit « Je suis prête » : choisis la bonne forme.'},choices:['prête','prêt','prêtes'],answer:'prête',feedback:{vi:'Tính từ mô tả Trân: Je suis prête.',fr:'L’adjectif décrit Trân : Je suis prête.'}},
+      {id:'adj-contente',prompt:{vi:'Trân nói mình vui: Je suis ___ .',fr:'Trân dit qu’elle est contente : Je suis ___ .'},choices:['contente','content','contents'],answer:'contente',feedback:{vi:'Với Trân: contente — Je suis contente.',fr:'Avec Trân : contente — Je suis contente.'}},
+      {id:'adj-fatiguee',prompt:{vi:'Trân nói mình rất mệt: Je suis très ___ .',fr:'Trân dit qu’elle est très fatiguée : Je suis très ___ .'},choices:['fatiguée','fatigué','fatigués'],answer:'fatiguée',feedback:{vi:'fatigué → fatiguée trong dạng nữ viết: Je suis très fatiguée.',fr:'fatigué → fatiguée à la forme féminine écrite : Je suis très fatiguée.'}},
+      {id:'adj-francaise',prompt:{vi:'Bạn nói về một phụ nữ Pháp: Elle est ___ .',fr:'Tu parles d’une femme française : Elle est ___ .'},choices:['française','français','françaises'],answer:'française',feedback:{vi:'français → française: Elle est française.',fr:'français → française : Elle est française.'}},
+      {id:'adj-inquiete',prompt:{vi:'Trân nói mình lo lắng. Câu nào đúng?',fr:'Trân dit qu’elle est inquiète. Quelle phrase est correcte ?'},choices:['Je suis inquiète.','Je suis inquiet.','Je suis inquiètes.'],answer:'Je suis inquiète.',feedback:{vi:'Dạng đã học là: Je suis inquiète. Đây là ví dụ cho thấy không phải lúc nào chỉ thêm một chữ -e đơn giản.',fr:'La forme déjà apprise est : Je suis inquiète. Cet exemple montre qu’on ne peut pas toujours appliquer mécaniquement « ajoute -e ».'}}
+    ],
+    conclusion:{vi:'Phản xạ cần giữ: trước tiên hỏi “tính từ đang mô tả ai?”. Khi Trân nói về mình, chọn dạng nữ đã học: prête, contente, fatiguée, inquiète… Nhiều mẫu có -e hoặc -ée, nhưng không có một quy tắc duy nhất cho mọi từ. Hãy học những tính từ thường dùng cùng với dạng của chúng. Một mini-check đúng chưa có nghĩa là đã “thành thạo”.',fr:'Le réflexe : demande-toi d’abord « l’adjectif décrit qui ? ». Quand Trân parle d’elle-même, choisis la forme féminine déjà apprise : prête, contente, fatiguée, inquiète… Beaucoup de formes utilisent -e ou -ée, mais il n’existe pas une règle unique pour tous les mots. Apprends les adjectifs fréquents avec leurs formes. Un mini-check réussi ne signifie pas que la règle est « maîtrisée ».'},
+    optional:true,persistence:'ephemeral-only',masteryClaim:false
+  };
+
   const engine = typeof module === 'object' && module.exports
     ? require('./foundations-capsule-engine.js')
     : window.FrenchTranquilleFoundationsCapsuleEngine;
@@ -110,7 +130,8 @@
     F11:engine.compile(NEGATION_RAW),
     F05:engine.compile(SUBJECT_PRONOUNS_RAW),
     F08:engine.compile(REGULAR_ER_RAW),
-    F12:engine.compile(QUESTIONS_RAW)
+    F12:engine.compile(QUESTIONS_RAW),
+    F13:engine.compile(ADJECTIVE_AGREEMENT_RAW)
   });
 
   if (typeof module === 'object' && module.exports) module.exports = CAPSULES;

@@ -120,9 +120,9 @@
         setLesson(43);
         ok(document.querySelector('[data-foundation-entry]')?.dataset.foundationCapsule==='F12','lesson 43 must remain F12');
         setLesson(44);
-        ok(!document.querySelector('[data-foundation-entry]'),'lesson 44 must not expose F12');
+        ok(document.querySelector('[data-foundation-entry]')?.dataset.foundationCapsule!=='F12','lesson 44 must not be owned by F12');
         setLesson(40);
-        ok(!document.querySelector('[data-foundation-entry]'),'lesson 40 must not expose F12');
+        ok(document.querySelector('[data-foundation-entry]')?.dataset.foundationCapsule!=='F12','lesson 40 must not be owned by F12');
         setLesson(32);
         ok(document.querySelector('[data-foundation-entry]')?.dataset.foundationCapsule==='F08','lesson 32 must remain owned by F08');
         click('[data-foundation-open]');
