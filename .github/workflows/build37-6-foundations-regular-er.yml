@@ -33,7 +33,7 @@ jobs:
           node tools/test-build37-5-foundations-subject-pronouns.cjs
           node tools/test-build37-6-foundations-regular-er.cjs
 
-      - name: F08 stays a narrow optional written-pattern consolidation
+      - name: F08 stays a narrow optional written-pattern consolidation while successors remain additive
         run: |
           set -euo pipefail
           grep -q "id:'regular-er-present-core',concepts:\['F08'\]" src/pedagogy/foundations-capsules.js
@@ -50,9 +50,6 @@ jobs:
           ! grep -q 'localStorage.setItem' src/pedagogy/foundations-pilot.js
           ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/foundations-capsules.js
           ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/foundations-pilot.js
-          ! grep -q "concepts:\['F12'\]" src/pedagogy/foundations-capsules.js
-          ! grep -q "concepts:\['F13'\]" src/pedagogy/foundations-capsules.js
-          ! grep -q "concepts:\['F16'\]" src/pedagogy/foundations-capsules.js
 
       - name: Product, storage, voice, curriculum and PWA owners stay untouched
         run: |
