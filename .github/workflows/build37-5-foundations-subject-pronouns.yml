@@ -1,18 +1,18 @@
-name: Build 37.4 Foundations F11 negation
+name: Build 37.5 Foundations F05 subject pronouns
 
 on:
   pull_request:
     branches: [main]
   push:
-    branches: [build37/f11-negation-capsule]
+    branches: [build37/f05-subject-pronouns]
 
 permissions:
   contents: read
 
 jobs:
-  foundations-f11-negation:
+  foundations-f05-subject-pronouns:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 14
     steps:
       - uses: actions/checkout@v4
         with:
@@ -21,43 +21,34 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Syntax + generic engine + predecessor parity + F11 contract
+      - name: Syntax + predecessor parity + F05 contract
         run: |
           set -euo pipefail
           node --check src/pedagogy/foundations-capsule-engine.js
           node --check src/pedagogy/foundations-capsules.js
           node --check src/pedagogy/foundations-pilot.js
-          node --check tools/test-build37-4-foundations-negation.cjs
+          node --check tools/test-build37-5-foundations-subject-pronouns.cjs
           node tools/test-build37-2-foundations-capsule-engine.cjs
           node tools/test-build37-4-foundations-negation.cjs
-          if grep -q "consolidation:'37.5'" src/pedagogy/foundations-pilot.js; then
-            node tools/test-build37-5-foundations-subject-pronouns.cjs
-          fi
+          node tools/test-build37-5-foundations-subject-pronouns.cjs
 
-      - name: F11 stays narrow while certified successors may add separate concepts
+      - name: F05 stays a narrow optional consolidation
         run: |
           set -euo pipefail
-          grep -q "concepts:\['F11'\]" src/pedagogy/foundations-capsules.js
+          grep -q "concepts:\['F05'\]" src/pedagogy/foundations-capsules.js
+          grep -q "id:'F05',capsule:subjectPronounsCapsule,min:34,max:36" src/pedagogy/foundations-pilot.js
           grep -q "id:'F11',capsule:negationCapsule,min:17,max:20" src/pedagogy/foundations-pilot.js
+          grep -q "id:'F01_F04',capsule:primaryCapsule,min:8,max:13" src/pedagogy/foundations-pilot.js
+          grep -q "adapter:'37.3'" src/pedagogy/foundations-pilot.js
           grep -q "expansion:'37.4'" src/pedagogy/foundations-pilot.js
           grep -q "expansionConcepts:\['F11'\]" src/pedagogy/foundations-pilot.js
-          grep -q "adapter:'37.3'" src/pedagogy/foundations-pilot.js
-          grep -q 'FrenchTranquilleFoundationsCapsules?.F01_F04' src/pedagogy/foundations-pilot.js
-          grep -q 'FrenchTranquilleFoundationsCapsules?.F11' src/pedagogy/foundations-pilot.js
+          grep -q "consolidation:'37.5'" src/pedagogy/foundations-pilot.js
+          grep -q "consolidationConcepts:\['F05'\]" src/pedagogy/foundations-pilot.js
           ! grep -q 'localStorage.setItem' src/pedagogy/foundations-capsules.js
           ! grep -q 'localStorage.setItem' src/pedagogy/foundations-pilot.js
           ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/foundations-capsules.js
           ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/foundations-pilot.js
           ! grep -q 'F12' src/pedagogy/foundations-capsules.js
-          if grep -q "consolidation:'37.5'" src/pedagogy/foundations-pilot.js; then
-            grep -q "concepts:\['F05'\]" src/pedagogy/foundations-capsules.js
-            grep -q "id:'F05',capsule:subjectPronounsCapsule,min:34,max:36" src/pedagogy/foundations-pilot.js
-            grep -q "consolidationConcepts:\['F05'\]" src/pedagogy/foundations-pilot.js
-            test -f tests/browser/build37-5-foundations-subject-pronouns.html
-            test -f .github/workflows/build37-5-foundations-subject-pronouns.yml
-          else
-            ! grep -q 'F05' src/pedagogy/foundations-capsules.js
-          fi
 
       - name: Product, storage, voice, curriculum and PWA owners stay untouched
         run: |
@@ -66,40 +57,24 @@ jobs:
           changed="$(git diff --name-only origin/main...HEAD)"
           forbidden='^(app\.js|voice-ios\.js|free-voice\.js|index\.html|sw\.js|src/core/build32-loader\.js|src/core/data-recovery|src/core/memory-evidence-v2-runtime\.js|src/pedagogy/memory-evidence-v2-core\.js|src/pedagogy/foundations-core\.js|src/pedagogy/curriculum-stage[234]\.js|src/pedagogy/learning-memory\.js|src/pedagogy/error-intelligence\.js|src/pedagogy/listening-engine\.js|src/pedagogy/scenario-engine\.js|src/pedagogy/mastery-engine\.js|src/pedagogy/learner-intelligence.*\.js|assets/LOGO\.png|assets/Favicon\.png)$'
           if printf '%s\n' "$changed" | grep -E "$forbidden"; then
-            echo 'Build 37 Foundations successors must stay inside the Foundations capsule/renderer lane' >&2
+            echo 'Build 37.5 must stay inside the Foundations capsule/renderer/test lane' >&2
             exit 1
           fi
 
       - name: Start static server
         run: |
-          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-b374-http.log 2>&1 &
-          echo $! >/tmp/ft-b374-server.pid
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-b375-http.log 2>&1 &
+          echo $! >/tmp/ft-b375-server.pid
           sleep 1
           google-chrome --version
 
-      - name: Chrome — real app keeps the 37.4 expansion owner on the 37.3 adapter
-        run: |
-          set -euo pipefail
-          profile=/tmp/ft-b374-app
-          file=/tmp/b374-real-app.html
-          rm -rf "$profile" "$file"
-          timeout --signal=TERM --kill-after=5s 70s google-chrome --headless=new --no-sandbox --disable-gpu \
-            --user-data-dir="$profile" --window-size=1280,900 --virtual-time-budget=22000 --dump-dom \
-            'http://127.0.0.1:4173/?debug=fr' >"$file"
-          grep -q 'data-build32-ready="1"' "$file"
-          grep -q 'data-foundations-adapter="37.3"' "$file"
-          grep -q 'data-foundations-expansion="37.4"' "$file"
-          grep -q 'data-foundations-capsule-engine' "$file"
-          grep -q 'data-foundations-capsules' "$file"
-          grep -q 'data-foundations-pilot' "$file"
-
-      - name: Chrome — F01-F04 predecessor remains visually exact
+      - name: Chrome — F01-F04 predecessor remains exact
         run: |
           set -euo pipefail
           passed=0
           for attempt in 1 2; do
-            profile="/tmp/ft-b374-predecessor-$attempt"
-            file="/tmp/b374-predecessor-$attempt.html"
+            profile="/tmp/ft-b375-f0104-$attempt"
+            file="/tmp/b375-f0104-$attempt.html"
             rm -rf "$profile" "$file"
             if timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
               --user-data-dir="$profile" --window-size=1280,900 --virtual-time-budget=9000 --dump-dom \
@@ -111,29 +86,49 @@ jobs:
           done
           test "$passed" -eq 1
 
-      - name: Chrome — F11 VI/FR desktop + iPhone parity
+      - name: Chrome — F11 predecessor remains exact
         run: |
           set -euo pipefail
-          for spec in 'vi 1280 900' 'fr 1280 900' 'vi 390 844' 'fr 390 844'; do
+          for spec in 'vi 1280 900' 'fr 390 844'; do
             set -- $spec; locale="$1"; width="$2"; height="$3"; passed=0
             for attempt in 1 2; do
-              profile="/tmp/ft-b374-${locale}-${width}-$attempt"
-              file="/tmp/b374-${locale}-${width}-$attempt.html"
+              profile="/tmp/ft-b375-f11-${locale}-${width}-$attempt"
+              file="/tmp/b375-f11-${locale}-${width}-$attempt.html"
               rm -rf "$profile" "$file"
               if timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
                 --user-data-dir="$profile" --window-size="$width,$height" --virtual-time-budget=9000 --dump-dom \
                 "http://127.0.0.1:4173/tests/browser/build37-4-foundations-negation.html?debug=$locale" >"$file" \
                 && grep -q 'data-b374-done="1"' "$file" \
-                && grep -q "data-b374-locale=\"$locale\"" "$file" \
                 && grep -q 'data-b374-f11="1"' "$file" \
                 && grep -q 'data-b374-storage-unchanged="1"' "$file" \
-                && grep -q 'data-b374-no-overflow="1"' "$file" \
                 && ! grep -q 'data-b374-error=' "$file"; then passed=1; break; fi
             done
-            if [ "$passed" -ne 1 ]; then echo "F11 tribunal failed for $locale ${width}x${height}" >&2; exit 1; fi
+            test "$passed" -eq 1
+          done
+
+      - name: Chrome — F05 VI/FR desktop + iPhone parity
+        run: |
+          set -euo pipefail
+          for spec in 'vi 1280 900' 'fr 1280 900' 'vi 390 844' 'fr 390 844'; do
+            set -- $spec; locale="$1"; width="$2"; height="$3"; passed=0
+            for attempt in 1 2; do
+              profile="/tmp/ft-b375-${locale}-${width}-$attempt"
+              file="/tmp/b375-${locale}-${width}-$attempt.html"
+              rm -rf "$profile" "$file"
+              if timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
+                --user-data-dir="$profile" --window-size="$width,$height" --virtual-time-budget=9000 --dump-dom \
+                "http://127.0.0.1:4173/tests/browser/build37-5-foundations-subject-pronouns.html?debug=$locale" >"$file" \
+                && grep -q 'data-b375-done="1"' "$file" \
+                && grep -q "data-b375-locale=\"$locale\"" "$file" \
+                && grep -q 'data-b375-f05="1"' "$file" \
+                && grep -q 'data-b375-storage-unchanged="1"' "$file" \
+                && grep -q 'data-b375-no-overflow="1"' "$file" \
+                && ! grep -q 'data-b375-error=' "$file"; then passed=1; break; fi
+            done
+            if [ "$passed" -ne 1 ]; then echo "F05 tribunal failed for $locale ${width}x${height}" >&2; exit 1; fi
           done
 
       - name: Stop static server
         if: always()
         run: |
-          if [ -f /tmp/ft-b374-server.pid ]; then kill "$(cat /tmp/ft-b374-server.pid)" || true; fi
+          if [ -f /tmp/ft-b375-server.pid ]; then kill "$(cat /tmp/ft-b375-server.pid)" || true; fi

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Build 37.5 F05 subject pronouns tribunal</title>
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#07111e;color:#eef5ff;font-family:system-ui,-apple-system,sans-serif}button{font:inherit;color:inherit;background:#20314a;border:1px solid #5f7595;border-radius:12px;padding:8px 12px}.primary{background:#315d74}.secondary{background:#253852}.muted{color:#9fb0c5}.screen-lesson{width:min(760px,calc(100% - 24px));margin:20px auto}.topbar{padding:10px 2px}.topbar h1{font-size:1.25rem}.lesson-step{padding:18px;border:1px solid #23364d;border-radius:20px;background:#0d1928}
+  </style>
+  <script>
+    (()=>{
+      const debug=new URLSearchParams(location.search).get('debug')==='fr';
+      localStorage.clear();
+      localStorage.setItem('tran-french-teacher:debug-fr:v1',debug?'1':'0');
+      localStorage.setItem('b37.5:sentinel','unchanged');
+      window.__b375Debug=debug;
+      window.__b375StorageBefore=JSON.stringify(Object.keys(localStorage).sort().map(k=>[k,localStorage.getItem(k)]));
+    })();
+  </script>
+</head>
+<body>
+  <main id="app">
+    <section class="screen-lesson">
+      <div class="topbar"><h1>Bài 34 — Nous — nói “chúng ta”</h1></div>
+      <div class="lesson-step"><p data-existing-lesson>Existing lesson content</p></div>
+    </section>
+  </main>
+  <script src="../../src/pedagogy/foundations-capsule-engine.js?v=2.4.0-b37.3"></script>
+  <script src="../../src/pedagogy/foundations-capsules.js?v=2.4.0-b37.5"></script>
+  <script src="../../src/pedagogy/foundations-pilot.js?v=2.4.0-b37.5"></script>
+  <script>
+    (()=>{
+      const root=document.documentElement;
+      const fail=message=>{root.dataset.b375Error=message;throw new Error(message)};
+      const ok=(value,message)=>{if(!value)fail(message)};
+      const text=selector=>document.querySelector(selector)?.textContent?.trim()||'';
+      const texts=selector=>[...document.querySelectorAll(selector)].map(node=>node.textContent.trim());
+      const click=selector=>{const node=document.querySelector(selector);ok(node,`missing ${selector}`);node.click();return node};
+      const clickChoice=choice=>{const node=[...document.querySelectorAll('[data-foundation-choice]')].find(button=>button.textContent.trim()===choice);ok(node,`missing choice ${choice}`);node.click();return node};
+      const expected=window.__b375Debug?{
+        title:'Qui fait l’action ? je • tu • il/elle • nous • vous',
+        entry:'Environ 5 minutes pour relier les pronoms déjà rencontrés et repérer immédiatement « qui fait l’action ? ». Pas de tableau de conjugaison.',
+        intro:'Tu as déjà rencontré ces petits mots dans beaucoup de phrases. Ils indiquent qui fait l’action ou qui est dans un état.',
+        prompts:['Trân parle d’elle-même : ___ suis prête.','Trân parle directement à Jerry : ___ veux manger ?','Tu parles d’une femme : ___ travaille.','Trân et Jerry ont le temps : ___ avons le temps.','Tu demandes poliment à une personne inconnue : ___ pouvez m’aider ?'],
+        conclusion:'Le réflexe : demande-toi d’abord « qui ? » — moi = je, un proche = tu, une autre personne = il/elle, mon groupe = nous, politesse ou plusieurs personnes = vous. « On » est très important à l’oral, mais Tyffany le reconnectera séparément au bon moment. Un mini-check réussi ne signifie pas que la règle est « maîtrisée ».'
+      }:{
+        title:'Ai làm hành động? je • tu • il/elle • nous • vous',
+        entry:'Khoảng 5 phút để nối những đại từ bạn đã gặp và nhìn ngay “ai làm hành động?”. Không cần học bảng chia động từ.',
+        intro:'Bạn đã gặp các từ nhỏ này trong nhiều câu. Chúng cho biết ai đang làm hành động hoặc ai đang ở trong một trạng thái.',
+        prompts:['Trân nói về chính mình: ___ suis prête.','Trân nói trực tiếp với Jerry: ___ veux manger ?','Bạn nói về một phụ nữ: ___ travaille.','Trân và Jerry có thời gian: ___ avons le temps.','Bạn hỏi lịch sự một người lạ: ___ pouvez m’aider ?'],
+        conclusion:'Phản xạ cần giữ: trước tiên xác định “ai?” — tôi = je, người thân = tu, người khác = il/elle, nhóm có mình = nous, lịch sự hoặc nhiều người = vous. “On” rất quan trọng trong lời nói tự nhiên nhưng Tyffany sẽ nối nó riêng khi bạn đến phần đó. Một mini-check đúng chưa có nghĩa là đã “thành thạo”.'
+      };
+      const nextFrame=()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+      (async()=>{
+        await nextFrame();
+        ok(window.FrenchTranquilleFoundationsCapsules?.F05?.concepts?.join(',')==='F05','F05 capsule missing');
+        ok(window.FrenchTranquilleFoundationsPilot?.adapter==='37.3','37.3 adapter must remain owner');
+        ok(window.FrenchTranquilleFoundationsPilot?.expansion==='37.4','F11 37.4 expansion ownership changed');
+        ok(window.FrenchTranquilleFoundationsPilot?.consolidation==='37.5','37.5 consolidation marker missing');
+        ok(window.FrenchTranquilleFoundationsPilot?.persistent===false,'Foundations must remain ephemeral');
+        ok(root.dataset.foundationsExpansion==='37.4','root F11 expansion marker changed');
+        ok(root.dataset.foundationsConsolidation==='37.5','root F05 consolidation marker missing');
+        ok(document.querySelectorAll('[data-foundation-entry]').length===1,'F05 entry count must be 1');
+        ok(document.querySelector('[data-foundation-entry]')?.dataset.foundationCapsule==='F05','wrong lesson/capsule routing');
+        ok(text('.ft-foundation-entry h3')==='je • tu • il/elle • nous • vous','entry title mismatch');
+        ok(text('.ft-foundation-entry p')===expected.entry,'entry copy mismatch');
+        click('[data-foundation-open]');
+        ok(document.querySelector('.ft-foundation-dialog')?.dataset.foundationActiveCapsule==='F05','F05 dialog ownership missing');
+        ok(text('.ft-foundation-top .ft-foundation-eyebrow')==='F05 • CONSOLIDATION','F05 label mismatch');
+        ok(text('.ft-foundation-top h2')===expected.title,'F05 title mismatch');
+        ok(text('.ft-foundation-copy strong')===expected.intro,'F05 intro mismatch');
+        ok(JSON.stringify(texts('.ft-foundation-examples b'))===JSON.stringify(['Je suis prête.','Tu veux manger ?','Elle travaille.','Nous avons le temps.','Vous pouvez m’aider ?']),'F05 examples mismatch');
+        click('[data-foundation-next]');
+        const choices=[['Je','Tu','Elle'],['Tu','Il','Nous'],['Il','Elle','Vous'],['Nous','Vous','Ils'],['Tu','Vous','Elle']];
+        const answers=['Je','Tu','Elle','Nous','Vous'];
+        for(let index=0;index<answers.length;index+=1){
+          ok(text('.ft-foundation-q h3')===expected.prompts[index],`question ${index+1} prompt mismatch`);
+          ok(JSON.stringify(texts('[data-foundation-choice]'))===JSON.stringify(choices[index]),`question ${index+1} choices mismatch`);
+          clickChoice(answers[index]);
+          const correct=[...document.querySelectorAll('[data-foundation-choice]')].find(button=>button.textContent.trim()===answers[index]);
+          ok(correct?.classList.contains('ok'),`question ${index+1} correct marking missing`);
+          click('[data-foundation-next]');
+        }
+        ok(text('.ft-foundation-done p')===expected.conclusion,'F05 conclusion mismatch');
+        click('.ft-foundation-done [data-foundation-close]');
+        ok(!document.querySelector('.ft-foundation-overlay'),'overlay must close');
+        ok(document.activeElement?.matches('[data-foundation-open]'),'focus must return to F05 entry CTA');
+        ok(document.querySelector('[data-existing-lesson]'),'lesson content must survive round trip');
+        ok(JSON.stringify(Object.keys(localStorage).sort().map(k=>[k,localStorage.getItem(k)]))===window.__b375StorageBefore,'localStorage changed during F05 capsule');
+        ok(document.documentElement.scrollWidth<=innerWidth+1,'horizontal overflow detected');
+        ok(document.querySelector('[data-foundation-open]').getBoundingClientRect().height>=44,'entry target below 44px');
+        root.dataset.b375Done='1';root.dataset.b375Locale=window.__b375Debug?'fr':'vi';root.dataset.b375F05='1';root.dataset.b375StorageUnchanged='1';root.dataset.b375NoOverflow='1';
+      })().catch(error=>{root.dataset.b375Error=error.message;console.error(error)});
+    })();
+  </script>
+</body>
+</html>

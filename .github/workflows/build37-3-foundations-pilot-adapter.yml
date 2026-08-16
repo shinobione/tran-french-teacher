@@ -71,17 +71,42 @@ jobs:
             src/pedagogy/learner-intelligence-v2.js \
             assets/LOGO.png assets/Favicon.png
 
-      - name: Pilot is engine-driven, still ephemeral, and F01-F04 only
+      - name: Pilot remains 37.3-owned and ephemeral; certified successors are explicit
         run: |
           set -euo pipefail
-          grep -q 'FrenchTranquilleFoundationsCapsuleEngine' src/pedagogy/foundations-pilot.js
-          grep -q 'FrenchTranquilleFoundationsCapsules' src/pedagogy/foundations-pilot.js
-          grep -q "adapter:'37.3'" src/pedagogy/foundations-pilot.js
-          ! grep -q 'const questions=' src/pedagogy/foundations-pilot.js
-          ! grep -q 'localStorage.setItem' src/pedagogy/foundations-pilot.js
-          ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/foundations-pilot.js
-          ! grep -q 'F05' src/pedagogy/foundations-pilot.js
-          ! grep -q 'F05' src/pedagogy/foundations-capsules.js
+          pilot='src/pedagogy/foundations-pilot.js'
+          capsules='src/pedagogy/foundations-capsules.js'
+          grep -q 'FrenchTranquilleFoundationsCapsuleEngine' "$pilot"
+          grep -q 'FrenchTranquilleFoundationsCapsules' "$pilot"
+          grep -q "adapter:'37.3'" "$pilot"
+          grep -q "concepts:\['F01','F02','F03','F04'\]" "$pilot"
+          grep -q "id:'F01_F04',capsule:primaryCapsule,min:8,max:13" "$pilot"
+          ! grep -q 'const questions=' "$pilot"
+          ! grep -q 'localStorage.setItem' "$pilot"
+          ! grep -q 'french-tranquille:memory-evidence:v2' "$pilot"
+
+          if grep -q "consolidation:'37.5'" "$pilot"; then
+            grep -q "expansion:'37.4'" "$pilot"
+            grep -q "expansionConcepts:\['F11'\]" "$pilot"
+            grep -q "id:'F11',capsule:negationCapsule,min:17,max:20" "$pilot"
+            grep -q "consolidationConcepts:\['F05'\]" "$pilot"
+            grep -q "id:'F05',capsule:subjectPronounsCapsule,min:34,max:36" "$pilot"
+            grep -q "concepts:\['F05'\]" "$capsules"
+            test -f tools/test-build37-5-foundations-subject-pronouns.cjs
+            test -f tests/browser/build37-5-foundations-subject-pronouns.html
+            test -f .github/workflows/build37-5-foundations-subject-pronouns.yml
+            node tools/test-build37-4-foundations-negation.cjs
+            node tools/test-build37-5-foundations-subject-pronouns.cjs
+          elif grep -q "expansion:'37.4'" "$pilot"; then
+            grep -q "expansionConcepts:\['F11'\]" "$pilot"
+            grep -q "id:'F11',capsule:negationCapsule,min:17,max:20" "$pilot"
+            ! grep -q 'F05' "$pilot"
+            ! grep -q 'F05' "$capsules"
+            node tools/test-build37-4-foundations-negation.cjs
+          else
+            ! grep -q 'F05' "$pilot"
+            ! grep -q 'F05' "$capsules"
+          fi
 
       - name: Start static server
         run: |
