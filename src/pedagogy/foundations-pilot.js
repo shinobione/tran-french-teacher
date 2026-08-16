@@ -9,7 +9,8 @@
   const primaryCapsule=window.FrenchTranquilleFoundationsCapsules?.F01_F04;
   const negationCapsule=window.FrenchTranquilleFoundationsCapsules?.F11;
   const subjectPronounsCapsule=window.FrenchTranquilleFoundationsCapsules?.F05;
-  if(!engine||!primaryCapsule||!negationCapsule||!subjectPronounsCapsule){
+  const regularErCapsule=window.FrenchTranquilleFoundationsCapsules?.F08;
+  if(!engine||!primaryCapsule||!negationCapsule||!subjectPronounsCapsule||!regularErCapsule){
     root.dataset.foundationsAdapter='missing';
     console.error('[French Trân’quille] Foundations adapter dependencies are missing');
     return;
@@ -27,6 +28,12 @@
       entryTitle:'ne / n’ … pas',
       entryCopyVi:'Khoảng 5 phút để nối các mẫu bạn đã gặp: ne / n’ trước động từ, pas sau động từ. Không bắt buộc để tiếp tục bài.',
       entryCopyFr:'Environ 5 minutes pour relier des formes déjà rencontrées : ne / n’ avant le verbe, pas après. Cette base reste facultative pour continuer la leçon.'
+    }),
+    Object.freeze({
+      id:'F08',capsule:regularErCapsule,min:32,max:33,overlayLabel:'F08 • CONSOLIDATION',
+      entryTitle:'je travaille • tu travailles • elle travaille',
+      entryCopyVi:'Khoảng 5 phút để nối một mẫu viết -er đã gặp trong bài: je = -e, tu = -es, il/elle = -e. Không học cả bảng chia động từ.',
+      entryCopyFr:'Environ 5 minutes pour relier un modèle écrit en -er déjà rencontré : je = -e, tu = -es, il/elle = -e. Pas de tableau complet de conjugaison.'
     }),
     Object.freeze({
       id:'F05',capsule:subjectPronounsCapsule,min:34,max:36,overlayLabel:'F05 • CONSOLIDATION',
@@ -59,7 +66,7 @@
     if(params.has('b32Audit')||params.has('b31Audit')||params.has('b30Audit')||params.has('v2Audit'))return;
     const meta=window.FrenchTranquilleBuildMeta;
     if(meta){meta.version=VERSION;meta.build=BUILD}
-    root.dataset.foundationsPilot='1';root.dataset.foundationsVersion=VERSION;root.dataset.foundationsBuild=BUILD;root.dataset.foundationsAdapter='37.3';root.dataset.foundationsExpansion='37.4';root.dataset.foundationsConsolidation='37.5';
+    root.dataset.foundationsPilot='1';root.dataset.foundationsVersion=VERSION;root.dataset.foundationsBuild=BUILD;root.dataset.foundationsAdapter='37.3';root.dataset.foundationsExpansion='37.4';root.dataset.foundationsConsolidation='37.5';root.dataset.foundationsVerbPattern='37.6';
   }
 
   function entryMarkup(rule){return `<section class="ft-foundation-entry" data-foundation-entry data-foundation-capsule="${esc(rule.id)}"><span class="ft-foundation-eyebrow">🧩 ${esc(T('NỀN TẢNG NHỎ','PETITE BASE UTILE'))}</span><h3>${esc(rule.entryTitle)}</h3><p>${esc(T(rule.entryCopyVi,rule.entryCopyFr))}</p><button type="button" class="secondary" data-foundation-open>${esc(T('Mở nền tảng • khoảng 5 phút','Ouvrir la base • ≈ 5 min'))} ›</button></section>`}
@@ -112,5 +119,5 @@
   function decorate(){updateMeta();mountEntry()}
   function schedule(){if(scheduled)return;scheduled=true;queueMicrotask(()=>{scheduled=false;decorate()})}
   installStyle();const app=document.getElementById('app');if(app)new MutationObserver(schedule).observe(app,{childList:true,subtree:true});window.addEventListener('pagehide',close);decorate();
-  window.FrenchTranquilleFoundationsPilot=Object.freeze({version:VERSION,build:BUILD,concepts:['F01','F02','F03','F04'],expansionConcepts:['F11'],consolidationConcepts:['F05'],persistent:false,adapter:'37.3',expansion:'37.4',consolidation:'37.5',engineSchema:engine.schema,refresh:decorate,open});
+  window.FrenchTranquilleFoundationsPilot=Object.freeze({version:VERSION,build:BUILD,concepts:['F01','F02','F03','F04'],expansionConcepts:['F11'],consolidationConcepts:['F05'],verbPatternConcepts:['F08'],persistent:false,adapter:'37.3',expansion:'37.4',consolidation:'37.5',verbPattern:'37.6',engineSchema:engine.schema,refresh:decorate,open});
 })();
