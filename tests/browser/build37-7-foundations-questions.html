@@ -39,6 +39,7 @@
       const clickChoice=choice=>{const node=[...document.querySelectorAll('[data-foundation-choice]')].find(button=>button.textContent.trim()===choice);ok(node,`missing choice ${choice}`);node.click();return node};
       const expected=window.__b377Debug?{
         title:'Poser une question : intonation • mot interrogatif • politesse',
+        f08Title:'Le présent régulier en -er : je • tu • il/elle',
         entry:'Environ 5 minutes pour relier les questions déjà rencontrées : intonation, mot interrogatif et demande polie. Pas besoin d’inversion.',
         intro:'Tu as déjà rencontré beaucoup de vraies questions. Le but est de reconnaître quelques façons simples de demander quelque chose et de choisir celle qui convient.',
         prompts:[
@@ -51,6 +52,7 @@
         conclusion:'Le réflexe : avec un proche, la phrase normale + l’intonation suffit souvent ; le mot interrogatif indique l’information recherchée ; avec une personne inconnue, Pouvez-vous… ? garde une demande polie. Pas besoin d’apprendre l’inversion maintenant. Un mini-check réussi ne signifie pas que la règle est « maîtrisée ».'
       }:{
         title:'Hỏi tự nhiên: ngữ điệu • từ để hỏi • lịch sự',
+        f08Title:'Hiện tại với động từ -er: je • tu • il/elle',
         entry:'Khoảng 5 phút để nối các kiểu câu hỏi bạn đã gặp: ngữ điệu, từ để hỏi và câu lịch sự. Chưa cần đảo động từ.',
         intro:'Bạn đã gặp nhiều câu hỏi thật trong các bài trước. Mục tiêu là nhận ra vài cách hỏi đơn giản và chọn cách phù hợp với tình huống.',
         prompts:[
@@ -126,13 +128,17 @@
         ok(!document.querySelector('[data-foundation-entry]'),'lesson 40 must not expose F12');
         await setLesson(32);
         ok(document.querySelector('[data-foundation-entry]')?.dataset.foundationCapsule==='F08','lesson 32 must remain owned by F08');
+        click('[data-foundation-open]');
+        ok(document.querySelector('.ft-foundation-dialog')?.dataset.foundationActiveCapsule==='F08','F08 predecessor dialog must still open');
+        ok(text('.ft-foundation-top h2')===expected.f08Title,'F08 predecessor title changed');
+        click('[data-foundation-close]');
         await setLesson(34);
         ok(document.querySelector('[data-foundation-entry]')?.dataset.foundationCapsule==='F05','lesson 34 must remain owned by F05');
 
         ok(JSON.stringify(Object.keys(localStorage).sort().map(k=>[k,localStorage.getItem(k)]))===window.__b377StorageBefore,'localStorage changed during F12 capsule');
         ok(document.documentElement.scrollWidth<=innerWidth+1,'horizontal overflow detected');
         ok(document.querySelector('[data-foundation-open]').getBoundingClientRect().height>=44,'entry target below 44px');
-        root.dataset.b377Done='1';root.dataset.b377Locale=window.__b377Debug?'fr':'vi';root.dataset.b377F12='1';root.dataset.b377Routing='1';root.dataset.b377StorageUnchanged='1';root.dataset.b377NoOverflow='1';
+        root.dataset.b377Done='1';root.dataset.b377Locale=window.__b377Debug?'fr':'vi';root.dataset.b377F08='1';root.dataset.b377F12='1';root.dataset.b377Routing='1';root.dataset.b377StorageUnchanged='1';root.dataset.b377NoOverflow='1';
       })().catch(error=>{root.dataset.b377Error=error.message;console.error(error)});
     })();
   </script>
