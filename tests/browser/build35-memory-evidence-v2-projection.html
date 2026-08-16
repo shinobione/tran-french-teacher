@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Build 35 Memory Evidence v2 projection</title>
+  <script src="../../src/core/data-recovery-core.js"></script>
+  <script src="../../src/pedagogy/memory-evidence-v2-core.js"></script>
+</head>
+<body>
+  <main id="result">Build 35 projection running…</main>
+  <script>
+    (() => {
+      'use strict';
+
+      const root = document.documentElement;
+      const result = document.getElementById('result');
+      const Recovery = window.FrenchTranquilleRecoveryCore;
+      const Evidence = window.FrenchTranquilleMemoryEvidenceV2;
+
+      function finish(ok, details = {}) {
+        root.dataset.b35ProjectionDone = '1';
+        root.dataset.b35ProjectionOk = ok ? '1' : '0';
+        Object.entries(details).forEach(([key, value]) => {
+          root.dataset[key] = value ? '1' : '0';
+        });
+        result.textContent = ok ? 'Build 35 projection PASS' : 'Build 35 projection FAIL';
+      }
+
+      try {
+        if (!Recovery || !Evidence) throw new Error('core-missing');
+
+        const stores = {
+          learner: {
+            schemaVersion: 2,
+            knownItems: ['i1', 'i2'],
+            completedLessons: ['l1'],
+            lessonProgress: { l2: 3 }
+          },
+          memory: {
+            schemaVersion: 1,
+            items: {
+              i1: {
+                id: 'i1',
+                firstSeen: '2026-08-01T08:00:00.000Z',
+                lastSeen: '2026-08-10T10:00:00.000Z',
+                lastReviewed: '2026-08-10T10:00:00.000Z',
+                attempts: 2,
+                successes: 2,
+                misses: 0,
+                streak: 2,
+                strength: 3,
+                lastRating: 2,
+                lastSource: 'smart-review'
+              },
+              i2: {
+                id: 'i2',
+                firstSeen: '2026-08-02T08:00:00.000Z',
+                lastSeen: '2026-08-11T10:00:00.000Z',
+                attempts: 1,
+                successes: 1,
+                misses: 0,
+                streak: 1,
+                strength: 2,
+                lastRating: 1,
+                lastSource: 'scenario-success'
+              }
+            },
+            totals: { reviews: 3, difficult: 0, correct: 2, easy: 1 }
+          },
+          errors: {
+            schemaVersion: 1,
+            items: {
+              i1: {
+                recoveries: 0,
+                events: [
+                  {
+                    type: 'voice-unrecognized',
+                    source: 'free-voice',
+                    at: '2026-08-06T09:00:00.000Z',
+                    repeated: false
+                  }
+                ]
+              }
+            },
+            recent: [],
+            totals: { errors: 1, recoveries: 0, assisted: 0, voice: 1, repeated: 0 }
+          },
+          scenarios: {
+            schemaVersion: 1,
+            scenarios: {
+              s1: { plays: 1, completions: 1, bestErrors: 0, lastPlayed: '2026-08-11T08:00:00.000Z', lastCompleted: '2026-08-11T08:05:00.000Z' }
+            },
+            totalCompletions: 1
+          },
+          listening: {
+            schemaVersion: 1,
+            totals: { sessions: 1, attempts: 1, correct: 1, misses: 0, plays: 1, replays: 0, slowPlays: 0 },
+            families: {
+              meaning: { attempts: 1, correct: 1 },
+              contrast: { attempts: 0, correct: 0 },
+              dialogue: { attempts: 0, correct: 0 }
+            },
+            recent: [
+              { at: '2026-08-08T10:00:00.000Z', family: 'meaning', id: 'meaning:i1', ok: true, slow: false, replays: 0 }
+            ]
+          },
+          milestones: { schemaVersion: 1, seen: {} }
+        };
+
+        Recovery.STORE_SPECS.forEach(spec => {
+          localStorage.setItem(spec.key, JSON.stringify(stores[spec.id]));
+        });
+        localStorage.removeItem(Evidence.PROPOSED_STORE_KEY);
+
+        const before = Recovery.collectRaw(localStorage);
+        const normalizedStores = Recovery.objectsFromRawMap(before);
+        const simulated = Evidence.simulate(normalizedStores, { curriculumItemIds: ['i1', 'i2'] });
+        const after = Recovery.collectRaw(localStorage);
+
+        const legacy = {
+          format: 'french-tranquille-backup',
+          version: 1,
+          exportedAt: '2026-08-01T00:00:00.000Z',
+          learner: stores.learner,
+          memory: stores.memory
+        };
+        const normalizedLegacy = Recovery.normalizeBackup(legacy);
+        const legacyProjection = Evidence.projectBackup(normalizedLegacy.backup, { curriculumItemIds: ['i1', 'i2'] });
+
+        const untouched = Recovery.rawMapsEqual(before, after);
+        const noAdoption = localStorage.getItem(Evidence.PROPOSED_STORE_KEY) === null;
+        const dimensionsComplete = Evidence.DIMENSIONS.length === 11 &&
+          Evidence.DIMENSIONS.every(name => Object.prototype.hasOwnProperty.call(simulated.proposal?.items?.i1?.dimensions || {}, name));
+        const recognitionSafe = Number(simulated.proposal?.items?.i1?.dimensions?.recognition?.unrecognized || 0) === 1 &&
+          Number(simulated.proposal?.items?.i1?.dimensions?.recognition?.misses || 0) === 0;
+        const legacyCompatible = normalizedLegacy.migratedFrom === 1 && legacyProjection.ok === true;
+        const ok = simulated.ok && simulated.deterministic && untouched && noAdoption && dimensionsComplete && recognitionSafe && legacyCompatible;
+
+        finish(ok, {
+          b35Deterministic: simulated.deterministic,
+          b35SourceUntouched: untouched,
+          b35NoAdoption: noAdoption,
+          b35DimensionsComplete: dimensionsComplete,
+          b35RecognitionSafe: recognitionSafe,
+          b35LegacyProjection: legacyCompatible
+        });
+      } catch (error) {
+        root.dataset.b35ProjectionDone = '1';
+        root.dataset.b35ProjectionOk = '0';
+        root.dataset.b35ProjectionError = String(error?.message || error).slice(0, 100);
+        result.textContent = `Build 35 projection FAIL: ${error?.message || error}`;
+      }
+    })();
+  </script>
+</body>
+</html>
