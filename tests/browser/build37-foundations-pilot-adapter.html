@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Build 37.3 Foundations pilot adapter tribunal</title>
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#07111e;color:#eef5ff;font-family:system-ui,-apple-system,sans-serif}button{font:inherit;color:inherit;background:#20314a;border:1px solid #5f7595;border-radius:12px;padding:8px 12px}.primary{background:#315d74}.secondary{background:#253852}.muted{color:#9fb0c5}.screen-lesson{width:min(760px,calc(100% - 24px));margin:20px auto}.topbar{padding:10px 2px}.topbar h1{font-size:1.25rem}.lesson-step{padding:18px;border:1px solid #23364d;border-radius:20px;background:#0d1928}
+  </style>
+  <script>
+    (()=>{
+      const debug=new URLSearchParams(location.search).get('debug')==='fr';
+      const key='tran-french-teacher:debug-fr:v1';
+      localStorage.clear();
+      localStorage.setItem(key,debug?'1':'0');
+      localStorage.setItem('b37.3:sentinel','unchanged');
+      window.__b373Debug=debug;
+      window.__b373StorageBefore=JSON.stringify(Object.keys(localStorage).sort().map(k=>[k,localStorage.getItem(k)]));
+    })();
+  </script>
+</head>
+<body>
+  <main id="app">
+    <section class="screen-lesson">
+      <div class="topbar"><h1>Bài 8 — Hỏi đường & tìm địa điểm</h1></div>
+      <div class="lesson-step"><p data-existing-lesson>Existing lesson content</p></div>
+    </section>
+  </main>
+  <script src="../../src/pedagogy/foundations-capsule-engine.js?v=2.4.0-b37.3"></script>
+  <script src="../../src/pedagogy/foundations-capsules.js?v=2.4.0-b37.3"></script>
+  <script src="../../src/pedagogy/foundations-pilot.js?v=2.4.0-b37.3"></script>
+  <script>
+    (()=>{
+      const root=document.documentElement;
+      const fail=message=>{root.dataset.b373Error=message;throw new Error(message)};
+      const ok=(value,message)=>{if(!value)fail(message)};
+      const text=selector=>document.querySelector(selector)?.textContent?.trim()||'';
+      const texts=selector=>[...document.querySelectorAll(selector)].map(node=>node.textContent.trim());
+      const click=selector=>{const node=document.querySelector(selector);ok(node,`missing ${selector}`);node.click();return node};
+      const width=()=>Math.round(parseFloat(document.querySelector('.ft-foundation-bar i')?.style.width||'-1'));
+      const expected=window.__b373Debug?{
+        entryEyebrow:'🧩 PETITE BASE UTILE',
+        entryCopy:'5 minutes pour comprendre pourquoi le petit mot devant le nom change. Cette base reste facultative pour continuer la leçon.',
+        entryButton:'Ouvrir la base • ≈ 5 min ›',
+        title:'Articles, genre & pluriel',
+        intro:'En français, apprends le nom avec son petit compagnon placé devant.',
+        prompts:[
+          'Choisis : ___ gare',
+          'Tu parles d’un billet non encore identifié : ___ billet',
+          'Tu demandes une table : ___ table',
+          'Au pluriel : la pharmacie → ___ pharmacies'
+        ],
+        feedback:[
+          '→ « gare » est féminin : la gare.',
+          '✓ « billet » est masculin : un billet.',
+          '✓ « table » est féminin : une table.',
+          '✓ Au pluriel, le/la devient les.'
+        ],
+        done:'Petite base terminée',
+        conclusion:'L’idée clé : apprends le nom avec son article — la gare, un billet, une table. Au pluriel, le/la → les. Une bonne réponse ne signifie pas que la règle est « maîtrisée » ; Tyffany la fera revenir plus tard.',
+        returnLabel:'Retour à la leçon ›'
+      }:{
+        entryEyebrow:'🧩 NỀN TẢNG NHỎ',
+        entryCopy:'5 phút để hiểu vì sao tiếng Pháp đổi “từ nhỏ” trước danh từ. Không bắt buộc để tiếp tục bài.',
+        entryButton:'Mở nền tảng • khoảng 5 phút ›',
+        title:'Mạo từ, giống & số nhiều',
+        intro:'Trong tiếng Pháp, hãy học danh từ cùng với “người bạn nhỏ” đứng trước nó.',
+        prompts:[
+          'Chọn từ đúng: ___ gare',
+          'Bạn nói về một vé chưa xác định: ___ billet',
+          'Bạn xin một cái bàn: ___ table',
+          'Số nhiều: la pharmacie → ___ pharmacies'
+        ],
+        feedback:[
+          '→ “gare” là danh từ giống cái: la gare.',
+          '✓ “billet” là giống đực: un billet.',
+          '✓ “table” là giống cái: une table.',
+          '✓ Ở số nhiều, le/la trở thành les.'
+        ],
+        done:'Xong nền tảng nhỏ',
+        conclusion:'Điểm quan trọng: học danh từ cùng với mạo từ — la gare, un billet, une table. Khi chuyển sang số nhiều, le/la → les. Một bài kiểm tra đúng chưa có nghĩa là đã “thành thạo”; Tyffany sẽ cho các mẫu này quay lại sau.',
+        returnLabel:'Quay lại bài học ›'
+      };
+
+      const nextFrame=()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+      (async()=>{
+        await nextFrame();
+        ok(window.FrenchTranquilleFoundationsCapsuleEngine?.slice==='37.2','engine 37.2 missing');
+        ok(window.FrenchTranquilleFoundationsCapsules?.F01_F04?.concepts?.join(',')==='F01,F02,F03,F04','capsule concepts mismatch');
+        ok(window.FrenchTranquilleFoundationsPilot?.adapter==='37.3','pilot adapter marker missing');
+        ok(window.FrenchTranquilleFoundationsPilot?.persistent===false,'pilot must remain ephemeral');
+        ok(root.dataset.foundationsAdapter==='37.3','root adapter marker missing');
+        ok(document.querySelectorAll('[data-foundation-entry]').length===1,'entry count must be 1');
+        ok(text('.ft-foundation-entry .ft-foundation-eyebrow')===expected.entryEyebrow,'entry eyebrow changed');
+        ok(text('.ft-foundation-entry h3')==='le / la / les • un / une','entry title changed');
+        ok(text('.ft-foundation-entry p')===expected.entryCopy,'entry copy changed');
+        ok(text('[data-foundation-open]')===expected.entryButton,'entry button changed');
+
+        click('[data-foundation-open]');
+        ok(text('.ft-foundation-top h2')===expected.title,'dialog title changed');
+        ok(width()===0,'intro progress must be 0');
+        ok(text('.ft-foundation-copy strong')===expected.intro,'intro opening changed');
+        ok(JSON.stringify(texts('.ft-foundation-examples b'))===JSON.stringify(['🚉 la gare','🎫 un billet','🍽️ une table','🚻 les toilettes']),'examples changed');
+        ok(text('[data-foundation-next]')===(window.__b373Debug?'Essayer 4 mini-questions ›':'Thử 4 câu ngắn ›'),'intro CTA changed');
+
+        click('[data-foundation-next]');
+        const choices=[['le','la','les'],['un','une','des'],['un','une','des'],['le','la','les']];
+        const answers=['le','un','une','les'];
+        const correct=['la','un','une','les'];
+        for(let index=0;index<4;index+=1){
+          ok(width()===(index+1)*20,`question ${index+1} progress changed`);
+          ok(text('.ft-foundation-q h3')===expected.prompts[index],`question ${index+1} prompt changed`);
+          ok(JSON.stringify(texts('[data-foundation-choice]'))===JSON.stringify(choices[index]),`question ${index+1} choices changed`);
+          ok(text('.ft-foundation-q .muted')===`${index+1}/4`,`question ${index+1} counter changed`);
+          click(`[data-foundation-choice="${answers[index]}"]`);
+          ok(text('[data-foundation-feedback]')===expected.feedback[index],`question ${index+1} feedback changed`);
+          ok(document.querySelector(`[data-foundation-choice="${correct[index]}"]`)?.classList.contains('ok'),`question ${index+1} correct marking missing`);
+          if(index===0)ok(document.querySelector('[data-foundation-choice="le"]')?.classList.contains('bad'),'wrong-choice marking missing');
+          ok([...document.querySelectorAll('[data-foundation-choice]')].every(button=>button.disabled),'answered choices must be disabled');
+          const next=document.querySelector('[data-foundation-next]');
+          ok(next&&!next.hidden,`question ${index+1} next must be visible`);
+          next.click();
+        }
+
+        ok(width()===100,'done progress must be 100');
+        ok(text('.ft-foundation-done h3')===expected.done,'done title changed');
+        ok(text('.ft-foundation-done p')===expected.conclusion,'conclusion changed');
+        ok(text('.ft-foundation-done [data-foundation-close]')===expected.returnLabel,'return CTA changed');
+        const returnButton=document.querySelector('.ft-foundation-done [data-foundation-close]');
+        returnButton.click();
+        ok(!document.querySelector('.ft-foundation-overlay'),'overlay must close');
+        ok(document.activeElement?.matches('[data-foundation-open]'),'focus must return to entry CTA');
+        ok(document.querySelector('[data-existing-lesson]'),'lesson content must survive round trip');
+        ok(JSON.stringify(Object.keys(localStorage).sort().map(k=>[k,localStorage.getItem(k)]))===window.__b373StorageBefore,'localStorage changed during capsule');
+        ok(document.documentElement.scrollWidth<=innerWidth+1,'horizontal overflow detected');
+        ok(document.querySelector('[data-foundation-open]').getBoundingClientRect().height>=44,'entry target below 44px');
+
+        root.dataset.b373Done='1';
+        root.dataset.b373Locale=window.__b373Debug?'fr':'vi';
+        root.dataset.b373Parity='1';
+        root.dataset.b373StorageUnchanged='1';
+        root.dataset.b373NoOverflow='1';
+      })().catch(error=>{root.dataset.b373Error=error.message;console.error(error)});
+    })();
+  </script>
+</body>
+</html>

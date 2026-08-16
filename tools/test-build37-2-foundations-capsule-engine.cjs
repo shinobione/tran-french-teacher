@@ -84,19 +84,40 @@ assert.throws(() => engine.compile({...capsule, masteryClaim:true}), /masteryCla
 assert.throws(() => engine.compile({...capsule, checks:[{prompt:{vi:'x',fr:'x'},choices:['a'],answer:'b',feedback:{vi:'x',fr:'x'}}]}), /answer must exist in choices/);
 assert.throws(() => engine.reduce(capsule, engine.initialState(capsule), {type:'ANSWER',choice:'la'}), /intro accepts NEXT only/);
 
-// Exact Build 34 mirror evidence: the old pilot remains the source we extracted.
+// Exact Build 34 mirror evidence remains mandatory across the 37.3 successor adapter.
 const pilotPath = path.join(__dirname, '..', 'src', 'pedagogy', 'foundations-pilot.js');
+const capsulesPath = path.join(__dirname, '..', 'src', 'pedagogy', 'foundations-capsules.js');
 const pilot = fs.readFileSync(pilotPath, 'utf8');
-for (const token of [
+const capsuleSource = fs.readFileSync(capsulesPath, 'utf8');
+const adapter37 = pilot.includes("adapter:'37.3'");
+const parityTokens = [
   "concepts:['F01','F02','F03','F04']",
-  "choices:['le','la','les'],answer:'la'",
-  "choices:['un','une','des'],answer:'un'",
-  "choices:['un','une','des'],answer:'une'",
-  "choices:['le','la','les'],answer:'les'",
+  "choices:['le','la','les']",
+  "answer:'la'",
+  "choices:['un','une','des']",
+  "answer:'un'",
+  "answer:'une'",
+  "answer:'les'",
   'la gare', 'un billet', 'une table', 'les toilettes',
   'Một bài kiểm tra đúng chưa có nghĩa là đã “thành thạo”',
   'Une bonne réponse ne signifie pas que la règle est « maîtrisée »'
-]) assert.ok(pilot.includes(token), `Build 34 parity token missing: ${token}`);
+];
+if (adapter37) {
+  assert.equal(pilot.includes('const questions='), false, '37.3 adapter must not keep the hardcoded question table');
+  assert.ok(pilot.includes('FrenchTranquilleFoundationsCapsules?.F01_F04'), '37.3 adapter must consume the canonical capsule');
+  for (const token of parityTokens) assert.ok(capsuleSource.includes(token), `Build 34 parity token missing from successor capsule: ${token}`);
+} else {
+  for (const token of [
+    "concepts:['F01','F02','F03','F04']",
+    "choices:['le','la','les'],answer:'la'",
+    "choices:['un','une','des'],answer:'un'",
+    "choices:['un','une','des'],answer:'une'",
+    "choices:['le','la','les'],answer:'les'",
+    'la gare', 'un billet', 'une table', 'les toilettes',
+    'Một bài kiểm tra đúng chưa có nghĩa là đã “thành thạo”',
+    'Une bonne réponse ne signifie pas que la règle est « maîtrisée »'
+  ]) assert.ok(pilot.includes(token), `Build 34 parity token missing: ${token}`);
+}
 
 // Hard purity boundary: no browser/storage/runtime owner is referenced by the engine/spec.
 for (const relative of [

@@ -9,7 +9,7 @@
 - Reconciled: **2026-08-16**
 - Repository: `shinobione/tran-french-teacher`
 - Default branch: `main`
-- Current deployed `main`: **`7cbab4f58d5c5e4212aa81db343fcee0004e5cbb`** — PR **#173**, Build 37.1 Foundations Core contract/registry.
+- Current deployed `main`: **`5168b3b42d71a059d14e68ddf1c41831b5ef969b`** — PR **#174**, Build 37.2 Generic Foundations Capsule Engine.
 - GitHub Pages deployment on that exact SHA: **SUCCESS**.
 - Visible application runtime metadata: **v2.4.0 · Build 36**.
 - Pedagogy baseline: **v2.3.0 · Build 34**.
@@ -17,9 +17,10 @@
 - **Build 35 CLOSED — Memory Evidence v2 / Migration Readiness.**
 - **Build 36 CLOSED — Memory Evidence v2 derived-shadow adoption.**
 - **Build 37 ACTIVE — Foundations Core.**
-- **37.1 MERGED / CERTIFIED** — pure F01–F18 registry, no runtime wiring.
-- Active implementation slice: **37.2 · Generic Foundations Capsule Engine**.
-- Active branch: `build37/foundations-capsule-engine`.
+- **37.1 MERGED / CERTIFIED** — pure F01–F18 ownership registry.
+- **37.2 MERGED / CERTIFIED** — pure generic capsule engine + exact F01–F04 mirror spec.
+- Active implementation slice: **37.3 · F01–F04 Pilot Adapter / Renderer Convergence**.
+- Active branch: `build37/foundations-pilot-adapter`.
 
 ## Current durable data contract — LOCKED
 
@@ -32,13 +33,13 @@
 | Evidence role | **derived shadow only** |
 | Product truth | **original six source stores remain canonical** |
 | Product read-path cutover to Evidence | **NONE** |
-| F01–F04 pilot persistence | **NONE / ephemeral only** |
+| Foundations persistence | **NONE / ephemeral only** |
 
-Build 36.3 merged as PR #170 at `f37561f46016918fffc750e69a6e728c27b9144a` and closed durability/adoption. PR #171 opened Build 37. PR #172 corrected runtime-version ownership only. PR #173 then established the pure F01–F18 Foundations registry and removed the stale temporary Build 36 reconciler.
+Build 36.3 merged as PR #170 and closed durability/adoption. PR #171 opened Build 37. PR #172 corrected runtime-version ownership only. PR #173 established the F01–F18 registry. PR #174 then merged the pure capsule engine/spec without learner-facing wiring.
 
 ## Current main CI baseline
 
-Current `main` `7cbab4f…` completed **36 push workflows**:
+Current `main` `5168b3b…` completed **36 push workflows**:
 
 - **32 SUCCESS**;
 - **4 inherited failures**;
@@ -52,35 +53,40 @@ Inherited failures still present:
 3. `Build 36.3 Recovery v3 durability tribunal`;
 4. `Build 28 Data recovery smoke`.
 
-These four failures predate Build 37 and are baseline CI debt, not evidence of a Foundations regression by themselves. The former fifth failure from `.github/workflows/tmp-build36-closeout-reconcile.yml` is gone because PR #173 removed that stale workflow.
+These failures predate Build 37 and are baseline CI debt, not evidence of a Foundations regression by themselves.
 
-## Build 37.2 candidate scope
+## Build 37.3 candidate scope
 
-37.2 extracts the deterministic session mechanics from the validated Build 34 F01–F04 pilot into a **pure generic capsule engine**.
+37.3 is the first learner-facing Build 37 refactor, but it is intentionally a **strict parity migration** rather than new content.
 
 ```text
-Build 34 learner-facing F01–F04 pilot
-+ Build 37.1 F01–F18 ownership registry
-→ generic immutable capsule definition
-→ pure intro / question / feedback / done state machine
-→ exact F01–F04 mirror fixture
-→ Vietnamese / French localized read model
-→ NO DOM wiring
+Build 37.2 engine + exact F01–F04 spec
+→ build32 loader loads engine → spec → pilot
+→ existing Build 34 pilot renderer consumes engine/session state
+→ same lessons 8–13
+→ same entry card / overlay / texts / choices / answers / feedback
+→ same VI / DEBUG FR behavior
+→ same 0/20/40/60/80/100 progress rhythm
+→ same return-to-lesson focus behavior
 → NO durable write
-→ NO Recovery dependency
 → NO Evidence product read
 → NO F05–F18 learner rollout
 ```
 
-Candidate files:
+Intentional runtime files in this candidate:
 
-- `src/pedagogy/foundations-capsule-engine.js` — pure deterministic engine;
-- `src/pedagogy/foundations-capsules.js` — exact F01–F04 mirror capsule only;
-- `tools/test-build37-2-foundations-capsule-engine.cjs` — pure state/parity tribunal;
-- `.github/workflows/build37-2-foundations-capsule-engine.yml` — dedicated guard;
-- `docs/BUILD-37-2-FOUNDATIONS-CAPSULE-ENGINE.md` — slice contract.
+- `src/pedagogy/foundations-pilot.js` — renderer/adapter, no duplicate question state machine;
+- `src/core/build32-loader.js` — ordered engine → capsule → pilot dependency loading;
+- `sw.js` — targeted precache for the three Foundations dependencies without global cache identity change.
 
-The current learner-facing `src/pedagogy/foundations-pilot.js` remains unchanged in 37.2.
+QA/docs files:
+
+- `tests/browser/build37-foundations-pilot-adapter.html`;
+- `.github/workflows/build37-3-foundations-pilot-adapter.yml`;
+- `tools/test-build37-2-foundations-capsule-engine.cjs` — successor-aware parity proof;
+- `docs/BUILD-37-3-FOUNDATIONS-PILOT-ADAPTER.md`.
+
+The dedicated Build 37.3 guard has already passed real-app boot plus VI/FR parity on desktop and 390×844 before PR opening.
 
 ## Protected boundaries
 
@@ -94,7 +100,8 @@ assets/LOGO.png
 assets/Favicon.png
 Recovery v3 seven-store ownership
 Evidence derived-shadow role
-Build 34 F01–F04 learner-visible pilot semantics
+52 / 313 curriculum semantics
+Listening / Scenario / Mastery / Learner Intelligence owners
 V5.10 field-accepted navigation / visual identities
 ```
 
@@ -103,13 +110,13 @@ Recognition failure remains recognition-system evidence, never a pronunciation d
 ## NEXT
 
 ```text
-finish Build 37.2 candidate
-→ dedicated 37.2 guard must pass
+finish Build 37.3 candidate PR
+→ dedicated 37.3 parity tribunal must remain green
 → classify full PR matrix against the four inherited main failures
 → merge only if there is no new regression
 → certify exact merged main + Pages
-→ then 37.3 may adapt the existing F01–F04 renderer to the generic engine with strict visual/semantic parity
-→ do NOT start learner-facing F05–F18 rollout yet
+→ only then select the next small learner-facing Foundations expansion from Build 33 + the 37.1 registry
+→ do NOT mass-rollout F05–F18
 → do NOT use Evidence as product truth without a separate explicit gate
 ```
 

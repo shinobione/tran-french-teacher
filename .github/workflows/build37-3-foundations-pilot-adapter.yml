@@ -1,0 +1,150 @@
+name: Build 37.3 Foundations pilot adapter parity
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [build37/foundations-pilot-adapter]
+
+permissions:
+  contents: read
+
+jobs:
+  foundations-pilot-adapter:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax and Build 37.2 contract chain
+        run: |
+          set -euo pipefail
+          node --check src/pedagogy/foundations-capsule-engine.js
+          node --check src/pedagogy/foundations-capsules.js
+          node --check src/pedagogy/foundations-pilot.js
+          node --check src/core/build32-loader.js
+          node --check sw.js
+          node tools/test-build37-2-foundations-capsule-engine.cjs
+
+      - name: Loader order and PWA/offline contract
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          loader=Path('src/core/build32-loader.js').read_text()
+          engine='foundations-capsule-engine.js'
+          capsules='foundations-capsules.js'
+          pilot='foundations-pilot.js'
+          assert loader.index(engine) < loader.index(capsules) < loader.index(pilot)
+          assert "const FOUNDATIONS = '2.4.0-b37.3'" in loader
+          sw=Path('sw.js').read_text()
+          assert "const CACHE='tran-french-teacher-v2.3.22-b34.14-v58debug1'" in sw
+          assert "const B373='2.4.0-b37.3'" in sw
+          for name in (engine,capsules,pilot):
+              assert f'./src/pedagogy/{name}' in sw
+          PY
+
+      - name: Protected owners stay untouched
+        run: |
+          set -euo pipefail
+          git fetch origin main --quiet
+          git diff --exit-code origin/main...HEAD -- \
+            app.js voice-ios.js free-voice.js index.html \
+            src/core/data-recovery-core.js \
+            src/core/data-recovery-v3-contract.js \
+            src/core/data-recovery-v3-runtime-core.js \
+            src/core/data-recovery.js \
+            src/core/memory-evidence-v2-runtime.js \
+            src/pedagogy/memory-evidence-v2-core.js \
+            src/pedagogy/foundations-core.js \
+            src/pedagogy/learning-memory.js \
+            src/pedagogy/error-intelligence.js \
+            src/pedagogy/listening-engine.js \
+            src/pedagogy/scenario-engine.js \
+            src/pedagogy/mastery-engine.js \
+            src/pedagogy/learner-intelligence.js \
+            src/pedagogy/learner-intelligence-v2.js \
+            assets/LOGO.png assets/Favicon.png
+
+      - name: Pilot is engine-driven, still ephemeral, and F01-F04 only
+        run: |
+          set -euo pipefail
+          grep -q 'FrenchTranquilleFoundationsCapsuleEngine' src/pedagogy/foundations-pilot.js
+          grep -q 'FrenchTranquilleFoundationsCapsules' src/pedagogy/foundations-pilot.js
+          grep -q "adapter:'37.3'" src/pedagogy/foundations-pilot.js
+          ! grep -q 'const questions=' src/pedagogy/foundations-pilot.js
+          ! grep -q 'localStorage.setItem' src/pedagogy/foundations-pilot.js
+          ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/foundations-pilot.js
+          ! grep -q 'F05' src/pedagogy/foundations-pilot.js
+          ! grep -q 'F05' src/pedagogy/foundations-capsules.js
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-b373-http.log 2>&1 &
+          echo $! >/tmp/ft-b373-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — real app loads engine → capsule → adapter
+        run: |
+          profile=/tmp/ft-b373-app
+          file=/tmp/b373-real-app.html
+          rm -rf "$profile" "$file"
+          timeout --signal=TERM --kill-after=5s 70s google-chrome --headless=new --no-sandbox --disable-gpu \
+            --user-data-dir="$profile" --window-size=1280,900 --virtual-time-budget=22000 --dump-dom \
+            'http://127.0.0.1:4173/?debug=fr' >"$file"
+          grep -q 'data-build32-ready="1"' "$file"
+          grep -q 'data-foundations-adapter="37.3"' "$file"
+          grep -q 'data-foundations-capsule-engine' "$file"
+          grep -q 'data-foundations-capsules' "$file"
+          grep -q 'data-foundations-pilot' "$file"
+
+      - name: Chrome — Vietnamese desktop parity
+        run: |
+          profile=/tmp/ft-b373-vi-desktop; file=/tmp/b373-vi-desktop.html
+          rm -rf "$profile" "$file"
+          timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
+            --user-data-dir="$profile" --window-size=1280,900 --virtual-time-budget=8000 --dump-dom \
+            'http://127.0.0.1:4173/tests/browser/build37-foundations-pilot-adapter.html?debug=vi' >"$file"
+          for marker in 'data-b373-done="1"' 'data-b373-locale="vi"' 'data-b373-parity="1"' 'data-b373-storage-unchanged="1"' 'data-b373-no-overflow="1"'; do grep -q "$marker" "$file"; done
+          ! grep -q 'data-b373-error=' "$file"
+
+      - name: Chrome — DEBUG FR desktop parity
+        run: |
+          profile=/tmp/ft-b373-fr-desktop; file=/tmp/b373-fr-desktop.html
+          rm -rf "$profile" "$file"
+          timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
+            --user-data-dir="$profile" --window-size=1280,900 --virtual-time-budget=8000 --dump-dom \
+            'http://127.0.0.1:4173/tests/browser/build37-foundations-pilot-adapter.html?debug=fr' >"$file"
+          for marker in 'data-b373-done="1"' 'data-b373-locale="fr"' 'data-b373-parity="1"' 'data-b373-storage-unchanged="1"' 'data-b373-no-overflow="1"'; do grep -q "$marker" "$file"; done
+          ! grep -q 'data-b373-error=' "$file"
+
+      - name: Chrome — Vietnamese iPhone-size parity
+        run: |
+          profile=/tmp/ft-b373-vi-mobile; file=/tmp/b373-vi-mobile.html
+          rm -rf "$profile" "$file"
+          timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
+            --user-data-dir="$profile" --window-size=390,844 --virtual-time-budget=8000 --dump-dom \
+            'http://127.0.0.1:4173/tests/browser/build37-foundations-pilot-adapter.html?debug=vi' >"$file"
+          for marker in 'data-b373-done="1"' 'data-b373-locale="vi"' 'data-b373-parity="1"' 'data-b373-storage-unchanged="1"' 'data-b373-no-overflow="1"'; do grep -q "$marker" "$file"; done
+          ! grep -q 'data-b373-error=' "$file"
+
+      - name: Chrome — DEBUG FR iPhone-size parity
+        run: |
+          profile=/tmp/ft-b373-fr-mobile; file=/tmp/b373-fr-mobile.html
+          rm -rf "$profile" "$file"
+          timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
+            --user-data-dir="$profile" --window-size=390,844 --virtual-time-budget=8000 --dump-dom \
+            'http://127.0.0.1:4173/tests/browser/build37-foundations-pilot-adapter.html?debug=fr' >"$file"
+          for marker in 'data-b373-done="1"' 'data-b373-locale="fr"' 'data-b373-parity="1"' 'data-b373-storage-unchanged="1"' 'data-b373-no-overflow="1"'; do grep -q "$marker" "$file"; done
+          ! grep -q 'data-b373-error=' "$file"
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-b373-server.pid ]; then kill "$(cat /tmp/ft-b373-server.pid)" || true; fi
