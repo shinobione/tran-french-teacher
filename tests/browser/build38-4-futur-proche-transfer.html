@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Build 38.4 futur proche transfer tribunal</title>
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#07111e;color:#eef5ff;font-family:system-ui,-apple-system,sans-serif}body{padding:16px}.card{width:min(680px,100%);margin:18px auto;padding:20px;border:1px solid #2c4665;border-radius:22px;background:#0d1928;display:grid;gap:14px}.eyebrow{font-size:.75rem;font-weight:850;letter-spacing:.12em;color:#7ee9c9}.source{padding:14px;border-radius:15px;background:#081421;font-size:1.08rem;font-weight:800}.choices{display:grid;gap:9px}.choices button{min-height:48px;border:1px solid #5f7595;border-radius:13px;background:#20314a;color:#eef5ff;font:inherit;font-weight:750;padding:10px 12px}.choices button.ok{outline:2px solid #74e8c6}.feedback{min-height:24px;color:#b7c8dd}.done{font-weight:850;color:#7ee9c9}@media(max-width:520px){.card{padding:16px;border-radius:18px}}
+  </style>
+  <script>
+    (()=>{
+      const debug=new URLSearchParams(location.search).get('debug')==='fr';
+      localStorage.clear();
+      localStorage.setItem('tran-french-teacher:debug-fr:v1',debug?'1':'0');
+      localStorage.setItem('b38.4:sentinel','unchanged');
+      window.__b384Debug=debug;
+      window.__b384StorageBefore=JSON.stringify(Object.keys(localStorage).sort().map(key=>[key,localStorage.getItem(key)]));
+    })();
+  </script>
+</head>
+<body>
+  <main class="card" id="tribunal">
+    <span class="eyebrow">BUILD 38.4 · FUTUR PROCHE TRANSFER</span>
+    <h1 data-title></h1>
+    <p data-instruction></p>
+    <p data-cue></p>
+    <div class="source" data-source></div>
+    <div class="choices" data-choices></div>
+    <p class="feedback" data-feedback></p>
+  </main>
+  <script src="../../src/pedagogy/generalization-transfer-core.js?v=2.4.0-b38.1"></script>
+  <script src="../../src/pedagogy/generalization-futur-proche-core.js?v=2.4.0-b38.4"></script>
+  <script>
+    (()=>{
+      const root=document.documentElement;
+      const fail=message=>{root.dataset.b384Error=message;throw new Error(message)};
+      const ok=(value,message)=>{if(!value)fail(message)};
+      const transfer=window.FrenchTranquilleGeneralizationTransfer;
+      const future=window.FrenchTranquilleGeneralizationFuturProche;
+      const locale=window.__b384Debug?'fr':'vi';
+      const exercises=future?.catalog||[];
+      let index=0;
+      const title=document.querySelector('[data-title]');
+      const instruction=document.querySelector('[data-instruction]');
+      const cue=document.querySelector('[data-cue]');
+      const source=document.querySelector('[data-source]');
+      const choices=document.querySelector('[data-choices]');
+      const feedback=document.querySelector('[data-feedback]');
+
+      function rotated(values,shift){const copy=[...values];const amount=shift%copy.length;return [...copy.slice(amount),...copy.slice(0,amount)]}
+      function render(){
+        const exercise=exercises[index];
+        const view=future.view(exercise,locale);
+        title.textContent=view.title;instruction.textContent=view.instruction;cue.textContent=view.cue;source.textContent=view.source;feedback.textContent='';choices.innerHTML='';
+        rotated(view.choices,index+1).forEach(value=>{
+          const button=document.createElement('button');button.type='button';button.textContent=value;button.dataset.choice=value;
+          button.addEventListener('click',()=>answer(button,exercise));choices.appendChild(button);
+        });
+      }
+      function answer(button,exercise){
+        ok(future.verify(exercise,button.dataset.choice),'selected answer should be correct in tribunal');
+        button.classList.add('ok');feedback.textContent=locale==='fr'?'✓ Futur proche reconstruit.':'✓ Đã xây lại câu tương lai gần.';index+=1;
+        if(index<exercises.length){render();return}
+        document.querySelector('#tribunal').insertAdjacentHTML('beforeend',`<p class="done" data-done>${locale==='fr'?'Transfert au futur proche terminé.':'Hoàn thành chuyển đổi sang tương lai gần.'}</p>`);
+      }
+
+      try{
+        ok(transfer?.slice==='38.1','38.1 predecessor missing');
+        ok(transfer?.family?.id==='subject-substitution-regular-er','38.1 family changed');
+        ok(future?.schema==='french-tranquille-generalization-futur-proche/v1','38.4 API missing');
+        ok(future?.slice==='38.4','38.4 slice marker missing');
+        ok(future?.status==='pure-non-wired','38.4 must remain non-wired');
+        ok(future?.family?.id==='present-futur-proche-travailler-singular','wrong future family');
+        ok(JSON.stringify(future?.family?.subjects)===JSON.stringify(['je','tu','il','elle']),'38.4 subjects changed');
+        ok(future?.family?.verb==='travailler','38.4 verb changed');
+        ok(future?.family?.persistence==='ephemeral-only','38.4 must remain ephemeral');
+        ok(future?.family?.masteryClaim===false,'38.4 must not claim mastery');
+        ok(exercises.length===4,'38.4 catalog must contain exactly 4 exercises');
+        ok(JSON.stringify(exercises.map(x=>x.source))===JSON.stringify(['Je travaille.','Tu travailles.','Il travaille.','Elle travaille.']),'source catalog changed');
+        ok(JSON.stringify(exercises.map(x=>x.target))===JSON.stringify(['Je vais travailler.','Tu vas travailler.','Il va travailler.','Elle va travailler.']),'target catalog changed');
+        render();
+        for(let step=0;step<exercises.length;step+=1){
+          const exercise=exercises[step];
+          const button=[...document.querySelectorAll('[data-choice]')].find(node=>node.dataset.choice===exercise.target);
+          ok(button,`missing target choice ${exercise.target}`);ok(button.getBoundingClientRect().height>=44,'choice target below 44px');button.click();
+        }
+        ok(document.querySelector('[data-done]'),'completion marker missing');
+        ok(JSON.stringify(Object.keys(localStorage).sort().map(key=>[key,localStorage.getItem(key)]))===window.__b384StorageBefore,'localStorage changed during 38.4 tribunal');
+        ok(document.documentElement.scrollWidth<=innerWidth+1,'horizontal overflow detected');
+        root.dataset.b384Done='1';root.dataset.b384Locale=locale;root.dataset.b384Family='present-futur-proche-travailler-singular';root.dataset.b384Exercises='4';root.dataset.b384StorageUnchanged='1';root.dataset.b384NoOverflow='1';
+      }catch(error){if(!root.dataset.b384Error)root.dataset.b384Error=error.message;console.error(error)}
+    })();
+  </script>
+</body>
+</html>
