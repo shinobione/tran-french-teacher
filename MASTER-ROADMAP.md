@@ -16,8 +16,8 @@
 |---|---|
 | Application runtime metadata | **V2.4.0 · Build 36** |
 | Product pedagogy baseline | **V2.3.0 · Build 34** |
-| Current runtime-bearing `main` | **`25d09fa44d5cf1efff9f8529bb2e54cb67b7bc48`** — PR #186 / Build 38.1 |
-| GitHub Pages | **#239 / run `31976241382` SUCCESS** on exact runtime SHA |
+| Current runtime-bearing `main` | **`694988e6299c7d25ca9e019f275c473422fd983e`** — PR #188 / Build 38.2 |
+| GitHub Pages | **#241 / run `31978687464` SUCCESS** on exact runtime SHA |
 | Curriculum | **52 lessons / 313 items** |
 | Scenario | **44 situations / 132 turns** |
 | Speaking Loop | **52/52 · max 2 moments / lesson** |
@@ -31,7 +31,8 @@
 | Build 36 | **CLOSED · seven-store derived-shadow adoption** |
 | Build 37 | **CLOSED · Foundations Core** |
 | Build 38.1 | **CLOSED · deterministic subject-substitution transfer core** |
-| Build 38.2 | **NEXT · learner-facing integration of certified 38.1 core** |
+| Build 38.2 | **CLOSED · learner-facing integration of certified 38.1 core** |
+| Build 38.3 | **NEXT · narrow deterministic affirmation → negation transfer** |
 | Primary field target | **iPhone / Safari / installed PWA** |
 
 ## Current interpretation
@@ -42,9 +43,10 @@
 - Build 37 industrialized the Foundations system without renumbering the 52 lessons, without persistent Foundations state, and without treating Evidence as product truth.
 - F16 (`à/de` contractions) remains **deferred / not completed**; Build 37 stays closed.
 - Build 38 owns **generalization and construction of unseen phrases**.
-- Build 38.1 proved the first transfer primitive as a **pure / non-wired** core; it deliberately changed no learner-facing PWA surface.
-- Build 38.2 now owns the smallest safe learner-facing placement for that certified core. It does **not** own expansion to new transfer families.
-- Post-38.1 `main` is closed with **exactly the four inherited historical failures**, **0 queued**, **0 in-progress**; all other workflows including Build 38.1 are SUCCESS.
+- Build 38.1 proved the first transfer primitive as a pure deterministic core.
+- Build 38.2 wires that certified subject-substitution core into **lesson 33 only**, after F08, with three deterministic exercises and no durable learner write.
+- Build 38.2 is merged/deployed at `694988e…`; Pages #241 is green; post-merge CI is **33 SUCCESS + exactly the four inherited historical failures**, zero queued/in-progress.
+- Build 38.3 should add exactly one new pure/non-wired transfer family before any learner-facing expansion.
 
 ---
 
@@ -163,7 +165,8 @@ original six source stores as product truth
 Listening / Scenario / Mastery / Learner Intelligence owners
 V5.10 field-accepted navigation / visual identities
 Build 37 Foundations ownership/routes
-Build 38.1 deterministic transfer semantics
+Build 38.1 deterministic subject-substitution semantics
+Build 38.2 lesson-33 placement / round-trip contract
 ```
 
 ---
@@ -475,25 +478,12 @@ Implementation:
 
 ```text
 src/pedagogy/generalization-transfer-core.js
-status = pure-non-wired
+status = deterministic core
 persistence = ephemeral-only
 masteryClaim = false
 ```
 
-Explicit exclusions remain locked for 38.1:
-
-```text
-nous / vous / ils / elles
-questions as a separate family
-negation
-futur proche
-agreement/plural transforms
-aller / vouloir / pouvoir / devoir
-random generation
-new vocabulary
-durable writes
-Evidence product reads
-```
+38.1 semantics remain locked: no hidden subject/verb expansion, no random generation and no durable/Evidence adoption.
 
 Certification:
 
@@ -509,37 +499,115 @@ localStorage byte-identical
 no horizontal overflow
 touch targets >=44 px
 Build 37.8 predecessor PASS
-post-merge = exactly 4 inherited failures, 0 queued, 0 in-progress
 ```
 
-38.1 deliberately does **not** change the learner-facing PWA.
+## 38.2 — learner-facing subject substitution — CLOSED
 
-## 38.2 — learner-facing integration — NEXT
+38.2 owns placement and interaction only; it does not broaden the 38.1 matrix.
 
-38.2 owns **placement and interaction only**, not expansion of the 38.1 matrix.
+Canonical placement:
+
+```text
+lesson 33 normal content
+→ existing F08 optional card
+→ optional Transfer card
+→ 3 deterministic subject-substitution exercises
+→ no mastery claim
+→ return to lesson
+→ normal Continue remains available
+```
+
+Learner-facing exercises:
+
+```text
+Je travaille. → Tu travailles.
+J'habite ici. → Tu habites ici.
+Tu aimes ça. → Elle aime ça.
+```
+
+Certified boundaries:
+
+- lesson 32 remains F08-only;
+- lesson 33 contains F08 then Transfer;
+- lesson 34 remains F05-only;
+- VI / DEBUG FR × desktop / 390×844;
+- real answer clicks + focus return;
+- learner localStorage byte-identical;
+- no horizontal overflow;
+- target sizes >=44 px;
+- installed-PWA cache includes the transfer core + adapter.
+
+Closeout:
+
+```text
+PR #188 MERGED
+main 694988e6299c7d25ca9e019f275c473422fd983e
+Pages #241 / run 31978687464 SUCCESS
+post-merge: 33 SUCCESS + exactly 4 inherited failures
+0 queued / 0 in-progress
+```
+
+No new physical smoke gate is required merely to close this narrow integration. Any later iPhone/PWA defect is a maintenance regression and must be handled as such.
+
+## 38.3 — affirmation → negation core — NEXT
+
+Fresh curriculum/Foundation audit ranks **affirmation → negation** ahead of singular → plural for the next transfer slice.
+
+Existing scaffold:
+
+```text
+F11 → ne / n’ ... pas
+lesson 17 → Je n'ai pas de monnaie.
+lesson 18 → Je ne peux pas.
+lesson 19 → Il n'y a pas d'eau chaude.
+lesson 20 → Mon téléphone ne marche pas.
+F08 / 38.1 → travailler / habiter / aimer
+```
+
+The first negation-transfer slice must remain deliberately narrower than the full negation system:
+
+```text
+Je travaille. → Je ne travaille pas.
+J'habite ici. → Je n'habite pas ici.
+J'aime ça. → Je n'aime pas ça.
+```
+
+38.3 owns a **pure / non-wired deterministic core only**. It must not add learner-facing placement in the same slice.
+
+Explicit exclusions:
+
+```text
+avoir and de-after-negation article changes
+pouvoir / aller / être or other irregular verbs
+il y a special case
+questions
+spoken ne-dropping
+plural transfer
+present → futur proche transfer
+agreement transfer
+new vocabulary
+random/adaptive generation
+new learner store
+durable writes
+Evidence product reads
+mastery claims
+38.2 placement changes
+```
 
 Canonical execution order:
 
 ```text
-audit existing lesson surfaces
-→ choose the smallest contextual insertion point
-→ reuse certified 38.1 core
-→ no new permanent navigation tab
-→ keep exercise optional/contextual and short
-→ no new vocabulary
-→ no irregular verbs
-→ no durable write / Evidence product read unless separately justified
-→ preserve 52/313 IDs and Build 37 owners
-→ VI / DEBUG FR × desktop / 390×844
-→ real lesson entry → transfer → return/continue
-→ learner stores byte-identical
+reuse already-known regular-er material
+→ build deterministic affirmation→negation core
+→ replay F11 + 38.1 predecessors
+→ pure Node contract
+→ VI / DEBUG FR × desktop / 390×844 browser tribunal
+→ localStorage byte-identical
 → one candidate PR
-→ STOP for control review
+→ control review / merge after dedicated proof
 ```
 
-38.2 must **not** simultaneously add negation, plural, futur proche or agreement transfer.
-
-Do **not** start Build 39 inside Build 38.
+Further Build 38 families remain one-at-a-time after 38.3. Do **not** start Build 39 inside Build 38.
 
 ---
 
@@ -588,7 +656,7 @@ Continue as needed:
 
 These tracks must not become excuses to rewrite pedagogical architecture or consume reserved build numbers.
 
-Known inherited CI debt after Build 38.1:
+Known inherited CI debt after Build 38.2:
 
 1. `Build 36.2 Evidence shadow adoption`;
 2. `V2.0.0 Freeze tribunal`;
@@ -637,28 +705,28 @@ Never declare a physical-device gate complete from automation alone.
 
 # 12. Next-agent checklist
 
-Before touching 38.2 runtime:
+Before touching 38.3:
 
 1. read `AGENTS.md`;
 2. read `PROJECT-STATE.md`;
-3. read **Build 38.1 CLOSED** and **38.2 NEXT** above;
+3. read Build 38.1 / 38.2 CLOSED and 38.3 NEXT above;
 4. inspect current `main`, open PRs and current Pages SHA;
 5. preserve Premium V5.10 field contracts;
 6. preserve Recovery v3 / backup v3 / seven-store ownership;
 7. preserve Evidence as derived shadow and original six stores as product truth;
 8. preserve Build 37 Foundation routes/owners;
-9. preserve 38.1 deterministic source/target semantics;
-10. preserve zero-flash atomic navigation;
-11. keep DEBUG independent from theme;
-12. do not regenerate locked Premium assets for a pedagogical task;
-13. choose the **smallest learner-facing placement** for 38.1;
-14. do not extend verbs/subjects in the same slice;
-15. keep learner storage byte-identical unless persistence is explicitly earned;
-16. materialize one candidate PR and stop for control review;
+9. preserve 38.1 deterministic subject-substitution semantics;
+10. preserve 38.2 lesson-33 placement/round-trip semantics;
+11. preserve zero-flash atomic navigation;
+12. keep DEBUG independent from theme;
+13. do not regenerate locked Premium assets for a pedagogical task;
+14. implement only the narrow pure/non-wired negation transfer family;
+15. keep learner storage byte-identical;
+16. materialize one candidate PR and stop for control review unless merge/next work was explicitly delegated;
 17. do not start Build 39 automatically.
 
 ---
 
 # Canonical one-line order
 
-> **Premium V5.10 FIELD PASS → Build 35 CLOSED → Build 36 CLOSED → Build 37 Foundations CLOSED → Build 38.1 transfer core CLOSED → Build 38.2 learner-facing integration NEXT → further Build 38 transfer families one-at-a-time → Build 39 Learner Intelligence 3 → Build 40 A1 Consolidation Audit → A2 only after Build 40 decision.**
+> **Premium V5.10 FIELD PASS → Build 35 CLOSED → Build 36 CLOSED → Build 37 Foundations CLOSED → Build 38.1 subject-substitution core CLOSED → Build 38.2 learner-facing integration CLOSED → Build 38.3 affirmation→negation core NEXT → further Build 38 transfer families one-at-a-time → Build 39 Learner Intelligence 3 → Build 40 A1 Consolidation Audit → A2 only after Build 40 decision.**
