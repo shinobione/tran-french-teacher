@@ -3,6 +3,7 @@
 
   const VERSION = '2.2.0-b32';
   const FOUNDATIONS = '2.4.0-b37.3';
+  const TRANSFER='2.4.0-b38.2';
   const RUNTIME_META = Object.freeze({
     version:'2.4.0',
     build:'36',
@@ -102,6 +103,8 @@
       await loadScript(`./src/pedagogy/foundations-capsule-engine.js?v=${FOUNDATIONS}`, 'foundationsCapsuleEngine');
       await loadScript(`./src/pedagogy/foundations-capsules.js?v=${FOUNDATIONS}`, 'foundationsCapsules');
       await loadScript(`./src/pedagogy/foundations-pilot.js?v=${FOUNDATIONS}`, 'foundationsPilot');
+      await loadScript(`./src/pedagogy/generalization-transfer-core.js?v=${TRANSFER}`, 'generalizationTransferCore');
+      await loadScript(`./src/pedagogy/generalization-transfer-lesson.js?v=${TRANSFER}`, 'generalizationTransferLesson');
       installRuntimeMeta();
       window.FrenchTranquilleBuild27Shell?.refresh?.();
       window.FrenchTranquilleBuild32Shell?.refresh?.();
