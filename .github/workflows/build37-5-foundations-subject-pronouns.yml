@@ -32,7 +32,7 @@ jobs:
           node tools/test-build37-4-foundations-negation.cjs
           node tools/test-build37-5-foundations-subject-pronouns.cjs
 
-      - name: F05 stays a narrow optional consolidation
+      - name: F05 stays a narrow optional consolidation while successors remain additive
         run: |
           set -euo pipefail
           grep -q "concepts:\['F05'\]" src/pedagogy/foundations-capsules.js
@@ -48,7 +48,6 @@ jobs:
           ! grep -q 'localStorage.setItem' src/pedagogy/foundations-pilot.js
           ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/foundations-capsules.js
           ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/foundations-pilot.js
-          ! grep -q 'F12' src/pedagogy/foundations-capsules.js
 
       - name: Product, storage, voice, curriculum and PWA owners stay untouched
         run: |
