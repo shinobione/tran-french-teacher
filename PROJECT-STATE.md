@@ -20,6 +20,7 @@
 - **Build 37 CLOSED — Foundations Core.**
 - **Build 38 NEXT / UNBLOCKED — Generalization & Transfer.**
 - Current closeout branch: **`docs/build37-closeout`** — documentation/governance only; no runtime change.
+- Current closeout PR: **#185 — Build 37 closeout · handoff to Build 38**.
 
 ## Build 37 closeout — certified chain
 
