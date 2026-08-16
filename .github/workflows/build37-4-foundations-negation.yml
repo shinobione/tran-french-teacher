@@ -30,13 +30,17 @@ jobs:
           node --check tools/test-build37-4-foundations-negation.cjs
           node tools/test-build37-2-foundations-capsule-engine.cjs
           node tools/test-build37-4-foundations-negation.cjs
+          if grep -q "consolidation:'37.5'" src/pedagogy/foundations-pilot.js; then
+            node tools/test-build37-5-foundations-subject-pronouns.cjs
+          fi
 
-      - name: F11 stays a narrow optional expansion
+      - name: F11 stays narrow while certified successors may add separate concepts
         run: |
           set -euo pipefail
           grep -q "concepts:\['F11'\]" src/pedagogy/foundations-capsules.js
           grep -q "id:'F11',capsule:negationCapsule,min:17,max:20" src/pedagogy/foundations-pilot.js
           grep -q "expansion:'37.4'" src/pedagogy/foundations-pilot.js
+          grep -q "expansionConcepts:\['F11'\]" src/pedagogy/foundations-pilot.js
           grep -q "adapter:'37.3'" src/pedagogy/foundations-pilot.js
           grep -q 'FrenchTranquilleFoundationsCapsules?.F01_F04' src/pedagogy/foundations-pilot.js
           grep -q 'FrenchTranquilleFoundationsCapsules?.F11' src/pedagogy/foundations-pilot.js
@@ -44,8 +48,16 @@ jobs:
           ! grep -q 'localStorage.setItem' src/pedagogy/foundations-pilot.js
           ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/foundations-capsules.js
           ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/foundations-pilot.js
-          ! grep -q 'F05' src/pedagogy/foundations-capsules.js
           ! grep -q 'F12' src/pedagogy/foundations-capsules.js
+          if grep -q "consolidation:'37.5'" src/pedagogy/foundations-pilot.js; then
+            grep -q "concepts:\['F05'\]" src/pedagogy/foundations-capsules.js
+            grep -q "id:'F05',capsule:subjectPronounsCapsule,min:34,max:36" src/pedagogy/foundations-pilot.js
+            grep -q "consolidationConcepts:\['F05'\]" src/pedagogy/foundations-pilot.js
+            test -f tests/browser/build37-5-foundations-subject-pronouns.html
+            test -f .github/workflows/build37-5-foundations-subject-pronouns.yml
+          else
+            ! grep -q 'F05' src/pedagogy/foundations-capsules.js
+          fi
 
       - name: Product, storage, voice, curriculum and PWA owners stay untouched
         run: |
@@ -54,7 +66,7 @@ jobs:
           changed="$(git diff --name-only origin/main...HEAD)"
           forbidden='^(app\.js|voice-ios\.js|free-voice\.js|index\.html|sw\.js|src/core/build32-loader\.js|src/core/data-recovery|src/core/memory-evidence-v2-runtime\.js|src/pedagogy/memory-evidence-v2-core\.js|src/pedagogy/foundations-core\.js|src/pedagogy/curriculum-stage[234]\.js|src/pedagogy/learning-memory\.js|src/pedagogy/error-intelligence\.js|src/pedagogy/listening-engine\.js|src/pedagogy/scenario-engine\.js|src/pedagogy/mastery-engine\.js|src/pedagogy/learner-intelligence.*\.js|assets/LOGO\.png|assets/Favicon\.png)$'
           if printf '%s\n' "$changed" | grep -E "$forbidden"; then
-            echo 'Build 37.4 must stay inside the Foundations capsule/renderer lane' >&2
+            echo 'Build 37 Foundations successors must stay inside the Foundations capsule/renderer lane' >&2
             exit 1
           fi
 
@@ -65,7 +77,7 @@ jobs:
           sleep 1
           google-chrome --version
 
-      - name: Chrome — real app loads the 37.4 expansion on the 37.3 adapter
+      - name: Chrome — real app keeps the 37.4 expansion owner on the 37.3 adapter
         run: |
           set -euo pipefail
           profile=/tmp/ft-b374-app
@@ -95,10 +107,7 @@ jobs:
               && grep -q 'data-b373-done="1"' "$file" \
               && grep -q 'data-b373-parity="1"' "$file" \
               && grep -q 'data-b373-storage-unchanged="1"' "$file" \
-              && ! grep -q 'data-b373-error=' "$file"; then
-              passed=1
-              break
-            fi
+              && ! grep -q 'data-b373-error=' "$file"; then passed=1; break; fi
           done
           test "$passed" -eq 1
 
@@ -106,8 +115,7 @@ jobs:
         run: |
           set -euo pipefail
           for spec in 'vi 1280 900' 'fr 1280 900' 'vi 390 844' 'fr 390 844'; do
-            set -- $spec
-            locale="$1"; width="$2"; height="$3"; passed=0
+            set -- $spec; locale="$1"; width="$2"; height="$3"; passed=0
             for attempt in 1 2; do
               profile="/tmp/ft-b374-${locale}-${width}-$attempt"
               file="/tmp/b374-${locale}-${width}-$attempt.html"
@@ -120,15 +128,9 @@ jobs:
                 && grep -q 'data-b374-f11="1"' "$file" \
                 && grep -q 'data-b374-storage-unchanged="1"' "$file" \
                 && grep -q 'data-b374-no-overflow="1"' "$file" \
-                && ! grep -q 'data-b374-error=' "$file"; then
-                passed=1
-                break
-              fi
+                && ! grep -q 'data-b374-error=' "$file"; then passed=1; break; fi
             done
-            if [ "$passed" -ne 1 ]; then
-              echo "F11 tribunal failed for $locale ${width}x${height}" >&2
-              exit 1
-            fi
+            if [ "$passed" -ne 1 ]; then echo "F11 tribunal failed for $locale ${width}x${height}" >&2; exit 1; fi
           done
 
       - name: Stop static server
