@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Build 36.3 Recovery seed</title></head>
+<body>Build 36.3 seed</body>
+<script>
+(() => {
+  'use strict';
+  const params = new URLSearchParams(location.search);
+  const mode = params.get('mode') || 'six';
+  const root = document.documentElement;
+  const keys = {
+    learner:'francais-avec-luc:learner:v1',
+    memory:'french-tranquille:learning-memory:v1',
+    errors:'french-tranquille:error-intelligence:v1',
+    scenarios:'french-tranquille:scenarios:v1',
+    listening:'french-tranquille:listening:v1',
+    milestones:'french-tranquille:milestones:v1',
+    evidence:'french-tranquille:memory-evidence:v2'
+  };
+  const meta = [
+    'french-tranquille:recovery:last-good:v1',
+    'french-tranquille:recovery:pre-restore:v1',
+    'french-tranquille:recovery:pre-migration:v1',
+    'french-tranquille:recovery:pre-reset:v1',
+    'french-tranquille:recovery:quarantine:v1',
+    'french-tranquille:safety:pre-build22:v1'
+  ];
+  const now = '2026-08-16T01:00:00.000Z';
+  const stores = {
+    learner:{
+      schemaVersion:2,
+      learnerName:'Trân',
+      level:'A0',
+      lessonProgress:{l1:999,l2:999,l3:999,l4:999,l5:999,l6:999,l7:999,l8:4},
+      completedLessons:['l1','l2','l3','l4','l5','l6','l7'],
+      knownItems:['bonjour','merci','au-revoir','je-mappelle','svp','excusez-moi','je-comprends','je-ne-comprends-pas','repetez','plus-lentement','je-suis-vietnamienne','je-viens-vietnam','jhabite-hcm','et-vous','oui','non','je-voudrais','eau','cafe','the','addition','combien-ca-coute','jaime','je-naime-pas','beaucoup','un-peu','cest-bon','je-prefere','zero','un','deux','trois','quatre','cinq','six','sept','huit','neuf','dix','euros'],
+      reviewState:{bonjour:2,'je-voudrais':1},
+      conversationWins:5,
+      lastActivity:now,
+      streak:{current:6,lastDate:'2026-08-16'}
+    },
+    memory:{
+      schemaVersion:1,
+      items:{
+        bonjour:{id:'bonjour',firstSeen:'2026-08-01T08:00:00.000Z',lastSeen:'2026-08-15T08:00:00.000Z',lastReviewed:'2026-08-15T08:00:00.000Z',dueAt:'2026-08-18T08:00:00.000Z',intervalDays:3,attempts:4,successes:4,misses:0,streak:3,strength:3,lastRating:2,lastSource:'smart-review'},
+        'je-voudrais':{id:'je-voudrais',firstSeen:'2026-08-02T08:00:00.000Z',lastSeen:'2026-08-15T09:00:00.000Z',lastReviewed:'2026-08-15T09:00:00.000Z',dueAt:'2026-08-16T09:00:00.000Z',intervalDays:1,attempts:3,successes:2,misses:1,streak:1,strength:1.5,lastRating:1,lastSource:'scenario-success'}
+      },
+      totals:{reviews:7,difficult:1,correct:2,easy:4},
+      updatedAt:now
+    },
+    errors:{
+      schemaVersion:1,
+      items:{
+        'je-voudrais':{id:'je-voudrais',counts:{'retrieval-difficult':0,'text-mismatch':0,'scenario-miss':1,assisted:1,'voice-unrecognized':0,partial:0,'practice-miss':0,'repeated-miss':0},totalErrors:2,recoveries:1,errorStreak:0,lastErrorAt:'2026-08-14T10:00:00.000Z',lastRecoveryAt:'2026-08-15T09:00:00.000Z',lastType:'assisted',lastSource:'scenario-success',events:[{id:'je-voudrais',type:'scenario-miss',source:'scenario-miss',at:'2026-08-14T09:55:00.000Z',repeated:false,note:null},{id:'je-voudrais',type:'assisted',source:'scenario-assisted',at:'2026-08-14T10:00:00.000Z',repeated:false,note:null}]}
+      },
+      recent:[{id:'je-voudrais',type:'scenario-miss',source:'scenario-miss',at:'2026-08-14T09:55:00.000Z',repeated:false,note:null},{id:'je-voudrais',type:'assisted',source:'scenario-assisted',at:'2026-08-14T10:00:00.000Z',repeated:false,note:null}],
+      totals:{errors:2,recoveries:1,assisted:1,voice:0,repeated:0},
+      updatedAt:now
+    },
+    scenarios:{
+      schemaVersion:1,
+      scenarios:{cafe:{plays:2,completions:1,bestErrors:1,lastPlayed:'2026-08-15T10:00:00.000Z',lastCompleted:'2026-08-15T10:05:00.000Z'}},
+      totalCompletions:1,
+      updatedAt:now
+    },
+    listening:{
+      schemaVersion:1,
+      totals:{sessions:2,attempts:3,correct:2,misses:1,plays:5,replays:2,slowPlays:1},
+      families:{meaning:{attempts:2,correct:2},contrast:{attempts:1,correct:0},dialogue:{attempts:0,correct:0}},
+      recent:[{at:'2026-08-15T11:00:00.000Z',family:'meaning',id:'meaning:bonjour',ok:true,slow:false,replays:1},{at:'2026-08-15T11:05:00.000Z',family:'contrast',id:'contrast:g1:je-voudrais',ok:false,slow:true,replays:0}],
+      updatedAt:now
+    },
+    milestones:{schemaVersion:1,seen:{welcome:true,'lesson-7':true},updatedAt:now}
+  };
+
+  if (mode === 'six') {
+    Object.values(keys).forEach(key => localStorage.removeItem(key));
+    meta.forEach(key => localStorage.removeItem(key));
+    Object.entries(stores).forEach(([id,value]) => localStorage.setItem(keys[id],JSON.stringify(value)));
+    localStorage.removeItem(keys.evidence);
+    localStorage.removeItem('french-tranquille:b36:pwa-persist');
+    root.dataset.b36SeedDone='1';
+    root.dataset.b36SeedMode='six';
+    root.dataset.b36SeedSources=Object.keys(stores).length;
+    root.dataset.b36SeedEvidence=localStorage.getItem(keys.evidence)===null?'0':'1';
+    return;
+  }
+
+  if (mode === 'corrupt-evidence') {
+    localStorage.setItem(keys.evidence,'{broken-json');
+    root.dataset.b36SeedDone='1';
+    root.dataset.b36SeedMode='corrupt-evidence';
+    root.dataset.b36SeedEvidence='corrupt';
+    return;
+  }
+
+  root.dataset.b36SeedDone='0';
+  root.dataset.b36SeedError='unknown-mode';
+})();
+</script>
+</html>
