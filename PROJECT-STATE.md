@@ -9,16 +9,17 @@
 - Reconciled: **2026-08-16**.
 - Repository: `shinobione/tran-french-teacher`.
 - Default branch: `main`.
-- Current runtime-bearing `main`: **`b7b8690e9684d90955c8c78933fae3ba1778ccc9`** — PR **#181**, Build **37.6 · F08 regular `-er` present consolidation**.
-- GitHub Pages **#234 / run `31972823389`** on `b7b8690…`: **SUCCESS**.
-- Build 37.6 PR matrix settled with all non-inherited checks green; the four historical failures remain baseline debt.
+- Current runtime-bearing `main`: **`d4d0436cfc86019de1e5e8a378c97829414b4656`** — PR **#183**, Build **37.7 · F12 Practical Question System**.
+- GitHub Pages **#235 / run `31973980389`** on that exact SHA: **SUCCESS**.
+- PR #183 matrix closed with **all non-inherited workflows green + exactly the four inherited historical failures**.
+- Post-merge `main` push matrix has exactly those same four failures; at this reconciliation one unrelated Build 26.4 Progress/Tyffany smoke is still finishing its legacy Chrome Details-scroll step and has introduced no new failure.
 - Visible application runtime metadata: **v2.4.0 · Build 36**.
 - Pedagogy baseline: **v2.3.0 · Build 34**.
 - Premium V5.10: **CLOSED / physical FIELD PASS**; issue **#114 CLOSED**.
 - **Build 35 CLOSED — Memory Evidence v2 / Migration Readiness.**
 - **Build 36 CLOSED — Memory Evidence v2 derived-shadow adoption.**
 - **Build 37 ACTIVE — Foundations Core.**
-- Current implementation branch: **`build37/f12-questions-core-v2`** — Build **37.7 · F12 Practical Question System**, **candidate in validation**.
+- Current implementation branch: **`build37/f13-adjective-agreement`** — Build **37.8 · F13 adjective agreement**, narrow candidate being prepared from deployed `main d4d0436…`.
 
 ## Build 37 certified chain
 
@@ -29,7 +30,8 @@
 37.4 F11 negation narrow expansion            ✅ MERGED / CERTIFIED
 37.5 F05 subject-pronoun consolidation        ✅ MERGED / CERTIFIED / DEPLOYED
 37.6 F08 regular -er present consolidation    ✅ MERGED / CERTIFIED / DEPLOYED
-37.7 F12 practical question system            🚧 CURRENT CANDIDATE / VALIDATION
+37.7 F12 practical question system            ✅ MERGED / CERTIFIED / DEPLOYED
+37.8 F13 adjective agreement                  🚧 CURRENT NARROW CANDIDATE
 ```
 
 ## Shared Foundations ownership — LOCKED
@@ -42,10 +44,11 @@ Historical ownership is additive. Later slices must not overwrite earlier owners
 37.4 → F11 expansion
 37.5 → F05 subject-pronoun consolidation
 37.6 → F08 regular -er verb-pattern consolidation
-37.7 → F12 practical-question systematization candidate
+37.7 → F12 practical-question systematization
+37.8 → F13 adjective-agreement candidate
 ```
 
-Current candidate metadata:
+Current certified metadata through 37.7:
 
 ```text
 adapter: '37.3'
@@ -59,14 +62,14 @@ systematization: '37.7'
 systematizationConcepts: ['F12']
 ```
 
-Current routes:
+Current certified routes:
 
 ```text
 F01–F04 → lessons 8–13
 F11     → lessons 17–20
 F08     → lessons 32–33
 F05     → lessons 34–36
-F12     → lessons 41–43   # candidate until 37.7 merges
+F12     → lessons 41–43
 ```
 
 ## Current durable data contract — LOCKED
@@ -84,39 +87,20 @@ F12     → lessons 41–43   # candidate until 37.7 merges
 
 Recognition failure remains recognition-system evidence, never a pronunciation diagnosis.
 
-## Build 37.6 — F08 certified contract
+## Build 37.7 — F12 certified contract
 
-Route: **lessons 32–33 only**.
+Route: **lessons 41–43 only**.
 
-```text
-many regular -er verbs, written present:
-je       → -e
-tu       → -es
-il/elle  → -e
-```
-
-The capsule notes that these forms often sound identical in speech, so the subject pronoun matters. It reconnects frequent exceptions such as `aller → tu vas` instead of implying that every `-er` verb follows the same pattern.
-
-F05 remains owner of lessons 34–36; no six-person conjugation table was introduced.
-
-### F08 Chrome harness note
-
-The historical Build 37.6 browser tribunal has a known headless timing flake at its final lesson-34 routing check: Chrome can dump the DOM after F05 is already mounted but before two final `requestAnimationFrame` callbacks write the `data-b376-*` completion markers.
-
-This was diagnosed twice without changing F08 product code. A diagnostic run showed:
+Teaching key:
 
 ```text
-FR 390×844 → full F08 markers PASS
-VI desktop → final F05 route visibly mounted, no b376 error, completion markers not yet written
+close person → ordinary sentence + question intonation
+missing info → question word
+polite context → Pouvez-vous… ?
+clarification → Qu'est-ce que ça veut dire ?
 ```
 
-Treat this as old harness timing, not a product regression. Do **not** patch F08 to satisfy that marker race.
-
-## Build 37.7 candidate — F12 practical questions
-
-Build 33 / the 37.1 registry classify F12 as **PARTIAL / system weak / teach-core**.
-
-Exact curriculum anchors already exist:
+Exact existing anchors reused:
 
 ```text
 lesson 25 → Où ? Quand ? Pourquoi ? Avec qui ? Quoi ?
@@ -127,54 +111,63 @@ lesson 42 → Combien il vous faut ?
 lesson 43 → Lequel est mieux ?
 ```
 
-37.7 therefore routes F12 only to **lessons 41–43**, after these strategies have already been encountered in real curriculum context.
+37.7 does not teach inversion, does not add a broad new `Est-ce que…` system, does not rewrite curriculum items and makes no durable write.
 
-Teaching key:
+### Build 37 predecessor CI composability — repaired in #183
 
-```text
-close person → ordinary sentence + question intonation
-missing info → question word
-polite stranger/context → Pouvez-vous… ?
-clarification → Qu'est-ce que ça veut dire ?
-```
+Historical 37.4/37.5/37.6 guards previously contained temporal assertions forbidding selected future concepts. #183 removed only those successor bans while preserving each predecessor's own concept, route, persistence, Evidence and protected-owner contracts.
 
-Explicitly out of scope:
+The historical F08 browser tribunal was also made synchronous to remove a diagnosed headless `requestAnimationFrame` race. F08 product behavior was not changed.
 
-```text
-subject-verb inversion
-new broad Est-ce que system
-large interrogative grammar table
-curriculum rewrites / new items
-persistent Foundations mastery
-Evidence product read
-F13 adjective agreement
-F16 à/de contractions
-Build 38 transfer/generalization
-A2
-```
+## Build 37.8 candidate — F13 adjective agreement
 
-37.7 dedicated evidence must replay:
+Build 33 / the 37.1 registry classify F13 as **PARTIAL / later core / teach-core**.
+
+Exact curriculum evidence makes F13 a cleaner next candidate than F16:
 
 ```text
-F01–F04 predecessor parity
-→ F11 predecessor parity
-→ F05 predecessor parity
-→ F08 semantic contract via Build 37.6 Node test
-→ F08 real route + dialog open inside the deterministic 37.7 browser tribunal
-→ F12 VI / DEBUG FR × desktop / 390×844
+lesson 16 → Je suis prête. / Il est français. / Elle est française.
+lesson 38 → feminine written forms already introduced in passé composé: allée / arrivée / rentrée…
+lesson 40 → Je suis contente. / inquiète. / stressée. / très fatiguée.
 ```
 
-Required routing boundaries:
+The strongest learner-facing anchor is lesson 40, whose existing grammar note already says:
 
 ```text
-40 → no F12
-41–43 → F12
-44 → no F12
-32 → still F08
-34 → still F05
+je suis + adjectif
 ```
 
-Storage must remain byte-identical, with no Evidence product read and no horizontal overflow.
+37.8 must **not** collapse past-participle agreement and adjective agreement into one rule. Lesson 38 is only a prior visual bridge: Trân has already noticed that feminine written forms may change.
+
+Candidate teaching direction:
+
+```text
+Who does the adjective describe?
+→ for Trân / a feminine subject, the written adjective often changes
+→ common familiar patterns, not one universal “just add -e” rule
+```
+
+Safe familiar examples include:
+
+```text
+prêt → prête
+content → contente
+fatigué → fatiguée
+stressé → stressée
+français → française   # familiar special pattern, not universal
+```
+
+Likely route should stay **before F12 and not overlap lessons 41–43**. Exact route must be chosen from the smallest justified lesson window around lessons 38–40 before implementation.
+
+### Why F16 is not selected now
+
+F16 has one excellent contrast in lesson 45:
+
+```text
+à la tête ↔ au ventre
+```
+
+but `du / des` also collide with already-taught partitive/article meanings, and no equally clean `aux` anchor was found in the inspected curriculum. F16 therefore carries more risk of teaching an artificial or ambiguous contraction table. It remains unresolved, not rejected forever.
 
 ## Current inherited CI debt
 
@@ -208,16 +201,15 @@ V5.10 field-accepted navigation / visual identities
 ## NEXT
 
 ```text
-37.7 branch: build37/f12-questions-core-v2
-→ finish clean dedicated 37.7 validation
-→ remove all temporary diagnostics before PR
-→ inspect final diff against main b7b8690…
-→ open ONE PR only after the dedicated guard is green
-→ PR matrix may retain exactly the four inherited historical failures
-→ any new non-baseline failure must be fixed or proven flaky without product appeasement
-→ if merged, verify Pages on the exact merge SHA
-→ then fresh-audit F13 versus F16; choose at most ONE next narrow concept or close Build 37 if the roadmap evidence supports it
-→ do not mass-rollout F13 + F16
+37.7 is MERGED / CERTIFIED / DEPLOYED on main d4d0436…
+→ finish exact F13 anchor/routing audit
+→ implement ONE narrow F13 capsule only if it remains pedagogically justified
+→ dedicated 37.8 tribunal must replay F01–F04 + F11 + F08 + F05 + F12 ownership before F13
+→ VI / DEBUG FR × desktop / iPhone-size
+→ storage byte-identical
+→ NO Evidence product read
+→ F16 remains out of scope
+→ after 37.8, reassess whether Build 37 should CLOSE instead of forcing F16
 → do not begin Build 38 transfer/generalization inside Build 37
 ```
 
