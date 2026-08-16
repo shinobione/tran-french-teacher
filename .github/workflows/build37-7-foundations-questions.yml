@@ -135,7 +135,7 @@ jobs:
         run: |
           set -euo pipefail
           for spec in 'vi 1280 900' 'fr 1280 900' 'vi 390 844' 'fr 390 844'; do
-            set -- $spec; locale="$1"; width="$2"; height="$3"; passed=0
+            set -- $spec; locale="$1"; width="$2"; height="$3"; passed=0; file=''
             for attempt in 1 2; do
               profile="/tmp/ft-b377-${locale}-${width}-$attempt"
               file="/tmp/b377-${locale}-${width}-$attempt.html"
@@ -152,7 +152,16 @@ jobs:
                 && grep -q 'data-b377-no-overflow="1"' "$file" \
                 && ! grep -q 'data-b377-error=' "$file"; then passed=1; break; fi
             done
-            if [ "$passed" -ne 1 ]; then echo "F12 tribunal failed for $locale ${width}x${height}" >&2; exit 1; fi
+            if [ "$passed" -ne 1 ]; then
+              echo "F12 tribunal failed for $locale ${width}x${height}" >&2
+              echo '--- Build 37.7 root markers ---' >&2
+              grep -o 'data-b377-[^ >]*="[^"]*"' "$file" >&2 || true
+              echo '--- Build 37.7 assertion ---' >&2
+              grep -o 'data-b377-error="[^"]*"' "$file" >&2 || true
+              echo '--- Active Foundations route ---' >&2
+              grep -o 'data-foundation-capsule="[^"]*"' "$file" | tail -5 >&2 || true
+              exit 1
+            fi
           done
 
       - name: Stop static server
