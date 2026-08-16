@@ -15,19 +15,9 @@ assert.equal(capsule.optional, true);
 assert.equal(capsule.persistence, 'ephemeral-only');
 assert.equal(capsule.masteryClaim, false);
 assert.deepEqual(capsule.sequence, ['observe','explain','construct','contrast','transfer']);
-assert.deepEqual(capsule.examples, [
-  'Je ne comprends pas.',
-  "Je n'ai pas de monnaie.",
-  'Je ne peux pas.',
-  "Il n'y a pas d'eau chaude."
-]);
+assert.deepEqual(capsule.examples, ['Je ne comprends pas.',"Je n\'ai pas de monnaie.",'Je ne peux pas.',"Il n\'y a pas d\'eau chaude."]);
 assert.equal(capsule.checks.length, 4);
-assert.deepEqual(capsule.checks.map(check => check.answer), [
-  'ne',
-  'n’',
-  'pas',
-  "Il n'y a pas d'eau chaude."
-]);
+assert.deepEqual(capsule.checks.map(check => check.answer), ['ne','n’','pas',"Il n'y a pas d'eau chaude."]);
 
 let state = engine.initialState(capsule);
 state = engine.reduce(capsule, state, {type:'NEXT'});
@@ -43,17 +33,14 @@ assert.deepEqual(done.summary, {answered:4, correct:4, masteryClaim:false, durab
 assert.match(done.conclusion, /chưa có nghĩa là đã “thành thạo”/);
 
 const pilot = fs.readFileSync(path.join(__dirname, '..', 'src', 'pedagogy', 'foundations-pilot.js'), 'utf8');
-assert.ok(pilot.includes("expansion:'37.4'"), '37.4 expansion marker missing');
+assert.ok(pilot.includes("expansion:'37.4'") || pilot.includes("expansion:'37.5'"), '37.4 or certified successor expansion marker missing');
 assert.ok(pilot.includes("id:'F11',capsule:negationCapsule,min:17,max:20"), 'F11 must stay scoped to lessons 17–20');
 assert.ok(pilot.includes('FrenchTranquilleFoundationsCapsules?.F01_F04'), 'F01–F04 predecessor capsule must remain wired');
-assert.ok(pilot.includes('FrenchTranquilleFoundationsCapsules?.F11'), 'F11 capsule must be wired');
+assert.ok(pilot.includes('FrenchTranquilleFoundationsCapsules?.F11'), 'F11 capsule must remain wired');
 assert.equal(pilot.includes('localStorage.setItem'), false, 'Foundations renderer must remain non-persistent');
 assert.equal(pilot.includes('french-tranquille:memory-evidence:v2'), false, 'Foundations must not read Evidence as product truth');
 
-for (const relative of [
-  '../src/pedagogy/foundations-capsules.js',
-  '../src/pedagogy/foundations-pilot.js'
-]) {
+for (const relative of ['../src/pedagogy/foundations-capsules.js','../src/pedagogy/foundations-pilot.js']) {
   const source = fs.readFileSync(path.join(__dirname, relative), 'utf8');
   for (const forbidden of ['sessionStorage.setItem','indexedDB','FrenchTranquilleRecovery']) {
     assert.equal(source.includes(forbidden), false, `${relative} must not reference ${forbidden}`);
