@@ -9,10 +9,10 @@
 - Reconciled: **2026-08-17**.
 - Repository: `shinobione/tran-french-teacher`.
 - Default branch: `main`.
-- `main` currently contains only documentation/governance commits after the last runtime-bearing product commit; **always verify live HEAD before implementation**.
-- Current runtime-bearing product commit: **`694988e6299c7d25ca9e019f275c473422fd983e`** — PR **#188**, Build **38.2 · learner-facing subject substitution**.
-- GitHub Pages **#241 / run `31978687464` — SUCCESS** on runtime commit `694988e…`.
-- Post-merge product matrix on `694988e…`: **37 runs = 33 SUCCESS + exactly the 4 inherited historical failures**, **0 queued**, **0 in-progress**.
+- Current runtime-bearing product commit: **`8c5c83e94113eeced0110447ffb60202ff377a5b`** — PR **#189**, Build **38.3 · deterministic affirmation → negation transfer core**.
+- GitHub Pages **#252 / run `31979484134` — SUCCESS** on that exact SHA.
+- Post-merge matrix on `8c5c83e…`: **exactly the 4 inherited historical failures**, **0 queued**, **0 in-progress**.
+- One extra `Field reliability V2 — router + lesson audio` red appeared on first post-merge attempt; its static contracts/sanctuaries were green and the first Chrome dump occurred before field-audio decoration. The **same job rerun unchanged** completed fully SUCCESS, proving a harness/timing flake. No product patch was made.
 - Visible application runtime metadata remains **v2.4.0 · Build 36**.
 - Pedagogy baseline: **v2.3.0 · Build 34**.
 - Curriculum: **52 lessons / 313 items**.
@@ -23,23 +23,95 @@
 - **Build 38 ACTIVE — Generalization & Transfer.**
 - **Build 38.1 CLOSED / CERTIFIED / MERGED.**
 - **Build 38.2 CLOSED / CERTIFIED / MERGED / DEPLOYED.**
-- **Build 38.3 NEXT — narrow deterministic affirmation → negation transfer core.**
+- **Build 38.3 CLOSED / CERTIFIED / MERGED.**
+- **Build 38.4 NEXT — narrow deterministic present → futur proche transfer core.**
 
-## Build 38.2 — certified learner-facing integration
+## Build 38.3 — certified negation transfer core
 
-Placement is intentionally narrow:
+Family:
+
+```text
+affirmation-negation-regular-er-je
+```
+
+Exact deterministic matrix:
+
+```text
+Je travaille. → Je ne travaille pas.
+J'habite ici. → Je n'habite pas ici.
+J'aime ça. → Je n'aime pas ça.
+```
+
+Implementation:
+
+```text
+src/pedagogy/generalization-negation-core.js
+status = pure-non-wired
+persistence = ephemeral-only
+masteryClaim = false
+```
+
+38.3 deliberately does **not** wire another learner-facing card. It preserves the 38.2 lesson-33 UI unchanged.
+
+### 38.3 proof / closeout
+
+Candidate:
+
+```text
+PR #189
+head 92d581eed175a7cca87ad93555783485181a3dee
+```
+
+Dedicated candidate workflow:
+
+```text
+Build 38.3 Generalization negation transfer
+run 31979223610 — SUCCESS
+```
+
+Dedicated proof certifies:
+
+```text
+F11 predecessor PASS
+38.1 predecessor PASS
+38.3 pure contract PASS
+VI × 1280×900 PASS
+FR × 1280×900 PASS
+VI × 390×844 PASS
+FR × 390×844 PASS
+3 deterministic negation transformations through real clicks
+localStorage byte-identical
+no horizontal overflow
+choice targets >=44 px
+```
+
+PR matrix settled at exactly the four inherited historical failures before merge.
+
+Final merge/deployment:
+
+```text
+PR #189 MERGED
+main 8c5c83e94113eeced0110447ffb60202ff377a5b
+Pages #252 / run 31979484134 — SUCCESS
+post-merge after unchanged Field reliability rerun = exactly 4 inherited failures
+0 queued / 0 in-progress
+```
+
+No physical smoke is required for 38.3 because the slice is pure/non-wired.
+
+## Build 38.2 — locked learner-facing integration
+
+Placement remains:
 
 ```text
 lesson 33 normal content
 → existing F08 optional card
-→ optional “build a sentence” transfer card
+→ optional subject-substitution Transfer card
 → 3 deterministic exercises
-→ no mastery claim
-→ return to lesson
-→ normal Continue remains available
+→ return to lesson / normal Continue
 ```
 
-Certified learner-facing exercises:
+Certified learner-facing exercises remain:
 
 ```text
 Je travaille. → Tu travailles.
@@ -47,55 +119,7 @@ J'habite ici. → Tu habites ici.
 Tu aimes ça. → Elle aime ça.
 ```
 
-38.2 reuses the 38.1 `subject-substitution-regular-er` core. It adds no new transfer family, vocabulary, irregular verb or permanent navigation route.
-
-### 38.2 proof
-
-Final candidate head:
-
-```text
-0e3e0e58e244faec4394d915f1bc2b937e9c5064
-```
-
-Dedicated proof passed on the code-bearing candidate and final candidate head. The code-bearing run was:
-
-```text
-Build 38.2 Learner-facing subject substitution
-run 31977464288 — SUCCESS
-```
-
-PR-matrix review classified temporary Build 37 / 38.1 reds as predecessor implementation-slice scope guards, not product regressions: their semantic contracts passed and their guard rejected successor wiring such as `sw.js`. Post-merge on `main`, those successor-scope false positives disappeared.
-
-Final deployment:
-
-```text
-PR #188 MERGED
-runtime commit 694988e6299c7d25ca9e019f275c473422fd983e
-Pages #241 / run 31978687464 — SUCCESS
-post-merge: 33 SUCCESS + exactly 4 inherited failures
-0 queued / 0 in-progress
-```
-
-Automated browser proof certifies:
-
-```text
-F08 predecessor PASS
-38.1 pure predecessor PASS
-VI × 1280×900 PASS
-FR × 1280×900 PASS
-VI × 390×844 PASS
-FR × 390×844 PASS
-F08 + Transfer coexist in lesson 33 in that order
-3 real transfer answer clicks
-return focus + normal lesson Continue survives
-lesson 32 remains F08-only
-lesson 34 remains F05-only
-localStorage byte-identical
-no horizontal overflow
-entry/choice targets >=44 px
-```
-
-No new physical-device gate is required merely to close this bounded 38.2 integration; future iPhone defects remain real maintenance regressions if observed.
+Do not stack another learner-facing transfer card into lesson 33 without a fresh placement/interaction decision.
 
 ## Build 38.1 — locked predecessor semantics
 
@@ -107,18 +131,7 @@ subjects je / tu / il / elle
 verbs    travailler / habiter / aimer
 ```
 
-Canonical catalog:
-
-```text
-Je travaille.  → Tu travailles.
-Tu travailles. → Elle travaille.
-J'habite ici.  → Tu habites ici.
-Il habite ici. → Elle habite ici.
-J'aime ça.     → Tu aimes ça.
-Tu aimes ça.   → Elle aime ça.
-```
-
-Core remains deterministic and ephemeral. 38.2 wires it learner-facing but does not broaden its certified matrix.
+Canonical catalog remains unchanged.
 
 ## Build 37 ownership — LOCKED
 
@@ -165,43 +178,49 @@ V5.10 field-accepted navigation / visual identities
 Build 37 Foundations ownership/routes
 38.1 deterministic subject-substitution semantics
 38.2 lesson-33 placement/round-trip contract
+38.3 deterministic negation semantics
 ```
 
-## NEXT — Build 38.3
+## NEXT — Build 38.4
 
-Fresh audit after 38.2 identifies **affirmation → negation** as the cleanest next transfer candidate, ahead of singular → plural.
+Fresh audit after 38.3 selects **present → futur proche** as the cleanest next pure transfer family.
 
-Why:
+The strongest narrow matrix uses **one already-known regular verb** and the four already-certified singular subjects:
 
 ```text
-F11 already teaches ne / n’ ... pas
-lesson 17 → Je n'ai pas de monnaie.
-lesson 18 → Je ne peux pas.
-lesson 19 → Il n'y a pas d'eau chaude.
-lesson 20 → Mon téléphone ne marche pas.
-38.1/F08 already owns travailler / habiter / aimer regular-er forms
+Je travaille.   → Je vais travailler.
+Tu travailles.  → Tu vas travailler.
+Il travaille.   → Il va travailler.
+Elle travaille. → Elle va travailler.
 ```
 
-The first implementation slice must stay narrower than the full negation system:
+Why this is clean:
 
 ```text
-Je travaille. → Je ne travaille pas.
-J'habite ici. → Je n'habite pas ici.
-J'aime ça. → Je n'aime pas ça.
+lesson 32 already owns tu travailles / tu vas
+lesson 33 already owns il/elle travaille and il/elle va patterns
+lesson 35 explicitly teaches futur proche = aller + infinitif
+lesson 35 contains Je vais travailler.
+38.1 already certifies je / tu / il / elle + travailler source forms
 ```
 
-This deliberately avoids:
+38.4 must remain **pure / non-wired**. It should prove only the structure:
 
 ```text
-avoir / article de-after-negation changes
-pouvoir / aller / être / irregular verbs
-il y a special case
+present regular-er sentence
+→ same subject + correct present of aller + infinitive travailler
+```
+
+Explicit exclusions for the first slice:
+
+```text
+nous / vous / ils / elles
+other infinitives
+negation + futur proche combination
 questions
-spoken ne-dropping
-plural
-futur proche
-agreement transformations
+past tense
 new vocabulary
+random/adaptive generation
 learner-facing wiring
 durable writes
 Evidence product reads
@@ -211,9 +230,10 @@ mastery claims
 Canonical execution order:
 
 ```text
-→ create one pure/non-wired deterministic 38.3 negation-transfer core
-→ reuse only already-known regular-er material
-→ replay F11 + 38.1 predecessors
+→ create one pure deterministic future-transfer core
+→ reuse 38.1 subject/travailler sources
+→ anchor exact aller/futur-proche forms to lessons 32–35
+→ replay 38.1 + 38.3 predecessors
 → VI / DEBUG FR × desktop / 390×844 browser tribunal
 → learner stores byte-identical
 → one candidate PR
