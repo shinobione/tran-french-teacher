@@ -70,7 +70,7 @@
     runtimeStatus.lastError = null;
     const beforeSources = sourceSnapshot();
     const beforeEvidence = localStorage.getItem(EVIDENCE_KEY);
-    const needsInitialAdoption = initial && beforeEvidence === null;
+    let needsInitialAdoption = false;
 
     try {
       if (allSourcesMissing()) {
@@ -80,9 +80,13 @@
         return emptyResult;
       }
 
+      // The first real Evidence write always owns a pre-migration snapshot,
+      // whether it happens at boot or after the first source store appears.
+      needsInitialAdoption = beforeEvidence === null;
       if (needsInitialAdoption) {
         Recovery.capturePreMigration?.({
           reason: 'memory-evidence-v2-shadow-adoption',
+          trigger: initial ? 'boot' : 'first-source-write',
           targetBackupVersion: Core.BACKUP_VERSION,
           proposedStoreKey: EVIDENCE_KEY
         });
