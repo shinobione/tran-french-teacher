@@ -18,7 +18,7 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Syntax, pure recovery tests and wiring
+      - name: Syntax, pure recovery tests and successor wiring
         run: |
           node --check src/core/data-recovery-core.js
           node --check src/core/data-recovery.js
@@ -26,10 +26,19 @@ jobs:
           node --check src/core/build-meta.js
           node --check sw.js
           node tools/test-build28-data-recovery.cjs
-          # Build 28 remains a mandatory subsystem; later builds may own global metadata/cache identity.
+          # The Build 28 source validators remain a permanent subsystem even after Recovery v3 adoption.
           grep -q 'src/core/data-recovery-core.js?v=1.21.0-b28' index.html
-          grep -q 'src/core/data-recovery.js?v=1.21.0-b28' index.html
-          grep -q 'tests/smoke/data-recovery-smoke.js?v=1.21.0-b28' index.html
+          if test -f src/core/data-recovery-v3-runtime-core.js && grep -q 'data-recovery-v3-runtime-core.js' index.html; then
+            grep -q 'src/pedagogy/memory-evidence-v2-core.js?v=2.4.0-b36.2' index.html
+            grep -q 'src/core/data-recovery-v3-contract.js?v=2.4.0-b36.2' index.html
+            grep -q 'src/core/data-recovery-v3-runtime-core.js?v=2.4.0-b36.2' index.html
+            grep -q 'src/core/data-recovery.js?v=2.4.0-b36.2' index.html
+            grep -q 'src/core/memory-evidence-v2-runtime.js?v=2.4.0-b36.2' index.html
+            grep -q 'tests/smoke/data-recovery-smoke.js?v=2.4.0-b36.2' index.html
+          else
+            grep -q 'src/core/data-recovery.js?v=1.21.0-b28' index.html
+            grep -q 'tests/smoke/data-recovery-smoke.js?v=1.21.0-b28' index.html
+          fi
           grep -q 'src/core/build-meta.js?v=' index.html
           grep -q 'FrenchTranquilleRecovery' src/core/build-meta.js
           grep -q 'tran-french-teacher-v' index.html sw.js
@@ -37,7 +46,7 @@ jobs:
           grep -q 'src/core/data-recovery.js' sw.js
           grep -q 'tests/smoke/data-recovery-smoke.js' sw.js
 
-      - name: Durable-store contract is explicit
+      - name: Durable-store and Recovery metadata contract is explicit
         run: |
           grep -q "francais-avec-luc:learner:v1" src/core/data-recovery-core.js
           grep -q "french-tranquille:learning-memory:v1" src/core/data-recovery-core.js
@@ -54,6 +63,7 @@ jobs:
 
       - name: Learner, voice and branding sanctuaries remain byte-identical
         run: |
+          test "$(git hash-object src/core/data-recovery-core.js)" = "10dc84bb71b82c62b5f169f52c6bd95c88b308f9"
           test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
           test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
           test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
