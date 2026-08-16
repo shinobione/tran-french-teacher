@@ -6,36 +6,35 @@
 
 ## Last reconciliation
 
-- Reconciled: **2026-08-16**.
+- Reconciled: **2026-08-17**.
 - Repository: `shinobione/tran-french-teacher`.
 - Default branch: `main`.
-- Runtime-bearing `main`: **`d4d0436cfc86019de1e5e8a378c97829414b4656`** — PR **#183**, Build **37.7 · F12 Practical Question System**.
-- GitHub Pages **#235 / run `31973980389`** on that exact SHA: **SUCCESS**.
-- PR #183 matrix closed with **all non-inherited workflows green + exactly the four inherited historical failures**.
-- Current PR: **#184 — Build 37.8 · F13 adjective agreement**.
-- Current branch: **`build37/f13-adjective-agreement`**.
-- Last fully code-bearing candidate tree before this handoff-only commit: **`820f9fb49cbc7bd833323f79750b4065c6c6ee61`**.
-- Dedicated Build 37.8 run **`31974879612`** on `820f9fb…`: **SUCCESS complete**.
-- Hardened Real Life III run **`31974879487`** on `820f9fb…`: **SUCCESS complete**, including lesson 35.
+- Runtime-bearing `main`: **`cb37b4a6bdd9451a07e83deeae2544a407d78844`** — PR **#184**, Build **37.8 · F13 adjective agreement**.
+- GitHub Pages **#236 / run `31975143562`** on that exact SHA: **SUCCESS**.
+- Post-merge matrix on `cb37b4a6…`: **32 SUCCESS + exactly 4 inherited historical failures**, **0 queued**, **0 in-progress**.
 - Visible application runtime metadata: **v2.4.0 · Build 36**.
 - Pedagogy baseline: **v2.3.0 · Build 34**.
 - Premium V5.10: **CLOSED / physical FIELD PASS**; issue **#114 CLOSED**.
 - **Build 35 CLOSED — Memory Evidence v2 / Migration Readiness.**
 - **Build 36 CLOSED — Memory Evidence v2 derived-shadow adoption.**
-- **Build 37 ACTIVE — Foundations Core.**
+- **Build 37 CLOSED — Foundations Core.**
+- **Build 38 NEXT / UNBLOCKED — Generalization & Transfer.**
+- Current closeout branch: **`docs/build37-closeout`** — documentation/governance only; no runtime change.
 
-## Build 37 chain
+## Build 37 closeout — certified chain
 
 ```text
 37.1 registry F01–F18                         ✅ MERGED / CERTIFIED
 37.2 generic pure capsule engine              ✅ MERGED / CERTIFIED
 37.3 F01–F04 pilot adapter parity             ✅ MERGED / CERTIFIED
-37.4 F11 negation narrow expansion            ✅ MERGED / CERTIFIED
+37.4 F11 negation narrow expansion            ✅ MERGED / CERTIFIED / DEPLOYED
 37.5 F05 subject-pronoun consolidation        ✅ MERGED / CERTIFIED / DEPLOYED
 37.6 F08 regular -er present consolidation    ✅ MERGED / CERTIFIED / DEPLOYED
 37.7 F12 practical question system            ✅ MERGED / CERTIFIED / DEPLOYED
-37.8 F13 adjective agreement                  🚧 PR #184 / CANDIDATE / CODE TRIBUNALS GREEN
+37.8 F13 adjective agreement                  ✅ MERGED / CERTIFIED / DEPLOYED
 ```
+
+Build 37 satisfied its mandate by industrializing the validated Foundations system and a deliberately selected set of transferable Core concepts. It did **not** require implementing every registry concept merely to complete F01→F18 as a checklist.
 
 ## Shared Foundations ownership — LOCKED
 
@@ -44,14 +43,14 @@ Ownership is additive; successors must not overwrite predecessors.
 ```text
 37.2 → generic pure capsule engine
 37.3 → shared learner-facing adapter / renderer
-37.4 → F11 expansion
+37.4 → F11 negation expansion
 37.5 → F05 subject-pronoun consolidation
 37.6 → F08 regular -er verb-pattern consolidation
 37.7 → F12 practical-question systematization
-37.8 → F13 adjective-agreement candidate
+37.8 → F13 adjective-agreement consolidation
 ```
 
-Candidate metadata:
+Runtime metadata:
 
 ```text
 adapter: '37.3'
@@ -67,7 +66,7 @@ agreement: '37.8'
 agreementConcepts: ['F13']
 ```
 
-Candidate routes:
+Runtime routes:
 
 ```text
 F01–F04 → lessons 8–13
@@ -93,7 +92,7 @@ F12     → lessons 41–43
 
 Recognition failure remains recognition-system evidence, never a pronunciation diagnosis.
 
-## Build 37.8 — F13 candidate contract
+## Build 37.8 — F13 certified contract
 
 Build 33 / 37.1 classify F13 as **PARTIAL / later core / teach-core**.
 
@@ -128,9 +127,7 @@ inquiet → inquiète
 
 Critical boundary: 37.8 does **not** merge adjective agreement with passé-composé / past-participle agreement. Lesson 38 is context only.
 
-37.7 predecessor tests were made successor-safe: lesson 40/44 are asserted **not owned by F12**, rather than required to remain empty forever.
-
-Dedicated 37.8 tribunal certifies:
+Dedicated 37.8 tribunal certified:
 
 ```text
 F01–F04 → F11 → F08 → F05 → F12 → F13
@@ -146,42 +143,30 @@ no horizontal overflow
 touch target ≥44 px
 ```
 
-## Historical harness hardening inside PR #184
+## Build 37 closeout decision — F16 intentionally deferred
 
-### Build 26.4 Progress / Details
+F16 is **not marked complete** and is **not required for Build 37 closeout**.
 
-The legacy `Details uses page scroll` Chrome step has now demonstrated the same timeout flake multiple times on unchanged product trees. On both the post-37.7 merge and the first PR #184 matrix, strict unchanged reruns completed **SUCCESS** through the exact previously timed-out step.
-
-Classification: **Chrome harness flake; no product patch**.
-
-### Real Life III
-
-The old `.github/workflows/real-life-3-smoke.yml` used raw headless Chrome commands without shell-level timeouts. On the first PR #184 matrix it became stuck indefinitely in the lesson-35 futur-proche Chrome launch while lesson 20 had already passed. The same workflow had been SUCCESS in about one minute on PR #183.
-
-PR #184 hardens **the harness only**:
-
-```text
-same URLs
-same virtual-time budgets
-same assertions
-+ bounded Chrome timeout
-+ up to 2 isolated-profile attempts
-+ job timeout-minutes: 10
-```
-
-No Real Life product/runtime source changed. Hardened run **`31974879487`** on code tree `820f9fb…` completed **SUCCESS**, including lessons 20, 35 and 40.
-
-## F16 decision
-
-F16 remains unresolved and **out of scope for 37.8**.
-
-Its cleanest anchor is:
+Its cleanest current anchor remains:
 
 ```text
 lesson 45 → à la tête ↔ au ventre
 ```
 
-But `du / des` collide with already-taught article/partitive meanings and the inspected curriculum lacks an equally clean `aux` scaffold. After 37.8, reassess whether F16 genuinely deserves another narrow slice or whether **Build 37 should close**. Do not implement F16 merely to complete a checklist.
+But a broad `à / au / à la / aux / de / du / de la / des` capsule would currently mix multiple meanings already encountered through articles/partitives, while the curriculum does not expose an equally clean `aux` scaffold.
+
+Canonical decision:
+
+- do **not** implement F16 merely to complete a registry checklist;
+- keep F16 available for a later pedagogy slice if future curriculum/evidence gives it a clean transferable need;
+- Build 38 begins from the already certified Foundations owners above.
+
+## Historical harness hardening retained
+
+PR #184 also left two useful CI reliability fixes without weakening assertions:
+
+- Build 26.4 / Details scroll flake classified by strict unchanged reruns; no product patch.
+- Real Life III Chrome commands are bounded/retryable with the same URLs, virtual-time budgets and assertions; no Real Life product source changed.
 
 ## Current inherited CI debt
 
@@ -191,6 +176,8 @@ The four pre-Build37 failures remain baseline debt unless separately repaired:
 2. `V2.0.0 Freeze tribunal`;
 3. `Build 36.3 Recovery v3 durability tribunal`;
 4. `Build 28 Data recovery smoke`.
+
+These same four failures are present on the post-37.8 `main` matrix; there is no new Build 37 failure.
 
 ## Protected boundaries
 
@@ -208,20 +195,37 @@ Evidence derived-shadow role
 52 / 313 curriculum semantics
 Listening / Scenario / Mastery / Learner Intelligence owners
 V5.10 field-accepted navigation / visual identities
+Build 37 Foundations ownership/routes above
 ```
 
-## NEXT
+## NEXT — Build 38 · Generalization & Transfer
+
+Build 38 owns **construction of unseen phrases**, not another round of Foundation-card accumulation.
+
+Canonical transfer families from `MASTER-ROADMAP.md`:
 
 ```text
-PR #184 is the only active F13 candidate
-→ no more product/test code changes unless a concrete final-head regression appears
-→ certify final handoff-only head
-→ require all non-baseline PR workflows green
-→ exactly the four inherited historical failures may remain
-→ merge only if no new red survives strict unchanged rerun / diagnosis
-→ verify Pages on exact merge SHA
-→ reassess F16 versus Build 37 closeout
-→ do not start Build 38 inside Build 37
+singular → plural
+subject substitution
+affirmation → negation
+present → futur proche
+agreement transformations
+recombination across known vocabulary / structures
 ```
 
-**Build 36 is CLOSED. Do not reopen it without a concrete regression.**
+First Build 38 action:
+
+```text
+→ audit the existing 52 lessons / 313 items for clean transfer pairs
+→ choose ONE narrow transformation family for 38.1
+→ define deterministic source/target generation using only already-known vocabulary/structures
+→ keep Foundations owners unchanged
+→ keep learner stores byte-identical unless a later Build 38 slice explicitly earns persistence
+→ add a real VI/DEBUG FR desktop+iPhone tribunal
+→ materialize one candidate PR, then stop for control review
+```
+
+Do **not** start Build 39 inside Build 38.
+Do **not** reopen Build 37 merely because a registry concept remains unimplemented.
+
+**Build 37 is CLOSED. Build 38 is NEXT / UNBLOCKED.**
