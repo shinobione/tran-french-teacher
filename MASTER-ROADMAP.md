@@ -16,8 +16,9 @@
 |---|---|
 | Application runtime metadata | **V2.4.0 · Build 36** |
 | Product pedagogy baseline | **V2.3.0 · Build 34** |
-| Current runtime-bearing `main` | **`694988e6299c7d25ca9e019f275c473422fd983e`** — PR #188 / Build 38.2 |
-| GitHub Pages | **#241 / run `31978687464` SUCCESS** on exact runtime SHA |
+| Current runtime-bearing product | **`694988e6299c7d25ca9e019f275c473422fd983e`** — PR #188 / Build 38.2 |
+| Current governance `main` | **`d0bc2007c7b7a8cc3a52e759b2a4fbba807d6299`** — post-38.2 documentation checkpoint |
+| GitHub Pages | **#241 / run `31978687464` SUCCESS** on runtime SHA |
 | Curriculum | **52 lessons / 313 items** |
 | Scenario | **44 situations / 132 turns** |
 | Speaking Loop | **52/52 · max 2 moments / lesson** |
@@ -541,7 +542,7 @@ Closeout:
 
 ```text
 PR #188 MERGED
-main 694988e6299c7d25ca9e019f275c473422fd983e
+runtime commit 694988e6299c7d25ca9e019f275c473422fd983e
 Pages #241 / run 31978687464 SUCCESS
 post-merge: 33 SUCCESS + exactly 4 inherited failures
 0 queued / 0 in-progress
