@@ -16,8 +16,8 @@
 |---|---|
 | Application runtime metadata | **V2.4.0 · Build 36** |
 | Product pedagogy baseline | **V2.3.0 · Build 34** |
-| Current deployed runtime | **`cb37b4a6bdd9451a07e83deeae2544a407d78844`** — PR #184 / Build 37.8 |
-| GitHub Pages | **#236 / run `31975143562` SUCCESS** on exact runtime SHA |
+| Current runtime-bearing `main` | **`25d09fa44d5cf1efff9f8529bb2e54cb67b7bc48`** — PR #186 / Build 38.1 |
+| GitHub Pages | **#239 / run `31976241382` SUCCESS** on exact runtime SHA |
 | Curriculum | **52 lessons / 313 items** |
 | Scenario | **44 situations / 132 turns** |
 | Speaking Loop | **52/52 · max 2 moments / lesson** |
@@ -30,7 +30,8 @@
 | Build 35 | **CLOSED · Memory Evidence v2 migration readiness** |
 | Build 36 | **CLOSED · seven-store derived-shadow adoption** |
 | Build 37 | **CLOSED · Foundations Core** |
-| Build 38 | **NEXT / UNBLOCKED · Generalization & Transfer** |
+| Build 38.1 | **CLOSED · deterministic subject-substitution transfer core** |
+| Build 38.2 | **NEXT · learner-facing integration of certified 38.1 core** |
 | Primary field target | **iPhone / Safari / installed PWA** |
 
 ## Current interpretation
@@ -39,10 +40,11 @@
 - Build 35 proved deterministic Evidence v2 projection and reversible migration planning.
 - Build 36 adopted Evidence as a seventh **derived shadow** under Recovery v3 / backup v3; the original six stores remain canonical product truth.
 - Build 37 industrialized the Foundations system without renumbering the 52 lessons, without persistent Foundations state, and without treating Evidence as product truth.
-- Build 37 intentionally closed after 37.8; not every F01→F18 registry concept needs a dedicated runtime capsule merely to complete a checklist.
-- F16 (`à/de` contractions) remains **deferred / not completed**, because its current curriculum scaffold is less clean and risks mixing contraction and partitive/article meanings.
-- Build 38 now owns **generalization and construction of unseen phrases**, not more Foundations-card accumulation.
-- The post-37.8 `main` matrix is closed with **32 SUCCESS + exactly the four inherited historical failures**, **0 queued**, **0 in-progress**.
+- F16 (`à/de` contractions) remains **deferred / not completed**; Build 37 stays closed.
+- Build 38 owns **generalization and construction of unseen phrases**.
+- Build 38.1 proved the first transfer primitive as a **pure / non-wired** core; it deliberately changed no learner-facing PWA surface.
+- Build 38.2 now owns the smallest safe learner-facing placement for that certified core. It does **not** own expansion to new transfer families.
+- Post-38.1 `main` is closed with **exactly the four inherited historical failures**, **0 queued**, **0 in-progress**; all other workflows including Build 38.1 are SUCCESS.
 
 ---
 
@@ -93,12 +95,6 @@ Do not return to older confusing stacked A0/A1 layouts.
 ## 1.4 Settings / DEBUG ownership
 
 Learner-facing Settings stays human and compact.
-
-Priority:
-
-1. Theme / appearance;
-2. About / privacy / rights;
-3. Data & Recovery via progressive disclosure.
 
 Canonical state model:
 
@@ -167,6 +163,7 @@ original six source stores as product truth
 Listening / Scenario / Mastery / Learner Intelligence owners
 V5.10 field-accepted navigation / visual identities
 Build 37 Foundations ownership/routes
+Build 38.1 deterministic transfer semantics
 ```
 
 ---
@@ -301,14 +298,9 @@ Evidence states distinguish:
 Certified sequence:
 
 ```text
-35.1 · PR #164
-→ deterministic Evidence v2 projection
-
-35.2 · PR #165
-→ isolated transactional write/reread/compare/rollback simulation
-
-closeout · PR #166
-→ explicit Build 36 adoption-readiness contract
+35.1 · PR #164 → deterministic Evidence v2 projection
+35.2 · PR #165 → isolated transactional write/reread/compare/rollback simulation
+closeout · PR #166 → explicit Build 36 adoption-readiness contract
 ```
 
 Mandatory migration principle remains:
@@ -348,24 +340,14 @@ product read-path cutover to Evidence = NONE
 Historical backup semantics remain locked:
 
 ```text
-v3
-→ owns seven stores directly
+v3 → owns seven stores directly
 
-v2
-→ owns the historical six stores
-→ rebuild Evidence from restored six
-→ never preserve a newer device's Evidence shadow
+v2 → owns historical six → rebuild Evidence from restored six
 
-v1
-→ owns learner + memory
-→ preserve historically absent errors/scenarios/listening/milestones
-→ do not preserve Evidence
-→ rebuild Evidence from resulting six-store target
+v1 → owns learner + memory → preserve historically absent stores → rebuild Evidence from resulting six
 ```
 
 Build 36.3 / PR #170 certified backup / restore / reset / rollback with the derived shadow. PR #171 closed Build 36 and opened Build 37.
-
-The four historical CI failures currently inherited by later builds are maintenance debt, not permission to weaken these contracts.
 
 ---
 
@@ -421,14 +403,7 @@ F13     → lesson 40 only
 F12     → lessons 41–43
 ```
 
-Foundations remain:
-
-- optional/ephemeral;
-- no durable write;
-- no Evidence product read;
-- additive rather than successor-overwrites-predecessor;
-- VI / DEBUG FR compatible;
-- mobile-safe.
+Foundations remain optional/ephemeral, additive, VI/DEBUG-FR compatible, with no durable write and no Evidence product read.
 
 ## F16 decision — deferred, not completed
 
@@ -440,18 +415,11 @@ lesson 45 → à la tête ↔ au ventre
 
 A broad `à / au / à la / aux / de / du / de la / des` capsule currently risks mixing contractions with already-taught article/partitive meanings and lacks an equally clean `aux` scaffold.
 
-Therefore:
-
-- F16 is **not** marked complete;
-- F16 is **not** required for Build 37 closeout;
-- do not implement it merely to complete F01→F18 as a checklist;
-- it may return later if curriculum/evidence establishes a clean transferable need.
-
-Build 37 is **CLOSED**.
+Therefore F16 is not required for Build 37 closeout and may return only if future curriculum/evidence establishes a clean transferable need.
 
 ---
 
-# 7. Build 38 — Generalization & Transfer — NEXT / UNBLOCKED
+# 7. Build 38 — Generalization & Transfer — ACTIVE
 
 ## Goal
 
@@ -476,30 +444,100 @@ recombination across known vocabulary / structures
 - one narrow transformation family per implementation slice;
 - preserve Build 37 Foundation owners;
 - no new permanent navigation tab merely for “Transfer”;
-- avoid turning transformation drills into school-like grammar tables;
+- avoid school-like grammar tables;
 - learner-facing explanations remain primarily Vietnamese when needed;
 - no fake mastery score;
 - no durable transfer/evidence adoption until explicitly justified and migration-safe;
-- Recognition misses remain recognition-system signals, not pronunciation diagnosis.
+- recognition misses remain recognition-system signals, not pronunciation diagnosis.
 
-## 38.1 — canonical first action
+## 38.1 — deterministic subject substitution — CLOSED
 
-Before coding a transformation engine:
+Audit winner:
 
 ```text
-audit 52 lessons / 313 items
-→ identify clean source/target transfer pairs
-→ rank candidate transformation families by coverage + pedagogical usefulness + ambiguity risk
-→ select ONE narrow family
-→ define deterministic examples and boundaries
-→ implement only that 38.1 family
-→ browser tribunal VI / DEBUG FR × desktop / 390×844
-→ learner stores byte-identical unless persistence is explicitly earned
-→ materialize candidate PR
+family   subject-substitution-regular-er
+subjects je / tu / il / elle
+verbs    travailler / habiter / aimer
+```
+
+Certified examples:
+
+```text
+Je travaille.  → Tu travailles.
+Tu travailles. → Elle travaille.
+J'habite ici.  → Tu habites ici.
+Il habite ici. → Elle habite ici.
+J'aime ça.     → Tu aimes ça.
+Tu aimes ça.   → Elle aime ça.
+```
+
+Implementation:
+
+```text
+src/pedagogy/generalization-transfer-core.js
+status = pure-non-wired
+persistence = ephemeral-only
+masteryClaim = false
+```
+
+Explicit exclusions remain locked for 38.1:
+
+```text
+nous / vous / ils / elles
+questions as a separate family
+negation
+futur proche
+agreement/plural transforms
+aller / vouloir / pouvoir / devoir
+random generation
+new vocabulary
+durable writes
+Evidence product reads
+```
+
+Certification:
+
+```text
+PR #186
+candidate head 4bc46dab110e70398d64671f0583fad2d3107b95
+merge 25d09fa44d5cf1efff9f8529bb2e54cb67b7bc48
+Pages #239 / run 31976241382 SUCCESS
+Build 38.1 Node + browser tribunal SUCCESS
+VI / DEBUG FR × 1280×900 / 390×844
+6 deterministic exercises through real clicks
+localStorage byte-identical
+no horizontal overflow
+touch targets >=44 px
+Build 37.8 predecessor PASS
+post-merge = exactly 4 inherited failures, 0 queued, 0 in-progress
+```
+
+38.1 deliberately does **not** change the learner-facing PWA.
+
+## 38.2 — learner-facing integration — NEXT
+
+38.2 owns **placement and interaction only**, not expansion of the 38.1 matrix.
+
+Canonical execution order:
+
+```text
+audit existing lesson surfaces
+→ choose the smallest contextual insertion point
+→ reuse certified 38.1 core
+→ no new permanent navigation tab
+→ keep exercise optional/contextual and short
+→ no new vocabulary
+→ no irregular verbs
+→ no durable write / Evidence product read unless separately justified
+→ preserve 52/313 IDs and Build 37 owners
+→ VI / DEBUG FR × desktop / 390×844
+→ real lesson entry → transfer → return/continue
+→ learner stores byte-identical
+→ one candidate PR
 → STOP for control review
 ```
 
-Good initial candidates include subject substitution or affirmation→negation because they can reuse already-certified F05/F11 ownership, but the audit must decide rather than the roadmap guessing.
+38.2 must **not** simultaneously add negation, plural, futur proche or agreement transfer.
 
 Do **not** start Build 39 inside Build 38.
 
@@ -550,7 +588,7 @@ Continue as needed:
 
 These tracks must not become excuses to rewrite pedagogical architecture or consume reserved build numbers.
 
-Known inherited CI debt after Build 37:
+Known inherited CI debt after Build 38.1:
 
 1. `Build 36.2 Evidence shadow adoption`;
 2. `V2.0.0 Freeze tribunal`;
@@ -599,27 +637,28 @@ Never declare a physical-device gate complete from automation alone.
 
 # 12. Next-agent checklist
 
-Before touching Build 38 runtime:
+Before touching 38.2 runtime:
 
 1. read `AGENTS.md`;
 2. read `PROJECT-STATE.md`;
-3. read **Build 37 closeout** and **Build 38** above;
+3. read **Build 38.1 CLOSED** and **38.2 NEXT** above;
 4. inspect current `main`, open PRs and current Pages SHA;
-5. confirm Premium V5.10 / issue #114 remain closed;
+5. preserve Premium V5.10 field contracts;
 6. preserve Recovery v3 / backup v3 / seven-store ownership;
 7. preserve Evidence as derived shadow and original six stores as product truth;
 8. preserve Build 37 Foundation routes/owners;
-9. preserve zero-flash atomic navigation;
-10. keep DEBUG independent from theme;
-11. do not regenerate locked Premium assets for a pedagogical task;
-12. audit transfer pairs before choosing 38.1;
-13. choose **one** transformation family only;
-14. keep learner storage byte-identical unless the slice explicitly justifies persistence;
-15. materialize one candidate PR and stop for control review;
-16. do not start Build 39 automatically.
+9. preserve 38.1 deterministic source/target semantics;
+10. preserve zero-flash atomic navigation;
+11. keep DEBUG independent from theme;
+12. do not regenerate locked Premium assets for a pedagogical task;
+13. choose the **smallest learner-facing placement** for 38.1;
+14. do not extend verbs/subjects in the same slice;
+15. keep learner storage byte-identical unless persistence is explicitly earned;
+16. materialize one candidate PR and stop for control review;
+17. do not start Build 39 automatically.
 
 ---
 
 # Canonical one-line order
 
-> **Premium V5.10 FIELD PASS → Build 35 CLOSED → Build 36 CLOSED → Build 37 Foundations Core CLOSED → Build 38 Generalization & Transfer NEXT → Build 39 Learner Intelligence 3 → Build 40 A1 Consolidation Audit → A2 only after Build 40 decision.**
+> **Premium V5.10 FIELD PASS → Build 35 CLOSED → Build 36 CLOSED → Build 37 Foundations CLOSED → Build 38.1 transfer core CLOSED → Build 38.2 learner-facing integration NEXT → further Build 38 transfer families one-at-a-time → Build 39 Learner Intelligence 3 → Build 40 A1 Consolidation Audit → A2 only after Build 40 decision.**
