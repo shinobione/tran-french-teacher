@@ -9,35 +9,16 @@
 - Reconciled: **2026-08-16**.
 - Repository: `shinobione/tran-french-teacher`.
 - Default branch: `main`.
-- Current runtime-bearing `main`: **`e017f7a041d147569ee0d47c93586b2c17f97a83`** — PR **#180**, PWA identity/cache isolation maintenance.
-- Last pedagogy-bearing runtime: **`9acce0b2b644fe5a14135085c4de0f7a64ec16b3`** — PR **#178**, Build **37.5 · F05 Subject-Pronoun Consolidation**.
-- Build 37.5 closeout checkpoint: **`02f70a2964eafdfa3e87aa22c22d25aa235a16cb`**.
-- GitHub Pages **#233** on current `main` `e017f7a…`: **SUCCESS**.
-- Current `main` matrix after one strict unchanged rerun of the legacy Build 26.1 Chrome job: **33 SUCCESS + exactly the four inherited failures**, **0 new regression**.
+- Current runtime-bearing `main`: **`b7b8690e9684d90955c8c78933fae3ba1778ccc9`** — PR **#181**, Build **37.6 · F08 regular `-er` present consolidation**.
+- GitHub Pages **#234 / run `31972823389`** on `b7b8690…`: **SUCCESS**.
+- Build 37.6 PR matrix settled with all non-inherited checks green; the four historical failures remain baseline debt.
 - Visible application runtime metadata: **v2.4.0 · Build 36**.
 - Pedagogy baseline: **v2.3.0 · Build 34**.
 - Premium V5.10: **CLOSED / physical FIELD PASS**; issue **#114 CLOSED**.
 - **Build 35 CLOSED — Memory Evidence v2 / Migration Readiness.**
 - **Build 36 CLOSED — Memory Evidence v2 derived-shadow adoption.**
 - **Build 37 ACTIVE — Foundations Core.**
-
-## Current maintenance checkpoint — PWA identity isolation
-
-PR #180 changed only the PWA identity/cache lane after Build 37.5.
-
-Locked maintenance contract:
-
-```text
-scope / identity → /tran-french-teacher/
-cache cleanup    → only cache names prefixed tran-french-teacher-
-sibling caches   → must never be deleted
-pedagogy         → unchanged
-learner data     → unchanged
-voice            → unchanged
-Premium field UX→ unchanged
-```
-
-A post-merge `Build 26.1 Voice replay + Details dashboard smoke` initially timed out in Chrome headless before its dashboard assertions. Static wiring/sanctuary checks had passed. The exact same job was rerun unchanged and completed **SUCCESS**, including Learning Details, Real Life III and Voice Replay. Treat this as a harness flake, not a PWA regression; no product patch was made.
+- Current implementation branch: **`build37/f12-questions-core-v2`** — Build **37.7 · F12 Practical Question System**, **candidate in validation**.
 
 ## Build 37 certified chain
 
@@ -47,22 +28,24 @@ A post-merge `Build 26.1 Voice replay + Details dashboard smoke` initially timed
 37.3 F01–F04 pilot adapter parity             ✅ MERGED / CERTIFIED
 37.4 F11 negation narrow expansion            ✅ MERGED / CERTIFIED
 37.5 F05 subject-pronoun consolidation        ✅ MERGED / CERTIFIED / DEPLOYED
-37.6 F08 regular -er present consolidation    🚧 CURRENT CANDIDATE
+37.6 F08 regular -er present consolidation    ✅ MERGED / CERTIFIED / DEPLOYED
+37.7 F12 practical question system            🚧 CURRENT CANDIDATE / VALIDATION
 ```
 
-### Shared Foundations ownership — LOCKED
+## Shared Foundations ownership — LOCKED
+
+Historical ownership is additive. Later slices must not overwrite earlier owners.
 
 ```text
 37.2 → generic pure capsule engine
 37.3 → shared learner-facing adapter / renderer
-37.4 → F11 expansion ownership
-37.5 → F05 consolidation ownership
-37.6 → F08 narrow verb-pattern consolidation candidate
+37.4 → F11 expansion
+37.5 → F05 subject-pronoun consolidation
+37.6 → F08 regular -er verb-pattern consolidation
+37.7 → F12 practical-question systematization candidate
 ```
 
-Historical ownership markers must not be overwritten by later slices.
-
-Current/candidate metadata:
+Current candidate metadata:
 
 ```text
 adapter: '37.3'
@@ -70,8 +53,20 @@ expansion: '37.4'
 expansionConcepts: ['F11']
 consolidation: '37.5'
 consolidationConcepts: ['F05']
-verbPattern: '37.6'                    # candidate branch only until merge
-verbPatternConcepts: ['F08']           # candidate branch only until merge
+verbPattern: '37.6'
+verbPatternConcepts: ['F08']
+systematization: '37.7'
+systematizationConcepts: ['F12']
+```
+
+Current routes:
+
+```text
+F01–F04 → lessons 8–13
+F11     → lessons 17–20
+F08     → lessons 32–33
+F05     → lessons 34–36
+F12     → lessons 41–43   # candidate until 37.7 merges
 ```
 
 ## Current durable data contract — LOCKED
@@ -89,66 +84,9 @@ verbPatternConcepts: ['F08']           # candidate branch only until merge
 
 Recognition failure remains recognition-system evidence, never a pronunciation diagnosis.
 
-## Certified predecessor contracts
+## Build 37.6 — F08 certified contract
 
-### F01–F04
-
-```text
-lessons 8–13
-→ optional article / gender / number capsule
-→ same VI / DEBUG FR behavior
-→ same return-to-lesson focus behavior
-→ NO durable write
-→ NO Evidence product read
-```
-
-### F11
-
-```text
-lessons 17–20 only
-→ ne / n’ + verb + pas
-→ reconnects already-known negative chunks
-→ natural spoken-French note without making dropped ne the beginner baseline
-```
-
-### F05
-
-```text
-lessons 34–36 only
-→ who is doing the action / who is in the state?
-→ je / tu / il-elle / nous / vous
-→ on remains owned by F18 / lesson 52
-→ no full conjugation table
-```
-
-## Build 37.6 candidate — F08 regular `-er` present
-
-A fresh anchor audit was performed before implementation, as required after 37.5.
-
-Remaining partial candidates were:
-
-```text
-F08 regular -er present       — PARTIAL / consolidate
-F12 questions                 — PARTIAL / system weak
-F13 adjective agreement       — PARTIAL / later core
-F16 à/de contractions         — PARTIAL / later core
-```
-
-F08 was selected because it has the smallest contiguous explicit curriculum scaffold:
-
-```text
-lesson 32 → je travaille → tu travailles
-            Tu travailles ? / Tu habites où ? / Tu aimes ça ?
-lesson 33 → Il travaille. / Elle travaille.
-            Il habite ici. / Elle habite ici.
-lesson 34 → nous / -ons exists, BUT remains outside 37.6 to preserve F05 ownership
-```
-
-### 37.6 learner scope
-
-Route **lessons 32–33 only**.
-
-Teaching key:
+Route: **lessons 32–33 only**.
 
 ```text
 many regular -er verbs, written present:
@@ -157,35 +95,86 @@ tu       → -es
 il/elle  → -e
 ```
 
-The capsule explicitly says these three forms often sound identical in speech, so the subject pronoun matters. It also prevents overgeneralization by reconnecting the known exception `aller → tu vas` and mentioning `vouloir / pouvoir` as frequent verbs with their own forms.
+The capsule notes that these forms often sound identical in speech, so the subject pronoun matters. It reconnects frequent exceptions such as `aller → tu vas` instead of implying that every `-er` verb follows the same pattern.
 
-Out of scope for 37.6:
+F05 remains owner of lessons 34–36; no six-person conjugation table was introduced.
+
+### F08 Chrome harness note
+
+The historical Build 37.6 browser tribunal has a known headless timing flake at its final lesson-34 routing check: Chrome can dump the DOM after F05 is already mounted but before two final `requestAnimationFrame` callbacks write the `data-b376-*` completion markers.
+
+This was diagnosed twice without changing F08 product code. A diagnostic run showed:
 
 ```text
-nous / vous / ils full table
-F12 questions
+FR 390×844 → full F08 markers PASS
+VI desktop → final F05 route visibly mounted, no b376 error, completion markers not yet written
+```
+
+Treat this as old harness timing, not a product regression. Do **not** patch F08 to satisfy that marker race.
+
+## Build 37.7 candidate — F12 practical questions
+
+Build 33 / the 37.1 registry classify F12 as **PARTIAL / system weak / teach-core**.
+
+Exact curriculum anchors already exist:
+
+```text
+lesson 25 → Où ? Quand ? Pourquoi ? Avec qui ? Quoi ?
+lesson 32 → Tu travailles ? / Tu habites où ? / Tu veux manger ?
+lesson 39 → Pouvez-vous m'expliquer ? / Quelle est l'adresse ?
+lesson 41 → Qu'est-ce que ça veut dire ? / Pouvez-vous reformuler ?
+lesson 42 → Combien il vous faut ?
+lesson 43 → Lequel est mieux ?
+```
+
+37.7 therefore routes F12 only to **lessons 41–43**, after these strategies have already been encountered in real curriculum context.
+
+Teaching key:
+
+```text
+close person → ordinary sentence + question intonation
+missing info → question word
+polite stranger/context → Pouvez-vous… ?
+clarification → Qu'est-ce que ça veut dire ?
+```
+
+Explicitly out of scope:
+
+```text
+subject-verb inversion
+new broad Est-ce que system
+large interrogative grammar table
+curriculum rewrites / new items
+persistent Foundations mastery
+Evidence product read
 F13 adjective agreement
 F16 à/de contractions
-persistent mastery
-Evidence product read
 Build 38 transfer/generalization
 A2
 ```
 
-Candidate architecture:
+37.7 dedicated evidence must replay:
 
 ```text
-same Build 37.2 pure engine
-→ compiled F08 capsule in foundations-capsules.js
-→ same Build 37.3 renderer routes by lesson context
-→ F08 lessons 32–33
-→ F05 still lessons 34–36
-→ no loader / index / SW / manifest change
-→ no durable write
-→ no Evidence product read
+F01–F04 predecessor parity
+→ F11 predecessor parity
+→ F05 predecessor parity
+→ F08 semantic contract via Build 37.6 Node test
+→ F08 real route + dialog open inside the deterministic 37.7 browser tribunal
+→ F12 VI / DEBUG FR × desktop / 390×844
 ```
 
-Dedicated 37.6 tribunal must replay **F01–F04 + F11 + F05** before F08, then certify F08 in **VI / DEBUG FR × desktop / iPhone-size**, storage byte-identical, no horizontal overflow and the lesson 33 → lesson 34 routing boundary.
+Required routing boundaries:
+
+```text
+40 → no F12
+41–43 → F12
+44 → no F12
+32 → still F08
+34 → still F05
+```
+
+Storage must remain byte-identical, with no Evidence product read and no horizontal overflow.
 
 ## Current inherited CI debt
 
@@ -196,7 +185,7 @@ The four pre-Build37 failures remain baseline debt unless separately repaired:
 3. `Build 36.3 Recovery v3 durability tribunal`;
 4. `Build 28 Data recovery smoke`.
 
-Do not hide these failures, but do not misclassify them as a new Foundations or PWA regression either.
+Do not hide these failures, but do not misclassify them as a new Foundations regression either.
 
 ## Protected boundaries
 
@@ -219,14 +208,17 @@ V5.10 field-accepted navigation / visual identities
 ## NEXT
 
 ```text
-37.6 candidate branch: build37/f08-regular-er
-→ finish dedicated guard + docs
-→ open ONE PR
-→ inspect PR diff and CI against current main e017f7a…
-→ exactly four inherited failures may remain baseline
-→ any new non-baseline failure must be explained/fixed or proven flaky by unchanged rerun
-→ do NOT merge silently in an implementation session
-→ do NOT begin F12/F13/F16 in the same slice
+37.7 branch: build37/f12-questions-core-v2
+→ finish clean dedicated 37.7 validation
+→ remove all temporary diagnostics before PR
+→ inspect final diff against main b7b8690…
+→ open ONE PR only after the dedicated guard is green
+→ PR matrix may retain exactly the four inherited historical failures
+→ any new non-baseline failure must be fixed or proven flaky without product appeasement
+→ if merged, verify Pages on the exact merge SHA
+→ then fresh-audit F13 versus F16; choose at most ONE next narrow concept or close Build 37 if the roadmap evidence supports it
+→ do not mass-rollout F13 + F16
+→ do not begin Build 38 transfer/generalization inside Build 37
 ```
 
 **Build 36 is CLOSED. Do not reopen it without a concrete regression.**
