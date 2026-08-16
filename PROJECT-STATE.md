@@ -9,44 +9,38 @@
 - Reconciled: **2026-08-16**
 - Repository: `shinobione/tran-french-teacher`
 - Default branch: `main`
-- Current certified `main`: **`68b24c8a541992085309bc4a53f46e3a0f21eb97`** — PR **#164**, Build **35.1** Memory Evidence v2 projection contract.
-- PR #164: **MERGED**.
-- Post-merge certification on exact SHA `68b24c8…`: **30/30 push workflows completed, 0 failure**.
-- GitHub Pages **#217 SUCCESS** on exact SHA `68b24c8…`.
+- Current certified `main`: **`c972bdc44d272c30601d73509c6e8a39c72f57cf`** — PR **#165**, Build **35.2** transactional Memory Evidence v2 migration simulation.
+- PR #165: **MERGED**.
+- PR #165 candidate: **45/45 pull-request workflows completed, 0 failure**.
+- Post-merge certification on exact SHA `c972bdc44…`: **31/31 push workflows completed, 0 failure**.
+- GitHub Pages **#218 SUCCESS** on exact SHA `c972bdc44…`.
+- Previous Build 35 checkpoint: **`68b24c8a541992085309bc4a53f46e3a0f21eb97`** — PR **#164**, deterministic Evidence v2 projection contract; **30/30 push workflows, 0 failure, Pages #217 SUCCESS**.
 - Latest product/runtime-bearing checkpoint remains **`54209392d3a349a1aefab14615dcecf24a59fcea`** — PR **#161**, V5.10 Theme-picker physical-field repair.
 - Premium V5.10: **CLOSED / physical FIELD PASS**.
 - Premium gate issue **#114 CLOSED**.
-- **Build 35 is ACTIVE** for Memory Evidence v2 / Migration Readiness.
-- Active candidate: **PR #165 OPEN** — `Build 35.2 · Memory Evidence v2 transactional migration simulation`.
-- Candidate branch: `build35/transaction-simulation`.
-- Candidate head at opening: **`9bfea97f6682ee4da8152814605c51672059ba71`**.
-- **Build 36 remains BLOCKED.**
+- **Build 35 implementation proof is complete.**
+- Active candidate: **Build 35 closeout / Build 36 adoption-readiness contract** on branch `build35/closeout-readiness`.
+- **Build 36 remains BLOCKED until that closeout is merged and certified.**
 
 ## Product baseline
 
 | Area | State |
 |---|---|
 | Production pedagogy | **V2.3.0 · Build 34** |
-| Active engineering line | **Build 35 · Memory Evidence v2 / Migration Readiness** |
-| Certified Build 35 slice | **35.1 · Evidence v2 Contract + Projection Simulator** |
-| Active Build 35 slice | **35.2 · Transactional Migration Simulation · PR #165** |
+| Active engineering line | **Build 35 · closeout / migration readiness** |
+| Certified Build 35 slice | **35.1 · Evidence v2 deterministic projection** |
+| Certified Build 35 slice | **35.2 · transactional migration simulation** |
 | Durable pedagogical stores | **6 — unchanged** |
+| Proposed future store | `french-tranquille:memory-evidence:v2` — **NOT ADOPTED** |
+| Backup envelope | **v2 — unchanged** |
 | Premium visual line | **V5.10 CLOSED · FIELD PASS** |
-| Build 36 | **BLOCKED until Build 35 closeout/readiness decision** |
+| Build 36 | **BLOCKED pending Build 35 closeout certification** |
 
 ## Build 35.1 — certified
 
-Slice 35.1 added a pure Evidence v2 projector over the six current Recovery stores.
+Evidence v2 is defined as a deterministic projection over the six current Recovery stores.
 
-Proposed future key:
-
-```text
-french-tranquille:memory-evidence:v2
-```
-
-It is still **not** a durable runtime store.
-
-Evidence dimensions:
+Dimensions:
 
 ```text
 retrieval
@@ -75,65 +69,36 @@ novel-construction-transfer
 
 Locked semantics:
 
-- `voice-unrecognized` = recognition-system evidence only; never a pronunciation failure;
-- model use / `assisted` proves assistance, not a successful outcome by itself;
-- construction, transfer and concept-understanding are not fabricated from v1 history;
-- unattributable old Listening dialogue / Scenario aggregate evidence remains explicitly unattributed;
-- history is bounded and deterministic.
+- `voice-unrecognized` is recognition-system evidence only, never a pronunciation failure;
+- model use proves assistance, not successful production by itself;
+- construction/transfer/concept-understanding are not fabricated from history that cannot prove them;
+- unattributable historical aggregates remain explicitly unattributed;
+- per-item history is bounded and deterministic.
 
-Certified proof:
+## Build 35.2 — certified
 
-```text
-PR #164 head CI           FULL GREEN
-main 68b24c8…             30/30 push workflows, 0 failure
-GitHub Pages #217         SUCCESS on 68b24c8…
-production wiring         NONE
-new durable key           NONE
-```
-
-## Build 35.2 — active candidate
-
-PR **#165** adds only migration-readiness simulation infrastructure:
-
-```text
-src/pedagogy/memory-evidence-v2-migration-sim.js
-tests/smoke/build35-memory-evidence-v2-transaction-smoke.js
-tests/browser/build35-memory-evidence-v2-transaction.html
-docs/BUILD-35-2-MIGRATION-SIMULATION.md
-.github/workflows/build35-memory-evidence-v2-transaction.yml
-```
-
-The candidate is additive relative to certified `main`: **5 added files, 0 deletions, no existing runtime owner modified**.
-
-### Transaction contract
+The migration mechanics are proven in an isolated storage sandbox:
 
 ```text
 six-source snapshot
-→ canonical Build 28 validation
-→ deterministic Evidence v2 transform
-→ isolated sandbox write
+→ Build 28 Recovery validation
+→ deterministic Evidence transform
+→ sandbox write
 → reread
 → canonical compare
 → verify six sources unchanged
 → rollback
-→ byte-equivalence check
+→ byte-equivalence verification
 ```
 
-### Hard sandbox guard
-
-The migration simulator accepts only storage created by its own `createSandboxStorage()` helper.
-
-Passing real `window.localStorage` must fail with:
+Hard guard:
 
 ```text
-sandbox-required
+real window.localStorage / unmarked storage
+→ sandbox-required
 ```
 
-This prevents Slice 35.2 from accidentally becoming a production migration path.
-
-### Failure proofs
-
-Dedicated test-only faults:
+Injected failures proven to rollback:
 
 ```text
 after-write
@@ -141,36 +106,75 @@ corrupt-target
 source-drift
 ```
 
-Each must fail and restore the tracked sandbox exactly.
-
-### Invalid-source / quarantine proof
-
-Invalid raw source data:
-
-```text
-Recovery validation reject
-→ preserve raw in simulation quarantine record
-→ no projection coercion
-→ rollback sandbox
-→ source remains byte-identical
-```
-
-No production quarantine write occurs.
-
-### Old backup compatibility
-
-Backup migration remains owned by Build 28 Recovery:
+Old backup compatibility proof:
 
 ```text
 backup v1
 → Recovery.normalizeBackup()
 → backup v2
-→ isolated Evidence v2 transaction simulation
+→ isolated Evidence transaction
+→ verify
+→ rollback
 ```
 
-No second backup migration implementation is introduced.
+No production Evidence key, runtime loader, Service Worker entry or Recovery seventh-store adoption exists yet.
 
-## Durable source ownership — unchanged
+## Build 35 Definition of Done status
+
+Canonical Build 35 requirements are now technically met:
+
+```text
+evidence model useful            ✅
+ownership clear                  ✅
+bounded history clear            ✅
+compatibility strategy clear     ✅
+migration simulable/reversible   ✅
+new durable schema not adopted   ✅
+```
+
+The remaining Build 35 work unit is **closeout governance**, not another migration implementation slice.
+
+## Build 36 adoption-readiness contract — closeout candidate
+
+`docs/BUILD-35-CLOSEOUT-ADOPTION-READINESS.md` defines the required next-build contract.
+
+### Initial adoption role
+
+Evidence v2 must enter Build 36 first as a **derived shadow store**, not an immediate replacement for the six current pedagogy sources.
+
+```text
+six current canonical stores
+→ deterministic Evidence v2 projection
+→ seventh shadow store
+```
+
+This preserves safe code rollback: older code ignores the extra key while the six canonical stores retain all current semantics.
+
+### Recovery / backup changes reserved for Build 36
+
+Build 36 must deliberately provide:
+
+- seventh Recovery store validator;
+- backup envelope **v3** rather than silently redefining v2;
+- explicit v1/v2/v3 restore matrix;
+- per-store missing ownership (`preserveMissingIds`);
+- derived-store rebuild ownership (`rebuildDerivedIds`);
+- pre-migration snapshot;
+- initial six→seven write/reread/compare/rollback;
+- source-write shadow refresh ownership centralized through Recovery;
+- reset / last-good / quarantine coverage for Evidence;
+- v1, v2 and v3 backup browser tribunals;
+- no product read-path cutover in the first adoption slice.
+
+Recommended Build 36 sequence:
+
+```text
+36.1 Recovery v3 + seventh-store contract
+36.2 Evidence shadow adoption runtime
+36.3 backup / restore / reset / rollback browser tribunal
+```
+
+## Durable source ownership — still unchanged in Build 35
 
 ```text
 learner     → francais-avec-luc:learner:v1
@@ -181,52 +185,33 @@ listening   → french-tranquille:listening:v1
 milestones  → french-tranquille:milestones:v1
 ```
 
-Build 28 Recovery remains authoritative for validation, backup normalization, snapshots, writes, reread/compare, rollback and corruption quarantine.
+Build 28 Recovery remains authoritative for current validation, backup normalization, snapshots, writes, reread/compare, rollback and corruption quarantine.
 
-## Protected sanctuaries
+## Protected Build 35 closeout boundary
 
-Do not silently change during Build 35:
+Until the closeout candidate is certified/merged:
 
 ```text
-app.js
-src/core/data-recovery-core.js
-src/core/data-recovery.js
-src/pedagogy/learning-memory.js
-src/pedagogy/error-intelligence.js
-src/pedagogy/listening-engine.js
-src/pedagogy/scenario-engine.js
-voice-ios.js
-free-voice.js
-index.html
-sw.js
-assets/LOGO.png
-assets/Favicon.png
+Recovery STORE_SPECS == 6
+Recovery BACKUP_VERSION == 2
+Evidence key absent from Recovery STORE_SPECS
+Evidence core absent from index.html
+Evidence simulator absent from index.html
+Evidence files absent from sw.js
+current six product source owners unchanged
 ```
-
-Also preserve:
-
-- six current durable stores;
-- learner progression continuity;
-- V5.10 FIELD PASS contracts;
-- Recovery / backup compatibility;
-- recognition-vs-pronunciation semantic separation.
 
 ## Canonical next action
 
-Certify **PR #165** before any further Build 35 step:
-
 ```text
-1. dedicated Node transaction smoke
-2. Chrome sandbox/live-storage proof
-3. Build 35.1 projection regression
-4. Build 28 Recovery regression
-5. historical workflow suite / sanctuaries
-6. if full green → merge #165
-7. verify exact main SHA + Pages
-8. reconcile Build 35 migration-readiness status
-9. decide Build 35 closeout / Build 36 readiness separately
+1. certify Build 35 closeout candidate
+2. verify no-adoption guard + historical CI
+3. merge closeout if green
+4. verify exact main SHA + Pages
+5. reconcile MASTER-ROADMAP durable gate:
+      Build 35 → CLOSED
+      Build 36 → NEXT / Adoption Candidate
+6. only then start Build 36.1
 ```
 
-Even if #165 is fully green, **do not adopt `french-tranquille:memory-evidence:v2` durably inside Build 35**.
-
-Before Build 36 can adopt a seventh durable store, there must be an explicit plan for Recovery validation, backup/export/import, restore, reset, corruption handling and rollback for that store.
+**Do not adopt `french-tranquille:memory-evidence:v2` durably inside Build 35.**
