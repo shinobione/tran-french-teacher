@@ -19,6 +19,7 @@
 - **Build 37 ACTIVE — Foundations Core.**
 - Active implementation slice: **37.1 · Foundations Core Contract / Registry**.
 - Active branch: `build37/foundations-core-contract`.
+- Active candidate PR: **#173 — `Build 37.1 · Foundations Core contract and registry`**.
 
 ## Current durable data contract — LOCKED
 
@@ -45,7 +46,7 @@ Current deployed main `bac91ad…` has **37 push workflow runs, including 5 inhe
 4. `Build 28 Data recovery smoke`;
 5. stale `.github/workflows/tmp-build36-closeout-reconcile.yml`.
 
-These failures predate Build 37.1 and must not be misclassified as regressions caused by the Foundations candidate. The stale temporary Build 36 reconciler is removed in the 37.1 branch.
+These failures predate Build 37.1 and must not be misclassified as regressions caused by the Foundations candidate. The stale temporary Build 36 reconciler is removed in PR #173.
 
 ## Build 37.1 candidate scope
 
@@ -91,7 +92,7 @@ Recognition failure remains recognition-system evidence, never a pronunciation d
 ## NEXT
 
 ```text
-Finish Build 37.1 candidate PR
+PR #173 is the active Build 37.1 candidate
 → run/classify its dedicated guard and PR matrix
 → merge only in a separate control step if it introduces no new regressions
 → after 37.1 certification, design 37.2 generic capsule engine from the registry
