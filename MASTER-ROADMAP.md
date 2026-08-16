@@ -53,7 +53,7 @@
 
 Physical field contract:
 
-**ZERO route flash / ZERO remANENCE / ZERO competing facades.**
+**ZERO route flash / ZERO remanence / ZERO competing facades.**
 
 Permanent rule:
 
