@@ -1,0 +1,137 @@
+name: Build 36.3 Recovery v3 durability tribunal
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  recovery-v3-tribunal:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax and certified Recovery proof chain
+        run: |
+          node --check tests/smoke/build36-recovery-v3-tribunal-smoke.js
+          node --check src/core/data-recovery-v3-contract.js
+          node --check src/core/data-recovery-v3-runtime-core.js
+          node --check src/core/memory-evidence-v2-runtime.js
+          node tests/smoke/build36-recovery-v3-smoke.js
+          node tests/smoke/build36-shadow-runtime-core-smoke.js
+          node tools/test-build28-data-recovery.cjs
+          node tests/smoke/build35-memory-evidence-v2-smoke.js
+          node tests/smoke/build35-memory-evidence-v2-transaction-smoke.js
+          node tests/smoke/build35-closeout-smoke.js
+
+      - name: Build 36.3 is tribunal-only — runtime and product owners unchanged
+        run: |
+          git fetch origin main --quiet
+          git diff --exit-code origin/main...HEAD -- \
+            src/core/data-recovery-core.js \
+            src/core/data-recovery-v3-contract.js \
+            src/core/data-recovery-v3-runtime-core.js \
+            src/core/data-recovery.js \
+            src/core/memory-evidence-v2-runtime.js \
+            src/pedagogy/memory-evidence-v2-core.js \
+            src/pedagogy/learning-memory.js \
+            src/pedagogy/error-intelligence.js \
+            src/pedagogy/listening-engine.js \
+            src/pedagogy/scenario-engine.js \
+            src/pedagogy/mastery-engine.js \
+            src/pedagogy/learner-intelligence.js \
+            src/pedagogy/learner-intelligence-v2.js \
+            app.js voice-ios.js free-voice.js index.html sw.js
+          grep -q 'b36RecoveryTribunal' tests/smoke/build36-recovery-v3-tribunal-smoke.js
+          grep -q 'b36-injected-write-failure' tests/smoke/build36-recovery-v3-tribunal-smoke.js
+          grep -q "mode==='pwa'" tests/smoke/build36-recovery-v3-tribunal-smoke.js
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-b36t-http.log 2>&1 &
+          echo $! >/tmp/ft-b36t-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — seed exactly six historical source stores
+        run: |
+          profile="/tmp/ft-b36t-profile"
+          file="/tmp/b36t-seed.html"
+          rm -rf "$profile" "$file"
+          timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
+            --user-data-dir="$profile" --window-size=1280,900 --virtual-time-budget=3000 --dump-dom \
+            'http://127.0.0.1:4173/tests/browser/build36-recovery-v3-seed.html?mode=six' >"$file"
+          grep -q 'data-b36-seed-done="1"' "$file"
+          grep -q 'data-b36-seed-mode="six"' "$file"
+          grep -q 'data-b36-seed-sources="6"' "$file"
+          grep -q 'data-b36-seed-evidence="0"' "$file"
+
+      - name: Chrome — fresh six-to-seven adoption owns pre-migration snapshot
+        run: |
+          profile="/tmp/ft-b36t-profile"; file="/tmp/b36t-adopt.html"
+          timeout --signal=TERM --kill-after=5s 70s google-chrome --headless=new --no-sandbox --disable-gpu \
+            --user-data-dir="$profile" --window-size=1280,900 --virtual-time-budget=22000 --dump-dom \
+            'http://127.0.0.1:4173/tests/browser/build36-recovery-v3-tribunal.html?mode=adopt' >"$file"
+          for marker in 'data-b36-host-done="1"' 'data-b36t-done="1"' 'data-b36t-mode="adopt"' 'data-b36t-seven-stores="1"' 'data-b36t-backup-v3="1"' 'data-b36t-evidence-present="1"' 'data-b36t-coherent="1"' 'data-b36t-lifecycle="1"' 'data-b36t-pre-migration="1"' 'data-b36t-source-count="6"' 'data-b36t-raw-valid="1"'; do grep -q "$marker" "$file"; done
+
+      - name: Chrome — existing seven-store profile reopens without remigration
+        run: |
+          profile="/tmp/ft-b36t-profile"; file="/tmp/b36t-reopen.html"
+          timeout --signal=TERM --kill-after=5s 70s google-chrome --headless=new --no-sandbox --disable-gpu \
+            --user-data-dir="$profile" --window-size=1280,900 --virtual-time-budget=22000 --dump-dom \
+            'http://127.0.0.1:4173/tests/browser/build36-recovery-v3-tribunal.html?mode=reopen' >"$file"
+          for marker in 'data-b36-host-done="1"' 'data-b36t-done="1"' 'data-b36t-mode="reopen"' 'data-b36t-seven-stores="1"' 'data-b36t-backup-v3="1"' 'data-b36t-evidence-present="1"' 'data-b36t-coherent="1"' 'data-b36t-lifecycle="1"'; do grep -q "$marker" "$file"; done
+
+      - name: Chrome — corrupted Evidence is quarantined and repaired at boot
+        run: |
+          profile="/tmp/ft-b36t-profile"; seed="/tmp/b36t-corrupt-seed.html"; file="/tmp/b36t-corrupt.html"
+          timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
+            --user-data-dir="$profile" --window-size=1280,900 --virtual-time-budget=3000 --dump-dom \
+            'http://127.0.0.1:4173/tests/browser/build36-recovery-v3-seed.html?mode=corrupt-evidence' >"$seed"
+          grep -q 'data-b36-seed-evidence="corrupt"' "$seed"
+          timeout --signal=TERM --kill-after=5s 70s google-chrome --headless=new --no-sandbox --disable-gpu \
+            --user-data-dir="$profile" --window-size=1280,900 --virtual-time-budget=22000 --dump-dom \
+            'http://127.0.0.1:4173/tests/browser/build36-recovery-v3-tribunal.html?mode=corrupt' >"$file"
+          for marker in 'data-b36-host-done="1"' 'data-b36t-done="1"' 'data-b36t-mode="corrupt"' 'data-b36t-repaired-evidence="1"' 'data-b36t-quarantined="1"' 'data-b36t-coherent="1"' 'data-b36t-evidence-present="1"'; do grep -q "$marker" "$file"; done
+
+      - name: Chrome — v1/v2/v3 restore, reset and injected-failure rollback tribunal
+        run: |
+          profile="/tmp/ft-b36t-profile"; file="/tmp/b36t-restore.html"
+          timeout --signal=TERM --kill-after=5s 90s google-chrome --headless=new --no-sandbox --disable-gpu \
+            --user-data-dir="$profile" --window-size=1280,900 --virtual-time-budget=32000 --dump-dom \
+            'http://127.0.0.1:4173/tests/browser/build36-recovery-v3-tribunal.html?mode=restore' >"$file"
+          for marker in 'data-b36-host-done="1"' 'data-b36t-done="1"' 'data-b36t-mode="restore"' 'data-b36t-v3-round-trip="1"' 'data-b36t-v2-rebuild="1"' 'data-b36t-v1-preserve-rebuild="1"' 'data-b36t-fault-rollback="1"' 'data-b36t-reset-seven="1"' 'data-b36t-final-baseline="1"' 'data-b36t-coherent="1"'; do grep -q "$marker" "$file"; done
+
+      - name: Chrome/PWA — online profile is controlled and cached
+        run: |
+          profile="/tmp/ft-b36t-profile"; file="/tmp/b36t-pwa-online.html"; url='http://127.0.0.1:4173/tests/browser/build36-recovery-v3-tribunal.html?mode=pwa'
+          timeout --signal=TERM --kill-after=5s 90s google-chrome --headless=new --no-sandbox --disable-gpu \
+            --user-data-dir="$profile" --window-size=390,844 --virtual-time-budget=32000 --dump-dom "$url" >"$file"
+          for marker in 'data-b36-host-done="1"' 'data-b36t-done="1"' 'data-b36t-mode="pwa"' 'data-b36t-persisted="1"' 'data-b36t-coherent="1"' 'data-b36t-backup-v3="1"' 'data-b36t-service-worker="1"'; do grep -q "$marker" "$file"; done
+
+      - name: Stop origin before offline reopen
+        run: |
+          kill "$(cat /tmp/ft-b36t-server.pid)"
+          rm -f /tmp/ft-b36t-server.pid
+          sleep 2
+
+      - name: Chrome/PWA — same profile reopens with origin server offline
+        run: |
+          profile="/tmp/ft-b36t-profile"; file="/tmp/b36t-pwa-offline.html"; url='http://127.0.0.1:4173/tests/browser/build36-recovery-v3-tribunal.html?mode=pwa'
+          timeout --signal=TERM --kill-after=5s 90s google-chrome --headless=new --no-sandbox --disable-gpu \
+            --user-data-dir="$profile" --window-size=390,844 --virtual-time-budget=32000 --dump-dom "$url" >"$file"
+          for marker in 'data-b36-host-done="1"' 'data-b36t-done="1"' 'data-b36t-mode="pwa"' 'data-b36t-persisted="1"' 'data-b36t-coherent="1"' 'data-b36t-backup-v3="1"' 'data-b36t-service-worker="1"'; do grep -q "$marker" "$file"; done
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-b36t-server.pid ]; then kill "$(cat /tmp/ft-b36t-server.pid)" || true; fi
