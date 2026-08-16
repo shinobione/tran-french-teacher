@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Build 35.2 Memory Evidence v2 transaction simulation</title>
+</head>
+<body>
+  <main>Build 35.2 isolated migration transaction proof</main>
+  <script src="../../src/core/data-recovery-core.js"></script>
+  <script src="../../src/pedagogy/memory-evidence-v2-core.js"></script>
+  <script src="../../src/pedagogy/memory-evidence-v2-migration-sim.js"></script>
+  <script>
+  (() => {
+    'use strict';
+    const root = document.documentElement;
+    const Recovery = window.FrenchTranquilleRecoveryCore;
+    const Evidence = window.FrenchTranquilleMemoryEvidenceV2;
+    const Sim = window.FrenchTranquilleMemoryEvidenceV2MigrationSim;
+
+    const stores = {
+      learner: { schemaVersion:2, lessonProgress:{ l2:3 }, completedLessons:['l1'], knownItems:['i1'], reviewState:{ i1:2 } },
+      memory: {
+        schemaVersion:1,
+        items:{
+          i1:{ id:'i1', firstSeen:'2026-08-01T08:00:00.000Z', lastSeen:'2026-08-10T10:00:00.000Z', lastReviewed:'2026-08-10T10:00:00.000Z', attempts:2, successes:2, misses:0, streak:2, strength:2, lastRating:2, lastSource:'smart-review' }
+        },
+        totals:{ reviews:2 }
+      },
+      errors: {
+        schemaVersion:1,
+        items:{ i1:{ recoveries:1, lastRecoveryAt:'2026-08-09T09:00:00.000Z', lastSource:'review', events:[{ type:'voice-unrecognized', source:'free-voice', at:'2026-08-06T09:00:00.000Z', repeated:false }] } },
+        recent:[],
+        totals:{ errors:1, recoveries:1, assisted:0, voice:1, repeated:0 }
+      },
+      scenarios:{ schemaVersion:1, scenarios:{}, totalCompletions:0 },
+      listening:{ schemaVersion:1, totals:{ attempts:1, correct:1, misses:0 }, families:{ meaning:{attempts:1,correct:1}, contrast:{attempts:0,correct:0}, dialogue:{attempts:0,correct:0} }, recent:[{ at:'2026-08-08T10:00:00.000Z', family:'meaning', id:'meaning:i1', ok:true, slow:false, replays:1 }] },
+      milestones:{ schemaVersion:1, seen:{ welcome:true } }
+    };
+
+    const rawSeed = source => Object.fromEntries(Recovery.STORE_SPECS.map(spec => [spec.key, source[spec.id] == null ? null : JSON.stringify(source[spec.id])]));
+    const liveSnapshot = () => JSON.stringify(Array.from({length:localStorage.length}, (_, index) => localStorage.key(index)).filter(Boolean).sort().map(key => [key, localStorage.getItem(key)]));
+
+    try {
+      localStorage.setItem('ft-b35-live-sentinel', 'untouched');
+      const liveBefore = liveSnapshot();
+
+      const sandbox = Sim.createSandboxStorage(rawSeed(stores));
+      const sandboxBefore = JSON.stringify(sandbox.dump());
+      const success = Sim.simulateTransaction({ storage:sandbox, recovery:Recovery, evidence:Evidence, projectionOptions:{ curriculumItemIds:['i1'] } });
+      const normalOk = success.ok && success.committedInSandbox && success.verified && success.rereadMatched && success.rolledBack && success.sourceUntouched && success.targetRestored && JSON.stringify(sandbox.dump()) === sandboxBefore;
+
+      const faultsOk = ['after-write','corrupt-target','source-drift'].every(fault => {
+        const faulty = Sim.createSandboxStorage(rawSeed(stores));
+        const before = JSON.stringify(faulty.dump());
+        const result = Sim.simulateTransaction({ storage:faulty, recovery:Recovery, evidence:Evidence, projectionOptions:{ curriculumItemIds:['i1'] }, fault });
+        return !result.ok && result.rolledBack && result.sourceUntouched && result.targetRestored && JSON.stringify(faulty.dump()) === before;
+      });
+
+      const corrupt = rawSeed(stores);
+      const memorySpec = Recovery.STORE_SPECS.find(spec => spec.id === 'memory');
+      corrupt[memorySpec.key] = '{broken-json';
+      const corruptSandbox = Sim.createSandboxStorage(corrupt);
+      const corruptBefore = JSON.stringify(corruptSandbox.dump());
+      const quarantine = Sim.simulateTransaction({ storage:corruptSandbox, recovery:Recovery, evidence:Evidence });
+      const quarantineOk = !quarantine.ok && quarantine.stage === 'source-validation' && quarantine.quarantined && quarantine.rolledBack && quarantine.quarantineRecords.some(record => record.sourceStore === 'memory' && record.reason === 'invalid-json') && JSON.stringify(corruptSandbox.dump()) === corruptBefore;
+
+      const legacyBackup = { format:'french-tranquille-backup', version:1, exportedAt:'2026-08-12T00:00:00.000Z', learner:stores.learner, memory:stores.memory };
+      const legacy = Sim.simulateBackupTransaction(legacyBackup, { recovery:Recovery, evidence:Evidence, projectionOptions:{ curriculumItemIds:['i1'] } });
+      const legacyOk = legacy.ok && legacy.migratedFrom === 1 && legacy.backupVersion === 2 && legacy.preserveMissing && legacy.verified && legacy.rolledBack;
+
+      let sandboxGuard = false;
+      try { Sim.simulateTransaction({ storage:localStorage, recovery:Recovery, evidence:Evidence }); }
+      catch (error) { sandboxGuard = String(error?.message || error) === 'sandbox-required'; }
+
+      const liveUntouched = liveSnapshot() === liveBefore;
+      const noAdoption = localStorage.getItem(Evidence.PROPOSED_STORE_KEY) === null;
+
+      root.dataset.b35TxDone = '1';
+      root.dataset.b35TxOk = normalOk ? '1' : '0';
+      root.dataset.b35TxVerified = success.verified ? '1' : '0';
+      root.dataset.b35TxRollback = success.rolledBack ? '1' : '0';
+      root.dataset.b35TxFaultRollback = faultsOk ? '1' : '0';
+      root.dataset.b35TxQuarantine = quarantineOk ? '1' : '0';
+      root.dataset.b35TxLegacy = legacyOk ? '1' : '0';
+      root.dataset.b35TxSandboxGuard = sandboxGuard ? '1' : '0';
+      root.dataset.b35TxLiveUntouched = liveUntouched ? '1' : '0';
+      root.dataset.b35TxNoAdoption = noAdoption ? '1' : '0';
+    } catch (error) {
+      root.dataset.b35TxDone = '0';
+      root.dataset.b35TxError = String(error?.message || error);
+    }
+  })();
+  </script>
+</body>
+</html>
