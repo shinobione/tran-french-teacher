@@ -31,6 +31,9 @@ jobs:
           node tools/test-build37-2-foundations-capsule-engine.cjs
           node tools/test-build37-4-foundations-negation.cjs
           node tools/test-build37-5-foundations-subject-pronouns.cjs
+          if grep -q "systematization:'37.6'" src/pedagogy/foundations-pilot.js; then
+            node tools/test-build37-6-foundations-questions.cjs
+          fi
 
       - name: F05 stays a narrow optional consolidation
         run: |
@@ -48,7 +51,16 @@ jobs:
           ! grep -q 'localStorage.setItem' src/pedagogy/foundations-pilot.js
           ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/foundations-capsules.js
           ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/foundations-pilot.js
-          ! grep -q 'F12' src/pedagogy/foundations-capsules.js
+          if grep -q "systematization:'37.6'" src/pedagogy/foundations-pilot.js; then
+            grep -q "concepts:\['F12'\]" src/pedagogy/foundations-capsules.js
+            grep -q "id:'F12',capsule:questionsCapsule,min:41,max:43" src/pedagogy/foundations-pilot.js
+            grep -q "systematizationConcepts:\['F12'\]" src/pedagogy/foundations-pilot.js
+            test -f tests/browser/build37-6-foundations-questions.html
+            test -f tools/test-build37-6-foundations-questions.cjs
+            test -f .github/workflows/build37-6-foundations-questions.yml
+          else
+            ! grep -q 'F12' src/pedagogy/foundations-capsules.js
+          fi
 
       - name: Product, storage, voice, curriculum and PWA owners stay untouched
         run: |

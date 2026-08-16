@@ -33,6 +33,9 @@ jobs:
           if grep -q "consolidation:'37.5'" src/pedagogy/foundations-pilot.js; then
             node tools/test-build37-5-foundations-subject-pronouns.cjs
           fi
+          if grep -q "systematization:'37.6'" src/pedagogy/foundations-pilot.js; then
+            node tools/test-build37-6-foundations-questions.cjs
+          fi
 
       - name: F11 stays narrow while certified successors may add separate concepts
         run: |
@@ -48,7 +51,6 @@ jobs:
           ! grep -q 'localStorage.setItem' src/pedagogy/foundations-pilot.js
           ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/foundations-capsules.js
           ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/foundations-pilot.js
-          ! grep -q 'F12' src/pedagogy/foundations-capsules.js
           if grep -q "consolidation:'37.5'" src/pedagogy/foundations-pilot.js; then
             grep -q "concepts:\['F05'\]" src/pedagogy/foundations-capsules.js
             grep -q "id:'F05',capsule:subjectPronounsCapsule,min:34,max:36" src/pedagogy/foundations-pilot.js
@@ -57,6 +59,16 @@ jobs:
             test -f .github/workflows/build37-5-foundations-subject-pronouns.yml
           else
             ! grep -q 'F05' src/pedagogy/foundations-capsules.js
+          fi
+          if grep -q "systematization:'37.6'" src/pedagogy/foundations-pilot.js; then
+            grep -q "concepts:\['F12'\]" src/pedagogy/foundations-capsules.js
+            grep -q "id:'F12',capsule:questionsCapsule,min:41,max:43" src/pedagogy/foundations-pilot.js
+            grep -q "systematizationConcepts:\['F12'\]" src/pedagogy/foundations-pilot.js
+            test -f tests/browser/build37-6-foundations-questions.html
+            test -f tools/test-build37-6-foundations-questions.cjs
+            test -f .github/workflows/build37-6-foundations-questions.yml
+          else
+            ! grep -q 'F12' src/pedagogy/foundations-capsules.js
           fi
 
       - name: Product, storage, voice, curriculum and PWA owners stay untouched

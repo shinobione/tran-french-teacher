@@ -60,6 +60,26 @@
     optional:true,persistence:'ephemeral-only',masteryClaim:false
   };
 
+  const QUESTIONS_RAW = {
+    id:'questions-core',concepts:['F12'],
+    title:{vi:'Hỏi tự nhiên: ngữ điệu • từ để hỏi • lịch sự',fr:'Poser une question : intonation • mot interrogatif • politesse'},
+    intro:[
+      {vi:'Bạn đã gặp nhiều câu hỏi thật trong các bài trước. Mục tiêu là nhận ra vài cách hỏi đơn giản và chọn cách phù hợp với tình huống.',fr:'Tu as déjà rencontré beaucoup de vraies questions. Le but est de reconnaître quelques façons simples de demander quelque chose et de choisir celle qui convient.'},
+      {vi:'Với người thân, chỉ cần câu bình thường + ngữ điệu hỏi: Tu travailles ? Bạn cũng có thể đặt từ hỏi ở cuối: Tu habites où ?',fr:'Avec un proche, une phrase normale + l’intonation suffit souvent : Tu travailles ? On peut aussi placer le mot interrogatif à la fin : Tu habites où ?'},
+      {vi:'Để hỏi lý do hoặc làm rõ, các khối ngắn như Pourquoi ? hoặc Qu’est-ce que ça veut dire ? rất hữu ích. Với người lạ, Pouvez-vous… ? là mẫu lịch sự an toàn.',fr:'Pour demander une raison ou clarifier, des blocs comme Pourquoi ? ou Qu’est-ce que ça veut dire ? sont très utiles. Avec une personne inconnue, Pouvez-vous… ? est un modèle poli et sûr.'}
+    ],
+    examples:['Tu travailles ?','Tu habites où ?','Pourquoi ?',"Qu'est-ce que ça veut dire ?",'Pouvez-vous reformuler ?'],
+    checks:[
+      {id:'question-intonation',prompt:{vi:'Bạn muốn hỏi Jerry có đang làm việc không. Câu nào tự nhiên?',fr:'Tu veux demander à Jerry s’il travaille. Quelle phrase est naturelle ?'},choices:['Tu travailles ?','Tu travaille où.','Travail tu ?'],answer:'Tu travailles ?',feedback:{vi:'Với người thân, câu bình thường + ngữ điệu hỏi là đủ: Tu travailles ?',fr:'Avec un proche, la phrase normale + l’intonation suffit : Tu travailles ?'}},
+      {id:'question-word-end',prompt:{vi:'Bạn muốn hỏi Jerry sống ở đâu. Câu nào bạn đã gặp?',fr:'Tu veux demander où Jerry habite. Quelle forme as-tu déjà rencontrée ?'},choices:['Tu habites où ?','Où tu habite.','Tu où habites ?'],answer:'Tu habites où ?',feedback:{vi:'Trong hội thoại, từ hỏi có thể đứng cuối trong mẫu bạn đã học: Tu habites où ?',fr:'À l’oral, le mot interrogatif peut venir à la fin dans le modèle déjà appris : Tu habites où ?'}},
+      {id:'question-reason',prompt:{vi:'Jerry nói anh ấy về muộn. Bạn muốn hỏi lý do bằng một từ ngắn.',fr:'Jerry dit qu’il rentre tard. Tu veux demander la raison avec un mot très court.'},choices:['Pourquoi ?','Quand ?','Quoi ?'],answer:'Pourquoi ?',feedback:{vi:'Để hỏi lý do: Pourquoi ?',fr:'Pour demander la raison : Pourquoi ?'}},
+      {id:'question-meaning',prompt:{vi:'Bạn không hiểu nghĩa của một cách nói. Câu nào giúp làm rõ?',fr:'Tu ne comprends pas le sens d’une expression. Quelle question permet de clarifier ?'},choices:["Qu'est-ce que ça veut dire ?",'Quelle est la date ?','Ça va ?'],answer:"Qu'est-ce que ça veut dire ?",feedback:{vi:'Để hỏi nghĩa: Qu’est-ce que ça veut dire ?',fr:'Pour demander le sens : Qu’est-ce que ça veut dire ?'}},
+      {id:'question-polite',prompt:{vi:'Bạn muốn lịch sự nhờ một người lạ nói lại theo cách khác.',fr:'Tu veux demander poliment à une personne inconnue de reformuler.'},choices:['Pouvez-vous reformuler ?','Tu reformules ?','Pourquoi reformuler.'],answer:'Pouvez-vous reformuler ?',feedback:{vi:'Trong tình huống lịch sự, Pouvez-vous… ? là một mẫu an toàn: Pouvez-vous reformuler ?',fr:'Dans une situation polie, Pouvez-vous… ? est un modèle sûr : Pouvez-vous reformuler ?'}}
+    ],
+    conclusion:{vi:'Phản xạ cần giữ: với người thân, câu bình thường + ngữ điệu hỏi thường đủ; từ để hỏi cho biết bạn cần thông tin gì; với người lạ, Pouvez-vous… ? giúp giữ sự lịch sự. Chưa cần học đảo động từ. Một mini-check đúng chưa có nghĩa là đã “thành thạo”.',fr:'Le réflexe : avec un proche, la phrase normale + l’intonation suffit souvent ; le mot interrogatif indique l’information recherchée ; avec une personne inconnue, Pouvez-vous… ? garde une demande polie. Pas besoin d’apprendre l’inversion maintenant. Un mini-check réussi ne signifie pas que la règle est « maîtrisée ».'},
+    optional:true,persistence:'ephemeral-only',masteryClaim:false
+  };
+
   const engine = typeof module === 'object' && module.exports
     ? require('./foundations-capsule-engine.js')
     : window.FrenchTranquilleFoundationsCapsuleEngine;
@@ -68,7 +88,8 @@
   const CAPSULES = Object.freeze({
     F01_F04:engine.compile(RAW),
     F11:engine.compile(NEGATION_RAW),
-    F05:engine.compile(SUBJECT_PRONOUNS_RAW)
+    F05:engine.compile(SUBJECT_PRONOUNS_RAW),
+    F12:engine.compile(QUESTIONS_RAW)
   });
 
   if (typeof module === 'object' && module.exports) module.exports = CAPSULES;
