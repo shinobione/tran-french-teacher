@@ -70,9 +70,9 @@
         return response.json();
       });
       if (manifest.display !== 'standalone') fail('manifest display is not standalone');
-      if (manifest.start_url !== './') fail('manifest start_url changed');
-      if (manifest.scope !== './') fail('manifest scope changed');
-      if (manifest.id !== './') fail('manifest id missing');
+      if (manifest.start_url !== '/tran-french-teacher/') fail('manifest start_url changed');
+      if (manifest.scope !== '/tran-french-teacher/') fail('manifest scope changed');
+      if (manifest.id !== '/tran-french-teacher/') fail('manifest id missing');
     } catch (error) {
       fail(`manifest fetch failed: ${error.message || error}`);
     }

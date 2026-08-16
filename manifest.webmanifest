@@ -1,10 +1,10 @@
 {
-  "id": "./",
+  "id": "/tran-french-teacher/",
   "name": "French Trân’quille",
   "short_name": "Trân’quille",
   "description": "Professeure de français personnelle pour Trân — parcours A0 vers premières fondations A1, interface vietnamienne.",
-  "start_url": "./",
-  "scope": "./",
+  "start_url": "/tran-french-teacher/",
+  "scope": "/tran-french-teacher/",
   "display": "standalone",
   "orientation": "any",
   "background_color": "#08111d",

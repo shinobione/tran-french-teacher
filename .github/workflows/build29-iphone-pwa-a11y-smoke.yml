@@ -73,9 +73,9 @@ jobs:
           python3 - <<'PY'
           import json
           m=json.load(open('manifest.webmanifest',encoding='utf-8'))
-          assert m['id']=='./'
-          assert m['start_url']=='./'
-          assert m['scope']=='./'
+          assert m['id']=='/tran-french-teacher/'
+          assert m['start_url']=='/tran-french-teacher/'
+          assert m['scope']=='/tran-french-teacher/'
           assert m['display']=='standalone'
           assert m['orientation']=='any'
           assert m['lang']=='vi'
