@@ -1,4 +1,5 @@
 const CACHE='tran-french-teacher-v2.3.22-b34.14-v58debug1';
+const CACHE_PREFIX='tran-french-teacher-';
 const V='1.17.0-b24';
 const UX='1.17.5-b24.5';
 const P25='1.18.0-b25';
@@ -74,7 +75,7 @@ self.addEventListener('install',event=>{
 self.addEventListener('activate',event=>{
   event.waitUntil((async()=>{
     const keys=await caches.keys();
-    await Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)));
+    await Promise.all(keys.filter(key=>key.startsWith(CACHE_PREFIX)&&key!==CACHE).map(key=>caches.delete(key)));
     await self.clients.claim();
   })());
 });
