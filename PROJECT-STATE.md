@@ -9,9 +9,10 @@
 - Reconciled: **2026-08-17**.
 - Repository: `shinobione/tran-french-teacher`.
 - Default branch: `main`.
-- Current runtime-bearing `main`: **`694988e6299c7d25ca9e019f275c473422fd983e`** — PR **#188**, Build **38.2 · learner-facing subject substitution**.
-- GitHub Pages **#241 / run `31978687464` — SUCCESS** on that exact SHA.
-- Post-merge matrix on `694988e…`: **37 runs = 33 SUCCESS + exactly the 4 inherited historical failures**, **0 queued**, **0 in-progress**.
+- Current governance `main`: **`f0a0df73a249e2c2014120e8a8e39ee0a30f53c1`** — documentation closeout after Build 38.2.
+- Current runtime-bearing product commit: **`694988e6299c7d25ca9e019f275c473422fd983e`** — PR **#188**, Build **38.2 · learner-facing subject substitution**.
+- GitHub Pages **#241 / run `31978687464` — SUCCESS** on runtime commit `694988e…`.
+- Post-merge product matrix on `694988e…`: **37 runs = 33 SUCCESS + exactly the 4 inherited historical failures**, **0 queued**, **0 in-progress**.
 - Visible application runtime metadata remains **v2.4.0 · Build 36**.
 - Pedagogy baseline: **v2.3.0 · Build 34**.
 - Curriculum: **52 lessons / 313 items**.
@@ -22,7 +23,7 @@
 - **Build 38 ACTIVE — Generalization & Transfer.**
 - **Build 38.1 CLOSED / CERTIFIED / MERGED.**
 - **Build 38.2 CLOSED / CERTIFIED / MERGED / DEPLOYED.**
-- **Build 38.3 NEXT — audit + one narrow deterministic transfer family.**
+- **Build 38.3 NEXT — narrow deterministic affirmation → negation transfer core.**
 
 ## Build 38.2 — certified learner-facing integration
 
@@ -50,28 +51,26 @@ Tu aimes ça. → Elle aime ça.
 
 ### 38.2 proof
 
-Candidate head:
+Final candidate head:
 
 ```text
 0e3e0e58e244faec4394d915f1bc2b937e9c5064
 ```
 
-Dedicated PR workflow:
+Dedicated proof passed on the code-bearing candidate and final candidate head. The code-bearing run was:
 
 ```text
 Build 38.2 Learner-facing subject substitution
-run 31977528558 — SUCCESS on final candidate head
+run 31977464288 — SUCCESS
 ```
 
-The earlier code-bearing candidate run `31977464288` was also SUCCESS.
-
-PR-matrix review classified temporary Build 37 / 38.1 reds as predecessor implementation-slice scope guards, not product regressions: their semantic contracts passed and their guard rejected successor wiring such as `sw.js`. Post-merge on `main`, those successor-scope false positives disappear.
+PR-matrix review classified temporary Build 37 / 38.1 reds as predecessor implementation-slice scope guards, not product regressions: their semantic contracts passed and their guard rejected successor wiring such as `sw.js`. Post-merge on `main`, those successor-scope false positives disappeared.
 
 Final deployment:
 
 ```text
 PR #188 MERGED
-main 694988e6299c7d25ca9e019f275c473422fd983e
+runtime commit 694988e6299c7d25ca9e019f275c473422fd983e
 Pages #241 / run 31978687464 — SUCCESS
 post-merge: 33 SUCCESS + exactly 4 inherited failures
 0 queued / 0 in-progress
@@ -119,15 +118,7 @@ J'aime ça.     → Tu aimes ça.
 Tu aimes ça.   → Elle aime ça.
 ```
 
-Core remains deterministic and ephemeral:
-
-```text
-src/pedagogy/generalization-transfer-core.js
-persistence = ephemeral-only
-masteryClaim = false
-```
-
-38.2 wires this core learner-facing but does not broaden its certified matrix.
+Core remains deterministic and ephemeral. 38.2 wires it learner-facing but does not broaden its certified matrix.
 
 ## Build 37 ownership — LOCKED
 
@@ -191,7 +182,7 @@ lesson 20 → Mon téléphone ne marche pas.
 38.1/F08 already owns travailler / habiter / aimer regular-er forms
 ```
 
-The first implementation slice must stay narrower than the full negation system. Preferred candidate:
+The first implementation slice must stay narrower than the full negation system:
 
 ```text
 Je travaille. → Je ne travaille pas.
@@ -226,7 +217,7 @@ Canonical execution order:
 → VI / DEBUG FR × desktop / 390×844 browser tribunal
 → learner stores byte-identical
 → one candidate PR
-→ control review / merge only after dedicated proof
+→ control review / merge after dedicated proof
 ```
 
 Do **not** start Build 39 inside Build 38.
