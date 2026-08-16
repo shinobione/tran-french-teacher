@@ -8,15 +8,15 @@
 
 ---
 
-# 0. Canonical checkpoint — 2026-08-15
+# 0. Canonical checkpoint — 2026-08-16
 
 ## Current line
 
 | Item | Canonical state |
 |---|---|
 | Product pedagogy | **V2.3.0 · Build 34** |
-| Visual maintenance line | **Premium V5.9 technically closed · V5.10 physical gate active** |
-| Verified V5.9 technical/runtime checkpoint at reconciliation | **`6477e980ea21f087a9d30a260dbe4630484e4b36`** |
+| Visual maintenance line | **Premium V5.10 CLOSED · physical FIELD PASS** |
+| Verified final V5.10 runtime checkpoint | **`54209392d3a349a1aefab14615dcecf24a59fcea`** — PR #161 |
 | Curriculum | **52 lessons / 313 items** |
 | Scenario | **44 situations / 132 turns** |
 | Speaking Loop | **52/52 · max 2 moments / lesson** |
@@ -26,18 +26,21 @@
 | Frozen architecture baseline | **2.0.0 · Build 30** |
 | Primary target | **iPhone / Safari / installed PWA** |
 | Recurring backend/API cost | **0 €** |
-| Final Premium issue | **#114 — OPEN** |
-| Build 35 | **BLOCKED / RESERVED** |
+| Final Premium issue | **#114 — CLOSED / completed** |
+| Build 35 | **UNBLOCKED · NEXT CANONICAL BUILD** |
 
 ## Current interpretation
 
 - V5.6 asset candidates were produced and user-approved.
 - V5.7 four-theme Premium artwork integration was user-approved, merged and delivered.
 - V5.8 DEBUG FR / theme decoupling was merged as PR #128.
-- V5.9 shared-system coherence was implemented as real rollback checkpoints **#137 → #141** and is **technically closed by automated QA**.
-- V5.9 solved the field findings as shared-system contracts rather than a theme-by-theme patch march.
-- The **active gate is V5.10**: physical installed-iPhone/PWA human field verdict.
-- Automation does **not** close #114; Build 35 remains blocked until explicit final user FIELD PASS and #114 closure.
+- V5.9 shared-system coherence was implemented as real rollback checkpoints **#137 → #141** and is technically closed.
+- V5.10 completed the full global/physical Premium gate, including later field fixes for destination identity, lesson/Tyffany ownership and the Settings Theme interaction.
+- Final runtime-bearing Premium checkpoint is **PR #161 / `54209392d3a349a1aefab14615dcecf24a59fcea`**.
+- PR #161 passed **44/44** pull-request workflows; the runtime passed **29/29** push workflows; **GitHub Pages #214** succeeded on the exact runtime SHA.
+- On **2026-08-16**, the user gave the explicit physical verdict: **`ça a l'air OK, TEST SMOKED`**.
+- That verdict is the canonical V5.10 **FIELD PASS**. Issue **#114 is CLOSED**.
+- **Build 35 is now unblocked**, but only for its reserved scope: **Memory Evidence v2 / Migration Readiness**. Premium polish must not steal the build number.
 
 ---
 
@@ -118,10 +121,10 @@ V5.5 stable structural base ✅
 → V5.7 Original Theme Parity + Theme Art Integration ✅
 → V5.8 DEBUG FR / Theme Decoupling ✅
 → V5.9 Shared UI Coherence + Fluidity / Premium Feel ✅
-→ V5.10 Global Visual QA + Physical iPhone verdict **← ACTIVE FIELD GATE**
-→ V2.3.x / Build 34 governance + documentation closure
-→ close #114 only after explicit user PASS
-→ Build 35 Memory Evidence v2 / Migration Readiness
+→ V5.10 Global Visual QA + Physical installed-PWA verdict ✅ FIELD PASS
+→ V2.3.x / Build 34 governance + documentation closure ✅
+→ issue #114 CLOSED after explicit user PASS ✅
+→ Build 35 Memory Evidence v2 / Migration Readiness **← NEXT CANONICAL BUILD**
 → Build 36 Adoption Candidate only if migration proof is complete
 → Build 37 Foundations Core
 → Build 38 Generalization & Transfer
@@ -130,9 +133,9 @@ V5.5 stable structural base ✅
 → A2 only after Build 40 decision
 ```
 
-All V5.6→V5.10 work stays in the **Build 34 maintenance line**.
+All V5.6→V5.10 work remains part of the **Build 34 maintenance line** historically.
 
-**Do not steal Build 35 for CSS, imagery, animation, cache work, DEBUG FR, icon work or visual QA.**
+**Do not steal Build 35 for CSS, imagery, animation, cache work, DEBUG FR, icon work or visual QA.** Concrete visual regressions remain maintenance defects and do not redefine the Build 35 scope.
 
 ---
 
@@ -217,7 +220,7 @@ For each theme:
 
 V5.7 user visual PASS: **2026-08-15**.
 
-Physical installed-iPhone FIELD PASS is still reserved for V5.10.
+The complete installed-PWA Premium package later received its final V5.10 FIELD PASS on **2026-08-16**.
 
 ---
 
@@ -245,7 +248,7 @@ PR #128 merged at verified checkpoint:
 
 **`bf196a101e9d444650390e94a9ba8adf5f19009c`**.
 
-V5.8 solved the **state ownership** problem. V5.9 still owns the quality of the **admin entry/access affordance**.
+V5.8 solved the **state ownership** problem. V5.9 later owned the quality of the **admin entry/access affordance**.
 
 ---
 
@@ -253,7 +256,7 @@ V5.8 solved the **state ownership** problem. V5.9 still owns the quality of the 
 
 ## 6.0 Technical closeout — 2026-08-15
 
-V5.9 is **technically closed by automated QA**. This does not replace the V5.10 physical installed-iPhone/PWA user verdict.
+V5.9 is **technically closed by automated QA**. Its successor V5.10 later received the required physical installed-PWA user verdict on 2026-08-16.
 
 Real independently revertable checkpoint chain:
 
@@ -288,7 +291,7 @@ Resolved implementation map:
 - goat favicon / Apple Touch / PWA any + maskable identity and offline wiring → **V5.9D**;
 - aggregate technical tribunal + deterministic PWA offline harness → **V5.9E**.
 
-**Canonical next step: V5.10 physical installed-iPhone/PWA field gate. Build 35 remains blocked.**
+Historical next step from V5.9 was V5.10 physical validation. That gate is now complete; the current next build is Build 35.
 
 ## Goal
 
@@ -536,11 +539,11 @@ Those are a separate control/review step unless explicitly delegated.
 
 ---
 
-# 7. V5.10 — Final Premium QA / Physical gate — ACTIVE
+# 7. V5.10 — Final Premium QA / Physical gate — CLOSED · FIELD PASS
 
-This is the **active actual closure gate for #114**.
+V5.10 is the completed closure gate for Premium issue #114.
 
-V5.9 automated technical QA is green. **Automation alone cannot close this phase:** the installed-iPhone/PWA human field verdict is still required.
+The phase combined automated global QA with physical installed-PWA human validation. Automation alone was never sufficient; the final field verdict was supplied by the user on **2026-08-16**.
 
 ## Automated matrix
 
@@ -582,33 +585,31 @@ Assertions:
 - no duplicate Speaking CTA;
 - no lesson identity / Eiffel overlap.
 
-## Human / physical gate
+Later V5.10 field closeout also permanently guards:
 
-Required on installed iPhone/PWA:
+- approved Practice artwork propagation into destination Feature Headers;
+- `Conversation` = Real-Life, never Speak;
+- canonical lesson icon ownership versus Tyffany tutor/voice ownership;
+- Settings Theme disclosure through **real user-style clicks after route churn/remount**;
+- zero competing Theme owners/hit targets.
+
+## Human / physical gate — PASSED
+
+The canonical installed-PWA review path included:
 
 ```text
 close app
 → reopen without deleting data
-→ Original
-→ Aurora
-→ Sunset
-→ Nocturne
-→ Today
-→ Practice
-→ Review
-→ Speak
-→ Listen
-→ Real Life
-→ Progress
-→ Listening
-→ Settings
-→ About
-→ Recovery open/close
-→ DEBUG/admin access verification
+→ theme travel
+→ Today / lesson
+→ Practice / Review / Speak / Listen / Real Life
+→ Progress / Listening
+→ Settings / Theme / About / Recovery
+→ normal navigation churn
 → return Home
 ```
 
-Human checks:
+Human checks included:
 
 - ZERO flash/remanence;
 - artwork actually looks Premium;
@@ -617,21 +618,32 @@ Human checks:
 - buttons/cards/chrome feel coherent with mockups;
 - screens feel fluid rather than abrupt;
 - no unreadable text over imagery;
-- no awkward real-iPhone crop;
+- no awkward real-device crop;
 - no duplicated speaking control;
-- admin access is available but not intrusive.
+- admin access is available but not intrusive;
+- Theme remains tappable after navigation / lesson usage.
 
-## Closure rule
+Final physical verdict:
 
-**Do not close issue #114 until the user gives an explicit final Premium PASS.**
+```text
+2026-08-16
+user → “ça a l'air OK, TEST SMOKED”
+```
 
-Only after that:
+This is the explicit final Premium **FIELD PASS** required by the gate.
 
-1. record exact runtime SHA + Pages evidence;
-2. record physical verdict;
-3. synchronize README / ROADMAP / CHANGELOG / ARCHITECTURE / MASTER / PROJECT-STATE;
-4. close #114;
-5. then and only then unblock Build 35.
+## Closure evidence — SATISFIED
+
+1. final runtime-bearing checkpoint recorded: **PR #161 / `54209392d3a349a1aefab14615dcecf24a59fcea`**;
+2. PR #161: **44/44 SUCCESS**;
+3. main runtime: **29/29 SUCCESS**, zero failure/queued/in-progress at closeout;
+4. GitHub Pages **#214 SUCCESS** on exact runtime SHA;
+5. physical verdict recorded above;
+6. PROJECT-STATE / MASTER ROADMAP reconciled;
+7. issue **#114 CLOSED / completed**;
+8. **Build 35 UNBLOCKED**.
+
+Future visual defects may be fixed as maintenance regressions, but V5.10 must not be silently reopened or Build 35 repurposed for Premium polish.
 
 ---
 
@@ -671,9 +683,11 @@ Voice rules remain:
 
 Premium work must not erase the post-Build34 pedagogy sequence.
 
-## Build 35 — Memory Evidence v2 / Migration Readiness
+## Build 35 — Memory Evidence v2 / Migration Readiness — NEXT / UNBLOCKED
 
 **Design and simulation first. No durable adoption yet.**
+
+Build 35 became eligible only after the explicit V5.10 FIELD PASS and issue #114 closure on **2026-08-16**. Its scope is reserved for Memory Evidence v2 / migration readiness; it is not a continuation of Premium visual polish.
 
 Evidence dimensions:
 
@@ -812,22 +826,22 @@ Before touching runtime:
 
 1. read `AGENTS.md`;
 2. read `PROJECT-STATE.md`;
-3. read V5.9 and V5.10 here;
-4. inspect current `main`, open PRs and issue #114;
+3. read the V5.10 closure and Build 35 sections here;
+4. inspect current `main`, open PRs and confirm issue #114 remains closed;
 5. verify the currently deployed Pages SHA when runtime work is involved;
 6. do not assume an old chat checkpoint is current;
-7. do not start Build35 while #114 is open;
+7. Build 35 is now allowed **only for Memory Evidence v2 / Migration Readiness**; do not use it for visual maintenance;
 8. do not regenerate locked backgrounds;
 9. preserve zero-flash atomic ownership;
 10. keep DEBUG independent from theme;
-11. solve shared layout/component problems before per-theme tweaks;
+11. preserve the accepted Premium identity/Feature Header/lesson/Tyffany/Theme contracts while doing pedagogy work;
 12. materialize work in git before treating it as project state;
-13. stop the coding-agent session at the V5.9 candidate PR unless the user explicitly asks for further actions;
-14. perform CI/merge/Pages/next-slice control as a separate step;
-15. never declare physical visual completion from automation alone.
+13. for Build 35, design and migration simulation come before any durable schema adoption;
+14. Build 36 remains blocked until Build 35 migration proof is complete;
+15. never declare a future physical/device gate complete from automation alone.
 
 ---
 
 # Canonical one-line order
 
-> **V5.8 merged → solve V5.9 as one shared-system coherence slice → stop at candidate PR → separately certify/merge → V5.10 global QA + physical iPhone Premium PASS → governance closure → Build35.**
+> **Premium V5.10 FIELD PASS → #114 CLOSED → Build 35 Memory Evidence v2 / Migration Readiness NEXT → Build 36 only after complete migration proof → Builds 37–40 → A2 only after Build 40 decision.**

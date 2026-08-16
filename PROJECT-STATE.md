@@ -15,9 +15,10 @@
 - PR #161 final head passed **44/44** pull-request workflows with no rerun required.
 - Runtime checkpoint `54209392…` passed **29/29** push workflows with **0 failure / 0 queued / 0 in-progress**.
 - **GitHub Pages #214 SUCCESS** on exact runtime SHA `54209392d3a349a1aefab14615dcecf24a59fcea`.
-- Premium gate issue: **#114 OPEN**.
-- **V5.10 remains the active human/physical installed-PWA visual field gate.**
-- Build 35 remains **BLOCKED / RESERVED** until explicit user field PASS and #114 closure.
+- **Physical V5.10 FIELD PASS received 2026-08-16**: user verdict — `ça a l'air OK, TEST SMOKED`.
+- Premium gate issue **#114 CLOSED / completed** after explicit user PASS.
+- **Premium V5.10 is CLOSED / physically accepted.**
+- **Build 35 is UNBLOCKED** for its canonical scope only: **Memory Evidence v2 / Migration Readiness**.
 
 A later docs-only reconciliation commit may advance `main` without changing the runtime-bearing SHA above. Always distinguish current Git HEAD from the latest runtime-bearing checkpoint.
 
@@ -26,7 +27,7 @@ A later docs-only reconciliation commit may advance `main` without changing the 
 | Area | State |
 |---|---|
 | Product pedagogy | **V2.3.0 · Build 34** |
-| Visual line | **Premium V5.10 · field-polished · physical verdict still required** |
+| Visual line | **Premium V5.10 · CLOSED · physical FIELD PASS** |
 | Curriculum | **52 lessons / 313 items** |
 | Scenario | **44 situations / 132 turns** |
 | Speaking Loop | **52/52 · max 2 moments / lesson** |
@@ -34,8 +35,8 @@ A later docs-only reconciliation commit may advance `main` without changing the 
 | Durable pedagogical stores | **6** |
 | Foundations | **F01–F04 pilot** |
 | Primary field target | **installed mobile PWA / Safari or Chromium mobile** |
-| Premium gate | issue **#114 OPEN** |
-| Build 35 | **BLOCKED / RESERVED** |
+| Premium gate | issue **#114 CLOSED** |
+| Build 35 | **UNBLOCKED · NEXT CANONICAL BUILD** |
 
 ## V5.10 canonical identity rules
 
@@ -144,17 +145,31 @@ Current V5.10 field automation now covers both visual ownership and the real The
 - visible theme options remain interactive inside Settings;
 - pure visual/theme travel leaves durable learner data unchanged.
 
+## Physical closure verdict
+
+The V5.10 installed-PWA gate is now closed by explicit human evidence:
+
+```text
+2026-08-16
+user physical smoke → “ça a l'air OK, TEST SMOKED”
+issue #114          → CLOSED / completed
+Premium V5.10       → FIELD PASS
+Build 35            → UNBLOCKED
+```
+
+This field PASS certifies the current Premium package as accepted enough to leave the Build 34 visual-maintenance gate. Future regressions still reopen maintenance as defects, but they do **not** retroactively consume Build 35 or rewrite the V5.10 closeout.
+
 ## PWA/cache choice
 
 - V5.10 lesson-identity targeted runtime URL version remains **`2.3.35-v510lessonidentity1`**.
 - Theme interaction contract marker: **`2.3.36-v510themeinteraction1`** inside `FrenchTranquilleThemes.interactionVersion`.
 - Global Service Worker cache identity remains deliberately unchanged.
 - No global cache nuke was used for this interaction correction.
-- Service Worker remains network-first for GET requests; physical retest should be performed after one warm-online reopen so the current runtime can refresh normally without deleting learner data.
+- Service Worker remains network-first for GET requests.
 
 ## Protected sanctuaries
 
-Current Premium field fixes must not silently change:
+Future work must not silently change:
 
 ```text
 app.js
@@ -164,7 +179,7 @@ assets/LOGO.png
 assets/Favicon.png
 ```
 
-Also preserve:
+Also preserve unless an explicitly scoped future build proves otherwise:
 
 - learner progression;
 - six durable stores;
@@ -185,33 +200,36 @@ Also preserve:
 - Feature Header artwork must remain the exact same approved source file used on Practice.
 - `Conversation` remains Real-Life; Speak remains explicit `Répondre à l’oral` only.
 - **Lesson surfaces use curriculum lesson identity; Tyffany owns tutor/voice surfaces, not generic lesson identity.**
-- Build 35 remains unavailable for CSS/assets/animation/cache/DEBUG/visual QA work.
+- Build 35 remains unavailable for CSS/assets/animation/cache/DEBUG/visual QA work: its scope is Memory Evidence v2 / Migration Readiness.
 
-## Canonical next action — physical field verdict
+## Canonical next action — Build 35
 
-**Do not start Build 35. Do not close #114 from automation alone.**
+Premium V5.10 is closed. **Do not reopen the visual gate without a concrete regression.**
 
-The current runtime/automation side is green:
+Certified closure evidence:
 
 ```text
 PR #161                       44/44 SUCCESS
 main runtime 54209392…        29/29 SUCCESS
 V5.10 Theme Picker #2         SUCCESS
 GitHub Pages #214             SUCCESS on 54209392…
+physical FIELD PASS           2026-08-16
+issue #114                    CLOSED / completed
 ```
 
-Next action is physical installed-PWA continuation from the current runtime:
+Next canonical build:
 
 ```text
-→ warm-online reopen PWA without deleting data
-→ navigate normally / complete or revisit a lesson
-→ Settings → Theme: verify the card visibly opens on tap
-→ select at least one different theme and verify the UI changes while Settings remains usable
-→ close/reopen Theme and revisit Settings after further navigation
-→ re-check lesson identity / Tyffany action alignment
-→ spot-check Listening / Real-Life / Progress
-→ verify ZERO flash/remanence regression
-→ explicit user FIELD PASS only when the physical package is actually clean
-→ close #114 / governance closeout
-→ only then Build 35
+Build 35 — Memory Evidence v2 / Migration Readiness
+
+→ audit current Memory evidence ownership and all 6 durable stores
+→ design evidence v2 without adopting a new durable schema yet
+→ define bounded evidence history + compatibility rules
+→ prove deterministic migration in simulation
+→ snapshot → transform → simulated write → reread → compare → rollback
+→ quarantine invalid data
+→ prove old-backup compatibility
+→ run historical learner + browser proof
+→ stop before durable adoption
+→ Build 36 only if migration proof is complete
 ```
