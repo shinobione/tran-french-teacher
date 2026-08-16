@@ -3,6 +3,11 @@
 
   const VERSION = '2.2.0-b32';
   const FOUNDATIONS = '2.3.0-b34';
+  const RUNTIME_META = Object.freeze({
+    version:'2.4.0',
+    build:'36',
+    pedagogyBaseline:Object.freeze({ version:'2.3.0', build:'34' })
+  });
   const root = document.documentElement;
   const loadStyle = (href, key) => {
     if (document.querySelector(`link[data-${key}]`)) return;
@@ -26,6 +31,47 @@
     script.addEventListener('error', reject, { once:true });
     document.body.appendChild(script);
   });
+
+  function installRuntimeMeta() {
+    window.FrenchTranquilleRuntimeMeta = RUNTIME_META;
+    window.FrenchTranquillePedagogyBaseline = RUNTIME_META.pedagogyBaseline;
+    root.dataset.runtimeVersion = RUNTIME_META.version;
+    root.dataset.runtimeBuild = RUNTIME_META.build;
+    root.dataset.pedagogyVersion = RUNTIME_META.pedagogyBaseline.version;
+    root.dataset.pedagogyBuild = RUNTIME_META.pedagogyBaseline.build;
+
+    const meta = window.FrenchTranquilleBuildMeta;
+    if (meta && typeof meta === 'object' && !Object.isFrozen(meta)) {
+      Object.defineProperty(meta, 'version', {
+        configurable:true,
+        enumerable:true,
+        get:() => RUNTIME_META.version,
+        set:() => {}
+      });
+      Object.defineProperty(meta, 'build', {
+        configurable:true,
+        enumerable:true,
+        get:() => RUNTIME_META.build,
+        set:() => {}
+      });
+      meta.pedagogyBaseline = RUNTIME_META.pedagogyBaseline;
+    }
+
+    document.querySelectorAll('.diagnostics > div').forEach(row => {
+      const label = row.querySelector('span')?.textContent?.trim()?.toLocaleLowerCase();
+      const value = row.querySelector('strong');
+      if (!value || (label !== 'version' && label !== 'phiên bản')) return;
+      value.textContent = `v${RUNTIME_META.version} • Build ${RUNTIME_META.build}`;
+    });
+
+    window.dispatchEvent(new CustomEvent('french-tranquille:runtime-meta-change', {
+      detail:{
+        version:RUNTIME_META.version,
+        build:RUNTIME_META.build,
+        pedagogyBaseline:RUNTIME_META.pedagogyBaseline
+      }
+    }));
+  }
 
   async function boot() {
     if (root.dataset.build32Ready === '1') return;
@@ -52,7 +98,12 @@
     }
 
     const historical = params.has('b31Audit') || params.has('b30Audit') || params.has('v2Audit');
-    if (!historical) await loadScript(`./src/pedagogy/foundations-pilot.js?v=${FOUNDATIONS}`, 'foundationsPilot');
+    if (!historical) {
+      await loadScript(`./src/pedagogy/foundations-pilot.js?v=${FOUNDATIONS}`, 'foundationsPilot');
+      installRuntimeMeta();
+      window.FrenchTranquilleBuild27Shell?.refresh?.();
+      window.FrenchTranquilleBuild32Shell?.refresh?.();
+    }
   }
 
   boot().catch(error => {
