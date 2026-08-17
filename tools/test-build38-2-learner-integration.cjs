@@ -27,7 +27,9 @@ assert.match(adapter,/masteryClaim:false/);
 assert.match(adapter,/data-transfer-entry/);
 assert.match(adapter,/data-transfer-open/);
 assert.match(adapter,/data-transfer-choice/);
-assert.match(adapter,/core\.verify\(exercise,choice\)/);
+assert.match(adapter,/slice:'38\.2',[\s\S]*?\n\s*core,[\s\S]*?family:core\.family\.id/);
+assert.match(adapter,/activeCore=route\.core/);
+assert.match(adapter,/activeCore\.verify\(exercise,session\.choice\)/);
 assert.match(adapter,/const shift=\(index\+1\)%choices\.length/);
 
 for(const forbidden of ['localStorage.setItem','sessionStorage.setItem','indexedDB','Math.random','french-tranquille:memory-evidence:v2']){
