@@ -5,6 +5,7 @@
   const FOUNDATIONS = '2.4.0-b37.3';
   const TRANSFER='2.4.0-b38.2';
   const TRANSFER_FUTURE='2.4.0-b38.5';
+  const TRANSFER_NUMBER='2.4.0-b38.7';
   const RUNTIME_META = Object.freeze({
     version:'2.4.0',
     build:'36',
@@ -44,18 +45,8 @@
 
     const meta = window.FrenchTranquilleBuildMeta;
     if (meta && typeof meta === 'object' && !Object.isFrozen(meta)) {
-      Object.defineProperty(meta, 'version', {
-        configurable:true,
-        enumerable:true,
-        get:() => RUNTIME_META.version,
-        set:() => {}
-      });
-      Object.defineProperty(meta, 'build', {
-        configurable:true,
-        enumerable:true,
-        get:() => RUNTIME_META.build,
-        set:() => {}
-      });
+      Object.defineProperty(meta, 'version', { configurable:true, enumerable:true, get:() => RUNTIME_META.version, set:() => {} });
+      Object.defineProperty(meta, 'build', { configurable:true, enumerable:true, get:() => RUNTIME_META.build, set:() => {} });
       meta.pedagogyBaseline = RUNTIME_META.pedagogyBaseline;
     }
 
@@ -67,11 +58,7 @@
     });
 
     window.dispatchEvent(new CustomEvent('french-tranquille:runtime-meta-change', {
-      detail:{
-        version:RUNTIME_META.version,
-        build:RUNTIME_META.build,
-        pedagogyBaseline:RUNTIME_META.pedagogyBaseline
-      }
+      detail:{ version:RUNTIME_META.version, build:RUNTIME_META.build, pedagogyBaseline:RUNTIME_META.pedagogyBaseline }
     }));
   }
 
@@ -106,6 +93,7 @@
       await loadScript(`./src/pedagogy/foundations-pilot.js?v=${FOUNDATIONS}`, 'foundationsPilot');
       await loadScript(`./src/pedagogy/generalization-transfer-core.js?v=${TRANSFER}`, 'generalizationTransferCore');
       await loadScript(`./src/pedagogy/generalization-futur-proche-core.js?v=${TRANSFER_FUTURE}`, 'generalizationFuturProcheCore');
+      await loadScript(`./src/pedagogy/generalization-number-core.js?v=${TRANSFER_NUMBER}`, 'generalizationNumberCore');
       await loadScript(`./src/pedagogy/generalization-transfer-lesson.js?v=${TRANSFER}`, 'generalizationTransferLesson');
       installRuntimeMeta();
       window.FrenchTranquilleBuild27Shell?.refresh?.();

@@ -6,9 +6,12 @@
   const EXERCISE_INDEXES=Object.freeze([0,2,5]);
   const FUTURE_LESSON=35;
   const FUTURE_EXERCISE_INDEXES=Object.freeze([0,1,3]);
+  const NUMBER_LESSON=13;
+  const NUMBER_EXERCISE_INDEXES=Object.freeze([0,2,3]);
   const root=document.documentElement;
   const core=window.FrenchTranquilleGeneralizationTransfer;
   const futureCore=window.FrenchTranquilleGeneralizationFuturProche;
+  const numberCore=window.FrenchTranquilleGeneralizationNumber;
   const T=(vi,fr)=>localStorage.getItem(DEBUG)==='1'?fr:vi;
   const locale=()=>localStorage.getItem(DEBUG)==='1'?'fr':'vi';
   const esc=(value='')=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
@@ -19,8 +22,10 @@
     return;
   }
 
+  const hasNumberCore=numberCore?.family?.id==='singular-plural-regular-noun-phrases';
   const legacyExercises=Object.freeze(EXERCISE_INDEXES.map(index=>core.catalog[index]));
   const futureExercises=Object.freeze(FUTURE_EXERCISE_INDEXES.map(index=>futureCore.catalog[index]));
+  const numberExercises=Object.freeze(hasNumberCore?NUMBER_EXERCISE_INDEXES.map(index=>numberCore.catalog[index]):[]);
   const ROUTES=Object.freeze([
     Object.freeze({
       lesson:LESSON,
@@ -57,8 +62,32 @@
       doneTitleFr:'Tu viens de construire 3 phrases au futur proche',
       doneCopyVi:'Bạn đã giữ cùng người và hành động, rồi dùng aller + động từ nguyên mẫu. Đây là luyện chuyển đổi, không phải điểm “thành thạo”.',
       doneCopyFr:'Tu as gardé la même personne et la même action, puis utilisé aller + infinitif. C’est un exercice de transfert, pas un score de « maîtrise ».'
-    })
-  ]);
+    }),
+    hasNumberCore?Object.freeze({
+      lesson:NUMBER_LESSON,
+      slice:'38.7',
+      core:numberCore,
+      family:numberCore.family.id,
+      exerciseIndexes:NUMBER_EXERCISE_INDEXES,
+      exercises:numberExercises,
+      eyebrowVi:'CHUYỂN ĐỔI',
+      eyebrowFr:'TRANSFORMER',
+      entryCtaVi:'Thử 3 nhóm từ • khoảng 2 phút',
+      entryCtaFr:'Essayer 3 groupes • ≈ 2 min',
+      startCtaVi:'Bắt đầu 3 nhóm từ',
+      startCtaFr:'Commencer les 3 groupes',
+      entryCopyVi:'3 nhóm từ đã gặp: đổi từ số ít sang số nhiều bằng cách đổi cả từ đứng trước và danh từ. Không bắt buộc để tiếp tục bài.',
+      entryCopyFr:'3 groupes déjà rencontrés : passe du singulier au pluriel en changeant le déterminant et le nom. Facultatif pour continuer la leçon.',
+      introCopyVi:'Không có từ mới. Bạn đổi cả hai phần: la → les hoặc un/une → des, rồi thêm -s cho danh từ thường.',
+      introCopyFr:'Pas de nouveau vocabulaire. Change les deux parties : la → les ou un/une → des, puis ajoute -s au nom régulier.',
+      correctVi:'✓ Đúng. Bạn đã đổi cả từ đứng trước và danh từ sang số nhiều.',
+      correctFr:'✓ Correct. Tu as mis le déterminant et le nom au pluriel.',
+      doneTitleVi:'Bạn vừa chuyển 3 nhóm từ sang số nhiều',
+      doneTitleFr:'Tu viens de passer 3 groupes au pluriel',
+      doneCopyVi:'Bạn đã đổi cả từ đứng trước và danh từ. Đây là luyện chuyển đổi, không phải điểm “thành thạo”.',
+      doneCopyFr:'Tu as transformé le déterminant et le nom. C’est un exercice de transfert, pas un score de « maîtrise ».'
+    }):null
+  ].filter(Boolean));
 
   let overlay=null,lastTrigger=null,scheduled=false,session=null,activeRoute=ROUTES[0],activeCore=core,exercises=legacyExercises;
 
@@ -81,7 +110,9 @@
   }
 
   function entryMarkup(route){
-    return `<section class="ft-transfer-entry" data-transfer-entry data-transfer-family="${esc(route.family)}" data-transfer-lesson="${route.lesson}"><span class="ft-transfer-eyebrow">🔁 ${esc(T('XÂY CÂU','CONSTRUIRE UNE PHRASE'))}</span><h3>${esc(route.core.family.title[locale()])}</h3><p>${esc(T(route.entryCopyVi,route.entryCopyFr))}</p><button type="button" class="secondary" data-transfer-open>${esc(T('Thử 3 câu • khoảng 2 phút','Essayer 3 phrases • ≈ 2 min'))} ›</button></section>`;
+    const eyebrow=T(route.eyebrowVi||'XÂY CÂU',route.eyebrowFr||'CONSTRUIRE UNE PHRASE');
+    const cta=T(route.entryCtaVi||'Thử 3 câu • khoảng 2 phút',route.entryCtaFr||'Essayer 3 phrases • ≈ 2 min');
+    return `<section class="ft-transfer-entry" data-transfer-entry data-transfer-family="${esc(route.family)}" data-transfer-lesson="${route.lesson}"><span class="ft-transfer-eyebrow">🔁 ${esc(eyebrow)}</span><h3>${esc(route.core.family.title[locale()])}</h3><p>${esc(T(route.entryCopyVi,route.entryCopyFr))}</p><button type="button" class="secondary" data-transfer-open>${esc(cta)} ›</button></section>`;
   }
 
   function activateRoute(route){
@@ -93,10 +124,7 @@
   function mountEntry(){
     const route=routeForLesson(currentLessonNumber());
     const existing=document.querySelector('[data-transfer-entry]');
-    if(!route){
-      existing?.remove();
-      return;
-    }
+    if(!route){existing?.remove();return}
     activateRoute(route);
     if(overlay)return;
     if(existing?.dataset.transferFamily===route.family&&Number(existing.dataset.transferLesson)===route.lesson){
@@ -144,12 +172,13 @@
     const lang=locale();
     let body='';
     if(session.phase==='intro'){
-      body=`<div class="ft-transfer-copy"><strong>${esc(activeCore.family.instruction[lang])}</strong><p>${esc(T(activeRoute.introCopyVi,activeRoute.introCopyFr))}</p></div><button class="primary ft-transfer-next" data-transfer-next>${esc(T('Bắt đầu 3 câu','Commencer les 3 phrases'))} ›</button>`;
+      const start=T(activeRoute.startCtaVi||'Bắt đầu 3 câu',activeRoute.startCtaFr||'Commencer les 3 phrases');
+      body=`<div class="ft-transfer-copy"><strong>${esc(activeCore.family.instruction[lang])}</strong><p>${esc(T(activeRoute.introCopyVi,activeRoute.introCopyFr))}</p></div><button class="primary ft-transfer-next" data-transfer-next>${esc(start)} ›</button>`;
     }else if(session.phase==='question'){
       const exercise=exercises[session.index];
       const view=activeCore.view(exercise,lang);
       const choices=orderedChoices(view,session.index);
-      const correct=session.answered&&(activeCore===core?core.verify(exercise,session.choice):activeCore.verify(exercise,session.choice));
+      const correct=session.answered&&activeCore.verify(exercise,session.choice);
       const feedback=session.answered
         ? correct
           ? T(activeRoute.correctVi,activeRoute.correctFr)
@@ -167,9 +196,8 @@
   }
 
   function next(){
-    if(session.phase==='intro'){
-      session={...session,phase:'question'};
-    }else if(session.phase==='question'&&session.answered){
+    if(session.phase==='intro')session={...session,phase:'question'};
+    else if(session.phase==='question'&&session.answered){
       session=session.index===exercises.length-1
         ? {...session,phase:'done'}
         : {phase:'question',index:session.index+1,answered:false,choice:null,correct:false};
@@ -181,13 +209,14 @@
     if(session?.phase!=='question'||session.answered)return;
     const exercise=exercises[session.index];
     const choice=button.dataset.transferChoice;
-    const correct=activeCore===core?core.verify(exercise,choice):activeCore.verify(exercise,choice);
+    const correct=activeCore.verify(exercise,choice);
     session={...session,answered:true,choice,correct};
     renderOverlay();
   }
 
   function decorate(){
     root.dataset.transferIntegration='38.5';
+    root.dataset.transferNumberIntegration=hasNumberCore?'38.7':'0';
     root.dataset.transferLesson=String(currentLessonNumber());
     mountEntry();
   }
@@ -203,6 +232,7 @@
     build:38,
     slice:'38.2',
     integration:'38.5',
+    numberIntegration:hasNumberCore?'38.7':null,
     status:'learner-facing-contextual',
     family:core.family.id,
     lesson:LESSON,
@@ -212,6 +242,10 @@
     futureLesson:FUTURE_LESSON,
     futureExerciseIndexes:FUTURE_EXERCISE_INDEXES,
     futureExercises,
+    numberFamily:hasNumberCore?numberCore.family.id:null,
+    numberLesson:hasNumberCore?NUMBER_LESSON:null,
+    numberExerciseIndexes:hasNumberCore?NUMBER_EXERCISE_INDEXES:Object.freeze([]),
+    numberExercises,
     routes:ROUTES,
     persistent:false,
     masteryClaim:false,
