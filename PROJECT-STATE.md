@@ -9,11 +9,11 @@
 - Default branch: `main`.
 - Current accepted governance `main`: **`0d7b8a31d4731024ff9e86d97e3128bad572efb3`** — PR **#200**, Build 38.9 documentation closeout.
 - Current accepted Build 38 product/core checkpoint: **`a33e504cdc20438c454fc365371af545ef747f0c`** — PR **#199**, Build **38.9 · deterministic nous→on spoken transfer core**.
-- Current learner-facing Transfer runtime remains Build **38.8** from **`3fae502dba8faee003b44c5a1b9a9cffd9affec7`**; Build 38.9 is intentionally **pure/non-wired**.
+- Current learner-facing runtime remains Build **38.8** from **`3fae502dba8faee003b44c5a1b9a9cffd9affec7`**; Build 38.9 is intentionally **pure/non-wired**, so it adds no learner-facing route yet.
 - GitHub Pages Build 38.9 product/core proof: **#265 / run `32059362998` — SUCCESS** on exact `a33e504c…` merge SHA.
 - GitHub Pages Build 38.9 docs-closeout proof: **#266 / run `32059893554` — SUCCESS** on exact `0d7b8a31…` merge SHA.
-- Post-38.9 accepted baseline: exactly **4 inherited historical CI failures**; no accepted new red.
-- Public application runtime metadata remains **v2.4.0 · Build 36**.
+- Post-merge Actions on accepted 38.9 product/core: exactly **4 inherited historical failures**, **0 queued**, **0 in-progress**. No new red.
+- Public application runtime metadata remains intentionally **v2.4.0 · Build 36**.
 - Pedagogy baseline remains **v2.3.0 · Build 34**.
 - Curriculum: **52 lessons / 313 items**.
 - Scenario: **44 situations / 132 turns**.
@@ -51,24 +51,9 @@ formalize release-version policy
 separate public runtime release / pedagogy baseline / roadmap checkpoint
 ```
 
-This slice is **documentation/governance only**.
+This slice is **documentation/governance only** and must not change runtime code, Settings runtime metadata, curriculum, learner stores, PWA identity/cache contract, voice, Recovery, Evidence, Premium or Transfer wiring.
 
-It must not change:
-
-```text
-runtime code
-Settings runtime metadata
-curriculum
-learner stores
-PWA identity/cache contract
-voice
-Recovery
-Evidence
-Premium
-Transfer wiring
-```
-
-Public runtime version remains:
+Public runtime release remains:
 
 ```text
 v2.4.0 · Build 36
@@ -80,7 +65,7 @@ Roadmap checkpoint remains independently:
 Build 38.9 CLOSED / CERTIFIED / NON-WIRED
 ```
 
-The natural candidate after eventual Build 38 closure is `v2.5.0 · Build 38`, but **no release bump is assigned by PR #201**.
+The natural candidate after eventual Build 38 closure is `v2.5.0 · Build 38`, but **PR #201 does not assign or ship that release**.
 
 ## Build 38.9 — certified core
 
@@ -108,7 +93,43 @@ lesson 34 → learner-known nous scaffold
 lesson 52 / F18 → spoken on often means nous + il/elle verb form
 ```
 
-Build 38.9 does **not** authorize a lesson-52 Transfer card automatically.
+Explicit exclusions remain locked:
+
+```text
+On est prêts.
+On a le temps.
+generic / indefinite on
+passive on
+object-pronoun rewrites
+negation
+questions
+adjective agreement
+new vocabulary
+random/adaptive generation
+durable writes
+Evidence product reads
+mastery claims
+learner-facing lesson wiring
+```
+
+Certification / closeout:
+
+```text
+PR #199 MERGED
+candidate head e066baa3d4c481f65bb361a4406d2a861b7563f3
+squash merge a33e504cdc20438c454fc365371af545ef747f0c
+Build 38.9 dedicated run 32058789584 SUCCESS
+full PR matrix: only the four inherited historical failures
+post-merge: only the same four inherited failures
+0 queued / 0 in-progress
+Pages #265 / run 32059362998 SUCCESS on exact merge SHA
+
+PR #200 MERGED — documentation closeout
+merge 0d7b8a31d4731024ff9e86d97e3128bad572efb3
+Pages #266 / run 32059893554 SUCCESS
+```
+
+Build 38.9 does **not** authorize a lesson-52 Transfer card automatically. A learner-facing placement must be audited separately for usefulness, density and non-duplication with the existing lesson/F18 teaching.
 
 ## Existing learner-facing Transfer routes — LOCKED
 
@@ -143,7 +164,7 @@ Exactly four historical failures remain baseline debt:
 3. `Build 36.3 Recovery v3 durability tribunal`;
 4. `Build 28 Data recovery smoke`.
 
-Any other failure must be classified.
+Any other failure must be classified. Historical red debt is not permission to ignore new failures.
 
 ## Protected boundaries
 
@@ -169,8 +190,37 @@ Build 37 Foundation routes
 38.7 lesson-13 Transfer placement
 38.8 lesson-34 Transfer placement
 shared Transfer renderer ownership
-historical learner continuity: 7 completed lessons / l8 progress 4 / 40 known items
 ```
+
+Historical learner continuity remains a release contract:
+
+```text
+7 completed lessons
+l8 progress = 4
+40 known historical items
+```
+
+## Version metadata rule — canonical policy
+
+The Settings value is **not derived from the latest roadmap slice number**.
+
+```text
+Public runtime release = v2.4.0 · Build 36
+Pedagogy baseline      = v2.3.0 · Build 34
+Roadmap checkpoint     = Build 38.9
+```
+
+Build 37.x / 38.x are roadmap slices and do not auto-bump public runtime metadata. Public metadata changes only through an explicit release-version slice with dedicated tests and docs.
+
+Candidate after a future explicit Build 38 closeout:
+
+```text
+v2.5.0 · Build 38
+```
+
+This is a candidate convention only, **not a release assigned by PR #201**.
+
+See `docs/RELEASE-VERSIONING-POLICY.md`.
 
 ## NEXT
 
@@ -179,18 +229,21 @@ Current control step:
 ```text
 review PR #201 exact docs-only diff
 → classify CI only for this governance slice
-→ merge if no product/runtime file leaked
+→ merge if no runtime/product file leaked
 → verify main + Pages
 ```
 
-After PR #201 closes, the next **product** action is:
+After PR #201 closes, next **product** action:
 
 ```text
-audit whether 38.9 deserves learner-facing placement at/after lesson 52
+audit whether the certified 38.9 core deserves learner-facing placement at/after lesson 52
 → prove genuine recombination value
-→ reject duplication of F18 / lesson-52 teaching
+→ reject a route that merely duplicates existing F18/lesson-52 teaching
 → check lesson density and round-trip UX
-→ only then assign a separate integration slice if justified
+→ if placement is useful, assign one separate integration slice
+→ otherwise audit at most one other narrow Build 38 family
 ```
 
 Do **not** start Build 39 while Build 38 still has unresolved transfer/placement decisions.
+
+See `docs/BUILD-38.9-CLOSEOUT.md` for the durable 38.9 acceptance record.
