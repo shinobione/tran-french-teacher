@@ -59,7 +59,8 @@ assert.match(loader32, /TRANSFER_LESSON='2\.4\.0-b38\.10'/);
 const loader31 = read('src/core/build31-loader.js');
 assert.match(loader31, /const VERSION = '2\.1\.0-b31'/);
 assert.match(loader31, /const RUNTIME_RELEASE = '2\.5\.0-b38-release1'/);
-assert.match(loader31, /build32-loader\.js\?v=\$\{RUNTIME_RELEASE\}/);
+assert.match(loader31, /const BUILD32_SUCCESSOR = '\.\/src\/core\/build32-loader\.js\?v=2\.2\.0-b32'/);
+assert.match(loader31, /successor\.src = `\$\{BUILD32_SUCCESSOR\}&release=\$\{RUNTIME_RELEASE\}`/);
 
 const historicalMeta = read('src/core/build-meta.js');
 assert.match(historicalMeta, /const CURRENT_META = \{ version: '2\.2\.0', build: '32'/);
