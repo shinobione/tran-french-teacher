@@ -16,11 +16,11 @@
 |---|---|
 | Public application runtime metadata | **V2.4.0 · Build 36** |
 | Product pedagogy baseline | **V2.3.0 · Build 34** |
-| Current governance main before PR #201 | **`0d7b8a31d4731024ff9e86d97e3128bad572efb3`** — PR #200 / Build 38.9 docs closeout |
-| Latest accepted Build 38 product/core checkpoint | **`a33e504cdc20438c454fc365371af545ef747f0c`** — PR #199 / Build 38.9 |
-| Latest learner-facing Transfer runtime checkpoint | **`3fae502dba8faee003b44c5a1b9a9cffd9affec7`** — PR #197 / Build 38.8 |
-| GitHub Pages 38.9 product/core proof | **#265 / run `32059362998` SUCCESS** on exact `a33e504c…` SHA |
-| GitHub Pages 38.9 docs-closeout proof | **#266 / run `32059893554` SUCCESS** on exact `0d7b8a31…` SHA |
+| Current accepted governance main before Build 38 milestone-closeout candidate | **`143beca0f45e5c71d9b72f5f3cb49f9b5b0877b1`** — PR #204 / Build 38.10 docs closeout |
+| Latest accepted Build 38 runtime checkpoint | **`2c7bf79a61d0cacd21f9345ed661cc3ac156e604`** — PR #203 / Build 38.10 learner-facing spoken-on Transfer |
+| Latest learner-facing Transfer runtime checkpoint | **`2c7bf79a61d0cacd21f9345ed661cc3ac156e604`** — PR #203 / Build 38.10 |
+| GitHub Pages 38.10 runtime proof | **#269 / run `32065682064` SUCCESS** on exact `2c7bf79a…` SHA |
+| GitHub Pages 38.10 docs-closeout proof | **#270 / run `32066217001` SUCCESS** on exact `143beca0…` SHA |
 | Curriculum | **52 lessons / 313 items** |
 | Scenario | **44 situations / 132 turns** |
 | Speaking Loop | **52/52 · max 2 moments / lesson** |
@@ -41,8 +41,10 @@
 | Build 38.6 | **CLOSED · deterministic singular → plural nominal core** |
 | Build 38.7 | **CLOSED · learner-facing nominal-plural integration** |
 | Build 38.8 | **CLOSED · learner-facing negation integration** |
-| Build 38.9 | **CLOSED / CERTIFIED / NON-WIRED · deterministic nous → on spoken-French core** |
-| Next Build 38 action | **learner-placement audit for 38.9; no automatic 38.10** |
+| Build 38.9 | **CLOSED / CERTIFIED · deterministic nous → on spoken-French core** |
+| Build 38.10 | **CLOSED / DEPLOYED · learner-facing nous → spoken-on integration** |
+| Build 38 milestone | **PEDAGOGICALLY COMPLETE · CLOSEOUT CANDIDATE / no Build 38.11 authorized** |
+| Next control action | **explicit Build-38 release-version decision/certification; no automatic public version bump** |
 | Primary field target | **iPhone / Safari / installed PWA** |
 
 ## Current interpretation
@@ -52,14 +54,15 @@
 - Build 36 adopted Evidence as a seventh **derived shadow** under Recovery v3 / backup v3; the original six stores remain canonical product truth.
 - Build 37 industrialized the Foundations system without renumbering the 52 lessons, without persistent Foundations state, and without treating Evidence as product truth.
 - F16 (`à/de` contractions) remains **deferred / not completed**; Build 37 stays closed.
-- Build 38 owns **generalization and construction of unseen phrases**.
+- Build 38 owns **generalization and construction of unseen phrases** and now has a complete deterministic chain from 38.1 through 38.10.
 - 38.1 / 38.3 / 38.4 / 38.6 / 38.9 remain certified deterministic transfer cores.
-- 38.2 / 38.5 / 38.7 / 38.8 expose certified cores contextually in lessons 33 / 35 / 13 / 34 through the **same shared Transfer renderer**.
-- Build 38.9 is merged/certified at `a33e504c…`; Pages #265 is green on that exact SHA. It is intentionally **pure/non-wired**, so the current learner-facing Transfer runtime remains 38.8.
-- PR #200 closed the Build 38.9 documentation checkpoint at `0d7b8a31…`; Pages #266 is green on that exact SHA.
-- PR #197 merged under a documented **controlled CI-infrastructure exception** after sequential workflow-only successor-safety fixes saturated GitHub Actions. Do not rewrite that event as “the entire final-head matrix drained green before merge.” Product/runtime proof was green; new reds were classified as stale historical ownership guards; the maintenance was isolated to workflow YAML.
-- The next Build 38 action is a **separate learner-placement audit for the certified 38.9 core**. Do not assign 38.10 automatically.
-- Public Settings metadata remains **v2.4.0 · Build 36** by explicit runtime-version ownership; roadmap slices are not SemVer patch numbers.
+- 38.2 / 38.5 / 38.7 / 38.8 / 38.10 expose certified cores contextually in lessons 33 / 35 / 13 / 34 / 52 through the **same shared Transfer renderer**.
+- Build 38.10 is merged/deployed at `2c7bf79a…`; Pages #269 is green on that exact runtime SHA. PR #204 then closed the volatile docs handoff at `143beca0…`; Pages #270 is green on that exact docs SHA.
+- The milestone audit rejected an automatic 38.11: adjective agreement lacks equally solid masculine source acquisition; generic question transformation conflicts with F12’s multiple-strategy/no-inversion boundary; comparatives are already explicit lesson content; broad combinatorial generation would exceed the deterministic Build 38 contract.
+- Therefore Build 38 is **pedagogically complete** and the durable closeout is now represented by this governance candidate. No new product family is authorized inside Build 38.
+- PR #197 merged under a documented **controlled CI-infrastructure exception** after sequential workflow-only successor-safety fixes saturated GitHub Actions. Do not rewrite that event as “the entire final-head matrix drained green before merge.”
+- PR #203 also merged under an explicit controlled queue exception: its dedicated final-head tribunal was green and no completed final-head workflow introduced a new failure, while one unrelated Premium V5.7 run remained queued after passing on the immediately preceding head.
+- Public Settings metadata remains **v2.4.0 · Build 36** by explicit runtime-version ownership. Closing Build 38 does not silently assign a release version.
 
 ## Release/version metadata policy — LOCKED
 
@@ -76,7 +79,8 @@ PEDAGOGY BASELINE
 
 ROADMAP CHECKPOINT
   internal implementation/certification sequence
-  current accepted checkpoint = Build 38.9
+  current accepted runtime checkpoint = Build 38.10
+  milestone verdict = Build 38 pedagogically complete / closeout candidate
 ```
 
 Permanent rules:
@@ -85,8 +89,8 @@ Permanent rules:
 - a narrow implementation slice must not silently bump public runtime metadata;
 - public runtime metadata changes only in an explicit release-version slice with dedicated tests and documentation;
 - the public `Build` displayed beside SemVer is the **release build anchor**, not the latest internal roadmap checkpoint;
-- a DEBUG/admin surface may later expose `Roadmap checkpoint: 38.9` separately, but must not overload the public release field;
-- if Build 38 eventually closes as one coherent shipped Generalization & Transfer milestone, **`v2.5.0 · Build 38` is the natural candidate**, but it is not assigned until an explicit release decision and certification.
+- a DEBUG/admin surface may later expose `Roadmap checkpoint: 38.10` separately, but must not overload the public release field;
+- with Build 38 now pedagogically complete as one coherent Generalization & Transfer milestone, **`v2.5.0 · Build 38` is the natural release candidate**, but it remains unassigned until a separate explicit release decision and certification.
 
 Canonical policy document: `docs/RELEASE-VERSIONING-POLICY.md`.
 
@@ -216,6 +220,7 @@ Build 38.6 deterministic nominal-plural semantics
 Build 38.7 lesson-13 placement / round-trip contract
 Build 38.8 lesson-34 placement / round-trip contract
 Build 38.9 deterministic nous→on core semantics
+Build 38.10 lesson-52 placement / round-trip contract
 shared Transfer renderer ownership
 ```
 
@@ -476,13 +481,13 @@ F18 remains `spoken-on = explicit / reuse-existing / lesson 52`; Build 38.9 does
 
 ---
 
-# 7. Build 38 — Generalization & Transfer — ACTIVE
+# 7. Build 38 — Generalization & Transfer — CLOSED / MILESTONE CLOSEOUT CANDIDATE
 
 ## Goal
 
 Move from “recognize/recall known phrases and understand selected Foundations” toward **constructing unseen but valid phrases from already-known material**.
 
-Prioritized transfer families remain directions to audit, not automatic implementation authorization:
+Prioritized transfer families were directions to audit, not automatic implementation authorization:
 
 ```text
 singular → plural
@@ -846,7 +851,7 @@ Before merge, actual green successor-safe executions included F11, F05, F08, F12
 
 Therefore PR #197 merged under a documented **controlled CI-infrastructure exception**. This is deliberately narrower than saying “full matrix green.” Product/runtime evidence was green and Pages subsequently deployed the exact merge SHA successfully.
 
-## 38.9 — deterministic `nous → on` spoken-French core — CLOSED / CERTIFIED / NON-WIRED
+## 38.9 — deterministic `nous → on` spoken-French core — CLOSED / CERTIFIED
 
 The post-38.8 audit selected a narrow recombination already scaffolded by the live curriculum:
 
@@ -892,7 +897,6 @@ random/adaptive generation
 durable writes
 Evidence product reads
 mastery claims
-learner-facing lesson wiring
 ```
 
 Certification / closeout:
@@ -912,38 +916,96 @@ merge 0d7b8a31d4731024ff9e86d97e3128bad572efb3
 Pages #266 / run 32059893554 SUCCESS
 ```
 
-38.9 deliberately added no loader, service-worker, curriculum, shared renderer or learner-store wiring. It does **not** authorize a lesson-52 Transfer card automatically.
+38.9 deliberately added no learner-facing wiring by itself. Its core remains the certified deterministic owner consumed by 38.10.
 
-A future learner-facing placement must prove useful construction practice without duplicating the existing lesson/F18 teaching or overloading lesson density.
+## 38.10 — learner-facing `nous → on` spoken transfer — CLOSED / DEPLOYED
+
+The post-38.9 learner-placement audit accepted lesson 52 only as **active reconstruction**, not as another grammar explanation or another F18 capsule.
+
+Exact learner-facing subset:
+
+```text
+Nous travaillons. → On travaille.
+Nous rentrons.    → On rentre.
+Nous allons à…    → On va à…
+```
+
+Shared-renderer contract:
+
+```text
+spokenOnIntegration = 38.10
+spokenOnLesson = 52
+spokenOnFamily = nous-on-spoken-equivalence
+spokenOnExerciseIndexes = [0,1,2]
+persistence = ephemeral-only
+masteryClaim = false
+```
+
+Certification / deployment:
+
+```text
+PR #203 MERGED
+candidate head 21d20a30af276e975e3055d6bacc7d9d32eb4e91
+squash merge 2c7bf79a61d0cacd21f9345ed661cc3ac156e604
+Build 38.10 dedicated run 32064765660 SUCCESS
+Pages #269 / run 32065682064 SUCCESS on exact runtime merge SHA
+
+PR #204 MERGED — docs handoff closeout
+merge 143beca0f45e5c71d9b72f5f3cb49f9b5b0877b1
+Pages #270 / run 32066217001 SUCCESS on exact docs SHA
+```
+
+38.10 keeps the 38.9 core byte-identical, adds no new vocabulary, no curriculum item, no durable write, no Evidence product read and no mastery claim.
 
 ## Current learner-facing Transfer routes — LOCKED
 
 ```text
-38.7 → lesson 13 / nominal plural / [0,2,3]
-38.2 → lesson 33 / subject substitution / [0,2,5]
-38.8 → lesson 34 / affirmation→negation / [0,1,2]
-38.5 → lesson 35 / futur proche / [0,1,3]
+38.7  → lesson 13 / nominal plural / [0,2,3]
+38.2  → lesson 33 / subject substitution / [0,2,5]
+38.8  → lesson 34 / affirmation→negation / [0,1,2]
+38.5  → lesson 35 / futur proche / [0,1,3]
+38.10 → lesson 52 / nous→spoken-on / [0,1,2]
 ```
 
 There is exactly one shared Transfer renderer.
 
-## NEXT — Build 38.9 learner-placement audit
+## Build 38 milestone closeout verdict
 
-Canonical next action:
+The post-38.10 milestone audit found **no pedagogically defensible Build 38.11** under the existing deterministic/known-material contract.
+
+Rejected directions:
 
 ```text
-read live lesson 52 + F18 learner-facing teaching
-→ test whether a construction exercise adds genuine retrieval/recombination value
-→ reject placement if it merely repeats the existing explanation/examples
-→ check lesson density and round-trip UX
-→ preserve all existing Transfer routes
-→ if useful, assign ONE separate learner-facing integration slice
-→ otherwise audit at most ONE other narrow Build 38 family
+adjective agreement
+→ REJECT for 38.11
+→ feminine forms are learner-facing, but masculine source forms are not an equally solid acquisition set
+
+generic affirmation → question
+→ REJECT
+→ F12 owns multiple question strategies and explicitly avoids inversion; no single safe deterministic transform exists
+
+comparative transformations
+→ REJECT as duplicate teaching
+→ lesson 43 already owns plus cher / moins cher / plus grand directly
+
+broad combinatorial recombination
+→ DEFER beyond Build 38
+→ would require wider lexical/semantic compatibility or adaptive/random generation
+
+F16 contractions
+→ remains deferred Foundation work
+→ current scaffold is not clean enough for a Build 38 transfer family
 ```
 
-Do not infer that lesson 52 automatically needs a new card merely because it owns `on`.
+Milestone decision:
 
-Further Build 38 families remain one-at-a-time. **Do not start Build 39 inside Build 38.**
+```text
+Build 38 = PEDAGOGICALLY COMPLETE
+Build 38.11 = NOT AUTHORIZED
+next = explicit release-version decision/certification
+```
+
+See `docs/BUILD-38-MILESTONE-CLOSEOUT.md`.
 
 ---
 
@@ -960,7 +1022,7 @@ Tyffany chooses whether the next useful action is:
 
 Build 39 should consume reliable evidence from prior systems; it must not invent mastery from recognition failures or decorative activity counts.
 
-Build 39 remains future work. It is **not** the next implementation slice while Build 38 still has an unresolved transfer/placement decision.
+Build 39 remains future product work. **Do not start it from the Build 38 closeout itself.** First complete an explicit release-version decision/certification for the closed Build 38 milestone. If that release boundary is accepted, Build 39 becomes the next product milestone.
 
 ---
 
@@ -980,13 +1042,16 @@ Outcome may be:
 
 # 10. CI baseline / governance note
 
-Exactly four historical failures remain known baseline debt unless separately repaired:
+Five persistent inherited failures remain known baseline debt unless separately repaired:
 
-1. `Build 36.2 Evidence shadow adoption`;
-2. `V2.0.0 Freeze tribunal`;
-3. `Build 36.3 Recovery v3 durability tribunal`;
-4. `Build 28 Data recovery smoke`.
+1. `French Trân'quille quality` — stale legacy Build-24 wiring/version assertions;
+2. `Build 36.2 Evidence shadow adoption`;
+3. `V2.0.0 Freeze tribunal`;
+4. `Build 36.3 Recovery v3 durability tribunal`;
+5. `Build 28 Data recovery smoke`.
 
-They do not authorize ignoring a new red. Any new failure must be classified against the current candidate. Harness/runner flakes should be rerun unchanged before product mutation.
+`Build 26.4 Progress single-scroll + Tyffany smoke` was red on the pre-38.10 base but passed unchanged on the 38.10 candidate; it is classified as a runner/harness flake, not durable baseline debt.
+
+These inherited failures do not authorize ignoring a new red. Any failure outside this set must be classified against the current candidate. Harness/runner flakes should be rerun unchanged before product mutation.
 
 Workflow successor-safety is now a permanent governance requirement: a predecessor workflow should lock its **certified owner/contract**, not prohibit all legitimate future successor delivery elsewhere in the repository.
