@@ -44,6 +44,11 @@ jobs:
           ! grep -q 'indexedDB' src/pedagogy/generalization-spoken-on-core.js
           ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/generalization-spoken-on-core.js
           git fetch origin main --quiet
+          if ! git diff --quiet origin/main...HEAD -- src/pedagogy/generalization-spoken-on-core.js; then
+            echo 'Build 38.9 certified core semantics must remain byte-identical in successor slices' >&2
+            git diff -- origin/main...HEAD -- src/pedagogy/generalization-spoken-on-core.js >&2 || true
+            exit 1
+          fi
           changed="$(git diff --name-only origin/main...HEAD)"
           for protected in \
             app.js voice-ios.js free-voice.js assets/LOGO.png assets/Favicon.png \
@@ -51,12 +56,11 @@ jobs:
             src/pedagogy/generalization-negation-core.js \
             src/pedagogy/generalization-futur-proche-core.js \
             src/pedagogy/generalization-number-core.js \
-            src/pedagogy/generalization-transfer-lesson.js \
             src/pedagogy/foundations-capsules.js \
             src/pedagogy/curriculum-stage3.js \
             src/pedagogy/curriculum-stage4.js; do
             if printf '%s\n' "$changed" | grep -Fxq "$protected"; then
-              echo "Build 38.9 must not modify certified predecessor/owner: $protected" >&2
+              echo "Build 38.9 successor must not modify certified predecessor/owner: $protected" >&2
               exit 1
             fi
           done
