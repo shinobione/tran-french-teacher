@@ -1,18 +1,36 @@
 # French Trân’quille — CHANGELOG
 
-Ce fichier conserve l’historique réellement livré. Les intentions futures vivent dans `ROADMAP.md`.
+Ce fichier conserve l’historique réellement livré. Les intentions futures vivent dans `ROADMAP.md` / `MASTER-ROADMAP.md`.
 
 ## [Unreleased]
 
-- **Premium V5.8** : préférence DEBUG FR découplée de la préférence visuelle, mode admin utilisable sous Original/Aurora/Sunset/Nocturne, diagnostic masqué en mode apprenant, matrice Chrome 4 thèmes × OFF/ON et six stores learner vérifiés byte-identiques ;
-- **Premium V5.7** : quatre fonds de thème et quatre Eiffel V2 transparents intégrés, Original élevé au même pipeline Premium, cache PWA versionné et matrice 5 viewports × 4 thèmes ; **PASS visuel utilisateur 2026-08-15**, verdict physique iPhone/PWA conservé pour V5.10 ;
-- retour terrain attendu sur :
-  - Listening → **un seul tap** `Aujourd’hui` ;
-  - Bài 11/12 → enregistrement → `▶ Giọng của tôi` ;
-  - pilote Fondations F01–F04 ;
-- prochaine intention de design : **Build 35 — Memory Evidence v2 / Migration Readiness** ;
-- aucune migration Memory v2 ni nouveau store pré-engagés ;
-- ne pas industrialiser F05–F18 avant validation réelle du pilote F01–F04.
+- Aucun changement produit postérieur à **v2.5.0 · Build 38** n’est encore matérialisé.
+
+---
+
+# [2.5.0] — Build 38 — Generalization & Transfer — 2026-08-17
+
+- publie le milestone **Build 38 — Generalization & Transfer** comme release publique **v2.5.0 · Build 38** ;
+- conserve la baseline pédagogique **v2.3.0 · Build 34** ;
+- conserve **52 leçons / 313 éléments**, Scenario **44 / 132**, Speaking Loop **52/52 · max 2**, Listening **0.88 / 0.65** ;
+- conserve Recovery **7 stores / backup v3** et Evidence v2 comme **derived shadow** ; les six stores historiques restent vérité produit ;
+- chaîne Transfer livrée :
+  - 38.1 → 38.2 : subject substitution → leçon 33 ;
+  - 38.3 → 38.8 : affirmation → negation → leçon 34 ;
+  - 38.4 → 38.5 : present → futur proche → leçon 35 ;
+  - 38.6 → 38.7 : singular → plural nominal → leçon 13 ;
+  - 38.9 → 38.10 : `nous` → spoken `on` → leçon 52 ;
+- Transfer reste optionnel/éphémère : aucun durable write, aucun Evidence product read, aucun mastery claim ;
+- audit milestone : **Build 38.11 NOT AUTHORIZED** ; adjective agreement, generic question transform, comparatives, broad recombination et F16 contractions ne justifient pas un 38.11 sous le contrat déterministe actuel ;
+- release slice #206 : ownership/version/certification uniquement, sans nouvelle pédagogie ;
+- final candidate head : `78768ff26dcc64c090535163a10af8e019fdb4a1` ;
+- squash merge / `main` accepté : **`2abe20511d6265d12643276f18041812fec3e715`** ;
+- GitHub Pages **#272 / run `32072053127` SUCCESS** sur exactement ce SHA ;
+- déploiement `github-pages` **5951805479 SUCCESS** sur exactement ce SHA ;
+- release gate final : dedicated release, runtime metadata, Build38.10 et Build32 verts ; Build26.4 confirmé flake par rerun inchangé SUCCESS ;
+- matrice finale : aucun nouvel échec persistant au-delà des cinq dettes CI héritées documentées ;
+- continuité historique verrouillée : **7 leçons terminées / l8=4 / 40 acquis historiques** ;
+- aucun changement de curriculum, voix, learner store, Recovery schema, Evidence role, Premium UI, PWA identity, logo ou favicon dans la release slice.
 
 ---
 
