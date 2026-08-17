@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Build 38.6 nominal plural transfer tribunal</title>
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#07111e;color:#eef5ff;font-family:system-ui,-apple-system,sans-serif}body{padding:16px}.card{width:min(680px,100%);margin:18px auto;padding:20px;border:1px solid #2c4665;border-radius:22px;background:#0d1928;display:grid;gap:14px}.eyebrow{font-size:.75rem;font-weight:850;letter-spacing:.12em;color:#7ee9c9}.source{padding:14px;border-radius:15px;background:#081421;font-size:1.08rem;font-weight:800}.choices{display:grid;gap:9px}.choices button{min-height:48px;border:1px solid #5f7595;border-radius:13px;background:#20314a;color:#eef5ff;font:inherit;font-weight:750;padding:10px 12px}.choices button.ok{outline:2px solid #74e8c6}.feedback{min-height:24px;color:#b7c8dd}.done{font-weight:850;color:#7ee9c9}@media(max-width:520px){.card{padding:16px;border-radius:18px}}
+  </style>
+  <script>
+    (()=>{
+      const debug=new URLSearchParams(location.search).get('debug')==='fr';
+      localStorage.clear();
+      localStorage.setItem('tran-french-teacher:debug-fr:v1',debug?'1':'0');
+      localStorage.setItem('b38.6:sentinel','unchanged');
+      window.__b386Debug=debug;
+      window.__b386StorageBefore=JSON.stringify(Object.keys(localStorage).sort().map(key=>[key,localStorage.getItem(key)]));
+    })();
+  </script>
+</head>
+<body>
+  <main class="card" id="tribunal">
+    <span class="eyebrow">BUILD 38.6 · NUMBER TRANSFER</span>
+    <h1 data-title></h1><p data-instruction></p><p data-cue></p>
+    <div class="source" data-source></div><div class="choices" data-choices></div><p class="feedback" data-feedback></p>
+  </main>
+  <script src="../../src/pedagogy/generalization-number-core.js?v=2.4.0-b38.6"></script>
+  <script>
+    (()=>{
+      const root=document.documentElement;
+      const fail=message=>{root.dataset.b386Error=message;throw new Error(message)};
+      const ok=(value,message)=>{if(!value)fail(message)};
+      const number=window.FrenchTranquilleGeneralizationNumber;
+      const locale=window.__b386Debug?'fr':'vi';
+      const exercises=number?.catalog||[];
+      let index=0;
+      const title=document.querySelector('[data-title]'),instruction=document.querySelector('[data-instruction]'),cue=document.querySelector('[data-cue]'),source=document.querySelector('[data-source]'),choices=document.querySelector('[data-choices]'),feedback=document.querySelector('[data-feedback]');
+      const rotate=(values,shift)=>{const copy=[...values],n=shift%copy.length;return [...copy.slice(n),...copy.slice(0,n)]};
+      function render(){
+        const exercise=exercises[index],view=number.view(exercise,locale);
+        title.textContent=view.title;instruction.textContent=view.instruction;cue.textContent=view.cue;source.textContent=view.source;feedback.textContent='';choices.innerHTML='';
+        rotate(view.choices,index+1).forEach(value=>{const button=document.createElement('button');button.type='button';button.textContent=value;button.dataset.choice=value;button.addEventListener('click',()=>answer(button,exercise));choices.appendChild(button)});
+      }
+      function answer(button,exercise){
+        ok(number.verify(exercise,button.dataset.choice),'tribunal must click the correct answer');
+        button.classList.add('ok');feedback.textContent=locale==='fr'?'✓ Groupe nominal reconstruit au pluriel.':'✓ Đã xây lại nhóm từ ở số nhiều.';index+=1;
+        if(index<exercises.length){render();return}
+        document.querySelector('#tribunal').insertAdjacentHTML('beforeend',`<p class="done" data-done>${locale==='fr'?'Transfert singulier → pluriel terminé.':'Hoàn thành chuyển đổi số ít → số nhiều.'}</p>`);
+      }
+      try{
+        ok(number?.schema==='french-tranquille-generalization-number/v1','38.6 API missing');
+        ok(number?.slice==='38.6','38.6 slice marker missing');
+        ok(number?.status==='pure-non-wired','38.6 must remain non-wired');
+        ok(number?.family?.id==='singular-plural-regular-noun-phrases','wrong number family');
+        ok(number?.family?.persistence==='ephemeral-only','38.6 must remain ephemeral');
+        ok(number?.family?.masteryClaim===false,'38.6 must not claim mastery');
+        ok(exercises.length===4,'38.6 catalog must contain exactly 4 exercises');
+        ok(JSON.stringify(exercises.map(x=>x.source))===JSON.stringify(['la gare','la pharmacie','un billet','une table']),'source catalog changed');
+        ok(JSON.stringify(exercises.map(x=>x.target))===JSON.stringify(['les gares','les pharmacies','des billets','des tables']),'target catalog changed');
+        render();
+        for(let step=0;step<exercises.length;step+=1){
+          const exercise=exercises[step],view=number.view(exercise,locale),buttons=[...document.querySelectorAll('[data-choice]')];
+          ok(buttons.length===3,`exercise ${step+1} must have three choices`);
+          ok(buttons.every(button=>button.getBoundingClientRect().height>=44),'choice target below 44px');
+          const correct=buttons.find(button=>button.dataset.choice===view.target);ok(correct,`missing target ${view.target}`);correct.click();
+        }
+        ok(document.querySelector('[data-done]'),'completion marker missing');
+        ok(JSON.stringify(Object.keys(localStorage).sort().map(key=>[key,localStorage.getItem(key)]))===window.__b386StorageBefore,'localStorage changed during 38.6');
+        ok(document.documentElement.scrollWidth<=innerWidth+1,'horizontal overflow detected');
+        root.dataset.b386Done='1';root.dataset.b386Locale=locale;root.dataset.b386Family='singular-plural-regular-noun-phrases';root.dataset.b386Exercises='4';root.dataset.b386StorageUnchanged='1';root.dataset.b386NoOverflow='1';
+      }catch(error){if(!root.dataset.b386Error)root.dataset.b386Error=error.message;console.error(error)}
+    })();
+  </script>
+</body>
+</html>
