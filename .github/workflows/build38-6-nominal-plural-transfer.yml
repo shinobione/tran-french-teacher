@@ -29,7 +29,7 @@ jobs:
           node tools/test-build37-2-foundations-capsule-engine.cjs
           node tools/test-build38-6-nominal-plural-transfer.cjs
 
-      - name: 38.6 stays narrow, deterministic and pure
+      - name: 38.6 stays narrow deterministic pure and successor-safe
         run: |
           set -euo pipefail
           grep -q "id:'singular-plural-regular-noun-phrases'" src/pedagogy/generalization-number-core.js
@@ -44,15 +44,10 @@ jobs:
           ! grep -q 'sessionStorage' src/pedagogy/generalization-number-core.js
           ! grep -q 'indexedDB' src/pedagogy/generalization-number-core.js
           ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/generalization-number-core.js
-
-      - name: Runtime, curriculum, Foundations and prior transfer owners stay untouched
-        run: |
-          set -euo pipefail
           git fetch origin main --quiet
           changed="$(git diff --name-only origin/main...HEAD)"
-          forbidden='^(app\.js|voice-ios\.js|free-voice\.js|index\.html|sw\.js|manifest\.webmanifest|src/core/|src/ui/|src/premium/|src/pedagogy/curriculum-stage[234]\.js|src/pedagogy/learning-memory\.js|src/pedagogy/error-intelligence\.js|src/pedagogy/listening-engine\.js|src/pedagogy/scenario-engine\.js|src/pedagogy/mastery-engine\.js|src/pedagogy/learner-intelligence.*\.js|src/pedagogy/foundations-core\.js|src/pedagogy/foundations-capsule-engine\.js|src/pedagogy/foundations-capsules\.js|src/pedagogy/foundations-pilot\.js|src/pedagogy/generalization-transfer-core\.js|src/pedagogy/generalization-transfer-lesson\.js|src/pedagogy/generalization-negation-core\.js|src/pedagogy/generalization-futur-proche-core\.js|assets/LOGO\.png|assets/Favicon\.png)$'
-          if printf '%s\n' "$changed" | grep -E "$forbidden"; then
-            echo 'Build 38.6 must remain a new pure/non-wired nominal-number core and preserve prior owners' >&2
+          if printf '%s\n' "$changed" | grep -qx 'src/pedagogy/generalization-number-core.js'; then
+            echo 'Certified Build 38.6 core must remain unchanged in successor slices' >&2
             exit 1
           fi
 
