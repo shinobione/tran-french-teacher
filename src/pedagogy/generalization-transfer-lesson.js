@@ -20,7 +20,7 @@
   const spokenOnCore=window.FrenchTranquilleGeneralizationSpokenOn;
   const T=(vi,fr)=>localStorage.getItem(DEBUG)==='1'?fr:vi;
   const locale=()=>localStorage.getItem(DEBUG)==='1'?'fr':'vi';
-  const esc=(value='')=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[char]));
+  const esc=(value='')=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 
   if(!core||core.family?.id!=='subject-substitution-regular-er'||!futureCore||futureCore.family?.id!=='present-futur-proche-travailler-singular'){
     root.dataset.transferLessonAdapter='missing';
