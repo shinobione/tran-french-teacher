@@ -2,7 +2,7 @@
 
 Status: **CANONICAL GOVERNANCE POLICY**
 
-Date: 2026-08-17
+Last reconciled: 2026-08-18
 
 ## Problem this policy solves
 
@@ -12,7 +12,7 @@ French Trân’quille historically reused the words `version`, `build` and `curr
 - historical architecture baselines;
 - pedagogy baselines;
 - roadmap phases such as Build 37 and Build 38;
-- implementation slices such as 38.8 and 38.9.
+- implementation slices such as 38.8 and 38.10.
 
 That made a correct Settings value look stale and made stale README wording look authoritative.
 
@@ -25,10 +25,17 @@ The public runtime release is the application identity shown in Settings and use
 Current accepted value:
 
 ```text
-v2.4.0 · Build 36
+v2.5.0 · Build 38
 ```
 
-It is intentionally **not derived from the latest roadmap slice**.
+Accepted release proof:
+
+- PR #206 merged;
+- accepted `main` = `2abe20511d6265d12643276f18041812fec3e715`;
+- GitHub Pages #272 / run `32072053127` = SUCCESS on that exact SHA;
+- `github-pages` deployment `5951805479` = SUCCESS on that exact SHA.
+
+The public release is intentionally **not derived from the latest roadmap slice**.
 
 Changing this value is a release action. It requires a dedicated governance/runtime slice, targeted tests and documentation.
 
@@ -53,7 +60,7 @@ Build 37
 Build 38
 38.1
 38.8
-38.9
+38.10
 ```
 
 These values are **not SemVer**.
@@ -61,11 +68,13 @@ These values are **not SemVer**.
 Examples:
 
 ```text
-38.8 ≠ v2.4.8
-38.9 ≠ v2.4.9
+38.8  ≠ v2.4.8
+38.10 ≠ v2.4.10
 ```
 
 A roadmap slice can be pure/non-wired, docs-only, CI-maintenance or learner-facing. None of those properties alone authorizes a public version bump.
+
+The latest accepted learner-facing roadmap checkpoint represented by the current release is **38.10**.
 
 ## 4. Bump rules
 
@@ -79,6 +88,8 @@ A patch bump is **not automatic per PR**.
 
 Use a SemVer minor bump for a meaningful completed product milestone that materially expands the shipped capability while remaining backward-compatible with learner data and product contracts.
 
+Build 38 followed this rule and was published as **v2.5.0 · Build 38**.
+
 ### Major version
 
 Use a major bump only for a deliberate major product contract change. Never use it merely because the roadmap reached a high internal build number.
@@ -90,38 +101,39 @@ The `Build` displayed beside SemVer is the **release build anchor**.
 Therefore:
 
 ```text
-v2.4.0 · Build 36
+v2.5.0 · Build 38
 ```
 
-can remain correct while the project internally certifies Build 37.x and 38.x slices.
+can remain correct while the project later certifies internal Build 39.x slices, until another explicit release action changes the public identity.
 
 If this distinction becomes confusing in DEBUG/admin, add a separate field such as:
 
 ```text
-Roadmap checkpoint: 38.9
+Roadmap checkpoint: 38.10
 ```
 
 Do not overload or mutate the release Build field.
 
-## 6. Candidate after Build 38
+## 6. Build 38 release decision — fulfilled
 
-If Build 38 closes as a coherent shipped Generalization & Transfer milestone, the natural next public release candidate is:
+Build 38 closed as one coherent shipped Generalization & Transfer milestone and its natural candidate convention was intentionally assigned as:
 
 ```text
 v2.5.0 · Build 38
 ```
 
-This is a **candidate convention, not a current release assignment**.
+The assignment was accepted only after all release-boundary requirements were satisfied:
 
-Before assigning it:
+1. Build 38 was explicitly closed;
+2. learner-facing scope was known and locked;
+3. relevant runtime/browser/PWA tribunals passed or failures were classified;
+4. historical learner continuity remained intact;
+5. Settings metadata ownership tests were updated intentionally;
+6. README / release contract / release notes were aligned for the candidate;
+7. PR #206 merged to exact SHA `2abe20511d6265d12643276f18041812fec3e715`;
+8. Pages #272 / run `32072053127` deployed that exact SHA successfully.
 
-1. Build 38 must be explicitly closed;
-2. learner-facing scope must be known;
-3. relevant runtime/browser/PWA tribunals must pass or have documented classified exceptions;
-4. historical learner continuity must remain intact;
-5. Settings metadata ownership tests must be updated intentionally;
-6. README / PROJECT-STATE / MASTER-ROADMAP / release notes must agree;
-7. Pages must deploy the exact release SHA.
+This precedent does **not** make later milestone bumps automatic. Every future public release still requires its own explicit decision and certification.
 
 ## 7. Documentation vocabulary
 
@@ -161,13 +173,16 @@ No version bump may silently alter:
 - PWA identity/cache contract;
 - certified Foundation/Transfer semantics.
 
-## 9. Current state at policy adoption
+## 9. Current accepted state
 
 ```text
-Public runtime release = v2.4.0 · Build 36
+Public runtime release = v2.5.0 · Build 38
 Pedagogy baseline      = v2.3.0 · Build 34
-Roadmap phase          = Build 38 ACTIVE
-Latest accepted slice  = 38.9 CLOSED / CERTIFIED / NON-WIRED
+Roadmap phase          = Build 38 CLOSED / RELEASED
+Latest accepted slice  = 38.10 CLOSED / DEPLOYED
+Build 38.11            = NOT AUTHORIZED
 ```
 
-The next canonical work is still the 38.9 learner-placement audit. This policy does not create a new product slice by itself.
+The release documentation closeout must finish before opening Build 39 as a separate product slice.
+
+Once that governance boundary is closed, **Build 39 — Learner Intelligence 3** is the next product milestone. Its implementation must not be smuggled into the release closeout and does not itself imply a new public SemVer value.
