@@ -1,0 +1,101 @@
+name: Build 38.9 Generalization nous to spoken on transfer
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [build38/spoken-on-transfer-core]
+
+permissions:
+  contents: read
+
+jobs:
+  spoken-on-transfer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax + Foundations predecessor + 38.9 contract
+        run: |
+          set -euo pipefail
+          node --check src/pedagogy/generalization-spoken-on-core.js
+          node --check tools/test-build38-9-spoken-on-transfer.cjs
+          node tools/test-build37-foundations-core.cjs
+          node tools/test-build38-9-spoken-on-transfer.cjs
+
+      - name: 38.9 stays narrow deterministic pure and successor-safe
+        run: |
+          set -euo pipefail
+          grep -q "id:'nous-on-spoken-equivalence'" src/pedagogy/generalization-spoken-on-core.js
+          grep -q "slice:'38.9'" src/pedagogy/generalization-spoken-on-core.js
+          grep -q "status:'pure-non-wired'" src/pedagogy/generalization-spoken-on-core.js
+          grep -q "source:'Nous travaillons.',target:'On travaille.'" src/pedagogy/generalization-spoken-on-core.js
+          grep -q "source:'Nous rentrons.',target:'On rentre.'" src/pedagogy/generalization-spoken-on-core.js
+          grep -q "source:'Nous allons à…',target:'On va à…'" src/pedagogy/generalization-spoken-on-core.js
+          ! grep -q 'Math.random' src/pedagogy/generalization-spoken-on-core.js
+          ! grep -q 'localStorage' src/pedagogy/generalization-spoken-on-core.js
+          ! grep -q 'sessionStorage' src/pedagogy/generalization-spoken-on-core.js
+          ! grep -q 'indexedDB' src/pedagogy/generalization-spoken-on-core.js
+          ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/generalization-spoken-on-core.js
+          git fetch origin main --quiet
+          changed="$(git diff --name-only origin/main...HEAD)"
+          for protected in \
+            app.js voice-ios.js free-voice.js assets/LOGO.png assets/Favicon.png \
+            src/pedagogy/generalization-transfer-core.js \
+            src/pedagogy/generalization-negation-core.js \
+            src/pedagogy/generalization-futur-proche-core.js \
+            src/pedagogy/generalization-number-core.js \
+            src/pedagogy/generalization-transfer-lesson.js \
+            src/pedagogy/foundations-capsules.js \
+            src/pedagogy/curriculum-stage3.js \
+            src/pedagogy/curriculum-stage4.js; do
+            if printf '%s\n' "$changed" | grep -Fxq "$protected"; then
+              echo "Build 38.9 must not modify certified predecessor/owner: $protected" >&2
+              exit 1
+            fi
+          done
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-b389-http.log 2>&1 &
+          echo $! >/tmp/ft-b389-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — 38.9 VI/FR desktop + iPhone parity
+        run: |
+          set -euo pipefail
+          for spec in 'vi 1280 900' 'fr 1280 900' 'vi 390 844' 'fr 390 844'; do
+            set -- $spec; locale="$1"; width="$2"; height="$3"; passed=0; file=''
+            for attempt in 1 2; do
+              profile="/tmp/ft-b389-${locale}-${width}-$attempt"
+              file="/tmp/b389-${locale}-${width}-$attempt.html"
+              rm -rf "$profile" "$file"
+              if timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
+                --user-data-dir="$profile" --window-size="$width,$height" --virtual-time-budget=10000 --dump-dom \
+                "http://127.0.0.1:4173/tests/browser/build38-9-spoken-on-transfer.html?debug=$locale" >"$file" \
+                && grep -q 'data-b389-done="1"' "$file" \
+                && grep -q "data-b389-locale=\"$locale\"" "$file" \
+                && grep -q 'data-b389-family="nous-on-spoken-equivalence"' "$file" \
+                && grep -q 'data-b389-exercises="3"' "$file" \
+                && grep -q 'data-b389-storage-unchanged="1"' "$file" \
+                && grep -q 'data-b389-no-overflow="1"' "$file" \
+                && ! grep -q 'data-b389-error=' "$file"; then passed=1; break; fi
+            done
+            if [ "$passed" -ne 1 ]; then
+              echo "38.9 tribunal failed for $locale ${width}x${height}" >&2
+              grep -o 'data-b389-[^ >]*="[^"]*"' "$file" >&2 || true
+              exit 1
+            fi
+          done
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-b389-server.pid ]; then kill "$(cat /tmp/ft-b389-server.pid)" || true; fi
