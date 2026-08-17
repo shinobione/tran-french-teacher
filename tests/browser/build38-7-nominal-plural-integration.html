@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Build 38.7 nominal plural learner integration tribunal</title>
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#07111e;color:#eef5ff;font-family:system-ui,-apple-system,sans-serif}button{font:inherit;color:inherit;background:#20314a;border:1px solid #5f7595;border-radius:12px;padding:8px 12px}.primary{background:#315d74}.secondary{background:#253852}.muted{color:#9fb0c5}.screen-lesson{width:min(760px,calc(100% - 24px));margin:20px auto}.topbar{padding:10px 2px}.topbar h1{font-size:1.25rem}.lesson-step{padding:18px;border:1px solid #23364d;border-radius:20px;background:#0d1928;display:grid;gap:12px}.lesson-step>p{margin:0}.lesson-step>[data-existing-continue]{min-height:48px;width:100%}
+  </style>
+  <script>
+    (()=>{
+      const debug=new URLSearchParams(location.search).get('debug')==='fr';
+      localStorage.clear();
+      localStorage.setItem('tran-french-teacher:debug-fr:v1',debug?'1':'0');
+      localStorage.setItem('b38.7:sentinel','unchanged');
+      window.__b387Debug=debug;
+      window.__b387StorageBefore=JSON.stringify(Object.keys(localStorage).sort().map(key=>[key,localStorage.getItem(key)]));
+    })();
+  </script>
+</head>
+<body>
+  <main id="app">
+    <section class="screen-lesson">
+      <div class="topbar"><h1>Bài 13 — Ôn tập địa điểm &amp; hướng đi</h1></div>
+      <div class="lesson-step">
+        <p data-existing-lesson>Existing lesson 13 content</p>
+        <button type="button" class="primary" data-existing-continue>Continuer</button>
+      </div>
+    </section>
+  </main>
+  <script src="../../src/pedagogy/foundations-capsule-engine.js?v=2.4.0-b37.8"></script>
+  <script src="../../src/pedagogy/foundations-capsules.js?v=2.4.0-b37.8"></script>
+  <script src="../../src/pedagogy/foundations-pilot.js?v=2.4.0-b37.8"></script>
+  <script src="../../src/pedagogy/generalization-transfer-core.js?v=2.4.0-b38.1"></script>
+  <script src="../../src/pedagogy/generalization-futur-proche-core.js?v=2.4.0-b38.5"></script>
+  <script src="../../src/pedagogy/generalization-number-core.js?v=2.4.0-b38.7"></script>
+  <script src="../../src/pedagogy/generalization-transfer-lesson.js?v=2.4.0-b38.2"></script>
+  <script>
+    (()=>{
+      const root=document.documentElement;
+      const fail=message=>{root.dataset.b387Error=message;throw new Error(message)};
+      const ok=(value,message)=>{if(!value)fail(message)};
+      const text=selector=>document.querySelector(selector)?.textContent?.trim()||'';
+      const texts=selector=>[...document.querySelectorAll(selector)].map(node=>node.textContent.trim());
+      const click=selector=>{const node=document.querySelector(selector);ok(node,`missing ${selector}`);node.click();return node};
+      const clickChoice=choice=>{const node=[...document.querySelectorAll('[data-transfer-choice]')].find(button=>button.textContent.trim()===choice);ok(node,`missing transfer choice ${choice}`);node.click();return node};
+      const expected=window.__b387Debug?{
+        title:'Passer du singulier au pluriel',
+        entry:'3 groupes déjà rencontrés : passe du singulier au pluriel en changeant le déterminant et le nom. Facultatif pour continuer la leçon.',
+        cta:'Essayer 3 groupes • ≈ 2 min',
+        intro:'Garde le même objet ou lieu. Passe le groupe au pluriel : le/la → les, un/une → des, puis ajoute -s au nom régulier.',
+        cues:['Mets « la gare » au pluriel.','Mets « un billet » au pluriel.','Mets « une table » au pluriel.']
+      }:{
+        title:'Từ một sang nhiều',
+        entry:'3 nhóm từ đã gặp: đổi từ số ít sang số nhiều bằng cách đổi cả từ đứng trước và danh từ. Không bắt buộc để tiếp tục bài.',
+        cta:'Thử 3 nhóm từ • khoảng 2 phút',
+        intro:'Giữ cùng đồ vật hoặc địa điểm. Đổi nhóm từ sang số nhiều: le/la → les, un/une → des, rồi thêm -s cho danh từ thường.',
+        cues:['Đổi “la gare” sang số nhiều.','Đổi “un billet” sang số nhiều.','Đổi “une table” sang số nhiều.']
+      };
+
+      try{
+        ok(window.FrenchTranquilleGeneralizationNumber?.family?.id==='singular-plural-regular-noun-phrases','38.6 number core missing');
+        ok(window.FrenchTranquilleGeneralizationNumber?.status==='pure-non-wired','38.6 core contract changed');
+        ok(window.FrenchTranquilleTransferLesson?.slice==='38.2','historical adapter owner changed');
+        ok(window.FrenchTranquilleTransferLesson?.lesson===33,'legacy lesson33 owner changed');
+        ok(JSON.stringify(window.FrenchTranquilleTransferLesson?.exerciseIndexes)===JSON.stringify([0,2,5]),'legacy 38.2 selection changed');
+        ok(window.FrenchTranquilleTransferLesson?.integration==='38.5','38.5 integration marker changed');
+        ok(window.FrenchTranquilleTransferLesson?.futureLesson===35,'future lesson owner changed');
+        ok(JSON.stringify(window.FrenchTranquilleTransferLesson?.futureExerciseIndexes)===JSON.stringify([0,1,3]),'future selection changed');
+        ok(window.FrenchTranquilleTransferLesson?.numberIntegration==='38.7','38.7 integration marker missing');
+        ok(window.FrenchTranquilleTransferLesson?.numberLesson===13,'number lesson owner mismatch');
+        ok(JSON.stringify(window.FrenchTranquilleTransferLesson?.numberExerciseIndexes)===JSON.stringify([0,2,3]),'number selection mismatch');
+        ok(window.FrenchTranquilleTransferLesson?.persistent===false,'Transfer must remain ephemeral');
+        ok(window.FrenchTranquilleTransferLesson?.masteryClaim===false,'Transfer must not claim mastery');
+
+        ok(document.querySelector('[data-foundation-entry]')?.dataset.foundationCapsule==='F01_F04','lesson13 F01-F04 owner missing');
+        ok(document.querySelectorAll('[data-transfer-entry]').length===1,'lesson13 needs exactly one Transfer entry');
+        ok(document.querySelector('[data-transfer-entry]')?.dataset.transferFamily==='singular-plural-regular-noun-phrases','wrong lesson13 Transfer family');
+        ok(document.querySelector('[data-transfer-entry]')?.dataset.transferLesson==='13','wrong lesson13 Transfer marker');
+        const foundationEntry=document.querySelector('[data-foundation-entry]');
+        const transferEntry=document.querySelector('[data-transfer-entry]');
+        ok(foundationEntry.compareDocumentPosition(transferEntry)&Node.DOCUMENT_POSITION_FOLLOWING,'number Transfer must follow F01-F04');
+        ok(text('.ft-transfer-entry h3')===expected.title,'number entry title mismatch');
+        ok(text('.ft-transfer-entry p')===expected.entry,'number entry copy mismatch');
+        ok(text('[data-transfer-open]').startsWith(expected.cta),'number CTA mismatch');
+
+        click('[data-transfer-open]');
+        ok(document.querySelector('.ft-transfer-dialog')?.dataset.transferActiveFamily==='singular-plural-regular-noun-phrases','number dialog family missing');
+        ok(document.querySelector('.ft-transfer-dialog')?.dataset.transferActiveLesson==='13','number dialog lesson marker missing');
+        ok(text('.ft-transfer-top h2')===expected.title,'number dialog title mismatch');
+        ok(text('.ft-transfer-copy strong')===expected.intro,'number intro mismatch');
+        click('[data-transfer-next]');
+
+        const sources=['la gare','un billet','une table'];
+        const targets=['les gares','des billets','des tables'];
+        const expectedChoices=[
+          ['les gare','la gares','les gares'],
+          ['un billets','des billets','des billet'],
+          ['des tables','des table','une tables']
+        ];
+        for(let index=0;index<targets.length;index+=1){
+          ok(text('.ft-transfer-q h3')===expected.cues[index],`number cue ${index+1} mismatch`);
+          ok(text('.ft-transfer-source')===sources[index],`number source ${index+1} mismatch`);
+          ok(JSON.stringify(texts('[data-transfer-choice]'))===JSON.stringify(expectedChoices[index]),`number choices ${index+1} mismatch`);
+          ok([...document.querySelectorAll('[data-transfer-choice]')].every(button=>button.getBoundingClientRect().height>=44),`number target ${index+1} below 44px`);
+          clickChoice(targets[index]);
+          const correct=[...document.querySelectorAll('[data-transfer-choice]')].find(button=>button.textContent.trim()===targets[index]);
+          ok(correct?.classList.contains('ok'),`number ${index+1} correct marking missing`);
+          click('[data-transfer-next]');
+        }
+
+        ok(document.querySelector('.ft-transfer-done'),'number completion missing');
+        ok(!/maîtris|thành thạo/i.test(text('.ft-transfer-done h3')),'number completion must not claim mastery');
+        click('.ft-transfer-done [data-transfer-close]');
+        ok(!document.querySelector('.ft-transfer-overlay'),'number overlay must close');
+        ok(document.activeElement?.matches('[data-transfer-open]'),'focus must return to number Transfer CTA');
+        ok(document.querySelector('[data-existing-lesson]'),'lesson13 content must survive round trip');
+        click('[data-existing-continue]');
+        root.dataset.b387Continued='1';
+
+        // Boundary before: lesson12 remains Foundation-only.
+        document.querySelector('.topbar h1').textContent='Bài 12 — Nhà hàng';
+        window.FrenchTranquilleFoundationsPilot.refresh();
+        window.FrenchTranquilleTransferLesson.refresh();
+        ok(document.querySelector('[data-foundation-entry]')?.dataset.foundationCapsule==='F01_F04','lesson12 must remain F01-F04');
+        ok(!document.querySelector('[data-transfer-entry]'),'lesson12 must not expose number Transfer');
+
+        // Boundary after: no number route leaks past lesson13.
+        document.querySelector('.topbar h1').textContent='Bài 14 — Ôn tập';
+        window.FrenchTranquilleTransferLesson.refresh();
+        ok(!document.querySelector('[data-transfer-entry]'),'lesson14 must not expose number Transfer');
+
+        // Historical lesson33 route remains exactly one subject Transfer.
+        document.querySelector('.topbar h1').textContent='Bài 33 — Il / elle ở hiện tại';
+        window.FrenchTranquilleFoundationsPilot.refresh();
+        window.FrenchTranquilleTransferLesson.refresh();
+        ok(document.querySelector('[data-foundation-entry]')?.dataset.foundationCapsule==='F08','lesson33 must remain F08');
+        ok(document.querySelectorAll('[data-transfer-entry]').length===1,'lesson33 must have exactly one Transfer');
+        ok(document.querySelector('[data-transfer-entry]')?.dataset.transferFamily==='subject-substitution-regular-er','lesson33 legacy family changed');
+
+        // Historical lesson35 route remains exactly one future Transfer.
+        document.querySelector('.topbar h1').textContent='Bài 35 — Futur proche — sắp làm gì';
+        window.FrenchTranquilleFoundationsPilot.refresh();
+        window.FrenchTranquilleTransferLesson.refresh();
+        ok(document.querySelector('[data-foundation-entry]')?.dataset.foundationCapsule==='F05','lesson35 must remain F05');
+        ok(document.querySelectorAll('[data-transfer-entry]').length===1,'lesson35 must have exactly one Transfer');
+        ok(document.querySelector('[data-transfer-entry]')?.dataset.transferFamily==='present-futur-proche-travailler-singular','lesson35 future family changed');
+
+        // Return to lesson13 for target-size and final storage/layout checks.
+        document.querySelector('.topbar h1').textContent='Bài 13 — Ôn tập địa điểm & hướng đi';
+        window.FrenchTranquilleFoundationsPilot.refresh();
+        window.FrenchTranquilleTransferLesson.refresh();
+        ok(document.querySelector('[data-transfer-open]').getBoundingClientRect().height>=44,'number Transfer entry target below 44px');
+        ok(JSON.stringify(Object.keys(localStorage).sort().map(key=>[key,localStorage.getItem(key)]))===window.__b387StorageBefore,'localStorage changed during 38.7');
+        ok(document.documentElement.scrollWidth<=innerWidth+1,'horizontal overflow detected');
+
+        root.dataset.b387Done='1';
+        root.dataset.b387Locale=window.__b387Debug?'fr':'vi';
+        root.dataset.b387Family='singular-plural-regular-noun-phrases';
+        root.dataset.b387Exercises='3';
+        root.dataset.b387Lesson='13';
+        root.dataset.b387FoundationCoexists='1';
+        root.dataset.b387LegacySubjectRoute='1';
+        root.dataset.b387LegacyFutureRoute='1';
+        root.dataset.b387Routing='1';
+        root.dataset.b387StorageUnchanged='1';
+        root.dataset.b387NoOverflow='1';
+      }catch(error){
+        if(!root.dataset.b387Error)root.dataset.b387Error=error.message;
+        console.error(error);
+      }
+    })();
+  </script>
+</body>
+</html>
