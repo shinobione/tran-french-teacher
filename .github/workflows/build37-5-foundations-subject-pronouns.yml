@@ -49,14 +49,14 @@ jobs:
           ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/foundations-capsules.js
           ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/foundations-pilot.js
 
-      - name: Product, storage, voice, curriculum and PWA owners stay untouched
+      - name: Product, storage, voice and curriculum owners stay untouched; successor delivery is allowed
         run: |
           set -euo pipefail
           git fetch origin main --quiet
           changed="$(git diff --name-only origin/main...HEAD)"
-          forbidden='^(app\.js|voice-ios\.js|free-voice\.js|index\.html|sw\.js|src/core/build32-loader\.js|src/core/data-recovery|src/core/memory-evidence-v2-runtime\.js|src/pedagogy/memory-evidence-v2-core\.js|src/pedagogy/foundations-core\.js|src/pedagogy/curriculum-stage[234]\.js|src/pedagogy/learning-memory\.js|src/pedagogy/error-intelligence\.js|src/pedagogy/listening-engine\.js|src/pedagogy/scenario-engine\.js|src/pedagogy/mastery-engine\.js|src/pedagogy/learner-intelligence.*\.js|assets/LOGO\.png|assets/Favicon\.png)$'
+          forbidden='^(app\.js|voice-ios\.js|free-voice\.js|index\.html|src/core/data-recovery|src/core/memory-evidence-v2-runtime\.js|src/pedagogy/memory-evidence-v2-core\.js|src/pedagogy/foundations-core\.js|src/pedagogy/curriculum-stage[234]\.js|src/pedagogy/learning-memory\.js|src/pedagogy/error-intelligence\.js|src/pedagogy/listening-engine\.js|src/pedagogy/scenario-engine\.js|src/pedagogy/mastery-engine\.js|src/pedagogy/learner-intelligence.*\.js|assets/LOGO\.png|assets/Favicon\.png)$'
           if printf '%s\n' "$changed" | grep -E "$forbidden"; then
-            echo 'Build 37.5 must stay inside the Foundations capsule/renderer/test lane' >&2
+            echo 'Build 37.5 successors must preserve certified product/storage/voice/curriculum ownership' >&2
             exit 1
           fi
 
