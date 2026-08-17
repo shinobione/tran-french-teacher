@@ -8,10 +8,13 @@
   const FUTURE_EXERCISE_INDEXES=Object.freeze([0,1,3]);
   const NUMBER_LESSON=13;
   const NUMBER_EXERCISE_INDEXES=Object.freeze([0,2,3]);
+  const NEGATION_LESSON=34;
+  const NEGATION_EXERCISE_INDEXES=Object.freeze([0,1,2]);
   const root=document.documentElement;
   const core=window.FrenchTranquilleGeneralizationTransfer;
   const futureCore=window.FrenchTranquilleGeneralizationFuturProche;
   const numberCore=window.FrenchTranquilleGeneralizationNumber;
+  const negationCore=window.FrenchTranquilleGeneralizationNegation;
   const T=(vi,fr)=>localStorage.getItem(DEBUG)==='1'?fr:vi;
   const locale=()=>localStorage.getItem(DEBUG)==='1'?'fr':'vi';
   const esc=(value='')=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
@@ -23,9 +26,11 @@
   }
 
   const hasNumberCore=numberCore?.family?.id==='singular-plural-regular-noun-phrases';
+  const hasNegationCore=negationCore?.family?.id==='affirmation-negation-regular-er-je';
   const legacyExercises=Object.freeze(EXERCISE_INDEXES.map(index=>core.catalog[index]));
   const futureExercises=Object.freeze(FUTURE_EXERCISE_INDEXES.map(index=>futureCore.catalog[index]));
   const numberExercises=Object.freeze(hasNumberCore?NUMBER_EXERCISE_INDEXES.map(index=>numberCore.catalog[index]):[]);
+  const negationExercises=Object.freeze(hasNegationCore?NEGATION_EXERCISE_INDEXES.map(index=>negationCore.catalog[index]):[]);
   const ROUTES=Object.freeze([
     Object.freeze({
       lesson:LESSON,
@@ -86,6 +91,26 @@
       doneTitleFr:'Tu viens de passer 3 groupes au pluriel',
       doneCopyVi:'Bạn đã đổi cả từ đứng trước và danh từ. Đây là luyện chuyển đổi, không phải điểm “thành thạo”.',
       doneCopyFr:'Tu as transformé le déterminant et le nom. C’est un exercice de transfert, pas un score de « maîtrise ».'
+    }):null,
+    hasNegationCore?Object.freeze({
+      lesson:NEGATION_LESSON,
+      slice:'38.8',
+      core:negationCore,
+      family:negationCore.family.id,
+      exerciseIndexes:NEGATION_EXERCISE_INDEXES,
+      exercises:negationExercises,
+      eyebrowVi:'CHUYỂN ĐỔI',
+      eyebrowFr:'TRANSFORMER',
+      entryCopyVi:'3 câu đã gặp: giữ cùng người, động từ và ý chính, rồi chuyển sang phủ định đầy đủ với ne / n’ ... pas. Không bắt buộc để tiếp tục bài.',
+      entryCopyFr:'3 phrases déjà rencontrées : garde la même personne, le même verbe et la même idée, puis passe à la négation complète avec ne / n’ ... pas. Facultatif pour continuer la leçon.',
+      introCopyVi:'Không có từ mới. Giữ nguyên câu, đặt ne / n’ trước động từ và pas sau động từ.',
+      introCopyFr:'Pas de nouveau vocabulaire. Garde la phrase et place ne / n’ avant le verbe, puis pas après le verbe.',
+      correctVi:'✓ Đúng. Bạn đã giữ nguyên ý và xây lại câu ở dạng phủ định đầy đủ.',
+      correctFr:'✓ Correct. Tu as gardé la même idée et reconstruit la phrase à la négation complète.',
+      doneTitleVi:'Bạn vừa chuyển 3 câu sang phủ định',
+      doneTitleFr:'Tu viens de passer 3 phrases à la négation',
+      doneCopyVi:'Bạn đã giữ cùng người, động từ và ý chính, rồi thêm ne / n’ ... pas đúng chỗ. Đây là luyện chuyển đổi, không phải điểm “thành thạo”.',
+      doneCopyFr:'Tu as gardé la même personne, le même verbe et la même idée, puis placé ne / n’ ... pas correctement. C’est un exercice de transfert, pas un score de « maîtrise ».'
     }):null
   ].filter(Boolean));
 
@@ -217,6 +242,7 @@
   function decorate(){
     root.dataset.transferIntegration='38.5';
     root.dataset.transferNumberIntegration=hasNumberCore?'38.7':'0';
+    root.dataset.transferNegationIntegration=hasNegationCore?'38.8':'0';
     root.dataset.transferLesson=String(currentLessonNumber());
     mountEntry();
   }
@@ -233,6 +259,7 @@
     slice:'38.2',
     integration:'38.5',
     numberIntegration:hasNumberCore?'38.7':null,
+    negationIntegration:hasNegationCore?'38.8':null,
     status:'learner-facing-contextual',
     family:core.family.id,
     lesson:LESSON,
@@ -246,6 +273,10 @@
     numberLesson:hasNumberCore?NUMBER_LESSON:null,
     numberExerciseIndexes:hasNumberCore?NUMBER_EXERCISE_INDEXES:Object.freeze([]),
     numberExercises,
+    negationFamily:hasNegationCore?negationCore.family.id:null,
+    negationLesson:hasNegationCore?NEGATION_LESSON:null,
+    negationExerciseIndexes:hasNegationCore?NEGATION_EXERCISE_INDEXES:Object.freeze([]),
+    negationExercises,
     routes:ROUTES,
     persistent:false,
     masteryClaim:false,
