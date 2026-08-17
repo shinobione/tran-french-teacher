@@ -1,6 +1,8 @@
 (() => {
   'use strict';
   const VERSION = '2.1.0-b31';
+  const RUNTIME_RELEASE = '2.5.0-b38-release1';
+  const BUILD32_SUCCESSOR = './src/core/build32-loader.js?v=2.2.0-b32';
   const params = new URLSearchParams(location.search);
   const historicalSmoke = [...params.keys()].some(key => /smoke/i.test(key)) && !params.has('v2Audit') && !params.has('b32Audit');
   const legacyAudit = params.has('b31Audit') || params.has('b30Audit') || historicalSmoke;
@@ -8,7 +10,7 @@
   if (!legacyAudit) {
     if (document.querySelector('script[data-build32-loader]')) return;
     const successor = document.createElement('script');
-    successor.src = './src/core/build32-loader.js?v=2.2.0-b32';
+    successor.src = `${BUILD32_SUCCESSOR}&release=${RUNTIME_RELEASE}`;
     successor.dataset.build32Loader = '1';
     document.body.appendChild(successor);
     return;

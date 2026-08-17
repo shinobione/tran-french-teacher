@@ -1,0 +1,49 @@
+{
+  "format": "french-tranquille-release-contract",
+  "release": {
+    "version": "2.5.0",
+    "codename": "Build 38 Generalization & Transfer",
+    "build": 38,
+    "status": "release"
+  },
+  "pedagogyBaseline": {
+    "version": "2.3.0",
+    "build": 34
+  },
+  "product": {
+    "lessons": 52,
+    "items": 313,
+    "scenarioSituations": 44,
+    "scenarioTurns": 132,
+    "listeningNormalRate": 0.88,
+    "listeningSlowRate": 0.65,
+    "speakingMaxMomentsPerLesson": 2,
+    "durableStores": 7,
+    "backupEnvelope": "v3",
+    "evidenceRole": "derived-shadow"
+  },
+  "historicalLearner": {
+    "completedLessons": 7,
+    "partialLesson": "l8",
+    "partialStep": 4,
+    "knownItems": 40
+  },
+  "build38": {
+    "milestone": "closed",
+    "nextSliceAuthorized": false,
+    "families": [
+      "subject-substitution",
+      "affirmation-negation",
+      "present-futur-proche",
+      "singular-plural-nominal",
+      "nous-spoken-on"
+    ]
+  },
+  "constraints": {
+    "pedagogyChangedByRelease": false,
+    "durableSchemaChangedByRelease": false,
+    "voiceChangedByRelease": false,
+    "curriculumChangedByRelease": false,
+    "premiumChangedByRelease": false
+  }
+}

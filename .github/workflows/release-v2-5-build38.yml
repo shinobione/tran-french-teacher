@@ -1,0 +1,86 @@
+name: Release v2.5.0 Build 38 certification
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  release-v2-5-build38:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax + release contract + Build 38 predecessor
+        run: |
+          set -euo pipefail
+          node --check src/core/build31-loader.js
+          node --check src/core/build32-loader.js
+          node --check tools/test-release-v2-5-build38.cjs
+          node tools/test-release-v2-5-build38.cjs
+          node tools/test-build38-10-spoken-on-integration.cjs
+
+      - name: Release scope guard — no product semantics in version slice
+        if: github.event_name == 'pull_request'
+        run: |
+          set -euo pipefail
+          git fetch origin "${{ github.base_ref }}" --depth=1
+          changed="$(git diff --name-only "origin/${{ github.base_ref }}"...HEAD)"
+          printf '%s\n' "$changed"
+          allowed='^(src/core/build31-loader\.js|src/core/build32-loader\.js|tests/browser/runtime-version-meta-tribunal\.html|\.github/workflows/runtime-version-meta\.yml|release-v2\.5\.json|tools/test-release-v2-5-build38\.cjs|\.github/workflows/release-v2-5-build38\.yml|docs/RELEASE-V2\.5\.0-BUILD38\.md|README\.md|PROJECT-STATE\.md)$'
+          unexpected="$(printf '%s\n' "$changed" | grep -Ev "$allowed" || true)"
+          if [ -n "$unexpected" ]; then
+            echo "Unexpected path(s) in release-only slice:"
+            printf '%s\n' "$unexpected"
+            exit 1
+          fi
+          git diff --exit-code "origin/${{ github.base_ref }}"...HEAD -- \
+            app.js voice-ios.js free-voice.js assets/LOGO.png assets/Favicon.png \
+            index.html sw.js manifest.webmanifest src/pedagogy src/ui src/premium \
+            src/core/data-recovery.js src/core/data-recovery-core.js \
+            src/core/data-recovery-v3-contract.js src/core/data-recovery-v3-runtime-core.js \
+            src/core/memory-evidence-v2-runtime.js
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-release25-http.log 2>&1 &
+          echo $! >/tmp/ft-release25-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — public release metadata VI/FR × desktop/iPhone
+        run: |
+          set -euo pipefail
+          run_case() {
+            name="$1"; size="$2"; query="$3"
+            out="/tmp/release25-${name}.html"
+            timeout --signal=TERM --kill-after=5s 50s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --window-size="$size" --virtual-time-budget=20000 --dump-dom \
+              "http://127.0.0.1:4173/tests/browser/runtime-version-meta-tribunal.html${query}" \
+              >"$out"
+            grep -q 'data-runtime-meta="ok"' "$out" || {
+              grep -o 'data-runtime-meta-detail="[^"]*"' "$out" || true
+              exit 1
+            }
+            grep -q 'data-runtime-meta-visible="v2.5.0 • Build 38"' "$out"
+          }
+          run_case vi-desktop 1440,900 ''
+          run_case fr-desktop 1440,900 '?debug=fr'
+          run_case vi-iphone 390,844 '?iphone=1'
+          run_case fr-iphone 390,844 '?iphone=1&debug=fr'
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-release25-server.pid ]; then kill "$(cat /tmp/ft-release25-server.pid)" || true; fi
