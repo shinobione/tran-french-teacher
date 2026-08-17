@@ -1,0 +1,175 @@
+name: Build 38.5 Learner-facing futur proche transfer
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [build38/futur-proche-learner-integration]
+
+permissions:
+  contents: read
+
+jobs:
+  futur-proche-learner-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax + 38.2 + 38.4 predecessors + 38.5 contract
+        run: |
+          set -euo pipefail
+          node --check src/pedagogy/generalization-transfer-core.js
+          node --check src/pedagogy/generalization-futur-proche-core.js
+          node --check src/pedagogy/generalization-transfer-lesson.js
+          node --check src/core/build32-loader.js
+          node --check sw.js
+          node --check tools/test-build38-2-learner-integration.cjs
+          node --check tools/test-build38-4-futur-proche-transfer.cjs
+          node --check tools/test-build38-5-futur-proche-integration.cjs
+          node tools/test-build38-2-learner-integration.cjs
+          node tools/test-build38-4-futur-proche-transfer.cjs
+          node tools/test-build38-5-futur-proche-integration.cjs
+
+      - name: Shared renderer keeps 38.2 exact and adds lesson 35 only
+        run: |
+          set -euo pipefail
+          grep -q "const LESSON=33" src/pedagogy/generalization-transfer-lesson.js
+          grep -q "EXERCISE_INDEXES=Object.freeze(\[0,2,5\])" src/pedagogy/generalization-transfer-lesson.js
+          grep -q "const FUTURE_LESSON=35" src/pedagogy/generalization-transfer-lesson.js
+          grep -q "FUTURE_EXERCISE_INDEXES=Object.freeze(\[0,1,3\])" src/pedagogy/generalization-transfer-lesson.js
+          grep -q "integration:'38.5'" src/pedagogy/generalization-transfer-lesson.js
+          grep -q "futureFamily:futureCore.family.id" src/pedagogy/generalization-transfer-lesson.js
+          grep -q "futureLesson:FUTURE_LESSON" src/pedagogy/generalization-transfer-lesson.js
+          grep -q "persistent:false" src/pedagogy/generalization-transfer-lesson.js
+          grep -q "masteryClaim:false" src/pedagogy/generalization-transfer-lesson.js
+          ! grep -q 'Math.random' src/pedagogy/generalization-transfer-lesson.js
+          ! grep -q 'localStorage.setItem' src/pedagogy/generalization-transfer-lesson.js
+          ! grep -q 'sessionStorage.setItem' src/pedagogy/generalization-transfer-lesson.js
+          ! grep -q 'indexedDB' src/pedagogy/generalization-transfer-lesson.js
+          ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/generalization-transfer-lesson.js
+
+      - name: Loader and installed-PWA offline dependency stay explicit
+        run: |
+          set -euo pipefail
+          grep -q "const TRANSFER='2.4.0-b38.2'" src/core/build32-loader.js
+          grep -q "const TRANSFER_FUTURE='2.4.0-b38.5'" src/core/build32-loader.js
+          grep -q 'generalization-futur-proche-core.js?v=${TRANSFER_FUTURE}' src/core/build32-loader.js
+          grep -q 'generalization-transfer-lesson.js?v=${TRANSFER}' src/core/build32-loader.js
+          grep -q "const B382='2.4.0-b38.2'" sw.js
+          grep -q "const B385='2.4.0-b38.5'" sw.js
+          grep -q 'generalization-futur-proche-core.js?v=${B385}' sw.js
+          grep -q 'generalization-transfer-lesson.js?v=${B382}' sw.js
+          python3 - <<'PY'
+          loader=open('src/core/build32-loader.js',encoding='utf-8').read()
+          order=[
+            loader.index('foundations-pilot.js?v=${FOUNDATIONS}'),
+            loader.index('generalization-transfer-core.js?v=${TRANSFER}'),
+            loader.index('generalization-futur-proche-core.js?v=${TRANSFER_FUTURE}'),
+            loader.index('generalization-transfer-lesson.js?v=${TRANSFER}')
+          ]
+          assert order==sorted(order) and min(order)>=0, order
+          print('38.5 loader order PASS',order)
+          PY
+
+      - name: Product/storage/voice/curriculum/Foundations/negation owners stay untouched
+        run: |
+          set -euo pipefail
+          git fetch origin main --quiet
+          changed="$(git diff --name-only origin/main...HEAD)"
+          forbidden='^(app\.js|voice-ios\.js|free-voice\.js|index\.html|manifest\.webmanifest|src/core/data-recovery|src/core/memory-evidence-v2-runtime\.js|src/pedagogy/memory-evidence-v2-core\.js|src/pedagogy/curriculum-stage[234]\.js|src/pedagogy/learning-memory\.js|src/pedagogy/error-intelligence\.js|src/pedagogy/listening-engine\.js|src/pedagogy/scenario-engine\.js|src/pedagogy/mastery-engine\.js|src/pedagogy/learner-intelligence.*\.js|src/pedagogy/foundations-core\.js|src/pedagogy/foundations-capsule-engine\.js|src/pedagogy/foundations-capsules\.js|src/pedagogy/foundations-pilot\.js|src/pedagogy/generalization-transfer-core\.js|src/pedagogy/generalization-negation-core\.js|src/pedagogy/generalization-futur-proche-core\.js|src/ui/|src/premium/|assets/LOGO\.png|assets/Favicon\.png)$'
+          if printf '%s\n' "$changed" | grep -E "$forbidden"; then
+            echo 'Build 38.5 must only generalize the shared Transfer adapter and wire the certified 38.4 core' >&2
+            exit 1
+          fi
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-b385-http.log 2>&1 &
+          echo $! >/tmp/ft-b385-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — F05 predecessor still owns lessons 34-36
+        run: |
+          set -euo pipefail
+          passed=0
+          for attempt in 1 2; do
+            profile="/tmp/ft-b385-f05-$attempt"; file="/tmp/b385-f05-$attempt.html"
+            rm -rf "$profile" "$file"
+            if timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=390,844 --virtual-time-budget=11000 --dump-dom \
+              'http://127.0.0.1:4173/tests/browser/build37-5-foundations-subject-pronouns.html?debug=fr' >"$file" \
+              && grep -q 'data-b375-done="1"' "$file" \
+              && grep -q 'data-b375-f05="1"' "$file" \
+              && grep -q 'data-b375-storage-unchanged="1"' "$file" \
+              && ! grep -q 'data-b375-error=' "$file"; then passed=1; break; fi
+          done
+          test "$passed" -eq 1
+
+      - name: Chrome — legacy 38.2 lesson 33 stays exact in all viewports
+        run: |
+          set -euo pipefail
+          for spec in 'vi 1280 900' 'fr 1280 900' 'vi 390 844' 'fr 390 844'; do
+            set -- $spec; locale="$1"; width="$2"; height="$3"; passed=0; file=''
+            for attempt in 1 2; do
+              profile="/tmp/ft-b385-legacy-${locale}-${width}-$attempt"
+              file="/tmp/b385-legacy-${locale}-${width}-$attempt.html"
+              rm -rf "$profile" "$file"
+              if timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
+                --user-data-dir="$profile" --window-size="$width,$height" --virtual-time-budget=12000 --dump-dom \
+                "http://127.0.0.1:4173/tests/browser/build38-2-learner-integration.html?debug=$locale" >"$file" \
+                && grep -q 'data-b382-done="1"' "$file" \
+                && grep -q "data-b382-locale=\"$locale\"" "$file" \
+                && grep -q 'data-b382-family="subject-substitution-regular-er"' "$file" \
+                && grep -q 'data-b382-exercises="3"' "$file" \
+                && grep -q 'data-b382-lesson="33"' "$file" \
+                && grep -q 'data-b382-storage-unchanged="1"' "$file" \
+                && grep -q 'data-b382-no-overflow="1"' "$file" \
+                && ! grep -q 'data-b382-error=' "$file"; then passed=1; break; fi
+            done
+            if [ "$passed" -ne 1 ]; then echo "legacy 38.2 failed for $locale ${width}x${height}" >&2; exit 1; fi
+          done
+
+      - name: Chrome — 38.5 future Transfer VI/FR desktop + iPhone
+        run: |
+          set -euo pipefail
+          for spec in 'vi 1280 900' 'fr 1280 900' 'vi 390 844' 'fr 390 844'; do
+            set -- $spec; locale="$1"; width="$2"; height="$3"; passed=0; file=''
+            for attempt in 1 2; do
+              profile="/tmp/ft-b385-${locale}-${width}-$attempt"
+              file="/tmp/b385-${locale}-${width}-$attempt.html"
+              rm -rf "$profile" "$file"
+              if timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
+                --user-data-dir="$profile" --window-size="$width,$height" --virtual-time-budget=12000 --dump-dom \
+                "http://127.0.0.1:4173/tests/browser/build38-5-futur-proche-integration.html?debug=$locale" >"$file" \
+                && grep -q 'data-b385-done="1"' "$file" \
+                && grep -q "data-b385-locale=\"$locale\"" "$file" \
+                && grep -q 'data-b385-family="present-futur-proche-travailler-singular"' "$file" \
+                && grep -q 'data-b385-exercises="3"' "$file" \
+                && grep -q 'data-b385-lesson="35"' "$file" \
+                && grep -q 'data-b385-foundation-coexists="1"' "$file" \
+                && grep -q 'data-b385-legacy-route="1"' "$file" \
+                && grep -q 'data-b385-routing="1"' "$file" \
+                && grep -q 'data-b385-continued="1"' "$file" \
+                && grep -q 'data-b385-storage-unchanged="1"' "$file" \
+                && grep -q 'data-b385-no-overflow="1"' "$file" \
+                && ! grep -q 'data-b385-error=' "$file"; then passed=1; break; fi
+            done
+            if [ "$passed" -ne 1 ]; then
+              echo "38.5 tribunal failed for $locale ${width}x${height}" >&2
+              grep -o 'data-b385-[^ >]*="[^"]*"' "$file" >&2 || true
+              grep -o 'data-b385-error="[^"]*"' "$file" >&2 || true
+              exit 1
+            fi
+          done
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-b385-server.pid ]; then kill "$(cat /tmp/ft-b385-server.pid)" || true; fi

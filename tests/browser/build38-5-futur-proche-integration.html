@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Build 38.5 futur proche learner integration tribunal</title>
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#07111e;color:#eef5ff;font-family:system-ui,-apple-system,sans-serif}button{font:inherit;color:inherit;background:#20314a;border:1px solid #5f7595;border-radius:12px;padding:8px 12px}.primary{background:#315d74}.secondary{background:#253852}.muted{color:#9fb0c5}.screen-lesson{width:min(760px,calc(100% - 24px));margin:20px auto}.topbar{padding:10px 2px}.topbar h1{font-size:1.25rem}.lesson-step{padding:18px;border:1px solid #23364d;border-radius:20px;background:#0d1928;display:grid;gap:12px}.lesson-step>p{margin:0}.lesson-step>[data-existing-continue]{min-height:48px;width:100%}
+  </style>
+  <script>
+    (()=>{
+      const debug=new URLSearchParams(location.search).get('debug')==='fr';
+      localStorage.clear();
+      localStorage.setItem('tran-french-teacher:debug-fr:v1',debug?'1':'0');
+      localStorage.setItem('b38.5:sentinel','unchanged');
+      window.__b385Debug=debug;
+      window.__b385StorageBefore=JSON.stringify(Object.keys(localStorage).sort().map(key=>[key,localStorage.getItem(key)]));
+    })();
+  </script>
+</head>
+<body>
+  <main id="app">
+    <section class="screen-lesson">
+      <div class="topbar"><h1>Bài 35 — Futur proche — sắp làm gì</h1></div>
+      <div class="lesson-step">
+        <p data-existing-lesson>Existing lesson 35 content</p>
+        <button type="button" class="primary" data-existing-continue>Continuer</button>
+      </div>
+    </section>
+  </main>
+  <script src="../../src/pedagogy/foundations-capsule-engine.js?v=2.4.0-b37.8"></script>
+  <script src="../../src/pedagogy/foundations-capsules.js?v=2.4.0-b37.8"></script>
+  <script src="../../src/pedagogy/foundations-pilot.js?v=2.4.0-b37.8"></script>
+  <script src="../../src/pedagogy/generalization-transfer-core.js?v=2.4.0-b38.1"></script>
+  <script src="../../src/pedagogy/generalization-futur-proche-core.js?v=2.4.0-b38.5"></script>
+  <script src="../../src/pedagogy/generalization-transfer-lesson.js?v=2.4.0-b38.2"></script>
+  <script>
+    (()=>{
+      const root=document.documentElement;
+      const fail=message=>{root.dataset.b385Error=message;throw new Error(message)};
+      const ok=(value,message)=>{if(!value)fail(message)};
+      const text=selector=>document.querySelector(selector)?.textContent?.trim()||'';
+      const texts=selector=>[...document.querySelectorAll(selector)].map(node=>node.textContent.trim());
+      const click=selector=>{const node=document.querySelector(selector);ok(node,`missing ${selector}`);node.click();return node};
+      const clickChoice=choice=>{const node=[...document.querySelectorAll('[data-transfer-choice]')].find(button=>button.textContent.trim()===choice);ok(node,`missing transfer choice ${choice}`);node.click();return node};
+      const expected=window.__b385Debug?{
+        title:'Passer du présent au futur proche',
+        entry:'3 phrases courtes : garde la même personne et l’action, puis passe au futur proche avec aller + infinitif. Facultatif pour continuer la leçon.',
+        cta:'Essayer 3 phrases • ≈ 2 min',
+        intro:'Garde la même personne et la même action. Utilise aller au présent puis travailler à l’infinitif.',
+        cues:[
+          'Transforme « Je travaille. » pour dire que l’action va arriver bientôt.',
+          'Transforme « Tu travailles. » pour dire que l’action va arriver bientôt.',
+          'Transforme « Elle travaille. » pour dire que l’action va arriver bientôt.'
+        ]
+      }:{
+        title:'Từ hiện tại sang tương lai gần',
+        entry:'3 câu ngắn: giữ cùng người và hành động, rồi chuyển sang “sắp làm” với aller + động từ nguyên mẫu. Không bắt buộc để tiếp tục bài.',
+        cta:'Thử 3 câu • khoảng 2 phút',
+        intro:'Giữ cùng người và cùng hành động. Dùng aller ở hiện tại rồi thêm travailler ở dạng nguyên mẫu.',
+        cues:[
+          'Đổi “Je travaille.” để nói hành động sắp xảy ra.',
+          'Đổi “Tu travailles.” để nói hành động sắp xảy ra.',
+          'Đổi “Elle travaille.” để nói hành động sắp xảy ra.'
+        ]
+      };
+
+      try{
+        ok(window.FrenchTranquilleGeneralizationTransfer?.family?.id==='subject-substitution-regular-er','38.1 core missing');
+        ok(window.FrenchTranquilleGeneralizationFuturProche?.family?.id==='present-futur-proche-travailler-singular','38.4 future core missing');
+        ok(window.FrenchTranquilleGeneralizationFuturProche?.status==='pure-non-wired','38.4 future core contract changed');
+        ok(window.FrenchTranquilleTransferLesson?.slice==='38.2','shared adapter historical owner changed');
+        ok(window.FrenchTranquilleTransferLesson?.integration==='38.5','38.5 integration marker missing');
+        ok(window.FrenchTranquilleTransferLesson?.lesson===33,'legacy lesson 33 owner changed');
+        ok(JSON.stringify(window.FrenchTranquilleTransferLesson?.exerciseIndexes)===JSON.stringify([0,2,5]),'legacy 38.2 selection changed');
+        ok(window.FrenchTranquilleTransferLesson?.futureLesson===35,'future lesson owner mismatch');
+        ok(JSON.stringify(window.FrenchTranquilleTransferLesson?.futureExerciseIndexes)===JSON.stringify([0,1,3]),'future exercise selection mismatch');
+        ok(window.FrenchTranquilleTransferLesson?.persistent===false,'Transfer must remain ephemeral');
+        ok(window.FrenchTranquilleTransferLesson?.masteryClaim===false,'Transfer must not claim mastery');
+
+        ok(document.querySelector('[data-foundation-entry]')?.dataset.foundationCapsule==='F05','lesson 35 F05 owner missing');
+        ok(document.querySelectorAll('[data-transfer-entry]').length===1,'lesson 35 needs exactly one transfer entry');
+        ok(document.querySelector('[data-transfer-entry]')?.dataset.transferFamily==='present-futur-proche-travailler-singular','wrong lesson 35 transfer family');
+        ok(document.querySelector('[data-transfer-entry]')?.dataset.transferLesson==='35','wrong transfer lesson marker');
+        const foundationEntry=document.querySelector('[data-foundation-entry]');
+        const transferEntry=document.querySelector('[data-transfer-entry]');
+        ok(foundationEntry.compareDocumentPosition(transferEntry)&Node.DOCUMENT_POSITION_FOLLOWING,'future Transfer entry must follow F05');
+        ok(text('.ft-transfer-entry h3')===expected.title,'future entry title mismatch');
+        ok(text('.ft-transfer-entry p')===expected.entry,'future entry copy mismatch');
+        ok(text('[data-transfer-open]').startsWith(expected.cta),'future CTA mismatch');
+
+        click('[data-transfer-open]');
+        ok(document.querySelector('.ft-transfer-dialog')?.dataset.transferActiveFamily==='present-futur-proche-travailler-singular','future dialog family missing');
+        ok(document.querySelector('.ft-transfer-dialog')?.dataset.transferActiveLesson==='35','future dialog lesson marker missing');
+        ok(text('.ft-transfer-top h2')===expected.title,'future dialog title mismatch');
+        ok(text('.ft-transfer-copy strong')===expected.intro,'future intro mismatch');
+        click('[data-transfer-next]');
+
+        const sources=['Je travaille.','Tu travailles.','Elle travaille.'];
+        const targets=['Je vais travailler.','Tu vas travailler.','Elle va travailler.'];
+        const expectedChoices=[
+          ['Je va travailler.','Je vais travaille.','Je vais travailler.'],
+          ['Tu vas travaille.','Tu vas travailler.','Tu vais travailler.'],
+          ['Elle va travailler.','Elle vais travailler.','Elle va travaille.']
+        ];
+        for(let index=0;index<targets.length;index+=1){
+          ok(text('.ft-transfer-q h3')===expected.cues[index],`future cue ${index+1} mismatch`);
+          ok(text('.ft-transfer-source')===sources[index],`future source ${index+1} mismatch`);
+          ok(JSON.stringify(texts('[data-transfer-choice]'))===JSON.stringify(expectedChoices[index]),`future choices ${index+1} mismatch`);
+          clickChoice(targets[index]);
+          const correct=[...document.querySelectorAll('[data-transfer-choice]')].find(button=>button.textContent.trim()===targets[index]);
+          ok(correct?.classList.contains('ok'),`future ${index+1} correct marking missing`);
+          click('[data-transfer-next]');
+        }
+
+        ok(document.querySelector('.ft-transfer-done'),'future transfer completion missing');
+        ok(!/maîtris|thành thạo/i.test(text('.ft-transfer-done h3')),'future completion heading must not claim mastery');
+        click('.ft-transfer-done [data-transfer-close]');
+        ok(!document.querySelector('.ft-transfer-overlay'),'future overlay must close');
+        ok(document.activeElement?.matches('[data-transfer-open]'),'focus must return to future Transfer CTA');
+        ok(document.querySelector('[data-existing-lesson]'),'lesson 35 content must survive round trip');
+        click('[data-existing-continue]');
+        root.dataset.b385Continued='1';
+
+        document.querySelector('.topbar h1').textContent='Bài 34 — Nous — nói “chúng ta”';
+        window.FrenchTranquilleFoundationsPilot.refresh();
+        window.FrenchTranquilleTransferLesson.refresh();
+        ok(document.querySelector('[data-foundation-entry]')?.dataset.foundationCapsule==='F05','lesson 34 must remain F05');
+        ok(!document.querySelector('[data-transfer-entry]'),'lesson 34 must not expose future Transfer');
+
+        document.querySelector('.topbar h1').textContent='Bài 36 — Venir de';
+        window.FrenchTranquilleFoundationsPilot.refresh();
+        window.FrenchTranquilleTransferLesson.refresh();
+        ok(document.querySelector('[data-foundation-entry]')?.dataset.foundationCapsule==='F05','lesson 36 must remain F05');
+        ok(!document.querySelector('[data-transfer-entry]'),'lesson 36 must not expose future Transfer');
+
+        document.querySelector('.topbar h1').textContent='Bài 33 — Il / elle ở hiện tại';
+        window.FrenchTranquilleFoundationsPilot.refresh();
+        window.FrenchTranquilleTransferLesson.refresh();
+        ok(document.querySelector('[data-foundation-entry]')?.dataset.foundationCapsule==='F08','lesson 33 must remain F08');
+        ok(document.querySelector('[data-transfer-entry]')?.dataset.transferFamily==='subject-substitution-regular-er','lesson 33 must keep legacy subject Transfer family');
+        ok(document.querySelectorAll('[data-transfer-entry]').length===1,'lesson 33 must still have exactly one Transfer card');
+
+        document.querySelector('.topbar h1').textContent='Bài 35 — Futur proche — sắp làm gì';
+        window.FrenchTranquilleFoundationsPilot.refresh();
+        window.FrenchTranquilleTransferLesson.refresh();
+        ok(document.querySelector('[data-transfer-open]').getBoundingClientRect().height>=44,'future Transfer entry target below 44px');
+
+        ok(JSON.stringify(Object.keys(localStorage).sort().map(key=>[key,localStorage.getItem(key)]))===window.__b385StorageBefore,'localStorage changed during 38.5');
+        ok(document.documentElement.scrollWidth<=innerWidth+1,'horizontal overflow detected');
+
+        root.dataset.b385Done='1';
+        root.dataset.b385Locale=window.__b385Debug?'fr':'vi';
+        root.dataset.b385Family='present-futur-proche-travailler-singular';
+        root.dataset.b385Exercises='3';
+        root.dataset.b385Lesson='35';
+        root.dataset.b385FoundationCoexists='1';
+        root.dataset.b385LegacyRoute='1';
+        root.dataset.b385Routing='1';
+        root.dataset.b385StorageUnchanged='1';
+        root.dataset.b385NoOverflow='1';
+      }catch(error){
+        if(!root.dataset.b385Error)root.dataset.b385Error=error.message;
+        console.error(error);
+      }
+    })();
+  </script>
+</body>
+</html>

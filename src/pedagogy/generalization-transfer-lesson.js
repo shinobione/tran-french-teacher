@@ -4,25 +4,70 @@
   const DEBUG='tran-french-teacher:debug-fr:v1';
   const LESSON=33;
   const EXERCISE_INDEXES=Object.freeze([0,2,5]);
+  const FUTURE_LESSON=35;
+  const FUTURE_EXERCISE_INDEXES=Object.freeze([0,1,3]);
   const root=document.documentElement;
   const core=window.FrenchTranquilleGeneralizationTransfer;
+  const futureCore=window.FrenchTranquilleGeneralizationFuturProche;
   const T=(vi,fr)=>localStorage.getItem(DEBUG)==='1'?fr:vi;
   const locale=()=>localStorage.getItem(DEBUG)==='1'?'fr':'vi';
   const esc=(value='')=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 
-  if(!core||core.family?.id!=='subject-substitution-regular-er'){
+  if(!core||core.family?.id!=='subject-substitution-regular-er'||!futureCore||futureCore.family?.id!=='present-futur-proche-travailler-singular'){
     root.dataset.transferLessonAdapter='missing';
-    console.error('[French Trân’quille] Build 38.2 transfer core is missing');
+    console.error('[French Trân’quille] Build 38.5 transfer dependencies are missing');
     return;
   }
 
-  const exercises=Object.freeze(EXERCISE_INDEXES.map(index=>core.catalog[index]));
-  let overlay=null,lastTrigger=null,scheduled=false,session=null;
+  const legacyExercises=Object.freeze(EXERCISE_INDEXES.map(index=>core.catalog[index]));
+  const futureExercises=Object.freeze(FUTURE_EXERCISE_INDEXES.map(index=>futureCore.catalog[index]));
+  const ROUTES=Object.freeze([
+    Object.freeze({
+      lesson:LESSON,
+      slice:'38.2',
+      core,
+      family:core.family.id,
+      exerciseIndexes:EXERCISE_INDEXES,
+      exercises:legacyExercises,
+      entryCopyVi:'3 câu ngắn: đổi người, giữ ý và động từ, rồi xây lại cả câu. Không bắt buộc để tiếp tục bài.',
+      entryCopyFr:'3 phrases courtes : change la personne, garde l’idée et le verbe, puis reconstruis toute la phrase. Facultatif pour continuer la leçon.',
+      introCopyVi:'Không học thêm từ mới. Bạn chỉ dùng những câu và mẫu đã gặp để tự xây một câu khác.',
+      introCopyFr:'Pas de nouveau vocabulaire : tu réutilises seulement des phrases et des formes déjà rencontrées pour construire une autre phrase.',
+      correctVi:'✓ Đúng. Bạn đã đổi người và xây lại đúng cả câu.',
+      correctFr:'✓ Correct. Tu as changé la personne et reconstruit toute la phrase.',
+      doneTitleVi:'Bạn vừa tự xây 3 câu',
+      doneTitleFr:'Tu viens de construire 3 phrases',
+      doneCopyVi:'Bạn đã giữ ý chính, đổi người làm hành động và điều chỉnh động từ. Đây là luyện chuyển đổi, không phải điểm “thành thạo”.',
+      doneCopyFr:'Tu as gardé l’idée, changé la personne qui agit et ajusté le verbe. C’est un exercice de transfert, pas un score de « maîtrise ».'
+    }),
+    Object.freeze({
+      lesson:FUTURE_LESSON,
+      slice:'38.5',
+      core:futureCore,
+      family:futureCore.family.id,
+      exerciseIndexes:FUTURE_EXERCISE_INDEXES,
+      exercises:futureExercises,
+      entryCopyVi:'3 câu ngắn: giữ cùng người và hành động, rồi chuyển sang “sắp làm” với aller + động từ nguyên mẫu. Không bắt buộc để tiếp tục bài.',
+      entryCopyFr:'3 phrases courtes : garde la même personne et l’action, puis passe au futur proche avec aller + infinitif. Facultatif pour continuer la leçon.',
+      introCopyVi:'Bạn không học thêm từ mới. Chỉ giữ cùng người và hành động, rồi dùng đúng dạng aller + travailler.',
+      introCopyFr:'Pas de nouveau vocabulaire : garde la même personne et la même action, puis utilise la bonne forme de aller + travailler.',
+      correctVi:'✓ Đúng. Bạn đã giữ cùng người và chuyển hành động sang tương lai gần.',
+      correctFr:'✓ Correct. Tu as gardé la même personne et reconstruit l’action au futur proche.',
+      doneTitleVi:'Bạn vừa xây 3 câu ở tương lai gần',
+      doneTitleFr:'Tu viens de construire 3 phrases au futur proche',
+      doneCopyVi:'Bạn đã giữ cùng người và hành động, rồi dùng aller + động từ nguyên mẫu. Đây là luyện chuyển đổi, không phải điểm “thành thạo”.',
+      doneCopyFr:'Tu as gardé la même personne et la même action, puis utilisé aller + infinitif. C’est un exercice de transfert, pas un score de « maîtrise ».'
+    })
+  ]);
+
+  let overlay=null,lastTrigger=null,scheduled=false,session=null,activeRoute=ROUTES[0],activeCore=core,exercises=legacyExercises;
 
   function currentLessonNumber(){
     const title=document.querySelector('.screen-lesson .topbar h1')?.textContent||'';
     return Number(title.match(/\d+/)?.[0]||0);
   }
+
+  function routeForLesson(number){return ROUTES.find(route=>route.lesson===number)||null}
 
   function installStyle(){
     if(document.getElementById('ft-transfer-lesson-style'))return;
@@ -35,25 +80,38 @@
     document.head.appendChild(style);
   }
 
-  function entryMarkup(){
-    return `<section class="ft-transfer-entry" data-transfer-entry data-transfer-family="${esc(core.family.id)}"><span class="ft-transfer-eyebrow">🔁 ${esc(T('XÂY CÂU','CONSTRUIRE UNE PHRASE'))}</span><h3>${esc(core.family.title[locale()])}</h3><p>${esc(T('3 câu ngắn: đổi người, giữ ý và động từ, rồi xây lại cả câu. Không bắt buộc để tiếp tục bài.','3 phrases courtes : change la personne, garde l’idée et le verbe, puis reconstruis toute la phrase. Facultatif pour continuer la leçon.'))}</p><button type="button" class="secondary" data-transfer-open>${esc(T('Thử 3 câu • khoảng 2 phút','Essayer 3 phrases • ≈ 2 min'))} ›</button></section>`;
+  function entryMarkup(route){
+    return `<section class="ft-transfer-entry" data-transfer-entry data-transfer-family="${esc(route.family)}" data-transfer-lesson="${route.lesson}"><span class="ft-transfer-eyebrow">🔁 ${esc(T('XÂY CÂU','CONSTRUIRE UNE PHRASE'))}</span><h3>${esc(route.core.family.title[locale()])}</h3><p>${esc(T(route.entryCopyVi,route.entryCopyFr))}</p><button type="button" class="secondary" data-transfer-open>${esc(T('Thử 3 câu • khoảng 2 phút','Essayer 3 phrases • ≈ 2 min'))} ›</button></section>`;
+  }
+
+  function activateRoute(route){
+    activeRoute=route;
+    activeCore=route.core;
+    exercises=route.exercises;
   }
 
   function mountEntry(){
+    const route=routeForLesson(currentLessonNumber());
     const existing=document.querySelector('[data-transfer-entry]');
-    if(currentLessonNumber()!==LESSON){
+    if(!route){
       existing?.remove();
       return;
     }
-    if(overlay||existing)return;
+    activateRoute(route);
+    if(overlay)return;
+    if(existing?.dataset.transferFamily===route.family&&Number(existing.dataset.transferLesson)===route.lesson){
+      lastTrigger=existing.querySelector('[data-transfer-open]');
+      return;
+    }
+    existing?.remove();
     const step=document.querySelector('.screen-lesson .lesson-step');
     if(!step)return;
     const wrap=document.createElement('div');
-    wrap.innerHTML=entryMarkup();
+    wrap.innerHTML=entryMarkup(route);
     const entry=wrap.firstElementChild;
     step.appendChild(entry);
     lastTrigger=entry.querySelector('[data-transfer-open]');
-    lastTrigger.addEventListener('click',open);
+    lastTrigger.addEventListener('click',()=>open(route));
   }
 
   function orderedChoices(view,index){
@@ -63,7 +121,7 @@
   }
 
   function initialState(){return {phase:'intro',index:0,answered:false,choice:null,correct:false}}
-  function open(){session=initialState();renderOverlay()}
+  function open(route=activeRoute){activateRoute(route);session=initialState();renderOverlay()}
   function close(){overlay?.remove();overlay=null;session=null;lastTrigger?.focus?.()}
 
   function progress(){
@@ -86,22 +144,23 @@
     const lang=locale();
     let body='';
     if(session.phase==='intro'){
-      body=`<div class="ft-transfer-copy"><strong>${esc(core.family.instruction[lang])}</strong><p>${esc(T('Không học thêm từ mới. Bạn chỉ dùng những câu và mẫu đã gặp để tự xây một câu khác.','Pas de nouveau vocabulaire : tu réutilises seulement des phrases et des formes déjà rencontrées pour construire une autre phrase.'))}</p></div><button class="primary ft-transfer-next" data-transfer-next>${esc(T('Bắt đầu 3 câu','Commencer les 3 phrases'))} ›</button>`;
+      body=`<div class="ft-transfer-copy"><strong>${esc(activeCore.family.instruction[lang])}</strong><p>${esc(T(activeRoute.introCopyVi,activeRoute.introCopyFr))}</p></div><button class="primary ft-transfer-next" data-transfer-next>${esc(T('Bắt đầu 3 câu','Commencer les 3 phrases'))} ›</button>`;
     }else if(session.phase==='question'){
       const exercise=exercises[session.index];
-      const view=core.view(exercise,lang);
+      const view=activeCore.view(exercise,lang);
       const choices=orderedChoices(view,session.index);
+      const correct=session.answered&&(activeCore===core?core.verify(exercise,session.choice):activeCore.verify(exercise,session.choice));
       const feedback=session.answered
-        ? session.correct
-          ? T('✓ Đúng. Bạn đã đổi người và xây lại đúng cả câu.','✓ Correct. Tu as changé la personne et reconstruit toute la phrase.')
+        ? correct
+          ? T(activeRoute.correctVi,activeRoute.correctFr)
           : T(`→ Gần đúng. Câu cần xây là : ${view.target}`,`→ Presque. La phrase à reconstruire est : ${view.target}`)
         : '';
-      body=`<div class="ft-transfer-q"><span class="muted">${session.index+1}/${exercises.length}</span><h3>${esc(view.cue)}</h3><div class="ft-transfer-source">${esc(view.source)}</div><div class="ft-transfer-options">${choices.map(choice=>{const classes=[];if(session.answered&&choice===view.target)classes.push('ok');if(session.answered&&choice===session.choice&&!session.correct)classes.push('bad');return `<button type="button"${classes.length?` class="${classes.join(' ')}"`:''} data-transfer-choice="${esc(choice)}"${session.answered?' disabled':''}>${esc(choice)}</button>`}).join('')}</div><p class="ft-transfer-feedback" data-transfer-feedback>${esc(feedback)}</p><button class="primary ft-transfer-next" data-transfer-next${session.answered?'':' hidden'}>${esc(session.index===exercises.length-1?T('Kết thúc','Terminer'):T('Câu tiếp theo','Phrase suivante'))} ›</button></div>`;
+      body=`<div class="ft-transfer-q"><span class="muted">${session.index+1}/${exercises.length}</span><h3>${esc(view.cue)}</h3><div class="ft-transfer-source">${esc(view.source)}</div><div class="ft-transfer-options">${choices.map(choice=>{const classes=[];if(session.answered&&choice===view.target)classes.push('ok');if(session.answered&&choice===session.choice&&!correct)classes.push('bad');return `<button type="button"${classes.length?` class="${classes.join(' ')}"`:''} data-transfer-choice="${esc(choice)}"${session.answered?' disabled':''}>${esc(choice)}</button>`}).join('')}</div><p class="ft-transfer-feedback" data-transfer-feedback>${esc(feedback)}</p><button class="primary ft-transfer-next" data-transfer-next${session.answered?'':' hidden'}>${esc(session.index===exercises.length-1?T('Kết thúc','Terminer'):T('Câu tiếp theo','Phrase suivante'))} ›</button></div>`;
     }else{
-      body=`<div class="ft-transfer-done"><div class="mark">✓</div><h3>${esc(T('Bạn vừa tự xây 3 câu','Tu viens de construire 3 phrases'))}</h3><p>${esc(T('Bạn đã giữ ý chính, đổi người làm hành động và điều chỉnh động từ. Đây là luyện chuyển đổi, không phải điểm “thành thạo”.','Tu as gardé l’idée, changé la personne qui agit et ajusté le verbe. C’est un exercice de transfert, pas un score de « maîtrise ».'))}</p><button class="primary ft-transfer-next" data-transfer-close>${esc(T('Quay lại bài học','Retour à la leçon'))} ›</button></div>`;
+      body=`<div class="ft-transfer-done"><div class="mark">✓</div><h3>${esc(T(activeRoute.doneTitleVi,activeRoute.doneTitleFr))}</h3><p>${esc(T(activeRoute.doneCopyVi,activeRoute.doneCopyFr))}</p><button class="primary ft-transfer-next" data-transfer-close>${esc(T('Quay lại bài học','Retour à la leçon'))} ›</button></div>`;
     }
 
-    overlay.innerHTML=`<section class="ft-transfer-dialog" data-transfer-active-family="${esc(core.family.id)}"><div class="ft-transfer-top"><div><span class="ft-transfer-eyebrow">BUILD 38.2 • TRANSFER</span><h2>${esc(core.family.title[lang])}</h2></div><button type="button" class="ft-transfer-close" data-transfer-close aria-label="${esc(T('Đóng','Fermer'))}">×</button></div><div class="ft-transfer-bar"><i style="width:${progress()}%"></i></div>${body}</section>`;
+    overlay.innerHTML=`<section class="ft-transfer-dialog" data-transfer-active-family="${esc(activeRoute.family)}" data-transfer-active-lesson="${activeRoute.lesson}"><div class="ft-transfer-top"><div><span class="ft-transfer-eyebrow">BUILD ${esc(activeRoute.slice)} • TRANSFER</span><h2>${esc(activeCore.family.title[lang])}</h2></div><button type="button" class="ft-transfer-close" data-transfer-close aria-label="${esc(T('Đóng','Fermer'))}">×</button></div><div class="ft-transfer-bar"><i style="width:${progress()}%"></i></div>${body}</section>`;
     overlay.querySelectorAll('[data-transfer-close]').forEach(button=>button.addEventListener('click',close));
     overlay.querySelector('[data-transfer-next]')?.addEventListener('click',next);
     overlay.querySelectorAll('[data-transfer-choice]').forEach(button=>button.addEventListener('click',()=>answer(button)));
@@ -122,13 +181,14 @@
     if(session?.phase!=='question'||session.answered)return;
     const exercise=exercises[session.index];
     const choice=button.dataset.transferChoice;
-    session={...session,answered:true,choice,correct:core.verify(exercise,choice)};
+    const correct=activeCore===core?core.verify(exercise,choice):activeCore.verify(exercise,choice);
+    session={...session,answered:true,choice,correct};
     renderOverlay();
   }
 
   function decorate(){
-    root.dataset.transferIntegration='38.2';
-    root.dataset.transferLesson=String(LESSON);
+    root.dataset.transferIntegration='38.5';
+    root.dataset.transferLesson=String(currentLessonNumber());
     mountEntry();
   }
   function schedule(){if(scheduled)return;scheduled=true;queueMicrotask(()=>{scheduled=false;decorate()})}
@@ -142,11 +202,17 @@
   window.FrenchTranquilleTransferLesson=Object.freeze({
     build:38,
     slice:'38.2',
+    integration:'38.5',
     status:'learner-facing-contextual',
     family:core.family.id,
     lesson:LESSON,
     exerciseIndexes:EXERCISE_INDEXES,
-    exercises,
+    exercises:legacyExercises,
+    futureFamily:futureCore.family.id,
+    futureLesson:FUTURE_LESSON,
+    futureExerciseIndexes:FUTURE_EXERCISE_INDEXES,
+    futureExercises,
+    routes:ROUTES,
     persistent:false,
     masteryClaim:false,
     refresh:decorate,
