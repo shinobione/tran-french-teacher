@@ -45,7 +45,8 @@ Build 38.11 is **NOT AUTHORIZED**.
 - Base: exact accepted main `8790eb059f47bcde0ea399962f7b42a3b9501714`
 - Target public release: **v2.5.0 · Build 38**
 - Pedagogy baseline remains: **v2.3.0 · Build 34**
-- PR: pending creation from this branch in this slice
+- PR: **#206 — Release · v2.5.0 Build 38 certification**
+- Implementation commit before this handoff update: `8b403fc1f22daf066057f7c6999c480e6cb0fe78`
 - Status: **CANDIDATE / NOT MERGED / NOT YET AN ACCEPTED PUBLIC RELEASE**
 
 ### Release-only scope
