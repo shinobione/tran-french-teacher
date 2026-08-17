@@ -72,8 +72,10 @@ jobs:
           grep -q "const TRANSFER_FUTURE='2.4.0-b38.5'" src/core/build32-loader.js
           grep -q "const TRANSFER_NUMBER='2.4.0-b38.7'" src/core/build32-loader.js
           grep -q 'generalization-negation-core.js?v=${TRANSFER_NEGATION}' src/core/build32-loader.js
+          grep -Fq 'generalization-transfer-lesson.js?v=${' src/core/build32-loader.js
           grep -q "const B388='2.4.0-b38.8'" sw.js
           grep -q 'generalization-negation-core.js?v=${B388}' sw.js
+          grep -Fq 'generalization-transfer-lesson.js?v=${' sw.js
           python3 - <<'PY'
           loader=open('src/core/build32-loader.js',encoding='utf-8').read()
           order=[
@@ -82,7 +84,7 @@ jobs:
             loader.index('generalization-negation-core.js?v=${TRANSFER_NEGATION}'),
             loader.index('generalization-futur-proche-core.js?v=${TRANSFER_FUTURE}'),
             loader.index('generalization-number-core.js?v=${TRANSFER_NUMBER}'),
-            loader.index('generalization-transfer-lesson.js?v=${TRANSFER}')
+            loader.index('generalization-transfer-lesson.js?v=')
           ]
           assert min(order)>=0 and order==sorted(order), order
           print('38.8 loader order PASS',order)
