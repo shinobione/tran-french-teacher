@@ -7,11 +7,9 @@
 
 - Repository: `shinobione/tran-french-teacher`.
 - Default branch: `main`.
-- Current runtime-bearing product commit: **`1f65aa163c74f35e445a1d994346193a87a2658b`** — PR **#193**, Build **38.7 · learner-facing nominal plural transfer**.
-- Current governance/CI `main` after successor-safe predecessor maintenance: **`b93d1b63be6ff3f1a804a1cd15a60b9c19a7b1ae`** — PR **#195**, test-only; no product/runtime behavior change.
-- GitHub Pages **#260 / run `31981783564` — SUCCESS** on the runtime-bearing product SHA.
-- Build 38.7 post-merge matrix: **33 SUCCESS + exactly 4 inherited historical failures**, **0 queued**, **0 in-progress**.
-- PR #195 candidate matrix: **all non-inherited workflows SUCCESS**, including 38.2 / 38.5 / 38.7 successor-safe guards; exactly the four inherited failures only.
+- Current runtime-bearing product / governance `main`: **`3fae502dba8faee003b44c5a1b9a9cffd9affec7`** — squash merge of PR **#197**, Build **38.8 · learner-facing negation transfer**.
+- GitHub Pages **#263 / run `32056843564` — SUCCESS** on the exact merge SHA `3fae502dba8faee003b44c5a1b9a9cffd9affec7`.
+- Build 38.8 dedicated tribunal on the final candidate head was **SUCCESS**. Merge used a documented **controlled CI-infrastructure exception** because sequential workflow-only successor-safety fixes saturated GitHub Actions with superseded queued runs; this is **not** a claim that the complete final-head matrix had drained before merge.
 - Visible application metadata remains **v2.4.0 · Build 36**.
 - Pedagogy baseline: **v2.3.0 · Build 34**.
 - Curriculum: **52 lessons / 313 items**.
@@ -22,91 +20,120 @@
 - **Build 38 ACTIVE — Generalization & Transfer.**
 - **38.1 CLOSED** — deterministic subject-substitution core.
 - **38.2 CLOSED / DEPLOYED** — subject Transfer in lesson 33.
-- **38.3 CLOSED** — deterministic affirmation → negation core, still pure/non-wired.
+- **38.3 CLOSED** — deterministic affirmation → negation core; core semantics remain pure/ephemeral and are now consumed by the learner-facing 38.8 route.
 - **38.4 CLOSED** — deterministic present → futur proche core.
 - **38.5 CLOSED / DEPLOYED** — futur proche Transfer in lesson 35.
 - **38.6 CLOSED** — deterministic singular → plural nominal core.
 - **38.7 CLOSED / DEPLOYED** — nominal plural Transfer in lesson 13.
-- **38.8 NEXT** — learner-facing integration of the already-certified 38.3 negation core, candidate placement **lesson 34**.
+- **38.8 CLOSED / DEPLOYED** — negation Transfer in lesson 34.
+- **NEXT: Build 38 next-family audit / handoff. No Build 38.9 number or feature is canonically assigned yet.**
 
-## Build 38.7 — certified learner-facing nominal plural transfer
+## Build 38.8 — certified learner-facing negation transfer
 
 Placement:
 
 ```text
-lesson 13 normal content
-→ existing F01–F04 Foundation card
-→ ONE optional nominal-number Transfer card
+lesson 34 normal content
+→ existing F05 Foundation card
+→ ONE optional negation Transfer card
 → 3 deterministic transformations
-→ return to lesson
+→ return focus to Transfer CTA / lesson
 → normal Continue
 ```
 
-Learner subset:
+Exact learner subset, reused unchanged from certified 38.3:
 
 ```text
-la gare    → les gares
-un billet  → des billets
-une table  → des tables
+Je travaille. → Je ne travaille pas.
+J'habite ici. → Je n'habite pas ici.
+J'aime ça. → Je n'aime pas ça.
 ```
 
 Contract:
 
 ```text
-numberIntegration = 38.7
-numberLesson = 13
-numberFamily = singular-plural-regular-noun-phrases
-numberExerciseIndexes = [0,2,3]
+negationIntegration = 38.8
+negationLesson = 34
+negationFamily = affirmation-negation-regular-er-je
+negationExerciseIndexes = [0,1,2]
 ```
 
-The shared Transfer renderer keeps all historical routes explicit:
+The shared Transfer renderer now owns exactly these learner-facing routes:
 
 ```text
-38.2 → lesson 33 / subject-substitution / [0,2,5]
-38.5 → lesson 35 / futur-proche / [0,1,3]
 38.7 → lesson 13 / nominal plural / [0,2,3]
+38.2 → lesson 33 / subject substitution / [0,2,5]
+38.8 → lesson 34 / affirmation → negation / [0,1,2]
+38.5 → lesson 35 / futur proche / [0,1,3]
 ```
 
-Runtime dependency order now includes the certified nominal-number core before the shared adapter:
+There is still **one shared Transfer renderer**. Build 38.8 did not add a second Transfer UI or a new family.
+
+Runtime dependency order:
 
 ```text
 Foundations
 → 38.1 subject core
+→ 38.3 negation core
 → 38.4 future core
 → 38.6 number core
 → shared Transfer adapter
 ```
 
-Installed-PWA parity is preserved by explicit precache of the number core. The PWA cache identity/namespace contract from PR #180 remains unchanged.
+Installed-PWA parity is preserved by explicit precache of the certified negation core. The PWA identity/cache-namespace contract from PR #180 remains unchanged.
 
-### 38.7 proof / closeout
+### 38.8 proof / closeout
 
 ```text
-PR #193
-candidate head 95d86bd6a7e1e6a423b32e2cc1f2279b6cf34d02
-merge 1f65aa163c74f35e445a1d994346193a87a2658b
-Pages #260 / run 31981783564 — SUCCESS
-post-merge = 33 SUCCESS + exactly 4 inherited failures
-0 queued / 0 in-progress
+PR #197
+final candidate head 06fcb745edb86018294f6369fd4922abe69687f3
+squash merge 3fae502dba8faee003b44c5a1b9a9cffd9affec7
+Pages #263 / run 32056843564 — SUCCESS on exact merge SHA
 ```
 
-The 38.7 gate replays and certifies:
+The final 38.8 tribunal proved:
 
 ```text
-38.2 / 38.5 / 38.6 predecessor contracts
-F01–F04 browser predecessor
-lesson 13 VI / DEBUG FR × desktop / 390×844
-3 real nominal-plural answer clicks
-lesson 12 / 14 route boundaries
+certified 38.3 core reused unchanged
+F05 coexistence in lesson 34
+ONE Transfer card after F05
+VI / DEBUG FR × desktop / 390×844
+3 deterministic learner answer clicks
+lesson 13 nominal route unchanged
 lesson 33 subject route unchanged
 lesson 35 future route unchanged
+lesson 36 no negation route leak
+return focus + normal Continue
 localStorage byte-identical
 no horizontal overflow
 >=44px targets
-installed-PWA number-core precache
+installed-PWA negation-core precache
+no durable learner write
+no Evidence product read
+no mastery claim
 ```
 
-No physical smoke is required specifically for 38.7 because it is a deterministic optional lesson integration built on already field-approved navigation and PWA contracts, with no new device API.
+### CI-infrastructure classification — permanent note
+
+The first PR #197 full matrix exposed eight stale predecessor ownership guards. Their functional/contract checks passed; they failed only because historical workflows broadly forbade later delivery wiring such as `src/core/build32-loader.js`, `sw.js` or the shared Transfer adapter.
+
+The fix was **workflow-only successor-safety maintenance**. No certified core or product owner was changed to appease CI.
+
+Executed green after those fixes before merge included:
+
+```text
+Build 37.4 F11 — SUCCESS
+Build 37.5 F05 — SUCCESS
+Build 37.6 F08 — SUCCESS
+Build 37.7 F12 — SUCCESS
+Build 37.8 F13 — SUCCESS
+Build 38.1 subject-substitution successor-safe guard — SUCCESS
+Build 38.8 final-head tribunal — SUCCESS
+```
+
+At merge time, the updated 38.4 and 38.6 workflow reruns were still queued behind the Actions fan-out. Their certified core files were unchanged, their earlier full browser tribunals were green, and their first #197 executions had passed contract checks before failing only at the obsolete broad guard. PR #197 records the exact controlled-infrastructure exception.
+
+**Do not rewrite history as “full matrix green before merge.”** The accurate statement is: product/runtime proof was green, new reds were classified as stale CI ownership guards, successor-safe maintenance was isolated to workflow YAML, and the merge exception was explicitly documented.
 
 ## Locked Build 38 predecessors
 
@@ -140,7 +167,7 @@ Family:
 affirmation-negation-regular-er-je
 ```
 
-38.3 remains pure/non-wired until 38.8.
+38.3 core semantics remain deterministic, narrow and ephemeral. Build 38.8 wires that certified core into lesson 34; it does not broaden the core.
 
 ### 38.4 futur proche core
 
@@ -172,62 +199,11 @@ une table     → des tables
 lesson 13 → F01–F04 → ONE nominal-plural Transfer card
 ```
 
-## 38.8 audit — learner-facing negation integration
-
-The old warning remains valid for lessons 17–20: **do not mount the 38.3 transfer there merely because F11 teaches negation there.** At that point, the full regular-`-er` source scaffold is not yet mature.
-
-By the end of lesson 33, however, all required evidence exists:
+### 38.8 learner placement
 
 ```text
-F11 / lessons 17–20
-→ ne / n’ ... pas is already taught in real sentences
-
-F08 / lessons 32–33
-→ travailler / habiter / aimer regular-present forms are consolidated
-
-historical lesson anchors
-→ J'habite... already encountered earlier
-→ J'aime... already encountered earlier
-
-38.1 / 38.2
-→ deterministic sentence reconstruction from the same verb family is already certified
+lesson 34 → F05 → ONE affirmation→negation Transfer card
 ```
-
-### Preferred placement — lesson 34
-
-Lesson 34 is the first clean learner point **after** the complete F11 + F08 + 38.1/38.2 scaffold.
-
-It also preserves the one-Transfer-per-lesson rhythm:
-
-```text
-lesson 13 → nominal plural Transfer
-lesson 33 → subject-substitution Transfer
-lesson 34 → negation Transfer candidate
-lesson 35 → futur-proche Transfer
-```
-
-Candidate 38.8 sequence:
-
-```text
-lesson 34 normal content
-→ existing F05 Foundation card
-→ ONE optional negation Transfer card
-→ 3 deterministic transformations from certified 38.3
-→ return to lesson
-→ normal Continue
-```
-
-Exact proposed learner subset remains the certified 38.3 catalog:
-
-```text
-Je travaille. → Je ne travaille pas.
-J'habite ici. → Je n'habite pas ici.
-J'aime ça. → Je n'aime pas ça.
-```
-
-38.8 must **reuse the existing shared Transfer renderer**. No second Transfer UI, no random generation, no new vocabulary, no learner write, no Evidence product read, no mastery claim.
-
-Before implementation, verify the live lesson-34/F05 DOM placement and replay lessons 13/33/35 as predecessor contracts.
 
 ## Build 37 ownership — LOCKED
 
@@ -251,7 +227,7 @@ Exactly four historical failures remain baseline debt:
 3. `Build 36.3 Recovery v3 durability tribunal`;
 4. `Build 28 Data recovery smoke`.
 
-Any other failure must be classified. Prove harness flakes with unchanged reruns before patching product code.
+Any other failure must be classified. Prove harness flakes with unchanged reruns before patching product code. Historical red debt is not permission to ignore new failures.
 
 ## Protected boundaries
 
@@ -275,42 +251,30 @@ Build 37 Foundation routes
 38.2 lesson-33 Transfer placement
 38.5 lesson-35 Transfer placement
 38.7 lesson-13 Transfer placement
+38.8 lesson-34 Transfer placement
+shared Transfer renderer ownership
 ```
 
-## NEXT — Build 38.8 · learner-facing negation transfer
+## NEXT — Build 38 next-family audit / handoff
 
-Canonical candidate direction:
+There is **no canonical Build 38.9 feature assigned yet**. Do not infer a number or implementation from the prioritized-family list alone.
+
+Next action is an audit, not a product mutation:
 
 ```text
-reuse certified 38.3 core
-→ candidate lesson 34
-→ mount after existing F05 Foundation card
-→ reuse shared Transfer renderer
-→ 3 deterministic exercises only
-→ no new vocabulary / no persistence / no mastery claim
-→ preserve lessons 13 / 33 / 35 exactly
+read live curriculum + current Transfer/Foundations ownership
+→ inventory remaining narrow transfer opportunities
+→ verify learner-known source vocabulary/structures at candidate lesson points
+→ reject families that duplicate existing Foundations or need unseen vocabulary
+→ prefer deterministic source/target ownership before any adaptation
+→ select at most ONE next family and placement
+→ record explicit handoff / build number only after the audit
 ```
 
-Implementation slice must prove at minimum:
+Potential roadmap families such as agreement transformations or recombination are **directions to audit**, not pre-authorized implementation slices.
 
-```text
-38.3 Node predecessor PASS
-F05 predecessor PASS
-38.2 lesson33 browser predecessor PASS
-38.5 lesson35 browser predecessor PASS
-38.7 lesson13 browser predecessor PASS
-lesson34 VI / DEBUG FR × desktop / 390×844
-3 real answer clicks
-return focus + normal Continue
-lesson33/35/13 route identities unchanged
-localStorage byte-identical
-no horizontal overflow
->=44px targets
-installed-PWA precache for the negation core if wired at runtime
-```
-
-Per `AGENTS.md`, 38.8 is **one implementation slice**. Materialize it in a PR and stop; do not start another transfer family in the same coding-agent session.
+Do not start Build 39 inside this handoff. Build 39 remains a later Learner Intelligence phase that should consume reliable evidence from completed prior systems.
 
 ## Documentation note
 
-`MASTER-ROADMAP.md` on this same closeout branch is reconciled through 38.7 and records 38.8 as NEXT. Repository/GitHub reality still wins over any stale wording if this branch diverges before merge.
+`MASTER-ROADMAP.md` must match this closeout: Build 38.8 CLOSED / DEPLOYED, PR #197 + merge `3fae502d…`, Pages #263 green, and NEXT = Build 38 next-family audit with no 38.9 assigned yet. Repository/GitHub reality still wins if later commits diverge from this snapshot.

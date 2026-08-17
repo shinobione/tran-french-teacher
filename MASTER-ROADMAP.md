@@ -16,8 +16,8 @@
 |---|---|
 | Application runtime metadata | **V2.4.0 · Build 36** |
 | Product pedagogy baseline | **V2.3.0 · Build 34** |
-| Current runtime-bearing product | **`1f65aa163c74f35e445a1d994346193a87a2658b`** — PR #193 / Build 38.7 |
-| GitHub Pages | **#260 / run `31981783564` SUCCESS** on runtime SHA |
+| Current runtime-bearing product / governance main | **`3fae502dba8faee003b44c5a1b9a9cffd9affec7`** — PR #197 / Build 38.8 |
+| GitHub Pages | **#263 / run `32056843564` SUCCESS** on exact runtime SHA |
 | Curriculum | **52 lessons / 313 items** |
 | Scenario | **44 situations / 132 turns** |
 | Speaking Loop | **52/52 · max 2 moments / lesson** |
@@ -37,7 +37,8 @@
 | Build 38.5 | **CLOSED · learner-facing futur-proche integration** |
 | Build 38.6 | **CLOSED · deterministic singular → plural nominal core** |
 | Build 38.7 | **CLOSED · learner-facing nominal-plural integration** |
-| Build 38.8 | **NEXT · learner-facing integration of certified 38.3 negation core** |
+| Build 38.8 | **CLOSED · learner-facing negation integration** |
+| Next Build 38 action | **next-family audit / handoff; no 38.9 assigned yet** |
 | Primary field target | **iPhone / Safari / installed PWA** |
 
 ## Current interpretation
@@ -48,10 +49,11 @@
 - Build 37 industrialized the Foundations system without renumbering the 52 lessons, without persistent Foundations state, and without treating Evidence as product truth.
 - F16 (`à/de` contractions) remains **deferred / not completed**; Build 37 stays closed.
 - Build 38 owns **generalization and construction of unseen phrases**.
-- 38.1 / 38.3 / 38.4 / 38.6 are deterministic transfer cores.
-- 38.2 / 38.5 / 38.7 expose three of those cores contextually in lessons 33 / 35 / 13 through the same shared Transfer renderer.
-- Build 38.7 is merged/deployed at `1f65aa…`; Pages #260 is green; post-merge CI is **33 SUCCESS + exactly the four inherited historical failures**, zero queued/in-progress.
-- Build 38.8 should expose the already-certified 38.3 negation core only after the full F11 + F08 + regular-`-er` source scaffold has matured. The current candidate placement is **lesson 34**.
+- 38.1 / 38.3 / 38.4 / 38.6 remain the certified deterministic transfer cores.
+- 38.2 / 38.5 / 38.7 / 38.8 expose those cores contextually in lessons 33 / 35 / 13 / 34 through the **same shared Transfer renderer**.
+- Build 38.8 is merged/deployed at `3fae502d…`; Pages #263 is green on that exact SHA.
+- PR #197 merged under a documented **controlled CI-infrastructure exception** after sequential workflow-only successor-safety fixes saturated GitHub Actions. Do not rewrite that event as “the entire final-head matrix drained green before merge.” Product/runtime proof was green; new reds were classified as stale historical ownership guards; the maintenance was isolated to workflow YAML.
+- The next Build 38 action is an **audit of the next narrow transfer family and placement**. No Build 38.9 number or feature is canonically assigned by this roadmap yet.
 
 ---
 
@@ -177,6 +179,8 @@ Build 38.4 deterministic futur-proche semantics
 Build 38.5 lesson-35 placement / round-trip contract
 Build 38.6 deterministic nominal-plural semantics
 Build 38.7 lesson-13 placement / round-trip contract
+Build 38.8 lesson-34 placement / round-trip contract
+shared Transfer renderer ownership
 ```
 
 ---
@@ -438,7 +442,7 @@ Therefore F16 is not required for Build 37 closeout and may return only if futur
 
 Move from “recognize/recall known phrases and understand selected Foundations” toward **constructing unseen but valid phrases from already-known material**.
 
-Prioritized transfer families:
+Prioritized transfer families remain directions to audit, not automatic implementation authorization:
 
 ```text
 singular → plural
@@ -511,7 +515,7 @@ touch targets >=44 px
 Build 37.8 predecessor PASS
 ```
 
-## 38.2 — learner-facing subject substitution — CLOSED
+## 38.2 — learner-facing subject substitution — CLOSED / DEPLOYED
 
 38.2 owns placement and interaction only; it does not broaden the 38.1 matrix.
 
@@ -520,8 +524,8 @@ Canonical placement:
 ```text
 lesson 33 normal content
 → existing F08 optional card
-→ optional Transfer card
-→ 3 deterministic subject-substitution exercises
+→ ONE optional subject-substitution Transfer card
+→ 3 deterministic exercises
 → no mastery claim
 → return to lesson
 → normal Continue remains available
@@ -580,7 +584,7 @@ Evidence product reads
 mastery claims
 ```
 
-38.3 remains a pure/non-wired core until 38.8.
+38.3 remains a pure deterministic core with no durable ownership. **Build 38.8 now consumes this certified core learner-facing; that wiring does not broaden 38.3 semantics.**
 
 ## 38.4 — present → futur proche core — CLOSED
 
@@ -599,7 +603,7 @@ Il travaille.   → Il va travailler.
 Elle travaille. → Elle va travailler.
 ```
 
-## 38.5 — learner-facing futur proche — CLOSED
+## 38.5 — learner-facing futur proche — CLOSED / DEPLOYED
 
 Canonical placement:
 
@@ -639,9 +643,9 @@ un billet     → des billets
 une table     → des tables
 ```
 
-38.6 is pure/non-wired and uses only learner-known nouns plus the certified F01–F04 article system.
+38.6 remains deterministic/pure and uses only learner-known nouns plus the certified F01–F04 article system.
 
-## 38.7 — learner-facing nominal plural — CLOSED
+## 38.7 — learner-facing nominal plural — CLOSED / DEPLOYED
 
 Canonical placement:
 
@@ -683,13 +687,13 @@ post-merge: 33 SUCCESS + exactly 4 inherited failures
 
 38.7 preserves 38.2 lesson 33 and 38.5 lesson 35 exactly, keeps learner localStorage byte-identical, preserves installed-PWA offline parity and adds no new vocabulary or mastery claim.
 
-## 38.8 — learner-facing negation transfer — NEXT
+## 38.8 — learner-facing negation transfer — CLOSED / DEPLOYED
 
-38.8 may expose **only** the already-certified 38.3 core. It must not broaden negation semantics in the same slice.
+38.8 exposes **only** the already-certified 38.3 core. It does not broaden negation semantics.
 
-### Why not lessons 17–20
+### Placement — lesson 34
 
-F11 teaches real negation there, but at that point the full regular-`-er` source scaffold used by 38.3 is not yet mature. Do not wire 38.3 merely because F11 is present.
+Lessons 17–20 were deliberately rejected for this Transfer merely because F11 lives there: at that point the full regular-`-er` source scaffold used by 38.3 is not yet mature.
 
 By the end of lesson 33, the scaffold is complete:
 
@@ -700,25 +704,23 @@ historical anchors   → J'habite... / J'aime...
 38.1 / 38.2          → sentence reconstruction already certified
 ```
 
-### Candidate placement — lesson 34
-
-Lesson 34 is the first clean learner point after that complete scaffold and keeps one Transfer card per lesson:
+Lesson 34 is therefore the first clean learner point after that scaffold and preserves one Transfer card per lesson:
 
 ```text
 lesson 13 → nominal plural Transfer
 lesson 33 → subject substitution Transfer
-lesson 34 → negation Transfer candidate
+lesson 34 → negation Transfer
 lesson 35 → futur proche Transfer
 ```
 
-Candidate flow:
+Canonical flow:
 
 ```text
 lesson 34 normal content
 → existing F05 Foundation card
 → ONE optional negation Transfer card
 → 3 deterministic 38.3 transformations
-→ return to lesson
+→ return focus to Transfer CTA / lesson
 → normal Continue
 ```
 
@@ -730,9 +732,29 @@ J'habite ici. → Je n'habite pas ici.
 J'aime ça. → Je n'aime pas ça.
 ```
 
-38.8 must reuse the existing shared Transfer renderer and preserve all earlier routes.
+Shared-renderer contract:
 
-Explicit 38.8 exclusions:
+```text
+negationIntegration = 38.8
+negationLesson = 34
+negationFamily = affirmation-negation-regular-er-je
+negationExerciseIndexes = [0,1,2]
+```
+
+Runtime dependency order after 38.8:
+
+```text
+Foundations
+→ 38.1 subject core
+→ 38.3 negation core
+→ 38.4 future core
+→ 38.6 number core
+→ shared Transfer adapter
+```
+
+Installed-PWA precache explicitly includes the certified negation core. No PWA identity/cache-namespace migration was introduced.
+
+38.8 exclusions remain locked:
 
 ```text
 no second Transfer UI
@@ -749,25 +771,69 @@ no Foundation-route change
 no voice / Recovery / Premium change
 ```
 
-Minimum proof gate:
+Closeout:
 
 ```text
-38.3 Node predecessor PASS
-F05 predecessor PASS
-38.2 lesson33 browser predecessor PASS
-38.5 lesson35 browser predecessor PASS
-38.7 lesson13 browser predecessor PASS
+PR #197 MERGED
+final candidate head 06fcb745edb86018294f6369fd4922abe69687f3
+squash merge 3fae502dba8faee003b44c5a1b9a9cffd9affec7
+Pages #263 / run 32056843564 SUCCESS on exact merge SHA
+```
+
+The final Build 38.8 tribunal certified:
+
+```text
+38.3 certified core reused unchanged
+F05 predecessor/coexistence
 lesson34 VI / DEBUG FR × desktop / 390×844
 3 real answer clicks
 return focus + normal Continue
-lesson13/33/35 route identities unchanged
+lesson13 / 33 / 35 route identities unchanged
+lesson36 no negation-route leak
 localStorage byte-identical
 no horizontal overflow
 >=44px targets
-installed-PWA precache for 38.3 core if wired at runtime
+installed-PWA negation-core precache
 ```
 
-Further Build 38 families remain one-at-a-time after 38.8. Do **not** start Build 39 inside Build 38.
+### PR #197 CI-infrastructure note
+
+The first full PR matrix exposed eight stale predecessor **ownership guards**. Their functional/contract checks passed and they failed only because old workflows broadly prohibited successor runtime delivery changes.
+
+Successor-safe fixes were workflow-only. They preserved each certified owner while allowing later runtime wiring outside that owner.
+
+Before merge, actual green successor-safe executions included F11, F05, F08, F12, F13, Build 38.1 and the final-head Build 38.8 tribunal. Updated 38.4 and 38.6 workflow reruns remained queued behind the Actions fan-out; their certified core files were unchanged, previous full browser tribunals were green, and their initial #197 contract steps had passed before the obsolete guard failure.
+
+Therefore PR #197 merged under a documented **controlled CI-infrastructure exception**. This is deliberately narrower than saying “full matrix green.” Product/runtime evidence was green and Pages subsequently deployed the exact merge SHA successfully.
+
+## NEXT — Build 38 next-family audit / handoff
+
+**No Build 38.9 feature is assigned yet.** The remaining prioritized families are audit directions, not authorization to implement them automatically.
+
+Canonical next action:
+
+```text
+read live curriculum + current Transfer/Foundations ownership
+→ inventory remaining narrow transfer opportunities
+→ verify that source vocabulary and structures are already learner-known at the candidate placement
+→ reject duplication of existing Foundations teaching
+→ reject families needing unseen vocabulary or broad exception logic
+→ prefer deterministic source/target ownership
+→ select at most ONE next family + placement
+→ only then assign the next build number and implementation handoff
+```
+
+Candidate directions that may be audited include:
+
+```text
+agreement transformations
+recombination across already-known vocabulary / structures
+other narrow transformations justified by the live curriculum
+```
+
+Do not infer that either is automatically the winner.
+
+Further Build 38 families remain one-at-a-time. **Do not start Build 39 inside Build 38.**
 
 ---
 
@@ -783,6 +849,8 @@ Tyffany chooses whether the next useful action is:
 - transfer/construction.
 
 Build 39 should consume reliable evidence from prior systems; it must not invent mastery from recognition failures or decorative activity counts.
+
+Build 39 remains future work. It is **not** the next implementation slice while Build 38 still has an unresolved next-family audit.
 
 ---
 
@@ -800,94 +868,15 @@ Outcome may be:
 
 ---
 
-# 10. Parallel maintenance tracks — no build-number theft
+# 10. CI baseline / governance note
 
-Continue as needed:
-
-- iPhone/Safari/PWA compatibility;
-- accessibility;
-- safe-area and target sizing;
-- offline/service-worker correctness;
-- performance;
-- Recovery/backup reliability;
-- CI flake hardening that does not weaken assertions;
-- documentation/governance;
-- concrete visual regressions against V5.10 field-accepted contracts.
-
-These tracks must not become excuses to rewrite pedagogical architecture or consume reserved build numbers.
-
-Known inherited CI debt after Build 38.7:
+Exactly four historical failures remain known baseline debt unless separately repaired:
 
 1. `Build 36.2 Evidence shadow adoption`;
 2. `V2.0.0 Freeze tribunal`;
 3. `Build 36.3 Recovery v3 durability tribunal`;
 4. `Build 28 Data recovery smoke`.
 
-Classify these separately from any new Build 38 regression.
+They do not authorize ignoring a new red. Any new failure must be classified against the current candidate. Harness/runner flakes should be rerun unchanged before product mutation.
 
----
-
-# 11. Agent execution policy
-
-## Mandatory boot
-
-```text
-read AGENTS.md
-→ read PROJECT-STATE.md
-→ read this MASTER-ROADMAP.md
-→ verify current main / PRs / issues / CI / Pages
-→ continue from NEXT, not chat history
-```
-
-Repository/GitHub reality wins over stale documentation.
-
-## One coherent slice
-
-For implementation work:
-
-```text
-audit exact current owner
-→ implement ONE named slice
-→ run relevant deterministic/browser proof
-→ materialize in git
-→ open/update candidate PR
-→ update candidate checkpoint
-→ STOP for control review unless user explicitly delegated merge/next work
-```
-
-Never rely on hidden workspace state as project memory.
-
-If a CI failure is a known harness flake, prove it from logs/reruns before retrying unchanged. Do not mutate product code to satisfy flaky Chrome timing.
-
-Never declare a physical-device gate complete from automation alone.
-
----
-
-# 12. Next-agent checklist
-
-Before touching 38.8:
-
-1. read `AGENTS.md`;
-2. read `PROJECT-STATE.md`;
-3. read Build 38.3 CLOSED and 38.8 NEXT above;
-4. inspect current `main`, open PRs and current Pages SHA;
-5. preserve Premium V5.10 field contracts;
-6. preserve Recovery v3 / backup v3 / seven-store ownership;
-7. preserve Evidence as derived shadow and original six stores as product truth;
-8. preserve Build 37 Foundation routes/owners;
-9. preserve 38.1 / 38.3 / 38.4 / 38.6 deterministic core semantics;
-10. preserve 38.2 lesson-33, 38.5 lesson-35 and 38.7 lesson-13 placements;
-11. verify lesson-34/F05 DOM ordering before wiring;
-12. preserve zero-flash atomic navigation;
-13. keep DEBUG independent from theme;
-14. do not regenerate locked Premium assets for a pedagogical task;
-15. implement only learner-facing reuse of the certified negation core;
-16. keep learner storage byte-identical;
-17. materialize one candidate PR and stop for control review unless merge/next work was explicitly delegated;
-18. do not start Build 39 automatically.
-
----
-
-# Canonical one-line order
-
-> **Premium V5.10 FIELD PASS → Build 35 CLOSED → Build 36 CLOSED → Build 37 Foundations CLOSED → 38.1 subject core CLOSED → 38.2 subject integration CLOSED → 38.3 negation core CLOSED → 38.4 futur-proche core CLOSED → 38.5 future integration CLOSED → 38.6 nominal-plural core CLOSED → 38.7 nominal-plural integration CLOSED → 38.8 learner-facing negation integration NEXT → further Build 38 transfer families one-at-a-time → Build 39 Learner Intelligence 3 → Build 40 A1 Consolidation Audit → A2 only after Build 40 decision.**
+Workflow successor-safety is now a permanent governance requirement: a predecessor workflow should lock its **certified owner/contract**, not prohibit all legitimate future successor delivery elsewhere in the repository.
