@@ -7,8 +7,10 @@
 
 - Repository: `shinobione/tran-french-teacher`.
 - Default branch: `main`.
-- Current runtime-bearing product / governance `main`: **`3fae502dba8faee003b44c5a1b9a9cffd9affec7`** — squash merge of PR **#197**, Build **38.8 · learner-facing negation transfer**.
-- GitHub Pages **#263 / run `32056843564` — SUCCESS** on the exact merge SHA `3fae502dba8faee003b44c5a1b9a9cffd9affec7`.
+- Current governance `main`: **`ec0c2d9eddba72f5385d23005d203d72c34ca571`** — docs-only Build 38.8 closeout / next-family handoff.
+- Current runtime-bearing product: **`3fae502dba8faee003b44c5a1b9a9cffd9affec7`** — squash merge of PR **#197**, Build **38.8 · learner-facing negation transfer**.
+- GitHub Pages runtime proof: **#263 / run `32056843564` — SUCCESS** on exact runtime SHA `3fae502dba8faee003b44c5a1b9a9cffd9affec7`.
+- GitHub Pages closeout proof: **#264 / run `32057646904` — SUCCESS** on exact governance SHA `ec0c2d9eddba72f5385d23005d203d72c34ca571`.
 - Build 38.8 dedicated tribunal on the final candidate head was **SUCCESS**. Merge used a documented **controlled CI-infrastructure exception** because sequential workflow-only successor-safety fixes saturated GitHub Actions with superseded queued runs; this is **not** a claim that the complete final-head matrix had drained before merge.
 - Visible application metadata remains **v2.4.0 · Build 36**.
 - Pedagogy baseline: **v2.3.0 · Build 34**.
@@ -26,7 +28,61 @@
 - **38.6 CLOSED** — deterministic singular → plural nominal core.
 - **38.7 CLOSED / DEPLOYED** — nominal plural Transfer in lesson 13.
 - **38.8 CLOSED / DEPLOYED** — negation Transfer in lesson 34.
-- **NEXT: Build 38 next-family audit / handoff. No Build 38.9 number or feature is canonically assigned yet.**
+- **38.9 CANDIDATE / NON-WIRED** — deterministic `nous → on` spoken-French transfer core on PR **#199**.
+- Active candidate branch: **`build38/spoken-on-transfer-core`**.
+- Initial 38.9 candidate commit: **`57293ada3267fe5899752e0c8b424a8b092e4d39`**.
+- **NEXT: review/certify PR #199 only. Do not wire a learner-facing 38.10 route automatically.**
+
+## Build 38.9 — current candidate / audit winner
+
+The post-38.8 next-family audit selected a narrow recombination already scaffolded by the live curriculum:
+
+```text
+family = nous-on-spoken-equivalence
+status = pure-non-wired
+lesson 34 source scaffold = nous
+lesson 52 / F18 target scaffold = spoken on meaning nous
+```
+
+Exact candidate catalog:
+
+```text
+Nous travaillons. → On travaille.
+Nous rentrons.    → On rentre.
+Nous allons à…    → On va à…
+```
+
+Why this family won:
+
+- lesson 34 already teaches `Nous travaillons.`, `Nous rentrons.` and `Nous allons à…`;
+- lesson 52 explicitly says `on` very often replaces `nous` in spoken French and takes the verb form used with `il/elle`;
+- Foundations F18 already owns `spoken-on` as `explicit / reuse-existing / lesson 52`;
+- therefore 38.9 recombines known structures instead of inventing a new Foundation concept or new vocabulary.
+
+Agreement transformation was audited but **not selected** for this slice: F13 gives Trân several feminine forms, while the corresponding masculine source forms are mostly distractors rather than equally solid learner-facing acquisitions. A masculine→feminine transfer would therefore smuggle new source material into a supposed generalization exercise.
+
+38.9 deliberately excludes:
+
+```text
+On est prêts.
+On a le temps.
+generic / indefinite on
+passive on
+object-pronoun rewrites
+negation
+questions
+adjective agreement
+new vocabulary
+random/adaptive generation
+durable writes
+Evidence product reads
+mastery claims
+learner-facing lesson wiring
+```
+
+Candidate files are documented in `docs/BUILD-38.9-SPOKEN-ON-TRANSFER.md`.
+
+A future learner-facing placement is **not assigned** by this candidate. Lesson 52 is the obvious area to audit later, but it must first prove useful construction practice without duplicating the existing lesson or stacking competing pedagogy.
 
 ## Build 38.8 — certified learner-facing negation transfer
 
@@ -218,6 +274,8 @@ F12     → lessons 41–43
 
 F16 remains deferred / not completed.
 
+F18 remains `reuse-existing`, canonically taught by lesson 52; Build 38.9 does not turn it into a new Foundation route.
+
 ## Inherited CI debt
 
 Exactly four historical failures remain baseline debt:
@@ -255,26 +313,22 @@ Build 37 Foundation routes
 shared Transfer renderer ownership
 ```
 
-## NEXT — Build 38 next-family audit / handoff
+## NEXT — review Build 38.9 candidate PR #199
 
-There is **no canonical Build 38.9 feature assigned yet**. Do not infer a number or implementation from the prioritized-family list alone.
-
-Next action is an audit, not a product mutation:
+Current control step:
 
 ```text
-read live curriculum + current Transfer/Foundations ownership
-→ inventory remaining narrow transfer opportunities
-→ verify learner-known source vocabulary/structures at candidate lesson points
-→ reject families that duplicate existing Foundations or need unseen vocabulary
-→ prefer deterministic source/target ownership before any adaptation
-→ select at most ONE next family and placement
-→ record explicit handoff / build number only after the audit
+review PR #199 exact diff
+→ run/classify dedicated 38.9 tribunal and full matrix
+→ allow only the four inherited historical reds
+→ do not mutate product for a runner/harness flake without proof
+→ merge only if the candidate remains pure/non-wired and predecessor owners stay intact
 ```
 
-Potential roadmap families such as agreement transformations or recombination are **directions to audit**, not pre-authorized implementation slices.
+If 38.9 merges, the next action is a **separate learner-placement audit**. Do not assume lesson 52 must receive a Transfer card merely because it teaches `on`.
 
 Do not start Build 39 inside this handoff. Build 39 remains a later Learner Intelligence phase that should consume reliable evidence from completed prior systems.
 
 ## Documentation note
 
-`MASTER-ROADMAP.md` must match this closeout: Build 38.8 CLOSED / DEPLOYED, PR #197 + merge `3fae502d…`, Pages #263 green, and NEXT = Build 38 next-family audit with no 38.9 assigned yet. Repository/GitHub reality still wins if later commits diverge from this snapshot.
+`MASTER-ROADMAP.md` on `main` still represents the last accepted closeout through Build 38.8. The 38.9 audit winner is a **candidate decision carried by PR #199 plus `docs/BUILD-38.9-SPOKEN-ON-TRANSFER.md` and this volatile checkpoint**. If the candidate is accepted/merged, reconcile the durable `MASTER-ROADMAP.md` during closeout. Repository/GitHub reality still wins if later commits diverge from this snapshot.
