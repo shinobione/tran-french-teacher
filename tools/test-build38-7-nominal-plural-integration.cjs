@@ -66,17 +66,17 @@ const foundationsPos=loader.indexOf('foundations-pilot.js?v=${FOUNDATIONS}');
 const subjectPos=loader.indexOf('generalization-transfer-core.js?v=${TRANSFER}');
 const futurePos=loader.indexOf('generalization-futur-proche-core.js?v=${TRANSFER_FUTURE}');
 const numberPos=loader.indexOf('generalization-number-core.js?v=${TRANSFER_NUMBER}');
-const adapterPos=loader.indexOf('generalization-transfer-lesson.js?v=${TRANSFER}');
+const adapterPos=loader.indexOf('generalization-transfer-lesson.js?v=');
 const order=[foundationsPos,subjectPos,futurePos,numberPos,adapterPos];
 assert(order.every(pos=>pos>=0)&&order.join(',')===[...order].sort((a,b)=>a-b).join(','),`38.7 loader order wrong: ${order}`);
 
-// Installed PWA precaches all three learner-facing transfer dependencies.
+// Installed PWA precaches all three certified dependencies and a successor-owned shared adapter.
 assert.match(sw,/const B382='2\.4\.0-b38\.2';/);
 assert.match(sw,/const B385='2\.4\.0-b38\.5';/);
 assert.match(sw,/const B387='2\.4\.0-b38\.7';/);
 assert.match(sw,/generalization-transfer-core\.js\?v=\$\{B382\}/);
 assert.match(sw,/generalization-futur-proche-core\.js\?v=\$\{B385\}/);
 assert.match(sw,/generalization-number-core\.js\?v=\$\{B387\}/);
-assert.match(sw,/generalization-transfer-lesson\.js\?v=\$\{B382\}/);
+assert.match(sw,/generalization-transfer-lesson\.js\?v=\$\{[^}]+\}/);
 
-console.log('Build 38.7 contract OK: lesson13 number route is additive; lesson33/35 contracts and offline dependencies remain explicit');
+console.log('Build 38.7 contract OK: lesson13 number route is additive; lesson33/35 contracts and offline dependencies remain explicit while shared-renderer cache token may advance');
