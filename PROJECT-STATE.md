@@ -8,8 +8,10 @@
 - Repository: `shinobione/tran-french-teacher`.
 - Default branch: `main`.
 - Current runtime-bearing product commit: **`1f65aa163c74f35e445a1d994346193a87a2658b`** — PR **#193**, Build **38.7 · learner-facing nominal plural transfer**.
-- GitHub Pages **#260 / run `31981783564` — SUCCESS** on that exact SHA.
-- Post-merge matrix: **33 SUCCESS + exactly 4 inherited historical failures**, **0 queued**, **0 in-progress**.
+- Current governance/CI `main` after successor-safe predecessor maintenance: **`b93d1b63be6ff3f1a804a1cd15a60b9c19a7b1ae`** — PR **#195**, test-only; no product/runtime behavior change.
+- GitHub Pages **#260 / run `31981783564` — SUCCESS** on the runtime-bearing product SHA.
+- Build 38.7 post-merge matrix: **33 SUCCESS + exactly 4 inherited historical failures**, **0 queued**, **0 in-progress**.
+- PR #195 candidate matrix: **all non-inherited workflows SUCCESS**, including 38.2 / 38.5 / 38.7 successor-safe guards; exactly the four inherited failures only.
 - Visible application metadata remains **v2.4.0 · Build 36**.
 - Pedagogy baseline: **v2.3.0 · Build 34**.
 - Curriculum: **52 lessons / 313 items**.
@@ -311,4 +313,4 @@ Per `AGENTS.md`, 38.8 is **one implementation slice**. Materialize it in a PR an
 
 ## Documentation note
 
-`MASTER-ROADMAP.md` still contains an older volatile checkpoint block from early Build 38. Its **permanent product contracts remain authoritative**, but its current Build-38 status markers must be reconciled with this verified checkpoint before any future roadmap decision that depends on those markers. Repository reality and this `PROJECT-STATE.md` take precedence until that reconciliation is merged.
+`MASTER-ROADMAP.md` on this same closeout branch is reconciled through 38.7 and records 38.8 as NEXT. Repository/GitHub reality still wins over any stale wording if this branch diverges before merge.
