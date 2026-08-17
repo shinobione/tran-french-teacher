@@ -10,14 +10,17 @@
   const NUMBER_EXERCISE_INDEXES=Object.freeze([0,2,3]);
   const NEGATION_LESSON=34;
   const NEGATION_EXERCISE_INDEXES=Object.freeze([0,1,2]);
+  const SPOKEN_ON_LESSON=52;
+  const SPOKEN_ON_EXERCISE_INDEXES=Object.freeze([0,1,2]);
   const root=document.documentElement;
   const core=window.FrenchTranquilleGeneralizationTransfer;
   const futureCore=window.FrenchTranquilleGeneralizationFuturProche;
   const numberCore=window.FrenchTranquilleGeneralizationNumber;
   const negationCore=window.FrenchTranquilleGeneralizationNegation;
+  const spokenOnCore=window.FrenchTranquilleGeneralizationSpokenOn;
   const T=(vi,fr)=>localStorage.getItem(DEBUG)==='1'?fr:vi;
   const locale=()=>localStorage.getItem(DEBUG)==='1'?'fr':'vi';
-  const esc=(value='')=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+  const esc=(value='')=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[char]));
 
   if(!core||core.family?.id!=='subject-substitution-regular-er'||!futureCore||futureCore.family?.id!=='present-futur-proche-travailler-singular'){
     root.dataset.transferLessonAdapter='missing';
@@ -27,10 +30,12 @@
 
   const hasNumberCore=numberCore?.family?.id==='singular-plural-regular-noun-phrases';
   const hasNegationCore=negationCore?.family?.id==='affirmation-negation-regular-er-je';
+  const hasSpokenOnCore=spokenOnCore?.family?.id==='nous-on-spoken-equivalence';
   const legacyExercises=Object.freeze(EXERCISE_INDEXES.map(index=>core.catalog[index]));
   const futureExercises=Object.freeze(FUTURE_EXERCISE_INDEXES.map(index=>futureCore.catalog[index]));
   const numberExercises=Object.freeze(hasNumberCore?NUMBER_EXERCISE_INDEXES.map(index=>numberCore.catalog[index]):[]);
   const negationExercises=Object.freeze(hasNegationCore?NEGATION_EXERCISE_INDEXES.map(index=>negationCore.catalog[index]):[]);
+  const spokenOnExercises=Object.freeze(hasSpokenOnCore?SPOKEN_ON_EXERCISE_INDEXES.map(index=>spokenOnCore.catalog[index]):[]);
   const ROUTES=Object.freeze([
     Object.freeze({
       lesson:LESSON,
@@ -111,6 +116,26 @@
       doneTitleFr:'Tu viens de passer 3 phrases à la négation',
       doneCopyVi:'Bạn đã giữ cùng người, động từ và ý chính, rồi thêm ne / n’ ... pas đúng chỗ. Đây là luyện chuyển đổi, không phải điểm “thành thạo”.',
       doneCopyFr:'Tu as gardé la même personne, le même verbe et la même idée, puis placé ne / n’ ... pas correctement. C’est un exercice de transfert, pas un score de « maîtrise ».'
+    }):null,
+    hasSpokenOnCore?Object.freeze({
+      lesson:SPOKEN_ON_LESSON,
+      slice:'38.10',
+      core:spokenOnCore,
+      family:spokenOnCore.family.id,
+      exerciseIndexes:SPOKEN_ON_EXERCISE_INDEXES,
+      exercises:spokenOnExercises,
+      eyebrowVi:'NÓI TỰ NHIÊN',
+      eyebrowFr:'FRANÇAIS ORAL',
+      entryCopyVi:'3 câu bạn đã học với « nous »: giữ cùng nhóm người và hành động, rồi tự xây lại theo cách nói rất thường gặp với « on ». Không bắt buộc để tiếp tục bài.',
+      entryCopyFr:'3 phrases déjà apprises avec « nous » : garde le même groupe et la même action, puis reconstruis-les comme on les dit très souvent avec « on ». Facultatif pour continuer la leçon.',
+      introCopyVi:'Quy tắc đã có trong bài. Ở đây bạn không học thêm: hãy tự chuyển « nous » sang « on » và dùng dạng động từ như với il/elle.',
+      introCopyFr:'La règle est déjà dans la leçon. Ici, rien de nouveau : transforme toi-même « nous » en « on » et prends la forme verbale de il/elle.',
+      correctVi:'✓ Đúng. Bạn đã giữ cùng ý “chúng ta” và xây lại câu với « on » đúng dạng động từ.',
+      correctFr:'✓ Correct. Tu as gardé le même sens « nous » et reconstruit la phrase avec « on » et la bonne forme verbale.',
+      doneTitleVi:'Bạn vừa chuyển 3 câu từ « nous » sang « on »',
+      doneTitleFr:'Tu viens de passer 3 phrases de « nous » à « on »',
+      doneCopyVi:'Bạn đã lấy những câu « nous » đã biết và tự tạo phiên bản nói tự nhiên với « on ». Đây là luyện chuyển đổi, không phải điểm “thành thạo”.',
+      doneCopyFr:'Tu as repris des phrases connues avec « nous » et construit leur version orale naturelle avec « on ». C’est un exercice de transfert, pas un score de « maîtrise ».'
     }):null
   ].filter(Boolean));
 
@@ -243,6 +268,7 @@
     root.dataset.transferIntegration='38.5';
     root.dataset.transferNumberIntegration=hasNumberCore?'38.7':'0';
     root.dataset.transferNegationIntegration=hasNegationCore?'38.8':'0';
+    root.dataset.transferSpokenOnIntegration=hasSpokenOnCore?'38.10':'0';
     root.dataset.transferLesson=String(currentLessonNumber());
     mountEntry();
   }
@@ -260,6 +286,7 @@
     integration:'38.5',
     numberIntegration:hasNumberCore?'38.7':null,
     negationIntegration:hasNegationCore?'38.8':null,
+    spokenOnIntegration:hasSpokenOnCore?'38.10':null,
     status:'learner-facing-contextual',
     family:core.family.id,
     lesson:LESSON,
@@ -277,6 +304,10 @@
     negationLesson:hasNegationCore?NEGATION_LESSON:null,
     negationExerciseIndexes:hasNegationCore?NEGATION_EXERCISE_INDEXES:Object.freeze([]),
     negationExercises,
+    spokenOnFamily:hasSpokenOnCore?spokenOnCore.family.id:null,
+    spokenOnLesson:hasSpokenOnCore?SPOKEN_ON_LESSON:null,
+    spokenOnExerciseIndexes:hasSpokenOnCore?SPOKEN_ON_EXERCISE_INDEXES:Object.freeze([]),
+    spokenOnExercises,
     routes:ROUTES,
     persistent:false,
     masteryClaim:false,
