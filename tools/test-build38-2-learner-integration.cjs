@@ -41,18 +41,18 @@ for(const forbidden of ['aller','vouloir','pouvoir','devoir']){
 
 assert.match(loader,/const TRANSFER='2\.4\.0-b38\.2';/);
 assert.match(loader,/generalization-transfer-core\.js\?v=\$\{TRANSFER\}/);
-assert.match(loader,/generalization-transfer-lesson\.js\?v=\$\{TRANSFER\}/);
+assert.match(loader,/generalization-transfer-lesson\.js\?v=\$\{[^}]+\}/);
 const foundationsPos=loader.indexOf("foundations-pilot.js?v=${FOUNDATIONS}");
 const corePos=loader.indexOf("generalization-transfer-core.js?v=${TRANSFER}");
-const adapterPos=loader.indexOf("generalization-transfer-lesson.js?v=${TRANSFER}");
+const adapterPos=loader.indexOf('generalization-transfer-lesson.js?v=');
 assert(foundationsPos>=0&&corePos>foundationsPos&&adapterPos>corePos,'38.2 must load after Foundations and core before adapter');
 
 assert.match(sw,/const B382='2\.4\.0-b38\.2';/);
 assert.match(sw,/generalization-transfer-core\.js\?v=\$\{B382\}/);
-assert.match(sw,/generalization-transfer-lesson\.js\?v=\$\{B382\}/);
+assert.match(sw,/generalization-transfer-lesson\.js\?v=\$\{[^}]+\}/);
 
 const chosen=[0,2,5].map(index=>core.catalog[index]);
 assert.deepEqual(chosen.map(x=>x.target),['Tu travailles.','Tu habites ici.','Elle aime ça.']);
 assert(chosen.every(x=>x.durableWrite===false&&x.masteryClaim===false));
 
-console.log('Build 38.2 contract OK: lesson 33 contextual integration, 3 certified exercises, ephemeral only');
+console.log('Build 38.2 contract OK: lesson 33 contextual integration, 3 certified exercises, ephemeral only; shared-renderer cache token may advance in successor slices');
