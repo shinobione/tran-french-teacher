@@ -1,90 +1,75 @@
 # French Trân’quille — CURRENT PROJECT STATE
 
 > **Short volatile handoff. Read this before `MASTER-ROADMAP.md`.**
->
-> Always verify current GitHub / CI reality before acting. Repository reality wins over stale wording.
+> Repository/GitHub reality wins over stale wording. Always verify live `main`, PRs, CI and Pages before acting.
 
-## Current checkpoint
+## Current checkpoint — 2026-08-17
 
-- Reconciled: **2026-08-17**.
 - Repository: `shinobione/tran-french-teacher`.
 - Default branch: `main`.
-- Current runtime-bearing product commit: **`14b1ff58b49b1fab37ca71daee90bb8d7638221e`** — PR **#191**, Build **38.5 · learner-facing futur proche transfer**.
-- GitHub Pages **#256 / run `31980705976` — SUCCESS** on that exact SHA.
-- Post-merge matrix on `14b1ff58…`: **exactly the 4 inherited historical failures**, **0 queued**, **0 in-progress**.
-- Visible application runtime metadata remains **v2.4.0 · Build 36**.
+- Current runtime-bearing product commit: **`a61629b531d4922d7d5c06fcb3e5c0212aa0e685`** — PR **#192**, Build **38.6 · deterministic singular → plural nominal transfer core**.
+- GitHub Pages **#258 / run `31981106987` — SUCCESS** on that exact SHA.
+- Post-merge matrix: **exactly 4 inherited historical failures**, **0 queued**, **0 in-progress**.
+- Visible application metadata remains **v2.4.0 · Build 36**.
 - Pedagogy baseline: **v2.3.0 · Build 34**.
 - Curriculum: **52 lessons / 313 items**.
 - Recovery: **7 durable stores / backup v3**.
 - Evidence v2: **derived shadow only; original six stores remain product truth**.
-- Premium V5.10: **CLOSED / physical FIELD PASS**; issue **#114 CLOSED**.
+- Premium V5.10: **CLOSED / physical FIELD PASS**.
 - **Build 35 CLOSED. Build 36 CLOSED. Build 37 CLOSED.**
 - **Build 38 ACTIVE — Generalization & Transfer.**
-- **38.1 CLOSED** — deterministic subject substitution core.
-- **38.2 CLOSED / DEPLOYED** — learner-facing subject substitution in lesson 33.
-- **38.3 CLOSED** — deterministic affirmation → negation core.
-- **38.4 CLOSED** — deterministic present → futur proche core.
-- **38.5 CLOSED / DEPLOYED** — learner-facing futur proche in lesson 35 using shared Transfer renderer.
-- **38.6 NEXT — narrow deterministic singular → plural nominal transfer core.**
+- **38.1 CLOSED** — subject substitution core.
+- **38.2 CLOSED / DEPLOYED** — subject Transfer in lesson 33.
+- **38.3 CLOSED** — negation core.
+- **38.4 CLOSED** — futur proche core.
+- **38.5 CLOSED / DEPLOYED** — futur proche Transfer in lesson 35.
+- **38.6 CLOSED** — singular → plural nominal core.
+- **38.7 NEXT** — learner-facing nominal plural integration in **lesson 13** using the shared Transfer renderer.
 
-## Build 38.5 — certified learner-facing futur proche integration
+## Build 38.6 — certified nominal-number core
 
-Canonical route:
+Family:
 
 ```text
-lesson 35 normal content
-→ existing F05 optional Foundation card
-→ ONE optional futur-proche Transfer card
-→ 3 deterministic exercises
-→ return to lesson
-→ normal Continue remains available
+singular-plural-regular-noun-phrases
 ```
 
-Learner-facing subset:
+Exact deterministic catalog:
 
 ```text
-Je travaille.   → Je vais travailler.
-Tu travailles.  → Tu vas travailler.
-Elle travaille. → Elle va travailler.
+la gare       → les gares
+la pharmacie  → les pharmacies
+un billet     → des billets
+une table     → des tables
 ```
 
-The shared renderer remains single-owner. Historical 38.2 compatibility is preserved:
+Implementation:
 
 ```text
-slice = 38.2
-lesson = 33
-exerciseIndexes = [0,2,5]
-family = subject-substitution-regular-er
+src/pedagogy/generalization-number-core.js
+status = pure-non-wired
+persistence = ephemeral-only
+masteryClaim = false
 ```
 
-38.5 adds only:
+Anchors are learner-known and explicit:
 
 ```text
-integration = 38.5
-futureLesson = 35
-futureExerciseIndexes = [0,1,3]
-futureFamily = present-futur-proche-travailler-singular
+lesson 8  → La gare. / La pharmacie.
+lesson 9  → Je voudrais un billet.
+lesson 12 → Une table pour deux, s’il vous plaît.
+F01–F04   → la gare / un billet / une table / les toilettes
+F01–F04   → le/la → les ; un/une → des
 ```
 
-Runtime order is explicit:
+### 38.6 proof / closeout
 
 ```text
-Foundations
-→ 38.1 subject core
-→ 38.4 futur-proche core
-→ shared Transfer adapter
-```
-
-The 38.4 future core is precached by `sw.js` for installed-PWA offline parity.
-
-### 38.5 proof / closeout
-
-```text
-PR #191
-candidate head 2cfa7a8426f11b778192552764723cf8c5931edc
-Build 38.5 dedicated run 31980416374 — SUCCESS
-merge 14b1ff58b49b1fab37ca71daee90bb8d7638221e
-Pages #256 / run 31980705976 — SUCCESS
+PR #192
+candidate head 74b074f5fe9b10ca5326412dd57294e2e8db2542
+Build 38.6 dedicated run 31980934442 — SUCCESS
+merge a61629b531d4922d7d5c06fcb3e5c0212aa0e685
+Pages #258 / run 31981106987 — SUCCESS
 post-merge = exactly 4 inherited failures
 0 queued / 0 in-progress
 ```
@@ -92,25 +77,20 @@ post-merge = exactly 4 inherited failures
 Dedicated proof certifies:
 
 ```text
-38.2 legacy Node/browser predecessor PASS
-38.4 pure core predecessor PASS
-F05 predecessor PASS
-exact lesson33 38.2 behavior in VI/FR × desktop/390×844 PASS
-lesson35 future route in VI/FR × desktop/390×844 PASS
-F05 + future Transfer order PASS
-lesson34/36 no-Transfer boundaries PASS
-lesson33 still selects legacy subject family PASS
-3 real future answer clicks
-return focus + normal Continue PASS
+F01–F04 predecessor PASS
+38.6 pure contract PASS
+VI × 1280×900 PASS
+FR × 1280×900 PASS
+VI × 390×844 PASS
+FR × 390×844 PASS
+4 deterministic plural transformations through real clicks
+article-only vs noun-only distractors
 localStorage byte-identical
 no horizontal overflow
 >=44px targets
-loader order + SW offline dependency PASS
 ```
 
-The PR matrix contained eight additional reds from historical implementation-slice scope guards (Build 37.4→37.8 and 38.1/38.3/38.4). Their semantic contract steps passed and only their old “owners stay untouched” branch guards failed on legitimate successor wiring. The dedicated 38.5 workflow explicitly replayed the relevant predecessors. After merge these scope-gate false positives disappeared and `main` returned to the canonical four historical failures.
-
-No new physical smoke gate is required merely to close 38.5; a concrete installed-PWA/iPhone regression, if observed, remains a maintenance defect.
+No physical smoke is required for 38.6 because it is pure/non-wired.
 
 ## Locked Build 38 predecessors
 
@@ -136,7 +116,7 @@ J'habite ici. → Je n'habite pas ici.
 J'aime ça. → Je n'aime pas ça.
 ```
 
-38.3 remains pure/non-wired. Do not force it into lessons 17–20: F11 is present there, but the full `travailler/habiter/aimer` source scaffold is not yet mature.
+38.3 remains pure/non-wired. Do not force it into lessons 17–20: F11 is present there, but the full source scaffold is not yet mature.
 
 ### 38.4 futur proche core
 
@@ -147,10 +127,17 @@ Il travaille.   → Il va travailler.
 Elle travaille. → Elle va travailler.
 ```
 
-### 38.5 future placement
+### 38.5 learner placement
 
 ```text
-lesson 35 → F05 → ONE future Transfer card
+lesson 35 → F05 → ONE futur-proche Transfer card
+```
+
+Historical shared-renderer contracts must remain readable:
+
+```text
+38.2: slice=38.2, lesson=33, exerciseIndexes=[0,2,5]
+38.5: integration=38.5, futureLesson=35, futureExerciseIndexes=[0,1,3]
 ```
 
 ## Build 37 ownership — LOCKED
@@ -164,18 +151,18 @@ F13     → lesson 40 only
 F12     → lessons 41–43
 ```
 
-F16 remains deferred / not completed; Build 37 stays closed.
+F16 remains deferred / not completed.
 
 ## Inherited CI debt
 
-Exactly four historical failures remain baseline debt unless separately repaired:
+Exactly four historical failures remain baseline debt:
 
 1. `Build 36.2 Evidence shadow adoption`;
 2. `V2.0.0 Freeze tribunal`;
 3. `Build 36.3 Recovery v3 durability tribunal`;
 4. `Build 28 Data recovery smoke`.
 
-A future Build 38 failure is **not** baseline merely because these four exist.
+Any other failure must be classified; prove flakes with unchanged reruns before patching anything.
 
 ## Protected boundaries
 
@@ -187,76 +174,66 @@ voice-ios.js
 free-voice.js
 assets/LOGO.png
 assets/Favicon.png
-manifest / service-worker PWA identity contract from PR #180
-Recovery v3 seven-store ownership
-backup envelope v3
+PWA identity/cache contract from PR #180
+Recovery v3 / backup v3 / seven-store ownership
 Evidence derived-shadow role
 original six stores as product truth
-52 / 313 curriculum semantics
+52/313 curriculum semantics
 Listening / Scenario / Mastery / Learner Intelligence owners
-V5.10 field-accepted navigation / visual identities
-Build 37 Foundations ownership/routes
-38.1 deterministic subject-substitution semantics
-38.2 lesson-33 placement/round-trip contract
-38.3 deterministic negation semantics
-38.4 deterministic futur-proche semantics
-38.5 lesson-35 shared-renderer placement contract
+V5.10 field-approved navigation/visual identity
+Build 37 Foundation routes
+38.1 / 38.3 / 38.4 / 38.6 pure-core semantics
+38.2 lesson-33 Transfer placement
+38.5 lesson-35 Transfer placement
 ```
 
-## NEXT — Build 38.6
+## NEXT — Build 38.7 · learner-facing nominal plural integration
 
-Fresh audit selects **singular → plural nominal phrases** as the cleanest next pure transfer family and as an originally-prioritized Build 38 gap.
+Chosen placement is **lesson 13**, not lesson 12.
 
-Existing anchors are strong and learner-known:
+Why l13:
 
 ```text
-lesson 8  → La gare. / La pharmacie.
-lesson 9  → Je voudrais un billet.
-lesson 12 → Une table pour deux, s’il vous plaît.
-F01–F04   → la gare / un billet / une table / les toilettes
-F01–F04   → le/la → les ; un/une → des
+by lesson 13, gare/pharmacie/billet/table have all already been encountered
+lesson 13 itself reuses pharmacie in direction phrases
+F01–F04 already owns lessons 8–13
+mounting the Transfer card at lesson start therefore introduces no unseen vocabulary
 ```
 
-Preferred pure matrix:
+Preferred learner subset:
 
 ```text
-la gare       → les gares
-la pharmacie  → les pharmacies
-un billet     → des billets
-une table     → des tables
+la gare    → les gares
+un billet  → des billets
+une table  → des tables
 ```
 
-38.6 must remain **pure / non-wired** and cover only regular noun plurals where the article transformation is already certified by F01–F04.
-
-Explicit exclusions:
+This covers:
 
 ```text
-irregular plurals
-x / aux spelling families
-adjective agreement
-possessives
-determiners beyond le/la/un/une → les/des
-full-sentence plural agreement
-new vocabulary
-random/adaptive generation
-learner-facing wiring
-durable writes
-Evidence product reads
-mastery claims
+la → les
+un → des
+une → des
+regular noun +s
 ```
 
-Canonical execution order:
+Canonical 38.7 direction:
 
 ```text
-→ create deterministic nominal-number core
-→ anchor to app lessons 8/9/12 + F01–F04
-→ replay Foundations article core
-→ VI / DEBUG FR × desktop / 390×844 browser tribunal
+→ reuse the single shared Transfer renderer
+→ keep exact 38.2 lesson33 route/API intact
+→ keep exact 38.5 lesson35 route/API intact
+→ add number core before shared adapter in Build32 loader
+→ add lesson13 number route after F01–F04 card
+→ pre-cache number core for installed-PWA offline parity
+→ lesson12: F01–F04 only, no number Transfer
+→ lesson13: F01–F04 + ONE number Transfer
+→ lesson14: no number Transfer
+→ replay exact 38.2 and 38.5 browser tribunals
+→ VI / DEBUG FR × desktop / 390×844 for l13
 → localStorage byte-identical
-→ one candidate PR
-→ automated control/merge after clean classification
+→ no new nav / store / Evidence read / mastery claim
+→ one candidate PR, automated control and merge after classification
 ```
 
-If 38.6 is certified, the natural later learner-facing placement to audit is **lesson 12**, because by then gare/pharmacie/billet/table have all been encountered and F01–F04 already owns that lesson window.
-
-Do **not** start Build 39 inside Build 38.
+Do **not** wire 38.3 negation in the same slice. Do **not** start Build 39 inside Build 38.
