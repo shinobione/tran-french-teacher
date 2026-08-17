@@ -62,12 +62,13 @@ The final #206 matrix introduced no new persistent failure beyond the inherited 
 - Branch: **`docs/v2.5.0-build38-release-closeout`**
 - Base: exact accepted release main **`2abe20511d6265d12643276f18041812fec3e715`**
 - PR: **#207 — `Docs · close v2.5.0 Build 38 release`**
-- Candidate head before this handoff update: **`97cdbcd5eedce240e513ce7d8dd948c77af3912b`**
-- Status: **OPEN / DOCS-GOVERNANCE ONLY / NOT MERGED**
+- Latest implementation/CI-maintenance commit before this handoff update: **`cc66098f41b26c27afa073667e3a643f936fb24a`**
+- Status: **OPEN / DOCS-GOVERNANCE + PREDECESSOR-CI MAINTENANCE / NOT MERGED**
 
 Intended changed paths only:
 
 ```text
+.github/workflows/release-v2-5-build38.yml
 README.md
 MASTER-ROADMAP.md
 CHANGELOG.md
@@ -76,7 +77,19 @@ docs/RELEASE-VERSIONING-POLICY.md
 docs/RELEASE-V2.5.0-BUILD38.md
 ```
 
-This closeout must not change runtime, JS/CSS, workflows, curriculum, pedagogy, learner data, voice, Recovery/Evidence, Premium, PWA identity, logo or favicon.
+The workflow change is CI-only successor-safety maintenance. It does not change runtime/product behavior: the strict release-slice path allowlist now applies only to the original `release/v2.5.0-build38-certification` branch, while the release contract and browser metadata checks continue to run on later PRs.
+
+This closeout must not change runtime, JS/CSS product code, curriculum, pedagogy, learner data, voice, Recovery/Evidence, Premium, PWA identity, logo or favicon.
+
+### Classified #207 CI event
+
+On previous head `ebee8efd54a6b36299e9ef1acf59d27801cf4b9f`, `Release v2.5.0 Build 38 certification` run **`32077265073`** failed only at the historical **release scope guard**.
+
+The preceding release contract + Build38.10 checks passed. The guard rejected the planned post-release closeout docs (`CHANGELOG.md`, `MASTER-ROADMAP.md`, `docs/RELEASE-VERSIONING-POLICY.md`) because its allowlist was intentionally frozen to the original #206 release slice.
+
+Classification: **predecessor CI successor-safety defect, not a product/runtime regression**.
+
+Fix: keep the v2.5 release contract/browser tribunal active globally, but run the strict release-slice path allowlist only when `github.head_ref == 'release/v2.5.0-build38-certification'`.
 
 ## Historical learner continuity — LOCKED
 
@@ -128,8 +141,9 @@ Fresh control step only:
 
 ```text
 re-read live PR #207 and its exact current head
-→ verify changed filenames are exactly the six Markdown docs above
-→ classify docs-only CI against the five inherited failures
+→ verify changed filenames are exactly the seven closeout/CI-maintenance paths above
+→ require v2.5 release certification to pass on that exact head
+→ classify full CI against the five inherited failures
 → rerun only proven flakes unchanged if needed
 → if no new regression, merge #207 with expected-head protection
 → verify main equals the merge SHA
