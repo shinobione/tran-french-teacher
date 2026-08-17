@@ -10,8 +10,8 @@
   const TRANSFER_SPOKEN_ON='2.4.0-b38.10';
   const TRANSFER_LESSON='2.4.0-b38.10';
   const RUNTIME_META = Object.freeze({
-    version:'2.4.0',
-    build:'36',
+    version:'2.5.0',
+    build:'38',
     pedagogyBaseline:Object.freeze({ version:'2.3.0', build:'34' })
   });
   const root = document.documentElement;
