@@ -7,14 +7,17 @@
 
 - Repository: `shinobione/tran-french-teacher`.
 - Default branch: `main`.
-- Current accepted governance `main`: **`0d7b8a31d4731024ff9e86d97e3128bad572efb3`** — PR **#200**, Build 38.9 documentation closeout.
+- Latest substantive governance/versioning merge: **`f1dd921acb3c95180aa849d40e1ba3795b4498db`** — PR **#201**, roadmap/README/version-policy reconciliation through Build 38.9.
+- GitHub Pages proof for PR #201: **#267 / run `32061546370` — SUCCESS** on exact SHA `f1dd921acb3c95180aa849d40e1ba3795b4498db`.
+- PR #201 was merged under an explicit **docs-only queue exception** while its full workflow fan-out was still queued. Do **not** rewrite this as “full matrix green before merge”. No runtime/product file changed in #201.
 - Current accepted Build 38 product/core checkpoint: **`a33e504cdc20438c454fc365371af545ef747f0c`** — PR **#199**, Build **38.9 · deterministic nous→on spoken transfer core**.
-- Current learner-facing runtime remains Build **38.8** from **`3fae502dba8faee003b44c5a1b9a9cffd9affec7`**; Build 38.9 is intentionally **pure/non-wired**, so it adds no learner-facing route yet.
+- Current learner-facing Transfer runtime remains Build **38.8** from **`3fae502dba8faee003b44c5a1b9a9cffd9affec7`**; Build 38.9 is intentionally **pure/non-wired**, so it adds no learner-facing route yet.
 - GitHub Pages Build 38.9 product/core proof: **#265 / run `32059362998` — SUCCESS** on exact `a33e504c…` merge SHA.
 - GitHub Pages Build 38.9 docs-closeout proof: **#266 / run `32059893554` — SUCCESS** on exact `0d7b8a31…` merge SHA.
 - Post-merge Actions on accepted 38.9 product/core: exactly **4 inherited historical failures**, **0 queued**, **0 in-progress**. No new red.
 - Public application runtime metadata remains intentionally **v2.4.0 · Build 36**.
 - Pedagogy baseline remains **v2.3.0 · Build 34**.
+- Internal roadmap checkpoint is independently **Build 38.9**.
 - Curriculum: **52 lessons / 313 items**.
 - Scenario: **44 situations / 132 turns**.
 - Listening: **0.88 normal / 0.65 slow**.
@@ -33,39 +36,27 @@
 - 38.7 CLOSED / DEPLOYED — nominal plural Transfer in lesson 13.
 - 38.8 CLOSED / DEPLOYED — negation Transfer in lesson 34.
 - **38.9 CLOSED / CERTIFIED / NON-WIRED** — deterministic `nous → on` spoken-French transfer core.
+- Versioning governance is **CLOSED**. `MASTER-ROADMAP.md`, current `README.md` and `docs/RELEASE-VERSIONING-POLICY.md` are reconciled through 38.9; the previous Build 34 README is preserved as historical evidence in `docs/HISTORICAL-README-BUILD34.md`.
 
-## Active governance slice — PR #201
+## Version metadata rule — LOCKED
 
-Branch:
-
-```text
-docs/versioning-roadmap-reconcile
-```
-
-Purpose:
+The Settings value is **not derived from the latest roadmap slice number**.
 
 ```text
-reconcile MASTER-ROADMAP through Build 38.9
-refresh stale README product state
-formalize release-version policy
-separate public runtime release / pedagogy baseline / roadmap checkpoint
+Public runtime release = v2.4.0 · Build 36
+Pedagogy baseline      = v2.3.0 · Build 34
+Roadmap checkpoint     = Build 38.9
 ```
 
-This slice is **documentation/governance only** and must not change runtime code, Settings runtime metadata, curriculum, learner stores, PWA identity/cache contract, voice, Recovery, Evidence, Premium or Transfer wiring.
+Rules:
 
-Public runtime release remains:
+- Build 37.x / 38.x are roadmap slices, not SemVer patch numbers;
+- public runtime metadata changes only through an explicit release-version slice with dedicated tests and documentation;
+- the public `Build` beside SemVer is the release-build anchor, not the latest internal roadmap checkpoint;
+- a future DEBUG/admin surface may expose the roadmap checkpoint separately, but must not overwrite the public release field;
+- after an explicit future Build 38 closure, **`v2.5.0 · Build 38` is the natural candidate**, not a release already assigned.
 
-```text
-v2.4.0 · Build 36
-```
-
-Roadmap checkpoint remains independently:
-
-```text
-Build 38.9 CLOSED / CERTIFIED / NON-WIRED
-```
-
-The natural candidate after eventual Build 38 closure is `v2.5.0 · Build 38`, but **PR #201 does not assign or ship that release**.
+Canonical policy: `docs/RELEASE-VERSIONING-POLICY.md`.
 
 ## Build 38.9 — certified core
 
@@ -124,9 +115,14 @@ post-merge: only the same four inherited failures
 0 queued / 0 in-progress
 Pages #265 / run 32059362998 SUCCESS on exact merge SHA
 
-PR #200 MERGED — documentation closeout
+PR #200 MERGED — Build 38.9 documentation closeout
 merge 0d7b8a31d4731024ff9e86d97e3128bad572efb3
 Pages #266 / run 32059893554 SUCCESS
+
+PR #201 MERGED — roadmap / README / release-versioning reconciliation
+merge f1dd921acb3c95180aa849d40e1ba3795b4498db
+Pages #267 / run 32061546370 SUCCESS
+merge used docs-only queue exception; no runtime/product change
 ```
 
 Build 38.9 does **not** authorize a lesson-52 Transfer card automatically. A learner-facing placement must be audited separately for usefulness, density and non-duplication with the existing lesson/F18 teaching.
@@ -200,50 +196,23 @@ l8 progress = 4
 40 known historical items
 ```
 
-## Version metadata rule — canonical policy
+## NEXT — Build 38.9 learner-placement audit
 
-The Settings value is **not derived from the latest roadmap slice number**.
+There is **no active implementation candidate** after the versioning-governance closeout.
 
-```text
-Public runtime release = v2.4.0 · Build 36
-Pedagogy baseline      = v2.3.0 · Build 34
-Roadmap checkpoint     = Build 38.9
-```
-
-Build 37.x / 38.x are roadmap slices and do not auto-bump public runtime metadata. Public metadata changes only through an explicit release-version slice with dedicated tests and docs.
-
-Candidate after a future explicit Build 38 closeout:
+Next product control step:
 
 ```text
-v2.5.0 · Build 38
-```
-
-This is a candidate convention only, **not a release assigned by PR #201**.
-
-See `docs/RELEASE-VERSIONING-POLICY.md`.
-
-## NEXT
-
-Current control step:
-
-```text
-review PR #201 exact docs-only diff
-→ classify CI only for this governance slice
-→ merge if no runtime/product file leaked
-→ verify main + Pages
-```
-
-After PR #201 closes, next **product** action:
-
-```text
-audit whether the certified 38.9 core deserves learner-facing placement at/after lesson 52
-→ prove genuine recombination value
-→ reject a route that merely duplicates existing F18/lesson-52 teaching
+read live lesson 52 + F18 learner-facing teaching
+→ test whether the certified 38.9 construction exercise adds genuine retrieval/recombination value
+→ reject placement if it merely repeats existing F18 / lesson-52 explanation or examples
 → check lesson density and round-trip UX
-→ if placement is useful, assign one separate integration slice
-→ otherwise audit at most one other narrow Build 38 family
+→ preserve all existing Transfer routes
+→ if useful, assign ONE separate learner-facing integration slice
+→ otherwise audit at most ONE other narrow Build 38 family
 ```
 
+Do **not** pre-assign `38.10` merely because 38.9 exists.
 Do **not** start Build 39 while Build 38 still has unresolved transfer/placement decisions.
 
-See `docs/BUILD-38.9-CLOSEOUT.md` for the durable 38.9 acceptance record.
+See `MASTER-ROADMAP.md`, `docs/BUILD-38.9-CLOSEOUT.md` and `docs/RELEASE-VERSIONING-POLICY.md`.
