@@ -1,0 +1,113 @@
+name: Build 38.6 Generalization nominal plural transfer
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [build38/nominal-plural-transfer-core]
+
+permissions:
+  contents: read
+
+jobs:
+  nominal-plural-transfer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax + Foundations predecessor + 38.6 contract
+        run: |
+          set -euo pipefail
+          node --check src/pedagogy/generalization-number-core.js
+          node --check tools/test-build38-6-nominal-plural-transfer.cjs
+          node tools/test-build37-2-foundations-capsule-engine.cjs
+          node tools/test-build38-6-nominal-plural-transfer.cjs
+
+      - name: 38.6 stays narrow, deterministic and pure
+        run: |
+          set -euo pipefail
+          grep -q "id:'singular-plural-regular-noun-phrases'" src/pedagogy/generalization-number-core.js
+          grep -q "slice:'38.6'" src/pedagogy/generalization-number-core.js
+          grep -q "status:'pure-non-wired'" src/pedagogy/generalization-number-core.js
+          grep -q "source:'la gare',target:'les gares'" src/pedagogy/generalization-number-core.js
+          grep -q "source:'la pharmacie',target:'les pharmacies'" src/pedagogy/generalization-number-core.js
+          grep -q "source:'un billet',target:'des billets'" src/pedagogy/generalization-number-core.js
+          grep -q "source:'une table',target:'des tables'" src/pedagogy/generalization-number-core.js
+          ! grep -q 'Math.random' src/pedagogy/generalization-number-core.js
+          ! grep -q 'localStorage' src/pedagogy/generalization-number-core.js
+          ! grep -q 'sessionStorage' src/pedagogy/generalization-number-core.js
+          ! grep -q 'indexedDB' src/pedagogy/generalization-number-core.js
+          ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/generalization-number-core.js
+
+      - name: Runtime, curriculum, Foundations and prior transfer owners stay untouched
+        run: |
+          set -euo pipefail
+          git fetch origin main --quiet
+          changed="$(git diff --name-only origin/main...HEAD)"
+          forbidden='^(app\.js|voice-ios\.js|free-voice\.js|index\.html|sw\.js|manifest\.webmanifest|src/core/|src/ui/|src/premium/|src/pedagogy/curriculum-stage[234]\.js|src/pedagogy/learning-memory\.js|src/pedagogy/error-intelligence\.js|src/pedagogy/listening-engine\.js|src/pedagogy/scenario-engine\.js|src/pedagogy/mastery-engine\.js|src/pedagogy/learner-intelligence.*\.js|src/pedagogy/foundations-core\.js|src/pedagogy/foundations-capsule-engine\.js|src/pedagogy/foundations-capsules\.js|src/pedagogy/foundations-pilot\.js|src/pedagogy/generalization-transfer-core\.js|src/pedagogy/generalization-transfer-lesson\.js|src/pedagogy/generalization-negation-core\.js|src/pedagogy/generalization-futur-proche-core\.js|assets/LOGO\.png|assets/Favicon\.png)$'
+          if printf '%s\n' "$changed" | grep -E "$forbidden"; then
+            echo 'Build 38.6 must remain a new pure/non-wired nominal-number core and preserve prior owners' >&2
+            exit 1
+          fi
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-b386-http.log 2>&1 &
+          echo $! >/tmp/ft-b386-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — F01-F04 predecessor remains exact
+        run: |
+          set -euo pipefail
+          passed=0
+          for attempt in 1 2; do
+            profile="/tmp/ft-b386-f0104-$attempt"; file="/tmp/b386-f0104-$attempt.html"
+            rm -rf "$profile" "$file"
+            if timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=390,844 --virtual-time-budget=10000 --dump-dom \
+              'http://127.0.0.1:4173/tests/browser/build37-foundations-pilot-adapter.html?debug=fr' >"$file" \
+              && grep -q 'data-b373-done="1"' "$file" \
+              && grep -q 'data-b373-parity="1"' "$file" \
+              && grep -q 'data-b373-storage-unchanged="1"' "$file" \
+              && ! grep -q 'data-b373-error=' "$file"; then passed=1; break; fi
+          done
+          test "$passed" -eq 1
+
+      - name: Chrome — 38.6 VI/FR desktop + iPhone parity
+        run: |
+          set -euo pipefail
+          for spec in 'vi 1280 900' 'fr 1280 900' 'vi 390 844' 'fr 390 844'; do
+            set -- $spec; locale="$1"; width="$2"; height="$3"; passed=0; file=''
+            for attempt in 1 2; do
+              profile="/tmp/ft-b386-${locale}-${width}-$attempt"
+              file="/tmp/b386-${locale}-${width}-$attempt.html"
+              rm -rf "$profile" "$file"
+              if timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
+                --user-data-dir="$profile" --window-size="$width,$height" --virtual-time-budget=10000 --dump-dom \
+                "http://127.0.0.1:4173/tests/browser/build38-6-nominal-plural-transfer.html?debug=$locale" >"$file" \
+                && grep -q 'data-b386-done="1"' "$file" \
+                && grep -q "data-b386-locale=\"$locale\"" "$file" \
+                && grep -q 'data-b386-family="singular-plural-regular-noun-phrases"' "$file" \
+                && grep -q 'data-b386-exercises="4"' "$file" \
+                && grep -q 'data-b386-storage-unchanged="1"' "$file" \
+                && grep -q 'data-b386-no-overflow="1"' "$file" \
+                && ! grep -q 'data-b386-error=' "$file"; then passed=1; break; fi
+            done
+            if [ "$passed" -ne 1 ]; then
+              echo "38.6 tribunal failed for $locale ${width}x${height}" >&2
+              grep -o 'data-b386-[^ >]*="[^"]*"' "$file" >&2 || true
+              exit 1
+            fi
+          done
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-b386-server.pid ]; then kill "$(cat /tmp/ft-b386-server.pid)" || true; fi
