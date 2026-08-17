@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Build 38.10 spoken-on learner integration tribunal</title>
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#07111e;color:#eef5ff;font-family:system-ui,-apple-system,sans-serif}button{font:inherit;color:inherit;background:#20314a;border:1px solid #5f7595;border-radius:12px;padding:8px 12px}.primary{background:#315d74}.secondary{background:#253852}.muted{color:#9fb0c5}.screen-lesson{width:min(760px,calc(100% - 24px));margin:20px auto}.topbar{padding:10px 2px}.topbar h1{font-size:1.25rem}.lesson-step{padding:18px;border:1px solid #23364d;border-radius:20px;background:#0d1928;display:grid;gap:12px}.lesson-step>p{margin:0}.lesson-step>[data-existing-continue]{min-height:48px;width:100%}
+  </style>
+  <script>
+    (()=>{
+      const debug=new URLSearchParams(location.search).get('debug')==='fr';
+      localStorage.clear();
+      localStorage.setItem('tran-french-teacher:debug-fr:v1',debug?'1':'0');
+      localStorage.setItem('b38.10:sentinel','unchanged');
+      window.__b3810Debug=debug;
+      window.__b3810StorageBefore=JSON.stringify(Object.keys(localStorage).sort().map(key=>[key,localStorage.getItem(key)]));
+    })();
+  </script>
+</head>
+<body>
+  <main id="app">
+    <section class="screen-lesson">
+      <div class="topbar"><h1>Bài 52 — “On” trong tiếng Pháp nói</h1></div>
+      <div class="lesson-step">
+        <p data-existing-lesson>Existing lesson 52 content and spoken-on explanation</p>
+        <button type="button" class="primary" data-existing-continue>Continuer</button>
+      </div>
+    </section>
+  </main>
+  <script src="../../src/pedagogy/generalization-transfer-core.js?v=2.4.0-b38.2"></script>
+  <script src="../../src/pedagogy/generalization-negation-core.js?v=2.4.0-b38.8"></script>
+  <script src="../../src/pedagogy/generalization-futur-proche-core.js?v=2.4.0-b38.5"></script>
+  <script src="../../src/pedagogy/generalization-number-core.js?v=2.4.0-b38.7"></script>
+  <script src="../../src/pedagogy/generalization-spoken-on-core.js?v=2.4.0-b38.10"></script>
+  <script src="../../src/pedagogy/generalization-transfer-lesson.js?v=2.4.0-b38.10"></script>
+  <script>
+    (()=>{
+      const root=document.documentElement;
+      const fail=message=>{root.dataset.b3810Error=message;throw new Error(message)};
+      const ok=(value,message)=>{if(!value)fail(message)};
+      const text=selector=>document.querySelector(selector)?.textContent?.trim()||'';
+      const texts=selector=>[...document.querySelectorAll(selector)].map(node=>node.textContent.trim());
+      const click=selector=>{const node=document.querySelector(selector);ok(node,`missing ${selector}`);node.click();return node};
+      const clickChoice=choice=>{const node=[...document.querySelectorAll('[data-transfer-choice]')].find(button=>button.textContent.trim()===choice);ok(node,`missing transfer choice ${choice}`);node.click();return node};
+      const expected=window.__b3810Debug?{
+        title:'Passer de « nous » à « on » à l’oral',
+        entry:'3 phrases déjà apprises avec « nous » : garde le même groupe et la même action, puis reconstruis-les comme on les dit très souvent avec « on ». Facultatif pour continuer la leçon.',
+        cta:'Essayer 3 phrases • ≈ 2 min',
+        eyebrow:'FRANÇAIS ORAL'
+      }:{
+        title:'Từ « nous » sang « on » khi nói',
+        entry:'3 câu bạn đã học với « nous »: giữ cùng nhóm người và hành động, rồi tự xây lại theo cách nói rất thường gặp với « on ». Không bắt buộc để tiếp tục bài.',
+        cta:'Thử 3 câu • khoảng 2 phút',
+        eyebrow:'NÓI TỰ NHIÊN'
+      };
+
+      try{
+        ok(window.FrenchTranquilleGeneralizationSpokenOn?.family?.id==='nous-on-spoken-equivalence','38.9 spoken-on core missing');
+        ok(window.FrenchTranquilleGeneralizationSpokenOn?.status==='pure-non-wired','38.9 certified core contract changed');
+        ok(window.FrenchTranquilleTransferLesson?.slice==='38.2','historical shared adapter owner changed');
+        ok(window.FrenchTranquilleTransferLesson?.integration==='38.5','38.5 integration marker changed');
+        ok(window.FrenchTranquilleTransferLesson?.numberIntegration==='38.7','38.7 integration marker changed');
+        ok(window.FrenchTranquilleTransferLesson?.negationIntegration==='38.8','38.8 integration marker changed');
+        ok(window.FrenchTranquilleTransferLesson?.spokenOnIntegration==='38.10','38.10 integration marker missing');
+        ok(window.FrenchTranquilleTransferLesson?.spokenOnLesson===52,'38.10 lesson owner mismatch');
+        ok(JSON.stringify(window.FrenchTranquilleTransferLesson?.spokenOnExerciseIndexes)===JSON.stringify([0,1,2]),'38.10 selection mismatch');
+        ok(window.FrenchTranquilleTransferLesson?.persistent===false,'Transfer must remain ephemeral');
+        ok(window.FrenchTranquilleTransferLesson?.masteryClaim===false,'Transfer must not claim mastery');
+
+        ok(document.querySelectorAll('[data-transfer-entry]').length===1,'lesson52 needs exactly one Transfer entry');
+        ok(document.querySelector('[data-transfer-entry]')?.dataset.transferFamily==='nous-on-spoken-equivalence','wrong lesson52 Transfer family');
+        ok(document.querySelector('[data-transfer-entry]')?.dataset.transferLesson==='52','wrong lesson52 Transfer marker');
+        ok(text('.ft-transfer-entry h3')===expected.title,'spoken-on entry title mismatch');
+        ok(text('.ft-transfer-entry p')===expected.entry,'spoken-on entry copy mismatch');
+        ok(text('.ft-transfer-eyebrow').includes(expected.eyebrow),'spoken-on eyebrow mismatch');
+        ok(text('[data-transfer-open]').startsWith(expected.cta),'spoken-on CTA mismatch');
+        ok(document.querySelector('[data-transfer-open]').getBoundingClientRect().height>=44,'spoken-on Transfer entry target below 44px');
+
+        click('[data-transfer-open]');
+        ok(document.querySelector('.ft-transfer-dialog')?.dataset.transferActiveFamily==='nous-on-spoken-equivalence','spoken-on dialog family missing');
+        ok(document.querySelector('.ft-transfer-dialog')?.dataset.transferActiveLesson==='52','spoken-on dialog lesson marker missing');
+        ok(text('.ft-transfer-top h2')===expected.title,'spoken-on dialog title mismatch');
+        click('[data-transfer-next]');
+
+        const sources=['Nous travaillons.','Nous rentrons.','Nous allons à…'];
+        const targets=['On travaille.','On rentre.','On va à…'];
+        const expectedChoices=[
+          ['On travaillons.','Nous travaille.','On travaille.'],
+          ['Nous rentre.','On rentre.','On rentrons.'],
+          ['On va à…','On allons à…','Nous va à…']
+        ];
+        for(let index=0;index<targets.length;index+=1){
+          ok(text('.ft-transfer-source')===sources[index],`spoken-on source ${index+1} mismatch`);
+          ok(JSON.stringify(texts('[data-transfer-choice]'))===JSON.stringify(expectedChoices[index]),`spoken-on choices ${index+1} mismatch`);
+          ok([...document.querySelectorAll('[data-transfer-choice]')].every(button=>button.getBoundingClientRect().height>=44),`spoken-on target ${index+1} below 44px`);
+          clickChoice(targets[index]);
+          const correct=[...document.querySelectorAll('[data-transfer-choice]')].find(button=>button.textContent.trim()===targets[index]);
+          ok(correct?.classList.contains('ok'),`spoken-on ${index+1} correct marking missing`);
+          click('[data-transfer-next]');
+        }
+
+        ok(document.querySelector('.ft-transfer-done'),'spoken-on completion missing');
+        ok(!/maîtris|thành thạo/i.test(text('.ft-transfer-done h3')),'spoken-on completion must not claim mastery');
+        click('.ft-transfer-done [data-transfer-close]');
+        ok(!document.querySelector('.ft-transfer-overlay'),'spoken-on overlay must close');
+        ok(document.activeElement?.matches('[data-transfer-open]'),'focus must return to spoken-on Transfer CTA');
+        ok(document.querySelector('[data-existing-lesson]'),'lesson52 content must survive round trip');
+        click('[data-existing-continue]');
+        root.dataset.b3810Continued='1';
+
+        const routeChecks=[
+          ['Bài 13 — Ôn tập địa điểm & hướng đi','singular-plural-regular-noun-phrases'],
+          ['Bài 33 — Il / elle ở hiện tại','subject-substitution-regular-er'],
+          ['Bài 34 — Nous — nói “chúng ta”','affirmation-negation-regular-er-je'],
+          ['Bài 35 — Futur proche — sắp làm gì','present-futur-proche-travailler-singular']
+        ];
+        for(const [title,family] of routeChecks){
+          document.querySelector('.topbar h1').textContent=title;
+          window.FrenchTranquilleTransferLesson.refresh();
+          ok(document.querySelectorAll('[data-transfer-entry]').length===1,`${title} must keep exactly one Transfer`);
+          ok(document.querySelector('[data-transfer-entry]')?.dataset.transferFamily===family,`${title} Transfer family changed`);
+        }
+
+        document.querySelector('.topbar h1').textContent='Bài 36 — Venir de';
+        window.FrenchTranquilleTransferLesson.refresh();
+        ok(!document.querySelector('[data-transfer-entry]'),'lesson36 must remain without Transfer');
+
+        document.querySelector('.topbar h1').textContent='Bài 52 — “On” trong tiếng Pháp nói';
+        window.FrenchTranquilleTransferLesson.refresh();
+        ok(document.querySelector('[data-transfer-entry]')?.dataset.transferFamily==='nous-on-spoken-equivalence','lesson52 route must restore after round trip');
+        ok(JSON.stringify(Object.keys(localStorage).sort().map(key=>[key,localStorage.getItem(key)]))===window.__b3810StorageBefore,'localStorage changed during 38.10');
+        ok(document.documentElement.scrollWidth<=innerWidth+1,'horizontal overflow detected');
+
+        root.dataset.b3810Done='1';
+        root.dataset.b3810Locale=window.__b3810Debug?'fr':'vi';
+        root.dataset.b3810Family='nous-on-spoken-equivalence';
+        root.dataset.b3810Exercises='3';
+        root.dataset.b3810Lesson='52';
+        root.dataset.b3810LegacyRoutes='1';
+        root.dataset.b3810StorageUnchanged='1';
+        root.dataset.b3810NoOverflow='1';
+      }catch(error){
+        if(!root.dataset.b3810Error)root.dataset.b3810Error=error.message;
+        console.error(error);
+      }
+    })();
+  </script>
+</body>
+</html>

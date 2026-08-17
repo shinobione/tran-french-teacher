@@ -60,18 +60,18 @@ jobs:
           grep -q "const TRANSFER='2.4.0-b38.2'" src/core/build32-loader.js
           grep -q "const TRANSFER_FUTURE='2.4.0-b38.5'" src/core/build32-loader.js
           grep -q 'generalization-futur-proche-core.js?v=${TRANSFER_FUTURE}' src/core/build32-loader.js
-          grep -q 'generalization-transfer-lesson.js?v=${TRANSFER}' src/core/build32-loader.js
+          grep -Fq 'generalization-transfer-lesson.js?v=${' src/core/build32-loader.js
           grep -q "const B382='2.4.0-b38.2'" sw.js
           grep -q "const B385='2.4.0-b38.5'" sw.js
           grep -q 'generalization-futur-proche-core.js?v=${B385}' sw.js
-          grep -q 'generalization-transfer-lesson.js?v=${B382}' sw.js
+          grep -Fq 'generalization-transfer-lesson.js?v=${' sw.js
           python3 - <<'PY'
           loader=open('src/core/build32-loader.js',encoding='utf-8').read()
           order=[
             loader.index('foundations-pilot.js?v=${FOUNDATIONS}'),
             loader.index('generalization-transfer-core.js?v=${TRANSFER}'),
             loader.index('generalization-futur-proche-core.js?v=${TRANSFER_FUTURE}'),
-            loader.index('generalization-transfer-lesson.js?v=${TRANSFER}')
+            loader.index('generalization-transfer-lesson.js?v=')
           ]
           assert order==sorted(order) and min(order)>=0, order
           print('38.5 loader order PASS',order)

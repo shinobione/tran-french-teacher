@@ -1,0 +1,112 @@
+name: Build 38.10 Learner-facing spoken on transfer
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [build38/spoken-on-learner-integration]
+
+permissions:
+  contents: read
+
+jobs:
+  spoken-on-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax + certified predecessors + 38.10 contract
+        run: |
+          set -euo pipefail
+          node --check src/pedagogy/generalization-transfer-lesson.js
+          node --check src/core/build32-loader.js
+          node --check sw.js
+          node --check tools/test-build38-10-spoken-on-integration.cjs
+          node tools/test-build38-2-learner-integration.cjs
+          node tools/test-build38-5-futur-proche-integration.cjs
+          node tools/test-build38-7-nominal-plural-integration.cjs
+          node tools/test-build38-8-negation-integration.cjs
+          node tools/test-build38-9-spoken-on-transfer.cjs
+          node tools/test-build38-10-spoken-on-integration.cjs
+
+      - name: 38.10 is additive and preserves certified owners
+        run: |
+          set -euo pipefail
+          grep -q "const SPOKEN_ON_LESSON=52;" src/pedagogy/generalization-transfer-lesson.js
+          grep -q "slice:'38.10'" src/pedagogy/generalization-transfer-lesson.js
+          grep -q "spokenOnIntegration:hasSpokenOnCore?'38.10':null" src/pedagogy/generalization-transfer-lesson.js
+          grep -q "generalization-spoken-on-core.js?v=\${TRANSFER_SPOKEN_ON}" src/core/build32-loader.js
+          grep -q "generalization-spoken-on-core.js?v=\${B3810}" sw.js
+          ! grep -q 'localStorage.setItem' src/pedagogy/generalization-transfer-lesson.js
+          ! grep -q 'indexedDB' src/pedagogy/generalization-transfer-lesson.js
+          ! grep -q 'masteryClaim:true' src/pedagogy/generalization-transfer-lesson.js
+          git fetch origin main --quiet
+          if ! git diff --quiet origin/main...HEAD -- src/pedagogy/generalization-spoken-on-core.js; then
+            echo '38.9 spoken-on core must stay byte-identical in 38.10' >&2
+            exit 1
+          fi
+          changed="$(git diff --name-only origin/main...HEAD)"
+          for protected in \
+            app.js voice-ios.js free-voice.js assets/LOGO.png assets/Favicon.png \
+            src/pedagogy/curriculum-stage2.js \
+            src/pedagogy/curriculum-stage3.js \
+            src/pedagogy/curriculum-stage4.js \
+            src/pedagogy/foundations-capsules.js \
+            src/pedagogy/foundations-pilot.js \
+            src/pedagogy/generalization-transfer-core.js \
+            src/pedagogy/generalization-negation-core.js \
+            src/pedagogy/generalization-futur-proche-core.js \
+            src/pedagogy/generalization-number-core.js \
+            src/pedagogy/generalization-spoken-on-core.js; do
+            if printf '%s\n' "$changed" | grep -Fxq "$protected"; then
+              echo "Build 38.10 must not modify certified owner: $protected" >&2
+              exit 1
+            fi
+          done
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-b3810-http.log 2>&1 &
+          echo $! >/tmp/ft-b3810-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — 38.10 VI/FR desktop + iPhone parity
+        run: |
+          set -euo pipefail
+          for spec in 'vi 1280 900' 'fr 1280 900' 'vi 390 844' 'fr 390 844'; do
+            set -- $spec; locale="$1"; width="$2"; height="$3"; passed=0; file=''
+            for attempt in 1 2; do
+              profile="/tmp/ft-b3810-${locale}-${width}-$attempt"
+              file="/tmp/b3810-${locale}-${width}-$attempt.html"
+              rm -rf "$profile" "$file"
+              if timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
+                --user-data-dir="$profile" --window-size="$width,$height" --virtual-time-budget=12000 --dump-dom \
+                "http://127.0.0.1:4173/tests/browser/build38-10-spoken-on-integration.html?debug=$locale" >"$file" \
+                && grep -q 'data-b3810-done="1"' "$file" \
+                && grep -q "data-b3810-locale=\"$locale\"" "$file" \
+                && grep -q 'data-b3810-family="nous-on-spoken-equivalence"' "$file" \
+                && grep -q 'data-b3810-exercises="3"' "$file" \
+                && grep -q 'data-b3810-lesson="52"' "$file" \
+                && grep -q 'data-b3810-legacy-routes="1"' "$file" \
+                && grep -q 'data-b3810-storage-unchanged="1"' "$file" \
+                && grep -q 'data-b3810-no-overflow="1"' "$file" \
+                && ! grep -q 'data-b3810-error=' "$file"; then passed=1; break; fi
+            done
+            if [ "$passed" -ne 1 ]; then
+              echo "38.10 tribunal failed for $locale ${width}x${height}" >&2
+              grep -o 'data-b3810-[^ >]*="[^"]*"' "$file" >&2 || true
+              exit 1
+            fi
+          done
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-b3810-server.pid ]; then kill "$(cat /tmp/ft-b3810-server.pid)" || true; fi

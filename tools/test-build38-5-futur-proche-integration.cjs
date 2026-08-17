@@ -55,15 +55,15 @@ assert.match(loader,/const TRANSFER_FUTURE='2\.4\.0-b38\.5';/);
 const foundationsPos=loader.indexOf('foundations-pilot.js?v=${FOUNDATIONS}');
 const basePos=loader.indexOf('generalization-transfer-core.js?v=${TRANSFER}');
 const futurePos=loader.indexOf('generalization-futur-proche-core.js?v=${TRANSFER_FUTURE}');
-const adapterPos=loader.indexOf('generalization-transfer-lesson.js?v=${TRANSFER}');
+const adapterPos=loader.indexOf('generalization-transfer-lesson.js?v=');
 assert(foundationsPos>=0&&basePos>foundationsPos&&futurePos>basePos&&adapterPos>futurePos,'38.5 loader order is wrong');
 
-// Installed PWA keeps the future runtime dependency offline.
+// Installed PWA keeps the future runtime dependency offline. Shared renderer token may advance in successor slices.
 assert.match(sw,/const B382='2\.4\.0-b38\.2';/);
 assert.match(sw,/const B385='2\.4\.0-b38\.5';/);
 assert.match(sw,/generalization-transfer-core\.js\?v=\$\{B382\}/);
 assert.match(sw,/generalization-futur-proche-core\.js\?v=\$\{B385\}/);
-assert.match(sw,/generalization-transfer-lesson\.js\?v=\$\{B382\}/);
+assert.match(sw,/generalization-transfer-lesson\.js\?v=\$\{[^}]+\}/);
 
 const legacy=[0,2,5].map(index=>base.catalog[index]);
 assert.deepEqual(legacy.map(x=>x.target),['Tu travailles.','Tu habites ici.','Elle aime ça.']);
@@ -82,4 +82,4 @@ assert.match(legacyBrowser,/lesson 33 needs exactly one transfer entry/);
 assert.match(legacyBrowser,/lesson 32 must not expose 38\.2 transfer/);
 assert.match(legacyBrowser,/lesson 34 must not expose 38\.2 transfer/);
 
-console.log('Build 38.5 contract OK: shared renderer keeps lesson 33 exact and future route lesson 35 while allowing later additive routes');
+console.log('Build 38.5 contract OK: shared renderer keeps lesson 33 exact and future route lesson 35 while allowing later additive routes and cache-token advancement');

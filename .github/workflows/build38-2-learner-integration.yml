@@ -42,9 +42,9 @@ jobs:
           grep -q "persistent:false" src/pedagogy/generalization-transfer-lesson.js
           grep -q "masteryClaim:false" src/pedagogy/generalization-transfer-lesson.js
           grep -q "generalization-transfer-core.js?v=\${TRANSFER}" src/core/build32-loader.js
-          grep -q "generalization-transfer-lesson.js?v=\${TRANSFER}" src/core/build32-loader.js
+          grep -Fq 'generalization-transfer-lesson.js?v=${' src/core/build32-loader.js
           grep -q "generalization-transfer-core.js?v=\${B382}" sw.js
-          grep -q "generalization-transfer-lesson.js?v=\${B382}" sw.js
+          grep -Fq 'generalization-transfer-lesson.js?v=${' sw.js
           ! grep -q 'Math.random' src/pedagogy/generalization-transfer-lesson.js
           ! grep -q 'localStorage.setItem' src/pedagogy/generalization-transfer-lesson.js
           ! grep -q 'sessionStorage.setItem' src/pedagogy/generalization-transfer-lesson.js
