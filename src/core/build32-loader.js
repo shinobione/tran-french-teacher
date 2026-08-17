@@ -7,6 +7,8 @@
   const TRANSFER_NEGATION='2.4.0-b38.8';
   const TRANSFER_FUTURE='2.4.0-b38.5';
   const TRANSFER_NUMBER='2.4.0-b38.7';
+  const TRANSFER_SPOKEN_ON='2.4.0-b38.10';
+  const TRANSFER_LESSON='2.4.0-b38.10';
   const RUNTIME_META = Object.freeze({
     version:'2.4.0',
     build:'36',
@@ -96,7 +98,8 @@
       await loadScript(`./src/pedagogy/generalization-negation-core.js?v=${TRANSFER_NEGATION}`, 'generalizationNegationCore');
       await loadScript(`./src/pedagogy/generalization-futur-proche-core.js?v=${TRANSFER_FUTURE}`, 'generalizationFuturProcheCore');
       await loadScript(`./src/pedagogy/generalization-number-core.js?v=${TRANSFER_NUMBER}`, 'generalizationNumberCore');
-      await loadScript(`./src/pedagogy/generalization-transfer-lesson.js?v=${TRANSFER}`, 'generalizationTransferLesson');
+      await loadScript(`./src/pedagogy/generalization-spoken-on-core.js?v=${TRANSFER_SPOKEN_ON}`, 'generalizationSpokenOnCore');
+      await loadScript(`./src/pedagogy/generalization-transfer-lesson.js?v=${TRANSFER_LESSON}`, 'generalizationTransferLesson');
       installRuntimeMeta();
       window.FrenchTranquilleBuild27Shell?.refresh?.();
       window.FrenchTranquilleBuild32Shell?.refresh?.();
