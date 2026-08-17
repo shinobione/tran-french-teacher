@@ -14,10 +14,13 @@
 
 | Item | Canonical state |
 |---|---|
-| Application runtime metadata | **V2.4.0 · Build 36** |
+| Public application runtime metadata | **V2.4.0 · Build 36** |
 | Product pedagogy baseline | **V2.3.0 · Build 34** |
-| Current runtime-bearing product / governance main | **`3fae502dba8faee003b44c5a1b9a9cffd9affec7`** — PR #197 / Build 38.8 |
-| GitHub Pages | **#263 / run `32056843564` SUCCESS** on exact runtime SHA |
+| Current governance main before PR #201 | **`0d7b8a31d4731024ff9e86d97e3128bad572efb3`** — PR #200 / Build 38.9 docs closeout |
+| Latest accepted Build 38 product/core checkpoint | **`a33e504cdc20438c454fc365371af545ef747f0c`** — PR #199 / Build 38.9 |
+| Latest learner-facing Transfer runtime checkpoint | **`3fae502dba8faee003b44c5a1b9a9cffd9affec7`** — PR #197 / Build 38.8 |
+| GitHub Pages 38.9 product/core proof | **#265 / run `32059362998` SUCCESS** on exact `a33e504c…` SHA |
+| GitHub Pages 38.9 docs-closeout proof | **#266 / run `32059893554` SUCCESS** on exact `0d7b8a31…` SHA |
 | Curriculum | **52 lessons / 313 items** |
 | Scenario | **44 situations / 132 turns** |
 | Speaking Loop | **52/52 · max 2 moments / lesson** |
@@ -38,7 +41,8 @@
 | Build 38.6 | **CLOSED · deterministic singular → plural nominal core** |
 | Build 38.7 | **CLOSED · learner-facing nominal-plural integration** |
 | Build 38.8 | **CLOSED · learner-facing negation integration** |
-| Next Build 38 action | **next-family audit / handoff; no 38.9 assigned yet** |
+| Build 38.9 | **CLOSED / CERTIFIED / NON-WIRED · deterministic nous → on spoken-French core** |
+| Next Build 38 action | **learner-placement audit for 38.9; no automatic 38.10** |
 | Primary field target | **iPhone / Safari / installed PWA** |
 
 ## Current interpretation
@@ -49,11 +53,42 @@
 - Build 37 industrialized the Foundations system without renumbering the 52 lessons, without persistent Foundations state, and without treating Evidence as product truth.
 - F16 (`à/de` contractions) remains **deferred / not completed**; Build 37 stays closed.
 - Build 38 owns **generalization and construction of unseen phrases**.
-- 38.1 / 38.3 / 38.4 / 38.6 remain the certified deterministic transfer cores.
-- 38.2 / 38.5 / 38.7 / 38.8 expose those cores contextually in lessons 33 / 35 / 13 / 34 through the **same shared Transfer renderer**.
-- Build 38.8 is merged/deployed at `3fae502d…`; Pages #263 is green on that exact SHA.
+- 38.1 / 38.3 / 38.4 / 38.6 / 38.9 remain certified deterministic transfer cores.
+- 38.2 / 38.5 / 38.7 / 38.8 expose certified cores contextually in lessons 33 / 35 / 13 / 34 through the **same shared Transfer renderer**.
+- Build 38.9 is merged/certified at `a33e504c…`; Pages #265 is green on that exact SHA. It is intentionally **pure/non-wired**, so the current learner-facing Transfer runtime remains 38.8.
+- PR #200 closed the Build 38.9 documentation checkpoint at `0d7b8a31…`; Pages #266 is green on that exact SHA.
 - PR #197 merged under a documented **controlled CI-infrastructure exception** after sequential workflow-only successor-safety fixes saturated GitHub Actions. Do not rewrite that event as “the entire final-head matrix drained green before merge.” Product/runtime proof was green; new reds were classified as stale historical ownership guards; the maintenance was isolated to workflow YAML.
-- The next Build 38 action is an **audit of the next narrow transfer family and placement**. No Build 38.9 number or feature is canonically assigned by this roadmap yet.
+- The next Build 38 action is a **separate learner-placement audit for the certified 38.9 core**. Do not assign 38.10 automatically.
+- Public Settings metadata remains **v2.4.0 · Build 36** by explicit runtime-version ownership; roadmap slices are not SemVer patch numbers.
+
+## Release/version metadata policy — LOCKED
+
+French Trân’quille must keep these concepts separate:
+
+```text
+PUBLIC RUNTIME RELEASE
+  learner/admin Settings identity
+  current = v2.4.0 · Build 36
+
+PEDAGOGY BASELINE
+  historical pedagogy compatibility/ownership anchor
+  current = v2.3.0 · Build 34
+
+ROADMAP CHECKPOINT
+  internal implementation/certification sequence
+  current accepted checkpoint = Build 38.9
+```
+
+Permanent rules:
+
+- `37.x`, `38.x`, etc. are roadmap slices, **not SemVer patch numbers**;
+- a narrow implementation slice must not silently bump public runtime metadata;
+- public runtime metadata changes only in an explicit release-version slice with dedicated tests and documentation;
+- the public `Build` displayed beside SemVer is the **release build anchor**, not the latest internal roadmap checkpoint;
+- a DEBUG/admin surface may later expose `Roadmap checkpoint: 38.9` separately, but must not overload the public release field;
+- if Build 38 eventually closes as one coherent shipped Generalization & Transfer milestone, **`v2.5.0 · Build 38` is the natural candidate**, but it is not assigned until an explicit release decision and certification.
+
+Canonical policy document: `docs/RELEASE-VERSIONING-POLICY.md`.
 
 ---
 
@@ -180,6 +215,7 @@ Build 38.5 lesson-35 placement / round-trip contract
 Build 38.6 deterministic nominal-plural semantics
 Build 38.7 lesson-13 placement / round-trip contract
 Build 38.8 lesson-34 placement / round-trip contract
+Build 38.9 deterministic nous→on core semantics
 shared Transfer renderer ownership
 ```
 
@@ -366,6 +402,8 @@ v1 → owns learner + memory → preserve historically absent stores → rebuild
 
 Build 36.3 / PR #170 certified backup / restore / reset / rollback with the derived shadow. PR #171 closed Build 36 and opened Build 37.
 
+Public runtime metadata is explicitly owned as **v2.4.0 · Build 36** until a dedicated release-version change replaces it. Build 37.x / 38.x roadmap slices do not auto-bump this value.
+
 ---
 
 # 6. Build 37 — Foundations Core — CLOSED
@@ -433,6 +471,8 @@ lesson 45 → à la tête ↔ au ventre
 A broad `à / au / à la / aux / de / du / de la / des` capsule currently risks mixing contractions with already-taught article/partitive meanings and lacks an equally clean `aux` scaffold.
 
 Therefore F16 is not required for Build 37 closeout and may return only if future curriculum/evidence establishes a clean transferable need.
+
+F18 remains `spoken-on = explicit / reuse-existing / lesson 52`; Build 38.9 does not create a second Foundation route for it.
 
 ---
 
@@ -806,32 +846,102 @@ Before merge, actual green successor-safe executions included F11, F05, F08, F12
 
 Therefore PR #197 merged under a documented **controlled CI-infrastructure exception**. This is deliberately narrower than saying “full matrix green.” Product/runtime evidence was green and Pages subsequently deployed the exact merge SHA successfully.
 
-## NEXT — Build 38 next-family audit / handoff
+## 38.9 — deterministic `nous → on` spoken-French core — CLOSED / CERTIFIED / NON-WIRED
 
-**No Build 38.9 feature is assigned yet.** The remaining prioritized families are audit directions, not authorization to implement them automatically.
+The post-38.8 audit selected a narrow recombination already scaffolded by the live curriculum:
+
+```text
+family = nous-on-spoken-equivalence
+status = pure-non-wired
+persistence = ephemeral-only
+masteryClaim = false
+lesson 34 source scaffold = nous
+lesson 52 / F18 target scaffold = spoken on meaning nous
+```
+
+Exact certified catalog:
+
+```text
+Nous travaillons. → On travaille.
+Nous rentrons.    → On rentre.
+Nous allons à…    → On va à…
+```
+
+Why this family was accepted:
+
+- lesson 34 already teaches `Nous travaillons.`, `Nous rentrons.` and `Nous allons à…`;
+- lesson 52 explicitly says `on` very often replaces `nous` in spoken French and takes the verb form used with `il/elle`;
+- Foundations F18 already owns `spoken-on` as `explicit / reuse-existing / lesson 52`;
+- therefore 38.9 recombines known structures instead of inventing a new Foundation concept or new vocabulary.
+
+Agreement transformation was audited but not selected for this slice: the corresponding masculine source forms were not equally solid learner-facing acquisitions, so a masculine→feminine transfer risked smuggling new source material into a supposed generalization exercise.
+
+Explicit exclusions remain locked:
+
+```text
+On est prêts.
+On a le temps.
+generic / indefinite on
+passive on
+object-pronoun rewrites
+negation
+questions
+adjective agreement
+new vocabulary
+random/adaptive generation
+durable writes
+Evidence product reads
+mastery claims
+learner-facing lesson wiring
+```
+
+Certification / closeout:
+
+```text
+PR #199 MERGED
+candidate head e066baa3d4c481f65bb361a4406d2a861b7563f3
+squash merge a33e504cdc20438c454fc365371af545ef747f0c
+Build 38.9 dedicated run 32058789584 SUCCESS
+full PR matrix: only the four inherited historical failures
+post-merge: only the same four inherited failures
+0 queued / 0 in-progress
+Pages #265 / run 32059362998 SUCCESS on exact merge SHA
+
+PR #200 MERGED — docs closeout
+merge 0d7b8a31d4731024ff9e86d97e3128bad572efb3
+Pages #266 / run 32059893554 SUCCESS
+```
+
+38.9 deliberately added no loader, service-worker, curriculum, shared renderer or learner-store wiring. It does **not** authorize a lesson-52 Transfer card automatically.
+
+A future learner-facing placement must prove useful construction practice without duplicating the existing lesson/F18 teaching or overloading lesson density.
+
+## Current learner-facing Transfer routes — LOCKED
+
+```text
+38.7 → lesson 13 / nominal plural / [0,2,3]
+38.2 → lesson 33 / subject substitution / [0,2,5]
+38.8 → lesson 34 / affirmation→negation / [0,1,2]
+38.5 → lesson 35 / futur proche / [0,1,3]
+```
+
+There is exactly one shared Transfer renderer.
+
+## NEXT — Build 38.9 learner-placement audit
 
 Canonical next action:
 
 ```text
-read live curriculum + current Transfer/Foundations ownership
-→ inventory remaining narrow transfer opportunities
-→ verify that source vocabulary and structures are already learner-known at the candidate placement
-→ reject duplication of existing Foundations teaching
-→ reject families needing unseen vocabulary or broad exception logic
-→ prefer deterministic source/target ownership
-→ select at most ONE next family + placement
-→ only then assign the next build number and implementation handoff
+read live lesson 52 + F18 learner-facing teaching
+→ test whether a construction exercise adds genuine retrieval/recombination value
+→ reject placement if it merely repeats the existing explanation/examples
+→ check lesson density and round-trip UX
+→ preserve all existing Transfer routes
+→ if useful, assign ONE separate learner-facing integration slice
+→ otherwise audit at most ONE other narrow Build 38 family
 ```
 
-Candidate directions that may be audited include:
-
-```text
-agreement transformations
-recombination across already-known vocabulary / structures
-other narrow transformations justified by the live curriculum
-```
-
-Do not infer that either is automatically the winner.
+Do not infer that lesson 52 automatically needs a new card merely because it owns `on`.
 
 Further Build 38 families remain one-at-a-time. **Do not start Build 39 inside Build 38.**
 
@@ -850,7 +960,7 @@ Tyffany chooses whether the next useful action is:
 
 Build 39 should consume reliable evidence from prior systems; it must not invent mastery from recognition failures or decorative activity counts.
 
-Build 39 remains future work. It is **not** the next implementation slice while Build 38 still has an unresolved next-family audit.
+Build 39 remains future work. It is **not** the next implementation slice while Build 38 still has an unresolved transfer/placement decision.
 
 ---
 
