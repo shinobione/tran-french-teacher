@@ -5,6 +5,8 @@ PWA de français pensée pour **Trân**, avec priorité à l’oral, au françai
 > Pour reprendre le projet correctement : **`AGENTS.md` → `PROJECT-STATE.md` → `MASTER-ROADMAP.md` → GitHub live**.
 >
 > Ce README décrit le produit. Il ne remplace pas le checkpoint ni la roadmap canonique.
+>
+> L’ancien README Build 34 est conservé comme preuve historique dans `docs/HISTORICAL-README-BUILD34.md`.
 
 ## État actuel — 2026-08-17
 
