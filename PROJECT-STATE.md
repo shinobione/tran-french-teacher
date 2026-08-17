@@ -7,11 +7,13 @@
 
 - Repository: `shinobione/tran-french-teacher`.
 - Default branch: `main`.
-- Current governance/code `main`: **`a33e504cdc20438c454fc365371af545ef747f0c`** — squash merge of PR **#199**, Build **38.9 · deterministic nous→on spoken transfer core**.
-- Current learner-facing runtime remains Build **38.8** from **`3fae502dba8faee003b44c5a1b9a9cffd9affec7`**; Build 38.9 is intentionally **pure/non-wired**, so it adds no learner-facing route yet.
-- GitHub Pages **#265 / run `32059362998` — SUCCESS** on exact main SHA `a33e504cdc20438c454fc365371af545ef747f0c`.
-- Post-merge Actions on `a33e504c…`: exactly **4 inherited historical failures**, **0 queued**, **0 in-progress**. No new red.
-- Visible application runtime metadata remains intentionally **v2.4.0 · Build 36**.
+- Current accepted governance `main`: **`0d7b8a31d4731024ff9e86d97e3128bad572efb3`** — PR **#200**, Build 38.9 documentation closeout.
+- Current accepted Build 38 product/core checkpoint: **`a33e504cdc20438c454fc365371af545ef747f0c`** — PR **#199**, Build **38.9 · deterministic nous→on spoken transfer core**.
+- Current learner-facing Transfer runtime remains Build **38.8** from **`3fae502dba8faee003b44c5a1b9a9cffd9affec7`**; Build 38.9 is intentionally **pure/non-wired**.
+- GitHub Pages Build 38.9 product/core proof: **#265 / run `32059362998` — SUCCESS** on exact `a33e504c…` merge SHA.
+- GitHub Pages Build 38.9 docs-closeout proof: **#266 / run `32059893554` — SUCCESS** on exact `0d7b8a31…` merge SHA.
+- Post-38.9 accepted baseline: exactly **4 inherited historical CI failures**; no accepted new red.
+- Public application runtime metadata remains **v2.4.0 · Build 36**.
 - Pedagogy baseline remains **v2.3.0 · Build 34**.
 - Curriculum: **52 lessons / 313 items**.
 - Scenario: **44 situations / 132 turns**.
@@ -31,6 +33,54 @@
 - 38.7 CLOSED / DEPLOYED — nominal plural Transfer in lesson 13.
 - 38.8 CLOSED / DEPLOYED — negation Transfer in lesson 34.
 - **38.9 CLOSED / CERTIFIED / NON-WIRED** — deterministic `nous → on` spoken-French transfer core.
+
+## Active governance slice — PR #201
+
+Branch:
+
+```text
+docs/versioning-roadmap-reconcile
+```
+
+Purpose:
+
+```text
+reconcile MASTER-ROADMAP through Build 38.9
+refresh stale README product state
+formalize release-version policy
+separate public runtime release / pedagogy baseline / roadmap checkpoint
+```
+
+This slice is **documentation/governance only**.
+
+It must not change:
+
+```text
+runtime code
+Settings runtime metadata
+curriculum
+learner stores
+PWA identity/cache contract
+voice
+Recovery
+Evidence
+Premium
+Transfer wiring
+```
+
+Public runtime version remains:
+
+```text
+v2.4.0 · Build 36
+```
+
+Roadmap checkpoint remains independently:
+
+```text
+Build 38.9 CLOSED / CERTIFIED / NON-WIRED
+```
+
+The natural candidate after eventual Build 38 closure is `v2.5.0 · Build 38`, but **no release bump is assigned by PR #201**.
 
 ## Build 38.9 — certified core
 
@@ -58,39 +108,7 @@ lesson 34 → learner-known nous scaffold
 lesson 52 / F18 → spoken on often means nous + il/elle verb form
 ```
 
-Explicit exclusions remain locked:
-
-```text
-On est prêts.
-On a le temps.
-generic / indefinite on
-passive on
-object-pronoun rewrites
-negation
-questions
-adjective agreement
-new vocabulary
-random/adaptive generation
-durable writes
-Evidence product reads
-mastery claims
-learner-facing lesson wiring
-```
-
-Certification / closeout:
-
-```text
-PR #199 MERGED
-candidate head e066baa3d4c481f65bb361a4406d2a861b7563f3
-squash merge a33e504cdc20438c454fc365371af545ef747f0c
-Build 38.9 dedicated run 32058789584 SUCCESS
-full PR matrix: only the four inherited historical failures
-post-merge: only the same four inherited failures
-0 queued / 0 in-progress
-Pages #265 / run 32059362998 SUCCESS on exact merge SHA
-```
-
-Build 38.9 does **not** authorize a lesson-52 Transfer card automatically. A learner-facing placement must be audited separately for usefulness, density and non-duplication with the existing lesson/F18 teaching.
+Build 38.9 does **not** authorize a lesson-52 Transfer card automatically.
 
 ## Existing learner-facing Transfer routes — LOCKED
 
@@ -125,7 +143,7 @@ Exactly four historical failures remain baseline debt:
 3. `Build 36.3 Recovery v3 durability tribunal`;
 4. `Build 28 Data recovery smoke`.
 
-Any other failure must be classified. Historical red debt is not permission to ignore new failures.
+Any other failure must be classified.
 
 ## Protected boundaries
 
@@ -151,32 +169,28 @@ Build 37 Foundation routes
 38.7 lesson-13 Transfer placement
 38.8 lesson-34 Transfer placement
 shared Transfer renderer ownership
+historical learner continuity: 7 completed lessons / l8 progress 4 / 40 known items
 ```
-
-## Version metadata rule — current reality
-
-The Settings value is **not derived from the latest roadmap slice number**. PR #172 deliberately separated and locked:
-
-```text
-Application runtime metadata = v2.4.0 · Build 36
-Pedagogical baseline         = v2.3.0 · Build 34
-Historical Build32 audit     = v2.2.0 · Build 32
-```
-
-Build 37.x / 38.x are project/pedagogy slices and currently do not auto-bump the public runtime metadata. Do not invent a version bump inside a narrow Transfer slice. If the project wants Settings to track major product phase completion more intuitively, define and certify a dedicated release-version policy/change rather than coupling Settings to every sub-slice.
 
 ## NEXT
 
-Before any new implementation:
+Current control step:
 
 ```text
-reconcile MASTER-ROADMAP through accepted Build 38.9
-→ audit whether the certified 38.9 core deserves learner-facing placement at/after lesson 52
-→ reject a route that merely duplicates existing F18/lesson-52 teaching
-→ if placement is useful, assign one separate integration slice
-→ otherwise audit at most one other narrow Build 38 family
+review PR #201 exact docs-only diff
+→ classify CI only for this governance slice
+→ merge if no product/runtime file leaked
+→ verify main + Pages
+```
+
+After PR #201 closes, the next **product** action is:
+
+```text
+audit whether 38.9 deserves learner-facing placement at/after lesson 52
+→ prove genuine recombination value
+→ reject duplication of F18 / lesson-52 teaching
+→ check lesson density and round-trip UX
+→ only then assign a separate integration slice if justified
 ```
 
 Do **not** start Build 39 while Build 38 still has unresolved transfer/placement decisions.
-
-See `docs/BUILD-38.9-CLOSEOUT.md` for the durable acceptance record.
