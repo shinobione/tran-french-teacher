@@ -7,10 +7,10 @@
 
 - Repository: `shinobione/tran-french-teacher`.
 - Default branch: `main`.
-- Current accepted `main`: **`c2fa5f22bd695bbadea9239b8bdcc408a82c92fe`** — PR **#202**, versioning-governance handoff closeout.
-- GitHub Pages proof for that handoff: **#268 / run `32062172506` — SUCCESS** on exact `c2fa5f22…` SHA.
-- Current accepted Build 38 core checkpoint: **38.9**, PR **#199**, merge **`a33e504cdc20438c454fc365371af545ef747f0c`**.
-- Current accepted learner-facing Transfer runtime on `main`: **38.8**, merge **`3fae502dba8faee003b44c5a1b9a9cffd9affec7`**.
+- Current runtime-bearing `main`: **`2c7bf79a61d0cacd21f9345ed661cc3ac156e604`** — PR **#203**, Build **38.10** learner-facing spoken-`on` Transfer.
+- GitHub Pages proof: **#269 / run `32065682064` — SUCCESS** on exact `2c7bf79a…` SHA.
+- Build 38.10 dedicated final-head proof: **run `32064765660` — SUCCESS** on exact candidate head `21d20a30af276e975e3055d6bacc7d9d32eb4e91`.
+- Build 38.9 core checkpoint remains **PR #199 / `a33e504cdc20438c454fc365371af545ef747f0c`** and remains the certified deterministic core owner.
 - Public runtime metadata remains intentionally **v2.4.0 · Build 36**.
 - Pedagogy baseline remains **v2.3.0 · Build 34**.
 - Curriculum: **52 lessons / 313 items**.
@@ -21,31 +21,23 @@
 - Premium V5.10: **CLOSED / physical FIELD PASS**.
 - **Build 35 CLOSED. Build 36 CLOSED. Build 37 CLOSED.**
 - **Build 38 ACTIVE — Generalization & Transfer.**
+- There is currently **no active product implementation candidate** after #203.
 
-## Active implementation candidate — Build 38.10
+## Build 38.10 — CLOSED / MERGED / DEPLOYED
 
 PR:
 
 ```text
 #203 — Build 38.10 · learner-facing spoken-on transfer
-branch = build38/spoken-on-learner-integration
-base = c2fa5f22bd695bbadea9239b8bdcc408a82c92fe
-status = OPEN / PR CANDIDATE / NOT MERGED
+candidate head = 21d20a30af276e975e3055d6bacc7d9d32eb4e91
+squash merge   = 2c7bf79a61d0cacd21f9345ed661cc3ac156e604
+status         = MERGED / DEPLOYED
+Pages          = #269 / run 32065682064 SUCCESS
 ```
 
-The required post-38.9 placement audit is resolved in favor of **lesson 52**, but only as active reconstruction through the existing Transfer renderer.
+The required post-38.9 placement audit resolved in favor of **lesson 52**, but only as active reconstruction through the existing Transfer renderer.
 
-Audit result:
-
-```text
-lesson 52 already owns explanation + recognition of spoken on
-lesson 34 already owns the exact nous source scaffold
-38.9 already owns the deterministic pure core
-
-missing learner action = actively rebuild known nous sentences with on
-```
-
-Therefore 38.10 adds exactly one optional lesson-52 Transfer route:
+Exact learner-facing Transfer:
 
 ```text
 Nous travaillons. → On travaille.
@@ -53,9 +45,7 @@ Nous rentrons.    → On rentre.
 Nous allons à…    → On va à…
 ```
 
-This is not another F18/Foundation capsule and not another grammar explanation. The lesson remains the teaching owner; Transfer adds retrieval/recombination.
-
-Runtime route candidate:
+Canonical route:
 
 ```text
 spokenOnIntegration = 38.10
@@ -66,69 +56,75 @@ persistence = ephemeral-only
 masteryClaim = false
 ```
 
+This is not a second F18/Foundation capsule and not another grammar explanation. Lesson 52 remains the explanation/recognition owner; Transfer adds retrieval/recombination.
+
 Build 38.9 core ownership remains unchanged:
 
 ```text
 src/pedagogy/generalization-spoken-on-core.js
 slice = 38.9
 status = pure-non-wired
-byte-for-byte unchanged in 38.10
-```
-
-38.10 only loads and consumes that core through the existing shared renderer.
-
-Dedicated candidate proof:
-
-```text
-tools/test-build38-10-spoken-on-integration.cjs
-tests/browser/build38-10-spoken-on-integration.html
-.github/workflows/build38-10-spoken-on-integration.yml
-docs/BUILD-38.10-SPOKEN-ON-INTEGRATION.md
-```
-
-The Build 38.9 workflow is made successor-safe: the certified 38.9 core itself remains immutable, while future shared-adapter integration is no longer incorrectly banned.
-
-## Existing learner-facing Transfer routes — LOCKED
-
-```text
-38.7 → lesson 13 / nominal plural / [0,2,3]
-38.2 → lesson 33 / subject substitution / [0,2,5]
-38.8 → lesson 34 / affirmation→negation / [0,1,2]
-38.5 → lesson 35 / futur proche / [0,1,3]
-```
-
-Build 38.10 must preserve all four and keep exactly **one shared Transfer renderer**.
-
-## Build 38.9 certified core — LOCKED
-
-```text
-family = nous-on-spoken-equivalence
-status = pure-non-wired
 persistence = ephemeral-only
 masteryClaim = false
-
-Nous travaillons. → On travaille.
-Nous rentrons.    → On rentre.
-Nous allons à…    → On va à…
 ```
 
-Excluded from this family:
+The 38.9 core stayed byte-identical in 38.10. Build 38.10 only loads and consumes that certified API through the existing shared Transfer adapter.
+
+## Shared Transfer routes — LOCKED
 
 ```text
-On est prêts.
-On a le temps.
-generic / indefinite on
-passive on
-object-pronoun rewrites
-negation
-questions
-adjective agreement
-new vocabulary
-random/adaptive generation
-durable writes
-Evidence product reads
-mastery claims
+38.7  → lesson 13 / nominal plural / [0,2,3]
+38.2  → lesson 33 / subject substitution / [0,2,5]
+38.8  → lesson 34 / affirmation→negation / [0,1,2]
+38.5  → lesson 35 / futur proche / [0,1,3]
+38.10 → lesson 52 / nous→spoken-on / [0,1,2]
 ```
+
+There is exactly **one shared learner-facing Transfer renderer**.
+
+## CI classification at 38.10 closeout
+
+The live pre-38.10 base (`c2fa5f22…`) actually had **six failed push runs**, so the older four-item handoff list was incomplete.
+
+Pre-38.10 failures observed on that exact base:
+
+```text
+French Trân'quille quality
+Build 36.2 Evidence shadow adoption
+V2.0.0 Freeze tribunal
+Build 36.3 Recovery v3 durability tribunal
+Build 28 Data recovery smoke
+Build 26.4 Progress single-scroll + Tyffany smoke
+```
+
+Classification after #203:
+
+- `Build 26.4 Progress single-scroll + Tyffany smoke` passed on the #203 candidate and is therefore treated as a **runner/harness flake**, not durable baseline debt.
+- `French Trân'quille quality` is inherited stale CI: it still contains literal Build-24 wiring/version assertions and fails before its Chrome stage.
+- The four previously documented failures remain inherited historical debt.
+- The resulting persistent inherited failure set at the 38.10 checkpoint is therefore **five**, not four.
+
+Persistent inherited set:
+
+```text
+French Trân'quille quality
+Build 36.2 Evidence shadow adoption
+V2.0.0 Freeze tribunal
+Build 36.3 Recovery v3 durability tribunal
+Build 28 Data recovery smoke
+```
+
+Any other failure is new until classified. Historical red debt is never permission to ignore a new regression.
+
+### PR #203 controlled queue note
+
+The final-head Build 38.10 tribunal completed **SUCCESS** on `21d20a30…`, and the completed final-head matrix introduced no failure outside the inherited set.
+
+One unrelated `Premium V5.7 Theme Art Integration` final-head run remained queued behind the Actions fan-out at merge time. Its immediately preceding run on head `6e854224…` was **SUCCESS**, and the only subsequent code change was the shared Transfer HTML `&quot;` escaping correction, outside Theme Art ownership.
+
+PR #203 therefore merged under an explicit **controlled queue exception**. Do not rewrite this as “every final-head workflow had drained before merge.”
+
+Post-merge Pages then completed **SUCCESS** on the exact squash merge SHA.
 
 ## Build 37 Foundation ownership — LOCKED
 
@@ -149,21 +145,10 @@ F18 remains `spoken-on = explicit / reuse-existing / lesson 52`; 38.10 does not 
 ```text
 Public runtime release = v2.4.0 · Build 36
 Pedagogy baseline      = v2.3.0 · Build 34
-Roadmap checkpoint     = Build 38.10 candidate
+Roadmap checkpoint     = Build 38.10
 ```
 
 Build 38.x slices do not auto-bump public Settings metadata. A public version change requires a dedicated release-version slice.
-
-## Inherited CI debt
-
-Exactly four historical failures remain baseline debt:
-
-1. `Build 36.2 Evidence shadow adoption`;
-2. `V2.0.0 Freeze tribunal`;
-3. `Build 36.3 Recovery v3 durability tribunal`;
-4. `Build 28 Data recovery smoke`.
-
-Any other failure must be classified. Historical red debt is not permission to ignore new failures.
 
 ## Protected boundaries
 
@@ -188,6 +173,7 @@ Build 37 Foundation routes
 38.5 lesson-35 Transfer placement
 38.7 lesson-13 Transfer placement
 38.8 lesson-34 Transfer placement
+38.10 lesson-52 Transfer placement
 shared Transfer renderer ownership
 ```
 
@@ -199,23 +185,21 @@ l8 progress = 4
 40 known historical items
 ```
 
-## NEXT — control step for PR #203
+## NEXT — Build 38 milestone audit, not an automatic 38.11
 
-Per `AGENTS.md`, implementation stops at the PR candidate boundary.
+There is no authorized 38.11 candidate.
 
-Next control action:
+Next canonical control decision:
 
 ```text
-review exact PR #203 diff
-→ run/classify dedicated 38.10 gate + predecessor workflows
-→ rerun suspected flakes unchanged
-→ reject any new product regression
-→ merge only after evidence is acceptable
-→ verify exact main SHA + Pages if merged
-→ durable closeout / next-family decision only afterward
+verify Build 38.1→38.10 ownership and deployed learner-facing coverage
+→ identify whether any high-value deterministic transfer family remains genuinely unresolved
+→ reject duplicates / weakly scaffolded families
+→ if Build 38 is pedagogically complete, prepare a dedicated Build-38 milestone closeout / release-version decision
+→ only if one clearly justified family remains, audit and authorize ONE narrow successor slice
 ```
 
-Do **not** start another Build 38 family while PR #203 is open.
-Do **not** start Build 39 while Build 38 remains active.
+Do **not** start Build 39 while Build 38 remains open.
+Do **not** change Settings to `v2.5.0 · Build 38` without an explicit release-version slice and dedicated certification.
 
-See `docs/BUILD-38.10-SPOKEN-ON-INTEGRATION.md`, `MASTER-ROADMAP.md` and `docs/RELEASE-VERSIONING-POLICY.md`.
+`MASTER-ROADMAP.md` still contains the pre-38.10 Build-38 placement wording at this docs-closeout branch point. Treat this `PROJECT-STATE.md` plus `docs/BUILD-38.10-SPOKEN-ON-INTEGRATION.md` as the current volatile handoff until the next deliberate MASTER consolidation; do not delete or compress historical roadmap evidence to force a cosmetic reconciliation.
