@@ -33,6 +33,11 @@ jobs:
           grep -q "Object.defineProperty(meta, 'version'" src/core/build32-loader.js
           grep -q "Object.defineProperty(meta, 'build'" src/core/build32-loader.js
           test -s tests/browser/runtime-version-meta-tribunal.html
+
+      - name: Release v2.5 scope guard stays release-local
+        if: github.event_name == 'pull_request' && github.head_ref == 'release/v2.5.0-build38-certification'
+        run: |
+          set -euo pipefail
           ! git diff origin/main...HEAD -- app.js voice-ios.js free-voice.js src/pedagogy/foundations-pilot.js src/core/data-recovery.js sw.js index.html | grep -q '^[-+]'
 
       - name: Start static server
