@@ -5,11 +5,12 @@ Last reconciled: 2026-08-18
 ## Canonical accepted main
 
 - Repository: `shinobione/tran-french-teacher`
-- Accepted `main`: **`15cd59be579f546b44946f6e31046d3a66cf21f5`**
-- Commit: `Docs: close Build 39.4 and hand off 39.5`
-- PR **#216 — MERGED** from exact head `6738cebe2246c1813d7c7baa7be779f172eb32d9` with expected-head squash protection.
-- Parent runtime/internal checkpoint: **`f662d96d55e385f3d6baa946bde8f22fd1d25f0e`** — PR #215 / Build39.4.
-- `main` verification after #216: exact SHA `15cd59be...`, GitHub verified / valid, and **0 open PRs before Build39.5 branch creation**.
+- Accepted runtime/internal `main`: **`3d3a6259b7b86ef7f7511832368c6d1eb549be44`**
+- Commit: `Build 39.5: LI3 advisory-only Practice recommendation`
+- PR **#217 — MERGED** from exact final head **`c171b0e65194289257a5e30763965f9f6ef6c03a`** with expected-head squash protection.
+- Parent: `15cd59be579f546b44946f6e31046d3a66cf21f5` — Build39.4 docs/governance closeout.
+- Merge commit is GitHub verified / valid.
+- Immediately after merge, `main` was re-read and matched exactly `3d3a6259...`; open PR search returned **0 open PRs** before this docs closeout branch.
 - Public runtime metadata remains **v2.5.0 · Build 38**.
 - Pedagogy baseline remains **v2.3.0 · Build 34**.
 - Latest exact public release deployment proof remains GitHub Pages #272 / run `32072053127` on release SHA `2abe20511d6265d12643276f18041812fec3e715`.
@@ -38,7 +39,7 @@ l8 progress = 4
 40 known historical items
 ```
 
-No Build39 work may reset, renumber or reinterpret this state.
+No future work may reset, renumber or reinterpret this state.
 
 ## Build 38 — CLOSED / RELEASED
 
@@ -52,9 +53,11 @@ No Build39 work may reset, renumber or reinterpret this state.
 
 Build38 is pedagogically complete, public release is `v2.5.0 · Build 38`, and Build38.11 is not authorized.
 
-## Build 39 — Learner Intelligence 3 — OPEN
+## Build 39 — Learner Intelligence 3 — CLOSED / CERTIFIED
 
-Target families:
+Milestone contract: choose a useful next action only from trustworthy observable evidence; otherwise explicitly abstain. Never invent mastery from speech-recognition failure, decorative counts, exposure or unsupported inference.
+
+Target vocabulary remains:
 
 ```text
 phrase-retrieval
@@ -65,202 +68,141 @@ scenario
 transfer-construction
 ```
 
-Permanent rule: consume reliable observable evidence only. Absence of evidence means unavailable / abstain. Recognition-only failures and decorative activity totals do not become mastery/weakness.
+Current trustworthy availability:
+
+```text
+phrase-retrieval ✅
+listening        ✅
+scenario         ✅
+concept-review         unavailable — no durable concept-understanding owner
+foundation-capsule     unavailable — Foundations has no trustworthy need owner
+transfer-construction  unavailable — Transfer has no durable evidence owner
+```
 
 ### 39.1 — arbitration core — CLOSED / CERTIFIED
 
 - merge `246338a9ef11eb430f59fc6ccf494688904cf883`
 - owner `src/pedagogy/learner-action-arbitration-core.js`
-- pure deterministic arbitration, no storage.
+- deterministic ranking, independent-evidence thresholds, recognition-only rejection, explicit abstention.
 
 ### 39.2 — evidence adapter — CLOSED / CERTIFIED
 
 - merge `9af287417d1fbb502837bea4aa80886cca2ffb2e`
 - owner `src/pedagogy/learner-evidence-adapter.js`
-- reliable families today:
-  - phrase retrieval via Memory due/fragile + trustworthy retrieval errors;
-  - listening via explicit `listening-*` Error events;
-  - scenario via `scenario-miss` / `scenario-assisted` Error events.
-- deliberately unavailable:
-  - concept-review;
-  - foundation-capsule;
-  - transfer-construction.
+- trustworthy inputs: Memory due/fragile and explicit Error Intelligence item events.
+- Listening/Scenario are consumed only through their explicit Error source/type events.
 
 ### 39.3 — decision pipeline — CLOSED / CERTIFIED
 
 - merge `c809790453a40ae5e2da3a497e3b64b7a51e5d87`
 - owner `src/pedagogy/learner-action-decision-pipeline.js`
-- caller snapshots → 39.2 → 39.1 → reliable decision or abstention.
+- caller snapshots → 39.2 → 39.1 → decision/abstention.
 
 ### 39.4 — runtime snapshot collector — CLOSED / CERTIFIED
 
-- PR #215 final head `92f5f76e97cb833df4d827fa7808ff368276148c`
-- accepted merge **`f662d96d55e385f3d6baa946bde8f22fd1d25f0e`**
+- merge `f662d96d55e385f3d6baa946bde8f22fd1d25f0e`
 - owner `src/pedagogy/learner-action-runtime-snapshot.js`
 - API `FrenchTranquilleLearnerActionRuntimeSnapshot.status()/collect()/decide()`.
 
-Certified flow:
+Certified runtime flow:
 
 ```text
 FrenchTranquilleMemory.summary()
 +
 FrenchTranquilleErrors.summary()
-        ↓
-narrow detached immutable snapshot
-        ↓
-39.3 pipeline
-        ↓
-reliable decision OR abstention
+→ narrow detached immutable snapshot
+→ 39.3 pipeline
+→ reliable decision OR abstention
 ```
 
-39.4 loads 39.1→39.4 in the current runtime and precaches the chain, but performs no decision at boot, no direct collector storage access, no durable write, no Evidence cutover and no learner-facing action execution.
+No decision at boot, no direct collector storage access, no durable write, no Evidence cutover and no learner-facing action execution.
 
-Final exact-head important SUCCESS runs:
+### 39.5 — advisory-only Practice recommendation — CLOSED / CERTIFIED
+
+- PR #217 final head **`c171b0e65194289257a5e30763965f9f6ef6c03a`**
+- accepted merge **`3d3a6259b7b86ef7f7511832368c6d1eb549be44`**
+- owner `src/pedagogy/learner-action-practice-advisory.js`
+- API `FrenchTranquilleLearnerActionPracticeAdvisory`.
+
+Build27 App Shell remains byte-identical and keeps route/action ownership.
+
+When the learner explicitly opens Practice:
 
 ```text
-Build39.4            32179692906
-Runtime metadata     32179693060
-Release v2.5         32179692997
-Build38.10           32179693123
-Build39.1            32179692834
-Build39.2            32179693212
-Build39.3            32179692784
-Build31              32179693098
-Build32              32179693208
-Build26.4            32179693043
+39.4 decide()
+→ phrase-retrieval → Réviser
+→ listening        → Écouter
+→ scenario         → Dans la vraie vie
+→ abstain/unsupported → no advisory
 ```
 
-Final matrix returned to exactly the five inherited standing failures and no pending jobs.
+39.5 only replaces the historical coarse `Conseillé maintenant` badge. No automatic route, click, persistent write, Evidence read-path change or fallback `Parler` recommendation occurs.
 
-### #216 governance closeout
-
-#216 preserved the old 1321-line MASTER byte-for-byte at:
+Dedicated final-head run:
 
 ```text
-docs/archive/MASTER-ROADMAP-pre-39.4-closeout.md
+Build 39.5 Practice advisory — 32182481929 ✅ SUCCESS
 ```
 
-and replaced the canonical `MASTER-ROADMAP.md` with a compact current-state handoff. #216 was docs-only and its matrix also drained to exactly the five inherited failures.
+The real-app Chrome tribunal passed VI/DEBUG FR × desktop/iPhone and proved retrieval/listening/scenario mapping, recognition-only + empty abstention, no auto-route, historical manual Review route, seven-store byte identity while advice renders, `7 completed / l8=4 / 40 known`, touch geometry and no overflow.
 
-## Build 39.5 — LI3 Practice advisory — ACTIVE IMPLEMENTATION SLICE
+The first dedicated run `32182214772` failed only because the test iframe used HTML `hidden` while asserting 44px geometry, necessarily producing 0×0 rects. Only the harness changed to a layoutable off-screen iframe; no product logic changed for this classification.
 
-Branch:
+Final exact-head matrix drained with **exactly the five inherited standing failures, no other failure, no queued, no in-progress**. Important green predecessors included Runtime metadata, Build27, Build31/32, Build39.1→39.4, Release v2.5, Build38.10, navigation/PWA/Premium, Build26.1 and Build26.4.
+
+## Build39 milestone closeout audit
+
+No 39.6 learner-facing wiring is authorized.
+
+Actual owner audit after #217:
+
+- canonical Home is the Build27 Home, not the old Daily Coach surface;
+- Build27 Home intentionally gives the current lesson the one primary CTA, with Review/Listening as secondary quick actions;
+- Practice is the dedicated learner surface for choosing what to work on now, and 39.5 already provides LI3 advice there;
+- adding a second LI3 recommendation system to Home would duplicate Practice or require a new Scenario CTA and weaken the one-primary-action Home contract;
+- `src/pedagogy/daily-coach.js` is a legacy layer relative to the Build27 Home and directly reads learner/Memory storage, so rewriting it for LI3 would move architecture backwards;
+- unsupported concept/Foundation/Transfer families still lack trustworthy evidence owners. No new durable evidence is justified merely to fill the vocabulary.
+
+Verdict: **Build39 closes here** with reliable recommendation where evidence exists and explicit abstention where it does not.
+
+## Build 40 — A1 Consolidation Audit — NEXT / AUDIT ONLY
+
+Build40 starts as a read-only analysis/documentation milestone. No learner-facing runtime mutation is authorized until its verdict is closed.
+
+Required audit dimensions:
 
 ```text
-build39/practice-advisory
+52 lessons / 313 items curriculum capability coverage
+Foundations registry + actual placements
+Build38 Transfer families + learner placements
+Scenario 44 / 132 contextual reuse
+Listening datasets / contrast families
+Learning Memory + Error Intelligence semantics
+LI3 supported vs unavailable evidence families
+current learner-facing Home / Practice / Progress surfaces
 ```
 
-Base:
+Build40 must classify each meaningful A1 capability as something like:
 
 ```text
-15cd59be579f546b44946f6e31046d3a66cf21f5
+taught / exposed
+practiced / recalled
+contextually reused
+constructed / transferred
+reliably evidenced
+under-evidenced
+missing / deferred
 ```
 
-### Selected learner-facing boundary
-
-The Build27 Practice overlay already owns stable actions and routes:
+It must then choose one defensible direction:
 
 ```text
-Parler
-Écouter
-Réviser
-Dans la vraie vie
+A1 consolidation
+or internal A1+ expansion
+or A2 roadmap opening
 ```
 
-Its historical heuristic marked `Réviser` when reviews were due and otherwise marked `Parler` as `Conseillé maintenant`.
-
-39.5 does **not** edit `src/ui/build27-app-shell.js`. A new decorator loads after 39.4 and replaces only that advisory badge when Practice is explicitly opened.
-
-New owner candidate:
-
-```text
-src/pedagogy/learner-action-practice-advisory.js
-FrenchTranquilleLearnerActionPracticeAdvisory
-version = 3.0.0-practice-advisory
-```
-
-Mapping:
-
-```text
-phrase-retrieval → review
-listening        → listening
-scenario         → real-life
-null / abstain   → no advisory
-unsupported      → no advisory
-```
-
-There is deliberately no `Parler` mapping because LI3 has no reliable conversation/free-voice need family.
-
-If a reliably selected action is currently unavailable/disabled, no fallback recommendation is shown.
-
-### Runtime behavior
-
-```text
-learner explicitly opens Pratiquer
-→ Build27 creates historical overlay
-→ 39.5 MutationObserver decorates new Practice page
-→ 39.4 decide()
-→ legacy heuristic badge removed
-→ at most one LI3 advisory badge added
-→ learner still chooses/clicks manually
-```
-
-The decorator contains no route calls, `.click()`, storage access, fetch, Evidence read or durable write.
-
-`src/core/build32-loader.js` loads 39.5 only after 39.4 in the current non-historical runtime.
-
-`sw.js` pre-caches 39.5 with `B395='3.0.0-b39.5'` while preserving the existing PWA cache namespace.
-
-Public runtime metadata remains `v2.5.0 · Build 38`.
-
-### Dedicated tribunal candidate
-
-Unit mapping tribunal covers:
-
-```text
-phrase-retrieval → review
-listening → listening
-scenario → real-life
-unsupported / abstain → null
-```
-
-Real application tribunal seeds the locked historical learner and boots actual runtime for five cases:
-
-```text
-retrieval       → only Réviser advised
-listening       → only Écouter advised
-scenario        → only Dans la vraie vie advised
-recognition-only→ no advisory
-empty evidence  → no advisory
-```
-
-It also requires:
-
-```text
-opening Practice does not auto-route
-manual Réviser route still works
-seven durable stores unchanged while only advice renders
-7 completed / l8=4 / 40 known preserved
-4 historical Practice buttons remain >=44px
-no horizontal overflow
-VI + DEBUG FR
-1280x900 + 390x844
-```
-
-### 39.5 intended scope
-
-```text
-.github/workflows/build39-5-practice-advisory.yml
-PROJECT-STATE.md
-docs/BUILD-39.5-PRACTICE-ADVISORY.md
-src/core/build32-loader.js
-src/pedagogy/learner-action-practice-advisory.js
-sw.js
-tests/browser/build39-5-practice-advisory.html
-tests/unit/build39-5-practice-advisory.test.cjs
-```
-
-Protected owners explicitly byte-identical in this slice include Build27 App Shell, Daily Coach, 39.1→39.4 owners, Memory, Errors, Listening, Scenario, Foundations, Transfer, Premium, Build30 bridge/contracts, voice sanctuaries and curriculum.
+No CEFR certification claim and no A2 implementation before the audit closes.
 
 ## CI baseline
 
@@ -302,18 +244,29 @@ Build39.1 arbitration semantics
 Build39.2 evidence reliability boundaries
 Build39.3 pipeline composition
 Build39.4 read-only runtime snapshot contract
+Build39.5 advisory-only Practice contract
 ```
+
+## Active docs closeout
+
+Branch:
+
+```text
+docs/build39-5-closeout
+```
+
+Base: exact accepted runtime/internal main `3d3a6259b7b86ef7f7511832368c6d1eb549be44`.
+
+Intent: docs/governance only; close 39.5 + Build39 milestone and hand off Build40 audit.
 
 ## NEXT
 
 ```text
-materialize Build39.5 candidate PR
-→ run dedicated real-browser tribunal
-→ classify every red outside five inherited failures
-→ merge only if exact-head matrix returns to baseline
-→ verify accepted main
-→ docs/governance closeout
-→ only then audit next Build39 learner-facing boundary
+merge Build39 docs closeout
+→ verify main + 0 open PRs
+→ open Build40 audit-only branch
+→ inspect real curriculum / Foundations / Transfer / Scenario / Listening / LI3 evidence
+→ materialize durable capability/evidence/gap audit
+→ choose one post-audit direction
+→ no A2 implementation before Build40 closes
 ```
-
-Do not bundle Home/Daily Coach changes or new evidence persistence into 39.5.
