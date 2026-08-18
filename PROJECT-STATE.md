@@ -1,20 +1,20 @@
 # PROJECT-STATE — French Trân’quille
 
-Last reconciled: 2026-08-17
+Last reconciled: 2026-08-18
 
-## Canonical accepted main before active release candidate
+## Canonical accepted main
 
 - Repository: `shinobione/tran-french-teacher`
-- Accepted `main`: `8790eb059f47bcde0ea399962f7b42a3b9501714`
-- Commit: `Docs: close Build 38 milestone`
-- PR: #205 — merged
-- GitHub Pages: #271 / run `32068419523` — SUCCESS on exact accepted main SHA
-- Open PR count at candidate start: 0
+- Accepted `main`: **`2abe20511d6265d12643276f18041812fec3e715`**
+- Commit: `Release: v2.5.0 Build 38 (#206)`
+- PR: **#206 — merged**
+- GitHub Pages: **#272 / run `32072053127` — SUCCESS** on exact accepted main SHA
+- `github-pages` deployment: **5951805479 — SUCCESS** on exact accepted main SHA
+- Public runtime release: **v2.5.0 · Build 38 — ACCEPTED / DEPLOYED**
+- Pedagogy baseline: **v2.3.0 · Build 34**
 
 ## Accepted product state
 
-- Public runtime release on accepted main: **v2.4.0 · Build 36**
-- Pedagogy baseline: **v2.3.0 · Build 34**
 - Curriculum: **52 lessons / 313 items**
 - Scenario: **44 situations / 132 turns**
 - Speaking Loop: **52/52 · max 2 moments / lesson**
@@ -22,12 +22,11 @@ Last reconciled: 2026-08-17
 - Recovery: **7 durable stores / backup v3**
 - Evidence v2: **derived shadow only**; original six stores remain product truth
 - Premium V5.10: **CLOSED / physical field pass**
+- Primary field target: **iPhone / Safari / installed PWA**
 
-## Build 38 milestone
+## Build 38 — CLOSED / RELEASED
 
-**CLOSED / PEDAGOGICALLY COMPLETE.**
-
-Certified chain:
+Certified learner-facing chain:
 
 ```text
 38.1 → 38.2   subject substitution       → lesson 33
@@ -37,44 +36,62 @@ Certified chain:
 38.9 → 38.10  nous → spoken on           → lesson 52
 ```
 
-Build 38.11 is **NOT AUTHORIZED**.
+- latest learner-facing roadmap checkpoint: **38.10**
+- Build 38 milestone: **PEDAGOGICALLY COMPLETE / CLOSED / RELEASED**
+- Build 38.11: **NOT AUTHORIZED**
+- public release representing the milestone: **v2.5.0 · Build 38**
 
-## Active slice — release-version certification
+## Release #206 certification result
 
-- Branch: `release/v2.5.0-build38-certification`
-- Base: exact accepted main `8790eb059f47bcde0ea399962f7b42a3b9501714`
-- Target public release: **v2.5.0 · Build 38**
-- Pedagogy baseline remains: **v2.3.0 · Build 34**
-- PR: **#206 — Release · v2.5.0 Build 38 certification**
-- Implementation commit before this handoff update: `8b403fc1f22daf066057f7c6999c480e6cb0fe78`
-- Status: **CANDIDATE / NOT MERGED / NOT YET AN ACCEPTED PUBLIC RELEASE**
+Final candidate head before merge:
 
-### Release-only scope
+`78768ff26dcc64c090535163a10af8e019fdb4a1`
 
-Allowed implementation ownership:
+Dedicated final-head gates:
 
-- `src/core/build31-loader.js` — release cache-bust for Build32 successor URL only
-- `src/core/build32-loader.js` — public runtime metadata only
-- runtime version tribunal/workflow
-- `release-v2.5.json`
-- dedicated release contract test/workflow
-- release documentation / README / this volatile handoff
+- `Release v2.5.0 Build 38 certification` — run `32071642717` — SUCCESS
+- `Runtime version metadata` — run `32071642472` — SUCCESS
+- `Build 38.10 Learner-facing spoken on transfer` — run `32071642921` — SUCCESS
+- `Build 32 Practical A1 Expansion` — run `32071642675` — SUCCESS
+- `Build 26.4 Progress single-scroll + Tyffany smoke` — initial flake, unchanged rerun SUCCESS
 
-Explicitly out of scope:
+The final #206 matrix introduced no new persistent failure beyond the inherited baseline.
 
-- curriculum / Foundations / Transfer semantics
-- learner stores / Recovery schema / Evidence role
-- `app.js`
-- `voice-ios.js`
-- `free-voice.js`
-- `index.html`
-- `sw.js`
-- `manifest.webmanifest`
-- `assets/LOGO.png`
-- `assets/Favicon.png`
-- Premium UI and navigation
+## Active slice — v2.5.0 release documentation closeout
 
-## Historical learner continuity — release invariant
+- Branch: **`docs/v2.5.0-build38-release-closeout`**
+- Base: exact accepted release main **`2abe20511d6265d12643276f18041812fec3e715`**
+- PR: **#207 — `Docs · close v2.5.0 Build 38 release`**
+- Latest implementation/CI-maintenance commit before this handoff update: **`cc66098f41b26c27afa073667e3a643f936fb24a`**
+- Status: **OPEN / DOCS-GOVERNANCE + PREDECESSOR-CI MAINTENANCE / NOT MERGED**
+
+Intended changed paths only:
+
+```text
+.github/workflows/release-v2-5-build38.yml
+README.md
+MASTER-ROADMAP.md
+CHANGELOG.md
+PROJECT-STATE.md
+docs/RELEASE-VERSIONING-POLICY.md
+docs/RELEASE-V2.5.0-BUILD38.md
+```
+
+The workflow change is CI-only successor-safety maintenance. It does not change runtime/product behavior: the strict release-slice path allowlist now applies only to the original `release/v2.5.0-build38-certification` branch, while the release contract and browser metadata checks continue to run on later PRs.
+
+This closeout must not change runtime, JS/CSS product code, curriculum, pedagogy, learner data, voice, Recovery/Evidence, Premium, PWA identity, logo or favicon.
+
+### Classified #207 CI event
+
+On previous head `ebee8efd54a6b36299e9ef1acf59d27801cf4b9f`, `Release v2.5.0 Build 38 certification` run **`32077265073`** failed only at the historical **release scope guard**.
+
+The preceding release contract + Build38.10 checks passed. The guard rejected the planned post-release closeout docs (`CHANGELOG.md`, `MASTER-ROADMAP.md`, `docs/RELEASE-VERSIONING-POLICY.md`) because its allowlist was intentionally frozen to the original #206 release slice.
+
+Classification: **predecessor CI successor-safety defect, not a product/runtime regression**.
+
+Fix: keep the v2.5 release contract/browser tribunal active globally, but run the strict release-slice path allowlist only when `github.head_ref == 'release/v2.5.0-build38-certification'`.
+
+## Historical learner continuity — LOCKED
 
 ```text
 7 completed lessons
@@ -82,11 +99,11 @@ l8 progress = 4
 40 known historical items
 ```
 
-No version or release operation may reset or reinterpret this state.
+No release, version, closeout or future Build39 work may reset or reinterpret this state.
 
 ## CI baseline
 
-Known inherited failure baseline entering this candidate:
+Known persistent inherited failure baseline:
 
 1. `French Trân'quille quality`
 2. `Build 36.2 Evidence shadow adoption`
@@ -94,26 +111,45 @@ Known inherited failure baseline entering this candidate:
 4. `Build 36.3 Recovery v3 durability tribunal`
 5. `Build 28 Data recovery smoke`
 
-Build 26.4 is a classified runner/harness flake, not a standing baseline debt; unchanged rerun previously passed.
+Build26.4 is a classified runner/harness flake, not standing debt. Any other failure is **NEW until classified** and suspected flakes must be rerun unchanged before product mutation.
 
-Any other failure is **NEW until classified**. A suspected flake must be rerun unchanged before product changes.
+## Protected boundaries
 
-## Release gate
+Preserve unless a future explicitly scoped build justifies otherwise:
 
-The candidate may merge only if:
+```text
+app.js
+voice-ios.js
+free-voice.js
+assets/LOGO.png
+assets/Favicon.png
+PWA identity/cache contract from PR #180
+Recovery v3 seven-store ownership
+backup envelope v3
+Evidence derived-shadow role
+52 / 313 curriculum semantics
+Premium V5.10 field-approved UI/navigation
+Build 37 Foundations ownership/routes
+Build 38.1 / 38.3 / 38.4 / 38.6 / 38.9 deterministic core semantics
+Build 38.2 / 38.5 / 38.7 / 38.8 / 38.10 learner placements
+shared Transfer renderer ownership
+```
 
-- dedicated v2.5.0 / Build38 release certification passes;
-- runtime-version metadata tribunal passes;
-- Build38.10 predecessor guard passes;
-- VI/FR × desktop/iPhone metadata rendering is correct;
-- release scope guard proves no product-semantic drift;
-- full matrix introduces no new failure beyond the inherited baseline.
+## NEXT
 
-After merge:
+Fresh control step only:
 
-1. verify exact `main` merge/squash SHA;
-2. require GitHub Pages SUCCESS on that exact SHA;
-3. only then accept **v2.5.0 · Build 38** as public runtime release;
-4. perform a separate docs-only closeout for MASTER-ROADMAP, release-versioning policy, CHANGELOG, and final PROJECT-STATE.
+```text
+re-read live PR #207 and its exact current head
+→ verify changed filenames are exactly the seven closeout/CI-maintenance paths above
+→ require v2.5 release certification to pass on that exact head
+→ classify full CI against the five inherited failures
+→ rerun only proven flakes unchanged if needed
+→ if no new regression, merge #207 with expected-head protection
+→ verify main equals the merge SHA
+→ verify GitHub Pages on that exact merge SHA
+→ only then close the v2.5.0 documentation boundary
+→ then Build 39 may be opened as a separate product slice
+```
 
-No Build39 work is authorized inside this release slice.
+Do **not** start Build39 while #207 remains open.

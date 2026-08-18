@@ -8,19 +8,20 @@
 
 ---
 
-# 0. Canonical checkpoint — 2026-08-17
+# 0. Canonical checkpoint — 2026-08-18
 
 ## Current line
 
 | Item | Canonical state |
 |---|---|
-| Public application runtime metadata | **V2.4.0 · Build 36** |
+| Public application runtime metadata | **V2.5.0 · Build 38** |
 | Product pedagogy baseline | **V2.3.0 · Build 34** |
-| Current accepted governance main before Build 38 milestone-closeout candidate | **`143beca0f45e5c71d9b72f5f3cb49f9b5b0877b1`** — PR #204 / Build 38.10 docs closeout |
-| Latest accepted Build 38 runtime checkpoint | **`2c7bf79a61d0cacd21f9345ed661cc3ac156e604`** — PR #203 / Build 38.10 learner-facing spoken-on Transfer |
+| Current accepted governance/runtime main | **`2abe20511d6265d12643276f18041812fec3e715`** — PR #206 / v2.5.0 Build 38 release |
+| Latest accepted Build 38 runtime checkpoint | **`2abe20511d6265d12643276f18041812fec3e715`** — release/version certification over the closed Build 38 milestone |
 | Latest learner-facing Transfer runtime checkpoint | **`2c7bf79a61d0cacd21f9345ed661cc3ac156e604`** — PR #203 / Build 38.10 |
+| GitHub Pages v2.5.0 release proof | **#272 / run `32072053127` SUCCESS** on exact `2abe20511…` SHA |
 | GitHub Pages 38.10 runtime proof | **#269 / run `32065682064` SUCCESS** on exact `2c7bf79a…` SHA |
-| GitHub Pages 38.10 docs-closeout proof | **#270 / run `32066217001` SUCCESS** on exact `143beca0…` SHA |
+| GitHub Pages Build 38 milestone-closeout proof | **#271 / run `32068419523` SUCCESS** on exact `8790eb05…` SHA |
 | Curriculum | **52 lessons / 313 items** |
 | Scenario | **44 situations / 132 turns** |
 | Speaking Loop | **52/52 · max 2 moments / lesson** |
@@ -43,8 +44,8 @@
 | Build 38.8 | **CLOSED · learner-facing negation integration** |
 | Build 38.9 | **CLOSED / CERTIFIED · deterministic nous → on spoken-French core** |
 | Build 38.10 | **CLOSED / DEPLOYED · learner-facing nous → spoken-on integration** |
-| Build 38 milestone | **PEDAGOGICALLY COMPLETE · CLOSEOUT CANDIDATE / no Build 38.11 authorized** |
-| Next control action | **explicit Build-38 release-version decision/certification; no automatic public version bump** |
+| Build 38 milestone | **CLOSED / RELEASED as v2.5.0 · Build 38 · no Build 38.11 authorized** |
+| Next control action | **finish the docs-only v2.5.0 release closeout; then Build 39 may open as a separate product slice** |
 | Primary field target | **iPhone / Safari / installed PWA** |
 
 ## Current interpretation
@@ -54,15 +55,16 @@
 - Build 36 adopted Evidence as a seventh **derived shadow** under Recovery v3 / backup v3; the original six stores remain canonical product truth.
 - Build 37 industrialized the Foundations system without renumbering the 52 lessons, without persistent Foundations state, and without treating Evidence as product truth.
 - F16 (`à/de` contractions) remains **deferred / not completed**; Build 37 stays closed.
-- Build 38 owns **generalization and construction of unseen phrases** and now has a complete deterministic chain from 38.1 through 38.10.
+- Build 38 owns **generalization and construction of unseen phrases** and has a complete deterministic chain from 38.1 through 38.10.
 - 38.1 / 38.3 / 38.4 / 38.6 / 38.9 remain certified deterministic transfer cores.
 - 38.2 / 38.5 / 38.7 / 38.8 / 38.10 expose certified cores contextually in lessons 33 / 35 / 13 / 34 / 52 through the **same shared Transfer renderer**.
-- Build 38.10 is merged/deployed at `2c7bf79a…`; Pages #269 is green on that exact runtime SHA. PR #204 then closed the volatile docs handoff at `143beca0…`; Pages #270 is green on that exact docs SHA.
+- Build 38.10 is merged/deployed at `2c7bf79a…`; Pages #269 is green on that exact learner-facing runtime SHA. PR #204 closed the 38.10 docs handoff at `143beca0…`; PR #205 then closed the Build 38 milestone at `8790eb05…`, with Pages #271 green on that exact milestone-closeout SHA.
 - The milestone audit rejected an automatic 38.11: adjective agreement lacks equally solid masculine source acquisition; generic question transformation conflicts with F12’s multiple-strategy/no-inversion boundary; comparatives are already explicit lesson content; broad combinatorial generation would exceed the deterministic Build 38 contract.
-- Therefore Build 38 is **pedagogically complete** and the durable closeout is now represented by this governance candidate. No new product family is authorized inside Build 38.
+- Therefore Build 38 is **pedagogically complete**, **closed**, and now **publicly released as v2.5.0 · Build 38**. No new product family is authorized inside Build 38.
+- PR #206 performed the explicit release/version certification. Its final candidate head `78768ff26dcc64c090535163a10af8e019fdb4a1` passed the dedicated release, runtime-metadata, Build38.10 and Build32 gates; Build26.4 flaked once and passed unchanged on rerun. The squash merge is `2abe20511d6265d12643276f18041812fec3e715`; Pages #272 / run `32072053127` and deployment `5951805479` succeeded on that exact SHA.
 - PR #197 merged under a documented **controlled CI-infrastructure exception** after sequential workflow-only successor-safety fixes saturated GitHub Actions. Do not rewrite that event as “the entire final-head matrix drained green before merge.”
 - PR #203 also merged under an explicit controlled queue exception: its dedicated final-head tribunal was green and no completed final-head workflow introduced a new failure, while one unrelated Premium V5.7 run remained queued after passing on the immediately preceding head.
-- Public Settings metadata remains **v2.4.0 · Build 36** by explicit runtime-version ownership. Closing Build 38 does not silently assign a release version.
+- Public Settings metadata is now **v2.5.0 · Build 38** by explicit release-version ownership. Internal roadmap slice **38.10** remains a separate checkpoint and must not be misrepresented as a SemVer patch.
 
 ## Release/version metadata policy — LOCKED
 
@@ -71,7 +73,7 @@ French Trân’quille must keep these concepts separate:
 ```text
 PUBLIC RUNTIME RELEASE
   learner/admin Settings identity
-  current = v2.4.0 · Build 36
+  current = v2.5.0 · Build 38
 
 PEDAGOGY BASELINE
   historical pedagogy compatibility/ownership anchor
@@ -79,8 +81,8 @@ PEDAGOGY BASELINE
 
 ROADMAP CHECKPOINT
   internal implementation/certification sequence
-  current accepted runtime checkpoint = Build 38.10
-  milestone verdict = Build 38 pedagogically complete / closeout candidate
+  latest learner-facing checkpoint = Build 38.10
+  milestone verdict = Build 38 CLOSED / RELEASED
 ```
 
 Permanent rules:
@@ -90,7 +92,7 @@ Permanent rules:
 - public runtime metadata changes only in an explicit release-version slice with dedicated tests and documentation;
 - the public `Build` displayed beside SemVer is the **release build anchor**, not the latest internal roadmap checkpoint;
 - a DEBUG/admin surface may later expose `Roadmap checkpoint: 38.10` separately, but must not overload the public release field;
-- with Build 38 now pedagogically complete as one coherent Generalization & Transfer milestone, **`v2.5.0 · Build 38` is the natural release candidate**, but it remains unassigned until a separate explicit release decision and certification.
+- Build 38’s coherent Generalization & Transfer milestone was intentionally assigned and certified as **`v2.5.0 · Build 38`** by PR #206; that precedent does not make later version bumps automatic.
 
 Canonical policy document: `docs/RELEASE-VERSIONING-POLICY.md`.
 
@@ -407,7 +409,7 @@ v1 → owns learner + memory → preserve historically absent stores → rebuild
 
 Build 36.3 / PR #170 certified backup / restore / reset / rollback with the derived shadow. PR #171 closed Build 36 and opened Build 37.
 
-Public runtime metadata is explicitly owned as **v2.4.0 · Build 36** until a dedicated release-version change replaces it. Build 37.x / 38.x roadmap slices do not auto-bump this value.
+Build 36’s public release identity was **v2.4.0 · Build 36** and remained the public runtime anchor throughout Build 37.x / 38.x implementation. It was intentionally replaced only by the explicit PR #206 release action assigning **v2.5.0 · Build 38**.
 
 ---
 
@@ -481,7 +483,7 @@ F18 remains `spoken-on = explicit / reuse-existing / lesson 52`; Build 38.9 does
 
 ---
 
-# 7. Build 38 — Generalization & Transfer — CLOSED / MILESTONE CLOSEOUT CANDIDATE
+# 7. Build 38 — Generalization & Transfer — CLOSED / RELEASED
 
 ## Goal
 
@@ -1000,12 +1002,30 @@ F16 contractions
 Milestone decision:
 
 ```text
-Build 38 = PEDAGOGICALLY COMPLETE
+Build 38 = PEDAGOGICALLY COMPLETE / CLOSED / RELEASED
 Build 38.11 = NOT AUTHORIZED
-next = explicit release-version decision/certification
+public release = v2.5.0 · Build 38
+next product milestone = Build 39, only after release-doc closeout
 ```
 
-See `docs/BUILD-38-MILESTONE-CLOSEOUT.md`.
+See `docs/BUILD-38-MILESTONE-CLOSEOUT.md` and `docs/RELEASE-V2.5.0-BUILD38.md`.
+
+## v2.5.0 · Build 38 release acceptance
+
+```text
+PR #206 MERGED
+final candidate head 78768ff26dcc64c090535163a10af8e019fdb4a1
+squash merge / accepted main 2abe20511d6265d12643276f18041812fec3e715
+release certification run 32071642717 SUCCESS
+runtime metadata run 32071642472 SUCCESS
+Build 38.10 predecessor run 32071642921 SUCCESS
+Build 32 Practical A1 run 32071642675 SUCCESS
+Build 26.4 unchanged rerun SUCCESS after runner/harness flake
+Pages #272 / run 32072053127 SUCCESS on exact merge SHA
+github-pages deployment 5951805479 SUCCESS on exact merge SHA
+```
+
+The release slice changed public metadata/certification only. It did not modify curriculum, Transfer semantics, learner stores, Recovery schema, Evidence role, voice, Premium UI, PWA identity, logo or favicon.
 
 ---
 
@@ -1022,7 +1042,9 @@ Tyffany chooses whether the next useful action is:
 
 Build 39 should consume reliable evidence from prior systems; it must not invent mastery from recognition failures or decorative activity counts.
 
-Build 39 remains future product work. **Do not start it from the Build 38 closeout itself.** First complete an explicit release-version decision/certification for the closed Build 38 milestone. If that release boundary is accepted, Build 39 becomes the next product milestone.
+The Build 38 release boundary is now accepted as **v2.5.0 · Build 38**. Build 39 is therefore the next product milestone **after the v2.5.0 documentation closeout is merged**.
+
+Do not implement Build 39 inside the release closeout. Open it as a new small canonical slice with its own branch, PR, checkpoint and test boundary.
 
 ---
 
@@ -1050,7 +1072,9 @@ Five persistent inherited failures remain known baseline debt unless separately 
 4. `Build 36.3 Recovery v3 durability tribunal`;
 5. `Build 28 Data recovery smoke`.
 
-`Build 26.4 Progress single-scroll + Tyffany smoke` was red on the pre-38.10 base but passed unchanged on the 38.10 candidate; it is classified as a runner/harness flake, not durable baseline debt.
+`Build 26.4 Progress single-scroll + Tyffany smoke` is a classified runner/harness flake, not durable baseline debt. It passed unchanged on the 38.10 candidate and again passed unchanged after flaking on the final #206 release candidate.
+
+During #206, `Build 32 Practical A1 Expansion` correctly caught a release cache-bust form that had replaced its historical literal successor URL. The release slice was fixed without weakening the predecessor workflow: the historical `v=2.2.0-b32` URL identity was preserved and a distinct release cache-bust parameter was added. Build32 then passed on the final #206 head.
 
 These inherited failures do not authorize ignoring a new red. Any failure outside this set must be classified against the current candidate. Harness/runner flakes should be rerun unchanged before product mutation.
 

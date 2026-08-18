@@ -1,8 +1,6 @@
 # 🇫🇷 French Trân’quille
 
-> **Release candidate: v2.5.0 · Build 38** — Generalization & Transfer milestone.
->
-> Until this candidate is merged and GitHub Pages succeeds on the exact merge SHA, the accepted public release on `main` remains **v2.4.0 · Build 36**.
+> **Public release: v2.5.0 · Build 38** — Generalization & Transfer milestone, accepted and deployed.
 
 French Trân’quille is a mobile-first French-learning PWA built for Trân, with Vietnamese learner support, guided speaking, listening, real-life scenarios, durable local progress, recovery, and deterministic pedagogy layers.
 
@@ -10,11 +8,12 @@ French Trân’quille is a mobile-first French-learning PWA built for Trân, wit
 
 | Identity | Value |
 |---|---|
-| Public runtime candidate | **v2.5.0 · Build 38** |
-| Accepted public runtime before candidate | **v2.4.0 · Build 36** |
+| Public runtime release | **v2.5.0 · Build 38** |
 | Pedagogy baseline | **v2.3.0 · Build 34** |
-| Current roadmap milestone | **Build 38 — CLOSED / pedagogically complete** |
+| Current roadmap milestone | **Build 38 — CLOSED / RELEASED** |
+| Latest internal learner-facing checkpoint | **38.10** |
 | Build 38.11 | **NOT AUTHORIZED** |
+| Next product milestone | **Build 39 — Learner Intelligence 3** |
 
 Roadmap sub-slices such as 38.2 or 38.10 are internal implementation/certification checkpoints, not SemVer patch releases.
 
@@ -44,23 +43,26 @@ Build 38 is a deterministic transfer layer that asks Trân to reconstruct known 
 
 The shared Transfer layer is optional and ephemeral: **no durable write, no Evidence product read, no mastery claim**.
 
-## Release candidate v2.5.0 · Build 38
+Build 38 was audited after 38.10 and no pedagogically defensible 38.11 remained under the deterministic known-material contract. The milestone is therefore closed.
 
-The release slice changes **release ownership and certification only**. It does not add or alter pedagogy.
+## Release v2.5.0 · Build 38
 
-The candidate must prove:
+The release slice changed **release ownership and certification only**. It did not add or alter pedagogy.
 
-- Settings displays exactly **`v2.5.0 • Build 38`**;
+Accepted release proof:
+
+- release PR **#206** merged;
+- accepted `main`: **`2abe20511d6265d12643276f18041812fec3e715`**;
+- GitHub Pages **#272 / run `32072053127` — SUCCESS** on that exact SHA;
+- `github-pages` deployment **5951805479 — SUCCESS** on that exact SHA;
+- Settings/runtime metadata certified as **`v2.5.0 • Build 38`**;
 - pedagogy baseline remains exactly **`v2.3.0 · Build 34`**;
-- historical lower-layer metadata cannot reclaim the public version;
-- VI/FR × desktop/iPhone runtime tribunal passes;
-- Build 38.10 predecessor semantics remain certified;
-- protected product/voice/storage/Premium files are absent from the release diff;
-- full CI introduces no new failure beyond the documented inherited baseline;
-- GitHub Pages succeeds on the exact post-merge SHA before the release is called accepted.
+- Build 38.10 predecessor semantics remained green;
+- historical learner continuity remained locked;
+- no product-semantic, curriculum, voice, storage, Premium, PWA-identity, logo or favicon change was introduced by the release slice.
 
 Machine-readable release contract: [`release-v2.5.json`](release-v2.5.json)  
-Certification rationale: [`docs/RELEASE-V2.5.0-BUILD38.md`](docs/RELEASE-V2.5.0-BUILD38.md)
+Certification and release proof: [`docs/RELEASE-V2.5.0-BUILD38.md`](docs/RELEASE-V2.5.0-BUILD38.md)
 
 ## Learner continuity — locked
 
@@ -73,6 +75,10 @@ l8 progress = 4
 ```
 
 No release/version change is allowed to reset or reinterpret that continuity contract.
+
+## What comes next
+
+Build 39 — Learner Intelligence 3 — is the next product milestone **after the v2.5.0 documentation closeout is merged**. It must be opened as a separate, explicitly scoped slice; this release closeout does not start Build 39 automatically.
 
 ## Canonical project control
 
