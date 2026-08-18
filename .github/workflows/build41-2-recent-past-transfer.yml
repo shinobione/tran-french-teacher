@@ -1,0 +1,85 @@
+name: Build 41.2 Recent-past transfer core
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  recent-past-transfer-core:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax + deterministic core tribunal
+        run: |
+          set -euo pipefail
+          node --check src/pedagogy/generalization-recent-past-core.js
+          node --check tests/unit/build41-2-recent-past-transfer.test.cjs
+          node tests/unit/build41-2-recent-past-transfer.test.cjs
+
+      - name: 41.2 purity and narrow-family contract
+        run: |
+          set -euo pipefail
+          grep -Fq "'41.2'" src/pedagogy/generalization-recent-past-core.js
+          grep -Fq "'present-je-regular-action-to-recent-past-je-venir-de'" src/pedagogy/generalization-recent-past-core.js
+          grep -Fq "source: 'Je travaille.'" src/pedagogy/generalization-recent-past-core.js
+          grep -Fq "target: 'Je viens de travailler.'" src/pedagogy/generalization-recent-past-core.js
+          grep -Fq "source: 'Je mange.'" src/pedagogy/generalization-recent-past-core.js
+          grep -Fq "target: 'Je viens de manger.'" src/pedagogy/generalization-recent-past-core.js
+          grep -Fq "source: 'Je rentre à la maison.'" src/pedagogy/generalization-recent-past-core.js
+          grep -Fq "target: 'Je viens de rentrer à la maison.'" src/pedagogy/generalization-recent-past-core.js
+          grep -Fq "status: 'pure-non-wired'" src/pedagogy/generalization-recent-past-core.js
+          grep -Fq 'masteryClaim: false' src/pedagogy/generalization-recent-past-core.js
+          grep -Fq 'durableWrite: false' src/pedagogy/generalization-recent-past-core.js
+          grep -Fq 'runtimeWiring: false' src/pedagogy/generalization-recent-past-core.js
+          ! grep -Eq 'localStorage|sessionStorage|indexedDB|FrenchTranquilleEvidence|fetch\(|document\.' src/pedagogy/generalization-recent-past-core.js
+          ! grep -Eq 'passé composé|passe compose|reflexive|random|Math\.random' src/pedagogy/generalization-recent-past-core.js
+
+      - name: Existing Build38 construction remains certified
+        run: |
+          set -euo pipefail
+          node tools/test-build38-4-futur-proche-transfer.cjs
+          node tools/test-build38-10-spoken-on-integration.cjs
+          node tools/test-release-v2-5-build38.cjs
+
+      - name: 41.2 scope guard — pure core only
+        if: github.event_name == 'pull_request' && github.head_ref == 'build41/recent-past-transfer-core'
+        run: |
+          set -euo pipefail
+          git fetch origin "${{ github.base_ref }}" --depth=1
+          changed="$(git diff --name-only "origin/${{ github.base_ref }}"...HEAD)"
+          printf '%s\n' "$changed"
+          allowed='^(src/pedagogy/generalization-recent-past-core\.js|tests/unit/build41-2-recent-past-transfer\.test\.cjs|\.github/workflows/build41-2-recent-past-transfer\.yml|docs/BUILD-41\.2-RECENT-PAST-TRANSFER-CORE\.md|PROJECT-STATE\.md)$'
+          unexpected="$(printf '%s\n' "$changed" | grep -Ev "$allowed" || true)"
+          if [ -n "$unexpected" ]; then
+            echo "Unexpected path(s) in Build41.2:"
+            printf '%s\n' "$unexpected"
+            exit 1
+          fi
+          git diff --exit-code "origin/${{ github.base_ref }}"...HEAD -- \
+            app.js voice-ios.js free-voice.js assets/LOGO.png assets/Favicon.png \
+            index.html sw.js manifest.webmanifest src/core src/ui src/premium \
+            src/pedagogy/curriculum-stage2.js src/pedagogy/curriculum-stage3.js src/pedagogy/curriculum-stage4.js \
+            src/pedagogy/foundations-core.js src/pedagogy/foundations-pilot.js \
+            src/pedagogy/generalization-transfer-core.js \
+            src/pedagogy/generalization-negation-core.js \
+            src/pedagogy/generalization-futur-proche-core.js \
+            src/pedagogy/generalization-number-core.js \
+            src/pedagogy/generalization-spoken-on-core.js \
+            src/pedagogy/generalization-transfer-lesson.js \
+            src/pedagogy/learner-action-arbitration-core.js \
+            src/pedagogy/learner-evidence-adapter.js \
+            src/pedagogy/learner-action-decision-pipeline.js \
+            src/pedagogy/learner-action-runtime-snapshot.js \
+            src/pedagogy/learner-action-practice-advisory.js
