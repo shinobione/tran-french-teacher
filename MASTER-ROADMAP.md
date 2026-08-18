@@ -58,6 +58,7 @@ A suspected flake is rerun unchanged before product mutation. Repo/live GitHub w
 - no learner-data reset/renumber/reinterpretation;
 - Recovery remains 7 stores / backup v3;
 - Evidence v2 remains derived shadow until an explicit future cutover decision;
+- no durable store/schema merely to make intelligence look smarter;
 - preserve 52 lesson IDs / 313 item semantics;
 - Build27 App Shell remains learner route/action owner;
 - Premium V5.10 field-approved navigation remains protected;
