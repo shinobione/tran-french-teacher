@@ -229,17 +229,28 @@ Build 39.1 deterministic arbitration semantics
 
 - Branch: **`docs/build39-1-closeout`**
 - Base: exact accepted main **`246338a9ef11eb430f59fc6ccf494688904cf883`**
+- PR: **#209 — `Docs · close Build 39.1` — OPEN**
 - Scope: **documentation/governance only**
 - Runtime/product change: **none**
 - Goal: reconcile this checkpoint and `MASTER-ROADMAP.md` to the accepted #208 merge before any 39.2 implementation begins.
 
 ## NEXT
 
-Finish the docs-only 39.1 closeout, then open 39.2 as a **separate** canonical implementation slice:
+Fresh control step for **PR #209 only**:
 
 ```text
-39.2 — evidence adapter audit / implementation
-→ inventory reliable existing product evidence sources
+re-read #209 exact head and changed filenames
+→ confirm scope remains PROJECT-STATE.md + MASTER-ROADMAP.md only
+→ classify CI against the five inherited failures
+→ if no new regression, merge #209 with expected-head protection
+→ verify main equals the closeout merge SHA
+→ then open 39.2 as a separate evidence-adapter audit/implementation slice
+```
+
+39.2 boundaries after #209 closes:
+
+```text
+inventory reliable existing product evidence sources
 → normalize only evidence already justified by current owners
 → preserve original six stores as product truth
 → keep Evidence v2 derived-shadow only
@@ -251,4 +262,4 @@ Finish the docs-only 39.1 closeout, then open 39.2 as a **separate** canonical i
 → preserve historical learner continuity
 ```
 
-Do **not** start 39.2 inside this closeout branch.
+Do **not** start 39.2 while #209 remains open.
