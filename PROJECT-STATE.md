@@ -5,14 +5,14 @@ Last reconciled: 2026-08-18
 ## Canonical accepted main
 
 - Repository: `shinobione/tran-french-teacher`
-- Accepted `main`: **`c809790453a40ae5e2da3a497e3b64b7a51e5d87`**
-- Commit: `Build 39.3 · learner action decision pipeline (#212)`
-- PR **#212 — MERGED** from exact candidate head **`70983da67a1f3c4703175ed5eaf4fa2c139cef68`** with expected-head squash protection.
-- GitHub merge SHA: **`c809790453a40ae5e2da3a497e3b64b7a51e5d87`**, signed / verified.
-- PR #212 changed exactly five paths and remained a **pure, non-wired Build39 composition slice**.
+- Accepted `main`: **`52152b0cfc3833a9a030c04a66a3970637a9dd31`**
+- Commit: `Docs: close Build 39.3`
+- PR **#213 — MERGED** from exact head **`bc6721a20c1cf301177cf591ca01a69caf09b870`** with expected-head squash protection.
+- Parent runtime/internal checkpoint: **`c809790453a40ae5e2da3a497e3b64b7a51e5d87`** — PR #212 / Build 39.3 decision pipeline.
+- `main` verification after #213: exact SHA `52152b0c…`, signed / verified, and **0 open PRs** before this governance audit slice.
 - Public runtime release remains **v2.5.0 · Build 38 — ACCEPTED / DEPLOYED**.
 - Pedagogy baseline remains **v2.3.0 · Build 34**.
-- Latest exact release deployment proof remains **GitHub Pages #272 / run `32072053127` — SUCCESS** on release SHA `2abe20511d6265d12643276f18041812fec3e715`, with `github-pages` deployment `5951805479 — SUCCESS` on that same release SHA.
+- Latest exact public release deployment proof remains **GitHub Pages #272 / run `32072053127` — SUCCESS** on release SHA `2abe20511d6265d12643276f18041812fec3e715`, with `github-pages` deployment `5951805479 — SUCCESS` on that same release SHA.
 - Build39.1 / 39.2 / 39.3 are internal non-wired checkpoints and do **not** change public runtime metadata or learner-facing runtime semantics.
 
 ## Accepted product state
@@ -38,24 +38,24 @@ Certified learner-facing chain:
 38.9 → 38.10  nous → spoken on           → lesson 52
 ```
 
-- Build 38 milestone: **PEDAGOGICALLY COMPLETE / CLOSED / RELEASED**
+- milestone: **PEDAGOGICALLY COMPLETE / CLOSED / RELEASED**
 - Build 38.11: **NOT AUTHORIZED**
 - public release: **v2.5.0 · Build 38**
 
 ## Build 39 — Learner Intelligence 3 — OPEN
 
-Tyffany should eventually choose the next useful action among:
+Target action families:
 
 ```text
-phrase retrieval
-concept review
-Foundation capsule
+phrase-retrieval
+concept-review
+foundation-capsule
 listening
 scenario
-transfer / construction
+transfer-construction
 ```
 
-Build39 must consume reliable evidence from existing owners and must not invent mastery from recognition failures, decorative activity counts or unsupported inference.
+Permanent Build39 rule: consume reliable evidence from existing owners; never invent mastery from recognition failures, decorative activity counts or unsupported inference.
 
 ## Build 39.1 — learner action arbitration core — CLOSED / CERTIFIED
 
@@ -63,83 +63,62 @@ Build39 must consume reliable evidence from existing owners and must not invent 
 - final candidate head **`719a838456156f9df3f7602b1beea0af1df322ab`**
 - squash merge **`246338a9ef11eb430f59fc6ccf494688904cf883`**
 - dedicated run **`32169633637` — SUCCESS**
-- docs/governance closeout PR **#209 — merged** as `b3b7a14bb080ecfc0228d7edd24ab97d261eaa0f`
+- docs closeout PR **#209 — merged**
+- owner: `src/pedagogy/learner-action-arbitration-core.js`
+- export: `FrenchTranquilleLearnerIntelligenceV3Core`
+- state: **PURE / NON-WIRED / CERTIFIED**
 
-Certified owner:
+39.1 requires observed need, confidence and independent evidence. Transfer/construction requires >=2 independent evidence items. Recognition-failure-only candidates are ineligible. Decorative activity totals are ignored. Explicit abstention is allowed.
 
-```text
-src/pedagogy/learner-action-arbitration-core.js
-export = FrenchTranquilleLearnerIntelligenceV3Core
-```
-
-39.1 is pure and non-wired. It requires observed need, confidence and independent evidence; Transfer requires two independent evidence items. Recognition-failure-only candidates are ineligible. Decorative activity totals are ignored. The core can explicitly abstain with `insufficient-reliable-evidence`.
-
-## Build 39.2 — Learner Evidence Adapter — CLOSED / CERTIFIED
+## Build 39.2 — learner evidence adapter — CLOSED / CERTIFIED
 
 - PR **#210 — merged**
 - final candidate head **`6fe014358fcdf39f262de5928e2705efbb964cd9`**
 - squash merge **`9af287417d1fbb502837bea4aa80886cca2ffb2e`**
-- dedicated final-head run **`32173436063` — SUCCESS**
-- docs/governance closeout PR **#211 — merged** as **`9a60e316e7a75bd5b6e0ce8f42bd20475f7785b7`**
-- state: **PURE ADAPTER / NON-WIRED / MERGED / CERTIFIED**
+- dedicated run **`32173436063` — SUCCESS**
+- docs closeout PR **#211 — merged** as `9a60e316e7a75bd5b6e0ce8f42bd20475f7785b7`
+- owner: `src/pedagogy/learner-evidence-adapter.js`
+- export: `FrenchTranquilleActionEvidenceAdapter`
+- state: **PURE ADAPTER / NON-WIRED / CERTIFIED**
 
-Certified owner:
-
-```text
-src/pedagogy/learner-evidence-adapter.js
-export = FrenchTranquilleActionEvidenceAdapter
-```
-
-Reliable current sources accepted by 39.2:
+Reliable sources accepted by 39.2:
 
 ```text
-Learning Memory
-→ item-level due / fragile / review state
+Learning Memory.summary()
+→ due / fragile / item-level review state
 
-Error Intelligence
-→ item-level observed errors, priority, assistance and source labels
+Error Intelligence.summary()
+→ observed item-level errors / priorities / recent events
 
 Listening
-→ reliable need only through Error Intelligence events sourced as listening-*
+→ only through explicit listening-* Error events
 
 Scenario
-→ reliable need through scenario-miss / scenario-assisted item events
+→ only through scenario-miss / scenario-assisted observable events
 ```
 
-Deliberately unavailable until a trustworthy owner exists:
+Deliberately unavailable because no trustworthy durable owner exists:
 
 ```text
 concept-review
-→ no durable concept-understanding evidence
-
 foundation-capsule
-→ Foundations remains optional / ephemeral with no mastery evidence
-
 transfer-construction
-→ Build38 Transfer remains ephemeral and explicitly not a mastery score
 ```
 
-Absence of reliable evidence means **unavailable / abstain**, not inferred weakness.
+Absence of evidence means **unavailable / abstain**, not inferred weakness.
 
-## Build 39.3 — Learner Action Decision Pipeline — CLOSED / CERTIFIED
+## Build 39.3 — learner action decision pipeline — CLOSED / CERTIFIED
 
 - PR **#212 — merged**
-- base: **`9a60e316e7a75bd5b6e0ce8f42bd20475f7785b7`**
-- final candidate head: **`70983da67a1f3c4703175ed5eaf4fa2c139cef68`**
-- squash merge / accepted main: **`c809790453a40ae5e2da3a497e3b64b7a51e5d87`**
-- dedicated workflow: **`Build 39.3 Learner action decision pipeline`**
-- dedicated final-head run: **`32174906010` — SUCCESS**
-- state: **PURE COMPOSITION / NON-WIRED / MERGED / CERTIFIED**
+- final candidate head **`70983da67a1f3c4703175ed5eaf4fa2c139cef68`**
+- squash merge **`c809790453a40ae5e2da3a497e3b64b7a51e5d87`**
+- dedicated run **`32174906010` — SUCCESS**
+- docs closeout PR **#213 — merged** as **`52152b0cfc3833a9a030c04a66a3970637a9dd31`**
+- owner: `src/pedagogy/learner-action-decision-pipeline.js`
+- export: `FrenchTranquilleLearnerActionDecisionPipeline`
+- state: **PURE COMPOSITION / NON-WIRED / CERTIFIED**
 
-Certified owner:
-
-```text
-src/pedagogy/learner-action-decision-pipeline.js
-export = FrenchTranquilleLearnerActionDecisionPipeline
-roadmapSlice = 39.3
-```
-
-Certified pipeline:
+Certified composition:
 
 ```text
 caller-supplied snapshots
@@ -149,56 +128,85 @@ caller-supplied snapshots
 → selected reliable action OR explicit abstention
 ```
 
-39.3 adds **no new evidence semantics**. It composes the already-certified 39.1 and 39.2 owners and preserves their boundaries.
+39.3 adds no evidence semantics, no direct owner reads, no storage access, no Evidence cutover, no UI/runtime wiring and no public version change.
 
-Permanent 39.3 contract:
+### #213 CI classification
 
-- caller-supplied snapshots only;
-- no direct read from Memory / Errors / Listening / Scenario / Foundations / Transfer runtime owners;
-- no `localStorage`, `sessionStorage`, IndexedDB or durable write;
+The docs-only #213 head was `bc6721a20c1cf301177cf591ca01a69caf09b870`.
+
+Its first fully drained matrix contained one failure outside the inherited five:
+
+```text
+Premium V5.9C Real Shared System
+run 32175440403
+job 95836178989
+```
+
+Static contracts and sanctuaries passed. The failure occurred only in the Chrome shared-surfaces tribunal when headless Chrome hit the workflow timeout (`exit 124`) with runner/DBus noise and no product assertion failure. The **same job was rerun unchanged**; rerun job `95837031577` finished **SUCCESS**, including the previously timed-out Chrome tribunal, reduced-motion and real-app A+B+C steps.
+
+Final #213 classification: **exactly the five inherited failures, no additional failure, no queued / no in-progress**. No product or workflow mutation was used.
+
+## Build 39.4 audit — READ-ONLY VERDICT / IMPLEMENTATION NOT YET STARTED
+
+The audit after #213 inspected the real runtime owners rather than inventing a new evidence store.
+
+### Existing trustworthy runtime APIs
+
+`src/pedagogy/learning-memory.js` already exposes:
+
+```text
+window.FrenchTranquilleMemory.summary()
+→ entries / due / fragile / learning / solid / tomorrow
+```
+
+`src/pedagogy/error-intelligence.js` already exposes:
+
+```text
+window.FrenchTranquilleErrors.summary()
+→ recent / recurring / assisted / voice / top / totals / session
+```
+
+39.2 already consumes exactly the relevant shapes from these two owners. Listening and Scenario evidence already reaches Error Intelligence through explicit source/type events, so Build39.4 does **not** need to read Listening or Scenario directly.
+
+### Existing Build30 Runtime Bridge is not the 39.4 owner
+
+`src/core/runtime-bridge.js` is a frozen Build30 architecture/diagnostic boundary. It imports `runtime-contracts.js`, verifies APIs/routes/stores and creates architecture snapshots; it also reads store presence/learner state directly for diagnostics.
+
+It does **not** expose the item-level Memory/Error snapshot shape required by 39.2. Build39.4 must therefore **not mutate or overload the frozen Build30 bridge** merely to add pedagogical decision input.
+
+`src/core/build-meta.js` imports the Build30 runtime contracts + bridge, so that architecture boundary remains live and protected.
+
+### 39.4 selected direction
+
+**Audit winner: a separate read-only learner-action runtime snapshot collector.**
+
+Target flow:
+
+```text
+FrenchTranquilleMemory.summary()
++ FrenchTranquilleErrors.summary()
+→ detached narrow immutable snapshot
+→ certified 39.3 decision pipeline
+→ decision / abstention
+```
+
+The collector should copy only the fields needed by 39.2, so downstream code never receives mutable references to Memory/Error internal state.
+
+Mandatory 39.4 boundaries:
+
+- no direct `localStorage` / `sessionStorage` / IndexedDB reads in the new collector;
+- no durable write;
+- no new store / schema / migration;
 - no Evidence v2 product read-path cutover;
-- no UI/runtime wiring, loader, service-worker or public-version change;
-- recognition-failure-only input cannot manufacture learner need;
-- decorative/global counters cannot alter the decision;
-- unsupported `concept-review`, `foundation-capsule`, `transfer-construction` remain unavailable;
-- input remains unmodified;
-- missing dependencies produce explicit `pipeline-dependencies-missing` abstention instead of guessing.
+- no mutation of Build30 `runtime-bridge.js` / `runtime-contracts.js`;
+- no mutation of Memory / Error / Listening / Scenario owner semantics;
+- no new evidence semantics and no attempt to unlock unsupported action families;
+- no learner-facing UI/action execution yet;
+- no public runtime version bump;
+- preserve LI V1/V2 compatibility and historical learner continuity;
+- browser tribunal must prove owner summaries → detached snapshot → 39.3 decision/abstention while all seven durable stores remain byte-identical.
 
-Exact #212 changed paths:
-
-```text
-.github/workflows/build39-3-decision-pipeline.yml
-PROJECT-STATE.md
-docs/BUILD-39.3-LEARNER-ACTION-DECISION-PIPELINE.md
-src/pedagogy/learner-action-decision-pipeline.js
-tests/unit/build39-3-decision-pipeline.test.cjs
-```
-
-### 39.3 final CI classification
-
-On exact head `70983da67a1f3c4703175ed5eaf4fa2c139cef68`:
-
-```text
-Build 39.3 Learner action decision pipeline     32174906010  SUCCESS
-Build 39.2 Learner evidence adapter              32174905906  SUCCESS
-Build 39.1 Learner action arbitration core       32174905872  SUCCESS
-Release v2.5.0 Build 38 certification            32174905955  SUCCESS
-Runtime version metadata                         32174905978  SUCCESS
-Build 38.10 Learner-facing spoken on transfer    32174906006  SUCCESS
-Build 32 Practical A1 Expansion                   32174907478  SUCCESS
-Build 31 Learner Intelligence compatibility      32174905874  SUCCESS
-```
-
-The dedicated 39.3 job also passed:
-
-```text
-Syntax + 39.3 composition contract        SUCCESS
-Existing release + Build38 predecessor    SUCCESS
-39.3 scope guard — composition only       SUCCESS
-Frozen sanctuaries byte-identical         SUCCESS
-```
-
-The full PR matrix drained completely with **no queued / no in-progress** run and exactly the five inherited failures below. No flake rerun or product/workflow mutation was required for #212.
+This is a **runtime-read/composition safety slice**, not learner-facing Learner Intelligence 3 wiring.
 
 ## Historical learner continuity — LOCKED
 
@@ -212,21 +220,17 @@ No Build39 work may reset, renumber or reinterpret this state.
 
 ## CI baseline
 
-Known persistent inherited failure baseline on the final #212 head:
+Known persistent inherited failures:
 
-1. `French Trân'quille quality` — run `32174905936`
-2. `Build 36.2 Evidence shadow adoption` — run `32174905938`
-3. `V2.0.0 Freeze tribunal` — run `32174905838`
-4. `Build 36.3 Recovery v3 durability tribunal` — run `32174905965`
-5. `Build 28 Data recovery smoke` — run `32174905999`
+1. `French Trân'quille quality`
+2. `Build 36.2 Evidence shadow adoption`
+3. `V2.0.0 Freeze tribunal`
+4. `Build 36.3 Recovery v3 durability tribunal`
+5. `Build 28 Data recovery smoke`
 
-Everything else in the drained #212 PR matrix completed **SUCCESS**.
-
-Build26.4 is a classified runner/harness flake, not standing debt. The Build37.4 #210 event remains classified as a runner/Chrome flake after unchanged rerun success. Any future failure outside the five-item baseline is **NEW until classified**. Suspected flakes must be rerun unchanged before product mutation.
+Build26.4 is a classified runner/harness flake, not standing debt. Build37.4 #210 and Premium V5.9C #213 are classified runner/Chrome flakes after unchanged rerun success. Any other failure is **NEW until classified**.
 
 ## Protected boundaries
-
-Preserve unless a future explicitly scoped build justifies otherwise:
 
 ```text
 app.js
@@ -249,46 +253,25 @@ Learner Intelligence V1/V2 historical compatibility
 Build 39.1 deterministic arbitration semantics
 Build 39.2 evidence-source reliability boundaries
 Build 39.3 pure decision-pipeline composition contract
+Build30 runtime contracts / runtime bridge frozen architecture boundary
 ```
 
-## Active control slice — Build 39.3 closeout
+## Active slice — governance reconciliation before Build39.4 implementation
 
-- Branch: **`docs/build39-3-closeout`**
-- Base: exact accepted main **`c809790453a40ae5e2da3a497e3b64b7a51e5d87`**
-- Scope: **`PROJECT-STATE.md` only**
+- Branch: **`docs/build39-4-audit-reconcile`**
+- Base: **`52152b0cfc3833a9a030c04a66a3970637a9dd31`**
 - Runtime/product change: **none**
-- Goal: persist the accepted #212 merge + CI classification before any Build39.4 product decision.
+- Goal: reconcile `PROJECT-STATE.md` + `MASTER-ROADMAP.md` with accepted 39.1→39.3 reality and persist the read-only 39.4 audit verdict.
 
 ## NEXT
 
-Fresh control step for the docs-only 39.3 closeout:
-
 ```text
-open / re-read the closeout PR
-→ confirm PROJECT-STATE.md is the only changed path
-→ classify its CI against the five inherited failures
-→ if no new regression, merge with expected-head protection
-→ verify main exact
-→ then perform a separate Build39.4 audit before any new implementation
+finish governance reconciliation PR
+→ verify docs-only scope
+→ control / merge it separately
+→ then open Build39.4 as one implementation slice
+→ implement only the read-only runtime snapshot collector + dedicated tribunal
+→ STOP at candidate PR
 ```
 
-### Build39.4 audit boundary — NOT YET AUTHORIZED
-
-The next product decision must be made by audit, not by numbering momentum.
-
-Primary candidates:
-
-```text
-A. read-only runtime snapshot collector
-   real Memory.summary() + Errors.summary()
-   → caller snapshot shape
-   → certified 39.3 pipeline
-
-B. a genuine evidence gap
-   concept-review / Foundation / Transfer
-   only if an existing trustworthy owner can support it
-```
-
-Do **not** create durable concept/mastery state merely to unlock all six families. Do **not** cut over Evidence v2 as product truth. Do **not** wire learner-facing UI until a later explicit slice proves the runtime read/composition safety contract.
-
-`MASTER-ROADMAP.md` keeps the durable Build39 mandate. If its volatile current-line metadata still lags behind this accepted checkpoint, reconcile that metadata in a dedicated governance-safe step before using it to authorize Build39.4 implementation.
+Do **not** wire a learner-facing recommendation/action executor inside 39.4. Do **not** create concept/Foundation/Transfer mastery evidence merely to fill the remaining three families.
