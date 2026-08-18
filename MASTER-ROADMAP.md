@@ -4,25 +4,25 @@
 >
 > Historical long-form roadmap state remains preserved under `docs/archive/`.
 
-## Canonical checkpoint — 2026-08-18
+## Canonical checkpoint — 2026-08-19
 
 ```text
-accepted main before 41.1   7fb5b66ab992852cd4f73aa4d05fa01b1a9b5b25
-public runtime               v2.5.0 · Build 38
-pedagogy baseline            v2.3.0 · Build 34
-curriculum                   52 lessons / 313 items
-scenario                     44 situations / 132 turns
-listening                    17 contrast families / 18 contextual dialogues
-speaking loop                52/52 · max 2 moments / lesson
-recovery                     7 durable stores / backup v3
-evidence v2                  derived shadow only; original six stores product truth
-Build38                      CLOSED / RELEASED
-Build39 LI3                  CLOSED / CERTIFIED
-Build40 A1 audit             CLOSED / SELECTED A1 PRODUCTIVE CONSOLIDATION
-Build41                      OPEN
-Build41.1                    AUDIT COMPLETE / CLOSEOUT CANDIDATE
-selected next family         present-je → recent past `je viens de + infinitive`
-A2                           NOT AUTHORIZED
+accepted main                 74e8b8038a35c50ee828ee4dfcff6dedd4472e22
+public runtime                v2.5.0 · Build 38
+pedagogy baseline             v2.3.0 · Build 34
+curriculum                    52 lessons / 313 items
+scenario                      44 situations / 132 turns
+listening                     17 contrast families / 18 contextual dialogues
+speaking loop                 52/52 · max 2 moments / lesson
+recovery                      7 durable stores / backup v3
+evidence v2                   derived shadow only; original six stores product truth
+Build38                       CLOSED / RELEASED
+Build39 LI3                   CLOSED / CERTIFIED
+Build40 A1 audit              CLOSED / PRODUCTIVE CONSOLIDATION SELECTED
+Build41                       OPEN
+Build41.1                     CLOSED / AUDITED
+Build41.2                     CLOSED / CERTIFIED PURE CORE
+A2                            NOT AUTHORIZED
 ```
 
 Historical learner continuity remains LOCKED:
@@ -58,20 +58,19 @@ A suspected flake is rerun unchanged before product mutation. Repo/live GitHub w
 - no learner-data reset/renumber/reinterpretation;
 - Recovery remains 7 stores / backup v3;
 - Evidence v2 remains derived shadow until an explicit future cutover decision;
-- no durable store/schema merely to make intelligence look smarter;
 - preserve 52 lesson IDs / 313 item semantics;
 - Build27 App Shell remains learner route/action owner;
 - Premium V5.10 field-approved navigation remains protected;
 - Build37 Foundations ownership/routes remain historical contracts;
 - Build38 deterministic cores/placements/shared Transfer renderer remain historical contracts;
 - Build39.1→39.5 semantics remain protected;
-- `app.js`, `voice-ios.js`, `free-voice.js`, `assets/LOGO.png`, `assets/Favicon.png`, Build30 runtime bridge/contracts remain sanctuaries unless a future explicit slice proves otherwise.
+- `app.js`, `voice-ios.js`, `free-voice.js`, `assets/LOGO.png`, `assets/Favicon.png`, Build30 runtime bridge/contracts remain sanctuaries unless explicitly justified.
 
 ## Closed milestone summary
 
 ### Build37 — Foundations — CLOSED
 
-F01→F18 registry established without a persistent Foundations mastery store. F16 `à / de` contractions remains explicit deferred teach-core debt.
+F01→F18 registry established without a persistent Foundations mastery store. F16 `à / de` contractions remains deferred teach-core debt.
 
 ### Build38 — Generalization & Transfer — CLOSED / RELEASED
 
@@ -95,26 +94,8 @@ Build38.11 is NOT AUTHORIZED. Public runtime release is `v2.5.0 · Build 38`.
 → 39.5 advisory-only Practice recommendation
 ```
 
-Reliable LI3 families today:
-
-```text
-phrase-retrieval ✅
-listening        ✅
-scenario         ✅
-concept-review         unavailable
-foundation-capsule     unavailable
-transfer-construction  unavailable
-```
-
-Practice advice only:
-
-```text
-phrase-retrieval → Réviser
-listening        → Écouter
-scenario         → Dans la vraie vie
-abstain          → no recommendation
-```
-
+Reliable families: `phrase-retrieval`, `listening`, `scenario`.
+Unavailable without trustworthy durable owner: `concept-review`, `foundation-capsule`, `transfer-construction`.
 No auto-route, no `Parler` fallback, no invented mastery.
 
 ### Build40 — A1 Consolidation Audit — CLOSED
@@ -122,75 +103,44 @@ No auto-route, no `Parler` fallback, no invented mastery.
 Canonical audit: `docs/BUILD-40-A1-CONSOLIDATION-AUDIT.md`.
 
 Verdict:
-
 - A1 thematic/content breadth is already strong;
-- the main weakness is productive generalization depth + trustworthy evidence of construction;
+- main weakness = productive generalization depth + trustworthy construction evidence;
 - A2 now = REJECTED;
-- broad phrase/content A1+ expansion = not selected;
+- broad A1+ phrase expansion = not selected;
 - **A1 Productive Consolidation = selected direction**.
 
 ## Build41 — A1 Productive Consolidation — OPEN
 
-### 41.1 productive-family audit — AUDIT COMPLETE / CLOSEOUT CANDIDATE
+### 41.1 productive-family audit — CLOSED / AUDITED
 
 Canonical audit: `docs/BUILD-41.1-PRODUCTIVE-FAMILY-AUDIT.md`.
 
-Seven candidates were classified:
-
-```text
-questions                         REJECT — TOO SEMANTIC / AMBIGUOUS
-past-time recombination           IMPLEMENTABLE — SELECTED NARROW RECENT-PAST FAMILY
-articles / quantities / F16       DEFER — NEEDS BETTER SOURCES
-possessives                       ALREADY COVERED / DUPLICATE
-adjective agreement               DEFER — NEEDS BETTER SOURCES
-short narration                   REJECT — TOO SEMANTIC / AMBIGUOUS
-opinion clauses                   REJECT — TOO SEMANTIC / AMBIGUOUS
-```
-
-#### Selected productive family
-
-Use already-taught lesson 24 present actions and lesson 36 regular recent-past structure:
-
-```text
-Je travaille.          → Je viens de travailler.
-Je mange.              → Je viens de manger.
-Je rentre à la maison. → Je viens de rentrer à la maison.
-```
-
-The selected family is narrow by design:
+Selected narrow family:
 
 ```text
 present-je-regular-action
 → recent-past-je-venir-de
 ```
 
-Why it is safe:
+Rejected/deferred alternatives remain documented in the audit. Generic passé composé transformation is NOT authorized.
 
-- same subject and same action meaning;
-- all vocabulary already taught;
-- selected verbs are regular `-er` actions;
-- no auxiliary choice;
-- no irregular participle;
-- no gender/agreement decision;
-- deterministic exact targets;
-- exercise can remain ephemeral with no mastery claim.
+### 41.2 recent-past deterministic transfer core — CLOSED / CERTIFIED
 
-Generic passé composé transformation is explicitly NOT authorized.
+Accepted PR: **#221**.
+Accepted merge commit:
 
-#### Why other candidates did not win
+```text
+74e8b8038a35c50ee828ee4dfcff6dedd4472e22
+```
 
-- Questions use multiple legitimate strategies; generic mechanical conversion would distort F12.
-- F16 is not coherently taught learner-facing yet; productive testing must not precede teaching.
-- Possessives l31 already owns the mon/ma/mes ↔ ton/ta/tes contrast; a tiny swap set would duplicate it.
-- Adjective agreement still lacks secure paired source forms and must not become a fake `+e` rule.
-- Narrative event ordering is semantic discourse planning, not a mechanical transform.
-- Opinion frames imply semantic stance and cannot be assigned mechanically.
+Pure owner:
 
-## Next authorized implementation — Build41.2
+```text
+src/pedagogy/generalization-recent-past-core.js
+FrenchTranquilleRecentPastTransferCore
+```
 
-**Build41.2 = pure non-wired recent-past deterministic transfer core.**
-
-First catalog exactly:
+Certified catalog:
 
 ```text
 Je travaille.          → Je viens de travailler.
@@ -198,21 +148,39 @@ Je mange.              → Je viens de manger.
 Je rentre à la maison. → Je viens de rentrer à la maison.
 ```
 
-Mandatory 41.2 boundaries:
-
+Contract:
 - pure static deterministic core;
-- no random/adaptive generation;
-- no new vocabulary;
+- unknown sources return `null`;
 - no generic passé composé;
 - no subject expansion beyond `je`;
-- no reflexive transformation in first core;
-- no negation/questions;
-- no loader/SW/learner-facing wiring;
+- no reflexive/negation/question expansion;
+- no random/adaptive generation;
+- no new vocabulary;
+- no learner-facing wiring;
+- no loader/SW wiring;
 - no storage / Evidence / durable write / mastery claim;
-- Build38 owners remain byte-identical;
-- learner placement is a separate later audit after the core is certified.
+- Build38/Build39 owners untouched.
 
-A2 remains NOT AUTHORIZED.
+The fourth audit example `Je regarde un film. → Je viens de regarder un film.` remains deliberately outside the certified catalog.
+
+PR #221 dedicated tribunal is green; exact-head full matrix returned to the known five inherited standing failures only.
+
+## Next authorized action — learner-placement audit
+
+Build41.2 must not be wired automatically.
+
+```text
+inspect lesson 24 real source ownership/content
+→ inspect lesson 36 real recent-past teaching/interaction
+→ inspect existing Build38 shared Transfer renderer + placement conventions
+→ determine whether learner-facing recent-past transfer is pedagogically additive
+→ select exact placement only if it avoids duplicate teaching and preserves lesson flow
+→ only then authorize/materialize one narrow learner-facing Build41 slice
+```
+
+The audit must prove all three source phrases are genuinely known before the selected placement, the activity remains ephemeral/non-mastery-claiming, and all 52 lesson IDs / 313 item semantics plus durable stores remain unchanged.
+
+No learner-facing Build41 slice number is assigned before this audit. A2 remains NOT AUTHORIZED.
 
 ## CI baseline
 
@@ -229,10 +197,9 @@ Build26.4 is a classified runner/harness flake, not standing debt. Any other red
 ## NEXT
 
 ```text
-review / merge 41.1 audit-only closeout
-→ verify main + 0 open PRs
-→ Build41.2 pure recent-past transfer core
-→ dedicated Node + browser-free deterministic tribunal
-→ no learner wiring in 41.2
-→ audit placement only after core certification
+merge/checkpoint Build41.2 closeout docs
+→ verify canonical repo handoff
+→ audit learner-facing placement separately
+→ only if justified, materialize one narrow learner-facing Build41 slice
+→ keep A2 blocked
 ```
