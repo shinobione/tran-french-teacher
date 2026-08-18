@@ -20,8 +20,10 @@ Build 39.1 does **not** wire those actions into the learner UI. It certifies the
 ## New owner
 
 ```text
-src/pedagogy/learner-intelligence-v3-core.js
+src/pedagogy/learner-action-arbitration-core.js
 ```
+
+The filename deliberately stays outside the historical `learner-intelligence*.js` ownership family. Several Build 37/38 predecessor guards protect that older family broadly; Build 39.1 is a new pure arbitration owner and must not masquerade as a mutation of Learner Intelligence V1/V2.
 
 The core is pure and read-free. It receives already-normalized candidates and returns either:
 
@@ -126,6 +128,18 @@ The tribunal covers:
 - v2.5.0 / Build 38 release predecessor still certified;
 - Build 38.10 predecessor still certified;
 - protected sanctuaries byte-identical.
+
+## Classified predecessor-CI naming collision
+
+The first candidate head `4332156fae8b7e8e374ebea5a1362cf4a6e9add6` had a green dedicated Build 39.1 tribunal, green v2.5 release certification, green runtime metadata, green Build38.10, green Build32 and green Build31 compatibility, but several older Build37/38 workflows rejected the path `src/pedagogy/learner-intelligence-v3-core.js` through broad historical ownership regexes such as:
+
+```text
+src/pedagogy/learner-intelligence.*\.js
+```
+
+Classification: **predecessor ownership-guard naming collision, not a product/runtime regression**.
+
+Resolution: keep the core/API semantics unchanged and move the new Build39 owner to `src/pedagogy/learner-action-arbitration-core.js`, rather than weakening a chain of certified predecessor workflows.
 
 ## Next slice if 39.1 is accepted
 
