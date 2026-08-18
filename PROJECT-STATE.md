@@ -132,7 +132,7 @@ caller-supplied snapshots
 
 39.3 adds no evidence semantics, no direct owner reads, no storage access, no Evidence cutover and no learner-facing wiring.
 
-## Build 39.4 — read-only runtime snapshot collector — ACTIVE / CANDIDATE BRANCH
+## Build 39.4 — read-only runtime snapshot collector — ACTIVE / PR #215
 
 Audit authority: `docs/BUILD-39.4-RUNTIME-SNAPSHOT-AUDIT.md`.
 
@@ -219,7 +219,7 @@ Public runtime metadata remains exactly:
 v2.5.0 · Build 38
 ```
 
-### 39.4 tribunals in candidate branch
+### 39.4 tribunals
 
 Unit tribunal proves:
 
@@ -242,6 +242,23 @@ all seven durable stores byte-identical before/after collect()+decide()
 7 completed / l8=4 / 40 known preserved
 ```
 
+### Initial #215 control classification
+
+The first published #215 head `9076d354381ce6f120be5e4f7c71fa32d8ec898d` produced:
+
+- `Build 39.4 Runtime snapshot collector` run **`32179120623` — SUCCESS**;
+- all Build39 predecessors green;
+- Release v2.5.0 Build38 green;
+- Build38.10 green;
+- Build31 / Build32 compatibility green;
+- exactly the five inherited standing failures;
+- plus `Runtime version metadata` run **`32179120244` — FAILURE** before its Chrome tribunal because its historical global diff guard forbade any future `sw.js` change;
+- plus Build26.4 run **`32179120204` — FAILURE** after three bounded Chrome timeouts in its known flaky Progress smoke; static contracts, sanctuaries and Tyffany render had passed.
+
+The runtime-metadata failure is classified as **historical successor-safety debt, not a version regression**. Its static metadata assertions remain unchanged; the old SW prohibition is now scoped only to its own historical `release/v2.5.0-build38-certification` branch. Build39.4 explicitly certifies that this guard remains release-local and that the Chrome metadata tribunal still exists.
+
+Build26.4 remains a known runner/harness flake and must be judged on the final head without product mutation.
+
 ### 39.4 mandatory boundaries
 
 - no direct `localStorage`, `sessionStorage` or IndexedDB read in the collector;
@@ -259,12 +276,14 @@ all seven durable stores byte-identical before/after collect()+decide()
 
 ## Active slice
 
+- PR: **#215 — `Build 39.4 · read-only runtime snapshot collector`**
 - Branch: **`build39/runtime-snapshot-collector`**
 - Base: **`9c5c75c4adf7c35eaf4b4c8331af24e1efb79d7c`**
 - Intended changed paths:
 
 ```text
 .github/workflows/build39-4-runtime-snapshot.yml
+.github/workflows/runtime-version-meta.yml
 PROJECT-STATE.md
 src/core/build32-loader.js
 src/pedagogy/learner-action-runtime-snapshot.js
@@ -276,6 +295,7 @@ tests/unit/build39-4-runtime-snapshot.test.cjs
 - No 39.1 / 39.2 / 39.3 owner file is modified.
 - No learner-facing UI is modified.
 - No public release/version metadata is changed.
+- The `runtime-version-meta.yml` change is CI successor-safety only; its `v2.5.0 · Build 38` assertions and real Chrome tribunal remain intact.
 
 ## CI baseline
 
@@ -318,12 +338,15 @@ Build30 runtime contracts / runtime bridge frozen architecture boundary
 ## NEXT
 
 ```text
-materialize Build39.4 candidate PR from the active branch
-→ STOP at PR boundary
-→ fresh control of exact PR head / scope / dedicated tribunal
-→ classify every red outside the inherited five as NEW
-→ merge only after exact-head certification
-→ then determine the next Build39 slice from repo reality / MASTER-ROADMAP
+fresh exact-head control of PR #215
+→ require 39.4 dedicated tribunal green
+→ require runtime-version metadata tribunal green after successor-safety repair
+→ classify/rerun Build26.4 unchanged if it flakes again
+→ require exactly the inherited five standing failures and no pending jobs
+→ expected-head squash merge #215
+→ verify accepted main
+→ perform Build39.4 docs/governance closeout
+→ only then audit the next Build39 slice
 ```
 
 Do **not** wire a learner-facing recommendation/action executor inside 39.4. Do **not** create concept/Foundation/Transfer mastery evidence merely to fill the remaining three families.
