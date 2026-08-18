@@ -7,7 +7,7 @@
 ## Canonical checkpoint — 2026-08-19
 
 ```text
-accepted main                 74e8b8038a35c50ee828ee4dfcff6dedd4472e22
+accepted main                 8d56b8d3b3bc727570d456ec43d90ed7f31c3b62
 public runtime                v2.5.0 · Build 38
 pedagogy baseline             v2.3.0 · Build 34
 curriculum                    52 lessons / 313 items
@@ -22,6 +22,8 @@ Build40 A1 audit              CLOSED / PRODUCTIVE CONSOLIDATION SELECTED
 Build41                       OPEN
 Build41.1                     CLOSED / AUDITED
 Build41.2                     CLOSED / CERTIFIED PURE CORE
+Build41 placement audit       COMPLETE
+Build41.3                     AUTHORIZED / NOT STARTED
 A2                            NOT AUTHORIZED
 ```
 
@@ -123,7 +125,7 @@ present-je-regular-action
 → recent-past-je-venir-de
 ```
 
-Rejected/deferred alternatives remain documented in the audit. Generic passé composé transformation is NOT authorized.
+Generic passé composé transformation is NOT authorized.
 
 ### 41.2 recent-past deterministic transfer core — CLOSED / CERTIFIED
 
@@ -162,26 +164,97 @@ Contract:
 - no storage / Evidence / durable write / mastery claim;
 - Build38/Build39 owners untouched.
 
-The fourth audit example `Je regarde un film. → Je viens de regarder un film.` remains deliberately outside the certified catalog.
+### Learner-placement audit — COMPLETE
 
-PR #221 dedicated tribunal is green; exact-head full matrix returned to the known five inherited standing failures only.
-
-## Next authorized action — learner-placement audit
-
-Build41.2 must not be wired automatically.
+Canonical audit:
 
 ```text
-inspect lesson 24 real source ownership/content
-→ inspect lesson 36 real recent-past teaching/interaction
-→ inspect existing Build38 shared Transfer renderer + placement conventions
-→ determine whether learner-facing recent-past transfer is pedagogically additive
-→ select exact placement only if it avoids duplicate teaching and preserves lesson flow
-→ only then authorize/materialize one narrow learner-facing Build41 slice
+docs/BUILD-41-RECENT-PAST-PLACEMENT-AUDIT.md
 ```
 
-The audit must prove all three source phrases are genuinely known before the selected placement, the activity remains ephemeral/non-mastery-claiming, and all 52 lesson IDs / 313 item semantics plus durable stores remain unchanged.
+Verified prerequisite chain:
 
-No learner-facing Build41 slice number is assigned before this audit. A2 remains NOT AUTHORIZED.
+```text
+lesson 24
+→ teaches all 3 certified present sources
+
+lesson 36
+→ explicitly teaches venir de + infinitif
+→ first valid target-structure anchor
+
+lesson 37
+→ begins passé composé starter blocks
+```
+
+Therefore placement before lesson 36 is invalid, and delaying beyond lesson 36 would mix the first recent-past consolidation with a second past-time system unnecessarily.
+
+Selected placement:
+
+```text
+lesson 36 normal content
+→ optional recent-past Transfer
+→ exactly 3 deterministic transformations
+→ return to lesson
+```
+
+Why this is additive rather than duplicate:
+- lesson 36 teaches rule + model phrases + narrow challenge;
+- the Transfer asks the learner to start from known lesson-24 present actions and reconstruct a new temporal meaning;
+- `Je viens de travailler.` is a genuinely new combination of already-known pieces;
+- the activity remains optional, ephemeral and non-mastery-claiming.
+
+#### Existing UI owner
+
+Reuse:
+
+```text
+src/pedagogy/generalization-transfer-lesson.js
+```
+
+Do not create a second learner-facing Transfer engine.
+
+Existing renderer already owns optional three-item reconstruction UX on lessons 13 / 33 / 34 / 35 / 52.
+
+#### Compatibility finding
+
+Build41.2 intentionally exposes a pure API that is not identical to the historical Build38 renderer API.
+
+Therefore direct wiring is NOT authorized and the certified 41.2 core must remain byte-identical.
+
+## Next authorized implementation — Build41.3
+
+**Build41.3 = learner-facing recent-past transfer.**
+
+Architecture:
+
+```text
+Build41.2 pure core (unchanged)
+        ↓
+new narrow read-only renderer compatibility adapter
+        ↓
+existing shared generalization-transfer-lesson.js
+        ↓
+lesson 36 optional Transfer entry
+```
+
+Mandatory Build41.3 boundaries:
+- exact three certified Build41.2 exercises only;
+- no fourth `Je regarde un film` pair;
+- adapter only supplies presentation data / deterministic choices and delegates verification to Build41.2;
+- additive route in the shared renderer; do not copy/fork overlay UI;
+- Build41.2 core remains byte-identical;
+- load core + adapter before the shared renderer;
+- update SW only as required for offline delivery;
+- preserve all historical Build38 routes and tribunals;
+- no curriculum item/lesson ID change;
+- no store/schema/Recovery change;
+- no Evidence write and no LI3 `transfer-construction` mastery claim;
+- public metadata remains `v2.5.0 · Build 38`;
+- one implementation slice only, stop at candidate PR.
+
+Recommended distractors should test the taught `venir de + infinitif` structure without introducing lesson-37 passé composé prematurely, e.g. target / missing `de` / finite verb after `de`.
+
+A2 remains NOT AUTHORIZED.
 
 ## CI baseline
 
@@ -198,9 +271,9 @@ Build26.4 is a classified runner/harness flake, not standing debt. Any other red
 ## NEXT
 
 ```text
-merge/checkpoint Build41.2 closeout docs
-→ verify canonical repo handoff
-→ audit learner-facing placement separately
-→ only if justified, materialize one narrow learner-facing Build41 slice
-→ keep A2 blocked
+close learner-placement audit docs
+→ verify canonical main + 0 open PRs
+→ materialize Build41.3 learner-facing recent-past transfer
+→ dedicated contracts + real Chrome VI/FR desktop/iPhone tribunal
+→ stop at candidate PR for separate CI control
 ```

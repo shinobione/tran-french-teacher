@@ -5,17 +5,15 @@ Last reconciled: 2026-08-19
 ## Canonical accepted main
 
 - Repository: `shinobione/tran-french-teacher`
-- Accepted `main`: **`74e8b8038a35c50ee828ee4dfcff6dedd4472e22`**
-- Commit: `Build 41.2: recent-past deterministic transfer core`
+- Accepted `main`: **`8d56b8d3b3bc727570d456ec43d90ed7f31c3b62`**
+- Commit: `Docs: close Build 41.2`
+- Parent: `74e8b8038a35c50ee828ee4dfcff6dedd4472e22` — accepted Build41.2 pure core runtime/product checkpoint.
 - PR **#221 — MERGED** from exact head `9d6606cc305aa42b8db8750bf720a5a143a69c6d`.
-- Parent: `7739418fd97a01df4bd1b67c27ccadb8fd3cd14a` — Build41.1 productive-family audit.
-- Merge commit is GitHub verified / valid.
-- PR #221 exact-head dedicated Build41.2 tribunal: **SUCCESS**.
-- PR #221 full matrix completed at the exact inherited five-failure baseline; no new red remained.
-- **0 open PRs** immediately after #221 merge and before this docs closeout branch.
+- PR **#222 — MERGED** from exact head `a34e5bd9cde2559e4b697c6c1f6adc5b0469ae5c`.
+- `main` re-read at exact SHA `8d56b8d3...`; GitHub commit verified / valid.
 - Public runtime metadata remains **v2.5.0 · Build 38**.
 - Pedagogy baseline remains **v2.3.0 · Build 34**.
-- Build41.2 is pure/non-wired: no runtime loader, SW, UI, curriculum, Recovery, Evidence or learner-store change.
+- Build41.2 remains pure/non-wired: no runtime loader, SW, UI, curriculum, Recovery, Evidence or learner-store change.
 
 ## Accepted product state
 
@@ -52,6 +50,8 @@ Build40  CLOSED — A1 Productive Consolidation selected
 Build41  OPEN
 Build41.1 CLOSED / AUDITED — recent-past family selected
 Build41.2 CLOSED / CERTIFIED — pure recent-past transfer core
+Build41 learner-placement audit COMPLETE
+Build41.3 AUTHORIZED / NOT STARTED
 A2       NOT AUTHORIZED
 ```
 
@@ -64,22 +64,6 @@ src/pedagogy/generalization-recent-past-core.js
 FrenchTranquilleRecentPastTransferCore
 ```
 
-Metadata:
-
-```text
-roadmapSlice = 41.2
-version = 1.0.0-recent-past-core
-familyId = present-je-regular-action-to-recent-past-je-venir-de
-status = pure-non-wired
-sourceLessons = [24]
-anchorLessons = [36]
-subject = je
-structure = venir-de-infinitive
-masteryClaim = false
-durableWrite = false
-runtimeWiring = false
-```
-
 Certified catalog exactly:
 
 ```text
@@ -88,32 +72,78 @@ Je mange.              → Je viens de manger.
 Je rentre à la maison. → Je viens de rentrer à la maison.
 ```
 
-API:
+Contract remains:
 
 ```text
-catalog()
-view(id)
-transform(source)
-verify(idOrSource, answer)
+status = pure-non-wired
+masteryClaim = false
+durableWrite = false
+runtimeWiring = false
 ```
 
-Unknown sources return `null`; this is not a generic French conjugation engine.
+No generic passé composé, no subject expansion beyond `je`, no reflexive/negation/question expansion, no random/adaptive generation and no new vocabulary.
 
-Explicit exclusions remain:
+## Learner-placement audit — COMPLETE
+
+Canonical audit:
 
 ```text
-generic passé composé
-subject expansion beyond je
-reflexive recent-past transformation
-negation / questions
-random/adaptive generation
-new vocabulary
-learner-facing placement
-loader / service-worker wiring
-storage / Evidence / durable write / mastery claim
+docs/BUILD-41-RECENT-PAST-PLACEMENT-AUDIT.md
 ```
 
-The fourth 41.1 audit anchor `Je regarde un film. → Je viens de regarder un film.` remains deliberately outside the first core.
+Evidence inspected:
+
+- lesson 24 genuinely teaches all three source forms;
+- lesson 36 explicitly teaches `venir de + infinitif` and is the first valid target-structure anchor;
+- lesson 37 immediately opens starter passé composé, so delaying the activity would mix two past-time systems unnecessarily;
+- the existing shared `generalization-transfer-lesson.js` renderer already owns optional, ephemeral, three-item Transfer UX on lessons 13 / 33 / 34 / 35 / 52.
+
+Final placement verdict:
+
+```text
+learner-facing recent-past transfer  JUSTIFIED
+placement                            lesson 36
+timing                               after normal lesson teaching, optional
+exercise count                       exactly 3
+UI owner                              existing shared Transfer renderer
+Build41.2 core                        byte-identical
+storage/mastery                      none
+public metadata                      unchanged
+```
+
+Important compatibility finding:
+
+Build41.2 deliberately exposes a pure API (`catalog()`, `view(id)`, `transform()`, `verify()` returning a result object), while the historical shared Transfer renderer expects a Build38-style presentation API (`family`, array catalog, localized `view()`, boolean `verify()`).
+
+Therefore direct wiring is NOT authorized.
+
+## Next authorized implementation — Build41.3
+
+```text
+Build41.2 pure core unchanged
+        ↓
+new narrow read-only renderer compatibility adapter
+        ↓
+existing shared generalization-transfer-lesson.js
+        ↓
+lesson 36 optional three-item Transfer entry
+```
+
+Build41.3 boundaries:
+
+- exact three certified Build41.2 exercises only;
+- no fourth `Je regarde un film` pair;
+- no generic conjugation or passé composé generator;
+- adapter provides only localized UI/presentation data and delegates correctness to Build41.2;
+- additive route in the existing shared Transfer renderer; no copied/forked overlay engine;
+- load certified Build41.2 core + adapter before shared renderer;
+- SW precache only as required for offline delivery;
+- existing Build38 routes/tests must stay green;
+- 52 lessons / 313 items unchanged;
+- 7 durable stores / Recovery v3 unchanged;
+- no Evidence write and no `transfer-construction` mastery claim;
+- public runtime metadata remains `v2.5.0 · Build 38`;
+- A2 remains blocked.
 
 ## CI baseline
 
@@ -129,15 +159,12 @@ Build26.4 remains a classified runner/harness flake, not standing debt. Any othe
 
 ## NEXT
 
-Do **not** wire Build41.2 automatically.
-
 ```text
-audit learner-facing placement separately
-→ inspect real lesson 24 and lesson 36 ownership/content
-→ inspect shared Build38 Transfer renderer/placement patterns without mutating them
-→ decide whether a recent-past exercise is pedagogically additive rather than duplicate teaching
-→ select exact placement and interaction only if justified
-→ only then assign/materialize the next Build41 slice
+close learner-placement audit docs
+→ verify canonical main + 0 open PRs
+→ materialize ONE implementation slice: Build41.3 learner-facing recent-past transfer
+→ dedicated contract + real Chrome VI/FR desktop/iPhone tribunal
+→ stop at candidate PR for CI control
 ```
 
-No A2 work is authorized.
+No second productive family and no A2 work are authorized in Build41.3.
