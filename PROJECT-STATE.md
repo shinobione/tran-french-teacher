@@ -1,19 +1,21 @@
 # PROJECT-STATE — French Trân’quille
 
-Last reconciled: 2026-08-18
+Last reconciled: 2026-08-19
 
 ## Canonical accepted main
 
 - Repository: `shinobione/tran-french-teacher`
-- Accepted `main`: **`7739418fd97a01df4bd1b67c27ccadb8fd3cd14a`**
-- Commit: `Build 41.1: select recent-past productive family`
-- PR **#220 — MERGED** from exact head `8d8e8275a412944a9f9b24da42d333d8e25577d2` with expected-head squash protection.
-- Parent: `7fb5b66ab992852cd4f73aa4d05fa01b1a9b5b25` — Build40 audit.
+- Accepted `main`: **`74e8b8038a35c50ee828ee4dfcff6dedd4472e22`**
+- Commit: `Build 41.2: recent-past deterministic transfer core`
+- PR **#221 — MERGED** from exact head `9d6606cc305aa42b8db8750bf720a5a143a69c6d`.
+- Parent: `7739418fd97a01df4bd1b67c27ccadb8fd3cd14a` — Build41.1 productive-family audit.
 - Merge commit is GitHub verified / valid.
-- `main` was re-read at exact SHA `7739418f...`; **0 open PRs before Build41.2 branch creation**.
+- PR #221 exact-head dedicated Build41.2 tribunal: **SUCCESS**.
+- PR #221 full matrix completed at the exact inherited five-failure baseline; no new red remained.
+- **0 open PRs** immediately after #221 merge and before this docs closeout branch.
 - Public runtime metadata remains **v2.5.0 · Build 38**.
 - Pedagogy baseline remains **v2.3.0 · Build 34**.
-- Latest exact public release deployment proof remains GitHub Pages #272 / run `32072053127` on release SHA `2abe20511d6265d12643276f18041812fec3e715`.
+- Build41.2 is pure/non-wired: no runtime loader, SW, UI, curriculum, Recovery, Evidence or learner-store change.
 
 ## Accepted product state
 
@@ -49,52 +51,13 @@ Build39  CLOSED / CERTIFIED
 Build40  CLOSED — A1 Productive Consolidation selected
 Build41  OPEN
 Build41.1 CLOSED / AUDITED — recent-past family selected
-Build41.2 ACTIVE / PURE CORE CANDIDATE
+Build41.2 CLOSED / CERTIFIED — pure recent-past transfer core
 A2       NOT AUTHORIZED
 ```
 
-## Build41.1 accepted verdict
+## Build41.2 — accepted pure core
 
-Canonical audit:
-
-```text
-docs/BUILD-41.1-PRODUCTIVE-FAMILY-AUDIT.md
-```
-
-Candidate classification:
-
-```text
-questions                         REJECT — TOO SEMANTIC / AMBIGUOUS
-past-time recombination           IMPLEMENTABLE — SELECTED NARROW RECENT-PAST FAMILY
-articles / quantities / F16       DEFER — NEEDS BETTER SOURCES
-possessives                       ALREADY COVERED / DUPLICATE
-adjective agreement               DEFER — NEEDS BETTER SOURCES
-short narration                   REJECT — TOO SEMANTIC / AMBIGUOUS
-opinion clauses                   REJECT — TOO SEMANTIC / AMBIGUOUS
-```
-
-Selected family:
-
-```text
-present-je-regular-action
-→ recent-past-je-venir-de
-```
-
-## Build41.2 — recent-past deterministic transfer core — ACTIVE CANDIDATE
-
-Branch:
-
-```text
-build41/recent-past-transfer-core
-```
-
-Base:
-
-```text
-7739418fd97a01df4bd1b67c27ccadb8fd3cd14a
-```
-
-New pure owner:
+Owner:
 
 ```text
 src/pedagogy/generalization-recent-past-core.js
@@ -117,7 +80,7 @@ durableWrite = false
 runtimeWiring = false
 ```
 
-Certified catalog candidate exactly:
+Certified catalog exactly:
 
 ```text
 Je travaille.          → Je viens de travailler.
@@ -134,9 +97,9 @@ transform(source)
 verify(idOrSource, answer)
 ```
 
-Unknown source returns `null` from `transform()`; the core never tries to conjugate an unseen French verb.
+Unknown sources return `null`; this is not a generic French conjugation engine.
 
-Explicit exclusions:
+Explicit exclusions remain:
 
 ```text
 generic passé composé
@@ -152,18 +115,6 @@ storage / Evidence / durable write / mastery claim
 
 The fourth 41.1 audit anchor `Je regarde un film. → Je viens de regarder un film.` remains deliberately outside the first core.
 
-## 41.2 intended scope
-
-```text
-.github/workflows/build41-2-recent-past-transfer.yml
-PROJECT-STATE.md
-docs/BUILD-41.2-RECENT-PAST-TRANSFER-CORE.md
-src/pedagogy/generalization-recent-past-core.js
-tests/unit/build41-2-recent-past-transfer.test.cjs
-```
-
-No Build38, Build39, curriculum, Foundations, loader, SW, UI, voice, Recovery, Evidence or Premium owner may change.
-
 ## CI baseline
 
 Known persistent inherited failures:
@@ -178,11 +129,15 @@ Build26.4 remains a classified runner/harness flake, not standing debt. Any othe
 
 ## NEXT
 
+Do **not** wire Build41.2 automatically.
+
 ```text
-materialize Build41.2 candidate PR
-→ dedicated pure-core tribunal
-→ exact-head full matrix classification
-→ merge only at five-failure baseline
-→ verify main
-→ audit learner placement separately
+audit learner-facing placement separately
+→ inspect real lesson 24 and lesson 36 ownership/content
+→ inspect shared Build38 Transfer renderer/placement patterns without mutating them
+→ decide whether a recent-past exercise is pedagogically additive rather than duplicate teaching
+→ select exact placement and interaction only if justified
+→ only then assign/materialize the next Build41 slice
 ```
+
+No A2 work is authorized.
