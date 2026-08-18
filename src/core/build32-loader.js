@@ -7,6 +7,8 @@
   const TRANSFER_FUTURE='2.4.0-b38.5';
   const TRANSFER_NUMBER='2.4.0-b38.7';
   const TRANSFER_SPOKEN_ON='2.4.0-b38.10';
+  const TRANSFER_RECENT_PAST='3.1.0-b41.2';
+  const TRANSFER_RECENT_PAST_ADAPTER='3.1.0-b41.3';
   const TRANSFER_LESSON='2.4.0-b38.10';
   const LEARNER_ACTION_CORE='3.0.0-b39.1';
   const LEARNER_EVIDENCE_ADAPTER='3.0.0-b39.2';
@@ -103,6 +105,8 @@
       await loadScript(`./src/pedagogy/generalization-futur-proche-core.js?v=${TRANSFER_FUTURE}`, 'generalizationFuturProcheCore');
       await loadScript(`./src/pedagogy/generalization-number-core.js?v=${TRANSFER_NUMBER}`, 'generalizationNumberCore');
       await loadScript(`./src/pedagogy/generalization-spoken-on-core.js?v=${TRANSFER_SPOKEN_ON}`, 'generalizationSpokenOnCore');
+      await loadScript(`./src/pedagogy/generalization-recent-past-core.js?v=${TRANSFER_RECENT_PAST}`, 'generalizationRecentPastCore');
+      await loadScript(`./src/pedagogy/generalization-recent-past-renderer-adapter.js?v=${TRANSFER_RECENT_PAST_ADAPTER}`, 'generalizationRecentPastAdapter');
       await loadScript(`./src/pedagogy/generalization-transfer-lesson.js?v=${TRANSFER_LESSON}`, 'generalizationTransferLesson');
       await loadScript(`./src/pedagogy/learner-action-arbitration-core.js?v=${LEARNER_ACTION_CORE}`, 'build391LearnerActionCore');
       await loadScript(`./src/pedagogy/learner-evidence-adapter.js?v=${LEARNER_EVIDENCE_ADAPTER}`, 'build392EvidenceAdapter');
