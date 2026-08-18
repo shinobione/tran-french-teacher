@@ -12,12 +12,15 @@
   const NEGATION_EXERCISE_INDEXES=Object.freeze([0,1,2]);
   const SPOKEN_ON_LESSON=52;
   const SPOKEN_ON_EXERCISE_INDEXES=Object.freeze([0,1,2]);
+  const RECENT_PAST_LESSON=36;
+  const RECENT_PAST_EXERCISE_INDEXES=Object.freeze([0,1,2]);
   const root=document.documentElement;
   const core=window.FrenchTranquilleGeneralizationTransfer;
   const futureCore=window.FrenchTranquilleGeneralizationFuturProche;
   const numberCore=window.FrenchTranquilleGeneralizationNumber;
   const negationCore=window.FrenchTranquilleGeneralizationNegation;
   const spokenOnCore=window.FrenchTranquilleGeneralizationSpokenOn;
+  const recentPastCore=window.FrenchTranquilleRecentPastTransferAdapter;
   const T=(vi,fr)=>localStorage.getItem(DEBUG)==='1'?fr:vi;
   const locale=()=>localStorage.getItem(DEBUG)==='1'?'fr':'vi';
   const esc=(value='')=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
@@ -31,11 +34,13 @@
   const hasNumberCore=numberCore?.family?.id==='singular-plural-regular-noun-phrases';
   const hasNegationCore=negationCore?.family?.id==='affirmation-negation-regular-er-je';
   const hasSpokenOnCore=spokenOnCore?.family?.id==='nous-on-spoken-equivalence';
+  const hasRecentPastCore=recentPastCore?.family?.id==='present-je-regular-action-to-recent-past-je-venir-de';
   const legacyExercises=Object.freeze(EXERCISE_INDEXES.map(index=>core.catalog[index]));
   const futureExercises=Object.freeze(FUTURE_EXERCISE_INDEXES.map(index=>futureCore.catalog[index]));
   const numberExercises=Object.freeze(hasNumberCore?NUMBER_EXERCISE_INDEXES.map(index=>numberCore.catalog[index]):[]);
   const negationExercises=Object.freeze(hasNegationCore?NEGATION_EXERCISE_INDEXES.map(index=>negationCore.catalog[index]):[]);
   const spokenOnExercises=Object.freeze(hasSpokenOnCore?SPOKEN_ON_EXERCISE_INDEXES.map(index=>spokenOnCore.catalog[index]):[]);
+  const recentPastExercises=Object.freeze(hasRecentPastCore?RECENT_PAST_EXERCISE_INDEXES.map(index=>recentPastCore.catalog[index]):[]);
   const ROUTES=Object.freeze([
     Object.freeze({
       lesson:LESSON,
@@ -136,6 +141,26 @@
       doneTitleFr:'Tu viens de passer 3 phrases de « nous » à « on »',
       doneCopyVi:'Bạn đã lấy những câu « nous » đã biết và tự tạo phiên bản nói tự nhiên với « on ». Đây là luyện chuyển đổi, không phải điểm “thành thạo”.',
       doneCopyFr:'Tu as repris des phrases connues avec « nous » et construit leur version orale naturelle avec « on ». C’est un exercice de transfert, pas un score de « maîtrise ».'
+    }):null,
+    hasRecentPastCore?Object.freeze({
+      lesson:RECENT_PAST_LESSON,
+      slice:'41.3',
+      core:recentPastCore,
+      family:recentPastCore.family.id,
+      exerciseIndexes:RECENT_PAST_EXERCISE_INDEXES,
+      exercises:recentPastExercises,
+      eyebrowVi:'VỪA MỚI',
+      eyebrowFr:'PASSÉ RÉCENT',
+      entryCopyVi:'3 câu đã biết ở hiện tại: giữ cùng « je » và hành động, rồi xây lại để nói việc vừa mới xảy ra với « venir de + infinitif ». Không bắt buộc để tiếp tục bài.',
+      entryCopyFr:'3 phrases déjà connues au présent : garde « je » et la même action, puis reconstruis-les pour dire ce qui vient de se passer avec « venir de + infinitif ». Facultatif pour continuer la leçon.',
+      introCopyVi:'Không có từ mới. Giữ nguyên « je » và hành động, rồi dùng « je viens de + động từ nguyên mẫu ».',
+      introCopyFr:'Pas de nouveau vocabulaire. Garde « je » et la même action, puis utilise « je viens de + infinitif ».',
+      correctVi:'✓ Đúng. Bạn đã giữ cùng hành động và xây lại câu để nói việc vừa mới xảy ra.',
+      correctFr:'✓ Correct. Tu as gardé la même action et reconstruit la phrase au passé récent.',
+      doneTitleVi:'Bạn vừa xây 3 câu với « venir de »',
+      doneTitleFr:'Tu viens de construire 3 phrases au passé récent',
+      doneCopyVi:'Bạn đã dùng những hành động đã biết để tạo câu mới với « venir de + infinitif ». Đây là luyện chuyển đổi, không phải điểm “thành thạo”.',
+      doneCopyFr:'Tu as réutilisé des actions connues pour construire de nouvelles phrases avec « venir de + infinitif ». C’est un exercice de transfert, pas un score de « maîtrise ».'
     }):null
   ].filter(Boolean));
 
@@ -269,6 +294,7 @@
     root.dataset.transferNumberIntegration=hasNumberCore?'38.7':'0';
     root.dataset.transferNegationIntegration=hasNegationCore?'38.8':'0';
     root.dataset.transferSpokenOnIntegration=hasSpokenOnCore?'38.10':'0';
+    root.dataset.transferRecentPastIntegration=hasRecentPastCore?'41.3':'0';
     root.dataset.transferLesson=String(currentLessonNumber());
     mountEntry();
   }
@@ -287,6 +313,7 @@
     numberIntegration:hasNumberCore?'38.7':null,
     negationIntegration:hasNegationCore?'38.8':null,
     spokenOnIntegration:hasSpokenOnCore?'38.10':null,
+    recentPastIntegration:hasRecentPastCore?'41.3':null,
     status:'learner-facing-contextual',
     family:core.family.id,
     lesson:LESSON,
@@ -308,6 +335,10 @@
     spokenOnLesson:hasSpokenOnCore?SPOKEN_ON_LESSON:null,
     spokenOnExerciseIndexes:hasSpokenOnCore?SPOKEN_ON_EXERCISE_INDEXES:Object.freeze([]),
     spokenOnExercises,
+    recentPastFamily:hasRecentPastCore?recentPastCore.family.id:null,
+    recentPastLesson:hasRecentPastCore?RECENT_PAST_LESSON:null,
+    recentPastExerciseIndexes:hasRecentPastCore?RECENT_PAST_EXERCISE_INDEXES:Object.freeze([]),
+    recentPastExercises,
     routes:ROUTES,
     persistent:false,
     masteryClaim:false,
