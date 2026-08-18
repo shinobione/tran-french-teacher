@@ -16,7 +16,8 @@
 |---|---|
 | Public application runtime metadata | **V2.5.0 · Build 38** |
 | Product pedagogy baseline | **V2.3.0 · Build 34** |
-| Current accepted governance/runtime main | **`2abe20511d6265d12643276f18041812fec3e715`** — PR #206 / v2.5.0 Build 38 release |
+| Current accepted governance/runtime main | **`246338a9ef11eb430f59fc6ccf494688904cf883`** — PR #208 / Build 39.1 learner action arbitration core |
+| Latest accepted Build 39 checkpoint | **`246338a9ef11eb430f59fc6ccf494688904cf883`** — PR #208 / pure non-wired 39.1 arbitration core |
 | Latest accepted Build 38 runtime checkpoint | **`2abe20511d6265d12643276f18041812fec3e715`** — release/version certification over the closed Build 38 milestone |
 | Latest learner-facing Transfer runtime checkpoint | **`2c7bf79a61d0cacd21f9345ed661cc3ac156e604`** — PR #203 / Build 38.10 |
 | GitHub Pages v2.5.0 release proof | **#272 / run `32072053127` SUCCESS** on exact `2abe20511…` SHA |
@@ -45,7 +46,8 @@
 | Build 38.9 | **CLOSED / CERTIFIED · deterministic nous → on spoken-French core** |
 | Build 38.10 | **CLOSED / DEPLOYED · learner-facing nous → spoken-on integration** |
 | Build 38 milestone | **CLOSED / RELEASED as v2.5.0 · Build 38 · no Build 38.11 authorized** |
-| Next control action | **finish the docs-only v2.5.0 release closeout; then Build 39 may open as a separate product slice** |
+| Build 39.1 | **CLOSED / CERTIFIED · pure deterministic learner-action arbitration core · non-wired** |
+| Next control action | **finish the docs-only Build 39.1 closeout; then open Build 39.2 evidence adapter as a separate product slice** |
 | Primary field target | **iPhone / Safari / installed PWA** |
 
 ## Current interpretation
@@ -62,9 +64,14 @@
 - The milestone audit rejected an automatic 38.11: adjective agreement lacks equally solid masculine source acquisition; generic question transformation conflicts with F12’s multiple-strategy/no-inversion boundary; comparatives are already explicit lesson content; broad combinatorial generation would exceed the deterministic Build 38 contract.
 - Therefore Build 38 is **pedagogically complete**, **closed**, and now **publicly released as v2.5.0 · Build 38**. No new product family is authorized inside Build 38.
 - PR #206 performed the explicit release/version certification. Its final candidate head `78768ff26dcc64c090535163a10af8e019fdb4a1` passed the dedicated release, runtime-metadata, Build38.10 and Build32 gates; Build26.4 flaked once and passed unchanged on rerun. The squash merge is `2abe20511d6265d12643276f18041812fec3e715`; Pages #272 / run `32072053127` and deployment `5951805479` succeeded on that exact SHA.
+- PR #208 opened Build 39 with a **pure deterministic learner-action arbitration core**. Its final candidate head `719a838456156f9df3f7602b1beea0af1df322ab` passed Build39.1, release v2.5.0, runtime metadata, Build38.10, Build32, Build31 and predecessor compatibility gates; the squash merge is `246338a9ef11eb430f59fc6ccf494688904cf883`.
+- The first 39.1 filename `src/pedagogy/learner-intelligence-v3-core.js` collided with historical predecessor ownership guards matching `src/pedagogy/learner-intelligence.*\.js`. The new owner was renamed to `src/pedagogy/learner-action-arbitration-core.js` instead of weakening Build37/38 guards. Former predecessor reds returned to SUCCESS on the final head.
+- `Premium V5.3 Pedagogical Islands` run `32169633601` flaked during multi-screenshot Chrome capture after static and functional tribunals had passed; the same job reran unchanged and succeeded. No product/workflow mutation was used to appease the flake.
+- The drained #208 final-head matrix ended with **exactly the five inherited failures** and no other failure/pending/in-progress run.
+- Build 39.1 remains **non-wired**: no learner-facing route, no durable write, no Evidence read-path cutover and no public runtime version bump. Public Settings metadata therefore remains **v2.5.0 · Build 38**.
 - PR #197 merged under a documented **controlled CI-infrastructure exception** after sequential workflow-only successor-safety fixes saturated GitHub Actions. Do not rewrite that event as “the entire final-head matrix drained green before merge.”
 - PR #203 also merged under an explicit controlled queue exception: its dedicated final-head tribunal was green and no completed final-head workflow introduced a new failure, while one unrelated Premium V5.7 run remained queued after passing on the immediately preceding head.
-- Public Settings metadata is now **v2.5.0 · Build 38** by explicit release-version ownership. Internal roadmap slice **38.10** remains a separate checkpoint and must not be misrepresented as a SemVer patch.
+- Public Settings metadata is now **v2.5.0 · Build 38** by explicit release-version ownership. Internal roadmap slice **38.10** remains a separate learner-facing checkpoint and Build39.1 is a later non-wired internal checkpoint; neither should be misrepresented as a SemVer patch.
 
 ## Release/version metadata policy — LOCKED
 
@@ -82,16 +89,17 @@ PEDAGOGY BASELINE
 ROADMAP CHECKPOINT
   internal implementation/certification sequence
   latest learner-facing checkpoint = Build 38.10
-  milestone verdict = Build 38 CLOSED / RELEASED
+  latest non-wired product checkpoint = Build 39.1
+  milestone verdict = Build 39 OPEN
 ```
 
 Permanent rules:
 
-- `37.x`, `38.x`, etc. are roadmap slices, **not SemVer patch numbers**;
+- `37.x`, `38.x`, `39.x`, etc. are roadmap slices, **not SemVer patch numbers**;
 - a narrow implementation slice must not silently bump public runtime metadata;
 - public runtime metadata changes only in an explicit release-version slice with dedicated tests and documentation;
 - the public `Build` displayed beside SemVer is the **release build anchor**, not the latest internal roadmap checkpoint;
-- a DEBUG/admin surface may later expose `Roadmap checkpoint: 38.10` separately, but must not overload the public release field;
+- a DEBUG/admin surface may later expose roadmap checkpoints separately, but must not overload the public release field;
 - Build 38’s coherent Generalization & Transfer milestone was intentionally assigned and certified as **`v2.5.0 · Build 38`** by PR #206; that precedent does not make later version bumps automatic.
 
 Canonical policy document: `docs/RELEASE-VERSIONING-POLICY.md`.
@@ -224,6 +232,7 @@ Build 38.8 lesson-34 placement / round-trip contract
 Build 38.9 deterministic nous→on core semantics
 Build 38.10 lesson-52 placement / round-trip contract
 shared Transfer renderer ownership
+Build 39.1 deterministic learner-action arbitration semantics
 ```
 
 ---
@@ -1005,7 +1014,7 @@ Milestone decision:
 Build 38 = PEDAGOGICALLY COMPLETE / CLOSED / RELEASED
 Build 38.11 = NOT AUTHORIZED
 public release = v2.5.0 · Build 38
-next product milestone = Build 39, only after release-doc closeout
+next product milestone = Build 39
 ```
 
 See `docs/BUILD-38-MILESTONE-CLOSEOUT.md` and `docs/RELEASE-V2.5.0-BUILD38.md`.
@@ -1029,7 +1038,7 @@ The release slice changed public metadata/certification only. It did not modify 
 
 ---
 
-# 8. Build 39 — Learner Intelligence 3
+# 8. Build 39 — Learner Intelligence 3 — OPEN
 
 Tyffany chooses whether the next useful action is:
 
@@ -1042,9 +1051,121 @@ Tyffany chooses whether the next useful action is:
 
 Build 39 should consume reliable evidence from prior systems; it must not invent mastery from recognition failures or decorative activity counts.
 
-The Build 38 release boundary is now accepted as **v2.5.0 · Build 38**. Build 39 is therefore the next product milestone **after the v2.5.0 documentation closeout is merged**.
+The Build 38 release boundary is accepted as **v2.5.0 · Build 38**. Build 39 is now open as the next product milestone.
 
-Do not implement Build 39 inside the release closeout. Open it as a new small canonical slice with its own branch, PR, checkpoint and test boundary.
+## 39.1 — learner action arbitration core — CLOSED / CERTIFIED
+
+39.1 owns a **pure deterministic arbitration core** only:
+
+```text
+src/pedagogy/learner-action-arbitration-core.js
+export = FrenchTranquilleLearnerIntelligenceV3Core
+persistence = none
+runtime wiring = none
+mastery claim = none
+```
+
+Canonical action IDs:
+
+```text
+phrase-retrieval
+concept-review
+foundation-capsule
+listening
+scenario
+transfer-construction
+```
+
+Reliability contract:
+
+```text
+observed need required
+minimum confidence required
+independent evidence required
+transfer/construction requires >= 2 independent evidence items
+blocked/unavailable candidates are ineligible
+recognition-failure-only candidates are ineligible
+decorative activity totals do not arbitrate
+ties are deterministic and input-order independent
+explicit abstention = insufficient-reliable-evidence
+```
+
+Certification / closeout proof:
+
+```text
+PR #208 MERGED
+final candidate head 719a838456156f9df3f7602b1beea0af1df322ab
+squash merge / accepted main 246338a9ef11eb430f59fc6ccf494688904cf883
+Build 39.1 dedicated run 32169633637 SUCCESS
+Release v2.5.0 Build 38 run 32169633712 SUCCESS
+Runtime version metadata run 32169633800 SUCCESS
+Build 38.10 predecessor run 32169632536 SUCCESS
+Build 32 Practical A1 run 32169633412 SUCCESS
+Build 31 Learner Intelligence compatibility run 32169633896 SUCCESS
+Build 37.7 F12 predecessor run 32169633494 SUCCESS
+Build 26.4 run 32169633668 SUCCESS
+full final-head matrix drained to exactly five inherited failures
+0 other failure / 0 queued / 0 in-progress
+```
+
+Historical predecessor guards match `src/pedagogy/learner-intelligence.*\.js`, so the first owner filename collided with certified Build37/38 ownership boundaries. 39.1 resolved this by renaming the new owner to `learner-action-arbitration-core.js` rather than weakening predecessor workflows.
+
+`Premium V5.3 Pedagogical Islands` run `32169633601` also produced one isolated Chrome screenshot-capture failure. Static contracts plus normal and reduced-motion tribunals passed; the same job reran unchanged and succeeded. It is classified as a browser/runner capture flake, not a product regression.
+
+39.1 explicitly does **not**:
+
+```text
+read or write localStorage / sessionStorage / IndexedDB
+make Evidence v2 product truth
+change Learner Intelligence V1/V2
+change curriculum or Foundation routes
+change Listening / Scenario / Transfer behavior
+change voice / Recovery / backup
+change Premium / PWA identity or cache
+change public runtime version metadata
+```
+
+Evidence v2 therefore remains a seventh **derived shadow** and the original six stores remain current product truth.
+
+## 39.2 — evidence adapter — NEXT / NOT STARTED
+
+39.2 is the next authorized **separate** implementation slice.
+
+Goal:
+
+```text
+reliable existing product evidence
+→ narrow normalization adapter
+→ six 39.1 candidate families
+→ certified 39.1 arbitration core
+```
+
+39.2 must first audit which current owners can provide reliable signals for:
+
+```text
+phrase retrieval
+concept review
+Foundation capsule
+listening
+scenario
+transfer / construction
+```
+
+Mandatory boundaries:
+
+- consume only evidence already justified by current owners;
+- original six source stores remain product truth;
+- Evidence v2 remains derived-shadow only;
+- no Evidence product read-path cutover;
+- no durable schema migration;
+- no mastery invention;
+- no recognition-failure-only need signal;
+- no decorative activity-count arbitration;
+- preserve Learner Intelligence V1/V2 historical compatibility;
+- preserve historical learner continuity `7 completed / l8 progress 4 / 40 known`;
+- no learner-facing UI wiring unless a later explicit slice authorizes it.
+
+39.2 must get its own branch, PR, checkpoint and dedicated test boundary. It must not be implemented inside the 39.1 closeout branch.
 
 ---
 
@@ -1072,9 +1193,11 @@ Five persistent inherited failures remain known baseline debt unless separately 
 4. `Build 36.3 Recovery v3 durability tribunal`;
 5. `Build 28 Data recovery smoke`.
 
-`Build 26.4 Progress single-scroll + Tyffany smoke` is a classified runner/harness flake, not durable baseline debt. It passed unchanged on the 38.10 candidate and again passed unchanged after flaking on the final #206 release candidate.
+`Build 26.4 Progress single-scroll + Tyffany smoke` is a classified runner/harness flake, not durable baseline debt. It passed unchanged on the 38.10 candidate, again passed unchanged after flaking on the final #206 release candidate, and passed on the final #208 head.
 
-During #206, `Build 32 Practical A1 Expansion` correctly caught a release cache-bust form that had replaced its historical literal successor URL. The release slice was fixed without weakening the predecessor workflow: the historical `v=2.2.0-b32` URL identity was preserved and a distinct release cache-bust parameter was added. Build32 then passed on the final #206 head.
+During #206, `Build 32 Practical A1 Expansion` correctly caught a release cache-bust form that had replaced its historical literal successor URL. The release slice was fixed without weakening the predecessor workflow: the historical `v=2.2.0-b32` URL identity was preserved and a distinct release cache-bust parameter was added. Build32 then passed on the final #206 head and remained green on the final #208 head.
+
+During #208, historical predecessor ownership guards correctly revealed that the first Build39 filename overlapped the protected `learner-intelligence.*.js` family. Build39 was renamed around that historical ownership instead of weakening predecessor contracts. The final #208 head drained with exactly the five inherited failures above.
 
 These inherited failures do not authorize ignoring a new red. Any failure outside this set must be classified against the current candidate. Harness/runner flakes should be rerun unchanged before product mutation.
 
