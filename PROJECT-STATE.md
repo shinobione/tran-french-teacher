@@ -5,14 +5,13 @@ Last reconciled: 2026-08-18
 ## Canonical accepted main
 
 - Repository: `shinobione/tran-french-teacher`
-- Accepted `main`: **`fe439de166ddb20c036d7253671e104eaa0eb5d5`**
-- Commit: `Docs: close v2.5.0 Build 38 release`
-- PR: **#207 — merged**
-- #207 was documentation/governance plus predecessor-CI successor-safety maintenance; it did not change learner runtime/product semantics.
+- Accepted `main`: **`246338a9ef11eb430f59fc6ccf494688904cf883`**
+- Commit: `Build 39.1: learner action arbitration core (#208)`
+- PR: **#208 — merged**
 - Public runtime release: **v2.5.0 · Build 38 — ACCEPTED / DEPLOYED**
 - Pedagogy baseline: **v2.3.0 · Build 34**
+- #208 is a **pure-core, non-wired Build39 slice**. It does not change public runtime metadata, learner-facing routes, durable learner state, Recovery, Evidence ownership, voice, Premium, PWA identity/cache, curriculum semantics, logo or favicon.
 - Latest exact release deployment proof remains **GitHub Pages #272 / run `32072053127` — SUCCESS** on release SHA `2abe20511d6265d12643276f18041812fec3e715`, with `github-pages` deployment `5951805479 — SUCCESS` on that same release SHA.
-- The GitHub connector used for #207 closeout could verify `main == fe439de...` but could not enumerate the later push-triggered Pages run by SHA. Do not invent a run ID for it.
 
 ## Accepted product state
 
@@ -42,14 +41,7 @@ Certified learner-facing chain:
 - Build 38.11: **NOT AUTHORIZED**
 - public release representing the milestone: **v2.5.0 · Build 38**
 
-## Active slice — Build 39.1 Learner action arbitration core
-
-- Milestone: **Build 39 — Learner Intelligence 3**
-- Branch: **`build39/learner-action-arbitration-core`**
-- Base: exact accepted main **`fe439de166ddb20c036d7253671e104eaa0eb5d5`**
-- PR: **#208 — `Build 39.1 · learner action arbitration core` — OPEN**
-- Latest rename/fix head immediately before this checkpoint update: **`b8efa8a7f8c7f1aa54136e5e24964325fd94fd4b`**
-- Status: **CANDIDATE / PURE CORE / NOT WIRED / NOT MERGED / CI RECHECK REQUIRED ON NEW HEAD**
+## Build 39 — Learner Intelligence 3 — OPEN
 
 Build39 roadmap mandate: Tyffany should eventually choose the next useful action among:
 
@@ -62,13 +54,28 @@ scenario
 transfer / construction
 ```
 
-39.1 introduces the pure deterministic owner:
+Build39 must consume reliable evidence from prior systems. It must not invent mastery from recognition failures, decorative activity counts or unsupported inference.
+
+## Build 39.1 — learner action arbitration core — MERGED / CERTIFIED
+
+- PR: **#208 — merged**
+- Final candidate head: **`719a838456156f9df3f7602b1beea0af1df322ab`**
+- Squash merge / accepted `main`: **`246338a9ef11eb430f59fc6ccf494688904cf883`**
+- Dedicated workflow: `Build 39.1 Learner action arbitration core`
+- Dedicated final-head run: **`32169633637` — SUCCESS**
+- State: **PURE CORE / NON-WIRED / MERGED / CERTIFIED**
+
+39.1 introduced the deterministic owner:
 
 ```text
 src/pedagogy/learner-action-arbitration-core.js
 ```
 
-The exported API remains `FrenchTranquilleLearnerIntelligenceV3Core`. The filename is intentionally outside the historical `learner-intelligence*.js` ownership family so Build39 can add a new pure arbitration owner without weakening predecessor guards that protect Learner Intelligence V1/V2.
+The exported API remains:
+
+```text
+FrenchTranquilleLearnerIntelligenceV3Core
+```
 
 Canonical action IDs:
 
@@ -97,9 +104,54 @@ Reliability boundary:
 - decorative activity totals do not affect arbitration;
 - ties are deterministic and input-order independent.
 
-## 39.1 explicit non-wiring contract
+## 39.1 predecessor-CI naming collision — CLOSED
 
-This slice must not:
+The first owner path was:
+
+```text
+src/pedagogy/learner-intelligence-v3-core.js
+```
+
+Historical Build37/38 predecessor ownership guards broadly protect:
+
+```text
+src/pedagogy/learner-intelligence.*\.js
+```
+
+The first candidate therefore triggered predecessor ownership reds even though the new core itself was pure and non-wired.
+
+Classification: **historical predecessor ownership-guard naming collision, not a Build39.1 product/runtime regression**.
+
+Resolution: preserve the historical guards and rename the new Build39 owner to:
+
+```text
+src/pedagogy/learner-action-arbitration-core.js
+```
+
+No predecessor workflow was weakened. Core semantics/API stayed unchanged.
+
+Final-head proof after the rename included:
+
+```text
+Build 39.1 Learner action arbitration core     run 32169633637  SUCCESS
+Release v2.5.0 Build 38 certification          run 32169633712  SUCCESS
+Runtime version metadata                       run 32169633800  SUCCESS
+Build 38.10 Learner-facing spoken on transfer  run 32169632536  SUCCESS
+Build 32 Practical A1 Expansion                 run 32169633412  SUCCESS
+Build 31 Learner Intelligence compatibility    run 32169633896  SUCCESS
+Build 37.7 Foundations F12 practical questions run 32169633494  SUCCESS
+Build 26.4 Progress single-scroll + Tyffany    run 32169633668  SUCCESS
+```
+
+Former predecessor reds including Build37.2 / 37.4 / 37.5 / 37.6 / 37.7 / 37.8 and Build38 learner-facing predecessors returned to SUCCESS on the final exact head.
+
+`Premium V5.3 Pedagogical Islands` run **`32169633601`** failed only during the multi-screenshot Chrome capture step after static contracts and both functional tribunals had passed. The same job was rerun unchanged and finished **SUCCESS**. Classification: **runner/browser capture flake**, with no product or workflow mutation.
+
+Final drained matrix: **exactly the five inherited failures below and no other failure / pending / in-progress run**.
+
+## 39.1 explicit non-wiring contract — LOCKED
+
+39.1 does not:
 
 ```text
 read or write localStorage / sessionStorage / IndexedDB
@@ -116,48 +168,6 @@ change public runtime version metadata
 ```
 
 Evidence v2 remains a seventh **derived shadow**. 39.1 is not an Evidence read-path cutover.
-
-## 39.1 candidate paths
-
-```text
-src/pedagogy/learner-action-arbitration-core.js
-tests/unit/build39-1-learner-action-core.test.cjs
-.github/workflows/build39-1-learner-action-core.yml
-docs/BUILD-39.1-LEARNER-ACTION-ARBITRATION.md
-PROJECT-STATE.md
-```
-
-`MASTER-ROADMAP.md` already contains the durable Build39 mandate and ordering. Its top current-line checkpoint still predates the #207 merge; that volatile summary is known stale and must be reconciled at the next documentation/control closeout if not repaired inside #208. Repository reality and this `PROJECT-STATE.md` take priority in the meantime.
-
-## Classified #208 predecessor-CI event
-
-On first final candidate head **`4332156fae8b7e8e374ebea5a1362cf4a6e9add6`**, the important product/release gates were green:
-
-- `Build 39.1 Learner action arbitration core` — run **`32084353902` — SUCCESS**
-- `Release v2.5.0 Build 38 certification` — run **`32084353790` — SUCCESS**
-- `Runtime version metadata` — run **`32084353942` — SUCCESS**
-- `Build 38.10 Learner-facing spoken on transfer` — run **`32084353858` — SUCCESS**
-- `Build 32 Practical A1 Expansion` — run **`32084353990` — SUCCESS**
-- `Build 31 Learner Intelligence compatibility` — run **`32084353969` — SUCCESS**
-- `Build 26.4 Progress single-scroll + Tyffany smoke` — run **`32084353916` — SUCCESS**
-
-The same head also produced additional predecessor reds beyond the five inherited baseline. Build 37.7 was inspected directly and its ownership guard contains the broad forbidden regex:
-
-```text
-src/pedagogy/learner-intelligence.*\.js
-```
-
-Therefore the first owner path `src/pedagogy/learner-intelligence-v3-core.js` collided with a historical ownership boundary even though the new file was pure and non-wired.
-
-Classification: **predecessor ownership-guard naming collision, not a Build39.1 product/runtime regression**.
-
-Resolution: **do not weaken the certified Build37/38 workflow chain**. Rename the new pure Build39 owner to:
-
-```text
-src/pedagogy/learner-action-arbitration-core.js
-```
-
-The core semantics/API and unit cases remain unchanged. Full CI must now be re-read on the new exact head before merge. Any residual non-baseline failure remains NEW until separately classified.
 
 ## Historical learner continuity — LOCKED
 
@@ -181,6 +191,16 @@ Known persistent inherited failure baseline:
 
 Build26.4 is a classified runner/harness flake, not standing debt. Any other failure is **NEW until classified**. Suspected flakes must be rerun unchanged before product mutation.
 
+Final #208 inherited-failure run IDs on head `719a838456156f9df3f7602b1beea0af1df322ab`:
+
+```text
+French Trân'quille quality                  32169632796  FAILURE / inherited
+Build 36.2 Evidence shadow adoption         32169633743  FAILURE / inherited
+V2.0.0 Freeze tribunal                      32169632645  FAILURE / inherited
+Build 36.3 Recovery v3 durability tribunal  32169633861  FAILURE / inherited
+Build 28 Data recovery smoke                32169633563  FAILURE / inherited
+```
+
 ## Protected boundaries
 
 Preserve unless a future explicitly scoped build justifies otherwise:
@@ -202,24 +222,44 @@ Build 38 deterministic core semantics
 Build 38 learner-facing placements
 shared Transfer renderer ownership
 Learner Intelligence V1/V2 historical compatibility
+Build 39.1 deterministic arbitration semantics
 ```
+
+## Active control slice — Build 39.1 closeout
+
+- Branch: **`docs/build39-1-closeout`**
+- Base: exact accepted main **`246338a9ef11eb430f59fc6ccf494688904cf883`**
+- PR: **#209 — `Docs · close Build 39.1` — OPEN**
+- Scope: **documentation/governance only**
+- Runtime/product change: **none**
+- Goal: reconcile this checkpoint and `MASTER-ROADMAP.md` to the accepted #208 merge before any 39.2 implementation begins.
 
 ## NEXT
 
-Fresh control step only:
+Fresh control step for **PR #209 only**:
 
 ```text
-re-read PR #208 and its exact current head after the predecessor-safe owner rename
-→ verify changed filenames stay inside the five-file 39.1 candidate scope
-→ require Build 39.1 Learner action arbitration core to pass on that exact head
-→ require existing v2.5.0 / Build38 release, runtime metadata, Build38.10, Build32 and Build31 compatibility to remain green
-→ classify the full CI matrix against the five inherited failures
-→ verify the former Build37/38 ownership-guard reds disappear after the filename change
-→ rerun only proven flakes unchanged if needed
-→ if no new regression, merge #208 with expected-head protection
-→ verify main equals the merge SHA
-→ reconcile any remaining stale MASTER-ROADMAP current-line metadata
+re-read #209 exact head and changed filenames
+→ confirm scope remains PROJECT-STATE.md + MASTER-ROADMAP.md only
+→ classify CI against the five inherited failures
+→ if no new regression, merge #209 with expected-head protection
+→ verify main equals the closeout merge SHA
 → then open 39.2 as a separate evidence-adapter audit/implementation slice
 ```
 
-Do **not** wire 39.1 into learner UI and do **not** start 39.2 while #208 remains open.
+39.2 boundaries after #209 closes:
+
+```text
+inventory reliable existing product evidence sources
+→ normalize only evidence already justified by current owners
+→ preserve original six stores as product truth
+→ keep Evidence v2 derived-shadow only
+→ reject recognition-failure-only and decorative activity counts
+→ feed normalized candidates into the certified 39.1 arbitration core
+→ no learner-facing UI wiring yet unless a later explicit slice authorizes it
+→ no durable schema migration
+→ no mastery invention
+→ preserve historical learner continuity
+```
+
+Do **not** start 39.2 while #209 remains open.
