@@ -5,11 +5,12 @@ Last reconciled: 2026-08-18
 ## Canonical accepted main
 
 - Repository: `shinobione/tran-french-teacher`
-- Accepted `main`: **`eff12111d31f57779d09e6c3d9fc42b3e59d0dbf`**
-- Commit: `Docs: close Build 39 milestone and hand off Build 40`
-- PR **#218 — MERGED** from exact head `7a76b08172c342ac481ae77920bc72d57557f423` with expected-head squash protection.
-- Parent runtime/internal checkpoint: **`3d3a6259b7b86ef7f7511832368c6d1eb549be44`** — PR #217 / Build39.5.
-- `main` verification after #218: exact SHA `eff12111...`, GitHub verified / valid, **0 open PRs before Build40 branch creation**.
+- Accepted `main`: **`7fb5b66ab992852cd4f73aa4d05fa01b1a9b5b25`**
+- Commit: `Build 40: A1 consolidation audit and productive direction`
+- PR **#219 — MERGED** from exact head `9c6507c53b9ee84b22f2a47f72c44df2014b4e3c` with expected-head squash protection.
+- Parent: `eff12111d31f57779d09e6c3d9fc42b3e59d0dbf` — Build39 closeout.
+- Merge commit is GitHub verified / valid.
+- After #219, `main` was re-read at exact SHA `7fb5b66a...`; **0 open PRs before Build41.1 branch creation**.
 - Public runtime metadata remains **v2.5.0 · Build 38**.
 - Pedagogy baseline remains **v2.3.0 · Build 34**.
 - Latest exact public release deployment proof remains GitHub Pages #272 / run `32072053127` on release SHA `2abe20511d6265d12643276f18041812fec3e715`.
@@ -28,7 +29,6 @@ Recovery                7 durable stores / backup v3
 Evidence v2             derived shadow only
 Original six stores     product truth
 Premium V5.10           CLOSED / physical field pass
-Primary field target    iPhone / Safari / installed PWA
 ```
 
 ## Historical learner continuity — LOCKED
@@ -41,31 +41,23 @@ l8 progress = 4
 
 No future work may reset, renumber or reinterpret this state.
 
-## Build 38 — CLOSED / RELEASED
+## Build38 — CLOSED / RELEASED
+
+Five certified learner-facing deterministic Transfer families remain frozen:
 
 ```text
-38.1 → 38.2   subject substitution       → lesson 33
-38.3 → 38.8   affirmation → negation     → lesson 34
-38.4 → 38.5   present → futur proche     → lesson 35
-38.6 → 38.7   singular → plural nominal  → lesson 13
-38.9 → 38.10  nous → spoken on           → lesson 52
+subject substitution       → lesson 33
+negation                   → lesson 34
+futur proche               → lesson 35
+singular → plural nominal  → lesson 13
+nous → spoken on           → lesson 52
 ```
 
-Build38 is pedagogically complete, public release is `v2.5.0 · Build 38`, and Build38.11 is not authorized.
+Build38.11 remains not authorized. Public release remains `v2.5.0 · Build 38`.
 
-## Build 39 — Learner Intelligence 3 — CLOSED / CERTIFIED
+## Build39 — Learner Intelligence 3 — CLOSED / CERTIFIED
 
-Certified chain:
-
-```text
-39.1 deterministic arbitration
-→ 39.2 reliable evidence adapter
-→ 39.3 decision pipeline
-→ 39.4 read-only runtime snapshot
-→ 39.5 advisory-only Practice recommendation
-```
-
-Reliable families today:
+Reliable families:
 
 ```text
 phrase-retrieval ✅
@@ -73,7 +65,7 @@ listening        ✅
 scenario         ✅
 ```
 
-Deliberately unavailable because no trustworthy durable owner exists:
+Unavailable because no trustworthy durable owner exists:
 
 ```text
 concept-review
@@ -81,7 +73,7 @@ foundation-capsule
 transfer-construction
 ```
 
-Learner-facing Practice mapping:
+Practice advice:
 
 ```text
 phrase-retrieval → Réviser
@@ -90,216 +82,141 @@ scenario         → Dans la vraie vie
 abstain          → no recommendation
 ```
 
-No auto-route, no `Parler` fallback and no invented mastery.
+No auto-route / no invented mastery.
 
-Accepted Build39.5 runtime/internal merge:
+## Build40 — A1 Consolidation Audit — CLOSED
 
-```text
-3d3a6259b7b86ef7f7511832368c6d1eb549be44
-```
-
-Build39 closeout main:
-
-```text
-eff12111d31f57779d09e6c3d9fc42b3e59d0dbf
-```
-
-## Build 40 — A1 Consolidation Audit — AUDIT COMPLETE / CLOSEOUT CANDIDATE
-
-Branch:
-
-```text
-build40/a1-consolidation-audit
-```
-
-Base:
-
-```text
-eff12111d31f57779d09e6c3d9fc42b3e59d0dbf
-```
-
-Runtime/product change: **none**.
-
-Canonical audit document:
+Canonical audit:
 
 ```text
 docs/BUILD-40-A1-CONSOLIDATION-AUDIT.md
 ```
 
-### Audited sources
+Build40 verdict:
 
-Build40 inspected the real current owners rather than inferring from labels:
+- broad practical A1 content already exists;
+- main gap = productive generalization depth + trustworthy construction evidence;
+- A2 now = rejected;
+- broad phrase/content A1+ expansion = not selected;
+- **A1 Productive Consolidation = selected next milestone**.
 
-```text
-app.js lesson 1–15 curriculum
-src/pedagogy/curriculum-stage2.js lessons 16–25
-src/pedagogy/curriculum-stage3.js lessons 26–40
-src/pedagogy/curriculum-stage4.js lessons 41–52
-src/pedagogy/foundations-core.js
-src/pedagogy/foundations-pilot.js
-src/pedagogy/generalization-transfer-lesson.js
-src/pedagogy/scenario-data.js
-src/pedagogy/real-life-data-2.js
-src/pedagogy/real-life-data-3.js
-src/pedagogy/real-life-data-4.js
-src/pedagogy/scenario-engine.js
-src/pedagogy/listening-data.js
-src/pedagogy/listening-data-2.js
-src/pedagogy/speaking-loop-content.js
-Build39 LI3 owners / current evidence contract
-```
+## Build41 — A1 Productive Consolidation — OPEN
 
-### Main finding
+### Build41.1 — productive-family audit — AUDIT COMPLETE / CLOSEOUT CANDIDATE
 
-French Trân’quille has **broad practical A1 content coverage already**. The limiting factor is not lack of topics or phrases.
-
-The main gap is:
+Branch:
 
 ```text
-productive generalization depth
-+
-trustworthy evidence of construction / concept reuse
+build41/productive-family-audit
 ```
 
-Current evidence hierarchy:
+Base:
 
 ```text
-lesson/challenge         → taught / narrow recognition
-Speaking Loop            → oral rehearsal / self-comparison only
-Listening                → contextual comprehension / reliable listening misses
-Scenario                 → guided contextual production / reliable miss+assistance evidence
-Build38 Transfer         → explicit deterministic reconstruction / ephemeral
-LI3                      → reliable retrieval/listening/scenario advice only
+7fb5b66ab992852cd4f73aa4d05fa01b1a9b5b25
 ```
 
-Scenario is meaningful production, but the engine still validates against finite accepted answer sets. Build40 therefore classifies it as **guided contextual production**, not unconstrained spontaneous production.
-
-### Foundations result
-
-Broad Foundations coverage exists, but Foundations remain ephemeral and make no durable mastery claim.
-
-The clearest canonical structural debt is still:
+Canonical audit:
 
 ```text
-F16 — à / de contractions
+docs/BUILD-41.1-PRODUCTIVE-FAMILY-AUDIT.md
 ```
 
-### Build38 result
+Runtime/product change: **none**.
 
-Five high-quality construction families exist:
+### Candidate classification
 
 ```text
-subject substitution
-negation
-futur proche
-nominal singular → plural
-nous → spoken on
+questions                         REJECT — TOO SEMANTIC / AMBIGUOUS
+past-time recombination           IMPLEMENTABLE — SELECTED NARROW RECENT-PAST FAMILY
+articles / quantities / F16       DEFER — NEEDS BETTER SOURCES
+possessives                       ALREADY COVERED / DUPLICATE
+adjective agreement               DEFER — NEEDS BETTER SOURCES
+short narration                   REJECT — TOO SEMANTIC / AMBIGUOUS
+opinion clauses                   REJECT — TOO SEMANTIC / AMBIGUOUS
 ```
 
-This is pedagogically strong but narrow compared with the full A1 curriculum.
+### Selected family
 
-### Listening result
-
-Current designed listening set:
+Use already-taught lesson 24 present actions and lesson 36 recent-past structure:
 
 ```text
-17 contrast families
-18 contextual dialogue activities
+Je travaille.          → Je viens de travailler.
+Je mange.              → Je viens de manger.
+Je rentre à la maison. → Je viens de rentrer à la maison.
 ```
 
-Strong contextual comprehension coverage; primarily recognition/selection rather than productive construction.
+The fourth safe audit anchor `Je regarde un film. → Je viens de regarder un film.` is deliberately left outside the first core catalog.
 
-### Main productive gaps
-
-Under-proven construction/recombination systems:
+Canonical family id/intention:
 
 ```text
-question construction / reformulation
-past-time recombination
-articles / quantities / F16 contractions
-possessive recombination
-adjective agreement beyond memorized forms
-short narrative assembly
-opinion + simple proposition recombination
+present-je-regular-action
+→ recent-past-je-venir-de
 ```
 
-### Evidence gaps
+Why selected:
 
-No trustworthy durable owner currently establishes:
+- source forms genuinely taught in lesson 24;
+- `venir de + infinitif` explicitly taught in lesson 36 as a very regular structure;
+- all first-core actions use known regular `-er` infinitives;
+- same subject and action meaning;
+- no new vocabulary;
+- no auxiliary choice / irregular participle / gender agreement decision;
+- deterministic exact targets;
+- can remain ephemeral and make no mastery claim.
+
+### Explicit exclusions
+
+41.1 does **not** authorize:
 
 ```text
-concept understanding
-Foundation mastery/need
-transfer/construction strength
+generic passé composé transformation
+subject expansion beyond je
+reflexive recent-past transformation
+negation / questions
+random/adaptive generation
+new vocabulary
+learner-facing placement
+storage / Evidence / mastery claim
 ```
 
-Build40 explicitly rejects persistence-first architecture. Do not create stores merely to fill these gaps.
+### Why other families did not win
 
-## Build40 decision
+- Questions: current F12 intentionally supports multiple legitimate strategies; generic transform would be arbitrary.
+- Articles/quantities/F16: F16 remains partial/distributed and must be taught coherently before productive testing.
+- Possessives: lesson31 already owns the mon/ma/mes ↔ ton/ta/tes contrast; a tiny swap set would duplicate it.
+- Adjective agreement: paired source forms remain insufficient; no fake universal `+e` rule.
+- Narration: event ordering is semantic discourse planning, not mechanical morphology.
+- Opinion: adding `Je pense que` assigns a semantic stance the system cannot infer mechanically.
 
-### Open A2 now
-
-**REJECTED.**
-
-Reason: A1 thematic breadth is already strong while autonomous productive construction and durable concept/transfer evidence remain much narrower.
-
-### Broad A1+ phrase/content expansion
-
-**NOT SELECTED as primary direction.**
-
-Reason: the audit does not show a major topic shortage.
-
-### A1 Productive Consolidation
-
-**SELECTED.**
-
-Goal:
+## Next authorized slice — Build41.2
 
 ```text
-widen deterministic reconstruction/recombination
-using already-taught vocabulary and structures
-before opening another large content layer
+Build41.2 — pure non-wired recent-past deterministic transfer core
 ```
 
-Build40 itself remains docs/audit only.
-
-## Selected next milestone — Build 41 / A1 Productive Consolidation
-
-Build41 is not started until Build40 audit/closeout is merged.
-
-### First authorized slice — 41.1 productive-family audit / read-only
-
-Candidate families:
+First catalog exactly:
 
 ```text
-questions
-past-time recombination
-articles / quantities / F16 contractions
-possessives
-adjective agreement
-short narration
-opinion clauses
+Je travaille.          → Je viens de travailler.
+Je mange.              → Je viens de manger.
+Je rentre à la maison. → Je viens de rentrer à la maison.
 ```
 
-For each family 41.1 must prove:
+Mandatory boundaries:
 
-- source forms genuinely taught in current 52/313;
-- deterministic target transformation;
-- no new vocabulary requirement;
-- no hidden semantic ambiguity;
-- useful learner placement that does not duplicate the lesson;
-- no durable mastery claim required.
-
-Each candidate must end as:
-
-```text
-IMPLEMENTABLE DETERMINISTIC FAMILY
-DEFER — NEEDS BETTER SOURCES
-REJECT — TOO SEMANTIC / AMBIGUOUS
-ALREADY COVERED / DUPLICATE
-```
-
-41.1 selects **at most one next implementation family**.
+- pure static deterministic core;
+- no random/adaptive generation;
+- no generic passé composé;
+- no new vocabulary;
+- no subject expansion beyond `je`;
+- no reflexive transform in first core;
+- no negation/questions;
+- no loader/SW/learner-facing wiring;
+- no storage / Evidence / durable write / mastery claim;
+- Build38 owners remain byte-identical;
+- learner placement requires a separate later audit after core certification.
 
 A2 remains **NOT AUTHORIZED**.
 
@@ -313,9 +230,7 @@ Known persistent inherited failures:
 4. `Build 36.3 Recovery v3 durability tribunal`
 5. `Build 28 Data recovery smoke`
 
-Build26.4 is a classified runner/harness flake, not standing debt. Build37.4 and Premium V5.9C have historical runner/Chrome flake classifications after unchanged rerun success.
-
-Any other failure is NEW until classified.
+Build26.4 is a classified runner/harness flake, not standing debt. Any other failure is NEW until classified.
 
 ## Protected boundaries
 
@@ -339,21 +254,15 @@ Build38 deterministic core semantics
 Build38 learner-facing placements
 shared Transfer renderer ownership
 Learner Intelligence V1/V2 historical compatibility
-Build39.1 arbitration semantics
-Build39.2 evidence reliability boundaries
-Build39.3 pipeline composition
-Build39.4 read-only runtime snapshot contract
-Build39.5 advisory-only Practice contract
+Build39.1→39.5 contracts
 ```
 
 ## NEXT
 
 ```text
-review / merge Build40 audit-only closeout
+review / merge Build41.1 audit-only PR
 → verify main + 0 open PRs
-→ open Build41.1 read-only productive-family audit
-→ classify seven candidate families
-→ select at most ONE deterministic implementation family
-→ no A2 implementation
-→ no new durable evidence owner yet
+→ Build41.2 pure recent-past transfer core
+→ dedicated deterministic tribunal
+→ no learner-facing wiring in 41.2
 ```
