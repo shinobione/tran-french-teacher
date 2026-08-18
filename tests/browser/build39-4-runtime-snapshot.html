@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Build 39.4 runtime snapshot tribunal</title>
+</head>
+<body>
+  <main id="result">Build 39.4 runtime snapshot tribunal</main>
+  <script>
+    (() => {
+      'use strict';
+
+      const root = document.documentElement;
+      const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+      const waitFor = async (predicate, timeout = 14000) => {
+        const started = performance.now();
+        while (performance.now() - started < timeout) {
+          try { if (predicate()) return true; } catch {}
+          await sleep(50);
+        }
+        return false;
+      };
+
+      const KEYS = Object.freeze([
+        'francais-avec-luc:learner:v1',
+        'french-tranquille:learning-memory:v1',
+        'french-tranquille:error-intelligence:v1',
+        'french-tranquille:scenarios:v1',
+        'french-tranquille:listening:v1',
+        'french-tranquille:milestones:v1',
+        'french-tranquille:memory-evidence:v2'
+      ]);
+
+      const KNOWN = Object.freeze([
+        'bonjour','merci','au-revoir','je-mappelle','svp','excusez-moi','je-comprends','je-ne-comprends-pas','repetez','plus-lentement',
+        'je-suis-vietnamienne','je-viens-vietnam','jhabite-hcm','et-vous','oui','non','je-voudrais','eau','cafe','the','addition','combien-ca-coute',
+        'jaime','je-naime-pas','beaucoup','un-peu','cest-bon','je-prefere','zero','un','deux','trois','quatre','cinq','six','sept','huit','neuf','dix','euros'
+      ]);
+
+      function learnerSeed() {
+        const completedLessons = Array.from({ length: 7 }, (_, index) => `l${index + 1}`);
+        const lessonProgress = Object.fromEntries(completedLessons.map(id => [id, 999]));
+        lessonProgress.l8 = 4;
+        return {
+          schemaVersion: 2,
+          learnerName: 'Trân',
+          level: 'A0',
+          lessonProgress,
+          completedLessons,
+          knownItems: [...KNOWN],
+          reviewState: { bonjour: 2, 'je-voudrais': 1 },
+          conversationWins: 5,
+          lastActivity: '2026-08-11T10:00:00.000Z',
+          streak: { current: 6, lastDate: '2026-08-11' }
+        };
+      }
+
+      function memorySeed(mode) {
+        const now = Date.now();
+        const items = Object.fromEntries(KNOWN.map((id, index) => [id, {
+          id,
+          firstSeen: '2026-08-01T10:00:00.000Z',
+          lastSeen: '2026-08-17T10:00:00.000Z',
+          lastReviewed: '2026-08-17T10:00:00.000Z',
+          dueAt: new Date(now + (index + 2) * 86400000).toISOString(),
+          intervalDays: 7,
+          attempts: 2,
+          successes: 2,
+          misses: 0,
+          streak: 2,
+          strength: 3,
+          lastRating: 2,
+          lastSource: 'smart-review'
+        }]));
+        if (mode === 'retrieval') {
+          Object.assign(items.bonjour, {
+            dueAt: new Date(now - 3600000).toISOString(),
+            intervalDays: 0.25,
+            attempts: 3,
+            successes: 0,
+            misses: 3,
+            streak: 0,
+            strength: 0,
+            lastRating: 0,
+            lastSource: 'smart-review'
+          });
+        }
+        return {
+          schemaVersion: 1,
+          items,
+          totals: { reviews: 3, difficult: mode === 'retrieval' ? 3 : 0, correct: 0, easy: 0 },
+          updatedAt: '2026-08-17T10:00:00.000Z'
+        };
+      }
+
+      function errorSeed(mode) {
+        const now = new Date().toISOString();
+        const base = {
+          schemaVersion: 1,
+          items: {},
+          recent: [],
+          totals: { errors: 0, recoveries: 0, assisted: 0, voice: 0, repeated: 0 },
+          updatedAt: now
+        };
+        if (mode === 'retrieval') {
+          const event = { id: 'bonjour', type: 'retrieval-difficult', source: 'smart-review', at: now, repeated: true, note: null };
+          base.items.bonjour = {
+            id: 'bonjour',
+            counts: { 'retrieval-difficult': 2, 'text-mismatch': 0, 'scenario-miss': 0, assisted: 0, 'voice-unrecognized': 0, partial: 0, 'practice-miss': 0, 'repeated-miss': 1 },
+            totalErrors: 2,
+            recoveries: 0,
+            errorStreak: 2,
+            lastErrorAt: now,
+            lastRecoveryAt: null,
+            lastType: 'retrieval-difficult',
+            lastSource: 'smart-review',
+            events: [event]
+          };
+          base.recent = [event];
+          base.totals.errors = 2;
+          base.totals.repeated = 1;
+        } else {
+          const event = { id: 'merci', type: 'voice-unrecognized', source: 'free-voice-voice', at: now, repeated: true, note: null };
+          base.items.merci = {
+            id: 'merci',
+            counts: { 'retrieval-difficult': 0, 'text-mismatch': 0, 'scenario-miss': 0, assisted: 0, 'voice-unrecognized': 2, partial: 0, 'practice-miss': 0, 'repeated-miss': 1 },
+            totalErrors: 2,
+            recoveries: 0,
+            errorStreak: 2,
+            lastErrorAt: now,
+            lastRecoveryAt: null,
+            lastType: 'voice-unrecognized',
+            lastSource: 'free-voice-voice',
+            events: [event]
+          };
+          base.recent = [event];
+          base.totals.errors = 2;
+          base.totals.voice = 2;
+          base.totals.repeated = 1;
+        }
+        return base;
+      }
+
+      function seed(mode) {
+        localStorage.clear();
+        localStorage.setItem(KEYS[0], JSON.stringify(learnerSeed()));
+        localStorage.setItem(KEYS[1], JSON.stringify(memorySeed(mode)));
+        localStorage.setItem(KEYS[2], JSON.stringify(errorSeed(mode)));
+      }
+
+      function storeBytes() {
+        return Object.fromEntries(KEYS.map(key => [key, localStorage.getItem(key)]));
+      }
+
+      function continuity() {
+        const learner = JSON.parse(localStorage.getItem(KEYS[0]) || '{}');
+        return Array.isArray(learner.completedLessons)
+          && learner.completedLessons.length === 7
+          && Number(learner.lessonProgress?.l8) === 4
+          && Array.isArray(learner.knownItems)
+          && learner.knownItems.length === 40;
+      }
+
+      async function runCase(mode) {
+        seed(mode);
+        const frame = document.createElement('iframe');
+        frame.hidden = true;
+        frame.src = `../../?b394Runtime=1&case=${encodeURIComponent(mode)}`;
+        document.body.appendChild(frame);
+
+        const ready = await waitFor(() => {
+          const win = frame.contentWindow;
+          return Boolean(
+            win?.FrenchTranquilleMemory?.summary
+            && win?.FrenchTranquilleErrors?.summary
+            && win?.FrenchTranquilleLearnerActionDecisionPipeline?.decide
+            && win?.FrenchTranquilleLearnerActionRuntimeSnapshot?.collect
+            && win?.FrenchTranquilleLearnerActionRuntimeSnapshot?.decide
+          );
+        });
+        if (!ready) throw new Error(`${mode}:runtime-not-ready`);
+
+        const win = frame.contentWindow;
+        win.FrenchTranquilleMemory.summary();
+        win.FrenchTranquilleErrors.summary();
+        await sleep(180);
+
+        const before = storeBytes();
+        if (!continuity()) throw new Error(`${mode}:historical-continuity-before`);
+
+        const ownerBefore = JSON.stringify({
+          memory: win.FrenchTranquilleMemory.summary(),
+          errors: win.FrenchTranquilleErrors.summary()
+        });
+        const snapshot = win.FrenchTranquilleLearnerActionRuntimeSnapshot.collect();
+
+        const immutable = Object.isFrozen(snapshot)
+          && Object.isFrozen(snapshot.memory)
+          && Object.isFrozen(snapshot.memory.entries)
+          && snapshot.memory.entries.every(Object.isFrozen)
+          && Object.isFrozen(snapshot.errors)
+          && Object.isFrozen(snapshot.errors.top)
+          && snapshot.errors.top.every(row => Object.isFrozen(row) && Object.isFrozen(row.entry) && Object.isFrozen(row.entry.events));
+        if (!immutable) throw new Error(`${mode}:snapshot-not-immutable`);
+
+        const firstId = snapshot.memory.entries[0]?.id || null;
+        try { if (snapshot.memory.entries[0]) snapshot.memory.entries[0].id = 'tampered'; } catch {}
+        try { snapshot.errors.recent.push({ id: 'tampered' }); } catch {}
+        if ((snapshot.memory.entries[0]?.id || null) !== firstId) throw new Error(`${mode}:snapshot-mutable`);
+
+        const decision = win.FrenchTranquilleLearnerActionRuntimeSnapshot.decide();
+        await sleep(120);
+
+        const after = storeBytes();
+        const ownerAfter = JSON.stringify({
+          memory: win.FrenchTranquilleMemory.summary(),
+          errors: win.FrenchTranquilleErrors.summary()
+        });
+        const storesUnchanged = JSON.stringify(before) === JSON.stringify(after);
+        const ownersUnchanged = ownerBefore === ownerAfter;
+        const continuityAfter = continuity();
+
+        frame.remove();
+        return { snapshot, decision, storesUnchanged, ownersUnchanged, continuityAfter };
+      }
+
+      async function run() {
+        const retrieval = await runCase('retrieval');
+        if (retrieval.decision.selected?.type !== 'phrase-retrieval' || retrieval.decision.selected?.targetId !== 'bonjour') {
+          throw new Error(`retrieval:unexpected-decision:${retrieval.decision.selected?.type || 'none'}:${retrieval.decision.selected?.targetId || 'none'}`);
+        }
+        if (!retrieval.storesUnchanged || !retrieval.ownersUnchanged || !retrieval.continuityAfter) {
+          throw new Error('retrieval:mutation-detected');
+        }
+
+        const recognition = await runCase('recognition');
+        if (recognition.decision.selected !== null || !recognition.decision.abstained || recognition.decision.reason !== 'insufficient-reliable-evidence') {
+          throw new Error(`recognition:must-abstain:${recognition.decision.reason || 'none'}`);
+        }
+        const candidates = recognition.decision.candidates || {};
+        if (candidates['concept-review']?.available !== false
+          || candidates['foundation-capsule']?.available !== false
+          || candidates['transfer-construction']?.available !== false) {
+          throw new Error('recognition:unsupported-family-unlocked');
+        }
+        if (!recognition.storesUnchanged || !recognition.ownersUnchanged || !recognition.continuityAfter) {
+          throw new Error('recognition:mutation-detected');
+        }
+
+        root.dataset.b394Done = '1';
+        root.dataset.b394RuntimeReady = '1';
+        root.dataset.b394Retrieval = '1';
+        root.dataset.b394RecognitionAbstain = '1';
+        root.dataset.b394Immutable = '1';
+        root.dataset.b394StoresUnchanged = '1';
+        root.dataset.b394OwnersUnchanged = '1';
+        root.dataset.b394Continuity = '1';
+        root.dataset.b394Unavailable = '1';
+        document.getElementById('result').textContent = 'Build 39.4 PASS';
+      }
+
+      run().catch(error => {
+        root.dataset.b394Done = '0';
+        root.dataset.b394Error = error?.message || String(error);
+        document.getElementById('result').textContent = `Build 39.4 FAIL: ${error?.message || error}`;
+      });
+    })();
+  </script>
+</body>
+</html>
