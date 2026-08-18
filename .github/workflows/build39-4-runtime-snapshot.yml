@@ -78,6 +78,8 @@ jobs:
           grep -Fq 'learner-evidence-adapter.js?v=${B392}' sw.js
           grep -Fq 'learner-action-decision-pipeline.js?v=${B393}' sw.js
           grep -Fq 'learner-action-runtime-snapshot.js?v=${B394}' sw.js
+          grep -Fq "github.head_ref == 'release/v2.5.0-build38-certification'" .github/workflows/runtime-version-meta.yml
+          grep -Fq 'Chrome — runtime version survives Foundations refresh and Settings render' .github/workflows/runtime-version-meta.yml
 
       - name: Existing release + Build38 predecessor remain certified
         run: |
@@ -140,7 +142,7 @@ jobs:
           git fetch origin "${{ github.base_ref }}" --depth=1
           changed="$(git diff --name-only "origin/${{ github.base_ref }}"...HEAD)"
           printf '%s\n' "$changed"
-          allowed='^(src/pedagogy/learner-action-runtime-snapshot\.js|tests/unit/build39-4-runtime-snapshot\.test\.cjs|tests/browser/build39-4-runtime-snapshot\.html|\.github/workflows/build39-4-runtime-snapshot\.yml|src/core/build32-loader\.js|sw\.js|docs/BUILD-39\.4-RUNTIME-SNAPSHOT-AUDIT\.md|PROJECT-STATE\.md)$'
+          allowed='^(src/pedagogy/learner-action-runtime-snapshot\.js|tests/unit/build39-4-runtime-snapshot\.test\.cjs|tests/browser/build39-4-runtime-snapshot\.html|\.github/workflows/build39-4-runtime-snapshot\.yml|\.github/workflows/runtime-version-meta\.yml|src/core/build32-loader\.js|sw\.js|docs/BUILD-39\.4-RUNTIME-SNAPSHOT-AUDIT\.md|PROJECT-STATE\.md)$'
           unexpected="$(printf '%s\n' "$changed" | grep -Ev "$allowed" || true)"
           if [ -n "$unexpected" ]; then
             echo "Unexpected path(s) in Build39.4 runtime-snapshot slice:"
