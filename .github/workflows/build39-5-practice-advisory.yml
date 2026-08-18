@@ -1,0 +1,172 @@
+name: Build 39.5 Practice advisory
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  practice-advisory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax + certified LI3 chain
+        run: |
+          set -euo pipefail
+          node --check src/pedagogy/learner-action-practice-advisory.js
+          node --check src/core/build32-loader.js
+          node --check sw.js
+          node --check tests/unit/build39-5-practice-advisory.test.cjs
+          node tests/unit/build39-1-learner-action-core.test.cjs
+          node tests/unit/build39-2-evidence-adapter.test.cjs
+          node tests/unit/build39-3-decision-pipeline.test.cjs
+          node tests/unit/build39-4-runtime-snapshot.test.cjs
+          node tests/unit/build39-5-practice-advisory.test.cjs
+
+      - name: 39.5 advisory-only contract
+        run: |
+          set -euo pipefail
+          grep -Fq "'39.5'" src/pedagogy/learner-action-practice-advisory.js
+          grep -Fq "'3.0.0-practice-advisory'" src/pedagogy/learner-action-practice-advisory.js
+          grep -Fq "'phrase-retrieval': 'review'" src/pedagogy/learner-action-practice-advisory.js
+          grep -Fq "listening: 'listening'" src/pedagogy/learner-action-practice-advisory.js
+          grep -Fq "scenario: 'real-life'" src/pedagogy/learner-action-practice-advisory.js
+          grep -Fq 'FrenchTranquilleLearnerActionRuntimeSnapshot' src/pedagogy/learner-action-practice-advisory.js
+          grep -Fq 'data-b395-advisory-badge' tests/browser/build39-5-practice-advisory.html
+          ! grep -Eq 'localStorage|sessionStorage|indexedDB|FrenchTranquilleEvidence|fetch\(' src/pedagogy/learner-action-practice-advisory.js
+          ! grep -Eq '\.click\(|location\.|history\.|dispatchEvent' src/pedagogy/learner-action-practice-advisory.js
+          ! grep -Eq 'concept-review.*review|foundation-capsule.*review|transfer-construction.*review' src/pedagogy/learner-action-practice-advisory.js
+
+      - name: Runtime load + offline contract
+        run: |
+          set -euo pipefail
+          node - <<'NODE'
+          const fs=require('fs');
+          const loader=fs.readFileSync('src/core/build32-loader.js','utf8');
+          const order=[
+            'learner-action-arbitration-core.js',
+            'learner-evidence-adapter.js',
+            'learner-action-decision-pipeline.js',
+            'learner-action-runtime-snapshot.js',
+            'learner-action-practice-advisory.js'
+          ];
+          let previous=-1;
+          for(const token of order){
+            const at=loader.indexOf(token);
+            if(at<0 || at<=previous) throw new Error(`Build39 runtime order invalid at ${token}`);
+            previous=at;
+          }
+          if(!loader.includes("version:'2.5.0'")) throw new Error('public runtime SemVer moved');
+          if(!loader.includes("build:'38'")) throw new Error('public runtime Build moved');
+          NODE
+          grep -Fq 'learner-action-practice-advisory.js?v=${B395}' sw.js
+
+      - name: Existing release + Build38 predecessor remain certified
+        run: |
+          set -euo pipefail
+          node tools/test-release-v2-5-build38.cjs
+          node tools/test-build38-10-spoken-on-integration.cjs
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-b395-http.log 2>&1 &
+          echo $! >/tmp/ft-b395-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — LI3 Practice advisory VI/FR desktop+iPhone
+        run: |
+          set -euo pipefail
+          for spec in 'vi 1280 900' 'fr 1280 900' 'vi 390 844' 'fr 390 844'; do
+            set -- $spec; locale="$1"; width="$2"; height="$3"; passed=0; file=''
+            for attempt in 1 2; do
+              profile="/tmp/ft-b395-${locale}-${width}-$attempt"
+              file="/tmp/b395-${locale}-${width}-$attempt.html"
+              rm -rf "$profile" "$file"
+              timeout --signal=TERM --kill-after=5s 130s \
+                google-chrome --headless=new --no-sandbox --disable-gpu \
+                --disable-background-timer-throttling --disable-renderer-backgrounding \
+                --user-data-dir="$profile" --window-size="$width,$height" \
+                --virtual-time-budget=75000 --dump-dom \
+                "http://127.0.0.1:4173/tests/browser/build39-5-practice-advisory.html?locale=$locale" >"$file" || true
+              ok=1
+              for marker in \
+                'data-b395-done="1"' \
+                "data-b395-locale=\"$locale\"" \
+                'data-b395-retrieval="1"' \
+                'data-b395-listening="1"' \
+                'data-b395-scenario="1"' \
+                'data-b395-recognition-abstain="1"' \
+                'data-b395-empty-abstain="1"' \
+                'data-b395-no-auto-route="1"' \
+                'data-b395-manual-route="1"' \
+                'data-b395-stores-unchanged="1"' \
+                'data-b395-continuity="1"' \
+                'data-b395-geometry="1"'; do
+                grep -q "$marker" "$file" || ok=0
+              done
+              if grep -q 'data-b395-error=' "$file"; then ok=0; fi
+              if [ "$ok" = 1 ]; then passed=1; break; fi
+              echo "=== Build39.5 markers for $locale ${width}x${height} attempt $attempt ==="
+              grep -o 'data-b395-[^ >]*="[^"]*"' "$file" | head -100 || true
+            done
+            test "$passed" = 1
+          done
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-b395-server.pid ]; then kill "$(cat /tmp/ft-b395-server.pid)" || true; fi
+
+      - name: 39.5 scope guard — advisory only
+        if: github.event_name == 'pull_request' && github.head_ref == 'build39/practice-advisory'
+        run: |
+          set -euo pipefail
+          git fetch origin "${{ github.base_ref }}" --depth=1
+          changed="$(git diff --name-only "origin/${{ github.base_ref }}"...HEAD)"
+          printf '%s\n' "$changed"
+          allowed='^(src/pedagogy/learner-action-practice-advisory\.js|tests/unit/build39-5-practice-advisory\.test\.cjs|tests/browser/build39-5-practice-advisory\.html|\.github/workflows/build39-5-practice-advisory\.yml|src/core/build32-loader\.js|sw\.js|docs/BUILD-39\.5-PRACTICE-ADVISORY\.md|PROJECT-STATE\.md)$'
+          unexpected="$(printf '%s\n' "$changed" | grep -Ev "$allowed" || true)"
+          if [ -n "$unexpected" ]; then
+            echo "Unexpected path(s) in Build39.5:"
+            printf '%s\n' "$unexpected"
+            exit 1
+          fi
+          git diff --exit-code "origin/${{ github.base_ref }}"...HEAD -- \
+            app.js voice-ios.js free-voice.js assets/LOGO.png assets/Favicon.png \
+            index.html manifest.webmanifest \
+            src/ui/build27-app-shell.js src/pedagogy/daily-coach.js \
+            src/core/runtime-contracts.js src/core/runtime-bridge.js \
+            src/pedagogy/learner-action-arbitration-core.js \
+            src/pedagogy/learner-evidence-adapter.js \
+            src/pedagogy/learner-action-decision-pipeline.js \
+            src/pedagogy/learner-action-runtime-snapshot.js \
+            src/pedagogy/learner-intelligence.js src/pedagogy/learner-intelligence-v2.js \
+            src/pedagogy/learning-memory.js src/pedagogy/error-intelligence.js \
+            src/pedagogy/listening-engine.js src/pedagogy/scenario-engine.js \
+            src/pedagogy/foundations-core.js src/pedagogy/foundations-capsule-engine.js \
+            src/pedagogy/foundations-pilot.js src/pedagogy/generalization-transfer-lesson.js \
+            src/premium
+          base_cache="$(git show "origin/${{ github.base_ref }}:sw.js" | sed -n "s/^const CACHE='\([^']*\)';/\1/p")"
+          head_cache="$(sed -n "s/^const CACHE='\([^']*\)';/\1/p" sw.js)"
+          test "$base_cache" = "$head_cache"
+
+      - name: Frozen sanctuaries stay byte-identical
+        run: |
+          set -euo pipefail
+          test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+          test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
+          test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"

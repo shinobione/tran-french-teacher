@@ -12,6 +12,7 @@
   const LEARNER_EVIDENCE_ADAPTER='3.0.0-b39.2';
   const LEARNER_ACTION_PIPELINE='3.0.0-b39.3';
   const LEARNER_ACTION_RUNTIME_SNAPSHOT='3.0.0-b39.4';
+  const LEARNER_ACTION_PRACTICE_ADVISORY='3.0.0-b39.5';
   const RUNTIME_META = Object.freeze({
     version:'2.5.0',
     build:'38',
@@ -107,6 +108,7 @@
       await loadScript(`./src/pedagogy/learner-evidence-adapter.js?v=${LEARNER_EVIDENCE_ADAPTER}`, 'build392EvidenceAdapter');
       await loadScript(`./src/pedagogy/learner-action-decision-pipeline.js?v=${LEARNER_ACTION_PIPELINE}`, 'build393DecisionPipeline');
       await loadScript(`./src/pedagogy/learner-action-runtime-snapshot.js?v=${LEARNER_ACTION_RUNTIME_SNAPSHOT}`, 'build394RuntimeSnapshot');
+      await loadScript(`./src/pedagogy/learner-action-practice-advisory.js?v=${LEARNER_ACTION_PRACTICE_ADVISORY}`, 'build395PracticeAdvisory');
       installRuntimeMeta();
       window.FrenchTranquilleBuild27Shell?.refresh?.();
       window.FrenchTranquilleBuild32Shell?.refresh?.();

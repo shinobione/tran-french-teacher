@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Build 39.5 Practice advisory tribunal</title>
+</head>
+<body>
+  <main id="result">Build 39.5 Practice advisory tribunal</main>
+  <script>
+    (() => {
+      'use strict';
+
+      const root = document.documentElement;
+      const params = new URLSearchParams(location.search);
+      const locale = params.get('locale') === 'fr' ? 'fr' : 'vi';
+      const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+      const waitFor = async (predicate, timeout = 18000) => {
+        const started = performance.now();
+        while (performance.now() - started < timeout) {
+          try { if (predicate()) return true; } catch {}
+          await sleep(50);
+        }
+        return false;
+      };
+
+      const KEYS = Object.freeze([
+        'francais-avec-luc:learner:v1',
+        'french-tranquille:learning-memory:v1',
+        'french-tranquille:error-intelligence:v1',
+        'french-tranquille:scenarios:v1',
+        'french-tranquille:listening:v1',
+        'french-tranquille:milestones:v1',
+        'french-tranquille:memory-evidence:v2'
+      ]);
+      const DEBUG_KEY = 'tran-french-teacher:debug-fr:v1';
+      const KNOWN = Object.freeze([
+        'bonjour','merci','au-revoir','je-mappelle','svp','excusez-moi','je-comprends','je-ne-comprends-pas','repetez','plus-lentement',
+        'je-suis-vietnamienne','je-viens-vietnam','jhabite-hcm','et-vous','oui','non','je-voudrais','eau','cafe','the','addition','combien-ca-coute',
+        'jaime','je-naime-pas','beaucoup','un-peu','cest-bon','je-prefere','zero','un','deux','trois','quatre','cinq','six','sept','huit','neuf','dix','euros'
+      ]);
+
+      function learnerSeed() {
+        const completedLessons = Array.from({ length: 7 }, (_, index) => `l${index + 1}`);
+        const lessonProgress = Object.fromEntries(completedLessons.map(id => [id, 999]));
+        lessonProgress.l8 = 4;
+        return {
+          schemaVersion: 2,
+          learnerName: 'Trân',
+          level: 'A0',
+          lessonProgress,
+          completedLessons,
+          knownItems: [...KNOWN],
+          reviewState: { bonjour: 2, 'je-voudrais': 1 },
+          conversationWins: 5,
+          lastActivity: '2026-08-11T10:00:00.000Z',
+          streak: { current: 6, lastDate: '2026-08-11' }
+        };
+      }
+
+      function memorySeed(mode) {
+        const now = Date.now();
+        const items = Object.fromEntries(KNOWN.map((id, index) => [id, {
+          id,
+          firstSeen: '2026-08-01T10:00:00.000Z',
+          lastSeen: '2026-08-17T10:00:00.000Z',
+          lastReviewed: '2026-08-17T10:00:00.000Z',
+          dueAt: new Date(now + (index + 2) * 86400000).toISOString(),
+          intervalDays: 7,
+          attempts: 2,
+          successes: 2,
+          misses: 0,
+          streak: 2,
+          strength: 3,
+          lastRating: 2,
+          lastSource: 'smart-review'
+        }]));
+        if (mode === 'retrieval') {
+          Object.assign(items.bonjour, {
+            dueAt: new Date(now - 3600000).toISOString(),
+            intervalDays: 0.25,
+            attempts: 3,
+            successes: 0,
+            misses: 3,
+            streak: 0,
+            strength: 0,
+            lastRating: 0,
+            lastSource: 'smart-review'
+          });
+        }
+        return {
+          schemaVersion: 1,
+          items,
+          totals: { reviews: 3, difficult: mode === 'retrieval' ? 3 : 0, correct: 0, easy: 0 },
+          updatedAt: '2026-08-17T10:00:00.000Z'
+        };
+      }
+
+      function blankCounts() {
+        return {
+          'retrieval-difficult':0,
+          'text-mismatch':0,
+          'scenario-miss':0,
+          assisted:0,
+          'voice-unrecognized':0,
+          partial:0,
+          'practice-miss':0,
+          'repeated-miss':0
+        };
+      }
+
+      function errorSeed(mode) {
+        const now = new Date().toISOString();
+        const base = {
+          schemaVersion: 1,
+          items: {},
+          recent: [],
+          totals: { errors:0, recoveries:0, assisted:0, voice:0, repeated:0 },
+          updatedAt: now
+        };
+        if (mode === 'empty') return base;
+
+        let id = 'bonjour';
+        let type = 'retrieval-difficult';
+        let source = 'smart-review';
+        let repeated = true;
+        if (mode === 'listening') {
+          id = 'merci';
+          type = 'practice-miss';
+          source = 'listening-choice';
+          repeated = false;
+        } else if (mode === 'scenario') {
+          id = 'bonjour';
+          type = 'scenario-miss';
+          source = 'scenario-miss';
+        } else if (mode === 'recognition') {
+          id = 'merci';
+          type = 'voice-unrecognized';
+          source = 'free-voice-voice';
+        }
+
+        const counts = blankCounts();
+        counts[type] = 2;
+        if (repeated) counts['repeated-miss'] = 1;
+        const event = { id, type, source, at:now, repeated, note:null };
+        base.items[id] = {
+          id,
+          counts,
+          totalErrors:2,
+          recoveries:0,
+          errorStreak: repeated ? 2 : 1,
+          lastErrorAt:now,
+          lastRecoveryAt:null,
+          lastType:type,
+          lastSource:source,
+          events:[event]
+        };
+        base.recent = [event];
+        base.totals.errors = 2;
+        if (type === 'assisted') base.totals.assisted = 2;
+        if (type === 'voice-unrecognized') base.totals.voice = 2;
+        if (repeated) base.totals.repeated = 1;
+        return base;
+      }
+
+      function seed(mode) {
+        localStorage.clear();
+        localStorage.setItem(KEYS[0], JSON.stringify(learnerSeed()));
+        localStorage.setItem(KEYS[1], JSON.stringify(memorySeed(mode)));
+        localStorage.setItem(KEYS[2], JSON.stringify(errorSeed(mode)));
+        if (locale === 'fr') localStorage.setItem(DEBUG_KEY, '1');
+      }
+
+      function storeBytes() {
+        return Object.fromEntries(KEYS.map(key => [key, localStorage.getItem(key)]));
+      }
+
+      function continuity() {
+        const learner = JSON.parse(localStorage.getItem(KEYS[0]) || '{}');
+        return Array.isArray(learner.completedLessons)
+          && learner.completedLessons.length === 7
+          && Number(learner.lessonProgress?.l8) === 4
+          && Array.isArray(learner.knownItems)
+          && learner.knownItems.length === 40;
+      }
+
+      function expectedAction(mode) {
+        return {
+          retrieval:'review',
+          listening:'listening',
+          scenario:'real-life',
+          recognition:null,
+          empty:null
+        }[mode] ?? null;
+      }
+
+      async function runCase(mode) {
+        seed(mode);
+        const frame = document.createElement('iframe');
+        frame.setAttribute('aria-hidden', 'true');
+        frame.style.cssText = 'position:fixed;left:-200vw;top:0;width:100vw;height:100vh;border:0;pointer-events:none;';
+        frame.src = `../../?b395Practice=1&case=${encodeURIComponent(mode)}${locale === 'fr' ? '&debug=fr' : ''}`;
+        document.body.appendChild(frame);
+
+        const ready = await waitFor(() => {
+          const win = frame.contentWindow;
+          const doc = frame.contentDocument;
+          return Boolean(
+            win?.FrenchTranquilleMemory?.summary
+            && win?.FrenchTranquilleErrors?.summary
+            && win?.FrenchTranquilleLearnerActionRuntimeSnapshot?.status?.().ready
+            && win?.FrenchTranquilleLearnerActionPracticeAdvisory?.decorate
+            && doc?.querySelector('.ux-bottom-nav [data-ux-nav="practice"]')
+          );
+        });
+        if (!ready) throw new Error(`${mode}:runtime-not-ready`);
+
+        const win = frame.contentWindow;
+        const doc = frame.contentDocument;
+        win.FrenchTranquilleMemory.summary();
+        win.FrenchTranquilleErrors.summary();
+        await sleep(180);
+        if (!continuity()) throw new Error(`${mode}:historical-continuity-before`);
+        const before = storeBytes();
+
+        const nav = doc.querySelector('.ux-bottom-nav [data-ux-nav="practice"]');
+        nav.click();
+
+        const decorated = await waitFor(() => doc.querySelector('.b27-practice-page[data-b395-advisory="1"]'));
+        if (!decorated) throw new Error(`${mode}:practice-not-decorated`);
+        const page = doc.querySelector('.b27-practice-page');
+        const expected = expectedAction(mode);
+        const actual = page.dataset.b395Recommended === 'none' ? null : page.dataset.b395Recommended;
+        if (actual !== expected) throw new Error(`${mode}:recommended:${actual || 'none'}:expected:${expected || 'none'}`);
+
+        const badges = [...page.querySelectorAll('[data-b395-advisory-badge="1"]')];
+        const marked = [...page.querySelectorAll('[data-b27-practice-action][data-b395-recommended="1"]')];
+        if (expected) {
+          if (badges.length !== 1 || marked.length !== 1) throw new Error(`${mode}:badge-count:${badges.length}:${marked.length}`);
+          if (marked[0].dataset.b27PracticeAction !== expected) throw new Error(`${mode}:badge-on-wrong-action`);
+          const label = badges[0].textContent.trim();
+          const expectedLabel = locale === 'fr' ? 'Conseillé maintenant' : 'Gợi ý lúc này';
+          if (label !== expectedLabel) throw new Error(`${mode}:wrong-label:${label}`);
+        } else if (badges.length !== 0 || marked.length !== 0) {
+          throw new Error(`${mode}:must-have-no-badge`);
+        }
+
+        if (!doc.documentElement.classList.contains('b27-practice-open') || !page.isConnected) {
+          throw new Error(`${mode}:opening-practice-auto-routed`);
+        }
+        if (doc.documentElement.classList.contains('listening-open')) throw new Error(`${mode}:auto-opened-listening`);
+
+        const afterAdvice = storeBytes();
+        if (JSON.stringify(before) !== JSON.stringify(afterAdvice)) throw new Error(`${mode}:store-mutated-by-advice`);
+        if (!continuity()) throw new Error(`${mode}:historical-continuity-after-advice`);
+
+        const actions = [...page.querySelectorAll('.b27-practice-action')];
+        const geometry = actions.length === 4 && actions.every(button => {
+          const rect = button.getBoundingClientRect();
+          return rect.width > 0 && rect.height >= 44;
+        });
+        if (!geometry) throw new Error(`${mode}:practice-geometry`);
+        const noOverflow = doc.documentElement.scrollWidth <= doc.documentElement.clientWidth + 1;
+        if (!noOverflow) throw new Error(`${mode}:horizontal-overflow`);
+
+        let manualRoute = true;
+        if (mode === 'retrieval') {
+          const button = page.querySelector('[data-b27-practice-action="review"]');
+          button.click();
+          manualRoute = await waitFor(() => doc.body.dataset.b27Screen === 'review' || doc.querySelector('.screen-review .flashcard'));
+          if (!manualRoute) throw new Error('retrieval:manual-review-route-broken');
+        }
+
+        const afterManual = storeBytes();
+        if (mode !== 'retrieval' && JSON.stringify(before) !== JSON.stringify(afterManual)) throw new Error(`${mode}:store-mutated-without-action`);
+
+        frame.remove();
+        return { mode, expected, manualRoute };
+      }
+
+      async function run() {
+        const modes = ['retrieval','listening','scenario','recognition','empty'];
+        for (const mode of modes) await runCase(mode);
+
+        root.dataset.b395Done = '1';
+        root.dataset.b395Locale = locale;
+        root.dataset.b395Retrieval = '1';
+        root.dataset.b395Listening = '1';
+        root.dataset.b395Scenario = '1';
+        root.dataset.b395RecognitionAbstain = '1';
+        root.dataset.b395EmptyAbstain = '1';
+        root.dataset.b395NoAutoRoute = '1';
+        root.dataset.b395ManualRoute = '1';
+        root.dataset.b395StoresUnchanged = '1';
+        root.dataset.b395Continuity = '1';
+        root.dataset.b395Geometry = '1';
+        document.getElementById('result').textContent = `Build 39.5 PASS (${locale})`;
+      }
+
+      run().catch(error => {
+        root.dataset.b395Done = '0';
+        root.dataset.b395Locale = locale;
+        root.dataset.b395Error = error?.message || String(error);
+        document.getElementById('result').textContent = `Build 39.5 FAIL: ${error?.message || error}`;
+      });
+    })();
+  </script>
+</body>
+</html>
