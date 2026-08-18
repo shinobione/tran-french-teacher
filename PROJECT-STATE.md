@@ -5,12 +5,11 @@ Last reconciled: 2026-08-18
 ## Canonical accepted main
 
 - Repository: `shinobione/tran-french-teacher`
-- Accepted runtime/internal `main`: **`3d3a6259b7b86ef7f7511832368c6d1eb549be44`**
-- Commit: `Build 39.5: LI3 advisory-only Practice recommendation`
-- PR **#217 — MERGED** from exact final head **`c171b0e65194289257a5e30763965f9f6ef6c03a`** with expected-head squash protection.
-- Parent: `15cd59be579f546b44946f6e31046d3a66cf21f5` — Build39.4 docs/governance closeout.
-- Merge commit is GitHub verified / valid.
-- Immediately after merge, `main` was re-read and matched exactly `3d3a6259...`; open PR search returned **0 open PRs** before this docs closeout branch.
+- Accepted `main`: **`eff12111d31f57779d09e6c3d9fc42b3e59d0dbf`**
+- Commit: `Docs: close Build 39 milestone and hand off Build 40`
+- PR **#218 — MERGED** from exact head `7a76b08172c342ac481ae77920bc72d57557f423` with expected-head squash protection.
+- Parent runtime/internal checkpoint: **`3d3a6259b7b86ef7f7511832368c6d1eb549be44`** — PR #217 / Build39.5.
+- `main` verification after #218: exact SHA `eff12111...`, GitHub verified / valid, **0 open PRs before Build40 branch creation**.
 - Public runtime metadata remains **v2.5.0 · Build 38**.
 - Pedagogy baseline remains **v2.3.0 · Build 34**.
 - Latest exact public release deployment proof remains GitHub Pages #272 / run `32072053127` on release SHA `2abe20511d6265d12643276f18041812fec3e715`.
@@ -22,8 +21,9 @@ Public runtime          v2.5.0 · Build 38
 Pedagogy baseline       v2.3.0 · Build 34
 Curriculum              52 lessons / 313 items
 Scenario                44 situations / 132 turns
+Listening               17 contrast families / 18 contextual dialogues
+Listening speed         0.88 normal / 0.65 slow
 Speaking Loop           52/52 · max 2 moments / lesson
-Listening               0.88 normal / 0.65 slow
 Recovery                7 durable stores / backup v3
 Evidence v2             derived shadow only
 Original six stores     product truth
@@ -55,154 +55,253 @@ Build38 is pedagogically complete, public release is `v2.5.0 · Build 38`, and B
 
 ## Build 39 — Learner Intelligence 3 — CLOSED / CERTIFIED
 
-Milestone contract: choose a useful next action only from trustworthy observable evidence; otherwise explicitly abstain. Never invent mastery from speech-recognition failure, decorative counts, exposure or unsupported inference.
-
-Target vocabulary remains:
+Certified chain:
 
 ```text
-phrase-retrieval
-concept-review
-foundation-capsule
-listening
-scenario
-transfer-construction
+39.1 deterministic arbitration
+→ 39.2 reliable evidence adapter
+→ 39.3 decision pipeline
+→ 39.4 read-only runtime snapshot
+→ 39.5 advisory-only Practice recommendation
 ```
 
-Current trustworthy availability:
+Reliable families today:
 
 ```text
 phrase-retrieval ✅
 listening        ✅
 scenario         ✅
-concept-review         unavailable — no durable concept-understanding owner
-foundation-capsule     unavailable — Foundations has no trustworthy need owner
-transfer-construction  unavailable — Transfer has no durable evidence owner
 ```
 
-### 39.1 — arbitration core — CLOSED / CERTIFIED
-
-- merge `246338a9ef11eb430f59fc6ccf494688904cf883`
-- owner `src/pedagogy/learner-action-arbitration-core.js`
-- deterministic ranking, independent-evidence thresholds, recognition-only rejection, explicit abstention.
-
-### 39.2 — evidence adapter — CLOSED / CERTIFIED
-
-- merge `9af287417d1fbb502837bea4aa80886cca2ffb2e`
-- owner `src/pedagogy/learner-evidence-adapter.js`
-- trustworthy inputs: Memory due/fragile and explicit Error Intelligence item events.
-- Listening/Scenario are consumed only through their explicit Error source/type events.
-
-### 39.3 — decision pipeline — CLOSED / CERTIFIED
-
-- merge `c809790453a40ae5e2da3a497e3b64b7a51e5d87`
-- owner `src/pedagogy/learner-action-decision-pipeline.js`
-- caller snapshots → 39.2 → 39.1 → decision/abstention.
-
-### 39.4 — runtime snapshot collector — CLOSED / CERTIFIED
-
-- merge `f662d96d55e385f3d6baa946bde8f22fd1d25f0e`
-- owner `src/pedagogy/learner-action-runtime-snapshot.js`
-- API `FrenchTranquilleLearnerActionRuntimeSnapshot.status()/collect()/decide()`.
-
-Certified runtime flow:
+Deliberately unavailable because no trustworthy durable owner exists:
 
 ```text
-FrenchTranquilleMemory.summary()
+concept-review
+foundation-capsule
+transfer-construction
+```
+
+Learner-facing Practice mapping:
+
+```text
+phrase-retrieval → Réviser
+listening        → Écouter
+scenario         → Dans la vraie vie
+abstain          → no recommendation
+```
+
+No auto-route, no `Parler` fallback and no invented mastery.
+
+Accepted Build39.5 runtime/internal merge:
+
+```text
+3d3a6259b7b86ef7f7511832368c6d1eb549be44
+```
+
+Build39 closeout main:
+
+```text
+eff12111d31f57779d09e6c3d9fc42b3e59d0dbf
+```
+
+## Build 40 — A1 Consolidation Audit — AUDIT COMPLETE / CLOSEOUT CANDIDATE
+
+Branch:
+
+```text
+build40/a1-consolidation-audit
+```
+
+Base:
+
+```text
+eff12111d31f57779d09e6c3d9fc42b3e59d0dbf
+```
+
+Runtime/product change: **none**.
+
+Canonical audit document:
+
+```text
+docs/BUILD-40-A1-CONSOLIDATION-AUDIT.md
+```
+
+### Audited sources
+
+Build40 inspected the real current owners rather than inferring from labels:
+
+```text
+app.js lesson 1–15 curriculum
+src/pedagogy/curriculum-stage2.js lessons 16–25
+src/pedagogy/curriculum-stage3.js lessons 26–40
+src/pedagogy/curriculum-stage4.js lessons 41–52
+src/pedagogy/foundations-core.js
+src/pedagogy/foundations-pilot.js
+src/pedagogy/generalization-transfer-lesson.js
+src/pedagogy/scenario-data.js
+src/pedagogy/real-life-data-2.js
+src/pedagogy/real-life-data-3.js
+src/pedagogy/real-life-data-4.js
+src/pedagogy/scenario-engine.js
+src/pedagogy/listening-data.js
+src/pedagogy/listening-data-2.js
+src/pedagogy/speaking-loop-content.js
+Build39 LI3 owners / current evidence contract
+```
+
+### Main finding
+
+French Trân’quille has **broad practical A1 content coverage already**. The limiting factor is not lack of topics or phrases.
+
+The main gap is:
+
+```text
+productive generalization depth
 +
-FrenchTranquilleErrors.summary()
-→ narrow detached immutable snapshot
-→ 39.3 pipeline
-→ reliable decision OR abstention
+trustworthy evidence of construction / concept reuse
 ```
 
-No decision at boot, no direct collector storage access, no durable write, no Evidence cutover and no learner-facing action execution.
-
-### 39.5 — advisory-only Practice recommendation — CLOSED / CERTIFIED
-
-- PR #217 final head **`c171b0e65194289257a5e30763965f9f6ef6c03a`**
-- accepted merge **`3d3a6259b7b86ef7f7511832368c6d1eb549be44`**
-- owner `src/pedagogy/learner-action-practice-advisory.js`
-- API `FrenchTranquilleLearnerActionPracticeAdvisory`.
-
-Build27 App Shell remains byte-identical and keeps route/action ownership.
-
-When the learner explicitly opens Practice:
+Current evidence hierarchy:
 
 ```text
-39.4 decide()
-→ phrase-retrieval → Réviser
-→ listening        → Écouter
-→ scenario         → Dans la vraie vie
-→ abstain/unsupported → no advisory
+lesson/challenge         → taught / narrow recognition
+Speaking Loop            → oral rehearsal / self-comparison only
+Listening                → contextual comprehension / reliable listening misses
+Scenario                 → guided contextual production / reliable miss+assistance evidence
+Build38 Transfer         → explicit deterministic reconstruction / ephemeral
+LI3                      → reliable retrieval/listening/scenario advice only
 ```
 
-39.5 only replaces the historical coarse `Conseillé maintenant` badge. No automatic route, click, persistent write, Evidence read-path change or fallback `Parler` recommendation occurs.
+Scenario is meaningful production, but the engine still validates against finite accepted answer sets. Build40 therefore classifies it as **guided contextual production**, not unconstrained spontaneous production.
 
-Dedicated final-head run:
+### Foundations result
+
+Broad Foundations coverage exists, but Foundations remain ephemeral and make no durable mastery claim.
+
+The clearest canonical structural debt is still:
 
 ```text
-Build 39.5 Practice advisory — 32182481929 ✅ SUCCESS
+F16 — à / de contractions
 ```
 
-The real-app Chrome tribunal passed VI/DEBUG FR × desktop/iPhone and proved retrieval/listening/scenario mapping, recognition-only + empty abstention, no auto-route, historical manual Review route, seven-store byte identity while advice renders, `7 completed / l8=4 / 40 known`, touch geometry and no overflow.
+### Build38 result
 
-The first dedicated run `32182214772` failed only because the test iframe used HTML `hidden` while asserting 44px geometry, necessarily producing 0×0 rects. Only the harness changed to a layoutable off-screen iframe; no product logic changed for this classification.
-
-Final exact-head matrix drained with **exactly the five inherited standing failures, no other failure, no queued, no in-progress**. Important green predecessors included Runtime metadata, Build27, Build31/32, Build39.1→39.4, Release v2.5, Build38.10, navigation/PWA/Premium, Build26.1 and Build26.4.
-
-## Build39 milestone closeout audit
-
-No 39.6 learner-facing wiring is authorized.
-
-Actual owner audit after #217:
-
-- canonical Home is the Build27 Home, not the old Daily Coach surface;
-- Build27 Home intentionally gives the current lesson the one primary CTA, with Review/Listening as secondary quick actions;
-- Practice is the dedicated learner surface for choosing what to work on now, and 39.5 already provides LI3 advice there;
-- adding a second LI3 recommendation system to Home would duplicate Practice or require a new Scenario CTA and weaken the one-primary-action Home contract;
-- `src/pedagogy/daily-coach.js` is a legacy layer relative to the Build27 Home and directly reads learner/Memory storage, so rewriting it for LI3 would move architecture backwards;
-- unsupported concept/Foundation/Transfer families still lack trustworthy evidence owners. No new durable evidence is justified merely to fill the vocabulary.
-
-Verdict: **Build39 closes here** with reliable recommendation where evidence exists and explicit abstention where it does not.
-
-## Build 40 — A1 Consolidation Audit — NEXT / AUDIT ONLY
-
-Build40 starts as a read-only analysis/documentation milestone. No learner-facing runtime mutation is authorized until its verdict is closed.
-
-Required audit dimensions:
+Five high-quality construction families exist:
 
 ```text
-52 lessons / 313 items curriculum capability coverage
-Foundations registry + actual placements
-Build38 Transfer families + learner placements
-Scenario 44 / 132 contextual reuse
-Listening datasets / contrast families
-Learning Memory + Error Intelligence semantics
-LI3 supported vs unavailable evidence families
-current learner-facing Home / Practice / Progress surfaces
+subject substitution
+negation
+futur proche
+nominal singular → plural
+nous → spoken on
 ```
 
-Build40 must classify each meaningful A1 capability as something like:
+This is pedagogically strong but narrow compared with the full A1 curriculum.
+
+### Listening result
+
+Current designed listening set:
 
 ```text
-taught / exposed
-practiced / recalled
-contextually reused
-constructed / transferred
-reliably evidenced
-under-evidenced
-missing / deferred
+17 contrast families
+18 contextual dialogue activities
 ```
 
-It must then choose one defensible direction:
+Strong contextual comprehension coverage; primarily recognition/selection rather than productive construction.
+
+### Main productive gaps
+
+Under-proven construction/recombination systems:
 
 ```text
-A1 consolidation
-or internal A1+ expansion
-or A2 roadmap opening
+question construction / reformulation
+past-time recombination
+articles / quantities / F16 contractions
+possessive recombination
+adjective agreement beyond memorized forms
+short narrative assembly
+opinion + simple proposition recombination
 ```
 
-No CEFR certification claim and no A2 implementation before the audit closes.
+### Evidence gaps
+
+No trustworthy durable owner currently establishes:
+
+```text
+concept understanding
+Foundation mastery/need
+transfer/construction strength
+```
+
+Build40 explicitly rejects persistence-first architecture. Do not create stores merely to fill these gaps.
+
+## Build40 decision
+
+### Open A2 now
+
+**REJECTED.**
+
+Reason: A1 thematic breadth is already strong while autonomous productive construction and durable concept/transfer evidence remain much narrower.
+
+### Broad A1+ phrase/content expansion
+
+**NOT SELECTED as primary direction.**
+
+Reason: the audit does not show a major topic shortage.
+
+### A1 Productive Consolidation
+
+**SELECTED.**
+
+Goal:
+
+```text
+widen deterministic reconstruction/recombination
+using already-taught vocabulary and structures
+before opening another large content layer
+```
+
+Build40 itself remains docs/audit only.
+
+## Selected next milestone — Build 41 / A1 Productive Consolidation
+
+Build41 is not started until Build40 audit/closeout is merged.
+
+### First authorized slice — 41.1 productive-family audit / read-only
+
+Candidate families:
+
+```text
+questions
+past-time recombination
+articles / quantities / F16 contractions
+possessives
+adjective agreement
+short narration
+opinion clauses
+```
+
+For each family 41.1 must prove:
+
+- source forms genuinely taught in current 52/313;
+- deterministic target transformation;
+- no new vocabulary requirement;
+- no hidden semantic ambiguity;
+- useful learner placement that does not duplicate the lesson;
+- no durable mastery claim required.
+
+Each candidate must end as:
+
+```text
+IMPLEMENTABLE DETERMINISTIC FAMILY
+DEFER — NEEDS BETTER SOURCES
+REJECT — TOO SEMANTIC / AMBIGUOUS
+ALREADY COVERED / DUPLICATE
+```
+
+41.1 selects **at most one next implementation family**.
+
+A2 remains **NOT AUTHORIZED**.
 
 ## CI baseline
 
@@ -247,26 +346,14 @@ Build39.4 read-only runtime snapshot contract
 Build39.5 advisory-only Practice contract
 ```
 
-## Active docs closeout
-
-Branch:
-
-```text
-docs/build39-5-closeout
-```
-
-Base: exact accepted runtime/internal main `3d3a6259b7b86ef7f7511832368c6d1eb549be44`.
-
-Intent: docs/governance only; close 39.5 + Build39 milestone and hand off Build40 audit.
-
 ## NEXT
 
 ```text
-merge Build39 docs closeout
+review / merge Build40 audit-only closeout
 → verify main + 0 open PRs
-→ open Build40 audit-only branch
-→ inspect real curriculum / Foundations / Transfer / Scenario / Listening / LI3 evidence
-→ materialize durable capability/evidence/gap audit
-→ choose one post-audit direction
-→ no A2 implementation before Build40 closes
+→ open Build41.1 read-only productive-family audit
+→ classify seven candidate families
+→ select at most ONE deterministic implementation family
+→ no A2 implementation
+→ no new durable evidence owner yet
 ```
