@@ -84,6 +84,7 @@ MASTER-ROADMAP.md
 
 - Branch: **`build39/evidence-adapter`**
 - Base: exact accepted main **`b3b7a14bb080ecfc0228d7edd24ab97d261eaa0f`**
+- PR: **#210 — `Build 39.2 · learner evidence adapter` — OPEN**
 - State: **CANDIDATE / PURE ADAPTER / NOT WIRED / NOT MERGED**
 - Runtime UI wiring: **none**
 - Durable writes: **none**
@@ -205,15 +206,16 @@ Build 39.1 deterministic arbitration semantics
 
 ## NEXT
 
-Fresh control step only after the 39.2 PR is materialized:
+Fresh control step for **PR #210 only**:
 
 ```text
-re-read the exact 39.2 PR head and changed filenames
+re-read #210 exact head and changed filenames
+→ confirm scope remains the five 39.2 candidate paths only
 → require Build 39.2 Learner evidence adapter on that exact head
 → require Build39.1 + v2.5.0 / Build38 predecessor contracts to remain green
 → classify the full matrix against the five inherited failures
 → rerun only proven flakes unchanged if needed
-→ if no new regression, merge with expected-head protection
+→ if no new regression, merge #210 with expected-head protection
 → verify main equals the merge SHA
 → only then decide the next separate Build39 slice
 ```
