@@ -5,12 +5,12 @@ Last reconciled: 2026-08-18
 ## Canonical accepted main
 
 - Repository: `shinobione/tran-french-teacher`
-- Accepted `main`: **`7fb5b66ab992852cd4f73aa4d05fa01b1a9b5b25`**
-- Commit: `Build 40: A1 consolidation audit and productive direction`
-- PR **#219 — MERGED** from exact head `9c6507c53b9ee84b22f2a47f72c44df2014b4e3c` with expected-head squash protection.
-- Parent: `eff12111d31f57779d09e6c3d9fc42b3e59d0dbf` — Build39 closeout.
+- Accepted `main`: **`7739418fd97a01df4bd1b67c27ccadb8fd3cd14a`**
+- Commit: `Build 41.1: select recent-past productive family`
+- PR **#220 — MERGED** from exact head `8d8e8275a412944a9f9b24da42d333d8e25577d2` with expected-head squash protection.
+- Parent: `7fb5b66ab992852cd4f73aa4d05fa01b1a9b5b25` — Build40 audit.
 - Merge commit is GitHub verified / valid.
-- After #219, `main` was re-read at exact SHA `7fb5b66a...`; **0 open PRs before Build41.1 branch creation**.
+- `main` was re-read at exact SHA `7739418f...`; **0 open PRs before Build41.2 branch creation**.
 - Public runtime metadata remains **v2.5.0 · Build 38**.
 - Pedagogy baseline remains **v2.3.0 · Build 34**.
 - Latest exact public release deployment proof remains GitHub Pages #272 / run `32072053127` on release SHA `2abe20511d6265d12643276f18041812fec3e715`.
@@ -41,80 +41,19 @@ l8 progress = 4
 
 No future work may reset, renumber or reinterpret this state.
 
-## Build38 — CLOSED / RELEASED
-
-Five certified learner-facing deterministic Transfer families remain frozen:
+## Milestone state
 
 ```text
-subject substitution       → lesson 33
-negation                   → lesson 34
-futur proche               → lesson 35
-singular → plural nominal  → lesson 13
-nous → spoken on           → lesson 52
+Build38  CLOSED / RELEASED
+Build39  CLOSED / CERTIFIED
+Build40  CLOSED — A1 Productive Consolidation selected
+Build41  OPEN
+Build41.1 CLOSED / AUDITED — recent-past family selected
+Build41.2 ACTIVE / PURE CORE CANDIDATE
+A2       NOT AUTHORIZED
 ```
 
-Build38.11 remains not authorized. Public release remains `v2.5.0 · Build 38`.
-
-## Build39 — Learner Intelligence 3 — CLOSED / CERTIFIED
-
-Reliable families:
-
-```text
-phrase-retrieval ✅
-listening        ✅
-scenario         ✅
-```
-
-Unavailable because no trustworthy durable owner exists:
-
-```text
-concept-review
-foundation-capsule
-transfer-construction
-```
-
-Practice advice:
-
-```text
-phrase-retrieval → Réviser
-listening        → Écouter
-scenario         → Dans la vraie vie
-abstain          → no recommendation
-```
-
-No auto-route / no invented mastery.
-
-## Build40 — A1 Consolidation Audit — CLOSED
-
-Canonical audit:
-
-```text
-docs/BUILD-40-A1-CONSOLIDATION-AUDIT.md
-```
-
-Build40 verdict:
-
-- broad practical A1 content already exists;
-- main gap = productive generalization depth + trustworthy construction evidence;
-- A2 now = rejected;
-- broad phrase/content A1+ expansion = not selected;
-- **A1 Productive Consolidation = selected next milestone**.
-
-## Build41 — A1 Productive Consolidation — OPEN
-
-### Build41.1 — productive-family audit — AUDIT COMPLETE / CLOSEOUT CANDIDATE
-
-Branch:
-
-```text
-build41/productive-family-audit
-```
-
-Base:
-
-```text
-7fb5b66ab992852cd4f73aa4d05fa01b1a9b5b25
-```
+## Build41.1 accepted verdict
 
 Canonical audit:
 
@@ -122,9 +61,7 @@ Canonical audit:
 docs/BUILD-41.1-PRODUCTIVE-FAMILY-AUDIT.md
 ```
 
-Runtime/product change: **none**.
-
-### Candidate classification
+Candidate classification:
 
 ```text
 questions                         REJECT — TOO SEMANTIC / AMBIGUOUS
@@ -136,67 +73,51 @@ short narration                   REJECT — TOO SEMANTIC / AMBIGUOUS
 opinion clauses                   REJECT — TOO SEMANTIC / AMBIGUOUS
 ```
 
-### Selected family
-
-Use already-taught lesson 24 present actions and lesson 36 recent-past structure:
-
-```text
-Je travaille.          → Je viens de travailler.
-Je mange.              → Je viens de manger.
-Je rentre à la maison. → Je viens de rentrer à la maison.
-```
-
-The fourth safe audit anchor `Je regarde un film. → Je viens de regarder un film.` is deliberately left outside the first core catalog.
-
-Canonical family id/intention:
+Selected family:
 
 ```text
 present-je-regular-action
 → recent-past-je-venir-de
 ```
 
-Why selected:
+## Build41.2 — recent-past deterministic transfer core — ACTIVE CANDIDATE
 
-- source forms genuinely taught in lesson 24;
-- `venir de + infinitif` explicitly taught in lesson 36 as a very regular structure;
-- all first-core actions use known regular `-er` infinitives;
-- same subject and action meaning;
-- no new vocabulary;
-- no auxiliary choice / irregular participle / gender agreement decision;
-- deterministic exact targets;
-- can remain ephemeral and make no mastery claim.
-
-### Explicit exclusions
-
-41.1 does **not** authorize:
+Branch:
 
 ```text
-generic passé composé transformation
-subject expansion beyond je
-reflexive recent-past transformation
-negation / questions
-random/adaptive generation
-new vocabulary
-learner-facing placement
-storage / Evidence / mastery claim
+build41/recent-past-transfer-core
 ```
 
-### Why other families did not win
-
-- Questions: current F12 intentionally supports multiple legitimate strategies; generic transform would be arbitrary.
-- Articles/quantities/F16: F16 remains partial/distributed and must be taught coherently before productive testing.
-- Possessives: lesson31 already owns the mon/ma/mes ↔ ton/ta/tes contrast; a tiny swap set would duplicate it.
-- Adjective agreement: paired source forms remain insufficient; no fake universal `+e` rule.
-- Narration: event ordering is semantic discourse planning, not mechanical morphology.
-- Opinion: adding `Je pense que` assigns a semantic stance the system cannot infer mechanically.
-
-## Next authorized slice — Build41.2
+Base:
 
 ```text
-Build41.2 — pure non-wired recent-past deterministic transfer core
+7739418fd97a01df4bd1b67c27ccadb8fd3cd14a
 ```
 
-First catalog exactly:
+New pure owner:
+
+```text
+src/pedagogy/generalization-recent-past-core.js
+FrenchTranquilleRecentPastTransferCore
+```
+
+Metadata:
+
+```text
+roadmapSlice = 41.2
+version = 1.0.0-recent-past-core
+familyId = present-je-regular-action-to-recent-past-je-venir-de
+status = pure-non-wired
+sourceLessons = [24]
+anchorLessons = [36]
+subject = je
+structure = venir-de-infinitive
+masteryClaim = false
+durableWrite = false
+runtimeWiring = false
+```
+
+Certified catalog candidate exactly:
 
 ```text
 Je travaille.          → Je viens de travailler.
@@ -204,21 +125,44 @@ Je mange.              → Je viens de manger.
 Je rentre à la maison. → Je viens de rentrer à la maison.
 ```
 
-Mandatory boundaries:
+API:
 
-- pure static deterministic core;
-- no random/adaptive generation;
-- no generic passé composé;
-- no new vocabulary;
-- no subject expansion beyond `je`;
-- no reflexive transform in first core;
-- no negation/questions;
-- no loader/SW/learner-facing wiring;
-- no storage / Evidence / durable write / mastery claim;
-- Build38 owners remain byte-identical;
-- learner placement requires a separate later audit after core certification.
+```text
+catalog()
+view(id)
+transform(source)
+verify(idOrSource, answer)
+```
 
-A2 remains **NOT AUTHORIZED**.
+Unknown source returns `null` from `transform()`; the core never tries to conjugate an unseen French verb.
+
+Explicit exclusions:
+
+```text
+generic passé composé
+subject expansion beyond je
+reflexive recent-past transformation
+negation / questions
+random/adaptive generation
+new vocabulary
+learner-facing placement
+loader / service-worker wiring
+storage / Evidence / durable write / mastery claim
+```
+
+The fourth 41.1 audit anchor `Je regarde un film. → Je viens de regarder un film.` remains deliberately outside the first core.
+
+## 41.2 intended scope
+
+```text
+.github/workflows/build41-2-recent-past-transfer.yml
+PROJECT-STATE.md
+docs/BUILD-41.2-RECENT-PAST-TRANSFER-CORE.md
+src/pedagogy/generalization-recent-past-core.js
+tests/unit/build41-2-recent-past-transfer.test.cjs
+```
+
+No Build38, Build39, curriculum, Foundations, loader, SW, UI, voice, Recovery, Evidence or Premium owner may change.
 
 ## CI baseline
 
@@ -230,39 +174,15 @@ Known persistent inherited failures:
 4. `Build 36.3 Recovery v3 durability tribunal`
 5. `Build 28 Data recovery smoke`
 
-Build26.4 is a classified runner/harness flake, not standing debt. Any other failure is NEW until classified.
-
-## Protected boundaries
-
-```text
-app.js
-voice-ios.js
-free-voice.js
-assets/LOGO.png
-assets/Favicon.png
-PWA identity/cache contract from PR #180
-Build30 runtime contracts/runtime bridge
-Recovery v3 seven-store ownership
-backup envelope v3
-Evidence derived-shadow role
-original six stores as product truth
-52 / 313 curriculum semantics
-Premium V5.10 field-approved UI/navigation
-Build27 App Shell route/action ownership
-Build37 Foundations ownership/routes
-Build38 deterministic core semantics
-Build38 learner-facing placements
-shared Transfer renderer ownership
-Learner Intelligence V1/V2 historical compatibility
-Build39.1→39.5 contracts
-```
+Build26.4 remains a classified runner/harness flake, not standing debt. Any other failure is NEW until classified.
 
 ## NEXT
 
 ```text
-review / merge Build41.1 audit-only PR
-→ verify main + 0 open PRs
-→ Build41.2 pure recent-past transfer core
-→ dedicated deterministic tribunal
-→ no learner-facing wiring in 41.2
+materialize Build41.2 candidate PR
+→ dedicated pure-core tribunal
+→ exact-head full matrix classification
+→ merge only at five-failure baseline
+→ verify main
+→ audit learner placement separately
 ```
