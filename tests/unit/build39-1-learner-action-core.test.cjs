@@ -1,7 +1,7 @@
 'use strict';
 
 const assert = require('node:assert/strict');
-const core = require('../../src/pedagogy/learner-intelligence-v3-core.js');
+const core = require('../../src/pedagogy/learner-action-arbitration-core.js');
 
 const TYPES = [
   'phrase-retrieval',
