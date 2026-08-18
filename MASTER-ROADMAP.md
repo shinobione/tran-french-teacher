@@ -4,7 +4,7 @@
 >
 > Every future AI/chat/session working on `shinobione/tran-french-teacher` must read `AGENTS.md`, then `PROJECT-STATE.md`, then this file before roadmap or implementation decisions.
 >
-> The previous long-form MASTER has been preserved byte-for-byte at `docs/archive/MASTER-ROADMAP-pre-39.4-closeout.md`. Historical build documents, PRs, README/changelog entries and archived roadmap versions remain evidence. This file now owns the **current durable state, execution order, locked contracts and next authorized boundaries**.
+> The previous long-form MASTER is preserved byte-for-byte at `docs/archive/MASTER-ROADMAP-pre-39.4-closeout.md`. Historical build documents, PRs, README/changelog entries and archived roadmap versions remain evidence. This file owns the **current durable state, execution order, locked contracts and next authorized boundary**.
 
 ---
 
@@ -12,16 +12,17 @@
 
 | Item | Canonical state |
 |---|---|
-| Accepted runtime/internal `main` | **`f662d96d55e385f3d6baa946bde8f22fd1d25f0e`** — PR #215 / Build 39.4 |
+| Accepted runtime/internal `main` | **`3d3a6259b7b86ef7f7511832368c6d1eb549be44`** — PR #217 / Build 39.5 |
 | Public application runtime metadata | **v2.5.0 · Build 38** |
 | Product pedagogy baseline | **v2.3.0 · Build 34** |
 | Build 38 milestone | **CLOSED / RELEASED** |
-| Build 39 | **OPEN** |
+| Build 39 — Learner Intelligence 3 | **CLOSED / CERTIFIED** |
 | Build 39.1 | **CLOSED / CERTIFIED** — deterministic learner-action arbitration core |
 | Build 39.2 | **CLOSED / CERTIFIED** — reliable Memory/Error evidence adapter |
 | Build 39.3 | **CLOSED / CERTIFIED** — pure decision pipeline |
 | Build 39.4 | **CLOSED / CERTIFIED** — read-only runtime snapshot collector |
-| Next Build39 boundary | **39.5 audit-selected advisory-only Practice recommendation; implementation must be separate** |
+| Build 39.5 | **CLOSED / CERTIFIED** — advisory-only Practice recommendation |
+| Next milestone | **Build 40 — A1 Consolidation Audit** |
 | Curriculum | **52 lessons / 313 items** |
 | Scenario | **44 situations / 132 turns** |
 | Speaking Loop | **52/52 · max 2 moments / lesson** |
@@ -78,14 +79,14 @@ A suspected flake is rerun **unchanged** before product mutation. Historical bas
 
 # 2. Permanent learner/product safety contracts
 
-## 2.1 Voice
+## Voice
 
 - no fake pronunciation score;
 - speech-recognition failure is recognition-system evidence, not proof of poor pronunciation;
 - own-voice replay remains local/temporary and never enters learner Memory/backups;
 - automatic capture of the exact first Siri attempt remains separately field-gated.
 
-## 2.2 Data / Recovery / Evidence
+## Data / Recovery / Evidence
 
 - Recovery owns **7 durable stores / backup v3**;
 - Evidence v2 remains a **derived shadow**;
@@ -94,7 +95,7 @@ A suspected flake is rerun **unchanged** before product mutation. Historical bas
 - no new durable store/schema merely to make Learner Intelligence appear smarter;
 - recognition-only evidence never implies mastery/weakness.
 
-## 2.3 Curriculum / pedagogy
+## Curriculum / pedagogy
 
 - preserve 52 lesson IDs / 313 item semantics;
 - Build37 Foundations ownership/routes remain historical contracts;
@@ -102,7 +103,7 @@ A suspected flake is rerun **unchanged** before product mutation. Historical bas
 - one shared Transfer renderer remains the owner of learner-facing Build38 construction cards;
 - no hidden curriculum renumbering for convenience.
 
-## 2.4 Navigation / Premium field contract
+## Navigation / Premium field contract
 
 - ZERO competing route facades / route flash;
 - atomic route ownership switch;
@@ -110,9 +111,7 @@ A suspected flake is rerun **unchanged** before product mutation. Historical bas
 - no learner-facing diagnostic cockpit;
 - Premium V5.10 field-approved navigation/identities remain protected.
 
-## 2.5 Protected sanctuaries
-
-Unless a later explicitly scoped build justifies otherwise:
+## Protected sanctuaries
 
 ```text
 app.js
@@ -128,6 +127,7 @@ Evidence derived-shadow role
 original six stores as product truth
 52 / 313 curriculum semantics
 Premium V5.10 field-approved UI/navigation
+Build27 App Shell route/action ownership
 Build37 Foundations ownership/routes
 Build38 deterministic core semantics
 Build38 learner-facing placements
@@ -137,6 +137,7 @@ Build39.1 arbitration semantics
 Build39.2 evidence-source reliability boundaries
 Build39.3 decision-pipeline composition contract
 Build39.4 runtime-snapshot read-only contract
+Build39.5 advisory-only Practice contract
 ```
 
 ---
@@ -171,11 +172,11 @@ Build38 is pedagogically complete. **38.11 is NOT AUTHORIZED.** Public release i
 
 ---
 
-# 4. Build 39 — Learner Intelligence 3 — OPEN
+# 4. Build 39 — Learner Intelligence 3 — CLOSED / CERTIFIED
 
-Goal: Tyffany chooses the most useful next action using **reliable observable evidence**, not decorative activity counts or invented mastery.
+Goal achieved: Tyffany can select the most useful next Practice action when **reliable observable evidence exists**, and can explicitly abstain rather than inventing a recommendation.
 
-Target action families:
+Target family vocabulary remains:
 
 ```text
 phrase-retrieval
@@ -185,6 +186,8 @@ listening
 scenario
 transfer-construction
 ```
+
+The milestone does **not** require all six families to fabricate availability. Three are currently supported by trustworthy product evidence; three remain deliberately unavailable.
 
 Permanent rule: **absence of reliable evidence means unavailable / abstain.**
 
@@ -198,12 +201,10 @@ FrenchTranquilleLearnerIntelligenceV3Core
 ```
 
 Properties:
-
 - deterministic ranking;
 - observed need + confidence + independent evidence required;
 - recognition-failure-only candidates rejected;
 - decorative activity totals ignored;
-- transfer/construction needs stronger independent support;
 - explicit abstention is valid.
 
 Accepted merge: `246338a9ef11eb430f59fc6ccf494688904cf883`.
@@ -228,9 +229,9 @@ scenario         ← scenario-miss / scenario-assisted observable Error events
 Deliberately unavailable:
 
 ```text
-concept-review      → no durable concept-understanding owner
-foundation-capsule  → Foundations remains ephemeral/no need evidence owner
-transfer-construction → Transfer remains ephemeral/no durable evidence owner
+concept-review         → no durable concept-understanding owner
+foundation-capsule     → Foundations remains ephemeral / no reliable need owner
+transfer-construction  → Transfer remains ephemeral / no durable evidence owner
 ```
 
 Accepted merge: `9af287417d1fbb502837bea4aa80886cca2ffb2e`.
@@ -244,8 +245,6 @@ src/pedagogy/learner-action-decision-pipeline.js
 FrenchTranquilleLearnerActionDecisionPipeline
 ```
 
-Certified composition:
-
 ```text
 caller snapshots
 → 39.2 adapter
@@ -253,17 +252,9 @@ caller snapshots
 → reliable selected action OR explicit abstention
 ```
 
-No storage reads/writes, no Evidence cutover and no learner-facing action execution.
-
 Accepted merge: `c809790453a40ae5e2da3a497e3b64b7a51e5d87`.
 
 ## 39.4 — read-only runtime snapshot collector — CLOSED / CERTIFIED
-
-Accepted merge:
-
-```text
-f662d96d55e385f3d6baa946bde8f22fd1d25f0e
-```
 
 Owner/API:
 
@@ -276,8 +267,6 @@ collect()
 decide()
 ```
 
-Runtime flow:
-
 ```text
 FrenchTranquilleMemory.summary()
 +
@@ -285,151 +274,106 @@ FrenchTranquilleErrors.summary()
         ↓
 narrow detached deeply-frozen snapshot
         ↓
-39.3 decision pipeline
+39.3 pipeline
         ↓
 reliable decision OR abstention
 ```
 
-Narrow copied data only:
+No decision at boot, direct collector storage access, durable write, Evidence cutover, or direct Listening/Scenario/Foundation/Transfer owner read.
+
+Accepted merge: `f662d96d55e385f3d6baa946bde8f22fd1d25f0e`.
+
+## 39.5 — advisory-only Practice recommendation — CLOSED / CERTIFIED
+
+Accepted merge:
 
 ```text
-Memory.entries[] → id / attempts
-Memory.due[]     → id
-Memory.fragile[] → id
-
-Errors.top[]     → item.id / score / dominant / entry.id / lastType / events(type,source)
-Errors.recent[]  → id / type / source / repeated
+3d3a6259b7b86ef7f7511832368c6d1eb549be44
 ```
 
-39.4 loads 39.1→39.4 in current runtime order and pre-caches the chain for PWA use, but:
+New owner/API:
 
-- no `decide()` at boot;
-- no direct storage access in collector;
-- no durable write;
-- no new schema/store/migration;
-- no direct Listening/Scenario/Foundation/Transfer owner reads;
-- no Evidence product read cutover;
-- no learner-facing route/action execution;
-- public metadata remains `v2.5.0 · Build 38`.
+```text
+src/pedagogy/learner-action-practice-advisory.js
+FrenchTranquilleLearnerActionPracticeAdvisory
+```
 
-Final exact-head PR matrix returned to **exactly the five inherited failures**, with dedicated 39.4, runtime metadata, Release v2.5, Build38.10, Build31/32 and 39.1/39.2/39.3 green. Build26.4 also passed unchanged on the final head.
+The field-approved Build27 Practice owner remains byte-identical and keeps all route/action ownership.
 
-The runtime-version metadata workflow exposed one historical successor-safety bug during #215: its old release guard globally forbade any future `sw.js` diff. The guard is now scoped to the historical release branch while all static `v2.5.0 · Build 38` assertions and the real Chrome Settings/version tribunal remain active.
+When the learner explicitly opens Practice:
+
+```text
+39.4 decide()
+→ phrase-retrieval → Réviser
+→ listening        → Écouter
+→ scenario         → Dans la vraie vie
+→ abstain/unsupported → no recommendation
+```
+
+39.5 only replaces the historical coarse `Conseillé maintenant` badge. It never auto-routes, auto-clicks, persists data, or falls back to `Parler` when LI3 abstains.
+
+Final exact-head dedicated run `32182481929` is SUCCESS across VI/DEBUG FR × desktop/iPhone. Final matrix drained to exactly the five inherited standing failures, with Runtime metadata, Build27, Build31/32, Build39.1→39.4, Release v2.5, Build38.10, Premium/PWA/navigation, Build26.1 and Build26.4 green.
+
+The initial 39.5 browser failure was a test-harness error only: the iframe used the HTML `hidden` attribute while asserting button geometry, forcing every rect to 0×0. The iframe was changed to remain layoutable off-screen; no product logic changed for that classification.
+
+## Build39 milestone closeout verdict
+
+No 39.6 learner-facing wiring is authorized.
+
+Audit of actual owners found:
+
+- Build27 Home already has a healthy hierarchy: primary current lesson, then Review/Listening quick actions;
+- Practice is the canonical learner surface for choosing **what to work on now**, and 39.5 already owns LI3 advice there;
+- adding LI3 advice to Home would duplicate Practice or require a new Scenario CTA and weaken the one-primary-action Home contract;
+- `src/pedagogy/daily-coach.js` is legacy relative to the Build27 Home and directly reads learner/Memory storage; rewriting it for LI3 would move architecture backwards;
+- the three unsupported families still lack trustworthy evidence owners, and creating durable evidence merely to make them appear available would violate the milestone’s reliability rule.
+
+Therefore Build39 closes with **reliable support where evidence exists + explicit abstention where it does not**.
 
 ---
 
-# 5. Build 39.5 — advisory-only Practice recommendation — AUDITED / NEXT IMPLEMENTATION SLICE
+# 5. Build 40 — A1 Consolidation Audit — NEXT / AUDIT-ONLY MILESTONE
 
-## Audit verdict
+Build40 is the next authorized milestone. Start with **analysis and documentation**, not learner-facing runtime mutation.
 
-The existing learner Practice overlay already has four stable actions and an existing **“Conseillé maintenant”** presentation slot:
+It must answer from real curriculum/runtime evidence:
 
-```text
-Parler
-Écouter
-Réviser
-Dans la vraie vie
-```
+1. Which A1 communication capabilities are actually taught across 52/313?
+2. Which capabilities have active construction/transfer proof versus phrase recognition/rehearsal only?
+3. Where do Listening and Scenario provide meaningful contextual reuse?
+4. Which Foundations concepts are taught/consolidated and which remain structurally weak or deferred (including F16)?
+5. Which gaps are content gaps, evidence gaps, or UX/intelligence gaps?
+6. Does the app need A1 consolidation, an internal A1+ phase, or is it defensible to open an A2 roadmap?
+7. What must remain untouched to preserve the learner’s historical data and released Build38 semantics?
 
-Current Build27 logic still chooses that badge with a coarse local heuristic:
+Build40 must not:
 
-```text
-review due > 0  → Réviser conseillé
-otherwise       → Parler conseillé
-```
+- invent CEFR certification;
+- infer mastery from mere exposure, knownItems or speech-recognition success;
+- create new learner data while auditing;
+- change curriculum IDs/order;
+- open A2 before the audit verdict is documented and reviewed.
 
-That heuristic predates LI3 and ignores the certified listening/scenario evidence now available through 39.1→39.4.
-
-The safest first learner-facing LI3 slice is therefore **advisory only**:
-
-```text
-user explicitly opens Pratiquer
-→ 39.4 decide()
-→ map supported action family to an EXISTING Practice action
-→ show at most one existing “Conseillé maintenant” badge
-→ user still chooses/clicks manually
-```
-
-Canonical mapping:
+Required audit sources include:
 
 ```text
-phrase-retrieval → review
-listening        → listening
-scenario         → real-life
-selected = null  → no LI3 recommendation badge
-unsupported family → no recommendation badge
+52 lesson curriculum content / 313 items
+Foundations registry + placements
+Build38 Transfer cores + placements
+Scenario 44/132
+Listening datasets/contrast families
+Learning Memory / Error Intelligence semantics
+Learner Intelligence 3 supported/unavailable evidence families
+current learner-facing Home/Practice/Progress surfaces
 ```
 
-There is deliberately **no mapping to Parler/conversation** yet because 39.2 exposes no reliable conversation/free-voice need family.
+Expected output: one durable Build40 audit document with a capability matrix, evidence-strength classification, concrete gaps, and a single recommended post-audit direction.
 
-## 39.5 mandatory boundaries
-
-- recommendation is computed only after the learner explicitly opens Practice; no decision at app boot;
-- no automatic navigation or action execution;
-- no replacement of the learner’s manual choice;
-- no new durable write/store/schema;
-- no Evidence read cutover;
-- no new concept/Foundation/Transfer evidence;
-- no recommendation from recognition-only failures;
-- no fallback “Parler” recommendation when LI3 abstains;
-- no Daily Coach rewrite in the same slice;
-- preserve existing Practice action labels, routes, accessibility and Premium geometry;
-- preserve all seven durable stores byte-identical across opening Practice and rendering the advisory;
-- preserve historical learner continuity;
-- public runtime metadata remains `v2.5.0 · Build 38`.
-
-## Required 39.5 tribunal
-
-Real browser, desktop + iPhone-size, VI + DEBUG FR as appropriate:
-
-```text
-retrieval evidence → only Réviser has “Conseillé maintenant”
-listening evidence → only Écouter has the badge
-scenario evidence → only Dans la vraie vie has the badge
-recognition-only evidence → no badge
-empty/unsupported evidence → no badge
-opening Practice does not navigate automatically
-manual click still reaches the same historical route
-7 durable stores unchanged
-7 completed / l8=4 / 40 known preserved
-no horizontal overflow / existing touch targets preserved
-```
-
-Implementation should remain one separately reviewed slice. Do **not** bundle Daily Coach/home recommendation changes into 39.5.
+**No A2 implementation is authorized before Build40 closes.**
 
 ---
 
-# 6. Later Build39 work — NOT YET AUTHORIZED
-
-After 39.5 is closed, audit separately before implementation:
-
-- whether Home/Daily Coach should consume LI3 advice;
-- whether any reliable evidence owner can support `concept-review`;
-- whether Foundations should ever gain a trustworthy need signal without creating fake mastery;
-- whether Transfer/construction evidence deserves a durable owner and what that would imply for Recovery/backup migrations;
-- whether a future conversation/free-voice need family is justified by observable evidence.
-
-Do not create persistence merely to make all six target families available.
-
----
-
-# 7. Build 40 — A1 Consolidation Audit — FUTURE GATE
-
-Build40 remains the milestone audit after Build39 is coherently closed.
-
-It must answer from real product evidence:
-
-- what A1 coverage is solid;
-- what is phrase recognition vs reusable construction;
-- where listening/scenario/retrieval weaknesses remain;
-- whether Foundations/Transfer need more work;
-- whether the product should consolidate A1, move to internal A1+, or open an A2 phase.
-
-**No A2 roadmap is authorized before Build40.**
-
----
-
-# 8. CI baseline
+# 6. CI baseline
 
 Known persistent inherited failures:
 
@@ -439,19 +383,20 @@ Known persistent inherited failures:
 4. `Build 36.3 Recovery v3 durability tribunal`
 5. `Build 28 Data recovery smoke`
 
-Build26.4 is a classified runner/harness flake, not standing debt. Build37.4 and Premium V5.9C also have documented historical Chrome/runner flake classifications after unchanged rerun success.
+Build26.4 is a classified runner/harness flake, not standing debt. Build37.4 and Premium V5.9C have documented historical Chrome/runner flake classifications after unchanged rerun success.
 
 Any other failure is **NEW until classified**.
 
 ---
 
-# 9. NEXT
+# 7. NEXT
 
 ```text
-finish Build39.4 docs/governance closeout
+finish docs/governance closeout of Build39.5 + Build39 milestone
 → verify main + 0 open PRs
-→ open Build39.5 as a separate advisory-only Practice recommendation slice
-→ dedicated exact-head tribunal
-→ no auto-route, no persistence, no invented evidence
-→ close 39.5 before considering Home/Daily Coach or new evidence families
+→ open Build40 as a separate audit-only slice
+→ inspect real curriculum / Foundations / Transfer / Scenario / Listening / LI3 evidence
+→ produce capability/evidence/gap matrix
+→ select ONE post-audit direction
+→ no A2 implementation before Build40 closes
 ```
