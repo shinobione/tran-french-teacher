@@ -1,0 +1,144 @@
+name: Build 41.3 Learner-facing recent-past transfer
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [build41/recent-past-learner-integration]
+
+permissions:
+  contents: read
+
+jobs:
+  recent-past-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax + certified predecessors + 41.3 contract
+        run: |
+          set -euo pipefail
+          node --check src/pedagogy/generalization-recent-past-renderer-adapter.js
+          node --check src/pedagogy/generalization-transfer-lesson.js
+          node --check src/core/build32-loader.js
+          node --check sw.js
+          node --check tests/unit/build41-2-recent-past-transfer.test.cjs
+          node --check tests/unit/build41-3-recent-past-adapter.test.cjs
+          node tests/unit/build41-2-recent-past-transfer.test.cjs
+          node tests/unit/build41-3-recent-past-adapter.test.cjs
+          node tools/test-build38-2-learner-integration.cjs
+          node tools/test-build38-5-futur-proche-integration.cjs
+          node tools/test-build38-7-nominal-plural-integration.cjs
+          node tools/test-build38-8-negation-integration.cjs
+          node tools/test-build38-10-spoken-on-integration.cjs
+          node tools/test-release-v2-5-build38.cjs
+
+      - name: 41.3 is additive and keeps 41.2 pure
+        run: |
+          set -euo pipefail
+          grep -Fq "const RECENT_PAST_LESSON=36;" src/pedagogy/generalization-transfer-lesson.js
+          grep -Fq "slice:'41.3'" src/pedagogy/generalization-transfer-lesson.js
+          grep -Fq "recentPastIntegration:hasRecentPastCore?'41.3':null" src/pedagogy/generalization-transfer-lesson.js
+          grep -Fq "const TRANSFER_RECENT_PAST='3.1.0-b41.2';" src/core/build32-loader.js
+          grep -Fq "const TRANSFER_RECENT_PAST_ADAPTER='3.1.0-b41.3';" src/core/build32-loader.js
+          grep -Fq 'generalization-recent-past-core.js?v=${TRANSFER_RECENT_PAST}' src/core/build32-loader.js
+          grep -Fq 'generalization-recent-past-renderer-adapter.js?v=${TRANSFER_RECENT_PAST_ADAPTER}' src/core/build32-loader.js
+          grep -Fq "const B412='3.1.0-b41.2';" sw.js
+          grep -Fq "const B413='3.1.0-b41.3';" sw.js
+          grep -Fq 'generalization-recent-past-core.js?v=${B412}' sw.js
+          grep -Fq 'generalization-recent-past-renderer-adapter.js?v=${B413}' sw.js
+          grep -Fq "version:'2.5.0'" src/core/build32-loader.js
+          grep -Fq "build:'38'" src/core/build32-loader.js
+          ! grep -q 'localStorage.setItem' src/pedagogy/generalization-recent-past-renderer-adapter.js
+          ! grep -q 'indexedDB' src/pedagogy/generalization-recent-past-renderer-adapter.js
+          ! grep -q 'masteryClaim:true' src/pedagogy/generalization-recent-past-renderer-adapter.js
+          ! grep -q 'localStorage.setItem' src/pedagogy/generalization-transfer-lesson.js
+          ! grep -q 'indexedDB' src/pedagogy/generalization-transfer-lesson.js
+          ! grep -q 'masteryClaim:true' src/pedagogy/generalization-transfer-lesson.js
+          git fetch origin main --quiet
+          git diff --exit-code origin/main...HEAD -- src/pedagogy/generalization-recent-past-core.js
+          changed="$(git diff --name-only origin/main...HEAD)"
+          for protected in \
+            app.js voice-ios.js free-voice.js assets/LOGO.png assets/Favicon.png \
+            src/pedagogy/curriculum-stage2.js \
+            src/pedagogy/curriculum-stage3.js \
+            src/pedagogy/curriculum-stage4.js \
+            src/pedagogy/foundations-capsules.js \
+            src/pedagogy/foundations-pilot.js \
+            src/pedagogy/generalization-transfer-core.js \
+            src/pedagogy/generalization-negation-core.js \
+            src/pedagogy/generalization-futur-proche-core.js \
+            src/pedagogy/generalization-number-core.js \
+            src/pedagogy/generalization-spoken-on-core.js \
+            src/pedagogy/learner-action-arbitration-core.js \
+            src/pedagogy/learner-evidence-adapter.js \
+            src/pedagogy/learner-action-decision-pipeline.js \
+            src/pedagogy/learner-action-runtime-snapshot.js \
+            src/pedagogy/learner-action-practice-advisory.js; do
+            if printf '%s\n' "$changed" | grep -Fxq "$protected"; then
+              echo "Build 41.3 must not modify protected owner: $protected" >&2
+              exit 1
+            fi
+          done
+
+      - name: Build 41.3 scope guard
+        if: github.event_name == 'pull_request' && github.head_ref == 'build41/recent-past-learner-integration'
+        run: |
+          set -euo pipefail
+          git fetch origin "${{ github.base_ref }}" --depth=1
+          changed="$(git diff --name-only "origin/${{ github.base_ref }}"...HEAD)"
+          printf '%s\n' "$changed"
+          allowed='^(src/pedagogy/generalization-recent-past-renderer-adapter\.js|src/pedagogy/generalization-transfer-lesson\.js|src/core/build32-loader\.js|sw\.js|tests/unit/build41-3-recent-past-adapter\.test\.cjs|tests/browser/build41-3-recent-past-integration\.html|\.github/workflows/build41-3-recent-past-integration\.yml|docs/BUILD-41\.3-RECENT-PAST-LEARNER-INTEGRATION\.md|PROJECT-STATE\.md)$'
+          unexpected="$(printf '%s\n' "$changed" | grep -Ev "$allowed" || true)"
+          if [ -n "$unexpected" ]; then
+            echo "Unexpected path(s) in Build41.3:"
+            printf '%s\n' "$unexpected"
+            exit 1
+          fi
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-b413-http.log 2>&1 &
+          echo $! >/tmp/ft-b413-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — 41.3 VI/FR desktop + iPhone parity
+        run: |
+          set -euo pipefail
+          for spec in 'vi 1280 900' 'fr 1280 900' 'vi 390 844' 'fr 390 844'; do
+            set -- $spec; locale="$1"; width="$2"; height="$3"; passed=0; file=''
+            for attempt in 1 2; do
+              profile="/tmp/ft-b413-${locale}-${width}-$attempt"
+              file="/tmp/b413-${locale}-${width}-$attempt.html"
+              rm -rf "$profile" "$file"
+              if timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
+                --user-data-dir="$profile" --window-size="$width,$height" --virtual-time-budget=12000 --dump-dom \
+                "http://127.0.0.1:4173/tests/browser/build41-3-recent-past-integration.html?debug=$locale" >"$file" \
+                && grep -q 'data-b413-done="1"' "$file" \
+                && grep -q "data-b413-locale=\"$locale\"" "$file" \
+                && grep -q 'data-b413-family="present-je-regular-action-to-recent-past-je-venir-de"' "$file" \
+                && grep -q 'data-b413-exercises="3"' "$file" \
+                && grep -q 'data-b413-lesson="36"' "$file" \
+                && grep -q 'data-b413-legacy-routes="1"' "$file" \
+                && grep -q 'data-b413-storage-unchanged="1"' "$file" \
+                && grep -q 'data-b413-no-overflow="1"' "$file" \
+                && ! grep -q 'data-b413-error=' "$file"; then passed=1; break; fi
+            done
+            if [ "$passed" -ne 1 ]; then
+              echo "41.3 tribunal failed for $locale ${width}x${height}" >&2
+              grep -o 'data-b413-[^ >]*="[^"]*"' "$file" >&2 || true
+              exit 1
+            fi
+          done
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-b413-server.pid ]; then kill "$(cat /tmp/ft-b413-server.pid)" || true; fi
