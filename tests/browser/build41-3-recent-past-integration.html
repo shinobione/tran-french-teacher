@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Build 41.3 recent-past learner integration tribunal</title>
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#07111e;color:#eef5ff;font-family:system-ui,-apple-system,sans-serif}button{font:inherit;color:inherit;background:#20314a;border:1px solid #5f7595;border-radius:12px;padding:8px 12px}.primary{background:#315d74}.secondary{background:#253852}.muted{color:#9fb0c5}.screen-lesson{width:min(760px,calc(100% - 24px));margin:20px auto}.topbar{padding:10px 2px}.topbar h1{font-size:1.25rem}.lesson-step{padding:18px;border:1px solid #23364d;border-radius:20px;background:#0d1928;display:grid;gap:12px}.lesson-step>p{margin:0}.lesson-step>[data-existing-continue]{min-height:48px;width:100%}
+  </style>
+  <script>
+    (()=>{
+      const debug=new URLSearchParams(location.search).get('debug')==='fr';
+      localStorage.clear();
+      localStorage.setItem('tran-french-teacher:debug-fr:v1',debug?'1':'0');
+      localStorage.setItem('b41.3:sentinel','unchanged');
+      window.__b413Debug=debug;
+      window.__b413StorageBefore=JSON.stringify(Object.keys(localStorage).sort().map(key=>[key,localStorage.getItem(key)]));
+    })();
+  </script>
+</head>
+<body>
+  <main id="app">
+    <section class="screen-lesson">
+      <div class="topbar"><h1>Bài 36 — Venir de — vừa mới làm</h1></div>
+      <div class="lesson-step">
+        <p data-existing-lesson>Existing lesson 36 content and venir de explanation</p>
+        <button type="button" class="primary" data-existing-continue>Continuer</button>
+      </div>
+    </section>
+  </main>
+  <script src="../../src/pedagogy/generalization-transfer-core.js?v=2.4.0-b38.2"></script>
+  <script src="../../src/pedagogy/generalization-negation-core.js?v=2.4.0-b38.8"></script>
+  <script src="../../src/pedagogy/generalization-futur-proche-core.js?v=2.4.0-b38.5"></script>
+  <script src="../../src/pedagogy/generalization-number-core.js?v=2.4.0-b38.7"></script>
+  <script src="../../src/pedagogy/generalization-spoken-on-core.js?v=2.4.0-b38.10"></script>
+  <script src="../../src/pedagogy/generalization-recent-past-core.js?v=3.1.0-b41.2"></script>
+  <script src="../../src/pedagogy/generalization-recent-past-renderer-adapter.js?v=3.1.0-b41.3"></script>
+  <script src="../../src/pedagogy/generalization-transfer-lesson.js?v=2.4.0-b38.10"></script>
+  <script>
+    (()=>{
+      const root=document.documentElement;
+      const fail=message=>{root.dataset.b413Error=message;throw new Error(message)};
+      const ok=(value,message)=>{if(!value)fail(message)};
+      const text=selector=>document.querySelector(selector)?.textContent?.trim()||'';
+      const texts=selector=>[...document.querySelectorAll(selector)].map(node=>node.textContent.trim());
+      const click=selector=>{const node=document.querySelector(selector);ok(node,`missing ${selector}`);node.click();return node};
+      const clickChoice=choice=>{const node=[...document.querySelectorAll('[data-transfer-choice]')].find(button=>button.textContent.trim()===choice);ok(node,`missing transfer choice ${choice}`);node.click();return node};
+      const expected=window.__b413Debug?{
+        title:'Passer du présent au passé récent',
+        entry:'3 phrases déjà connues au présent : garde « je » et la même action, puis reconstruis-les pour dire ce qui vient de se passer avec « venir de + infinitif ». Facultatif pour continuer la leçon.',
+        cta:'Essayer 3 phrases • ≈ 2 min',
+        eyebrow:'PASSÉ RÉCENT'
+      }:{
+        title:'Từ hiện tại sang “vừa mới”',
+        entry:'3 câu đã biết ở hiện tại: giữ cùng « je » và hành động, rồi xây lại để nói việc vừa mới xảy ra với « venir de + infinitif ». Không bắt buộc để tiếp tục bài.',
+        cta:'Thử 3 câu • khoảng 2 phút',
+        eyebrow:'VỪA MỚI'
+      };
+
+      try{
+        const pure=window.FrenchTranquilleRecentPastTransferCore;
+        const adapter=window.FrenchTranquilleRecentPastTransferAdapter;
+        const integration=window.FrenchTranquilleTransferLesson;
+        ok(pure?.roadmapSlice==='41.2','41.2 pure core missing');
+        ok(pure?.status==='pure-non-wired','41.2 pure core status changed');
+        ok(pure?.runtimeWiring===false,'41.2 pure core runtimeWiring changed');
+        ok(adapter?.slice==='41.3','41.3 compatibility adapter missing');
+        ok(adapter?.sourceSlice==='41.2','41.3 source slice mismatch');
+        ok(adapter?.status==='read-only-renderer-compatibility','41.3 adapter status mismatch');
+        ok(adapter?.durableWrite===false,'41.3 adapter durable write forbidden');
+        ok(adapter?.masteryClaim===false,'41.3 adapter mastery claim forbidden');
+
+        ok(integration?.slice==='38.2','historical shared renderer owner changed');
+        ok(integration?.integration==='38.5','38.5 integration marker changed');
+        ok(integration?.numberIntegration==='38.7','38.7 integration marker changed');
+        ok(integration?.negationIntegration==='38.8','38.8 integration marker changed');
+        ok(integration?.spokenOnIntegration==='38.10','38.10 integration marker changed');
+        ok(integration?.recentPastIntegration==='41.3','41.3 integration marker missing');
+        ok(integration?.recentPastLesson===36,'41.3 lesson owner mismatch');
+        ok(JSON.stringify(integration?.recentPastExerciseIndexes)===JSON.stringify([0,1,2]),'41.3 selection mismatch');
+        ok(integration?.persistent===false,'Transfer must remain ephemeral');
+        ok(integration?.masteryClaim===false,'Transfer must not claim mastery');
+
+        ok(document.querySelectorAll('[data-transfer-entry]').length===1,'lesson36 needs exactly one Transfer entry');
+        ok(document.querySelector('[data-transfer-entry]')?.dataset.transferFamily==='present-je-regular-action-to-recent-past-je-venir-de','wrong lesson36 Transfer family');
+        ok(document.querySelector('[data-transfer-entry]')?.dataset.transferLesson==='36','wrong lesson36 Transfer marker');
+        ok(text('.ft-transfer-entry h3')===expected.title,'recent-past entry title mismatch');
+        ok(text('.ft-transfer-entry p')===expected.entry,'recent-past entry copy mismatch');
+        ok(text('.ft-transfer-eyebrow').includes(expected.eyebrow),'recent-past eyebrow mismatch');
+        ok(text('[data-transfer-open]').startsWith(expected.cta),'recent-past CTA mismatch');
+        ok(document.querySelector('[data-transfer-open]').getBoundingClientRect().height>=44,'recent-past Transfer entry target below 44px');
+
+        click('[data-transfer-open]');
+        ok(document.querySelector('.ft-transfer-dialog')?.dataset.transferActiveFamily==='present-je-regular-action-to-recent-past-je-venir-de','recent-past dialog family missing');
+        ok(document.querySelector('.ft-transfer-dialog')?.dataset.transferActiveLesson==='36','recent-past dialog lesson marker missing');
+        ok(text('.ft-transfer-top h2')===expected.title,'recent-past dialog title mismatch');
+        click('[data-transfer-next]');
+
+        const sources=['Je travaille.','Je mange.','Je rentre à la maison.'];
+        const targets=['Je viens de travailler.','Je viens de manger.','Je viens de rentrer à la maison.'];
+        const expectedChoices=[
+          ['Je viens travailler.','Je viens de travaille.','Je viens de travailler.'],
+          ['Je viens de mange.','Je viens de manger.','Je viens manger.'],
+          ['Je viens de rentrer à la maison.','Je viens rentrer à la maison.','Je viens de rentre à la maison.']
+        ];
+        for(let index=0;index<targets.length;index+=1){
+          ok(text('.ft-transfer-source')===sources[index],`recent-past source ${index+1} mismatch`);
+          ok(JSON.stringify(texts('[data-transfer-choice]'))===JSON.stringify(expectedChoices[index]),`recent-past choices ${index+1} mismatch`);
+          ok([...document.querySelectorAll('[data-transfer-choice]')].every(button=>button.getBoundingClientRect().height>=44),`recent-past target ${index+1} below 44px`);
+          clickChoice(targets[index]);
+          const correct=[...document.querySelectorAll('[data-transfer-choice]')].find(button=>button.textContent.trim()===targets[index]);
+          ok(correct?.classList.contains('ok'),`recent-past ${index+1} correct marking missing`);
+          click('[data-transfer-next]');
+        }
+
+        ok(document.querySelector('.ft-transfer-done'),'recent-past completion missing');
+        ok(!/maîtris|thành thạo/i.test(text('.ft-transfer-done h3')),'recent-past completion must not claim mastery');
+        click('.ft-transfer-done [data-transfer-close]');
+        ok(!document.querySelector('.ft-transfer-overlay'),'recent-past overlay must close');
+        ok(document.activeElement?.matches('[data-transfer-open]'),'focus must return to recent-past Transfer CTA');
+        ok(document.querySelector('[data-existing-lesson]'),'lesson36 content must survive round trip');
+        click('[data-existing-continue]');
+        root.dataset.b413Continued='1';
+
+        const routeChecks=[
+          ['Bài 13 — Ôn tập địa điểm & hướng đi','singular-plural-regular-noun-phrases'],
+          ['Bài 33 — Il / elle ở hiện tại','subject-substitution-regular-er'],
+          ['Bài 34 — Nous — nói “chúng ta”','affirmation-negation-regular-er-je'],
+          ['Bài 35 — Futur proche — sắp làm gì','present-futur-proche-travailler-singular'],
+          ['Bài 52 — “On” trong tiếng Pháp nói','nous-on-spoken-equivalence']
+        ];
+        for(const [title,family] of routeChecks){
+          document.querySelector('.topbar h1').textContent=title;
+          integration.refresh();
+          ok(document.querySelectorAll('[data-transfer-entry]').length===1,`${title} must keep exactly one Transfer`);
+          ok(document.querySelector('[data-transfer-entry]')?.dataset.transferFamily===family,`${title} Transfer family changed`);
+        }
+
+        document.querySelector('.topbar h1').textContent='Bài 37 — Passé composé avec avoir';
+        integration.refresh();
+        ok(!document.querySelector('[data-transfer-entry]'),'lesson37 must remain without Transfer');
+
+        document.querySelector('.topbar h1').textContent='Bài 36 — Venir de — vừa mới làm';
+        integration.refresh();
+        ok(document.querySelector('[data-transfer-entry]')?.dataset.transferFamily==='present-je-regular-action-to-recent-past-je-venir-de','lesson36 route must restore after round trip');
+        ok(JSON.stringify(Object.keys(localStorage).sort().map(key=>[key,localStorage.getItem(key)]))===window.__b413StorageBefore,'localStorage changed during 41.3');
+        ok(document.documentElement.scrollWidth<=innerWidth+1,'horizontal overflow detected');
+
+        root.dataset.b413Done='1';
+        root.dataset.b413Locale=window.__b413Debug?'fr':'vi';
+        root.dataset.b413Family='present-je-regular-action-to-recent-past-je-venir-de';
+        root.dataset.b413Exercises='3';
+        root.dataset.b413Lesson='36';
+        root.dataset.b413LegacyRoutes='1';
+        root.dataset.b413StorageUnchanged='1';
+        root.dataset.b413NoOverflow='1';
+      }catch(error){
+        if(!root.dataset.b413Error)root.dataset.b413Error=error.message;
+        console.error(error);
+      }
+    })();
+  </script>
+</body>
+</html>
