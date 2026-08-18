@@ -5,21 +5,19 @@ Last reconciled: 2026-08-19
 ## Canonical accepted main
 
 - Repository: `shinobione/tran-french-teacher`
-- Accepted `main`: **`701cee6b7a0434fb2beb515a9030532dd78b3c46`**
-- Commit: `Docs: audit Build 41 recent-past learner placement`
-- Parent: `8d56b8d3b3bc727570d456ec43d90ed7f31c3b62` — Build41.2 closeout checkpoint.
-- PR **#221 — MERGED** — Build41.2 pure recent-past core.
-- PR **#222 — MERGED** — Build41.2 closeout docs.
-- PR **#223 — MERGED** — learner-placement audit authorizing Build41.3.
-- `main` was re-read at exact SHA `701cee6b...`; GitHub commit is verified / valid.
-- **0 open PRs** existed immediately before Build41.3 materialization.
+- Accepted `main`: **`39ea5fe5d51b272fcdcbfb3a8c66dfdea2b03d42`**
+- Commit: `Build 41.3: learner-facing recent-past transfer`
+- Parent: `701cee6b7a0434fb2beb515a9030532dd78b3c46` — learner-placement audit checkpoint.
+- PR **#224 — MERGED** from exact head `bf91b6fb6325c86cf1728b8c0c4c08f68f6f6fdd` with expected-head protection.
+- `main` was re-read after merge and points exactly to `39ea5fe5...`; GitHub commit is verified / valid.
 - Public runtime metadata remains **v2.5.0 · Build 38**.
 - Pedagogy baseline remains **v2.3.0 · Build 34**.
+- Pages deployment for this merge SHA was **not independently verified in the connector session**; do not equate merge with deployment proof.
 
 ## Accepted product state
 
 ```text
-Public runtime          v2.5.0 · Build 38
+Public runtime metadata v2.5.0 · Build 38
 Pedagogy baseline       v2.3.0 · Build 34
 Curriculum              52 lessons / 313 items
 Scenario                44 situations / 132 turns
@@ -48,13 +46,15 @@ No future work may reset, renumber or reinterpret this state.
 Build38  CLOSED / RELEASED
 Build39  CLOSED / CERTIFIED
 Build40  CLOSED — A1 Productive Consolidation selected
-Build41  OPEN
+Build41  OPEN — closure audit pending
 Build41.1 CLOSED / AUDITED — recent-past family selected
 Build41.2 CLOSED / CERTIFIED — pure recent-past transfer core
 Build41 learner-placement audit COMPLETE
-Build41.3 CANDIDATE / NOT MERGED — PR #224
+Build41.3 CLOSED / MERGED / CI-CERTIFIED
 A2       NOT AUTHORIZED
 ```
+
+No Build41.4 or second productive family is authorized merely because Build41.3 closed.
 
 ## Build41.2 — immutable certified source
 
@@ -82,26 +82,17 @@ durableWrite = false
 runtimeWiring = false
 ```
 
-The Build41.2 core must remain byte-identical in Build41.3.
+Build41.3 preserved this core unchanged and consumes it only through a narrow read-only renderer adapter.
 
-## Build41.3 — active candidate
+## Build41.3 — accepted learner-facing integration
 
-PR:
-
-```text
-#224 — Build 41.3 · learner-facing recent-past transfer
-branch: build41/recent-past-learner-integration
-base:   701cee6b7a0434fb2beb515a9030532dd78b3c46
-state:  OPEN / CANDIDATE / NOT MERGED
-```
-
-Canonical implementation document:
+Canonical document:
 
 ```text
 docs/BUILD-41.3-RECENT-PAST-LEARNER-INTEGRATION.md
 ```
 
-Architecture:
+Accepted chain:
 
 ```text
 Build41.2 pure core unchanged
@@ -113,7 +104,7 @@ existing shared Build38 Transfer renderer
 lesson 36 optional three-item Transfer entry
 ```
 
-New adapter owner:
+Adapter owner:
 
 ```text
 src/pedagogy/generalization-recent-past-renderer-adapter.js
@@ -129,16 +120,16 @@ lesson 36 normal teaching
 → return to lesson
 ```
 
-Runtime delivery:
+Exact three exercises only:
 
-- Build32 loader loads Build41.2 core then Build41.3 adapter before the historical shared Transfer renderer;
-- SW pre-caches core + adapter for offline/PWA;
-- the historical shared renderer keeps its Build38 identity/version token;
-- public runtime metadata remains `v2.5.0 · Build 38`.
+```text
+Je travaille.          → Je viens de travailler.
+Je mange.              → Je viens de manger.
+Je rentre à la maison. → Je viens de rentrer à la maison.
+```
 
-Hard boundaries:
+Hard boundaries remain:
 
-- exact three certified Build41.2 exercises only;
 - no fourth `Je regarde un film` pair;
 - no generic recent-past or passé composé generator;
 - no subject expansion beyond `je`;
@@ -147,17 +138,41 @@ Hard boundaries:
 - no Evidence write;
 - no Foundation/Transfer mastery claim;
 - no `app.js`, voice, Premium or branding change;
+- all historical Build38 Transfer routes remain protected;
 - A2 remains blocked.
 
-Dedicated candidate tribunal:
+## Build41.3 exact-head CI evidence
+
+Candidate head:
+
+```text
+bf91b6fb6325c86cf1728b8c0c4c08f68f6f6fdd
+```
+
+Dedicated gate:
 
 ```text
 Build 41.3 Learner-facing recent-past transfer
+run 32198077009  SUCCESS
+job 95906031546 SUCCESS
 ```
 
-It is designed to verify Build41.2 purity, adapter determinism, all historical Build38 Transfer routes, VI/DEBUG FR, desktop + 390×844, three real answer clicks, focus return, storage byte-identity, offline delivery and no horizontal overflow.
+Dedicated job passed:
 
-A local replay from this ChatGPT environment could not be executed because the local container has no DNS/network route to GitHub. No local PASS is claimed. PR Actions is the executable candidate gate.
+- syntax + predecessor contracts;
+- 41.3 adapter unit tribunal;
+- 41.2 purity / byte-identity guard;
+- scope guard;
+- Chrome VI desktop;
+- Chrome DEBUG FR desktop;
+- Chrome VI 390×844;
+- Chrome DEBUG FR 390×844;
+- three real answer interactions;
+- storage unchanged;
+- focus return;
+- no horizontal overflow.
+
+The exact-head full matrix returned to the known inherited five-red baseline with **no new red**.
 
 ## CI baseline
 
@@ -171,16 +186,26 @@ Known persistent inherited failures:
 
 Build26.4 remains a classified runner/harness flake, not standing debt. Any other failure is NEW until classified.
 
+## Deployment state
+
+Build41.3 is **merged and CI-certified**.
+
+The current connector could not independently list the push-triggered Pages run for merge SHA `39ea5fe5...`. Therefore this checkpoint intentionally does **not** claim a Pages run ID or physical-device PASS for Build41.3.
+
 ## NEXT
 
-Per `AGENTS.md`, stop at the candidate boundary:
+No implementation slice is currently authorized.
 
 ```text
-review PR #224 exact-head CI
-→ classify every new red
-→ merge only if Build41.3 dedicated tribunal is green and matrix returns to inherited baseline
-→ verify main / Pages
-→ closeout Build41.3
+verify Pages/deployment for 39ea5fe5... when independently retrievable
+→ audit Build41 as a milestone after its first complete productive-consolidation family
+→ decide from evidence whether Build41 can close or whether another narrow productive family is justified
+→ only then authorize a named next slice
 ```
 
-Do not start Build41.4, a second productive family or A2 before that boundary is closed.
+Until that audit is complete:
+
+- do not invent Build41.4;
+- do not start a second productive family;
+- do not start A2;
+- do not add a durable Transfer mastery store merely to make consolidation look more measurable.
