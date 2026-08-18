@@ -197,7 +197,8 @@
       async function runCase(mode) {
         seed(mode);
         const frame = document.createElement('iframe');
-        frame.hidden = true;
+        frame.setAttribute('aria-hidden', 'true');
+        frame.style.cssText = 'position:fixed;left:-200vw;top:0;width:100vw;height:100vh;border:0;pointer-events:none;';
         frame.src = `../../?b395Practice=1&case=${encodeURIComponent(mode)}${locale === 'fr' ? '&debug=fr' : ''}`;
         document.body.appendChild(frame);
 
@@ -253,6 +254,15 @@
         if (JSON.stringify(before) !== JSON.stringify(afterAdvice)) throw new Error(`${mode}:store-mutated-by-advice`);
         if (!continuity()) throw new Error(`${mode}:historical-continuity-after-advice`);
 
+        const actions = [...page.querySelectorAll('.b27-practice-action')];
+        const geometry = actions.length === 4 && actions.every(button => {
+          const rect = button.getBoundingClientRect();
+          return rect.width > 0 && rect.height >= 44;
+        });
+        if (!geometry) throw new Error(`${mode}:practice-geometry`);
+        const noOverflow = doc.documentElement.scrollWidth <= doc.documentElement.clientWidth + 1;
+        if (!noOverflow) throw new Error(`${mode}:horizontal-overflow`);
+
         let manualRoute = true;
         if (mode === 'retrieval') {
           const button = page.querySelector('[data-b27-practice-action="review"]');
@@ -263,15 +273,6 @@
 
         const afterManual = storeBytes();
         if (mode !== 'retrieval' && JSON.stringify(before) !== JSON.stringify(afterManual)) throw new Error(`${mode}:store-mutated-without-action`);
-
-        const actions = [...doc.querySelectorAll('.b27-practice-action')];
-        const geometry = actions.length === 4 && actions.every(button => {
-          const rect = button.getBoundingClientRect();
-          return rect.width > 0 && rect.height >= 44;
-        });
-        if (page.isConnected && !geometry) throw new Error(`${mode}:practice-geometry`);
-        const noOverflow = doc.documentElement.scrollWidth <= doc.documentElement.clientWidth + 1;
-        if (!noOverflow) throw new Error(`${mode}:horizontal-overflow`);
 
         frame.remove();
         return { mode, expected, manualRoute };
