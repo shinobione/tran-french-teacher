@@ -1,6 +1,5 @@
 (() => {
   'use strict';
-
   const VERSION = '2.2.0-b32';
   const FOUNDATIONS = '2.4.0-b37.3';
   const TRANSFER='2.4.0-b38.2';
@@ -9,6 +8,10 @@
   const TRANSFER_NUMBER='2.4.0-b38.7';
   const TRANSFER_SPOKEN_ON='2.4.0-b38.10';
   const TRANSFER_LESSON='2.4.0-b38.10';
+  const LEARNER_ACTION_CORE='3.0.0-b39.1';
+  const LEARNER_EVIDENCE_ADAPTER='3.0.0-b39.2';
+  const LEARNER_ACTION_PIPELINE='3.0.0-b39.3';
+  const LEARNER_ACTION_RUNTIME_SNAPSHOT='3.0.0-b39.4';
   const RUNTIME_META = Object.freeze({
     version:'2.5.0',
     build:'38',
@@ -100,6 +103,10 @@
       await loadScript(`./src/pedagogy/generalization-number-core.js?v=${TRANSFER_NUMBER}`, 'generalizationNumberCore');
       await loadScript(`./src/pedagogy/generalization-spoken-on-core.js?v=${TRANSFER_SPOKEN_ON}`, 'generalizationSpokenOnCore');
       await loadScript(`./src/pedagogy/generalization-transfer-lesson.js?v=${TRANSFER_LESSON}`, 'generalizationTransferLesson');
+      await loadScript(`./src/pedagogy/learner-action-arbitration-core.js?v=${LEARNER_ACTION_CORE}`, 'build391LearnerActionCore');
+      await loadScript(`./src/pedagogy/learner-evidence-adapter.js?v=${LEARNER_EVIDENCE_ADAPTER}`, 'build392EvidenceAdapter');
+      await loadScript(`./src/pedagogy/learner-action-decision-pipeline.js?v=${LEARNER_ACTION_PIPELINE}`, 'build393DecisionPipeline');
+      await loadScript(`./src/pedagogy/learner-action-runtime-snapshot.js?v=${LEARNER_ACTION_RUNTIME_SNAPSHOT}`, 'build394RuntimeSnapshot');
       installRuntimeMeta();
       window.FrenchTranquilleBuild27Shell?.refresh?.();
       window.FrenchTranquilleBuild32Shell?.refresh?.();
