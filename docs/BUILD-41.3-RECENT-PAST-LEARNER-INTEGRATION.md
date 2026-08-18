@@ -1,16 +1,20 @@
 # Build 41.3 — Learner-facing recent-past transfer
 
-Status: **CANDIDATE / NOT MERGED**
+Status: **CLOSED / MERGED / CI-CERTIFIED**
 
-Base: `701cee6b7a0434fb2beb515a9030532dd78b3c46`
+Accepted PR: **#224 — Build 41.3 · learner-facing recent-past transfer**
+
+```text
+base accepted before merge  701cee6b7a0434fb2beb515a9030532dd78b3c46
+candidate head              bf91b6fb6325c86cf1728b8c0c4c08f68f6f6fdd
+merge commit                39ea5fe5d51b272fcdcbfb3a8c66dfdea2b03d42
+```
 
 Build41.3 implements the learner placement authorized by `docs/BUILD-41-RECENT-PAST-PLACEMENT-AUDIT.md`.
 
 ## Pedagogical placement
 
 The activity exists **only in lesson 36**, after the normal lesson has taught `venir de + infinitif` and before lesson 37 begins starter passé composé.
-
-Flow:
 
 ```text
 lesson 36 normal content
@@ -31,7 +35,7 @@ The fourth audit anchor `Je regarde un film. → Je viens de regarder un film.` 
 
 ## Architecture
 
-Build41.2 remains the certified source of truth and is not modified.
+Build41.2 remains the certified source of truth and was not modified by Build41.3.
 
 ```text
 Build41.2 pure core
@@ -43,21 +47,16 @@ existing shared Build38 Transfer renderer
 lesson 36 optional activity
 ```
 
-New presentation adapter:
+Presentation adapter:
 
 ```text
 src/pedagogy/generalization-recent-past-renderer-adapter.js
 FrenchTranquilleRecentPastTransferAdapter
 ```
 
-The adapter provides only the historical renderer shape (`family`, `catalog`, localized `view()`, boolean `verify()`). Correctness delegates to `FrenchTranquilleRecentPastTransferCore.verify()`.
+The adapter supplies only the historical renderer shape (`family`, `catalog`, localized `view()`, boolean `verify()`). Correctness delegates to `FrenchTranquilleRecentPastTransferCore.verify()`.
 
-Distractors test only the already-taught structure:
-
-- missing `de`;
-- finite verb after `de` instead of the infinitive.
-
-No passé composé distractor is introduced.
+Distractors test only the already-taught `venir de + infinitif` structure: missing `de`, or a finite verb after `de` instead of the infinitive. No passé composé distractor was introduced.
 
 ## Runtime delivery
 
@@ -69,19 +68,20 @@ Build41.2 recent-past pure core
 → existing shared generalization-transfer-lesson.js
 ```
 
-The historical shared renderer keeps its existing Build38 cache/version identity so predecessor tribunals remain successor-safe.
+`sw.js` pre-caches the Build41.2 core and Build41.3 adapter for offline/PWA delivery.
 
-`sw.js` pre-caches the Build41.2 core and Build41.3 adapter for offline delivery. Public runtime metadata remains intentionally:
+The historical shared renderer keeps its Build38 identity/version token so predecessor tribunals stay successor-safe.
+
+Public metadata intentionally remains:
 
 ```text
-v2.5.0 · Build 38
+runtime            v2.5.0 · Build 38
+pedagogy baseline  v2.3.0 · Build 34
 ```
 
-Pedagogy baseline remains `v2.3.0 · Build 34`.
+## Hard boundaries preserved
 
-## Hard boundaries
-
-Build41.3 does not:
+Build41.3 did not:
 
 - modify the Build41.2 pure core;
 - add generic recent-past conjugation;
@@ -94,26 +94,55 @@ Build41.3 does not:
 - write Evidence;
 - claim Foundation/Transfer mastery;
 - modify `app.js`, `voice-ios.js`, `free-voice.js`, branding, Premium or Recovery owners;
-- open A2.
+- authorize A2.
 
-## Dedicated tribunal
+## Exact-head certification
 
-`Build 41.3 Learner-facing recent-past transfer` verifies:
+Candidate exact head:
 
-- Build41.2 unit/purity predecessor;
-- Build41.3 adapter contract;
-- Build38 learner-facing routes 13 / 33 / 34 / 35 / 52;
-- release v2.5 Build38 predecessor;
-- exact three recent-past exercises;
-- lesson36-only placement;
-- real click-through of all three answers;
-- VI + DEBUG FR;
-- desktop + 390×844 parity;
-- minimum 44 px controls;
-- focus return after closing;
-- no localStorage mutation;
-- no horizontal overflow;
-- public runtime metadata unchanged;
-- Build41.2 core byte-identical to `main`.
+```text
+bf91b6fb6325c86cf1728b8c0c4c08f68f6f6fdd
+```
 
-CI review and merge are a separate session boundary under `AGENTS.md`.
+Dedicated workflow:
+
+```text
+Build 41.3 Learner-facing recent-past transfer
+run 32198077009  SUCCESS
+job 95906031546 SUCCESS
+```
+
+The job passed all dedicated steps, including:
+
+- syntax + certified predecessor contracts;
+- Build41.3 adapter unit tribunal;
+- Build41.2 purity / byte-identity guard;
+- Build38 historical learner-facing route contracts;
+- Build41.3 scope guard;
+- real Chrome VI + DEBUG FR desktop;
+- real Chrome VI + DEBUG FR at 390×844;
+- three real answer clicks;
+- minimum target geometry;
+- focus return;
+- unchanged localStorage sentinel;
+- no horizontal overflow.
+
+The exact-head full matrix returned to the inherited five-red baseline and introduced no new failure.
+
+## Merge verification
+
+PR #224 was squash-merged with expected-head protection.
+
+`main` was re-read after merge and pointed exactly to:
+
+```text
+39ea5fe5d51b272fcdcbfb3a8c66dfdea2b03d42
+```
+
+The GitHub commit is verified/valid and has parent `701cee6b7a0434fb2beb515a9030532dd78b3c46`.
+
+## Deployment distinction
+
+This closeout certifies **merged + exact-head CI green for the new slice**. The connector session did not expose a reliable push-triggered Pages run listing for the merge SHA, so no separate Pages-green run ID is claimed here.
+
+A future control session may record deployment proof when it is independently retrievable. Do not reinterpret the merge itself as deployment evidence.
