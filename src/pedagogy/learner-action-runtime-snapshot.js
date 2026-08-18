@@ -120,7 +120,8 @@
   function status() {
     const memoryReady = typeof memoryOwner()?.summary === 'function';
     const errorsReady = typeof errorOwner()?.summary === 'function';
-    const pipelineReady = typeof decisionPipeline()?.decide === 'function';
+    const pipeline = decisionPipeline();
+    const pipelineReady = pipeline?.ready === true && typeof pipeline?.decide === 'function';
     return Object.freeze({
       roadmapSlice: ROADMAP_SLICE,
       version: API_VERSION,
