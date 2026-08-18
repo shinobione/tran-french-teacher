@@ -5,14 +5,13 @@ Last reconciled: 2026-08-18
 ## Canonical accepted main
 
 - Repository: `shinobione/tran-french-teacher`
-- Accepted `main`: **`b3b7a14bb080ecfc0228d7edd24ab97d261eaa0f`**
-- Commit: `Docs: close Build 39.1`
-- PR **#209 — merged** from exact head `ebaaa6b51ca5063f7897e09222969aa96d1a89b8`.
-- #209 final PR matrix completed with **exactly the five inherited failures** and no new failure/pending run.
-- Public runtime release: **v2.5.0 · Build 38 — ACCEPTED / DEPLOYED**
-- Pedagogy baseline: **v2.3.0 · Build 34**
+- Accepted `main`: **`9af287417d1fbb502837bea4aa80886cca2ffb2e`**
+- Commit: `Build 39.2: learner evidence adapter`
+- PR **#210 — merged** from exact head `6fe014358fcdf39f262de5928e2705efbb964cd9` with expected-head squash protection.
+- Public runtime release remains **v2.5.0 · Build 38 — ACCEPTED / DEPLOYED**.
+- Pedagogy baseline remains **v2.3.0 · Build 34**.
 - Latest exact release deployment proof remains **GitHub Pages #272 / run `32072053127` — SUCCESS** on release SHA `2abe20511d6265d12643276f18041812fec3e715`, with `github-pages` deployment `5951805479 — SUCCESS` on that same release SHA.
-- The #209 merge is documentation/governance only; it does not change learner runtime semantics or public version metadata.
+- Build39.2 is a **pure, non-wired adapter slice**. It does not change public runtime metadata, learner-facing UI/routes, service worker, curriculum semantics, voice, Recovery, Premium, PWA identity/cache, durable learner state or Evidence ownership.
 
 ## Accepted product state
 
@@ -73,24 +72,23 @@ export = FrenchTranquilleLearnerIntelligenceV3Core
 
 39.1 is pure and non-wired. It requires observed need, confidence and independent evidence; Transfer requires two independent evidence items. Recognition-failure-only candidates are ineligible. Decorative activity totals are ignored. The core can explicitly abstain with `insufficient-reliable-evidence`.
 
-Detailed 39.1 contract and predecessor naming-collision closeout remain in:
+Detailed contract:
 
 ```text
 docs/BUILD-39.1-LEARNER-ACTION-ARBITRATION.md
-MASTER-ROADMAP.md
 ```
 
-## Active slice — Build 39.2 Learner Evidence Adapter
+## Build 39.2 — Learner Evidence Adapter — CLOSED / CERTIFIED
 
-- Branch: **`build39/evidence-adapter`**
-- Base: exact accepted main **`b3b7a14bb080ecfc0228d7edd24ab97d261eaa0f`**
-- PR: **#210 — `Build 39.2 · learner evidence adapter` — OPEN**
-- State: **CANDIDATE / PURE ADAPTER / NOT WIRED / NOT MERGED**
-- Runtime UI wiring: **none**
-- Durable writes: **none**
-- Evidence v2 read-path cutover: **none**
+- PR **#210 — merged**
+- base **`b3b7a14bb080ecfc0228d7edd24ab97d261eaa0f`**
+- final candidate head **`6fe014358fcdf39f262de5928e2705efbb964cd9`**
+- squash merge / accepted main **`9af287417d1fbb502837bea4aa80886cca2ffb2e`**
+- dedicated workflow **`Build 39.2 Learner evidence adapter`**
+- dedicated final-head run **`32173436063` — SUCCESS**
+- state: **PURE ADAPTER / NON-WIRED / MERGED / CERTIFIED**
 
-39.2 owner:
+Certified owner:
 
 ```text
 src/pedagogy/learner-evidence-adapter.js
@@ -99,7 +97,7 @@ export = FrenchTranquilleActionEvidenceAdapter
 
 ### 39.2 source audit verdict
 
-Reliable current sources accepted for this first adapter:
+Reliable current sources accepted for the first adapter:
 
 ```text
 Learning Memory
@@ -147,15 +145,25 @@ Canonical documentation:
 docs/BUILD-39.2-LEARNER-EVIDENCE-ADAPTER.md
 ```
 
-Candidate paths:
+### 39.2 final CI classification
+
+On exact head `6fe014358fcdf39f262de5928e2705efbb964cd9`:
 
 ```text
-src/pedagogy/learner-evidence-adapter.js
-tests/unit/build39-2-evidence-adapter.test.cjs
-.github/workflows/build39-2-evidence-adapter.yml
-docs/BUILD-39.2-LEARNER-EVIDENCE-ADAPTER.md
-PROJECT-STATE.md
+Build 39.2 Learner evidence adapter             32173436063  SUCCESS
+Build 39.1 Learner action arbitration core      32173436052  SUCCESS
+Release v2.5.0 Build 38 certification           32173436096  SUCCESS
+Runtime version metadata                        32173436150  SUCCESS
+Build 38.10 Learner-facing spoken on transfer   32173436066  SUCCESS
+Build 32 Practical A1 Expansion                  32173436040  SUCCESS
+Build 31 Learner Intelligence compatibility     32173436101  SUCCESS
 ```
+
+`Build 37.4 Foundations F11 negation` run **`32173436307`** initially failed only in the Chrome VI desktop parity step after its syntax/contracts, ownership guards, real-app owner check and predecessor parity had already passed. The same workflow was SUCCESS on the immediately preceding certified #209 head (`32171636777`). The failed job was rerun **unchanged**; rerun job **`95831058266`** finished **SUCCESS**, including `Chrome — F11 VI/FR desktop + iPhone parity`.
+
+Classification: **runner/Chrome flake, no Build39.2 product regression, no product/workflow mutation required**.
+
+After that unchanged rerun, the matrix returned to exactly the five inherited failures below and no additional failure/pending/in-progress run.
 
 ## Historical learner continuity — LOCKED
 
@@ -177,7 +185,7 @@ Known persistent inherited failure baseline:
 4. `Build 36.3 Recovery v3 durability tribunal`
 5. `Build 28 Data recovery smoke`
 
-Build26.4 is a classified runner/harness flake, not standing debt. Any other failure is **NEW until classified**. Suspected flakes must be rerun unchanged before product mutation.
+Build26.4 is a classified runner/harness flake, not standing debt. The Build37.4 #210 event above is also classified as a runner/Chrome flake after unchanged rerun success. Any other failure is **NEW until classified**. Suspected flakes must be rerun unchanged before product mutation.
 
 ## Protected boundaries
 
@@ -202,22 +210,39 @@ Build 38 learner-facing placements
 shared Transfer renderer ownership
 Learner Intelligence V1/V2 historical compatibility
 Build 39.1 deterministic arbitration semantics
+Build 39.2 evidence-source reliability boundaries
 ```
+
+## Active control slice — Build 39.2 closeout
+
+- Branch: **`docs/build39-2-closeout`**
+- Base: exact accepted main **`9af287417d1fbb502837bea4aa80886cca2ffb2e`**
+- Scope: **`PROJECT-STATE.md` only**
+- Runtime/product change: **none**
+- Goal: make the durable handoff reflect accepted Build39.2 before any 39.3 implementation begins.
 
 ## NEXT
 
-Fresh control step for **PR #210 only**:
+Fresh control step for the Build39.2 docs closeout only:
 
 ```text
-re-read #210 exact head and changed filenames
-→ confirm scope remains the five 39.2 candidate paths only
-→ require Build 39.2 Learner evidence adapter on that exact head
-→ require Build39.1 + v2.5.0 / Build38 predecessor contracts to remain green
-→ classify the full matrix against the five inherited failures
-→ rerun only proven flakes unchanged if needed
-→ if no new regression, merge #210 with expected-head protection
-→ verify main equals the merge SHA
-→ only then decide the next separate Build39 slice
+open/re-read the docs-only closeout PR
+→ confirm PROJECT-STATE.md is the only changed path
+→ classify CI against the five inherited failures
+→ if no new regression, merge with expected-head protection
+→ verify main equals the closeout merge SHA
+→ then perform a separate Build39.3 audit before choosing any new implementation
 ```
 
-Do **not** wire 39.2 into learner-facing UI and do **not** create a durable Evidence read path inside this slice.
+### 39.3 audit boundary — NOT YET IMPLEMENTED
+
+The next product slice must first decide what reliable evidence gap to close next. Audit candidates include:
+
+```text
+concept-review evidence
+Foundation-capsule eligibility evidence
+transfer/construction evidence
+runtime composition of 39.2 adapter + 39.1 arbitration
+```
+
+Do **not** create durable concept/mastery evidence merely to make all six action families available. Do **not** cut over Evidence v2 as product truth. Do **not** wire learner-facing UI until a later explicit slice proves the composition and safety contract.
