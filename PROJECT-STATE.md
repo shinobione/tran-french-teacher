@@ -5,14 +5,16 @@ Last reconciled: 2026-08-19
 ## Canonical accepted main
 
 - Repository: `shinobione/tran-french-teacher`
-- Accepted `main`: **`39ea5fe5d51b272fcdcbfb3a8c66dfdea2b03d42`**
-- Commit: `Build 41.3: learner-facing recent-past transfer`
-- Parent: `701cee6b7a0434fb2beb515a9030532dd78b3c46` — learner-placement audit checkpoint.
-- PR **#224 — MERGED** from exact head `bf91b6fb6325c86cf1728b8c0c4c08f68f6f6fdd` with expected-head protection.
-- `main` was re-read after merge and points exactly to `39ea5fe5...`; GitHub commit is verified / valid.
+- Accepted `main`: **`5f90f492703dce507e19228cb3828e2eb890d90c`**
+- Commit: `Docs: close Build 41.3`
+- Parent: `39ea5fe5d51b272fcdcbfb3a8c66dfdea2b03d42` — accepted Build41.3 learner-facing runtime/product merge.
+- PR **#224 — MERGED** — Build41.3 product integration.
+- PR **#225 — MERGED** — Build41.3 documentation closeout.
+- `main` was re-read at exact SHA `5f90f492...`; GitHub commit is verified / valid.
+- **0 open PRs** existed immediately before the Build41 milestone-closure audit branch was created.
 - Public runtime metadata remains **v2.5.0 · Build 38**.
 - Pedagogy baseline remains **v2.3.0 · Build 34**.
-- Pages deployment for this merge SHA was **not independently verified in the connector session**; do not equate merge with deployment proof.
+- Pages deployment for Build41.3 was not independently verified in the prior connector session; do not equate merge with deployment proof.
 
 ## Accepted product state
 
@@ -46,7 +48,7 @@ No future work may reset, renumber or reinterpret this state.
 Build38  CLOSED / RELEASED
 Build39  CLOSED / CERTIFIED
 Build40  CLOSED — A1 Productive Consolidation selected
-Build41  OPEN — closure audit pending
+Build41  OPEN — closure audit candidate PR #226
 Build41.1 CLOSED / AUDITED — recent-past family selected
 Build41.2 CLOSED / CERTIFIED — pure recent-past transfer core
 Build41 learner-placement audit COMPLETE
@@ -54,73 +56,50 @@ Build41.3 CLOSED / MERGED / CI-CERTIFIED
 A2       NOT AUTHORIZED
 ```
 
-No Build41.4 or second productive family is authorized merely because Build41.3 closed.
-
-## Build41.2 — immutable certified source
-
-Owner:
+## Active candidate
 
 ```text
-src/pedagogy/generalization-recent-past-core.js
-FrenchTranquilleRecentPastTransferCore
+PR      #226 — Docs · audit Build 41 milestone closure
+branch  docs/build41-milestone-closure-audit
+base    5f90f492703dce507e19228cb3828e2eb890d90c
+state   OPEN / CANDIDATE / NOT MERGED
+scope   docs only
 ```
 
-Certified catalog exactly:
+Canonical candidate document:
 
 ```text
-Je travaille.          → Je viens de travailler.
-Je mange.              → Je viens de manger.
-Je rentre à la maison. → Je viens de rentrer à la maison.
+docs/BUILD-41-MILESTONE-CLOSURE-AUDIT.md
 ```
 
-Contract remains:
+Proposed decision:
 
 ```text
-status = pure-non-wired
-masteryClaim = false
-durableWrite = false
-runtimeWiring = false
+Build41 → CLOSE / SUCCESSFUL NARROW CONSOLIDATION
+A2      → REMAINS NOT AUTHORIZED
+NEXT    → Build42.1 F16 à/de contractions source + learner-placement audit
 ```
 
-Build41.3 preserved this core unchanged and consumes it only through a narrow read-only renderer adapter.
+## Build41 result under closure audit
 
-## Build41.3 — accepted learner-facing integration
-
-Canonical document:
+Build41 completed one full productive-family lifecycle:
 
 ```text
-docs/BUILD-41.3-RECENT-PAST-LEARNER-INTEGRATION.md
+41.1 audit seven candidate families
+→ exactly one deterministic family passes
+→ 41.2 pure recent-past core
+→ separate learner-placement audit
+→ 41.3 learner-facing integration
 ```
 
-Accepted chain:
+Accepted family:
 
 ```text
-Build41.2 pure core unchanged
-        ↓
-Build41.3 read-only renderer compatibility adapter
-        ↓
-existing shared Build38 Transfer renderer
-        ↓
-lesson 36 optional three-item Transfer entry
+present-je-regular-action
+→ recent-past-je-venir-de
 ```
 
-Adapter owner:
-
-```text
-src/pedagogy/generalization-recent-past-renderer-adapter.js
-FrenchTranquilleRecentPastTransferAdapter
-```
-
-Learner placement:
-
-```text
-lesson 36 normal teaching
-→ optional recent-past Transfer
-→ exactly 3 deterministic exercises
-→ return to lesson
-```
-
-Exact three exercises only:
+Exact certified catalog:
 
 ```text
 Je travaille.          → Je viens de travailler.
@@ -128,51 +107,78 @@ Je mange.              → Je viens de manger.
 Je rentre à la maison. → Je viens de rentrer à la maison.
 ```
 
-Hard boundaries remain:
+Build41.3 widened deterministic learner-facing Transfer from the five historical Build38 families to six total families while preserving:
 
-- no fourth `Je regarde un film` pair;
-- no generic recent-past or passé composé generator;
-- no subject expansion beyond `je`;
-- no curriculum item/lesson change;
-- no new durable store or Recovery migration;
-- no Evidence write;
-- no Foundation/Transfer mastery claim;
-- no `app.js`, voice, Premium or branding change;
-- all historical Build38 Transfer routes remain protected;
-- A2 remains blocked.
+- the Build41.2 pure core contract;
+- historical Build38 routes/shared renderer;
+- 52 lessons / 313 item semantics;
+- Recovery 7 stores / backup v3;
+- Evidence v2 shadow-only status;
+- no durable Transfer mastery claim;
+- public metadata `v2.5.0 · Build 38`;
+- A2 blocked.
 
-## Build41.3 exact-head CI evidence
-
-Candidate head:
+Dedicated accepted Build41.3 evidence remains:
 
 ```text
-bf91b6fb6325c86cf1728b8c0c4c08f68f6f6fdd
+candidate head bf91b6fb6325c86cf1728b8c0c4c08f68f6f6fdd
+run            32198077009 SUCCESS
+job            95906031546 SUCCESS
+merge           39ea5fe5d51b272fcdcbfb3a8c66dfdea2b03d42
 ```
 
-Dedicated gate:
+## Why the candidate closes Build41 instead of inventing 41.4
+
+- 41.1 already audited the full Build40 candidate set;
+- questions, narration and opinion were rejected as semantic/ambiguous;
+- possessives were duplicate at current source depth;
+- adjective agreement still lacks safe source pairs;
+- articles/quantities/F16 were deferred because F16 is not coherently taught yet;
+- exactly one candidate passed, and Build41 implemented it fully.
+
+No second Build41 productive family remains authorized by current evidence.
+
+## F16 dependency
+
+The certified Foundations core still records:
 
 ```text
-Build 41.3 Learner-facing recent-past transfer
-run 32198077009  SUCCESS
-job 95906031546 SUCCESS
+F16
+key      a-de-contractions
+audit    partial-distributed
+strategy teach-core
+priority later-core
 ```
 
-Dedicated job passed:
+Build40 explicitly recommended a dedicated F16 decision audit. Build41.1 independently confirmed that contractions must not become productive-transfer input before coherent source teaching exists.
 
-- syntax + predecessor contracts;
-- 41.3 adapter unit tribunal;
-- 41.2 purity / byte-identity guard;
-- scope guard;
-- Chrome VI desktop;
-- Chrome DEBUG FR desktop;
-- Chrome VI 390×844;
-- Chrome DEBUG FR 390×844;
-- three real answer interactions;
-- storage unchanged;
-- focus return;
-- no horizontal overflow.
+Therefore PR #226 proposes a new audit-only milestone boundary rather than stretching Build41:
 
-The exact-head full matrix returned to the known inherited five-red baseline with **no new red**.
+```text
+Build42.1 — F16 à/de contractions source + learner-placement audit
+```
+
+This does **not** authorize an F16 capsule, curriculum mutation, Transfer family, durable evidence owner or A2.
+
+## Evidence gate
+
+Reliable LI3 families remain:
+
+```text
+phrase-retrieval
+listening
+scenario
+```
+
+Still unavailable as trustworthy durable intelligence evidence:
+
+```text
+concept-review
+foundation-capsule
+transfer-construction
+```
+
+Build41 created meaningful productive activity but did not change this evidence boundary. That restraint remains correct.
 
 ## CI baseline
 
@@ -186,26 +192,22 @@ Known persistent inherited failures:
 
 Build26.4 remains a classified runner/harness flake, not standing debt. Any other failure is NEW until classified.
 
-## Deployment state
-
-Build41.3 is **merged and CI-certified**.
-
-The current connector could not independently list the push-triggered Pages run for merge SHA `39ea5fe5...`. Therefore this checkpoint intentionally does **not** claim a Pages run ID or physical-device PASS for Build41.3.
-
 ## NEXT
 
-No implementation slice is currently authorized.
+Per `AGENTS.md`, stop at the audit candidate boundary:
 
 ```text
-verify Pages/deployment for 39ea5fe5... when independently retrievable
-→ audit Build41 as a milestone after its first complete productive-consolidation family
-→ decide from evidence whether Build41 can close or whether another narrow productive family is justified
-→ only then authorize a named next slice
+review PR #226 exact-head / scope
+→ merge only if docs-only decision is accepted
+→ verify main
+→ Build41 becomes CLOSED
+→ then and only then start Build42.1 audit
 ```
 
-Until that audit is complete:
+Until PR #226 is accepted:
 
 - do not invent Build41.4;
+- do not implement F16;
 - do not start a second productive family;
 - do not start A2;
-- do not add a durable Transfer mastery store merely to make consolidation look more measurable.
+- do not add a durable Transfer mastery store.

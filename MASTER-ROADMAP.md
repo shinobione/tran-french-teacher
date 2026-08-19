@@ -7,7 +7,7 @@
 ## Canonical checkpoint — 2026-08-19
 
 ```text
-accepted main                 39ea5fe5d51b272fcdcbfb3a8c66dfdea2b03d42
+accepted main                 5f90f492703dce507e19228cb3828e2eb890d90c
 public runtime metadata       v2.5.0 · Build 38
 pedagogy baseline             v2.3.0 · Build 34
 curriculum                    52 lessons / 313 items
@@ -19,11 +19,12 @@ evidence v2                   derived shadow only; original six stores product t
 Build38                       CLOSED / RELEASED
 Build39 LI3                   CLOSED / CERTIFIED
 Build40 A1 audit              CLOSED / PRODUCTIVE CONSOLIDATION SELECTED
-Build41                       OPEN — milestone closure audit pending
+Build41                       CLOSURE AUDIT CANDIDATE
 Build41.1                     CLOSED / AUDITED
 Build41.2                     CLOSED / CERTIFIED PURE CORE
 Build41 placement audit       COMPLETE
 Build41.3                     CLOSED / MERGED / CI-CERTIFIED
+Build42.1                     PROPOSED NEXT / AUDIT ONLY
 A2                            NOT AUTHORIZED
 ```
 
@@ -113,24 +114,49 @@ Verdict:
 - broad A1+ phrase expansion = not selected;
 - **A1 Productive Consolidation = selected direction**.
 
-## Build41 — A1 Productive Consolidation — OPEN
+Build40 recommended:
 
-Build41 has now completed one full narrow productive-consolidation family from audit through learner-facing integration.
+```text
+P1 productive-family audit
+P2 dedicated F16 à/de contractions audit
+P3 evidence-owner design only after meaningful productive events exist
+P4 re-run A1 readiness before A2
+```
 
-It is **not automatically closed** and **does not automatically authorize a second family**. The next action is a milestone audit.
+## Build41 — A1 Productive Consolidation
+
+Canonical closure audit candidate:
+
+```text
+docs/BUILD-41-MILESTONE-CLOSURE-AUDIT.md
+```
+
+Build41 completed one full narrow productive-family lifecycle.
 
 ### 41.1 productive-family audit — CLOSED / AUDITED
 
 Canonical audit: `docs/BUILD-41.1-PRODUCTIVE-FAMILY-AUDIT.md`.
 
-Selected narrow family:
+41.1 audited all seven Build40 productive-family candidates:
+
+| Candidate | Result |
+|---|---|
+| Questions | REJECT — too semantic / ambiguous |
+| Past-time recombination | IMPLEMENTABLE — narrow recent-past family selected |
+| Articles / quantities / F16 | DEFER — needs better sources |
+| Possessives | ALREADY COVERED / DUPLICATE |
+| Adjective agreement | DEFER — needs better sources |
+| Short narration | REJECT — too semantic / ambiguous |
+| Opinion clauses | REJECT — too semantic / ambiguous |
+
+Exactly one family passed the deterministic, vocabulary-safe contract:
 
 ```text
 present-je-regular-action
 → recent-past-je-venir-de
 ```
 
-Generic passé composé transformation is NOT authorized.
+Generic passé composé transformation remains NOT AUTHORIZED.
 
 ### 41.2 recent-past deterministic transfer core — CLOSED / CERTIFIED
 
@@ -248,11 +274,90 @@ Build41.3 preserved:
 - public runtime metadata `v2.5.0 · Build 38`;
 - A2 blocked.
 
-### Deployment evidence boundary
+This raises learner-facing deterministic Transfer from the five Build38 families to six total families.
+
+## Build41 closure decision — CANDIDATE
+
+The closure audit proposes:
+
+```text
+Build41 → CLOSED / SUCCESSFUL NARROW CONSOLIDATION
+```
+
+Rationale:
+
+- Build41.1 already audited the complete Build40 candidate set;
+- exactly one family passed the strict deterministic contract;
+- Build41.2 certified that family as a pure core;
+- placement was separately audited;
+- Build41.3 delivered and exact-head certified the learner-facing activity;
+- no second Build41 family remains authorized by current evidence.
+
+Build41 closure does **not** mean A1 productive depth is complete.
+
+A2 remains **NOT AUTHORIZED** because:
+
+- productive generalization widened only narrowly;
+- LI3 still has no trustworthy durable `transfer-construction` or concept-mastery evidence owner;
+- F16 remains explicit structural teach-core debt;
+- no fresh post-consolidation A1 readiness audit has approved A2.
+
+## F16 dependency — next clean audit target
+
+The certified Foundations core still records:
+
+```text
+F16
+a-de-contractions
+partial-distributed
+teach-core
+later-core
+```
+
+Build40 explicitly selected F16 for a dedicated decision audit. Build41.1 then deferred the articles/quantities/F16 productive candidate because the contraction system is distributed across lexical examples and is not yet taught coherently enough to become safe Transfer input.
+
+The correct dependency is therefore:
+
+```text
+source + learner-placement audit
+→ if justified, coherent F16 teach-core implementation
+→ only after teaching exists, reassess deterministic productive transfer
+```
+
+Do not reverse this order.
+
+## Proposed next milestone — Build42
+
+### Build42.1 — F16 à/de contractions source + learner-placement audit
+
+**AUTHORIZED ONLY IF THE BUILD41 CLOSURE AUDIT IS ACCEPTED.**
+
+Build42.1 is docs/read-only audit work only.
+
+Mission:
+
+- inspect real 52/313 curriculum anchors for `à / de` contractions;
+- distinguish explicit rule teaching from distributed lexical exposure;
+- map `au`, `aux`, `du`, `des` against non-contracted `à la`, `à l’`, `de la`, `de l’`;
+- identify the earliest pedagogically valid learner placement if a coherent Foundation owner is justified;
+- verify whether the existing Foundations capsule engine can be reused without creating a parallel teaching UI;
+- decide whether later productive transfer could become deterministic and vocabulary-safe.
+
+Hard boundaries:
+
+- no runtime/curriculum mutation in 42.1;
+- no F16 capsule implementation yet;
+- no Transfer implementation yet;
+- no new store/schema/Recovery/Evidence owner;
+- no mastery claim;
+- no A2 roadmap opening;
+- no Build42.2 before the 42.1 audit is reviewed and accepted.
+
+## Deployment evidence boundary
 
 Build41.3 is accepted as **merged + CI-certified**.
 
-The closeout session did not obtain an independently verified push-triggered GitHub Pages run ID for merge SHA `39ea5fe5...`. Therefore the roadmap does not claim a Pages-green deployment from merge evidence alone.
+The prior closeout session did not obtain an independently verified push-triggered GitHub Pages run ID for merge SHA `39ea5fe5...`. Therefore the roadmap still does not claim a Pages-green deployment from merge evidence alone.
 
 ## CI baseline
 
@@ -266,23 +371,30 @@ Known persistent inherited failures:
 
 Build26.4 is a classified runner/harness flake, not standing debt. Any other red is NEW until classified.
 
-## NEXT — Build41 milestone closure audit
+## NEXT
 
-No implementation slice is currently authorized.
+Current slice:
 
 ```text
-verify deployment evidence for 39ea5fe5... when retrievable
-→ audit what Build41 achieved against the Build40 A1 Productive Consolidation objective
-→ assess whether one complete recent-past family materially closes the identified productive-generalization gap
-→ decide one of:
-   A. close Build41 and keep A2 blocked pending a fresh readiness audit
-   B. authorize one specifically justified additional narrow productive family
-→ materialize that decision in repo before any implementation
+Build41 milestone-closure audit
+→ docs-only candidate PR
+→ STOP for separate review/merge
 ```
 
-Until this audit is complete:
+If accepted:
+
+```text
+Build41 CLOSED
+→ Build42.1 F16 source + learner-placement audit
+→ review the audit before any implementation
+→ only then decide whether F16 teaching deserves a Build42.2
+→ later re-run A1 readiness before any A2 authorization
+```
+
+Until the closure audit is accepted:
 
 - **Build41.4 is NOT AUTHORIZED**;
+- F16 implementation is NOT AUTHORIZED;
 - a second productive family is NOT AUTHORIZED;
 - A2 is NOT AUTHORIZED;
-- no new durable Transfer mastery store is authorized.
+- no durable Transfer mastery store is authorized.
