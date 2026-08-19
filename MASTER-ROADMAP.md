@@ -34,11 +34,12 @@ Current closure candidate:
 ```text
 PR      #232 — Docs · audit Build 42 milestone closure
 branch  docs/build42-milestone-closure-audit
+scope   3 closure Markdown files + 1 historical CI scope-guard maintenance file
 ```
 
 Live PR/GitHub is authoritative for the exact candidate head.
 
-The candidate changes Build42 closure documentation plus one CI successor-safety maintenance line: the old Build42.2 *slice scope* check now runs only on its original `build42/f16-teach-core` PR branch. All F16 contract and browser tribunals still run on successor PRs. No product/runtime/pedagogy owner is changed by this maintenance.
+The only non-Markdown candidate file is `.github/workflows/build42-2-foundations-f16-contractions.yml`. Its F16 tests remain unchanged; only the old *slice scope* step is limited to its original `build42/f16-teach-core` PR branch so future unrelated PRs can still run the F16 tribunal without being forced into the 42.2 file allowlist.
 
 Historical learner continuity remains LOCKED:
 
@@ -179,25 +180,7 @@ Canonical closure audit:
 docs/BUILD-41-MILESTONE-CLOSURE-AUDIT.md
 ```
 
-Build41 completed one full productive-family lifecycle:
-
-```text
-41.1 audit seven candidate families
-→ one deterministic family passes
-→ 41.2 pure recent-past core
-→ placement audit
-→ 41.3 learner-facing integration
-→ closure
-```
-
 Accepted family:
-
-```text
-present-je-regular-action
-→ recent-past-je-venir-de
-```
-
-Certified catalog:
 
 ```text
 Je travaille.          → Je viens de travailler.
@@ -205,7 +188,7 @@ Je mange.              → Je viens de manger.
 Je rentre à la maison. → Je viens de rentrer à la maison.
 ```
 
-Build41.3 raised learner-facing deterministic Transfer from five Build38 families to six total while preserving Recovery/Evidence/public metadata boundaries. Build41.4 and a second Build41 family are not authorized.
+Build41 completed one full productive-family lifecycle and raised learner-facing deterministic Transfer from five Build38 families to six total. Build41.4 and a second Build41 family are not authorized.
 
 # Build42 — Foundations debt resolution — CLOSURE CANDIDATE
 
@@ -221,7 +204,7 @@ Candidate verdict:
 
 ## Build42.1 — source + placement — CLOSED / AUDITED
 
-Build42.1 established the accepted F16 distinction:
+Accepted F16 distinction:
 
 ```text
 à + le   → au
@@ -277,8 +260,6 @@ lesson 38 normal content
 → return to lesson
 ```
 
-The implementation reuses the existing Foundation engine/overlay and adds no parallel grammar UI.
-
 The capsule teaches the complete mechanical system and contains exactly six deterministic checks:
 
 ```text
@@ -289,8 +270,6 @@ de + le → du
 de + les → des
 Du pain. → article partitif, not contraction proof
 ```
-
-`aux` and contraction-`des` are labelled as teaching recombinations, not as previously mastered learner phrases.
 
 Safety state remains:
 
@@ -306,16 +285,9 @@ A2                none
 
 ### Why Build42 should close
 
-The milestone's explicit structural debt was that F16 was partial/distributed and lacked coherent learner-facing teaching. That debt is now resolved:
+The structural debt was the absence of coherent F16 learner-facing teaching. That debt is now resolved by 42.1 + 42.2.
 
-```text
-42.1 maps real sources + defines the grammatical boundary + selects placement
-42.2 teaches the full system through the accepted Foundation owner
-```
-
-The remaining lack of durable Foundation mastery and productive F16 Transfer does not represent unfinished Build42 teaching. It is an evidence/source-ownership boundary that the product deliberately refuses to fake.
-
-No Build42.3 implementation is independently justified.
+The remaining lack of durable Foundation mastery and productive F16 Transfer is an evidence/source-ownership boundary, not unfinished Build42 teaching. No Build42.3 implementation is independently justified.
 
 ### Productive F16 Transfer gate — NOT AUTHORIZED
 
@@ -325,16 +297,14 @@ Still insufficient:
 - no equally clean learner-facing contraction-`des` source pair;
 - no trustworthy durable Foundation/Transfer construction evidence owner.
 
-Therefore closing Build42 must **not** authorize productive F16 Transfer.
+Closing Build42 must not authorize productive F16 Transfer.
 
 ### #232 CI maintenance
 
-The first closure-candidate head exposed two failures beyond the known baseline:
+The first closure-candidate head exposed two non-baseline failures:
 
-1. Build26.1 Voice replay timed out in Chrome after its static/wiring/sanctuary checks passed. The exact same job was rerun unchanged and returned SUCCESS. No product mutation was made.
-2. Build42.2 F16 passed its product/contract checks but its historical *slice scope* guard rejected the new milestone-closure Markdown file. That scope check is now limited to its original `build42/f16-teach-core` PR branch, while all F16 contracts/browser tests continue to run on future PRs.
-
-This maintenance makes the old workflow successor-safe; it does not weaken F16 certification or change runtime behavior.
+1. Build26.1 Voice replay: static/wiring/sanctuary checks passed; Chrome timed out. Exact unchanged rerun returned SUCCESS → runner/browser flake, no product mutation.
+2. Build42.2 F16: F16 contract/product assertions passed; only the historical slice-scope allowlist rejected the new closure document. That step is now scoped to the original `build42/f16-teach-core` branch while all F16 tribunals still run on successors.
 
 # Evidence gate
 
@@ -354,8 +324,6 @@ foundation-capsule
 transfer-construction
 ```
 
-Build42 teaching does not silently promote those families to durable mastery evidence.
-
 # CI baseline
 
 Known persistent inherited failures:
@@ -370,7 +338,7 @@ Build26.4 is a classified runner/harness flake, not standing debt. Any other red
 
 # NEXT if Build42 closure is accepted
 
-Continue the Build40 plan rather than inventing Build42.3 or an implementation number prematurely:
+Continue Build40's remaining order without inventing a new implementation number:
 
 ```text
 P3 — evidence-owner design audit — READ-ONLY
