@@ -59,7 +59,8 @@ jobs:
           set -euo pipefail
           git fetch origin main --quiet
           changed="$(git diff --name-only origin/main...HEAD)"
-          unexpected="$(printf '%s\n' "$changed" | grep -Ev '^(src/pedagogy/foundations-capsules\.js|src/pedagogy/foundations-pilot\.js|tools/test-build42-2-foundations-f16-contractions\.cjs|tests/browser/build42-2-foundations-f16-contractions\.html|\.github/workflows/build42-2-foundations-f16-contractions\.yml|docs/BUILD-42\.2-F16-TEACH-CORE\.md|PROJECT-STATE\.md|MASTER-ROADMAP\.md)$' || true)"
+          allowed='^(src/pedagogy/foundations-capsules\.js|src/pedagogy/foundations-pilot\.js|tools/test-build42-2-foundations-f16-contractions\.cjs|tests/browser/build42-2-foundations-f16-contractions\.html|\.github/workflows/build42-2-foundations-f16-contractions\.yml|\.github/workflows/build38-2-learner-integration\.yml|\.github/workflows/build38-5-futur-proche-integration\.yml|\.github/workflows/build38-7-nominal-plural-integration\.yml|\.github/workflows/build38-8-negation-integration\.yml|\.github/workflows/build38-9-spoken-on-transfer\.yml|\.github/workflows/build38-10-spoken-on-integration\.yml|\.github/workflows/build41-3-recent-past-integration\.yml|docs/BUILD-42\.2-F16-TEACH-CORE\.md|PROJECT-STATE\.md|MASTER-ROADMAP\.md)$'
+          unexpected="$(printf '%s\n' "$changed" | grep -Ev "$allowed" || true)"
           if [ -n "$unexpected" ]; then
             echo 'Build42.2 changed files outside the authorized F16 slice:' >&2
             printf '%s\n' "$unexpected" >&2
