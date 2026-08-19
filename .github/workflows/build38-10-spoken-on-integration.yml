@@ -57,8 +57,6 @@ jobs:
             src/pedagogy/curriculum-stage2.js \
             src/pedagogy/curriculum-stage3.js \
             src/pedagogy/curriculum-stage4.js \
-            src/pedagogy/foundations-capsules.js \
-            src/pedagogy/foundations-pilot.js \
             src/pedagogy/generalization-transfer-core.js \
             src/pedagogy/generalization-negation-core.js \
             src/pedagogy/generalization-futur-proche-core.js \
