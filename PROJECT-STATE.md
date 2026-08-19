@@ -12,8 +12,8 @@ Last reconciled: 2026-08-19
 - Current candidate: **PR #232 — `Docs · audit Build 42 milestone closure`**, branch `docs/build42-milestone-closure-audit`.
 - Candidate verdict: **CLOSE Build42** as successful F16 Foundations debt resolution.
 - Live PR/GitHub is authoritative for the exact candidate head; this document intentionally avoids self-referential head-SHA chasing.
-- Candidate scope is exactly **4 files**: three Build42 closure Markdown files plus `.github/workflows/build42-2-foundations-f16-contractions.yml` for successor-safe CI scoping. No runtime/product/pedagogy owner changed.
-- The historical Build42.2 *slice scope* check is now limited to its original `build42/f16-teach-core` PR branch. F16 syntax, contract, predecessor and browser tribunals continue to run on successor PRs.
+- Candidate scope is exactly four files: `MASTER-ROADMAP.md`, `PROJECT-STATE.md`, `docs/BUILD-42-MILESTONE-CLOSURE-AUDIT.md`, and `.github/workflows/build42-2-foundations-f16-contractions.yml`.
+- The sole workflow change makes only the historical 42.2 *slice scope* guard branch-specific; F16 syntax/contract/predecessor/browser evidence still runs on successor PRs.
 - Build26.1 produced one headless-Chrome timeout on the first #232 head; rerun of the exact same job unchanged returned **SUCCESS**, so it is classified as a runner/browser flake and no product code was changed.
 - Push-triggered GitHub Pages for the Build42.2 product SHA was not independently proven through the available connector; do not infer deployment from merge alone.
 
@@ -70,7 +70,7 @@ Build42.1 established:
 - lesson22 `Du pain / Du lait / Des œufs` are partitives and must not be misclassified as contraction ownership;
 - no clean learner-facing `aux` item and no clean contraction-`des` pair exist, so productive F16 Transfer is not justified.
 
-Build42.2 then implemented the accepted teaching obligation through the existing Foundations owner:
+Build42.2 implemented the accepted teaching obligation through the existing Foundations owner:
 
 ```text
 à + le   → au
@@ -81,13 +81,11 @@ de + les → des
 à la / à l’ / de la / de l’ remain uncontracted
 ```
 
-The learner-facing capsule is lesson38-only, optional, deterministic, ephemeral-only and `masteryClaim=false`. It explicitly labels `aux` and contraction-`des` as teaching recombinations rather than prior learner mastery and keeps partitive `du/des` separate.
+The learner-facing capsule is lesson38-only, optional, deterministic, ephemeral-only and `masteryClaim=false`. It labels `aux` and contraction-`des` as teaching recombinations rather than prior learner mastery and keeps partitive `du/des` separate.
 
 Therefore no remaining implementation is independently justified inside the Build42 mission.
 
 ## Productive F16 Transfer gate — STILL CLOSED
-
-Build42 teaching does **not** manufacture learner-source ownership or durable construction evidence.
 
 Still insufficient:
 
@@ -102,8 +100,6 @@ productive F16 Transfer    NOT AUTHORIZED
 durable Foundation mastery NOT CLAIMED
 Build42.3                   NOT AUTHORIZED
 ```
-
-A future Transfer slice would require a separate source/readiness audit and explicit authorization.
 
 ## Evidence gate
 
