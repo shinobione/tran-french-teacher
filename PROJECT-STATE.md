@@ -48,12 +48,36 @@ No future work may reset, renumber or reinterpret this state.
 Build38  CLOSED / RELEASED
 Build39  CLOSED / CERTIFIED
 Build40  CLOSED — A1 Productive Consolidation selected
-Build41  OPEN — closure audit candidate materialized
+Build41  OPEN — closure audit candidate PR #226
 Build41.1 CLOSED / AUDITED — recent-past family selected
 Build41.2 CLOSED / CERTIFIED — pure recent-past transfer core
 Build41 learner-placement audit COMPLETE
 Build41.3 CLOSED / MERGED / CI-CERTIFIED
 A2       NOT AUTHORIZED
+```
+
+## Active candidate
+
+```text
+PR      #226 — Docs · audit Build 41 milestone closure
+branch  docs/build41-milestone-closure-audit
+base    5f90f492703dce507e19228cb3828e2eb890d90c
+state   OPEN / CANDIDATE / NOT MERGED
+scope   docs only
+```
+
+Canonical candidate document:
+
+```text
+docs/BUILD-41-MILESTONE-CLOSURE-AUDIT.md
+```
+
+Proposed decision:
+
+```text
+Build41 → CLOSE / SUCCESSFUL NARROW CONSOLIDATION
+A2      → REMAINS NOT AUTHORIZED
+NEXT    → Build42.1 F16 à/de contractions source + learner-placement audit
 ```
 
 ## Build41 result under closure audit
@@ -103,30 +127,7 @@ job            95906031546 SUCCESS
 merge           39ea5fe5d51b272fcdcbfb3a8c66dfdea2b03d42
 ```
 
-## Build41 milestone-closure audit candidate
-
-Canonical candidate document:
-
-```text
-docs/BUILD-41-MILESTONE-CLOSURE-AUDIT.md
-```
-
-Branch:
-
-```text
-docs/build41-milestone-closure-audit
-base = 5f90f492703dce507e19228cb3828e2eb890d90c
-```
-
-Audit verdict proposed by the candidate:
-
-```text
-Build41 → CLOSE
-A2      → REMAINS NOT AUTHORIZED
-NEXT    → Build42.1 F16 à/de contractions source + learner-placement audit
-```
-
-Why no Build41.4:
+## Why the candidate closes Build41 instead of inventing 41.4
 
 - 41.1 already audited the full Build40 candidate set;
 - questions, narration and opinion were rejected as semantic/ambiguous;
@@ -134,6 +135,8 @@ Why no Build41.4:
 - adjective agreement still lacks safe source pairs;
 - articles/quantities/F16 were deferred because F16 is not coherently taught yet;
 - exactly one candidate passed, and Build41 implemented it fully.
+
+No second Build41 productive family remains authorized by current evidence.
 
 ## F16 dependency
 
@@ -149,7 +152,7 @@ priority later-core
 
 Build40 explicitly recommended a dedicated F16 decision audit. Build41.1 independently confirmed that contractions must not become productive-transfer input before coherent source teaching exists.
 
-Therefore the candidate proposes a new audit-only milestone boundary rather than stretching Build41:
+Therefore PR #226 proposes a new audit-only milestone boundary rather than stretching Build41:
 
 ```text
 Build42.1 — F16 à/de contractions source + learner-placement audit
@@ -191,20 +194,17 @@ Build26.4 remains a classified runner/harness flake, not standing debt. Any othe
 
 ## NEXT
 
-Current work unit is docs/audit only. Stop at candidate PR once materialized.
-
-If the closure-audit candidate is accepted:
+Per `AGENTS.md`, stop at the audit candidate boundary:
 
 ```text
-merge closure audit
-→ Build41 CLOSED / successful narrow consolidation
-→ start Build42.1 audit only
-→ map real F16 curriculum anchors and possible learner placement
-→ decide whether coherent F16 teaching is justified
-→ only then authorize any implementation
+review PR #226 exact-head / scope
+→ merge only if docs-only decision is accepted
+→ verify main
+→ Build41 becomes CLOSED
+→ then and only then start Build42.1 audit
 ```
 
-Until the closure audit is accepted:
+Until PR #226 is accepted:
 
 - do not invent Build41.4;
 - do not implement F16;
