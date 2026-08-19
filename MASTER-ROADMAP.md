@@ -36,11 +36,9 @@ PR      #232 — Docs · audit Build 42 milestone closure
 branch  docs/build42-milestone-closure-audit
 ```
 
-Live PR/GitHub is authoritative for its exact candidate head.
+Live PR/GitHub is authoritative for the exact candidate head.
 
-The candidate changes only Build42 closure documentation plus one CI successor-safety maintenance line: the old Build42.2 *slice scope* check now runs only on its original `build42/f16-teach-core` PR branch. All F16 contract and browser tribunals still run on successor PRs. No product/runtime/pedagogy owner is changed by this maintenance.
-
-Push-triggered Pages for the Build42.2 product SHA was not independently proven through the available connector. Do not collapse merge, deployment and field-pass into one claim.
+The candidate changes Build42 closure documentation plus one CI successor-safety maintenance line: the old Build42.2 *slice scope* check now runs only on its original `build42/f16-teach-core` PR branch. All F16 contract and browser tribunals still run on successor PRs. No product/runtime/pedagogy owner is changed by this maintenance.
 
 Historical learner continuity remains LOCKED:
 
