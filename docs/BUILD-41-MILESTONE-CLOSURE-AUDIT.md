@@ -1,6 +1,6 @@
 # Build 41 — Milestone Closure Audit
 
-Status: **AUDIT CANDIDATE / READ-ONLY**
+Status: **ACCEPTED / CLOSED / READ-ONLY**
 
 Date: 2026-08-19
 
@@ -10,7 +10,15 @@ Base audited:
 5f90f492703dce507e19228cb3828e2eb890d90c
 ```
 
-This audit decides whether Build41 should continue with another productive family or close after the certified recent-past family. It makes no runtime, learner-data, curriculum, Evidence, Recovery, voice, Premium or public-version change.
+Accepted via:
+
+```text
+PR             #226 — Docs · audit Build 41 milestone closure
+candidate head c8706e47867aa92bd3cd6bdcc91f41b44c4f4138
+merge           e2467cf886cee748a66c38374f56c6e7278d56a7
+```
+
+This audit decided whether Build41 should continue with another productive family or close after the certified recent-past family. It made no runtime, learner-data, curriculum, Evidence, Recovery, voice, Premium or public-version change.
 
 ## 1. Starting contract from Build40
 
@@ -23,7 +31,7 @@ It selected **A1 Productive Consolidation** with four important roadmap principl
 3. design durable construction evidence only after meaningful productive events exist;
 4. reconsider A2 only after productive consolidation has materially widened and the project can explain what evidence changed.
 
-## 2. What Build41 actually delivered
+## 2. What Build41 delivered
 
 Build41 completed one full productive-family lifecycle:
 
@@ -32,9 +40,10 @@ Build41 completed one full productive-family lifecycle:
 → 41.2 pure deterministic recent-past core
 → learner-placement audit
 → 41.3 learner-facing integration
+→ milestone closure audit
 ```
 
-The accepted family is:
+Accepted family:
 
 ```text
 present-je-regular-action
@@ -53,27 +62,25 @@ Build41.3 places those three deterministic reconstructions after normal lesson-3
 
 This widens learner-facing deterministic Transfer from the five Build38 families to six total families.
 
-## 3. Did Build41 materially improve productive depth?
+## 3. Productive-depth verdict
 
-**Yes, narrowly.**
+**Build41 materially improved productive depth, narrowly.**
 
-Build41 proves a complete additional productive-consolidation path using already-taught vocabulary, a new temporal meaning and active reconstruction rather than phrase replay. It also proves the project can extend the existing Transfer renderer without forking the UI or weakening historical contracts.
+It proves a complete additional productive-consolidation path using already-taught vocabulary, a new temporal meaning and active reconstruction rather than phrase replay. It also proves that the existing Transfer renderer can be extended without forking UI or weakening historical contracts.
 
-However, the gain is intentionally narrow:
+The gain is intentionally narrow:
 
 - only one new family was admissible under the deterministic contract;
 - it remains exactly three exercises;
-- no generic passé composé or broader past-time generator was introduced;
+- no generic passé composé or broad past-time generator was introduced;
 - no second subject family was added;
 - no durable Transfer mastery/evidence owner was created.
 
 Therefore Build41 is a successful narrow milestone, not evidence that all A1 productive-generalization debt is finished.
 
-## 4. Why Build41 should not continue as Build41.4
+## 4. Why there is no Build41.4
 
 Build41.1 already audited the seven candidate areas prioritized by Build40.
-
-Final 41.1 classifications:
 
 | Candidate | Result |
 |---|---|
@@ -87,13 +94,20 @@ Final 41.1 classifications:
 
 Exactly one family passed, and Build41 implemented it through learner-facing certification.
 
-Starting a second Build41 family now would therefore require one of three bad moves:
+Starting a second Build41 family would require one of three bad moves:
 
 - reopen a candidate already rejected as semantically ambiguous;
 - duplicate an existing lesson instead of creating new recombination;
 - test a rule whose source teaching is still insufficient.
 
 None is justified.
+
+Canonical decision:
+
+```text
+Build41.4 NOT AUTHORIZED
+second Build41 productive family NOT AUTHORIZED
+```
 
 ## 5. Evidence gate remains unchanged
 
@@ -117,7 +131,7 @@ Build41 added meaningful productive events but did not add a durable evidence ow
 
 Therefore Build40's A2 gate is **not satisfied** merely because Build41 added one new Transfer family.
 
-## 6. F16 is now the clean next audit target
+## 6. F16 is the next clean audit target
 
 The canonical Foundations core still records:
 
@@ -131,7 +145,7 @@ priority later-core
 
 Build40 explicitly identified F16 as the clearest structural Foundation debt and recommended a dedicated audit. Build41.1 then deferred the combined articles/quantities/F16 candidate because contractions are distributed across lexical phrases and are not yet taught coherently enough to become safe productive-transfer input.
 
-This creates a clean dependency chain:
+This creates the dependency chain:
 
 ```text
 F16 source/placement audit
@@ -141,18 +155,18 @@ F16 source/placement audit
 
 The audit must not assume a capsule is required. It must first map real curriculum anchors and distinguish:
 
-- `à + le → au`
-- `à + les → aux`
-- `de + le → du`
-- `de + les → des`
-- non-contracted feminine/elided forms such as `à la`, `à l’`, `de la`, `de l’`
+- `à + le → au`;
+- `à + les → aux`;
+- `de + le → du`;
+- `de + les → des`;
+- non-contracted feminine/elided forms `à la`, `à l’`, `de la`, `de l’`;
 - lexical phrases whose preposition is semantically selected rather than mechanically generated.
 
-## 7. Closure verdict
+## 7. Accepted closure verdict
 
 ### Build41
 
-**CLOSE.**
+**CLOSED / SUCCESSFUL NARROW CONSOLIDATION.**
 
 Reason:
 
@@ -185,7 +199,7 @@ Reason:
 
 ## 8. Next authorized slice
 
-Authorize one audit-only slice:
+The accepted next slice is:
 
 ```text
 Build42.1 — F16 à/de contractions source + learner-placement audit
@@ -210,11 +224,10 @@ Hard boundaries:
 - no A2 roadmap opening;
 - no Build42.2 until Build42.1 audit is reviewed and accepted.
 
-## 9. Canonical next chain
+## 9. Accepted next chain
 
 ```text
-merge Build41 closure audit
-→ Build41 CLOSED
+Build41 CLOSED
 → Build42.1 F16 source + learner-placement audit
 → review result
 → only then decide whether F16 teaching implementation is justified
