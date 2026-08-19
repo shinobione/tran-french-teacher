@@ -7,7 +7,7 @@
 ## Canonical checkpoint — 2026-08-19
 
 ```text
-accepted main                 5f90f492703dce507e19228cb3828e2eb890d90c
+Build41 closure decision      e2467cf886cee748a66c38374f56c6e7278d56a7
 public runtime metadata       v2.5.0 · Build 38
 pedagogy baseline             v2.3.0 · Build 34
 curriculum                    52 lessons / 313 items
@@ -19,14 +19,16 @@ evidence v2                   derived shadow only; original six stores product t
 Build38                       CLOSED / RELEASED
 Build39 LI3                   CLOSED / CERTIFIED
 Build40 A1 audit              CLOSED / PRODUCTIVE CONSOLIDATION SELECTED
-Build41                       CLOSURE AUDIT CANDIDATE
+Build41                       CLOSED / SUCCESSFUL NARROW CONSOLIDATION
 Build41.1                     CLOSED / AUDITED
 Build41.2                     CLOSED / CERTIFIED PURE CORE
 Build41 placement audit       COMPLETE
 Build41.3                     CLOSED / MERGED / CI-CERTIFIED
-Build42.1                     PROPOSED NEXT / AUDIT ONLY
+Build42.1                     AUTHORIZED NEXT / AUDIT ONLY
 A2                            NOT AUTHORIZED
 ```
+
+The containing docs closeout commit may advance `main` beyond the Build41 closure-decision SHA above without changing runtime/product state. Live GitHub remains authoritative for exact HEAD.
 
 Historical learner continuity remains LOCKED:
 
@@ -71,13 +73,24 @@ A suspected flake is rerun unchanged before product mutation. Repo/live GitHub w
 - Build41.2 recent-past pure core remains a certified source contract;
 - `app.js`, `voice-ios.js`, `free-voice.js`, `assets/LOGO.png`, `assets/Favicon.png`, Build30 runtime bridge/contracts remain sanctuaries unless explicitly justified.
 
-## Closed milestone summary
+# Closed milestones
 
-### Build37 — Foundations — CLOSED
+## Build37 — Foundations — CLOSED
 
-F01→F18 registry established without a persistent Foundations mastery store. F16 `à / de` contractions remains deferred teach-core debt.
+F01→F18 registry established without a persistent Foundations mastery store.
 
-### Build38 — Generalization & Transfer — CLOSED / RELEASED
+Important remaining structural debt:
+
+```text
+F16 — à / de contractions
+status   partial-distributed
+strategy teach-core
+priority later-core
+```
+
+## Build38 — Generalization & Transfer — CLOSED / RELEASED
+
+Certified learner-facing deterministic families:
 
 ```text
 38.1→38.2 subject substitution       lesson 33
@@ -89,7 +102,7 @@ F01→F18 registry established without a persistent Foundations mastery store. F
 
 Build38.11 is NOT AUTHORIZED. Public runtime release metadata remains `v2.5.0 · Build 38`.
 
-### Build39 — Learner Intelligence 3 — CLOSED / CERTIFIED
+## Build39 — Learner Intelligence 3 — CLOSED / CERTIFIED
 
 ```text
 39.1 arbitration
@@ -99,22 +112,41 @@ Build38.11 is NOT AUTHORIZED. Public runtime release metadata remains `v2.5.0 ·
 → 39.5 advisory-only Practice recommendation
 ```
 
-Reliable families: `phrase-retrieval`, `listening`, `scenario`.
-Unavailable without trustworthy durable owner: `concept-review`, `foundation-capsule`, `transfer-construction`.
+Reliable families:
+
+```text
+phrase-retrieval
+listening
+scenario
+```
+
+Unavailable without trustworthy durable owner:
+
+```text
+concept-review
+foundation-capsule
+transfer-construction
+```
+
 No auto-route, no `Parler` fallback, no invented mastery.
 
-### Build40 — A1 Consolidation Audit — CLOSED
+## Build40 — A1 Consolidation Audit — CLOSED
 
-Canonical audit: `docs/BUILD-40-A1-CONSOLIDATION-AUDIT.md`.
+Canonical audit:
+
+```text
+docs/BUILD-40-A1-CONSOLIDATION-AUDIT.md
+```
 
 Verdict:
+
 - A1 thematic/content breadth is already strong;
 - main weakness = productive generalization depth + trustworthy construction evidence;
-- A2 now = REJECTED;
+- A2 = REJECTED for now;
 - broad A1+ phrase expansion = not selected;
 - **A1 Productive Consolidation = selected direction**.
 
-Build40 recommended:
+Build40 recommended this sequence:
 
 ```text
 P1 productive-family audit
@@ -123,21 +155,32 @@ P3 evidence-owner design only after meaningful productive events exist
 P4 re-run A1 readiness before A2
 ```
 
-## Build41 — A1 Productive Consolidation
+## Build41 — A1 Productive Consolidation — CLOSED
 
-Canonical closure audit candidate:
+Canonical closure audit:
 
 ```text
 docs/BUILD-41-MILESTONE-CLOSURE-AUDIT.md
 ```
 
-Build41 completed one full narrow productive-family lifecycle.
+Accepted closure:
 
-### 41.1 productive-family audit — CLOSED / AUDITED
+```text
+PR #226
+candidate head c8706e47867aa92bd3cd6bdcc91f41b44c4f4138
+merge          e2467cf886cee748a66c38374f56c6e7278d56a7
+verdict        CLOSED / SUCCESSFUL NARROW CONSOLIDATION
+```
 
-Canonical audit: `docs/BUILD-41.1-PRODUCTIVE-FAMILY-AUDIT.md`.
+### Build41.1 — productive-family audit — CLOSED / AUDITED
 
-41.1 audited all seven Build40 productive-family candidates:
+Canonical audit:
+
+```text
+docs/BUILD-41.1-PRODUCTIVE-FAMILY-AUDIT.md
+```
+
+41.1 audited all seven Build40 candidate areas:
 
 | Candidate | Result |
 |---|---|
@@ -158,10 +201,9 @@ present-je-regular-action
 
 Generic passé composé transformation remains NOT AUTHORIZED.
 
-### 41.2 recent-past deterministic transfer core — CLOSED / CERTIFIED
+### Build41.2 — recent-past deterministic transfer core — CLOSED / CERTIFIED
 
-Accepted PR: **#221**.
-Accepted merge commit:
+Accepted PR #221 / merge:
 
 ```text
 74e8b8038a35c50ee828ee4dfcff6dedd4472e22
@@ -183,6 +225,7 @@ Je rentre à la maison. → Je viens de rentrer à la maison.
 ```
 
 Contract:
+
 - pure static deterministic core;
 - unknown sources return `null`;
 - no generic passé composé;
@@ -192,7 +235,7 @@ Contract:
 - no new vocabulary;
 - no storage / Evidence / durable write / mastery claim.
 
-### Learner-placement audit — COMPLETE
+### Build41 learner-placement audit — COMPLETE
 
 Canonical audit:
 
@@ -200,18 +243,12 @@ Canonical audit:
 docs/BUILD-41-RECENT-PAST-PLACEMENT-AUDIT.md
 ```
 
-Verified prerequisite chain:
+Verified chain:
 
 ```text
-lesson 24
-→ teaches all 3 certified present sources
-
-lesson 36
-→ explicitly teaches venir de + infinitif
-→ first valid target-structure anchor
-
-lesson 37
-→ begins passé composé starter blocks
+lesson 24 teaches all three present sources
+→ lesson 36 explicitly teaches venir de + infinitif
+→ lesson 37 begins passé composé starter blocks
 ```
 
 Selected placement:
@@ -223,7 +260,7 @@ lesson 36 normal content
 → return to lesson
 ```
 
-### 41.3 learner-facing recent-past transfer — CLOSED / MERGED / CI-CERTIFIED
+### Build41.3 — learner-facing recent-past transfer — CLOSED / MERGED / CI-CERTIFIED
 
 Canonical document:
 
@@ -236,7 +273,7 @@ Accepted PR and merge:
 ```text
 PR #224
 candidate head  bf91b6fb6325c86cf1728b8c0c4c08f68f6f6fdd
-merge commit    39ea5fe5d51b272fcdcbfb3a8c66dfdea2b03d42
+product merge   39ea5fe5d51b272fcdcbfb3a8c66dfdea2b03d42
 ```
 
 Architecture:
@@ -259,11 +296,10 @@ run 32198077009  SUCCESS
 job 95906031546 SUCCESS
 ```
 
-The dedicated Chrome tribunal passed VI + DEBUG FR on desktop and 390×844, three real answer interactions, focus return, unchanged localStorage and no horizontal overflow.
-
-The exact-head full workflow matrix returned to the inherited five-red baseline with no new failure.
+The Chrome tribunal passed VI + DEBUG FR on desktop and 390×844, three real answer interactions, focus return, unchanged localStorage and no horizontal overflow.
 
 Build41.3 preserved:
+
 - exact three certified exercises only;
 - Build41.2 core unchanged;
 - historical Build38 Transfer routes;
@@ -274,24 +310,19 @@ Build41.3 preserved:
 - public runtime metadata `v2.5.0 · Build 38`;
 - A2 blocked.
 
-This raises learner-facing deterministic Transfer from the five Build38 families to six total families.
+This raises learner-facing deterministic Transfer from five Build38 families to six total families.
 
-## Build41 closure decision — CANDIDATE
+### Why Build41 closes here
 
-The closure audit proposes:
+Build41.1 already exhausted the candidate set selected by Build40. Starting a Build41.4 would require reopening a rejected/ambiguous family, duplicating existing teaching, or testing a structural rule whose teaching sources are still insufficient.
+
+Therefore:
 
 ```text
-Build41 → CLOSED / SUCCESSFUL NARROW CONSOLIDATION
+Build41 CLOSED
+Build41.4 NOT AUTHORIZED
+second Build41 family NOT AUTHORIZED
 ```
-
-Rationale:
-
-- Build41.1 already audited the complete Build40 candidate set;
-- exactly one family passed the strict deterministic contract;
-- Build41.2 certified that family as a pure core;
-- placement was separately audited;
-- Build41.3 delivered and exact-head certified the learner-facing activity;
-- no second Build41 family remains authorized by current evidence.
 
 Build41 closure does **not** mean A1 productive depth is complete.
 
@@ -302,46 +333,21 @@ A2 remains **NOT AUTHORIZED** because:
 - F16 remains explicit structural teach-core debt;
 - no fresh post-consolidation A1 readiness audit has approved A2.
 
-## F16 dependency — next clean audit target
+# Build42 — Foundations debt resolution — NEXT
 
-The certified Foundations core still records:
+## Build42.1 — F16 à/de contractions source + learner-placement audit — AUTHORIZED
 
-```text
-F16
-a-de-contractions
-partial-distributed
-teach-core
-later-core
-```
-
-Build40 explicitly selected F16 for a dedicated decision audit. Build41.1 then deferred the articles/quantities/F16 productive candidate because the contraction system is distributed across lexical examples and is not yet taught coherently enough to become safe Transfer input.
-
-The correct dependency is therefore:
-
-```text
-source + learner-placement audit
-→ if justified, coherent F16 teach-core implementation
-→ only after teaching exists, reassess deterministic productive transfer
-```
-
-Do not reverse this order.
-
-## Proposed next milestone — Build42
-
-### Build42.1 — F16 à/de contractions source + learner-placement audit
-
-**AUTHORIZED ONLY IF THE BUILD41 CLOSURE AUDIT IS ACCEPTED.**
-
-Build42.1 is docs/read-only audit work only.
+Build42.1 is the only newly authorized slice, and it is **docs/read-only audit work only**.
 
 Mission:
 
 - inspect real 52/313 curriculum anchors for `à / de` contractions;
 - distinguish explicit rule teaching from distributed lexical exposure;
 - map `au`, `aux`, `du`, `des` against non-contracted `à la`, `à l’`, `de la`, `de l’`;
+- distinguish mechanical contraction from lexical/prepositional choice;
 - identify the earliest pedagogically valid learner placement if a coherent Foundation owner is justified;
 - verify whether the existing Foundations capsule engine can be reused without creating a parallel teaching UI;
-- decide whether later productive transfer could become deterministic and vocabulary-safe.
+- decide whether any later deterministic productive Transfer family becomes admissible.
 
 Hard boundaries:
 
@@ -353,13 +359,23 @@ Hard boundaries:
 - no A2 roadmap opening;
 - no Build42.2 before the 42.1 audit is reviewed and accepted.
 
-## Deployment evidence boundary
+Dependency order:
+
+```text
+F16 source + learner-placement audit
+→ if justified, coherent F16 teach-core implementation
+→ only after teaching exists, reassess deterministic productive transfer
+```
+
+Do not reverse this order.
+
+# Deployment evidence boundary
 
 Build41.3 is accepted as **merged + CI-certified**.
 
-The prior closeout session did not obtain an independently verified push-triggered GitHub Pages run ID for merge SHA `39ea5fe5...`. Therefore the roadmap still does not claim a Pages-green deployment from merge evidence alone.
+The prior sessions did not obtain an independently verified push-triggered Pages run ID specifically for the Build41.3 product merge SHA `39ea5fe5...`. Do not retroactively invent one. This does not affect the Build41 pedagogical/CI closure decision.
 
-## CI baseline
+# CI baseline
 
 Known persistent inherited failures:
 
@@ -371,30 +387,19 @@ Known persistent inherited failures:
 
 Build26.4 is a classified runner/harness flake, not standing debt. Any other red is NEW until classified.
 
-## NEXT
-
-Current slice:
+# NEXT
 
 ```text
-Build41 milestone-closure audit
-→ docs-only candidate PR
-→ STOP for separate review/merge
-```
-
-If accepted:
-
-```text
-Build41 CLOSED
-→ Build42.1 F16 source + learner-placement audit
-→ review the audit before any implementation
-→ only then decide whether F16 teaching deserves a Build42.2
+Build42.1 F16 source + learner-placement audit
+→ materialize one docs/read-only audit candidate
+→ STOP for review
+→ only then decide whether a Build42.2 F16 teaching slice is justified
 → later re-run A1 readiness before any A2 authorization
 ```
 
-Until the closure audit is accepted:
+Until Build42.1 is reviewed:
 
-- **Build41.4 is NOT AUTHORIZED**;
 - F16 implementation is NOT AUTHORIZED;
-- a second productive family is NOT AUTHORIZED;
+- Build42.2 is NOT AUTHORIZED;
 - A2 is NOT AUTHORIZED;
-- no durable Transfer mastery store is authorized.
+- no durable Foundation/Transfer mastery store is authorized.
