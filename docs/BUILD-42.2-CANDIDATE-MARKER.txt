@@ -1,0 +1,2 @@
+Build42.2 candidate branch: build42/f16-teach-core
+Base: cfced413ce74e78712a62776641993c4de8551c1
