@@ -1,0 +1,126 @@
+name: Build 42.2 Foundations F16 contractions
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [build42/f16-teach-core]
+
+permissions:
+  contents: read
+
+jobs:
+  foundations-f16-contractions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax + predecessor contracts + F16 contract
+        run: |
+          set -euo pipefail
+          node --check src/pedagogy/foundations-capsule-engine.js
+          node --check src/pedagogy/foundations-capsules.js
+          node --check src/pedagogy/foundations-pilot.js
+          node --check tools/test-build42-2-foundations-f16-contractions.cjs
+          node tools/test-build37-2-foundations-capsule-engine.cjs
+          node tools/test-build37-4-foundations-negation.cjs
+          node tools/test-build37-5-foundations-subject-pronouns.cjs
+          node tools/test-build37-6-foundations-regular-er.cjs
+          node tools/test-build37-7-foundations-questions.cjs
+          node tools/test-build37-8-foundations-adjective-agreement.cjs
+          node tools/test-build42-2-foundations-f16-contractions.cjs
+
+      - name: F16 stays narrow and additive
+        run: |
+          set -euo pipefail
+          grep -q "id:'a-de-contractions-core',concepts:\['F16'\]" src/pedagogy/foundations-capsules.js
+          grep -q "F16:engine.compile(CONTRACTIONS_RAW)" src/pedagogy/foundations-capsules.js
+          grep -q "id:'F16',capsule:contractionsCapsule,min:38,max:38" src/pedagogy/foundations-pilot.js
+          grep -q "contractions:'42.2'" src/pedagogy/foundations-pilot.js
+          grep -q "contractionConcepts:\['F16'\]" src/pedagogy/foundations-pilot.js
+          grep -q "id:'F13',capsule:adjectiveAgreementCapsule,min:40,max:40" src/pedagogy/foundations-pilot.js
+          grep -q "id:'F12',capsule:questionsCapsule,min:41,max:43" src/pedagogy/foundations-pilot.js
+          grep -q "id:'F05',capsule:subjectPronounsCapsule,min:34,max:36" src/pedagogy/foundations-pilot.js
+          grep -q 'Du pain. / Des œufs.' src/pedagogy/foundations-capsules.js
+          grep -q 'recombinaison d’enseignement' src/pedagogy/foundations-capsules.js
+          ! grep -q 'localStorage.setItem' src/pedagogy/foundations-capsules.js
+          ! grep -q 'localStorage.setItem' src/pedagogy/foundations-pilot.js
+          ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/foundations-capsules.js
+          ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/foundations-pilot.js
+
+      - name: Slice scope stays inside authorized owners
+        run: |
+          set -euo pipefail
+          git fetch origin main --quiet
+          changed="$(git diff --name-only origin/main...HEAD)"
+          unexpected="$(printf '%s\n' "$changed" | grep -Ev '^(src/pedagogy/foundations-capsules\.js|src/pedagogy/foundations-pilot\.js|tools/test-build42-2-foundations-f16-contractions\.cjs|tests/browser/build42-2-foundations-f16-contractions\.html|\.github/workflows/build42-2-foundations-f16-contractions\.yml|docs/BUILD-42\.2-F16-TEACH-CORE\.md|PROJECT-STATE\.md|MASTER-ROADMAP\.md)$' || true)"
+          if [ -n "$unexpected" ]; then
+            echo 'Build42.2 changed files outside the authorized F16 slice:' >&2
+            printf '%s\n' "$unexpected" >&2
+            exit 1
+          fi
+          ! printf '%s\n' "$changed" | grep -Eq '^(app\.js|voice-ios\.js|free-voice\.js|index\.html|manifest\.webmanifest|src/pedagogy/foundations-core\.js|src/pedagogy/curriculum-stage[234]\.js|src/core/|assets/LOGO\.png|assets/Favicon\.png)$'
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-b422-http.log 2>&1 &
+          echo $! >/tmp/ft-b422-server.pid
+          sleep 1
+          google-chrome --version
+
+      - name: Chrome — F13 predecessor ownership survives
+        run: |
+          set -euo pipefail
+          passed=0
+          for attempt in 1 2; do
+            profile="/tmp/ft-b422-predecessor-$attempt"; file="/tmp/b422-predecessor-$attempt.html"
+            rm -rf "$profile" "$file"
+            if timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=390,844 --virtual-time-budget=11000 --dump-dom \
+              'http://127.0.0.1:4173/tests/browser/build37-8-foundations-adjective-agreement.html?debug=fr' >"$file" \
+              && grep -q 'data-b378-done="1"' "$file" \
+              && grep -q 'data-b378-f13="1"' "$file" \
+              && grep -q 'data-b378-routing="1"' "$file" \
+              && grep -q 'data-b378-storage-unchanged="1"' "$file" \
+              && ! grep -q 'data-b378-error=' "$file"; then passed=1; break; fi
+          done
+          test "$passed" -eq 1
+
+      - name: Chrome — F16 VI/FR desktop + iPhone parity and routing
+        run: |
+          set -euo pipefail
+          for spec in 'vi 1280 900' 'fr 1280 900' 'vi 390 844' 'fr 390 844'; do
+            set -- $spec; locale="$1"; width="$2"; height="$3"; passed=0; file=''
+            for attempt in 1 2; do
+              profile="/tmp/ft-b422-${locale}-${width}-$attempt"
+              file="/tmp/b422-${locale}-${width}-$attempt.html"
+              rm -rf "$profile" "$file"
+              if timeout --signal=TERM --kill-after=5s 45s google-chrome --headless=new --no-sandbox --disable-gpu \
+                --user-data-dir="$profile" --window-size="$width,$height" --virtual-time-budget=13000 --dump-dom \
+                "http://127.0.0.1:4173/tests/browser/build42-2-foundations-f16-contractions.html?debug=$locale" >"$file" \
+                && grep -q 'data-b422-done="1"' "$file" \
+                && grep -q "data-b422-locale=\"$locale\"" "$file" \
+                && grep -q 'data-b422-f16="1"' "$file" \
+                && grep -q 'data-b422-routing="1"' "$file" \
+                && grep -q 'data-b422-storage-unchanged="1"' "$file" \
+                && grep -q 'data-b422-no-overflow="1"' "$file" \
+                && ! grep -q 'data-b422-error=' "$file"; then passed=1; break; fi
+            done
+            if [ "$passed" -ne 1 ]; then
+              echo "F16 tribunal failed for $locale ${width}x${height}" >&2
+              grep -o 'data-b422-[^ >]*="[^"]*"' "$file" >&2 || true
+              grep -o 'data-b422-error="[^"]*"' "$file" >&2 || true
+              exit 1
+            fi
+          done
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-b422-server.pid ]; then kill "$(cat /tmp/ft-b422-server.pid)" || true; fi
