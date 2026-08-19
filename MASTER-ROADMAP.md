@@ -7,32 +7,40 @@
 ## Canonical checkpoint — 2026-08-19
 
 ```text
-accepted main before current audit   79992e6acfce4d0913ae84838f93f47abc77c8c7
-Build42.2 product merge               8b462fae236c00b902a9312fe8e1b103412b8694
-public runtime metadata               v2.5.0 · Build 38
-pedagogy baseline                     v2.3.0 · Build 34
-curriculum                            52 lessons / 313 items
-scenario                              44 situations / 132 turns
-listening                             17 contrast families / 18 contextual dialogues
-speaking loop                         52/52 · max 2 moments / lesson
-recovery                              7 durable stores / backup v3
-evidence v2                           derived shadow only; original six stores product truth
-Build38                               CLOSED / RELEASED
-Build39 LI3                           CLOSED / CERTIFIED
-Build40 A1 audit                      CLOSED / PRODUCTIVE CONSOLIDATION SELECTED
-Build41                               CLOSED / SUCCESSFUL NARROW CONSOLIDATION
-Build42.1                             CLOSED / AUDITED
-Build42.2                             CLOSED / MERGED / EXACT-HEAD CI-CERTIFIED
-Build42                               ACTIVE — closure audit candidate recommends CLOSE
-Build42.3                             NOT AUTHORIZED
-productive F16 Transfer               NOT AUTHORIZED
-P3 evidence-owner design              NOT AUTHORIZED until Build42 closure acceptance
-A2                                    NOT AUTHORIZED
+Build42.2 product merge          8b462fae236c00b902a9312fe8e1b103412b8694
+accepted docs checkpoint         79992e6acfce4d0913ae84838f93f47abc77c8c7
+public runtime metadata          v2.5.0 · Build 38
+pedagogy baseline                v2.3.0 · Build 34
+curriculum                       52 lessons / 313 items
+scenario                         44 situations / 132 turns
+listening                        17 contrast families / 18 contextual dialogues
+speaking loop                    52/52 · max 2 moments / lesson
+recovery                         7 durable stores / backup v3
+evidence v2                      derived shadow only; original six stores product truth
+Build38                          CLOSED / RELEASED
+Build39 LI3                      CLOSED / CERTIFIED
+Build40 A1 audit                 CLOSED / PRODUCTIVE CONSOLIDATION SELECTED
+Build41                          CLOSED / SUCCESSFUL NARROW CONSOLIDATION
+Build42.1                        CLOSED / AUDITED
+Build42.2                        CLOSED / MERGED / EXACT-HEAD CI-CERTIFIED
+Build42                          CLOSURE CANDIDATE — recommendation: CLOSE
+Build42.3                        NOT AUTHORIZED
+productive F16 Transfer          NOT AUTHORIZED
+A2                               NOT AUTHORIZED
 ```
 
-A docs-only checkpoint may advance `main` without changing runtime/product state. Live GitHub remains authoritative for exact HEAD.
+Current closure candidate:
 
-Push-triggered Pages for the Build42.2 product/docs merges was not independently proven through the available connector. Do not collapse merge, deployment and field-pass into one claim.
+```text
+PR      #232 — Docs · audit Build 42 milestone closure
+branch  docs/build42-milestone-closure-audit
+```
+
+Live PR/GitHub is authoritative for its exact candidate head.
+
+The candidate changes only Build42 closure documentation plus one CI successor-safety maintenance line: the old Build42.2 *slice scope* check now runs only on its original `build42/f16-teach-core` PR branch. All F16 contract and browser tribunals still run on successor PRs. No product/runtime/pedagogy owner is changed by this maintenance.
+
+Push-triggered Pages for the Build42.2 product SHA was not independently proven through the available connector. Do not collapse merge, deployment and field-pass into one claim.
 
 Historical learner continuity remains LOCKED:
 
@@ -75,6 +83,7 @@ A suspected flake is rerun unchanged before product mutation. Repo/live GitHub w
 - Build38 deterministic cores/placements/shared Transfer renderer remain historical contracts;
 - Build39.1→39.5 semantics remain protected;
 - Build41.2 recent-past pure core remains a certified source contract;
+- Build42.2 F16 teaching contract remains protected;
 - `app.js`, `voice-ios.js`, `free-voice.js`, `assets/LOGO.png`, `assets/Favicon.png`, Build30 runtime bridge/contracts remain sanctuaries unless explicitly justified.
 
 # Closed milestones
@@ -96,8 +105,6 @@ F12     questions                       lessons 41–43
 ```
 
 All use the shared optional Foundations capsule infrastructure, ephemeral session state and no mastery claim.
-
-F16 entered Build42 as the explicit structural debt and is now coherently taught by Build42.2.
 
 ## Build38 — Generalization & Transfer — CLOSED / RELEASED
 
@@ -204,15 +211,19 @@ Build41.3 raised learner-facing deterministic Transfer from five Build38 familie
 
 # Build42 — Foundations debt resolution — CLOSURE CANDIDATE
 
-## Build42.1 — F16 source + learner-placement audit — CLOSED / AUDITED
-
-Canonical audit:
+Canonical closure audit candidate:
 
 ```text
-docs/BUILD-42.1-F16-SOURCE-PLACEMENT-AUDIT.md
+docs/BUILD-42-MILESTONE-CLOSURE-AUDIT.md
 ```
 
-Accepted F16 distinction:
+Candidate verdict:
+
+> **CLOSE Build42** as a successful F16 Foundations debt-resolution milestone.
+
+## Build42.1 — source + placement — CLOSED / AUDITED
+
+Build42.1 established the accepted F16 distinction:
 
 ```text
 à + le   → au
@@ -226,7 +237,7 @@ non-contracted comparison:
 
 F16 owns the mechanical contraction only after `à` or `de` + definite article is already intended. It does not decide lexical preposition choice.
 
-Strong real source anchors include:
+Strong real anchors include:
 
 ```text
 lesson 3   Je viens du Vietnam.
@@ -250,22 +261,14 @@ lesson 42  Une bouteille d'eau. / Un paquet de riz. / Un peu de…
 
 Build42.1 found enough evidence for coherent teaching at lesson38, but not enough for productive F16 Transfer.
 
-## Build42.2 — F16 learner-facing teach-core capsule — CLOSED / MERGED / EXACT-HEAD CI-CERTIFIED
-
-Canonical implementation document:
-
-```text
-docs/BUILD-42.2-F16-TEACH-CORE.md
-```
+## Build42.2 — learner-facing teach-core — CLOSED / MERGED / EXACT-HEAD CI-CERTIFIED
 
 Accepted GitHub evidence:
 
 ```text
 PR             #230 — Build 42.2 · F16 learner-facing contractions capsule
-base           cfced413ce74e78712a62776641993c4de8551c1
 accepted head  1c11f253ce6841289f619252bfc077c7e657219a
 merge          8b462fae236c00b902a9312fe8e1b103412b8694
-docs closeout  79992e6acfce4d0913ae84838f93f47abc77c8c7
 ```
 
 Accepted learner flow:
@@ -303,27 +306,20 @@ F16 Transfer      none
 A2                none
 ```
 
-### Build42.2 exact-head CI
+### Why Build42 should close
 
-Final exact-head `1c11f253...` returned the complete matrix to the expected baseline:
+The milestone's explicit structural debt was that F16 was partial/distributed and lacked coherent learner-facing teaching. That debt is now resolved:
 
 ```text
-Build42.2  SUCCESS
-Build38.2  SUCCESS
-Build38.5  SUCCESS
-Build38.7  SUCCESS
-Build38.8  SUCCESS
-Build38.9  SUCCESS
-Build38.10 SUCCESS
-Build41.3  SUCCESS
-all other non-baseline checks SUCCESS
+42.1 maps real sources + defines the grammatical boundary + selects placement
+42.2 teaches the full system through the accepted Foundation owner
 ```
 
-Only the five inherited CI debts remained.
+The remaining lack of durable Foundation mastery and productive F16 Transfer does not represent unfinished Build42 teaching. It is an evidence/source-ownership boundary that the product deliberately refuses to fake.
+
+No Build42.3 implementation is independently justified.
 
 ### Productive F16 Transfer gate — NOT AUTHORIZED
-
-Build42.2 supplies coherent instruction, not missing learner-source evidence.
 
 Still insufficient:
 
@@ -331,96 +327,16 @@ Still insufficient:
 - no equally clean learner-facing contraction-`des` source pair;
 - no trustworthy durable Foundation/Transfer construction evidence owner.
 
-Therefore no productive F16 Transfer slice is authorized from Build42.2 alone.
+Therefore closing Build42 must **not** authorize productive F16 Transfer.
 
-## Build42 milestone closure audit — CANDIDATE
+### #232 CI maintenance
 
-Canonical candidate:
+The first closure-candidate head exposed two failures beyond the known baseline:
 
-```text
-docs/BUILD-42-MILESTONE-CLOSURE-AUDIT.md
-```
+1. Build26.1 Voice replay timed out in Chrome after its static/wiring/sanctuary checks passed. The exact same job was rerun unchanged and returned SUCCESS. No product mutation was made.
+2. Build42.2 F16 passed its product/contract checks but its historical *slice scope* guard rejected the new milestone-closure Markdown file. That scope check is now limited to its original `build42/f16-teach-core` PR branch, while all F16 contracts/browser tests continue to run on future PRs.
 
-Closure question:
-
-```text
-Did 42.1 + 42.2 resolve the authorized F16 teaching debt?
-```
-
-Candidate answer:
-
-```text
-YES → CLOSE Build42
-```
-
-Reasoning:
-
-- F16 is now explicitly and completely defined;
-- lesson38 placement is source-backed;
-- learner-facing teaching exists through the shared Foundation owner;
-- the partitive/contraction distinction is explicit and tested;
-- no curriculum or learner-data mutation was needed;
-- no independent F16 implementation remains justified inside this milestone.
-
-The missing durable mastery/Transfer evidence is kept outside Build42 ownership. It remains a separate evidence/readiness concern and must not be “fixed” by inventing a store or a Build42.3.
-
-Therefore the candidate closure state is:
-
-```text
-Build42      CLOSE / SUCCESSFUL FOUNDATIONS DEBT RESOLUTION
-Build42.3    NOT AUTHORIZED
-F16 Transfer NOT AUTHORIZED
-A2           NOT AUTHORIZED
-```
-
-Until the audit candidate is reviewed and accepted, Build42 remains formally ACTIVE.
-
-# Post-Build42 order — candidate decision
-
-Build40 established:
-
-```text
-P1 productive-family audit
-P2 F16 à/de contractions audit
-P3 evidence-owner design only after meaningful productive events exist
-P4 re-run A1 readiness before A2
-```
-
-Current status:
-
-```text
-P1 complete through Build41
-   → deterministic learner-facing Transfer widened from 5 to 6 families
-
-P2 complete through Build42.1 + Build42.2
-   → F16 teaching debt resolved
-
-P3 next if Build42 closure is accepted
-   → READ-ONLY evidence-owner design audit first
-
-P4 blocked
-   → durable construction/concept evidence has not changed yet
-```
-
-### P3 boundary
-
-The next audit must inspect actual observable success/miss/assistance events from current Foundation/Transfer/Productive activities before authorizing any persistence or new owner.
-
-It must not:
-
-- infer concept mastery from lesson completion or opening a capsule;
-- infer transfer mastery from ephemeral UI success without an explicit trustworthy owner;
-- create a store merely so Learner Intelligence can claim more;
-- cut over Evidence v2 by implication;
-- assign a Build43 implementation number before the audit proves a real event/owner model.
-
-Therefore:
-
-```text
-P3 evidence-owner design audit   NEXT only after Build42 closure acceptance
-Build43 implementation           NOT AUTHORIZED
-A2                               NOT AUTHORIZED
-```
+This maintenance makes the old workflow successor-safe; it does not weaken F16 certification or change runtime behavior.
 
 # Evidence gate
 
@@ -454,15 +370,20 @@ Known persistent inherited failures:
 
 Build26.4 is a classified runner/harness flake, not standing debt. Any other red is NEW until classified.
 
-# NEXT
+# NEXT if Build42 closure is accepted
+
+Continue the Build40 plan rather than inventing Build42.3 or an implementation number prematurely:
 
 ```text
-Review Build42 milestone closure audit candidate
-→ confirm docs-only exact head and no review blocker
-→ classify CI only against the known five inherited failures
-→ if accepted, merge with expected-head protection
-→ verify main and reconcile Build42 = CLOSED
-→ then authorize P3 evidence-owner design audit
+P3 — evidence-owner design audit — READ-ONLY
+→ inventory actual observable productive/Foundation/Transfer events
+→ distinguish exercise existence from durable evidence ownership
+→ decide whether a trustworthy event/owner model is justified
+→ no persistence-first architecture
+→ no implementation number until this audit proves one
+
+P4 — fresh A1 readiness audit
+→ reconsider A2 only after the productive/evidence reality is re-audited
 ```
 
 Not authorized before that decision:
@@ -470,7 +391,5 @@ Not authorized before that decision:
 - Build42.3 implementation;
 - productive F16 Transfer;
 - durable Foundation/Transfer mastery claims;
-- P3 implementation;
-- Build43 implementation numbering;
 - A2;
 - a new durable store merely to manufacture evidence.
