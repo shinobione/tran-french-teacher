@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Build 42.2 F16 contractions tribunal</title>
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#07111e;color:#eef5ff;font-family:system-ui,-apple-system,sans-serif}button{font:inherit;color:inherit;background:#20314a;border:1px solid #5f7595;border-radius:12px;padding:8px 12px}.primary{background:#315d74}.secondary{background:#253852}.muted{color:#9fb0c5}.screen-lesson{width:min(760px,calc(100% - 24px));margin:20px auto}.topbar{padding:10px 2px}.topbar h1{font-size:1.25rem}.lesson-step{padding:18px;border:1px solid #23364d;border-radius:20px;background:#0d1928}
+  </style>
+  <script>
+    (()=>{
+      const debug=new URLSearchParams(location.search).get('debug')==='fr';
+      localStorage.clear();
+      localStorage.setItem('tran-french-teacher:debug-fr:v1',debug?'1':'0');
+      localStorage.setItem('b42.2:sentinel','unchanged');
+      window.__b422Debug=debug;
+      window.__b422StorageBefore=JSON.stringify(Object.keys(localStorage).sort().map(k=>[k,localStorage.getItem(k)]));
+    })();
+  </script>
+</head>
+<body>
+  <main id="app">
+    <section class="screen-lesson">
+      <div class="topbar"><h1>Bài 38 — Passé composé : expérience récente</h1></div>
+      <div class="lesson-step"><p data-existing-lesson>Existing lesson content</p></div>
+    </section>
+  </main>
+  <script src="../../src/pedagogy/foundations-capsule-engine.js?v=2.4.0-b37.3"></script>
+  <script src="../../src/pedagogy/foundations-capsules.js?v=2.5.0-b42.2"></script>
+  <script src="../../src/pedagogy/foundations-pilot.js?v=2.5.0-b42.2"></script>
+  <script>
+    (()=>{
+      const root=document.documentElement;
+      const fail=message=>{root.dataset.b422Error=message;throw new Error(message)};
+      const ok=(value,message)=>{if(!value)fail(message)};
+      const text=selector=>document.querySelector(selector)?.textContent?.trim()||'';
+      const texts=selector=>[...document.querySelectorAll(selector)].map(node=>node.textContent.trim());
+      const click=selector=>{const node=document.querySelector(selector);ok(node,`missing ${selector}`);node.click();return node};
+      const clickChoice=choice=>{const node=[...document.querySelectorAll('[data-foundation-choice]')].find(button=>button.textContent.trim()===choice);ok(node,`missing choice ${choice}`);node.click();return node};
+      const expected=window.__b422Debug?{
+        title:'Contractions de à / de avec le • les',
+        entry:'Environ 5 minutes pour relier à / de avec le / les sans confondre les contractions du / des avec les partitifs. Cette base reste facultative pour continuer la leçon.',
+        intro:'À la leçon 38, tu as déjà vu « au restaurant » et « à la maison ». Les deux utilisent à + article défini : à + le se contracte en au, tandis que à + la reste séparé.',
+        prompts:[
+          'Leçon 38 : Je suis allée ___ restaurant.',
+          'Leçon 38 : Je suis rentrée ___ maison.',
+          'Mécanique : à + les → ?',
+          'Mécanique : de + le → ?',
+          'Mécanique : de + les → ?',
+          'Dans « Du pain. » à la leçon 22, quel est le rôle de « du » ?'
+        ],
+        conclusion:'Le réflexe : quand la structure demande déjà à/de + article défini, regarde l’article. le/les se contractent : au/aux, du/des. la/l’ restent séparés : à la/à l’, de la/de l’. N’utilise pas cette règle pour choisir à ou de, et ne confonds pas le du/des de contraction avec les partitifs de la leçon 22. Un mini-check réussi ne signifie pas que la règle est « maîtrisée ».'
+      }:{
+        title:'Co rút à / de với le • les',
+        entry:'Khoảng 5 phút để nối à / de với le / les mà không nhầm du / des co rút với mạo từ bộ phận. Không bắt buộc để tiếp tục bài.',
+        intro:'Ở bài 38, bạn đã gặp « au restaurant » và « à la maison ». Cả hai dùng à + mạo từ xác định: à + le co lại thành au, còn à + la giữ nguyên.',
+        prompts:[
+          'Bài 38: Je suis allée ___ restaurant.',
+          'Bài 38: Je suis rentrée ___ maison.',
+          'Mẫu cơ học: à + les → ?',
+          'Mẫu cơ học: de + le → ?',
+          'Mẫu cơ học: de + les → ?',
+          'Trong « Du pain. » ở bài 22, « du » có vai trò gì?'
+        ],
+        conclusion:'Phản xạ cần giữ: khi cấu trúc đã cần à/de + mạo từ xác định, nhìn mạo từ. le/les co rút: au/aux, du/des. la/l’ giữ tách: à la/à l’, de la/de l’. Đừng dùng quy tắc này để tự chọn à hay de, và đừng nhầm du/des co rút với mạo từ bộ phận của bài 22. Một mini-check đúng chưa có nghĩa là đã “thành thạo”.'
+      };
+      const setLesson=number=>{
+        document.querySelector('.topbar h1').textContent=`Bài ${number} — routing tribunal`;
+        document.querySelector('.lesson-step').innerHTML='<p data-existing-lesson>Existing lesson content</p>';
+        window.FrenchTranquilleFoundationsPilot.refresh();
+      };
+      try{
+        ok(window.FrenchTranquilleFoundationsCapsules?.F16?.concepts?.join(',')==='F16','F16 capsule missing');
+        ok(window.FrenchTranquilleFoundationsPilot?.adapter==='37.3','37.3 adapter ownership changed');
+        ok(window.FrenchTranquilleFoundationsPilot?.expansion==='37.4','F11 ownership changed');
+        ok(window.FrenchTranquilleFoundationsPilot?.consolidation==='37.5','F05 ownership changed');
+        ok(window.FrenchTranquilleFoundationsPilot?.verbPattern==='37.6','F08 ownership changed');
+        ok(window.FrenchTranquilleFoundationsPilot?.systematization==='37.7','F12 ownership changed');
+        ok(window.FrenchTranquilleFoundationsPilot?.agreement==='37.8','F13 ownership changed');
+        ok(window.FrenchTranquilleFoundationsPilot?.contractions==='42.2','F16 ownership marker missing');
+        ok(window.FrenchTranquilleFoundationsPilot?.persistent===false,'Foundations must remain ephemeral');
+        ok(root.dataset.foundationsContractions==='42.2','root F16 marker missing');
+        ok(document.querySelectorAll('[data-foundation-entry]').length===1,'F16 entry count must be 1');
+        ok(document.querySelector('[data-foundation-entry]')?.dataset.foundationCapsule==='F16','lesson 38 must route to F16');
+        ok(text('.ft-foundation-entry h3')==='au • aux • du • des','F16 entry title mismatch');
+        ok(text('.ft-foundation-entry p')===expected.entry,'F16 entry copy mismatch');
+        click('[data-foundation-open]');
+        ok(document.querySelector('.ft-foundation-dialog')?.dataset.foundationActiveCapsule==='F16','F16 dialog ownership missing');
+        ok(text('.ft-foundation-top .ft-foundation-eyebrow')==='F16 • CORE','F16 label mismatch');
+        ok(text('.ft-foundation-top h2')===expected.title,'F16 title mismatch');
+        ok(text('.ft-foundation-copy strong')===expected.intro,'F16 intro mismatch');
+        ok(JSON.stringify(texts('.ft-foundation-examples b'))===JSON.stringify(['✓ au restaurant','✓ à la maison','✓ du Vietnam','→ à + les = aux','→ de + les = des']),'F16 examples mismatch');
+        click('[data-foundation-next]');
+        const choices=[
+          ['au','à la','aux'],
+          ['à la','au','aux'],
+          ['aux','au','à les'],
+          ['du','des','de le'],
+          ['des','du','de les'],
+          ['article partitif','contraction de + le','les deux']
+        ];
+        const answers=['au','à la','aux','du','des','article partitif'];
+        for(let index=0;index<answers.length;index+=1){
+          ok(text('.ft-foundation-q h3')===expected.prompts[index],`question ${index+1} prompt mismatch`);
+          ok(JSON.stringify(texts('[data-foundation-choice]'))===JSON.stringify(choices[index]),`question ${index+1} choices mismatch`);
+          clickChoice(answers[index]);
+          const correct=[...document.querySelectorAll('[data-foundation-choice]')].find(button=>button.textContent.trim()===answers[index]);
+          ok(correct?.classList.contains('ok'),`question ${index+1} correct marking missing`);
+          click('[data-foundation-next]');
+        }
+        ok(text('.ft-foundation-done p')===expected.conclusion,'F16 conclusion mismatch');
+        click('.ft-foundation-done [data-foundation-close]');
+        ok(!document.querySelector('.ft-foundation-overlay'),'overlay must close');
+        ok(document.activeElement?.matches('[data-foundation-open]'),'focus must return to F16 entry CTA');
+        ok(document.querySelector('[data-existing-lesson]'),'lesson content must survive round trip');
+
+        setLesson(37);
+        ok(!document.querySelector('[data-foundation-entry]'),'lesson 37 must remain without a Foundation owner');
+        setLesson(38);
+        ok(document.querySelector('[data-foundation-entry]')?.dataset.foundationCapsule==='F16','lesson 38 must return to F16');
+        setLesson(40);
+        ok(document.querySelector('[data-foundation-entry]')?.dataset.foundationCapsule==='F13','lesson 40 must remain owned by F13');
+        setLesson(41);
+        ok(document.querySelector('[data-foundation-entry]')?.dataset.foundationCapsule==='F12','lesson 41 must remain owned by F12');
+        setLesson(34);
+        ok(document.querySelector('[data-foundation-entry]')?.dataset.foundationCapsule==='F05','lesson 34 must remain owned by F05');
+        setLesson(13);
+        ok(document.querySelector('[data-foundation-entry]')?.dataset.foundationCapsule==='F01_F04','lesson 13 must remain owned by F01-F04');
+        setLesson(38);
+
+        ok(JSON.stringify(Object.keys(localStorage).sort().map(k=>[k,localStorage.getItem(k)]))===window.__b422StorageBefore,'localStorage changed during F16 capsule');
+        ok(document.documentElement.scrollWidth<=innerWidth+1,'horizontal overflow detected');
+        ok(document.querySelector('[data-foundation-open]').getBoundingClientRect().height>=44,'entry target below 44px');
+        root.dataset.b422Done='1';root.dataset.b422Locale=window.__b422Debug?'fr':'vi';root.dataset.b422F16='1';root.dataset.b422Routing='1';root.dataset.b422StorageUnchanged='1';root.dataset.b422NoOverflow='1';
+      }catch(error){
+        if(!root.dataset.b422Error)root.dataset.b422Error=error.message;
+        console.error(error);
+      }
+    })();
+  </script>
+</body>
+</html>
