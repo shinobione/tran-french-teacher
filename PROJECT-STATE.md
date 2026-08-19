@@ -12,7 +12,8 @@ Last reconciled: 2026-08-19
 - Current candidate: **PR #232 — `Docs · audit Build 42 milestone closure`**, branch `docs/build42-milestone-closure-audit`.
 - Candidate verdict: **CLOSE Build42** as successful F16 Foundations debt resolution.
 - Live PR/GitHub is authoritative for the exact candidate head; this document intentionally avoids self-referential head-SHA chasing.
-- Candidate scope: Build42 closure documentation plus one CI successor-safety maintenance change. The historical Build42.2 *slice scope* check is branch-scoped to its original `build42/f16-teach-core` PR; F16 syntax, contract, predecessor and browser tribunals continue to run on successor PRs.
+- Candidate scope is exactly **4 files**: three Build42 closure Markdown files plus `.github/workflows/build42-2-foundations-f16-contractions.yml` for successor-safe CI scoping. No runtime/product/pedagogy owner changed.
+- The historical Build42.2 *slice scope* check is now limited to its original `build42/f16-teach-core` PR branch. F16 syntax, contract, predecessor and browser tribunals continue to run on successor PRs.
 - Build26.1 produced one headless-Chrome timeout on the first #232 head; rerun of the exact same job unchanged returned **SUCCESS**, so it is classified as a runner/browser flake and no product code was changed.
 - Push-triggered GitHub Pages for the Build42.2 product SHA was not independently proven through the available connector; do not infer deployment from merge alone.
 
@@ -97,9 +98,9 @@ Still insufficient:
 Therefore:
 
 ```text
-productive F16 Transfer   NOT AUTHORIZED
+productive F16 Transfer    NOT AUTHORIZED
 durable Foundation mastery NOT CLAIMED
-Build42.3                  NOT AUTHORIZED
+Build42.3                   NOT AUTHORIZED
 ```
 
 A future Transfer slice would require a separate source/readiness audit and explicit authorization.
