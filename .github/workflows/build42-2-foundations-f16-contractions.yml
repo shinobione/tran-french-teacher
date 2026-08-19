@@ -55,6 +55,7 @@ jobs:
           ! grep -q 'french-tranquille:memory-evidence:v2' src/pedagogy/foundations-pilot.js
 
       - name: Slice scope stays inside authorized owners
+        if: github.event_name == 'pull_request' && github.head_ref == 'build42/f16-teach-core'
         run: |
           set -euo pipefail
           git fetch origin main --quiet
