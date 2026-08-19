@@ -12,8 +12,8 @@ Last reconciled: 2026-08-19
 - Current candidate: **PR #232 — `Docs · audit Build 42 milestone closure`**, branch `docs/build42-milestone-closure-audit`.
 - Candidate verdict: **CLOSE Build42** as successful F16 Foundations debt resolution.
 - Live PR/GitHub is authoritative for the exact candidate head; this document intentionally avoids self-referential head-SHA chasing.
-- The candidate is docs/read-only except for one CI successor-safety maintenance change: the historical Build42.2 slice-scope guard is now limited to its original branch while all F16 product/browser tribunals continue to run on successor PRs.
-- Build26.1 produced one Chrome timeout on the first #232 head; rerun of the exact same job unchanged returned **SUCCESS**, so it is classified as a runner/browser flake and no product code was changed.
+- Candidate scope: Build42 closure documentation plus one CI successor-safety maintenance change. The historical Build42.2 *slice scope* check is branch-scoped to its original `build42/f16-teach-core` PR; F16 syntax, contract, predecessor and browser tribunals continue to run on successor PRs.
+- Build26.1 produced one headless-Chrome timeout on the first #232 head; rerun of the exact same job unchanged returned **SUCCESS**, so it is classified as a runner/browser flake and no product code was changed.
 - Push-triggered GitHub Pages for the Build42.2 product SHA was not independently proven through the available connector; do not infer deployment from merge alone.
 
 ## Accepted product state
@@ -74,7 +74,7 @@ Build42.2 then implemented the accepted teaching obligation through the existing
 ```text
 à + le   → au
 à + les  → aux
-de + le   → du
+de + le  → du
 de + les → des
 
 à la / à l’ / de la / de l’ remain uncontracted
@@ -140,7 +140,7 @@ Build26.4 remains a classified runner/harness flake, not standing debt. Any othe
 
 The first #232 head exposed two reds beyond baseline:
 
-- Build26.1 Voice replay: Chrome timed out after static/sanctuary checks passed; unchanged rerun returned SUCCESS → runner/browser flake, no product mutation.
+- Build26.1 Voice replay: Chrome timed out after static/wiring/sanctuary checks passed; unchanged rerun returned SUCCESS → runner/browser flake, no product mutation.
 - Build42.2 F16: all F16 contract/product checks passed; only the historical slice-scope guard rejected the new Build42 milestone audit document. The guard is now branch-scoped to the original `build42/f16-teach-core` slice. F16 unit/browser tribunals continue to run on successor PRs.
 
 This is CI successor-safety maintenance, not a runtime/pedagogy change.
