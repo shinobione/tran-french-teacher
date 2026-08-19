@@ -2,14 +2,14 @@
 
 Last reconciled: 2026-08-19
 
-## Canonical accepted main
+## Canonical checkpoint
 
-- Repository: `shinobione/tran-french-teacher`
-- Live `main` verified before this slice: **`e04fc556f2c17d3254d862ba03cf60a3437d7aeb`**.
-- Commit: `Docs: finalize Build 41 closeout`.
-- Parent: `e2467cf886cee748a66c38374f56c6e7278d56a7` — accepted Build41 milestone-closure decision.
-- GitHub commit verification: valid / verified.
-- **0 open PRs** existed before the Build42.1 branch was created.
+- Repository: `shinobione/tran-french-teacher`.
+- Build42.1 audit decision is **accepted** at **`1481e4de07b01a0e644138f062685a800e342b12`** (`Docs: accept Build 42.1 F16 source and placement audit`).
+- Parent: `e04fc556f2c17d3254d862ba03cf60a3437d7aeb` — final Build41 closeout checkpoint.
+- PR **#228** was merged by squash from exact head **`910db22d252f28ee325635499f3e0084451ccb67`** with expected-head protection.
+- GitHub was re-read after merge and `main` pointed exactly to `1481e4de...`; commit verification was valid.
+- This closeout is docs-only. A containing closeout commit may advance `main` beyond `1481e4de...` without changing product/runtime state; live GitHub remains authoritative for exact HEAD.
 - Public runtime metadata remains **v2.5.0 · Build 38**.
 - Pedagogy baseline remains **v2.3.0 · Build 34**.
 
@@ -46,64 +46,37 @@ Build38   CLOSED / RELEASED
 Build39   CLOSED / CERTIFIED
 Build40   CLOSED — A1 Productive Consolidation selected
 Build41   CLOSED / SUCCESSFUL NARROW CONSOLIDATION
-Build42.1 AUDIT CANDIDATE — PR #228
-Build42.2 NOT AUTHORIZED pending review of #228
+Build42.1 CLOSED / AUDITED — F16 teaching + lesson38 placement accepted
+Build42.2 AUTHORIZED NEXT — narrow F16 teach-core implementation
+F16 Transfer NOT AUTHORIZED
 A2        NOT AUTHORIZED
 ```
 
-There is no Build41.4 and no second Build41 productive family.
+## Build42.1 accepted evidence
 
-## Active candidate
-
-```text
-PR      #228 — Docs · Build 42.1 F16 source + placement audit
-branch  docs/build42-1-f16-source-placement-audit
-base    e04fc556f2c17d3254d862ba03cf60a3437d7aeb
-scope   docs/read-only audit only
-state   OPEN / CANDIDATE / NOT MERGED
-```
-
-Canonical candidate document:
+Canonical audit:
 
 ```text
 docs/BUILD-42.1-F16-SOURCE-PLACEMENT-AUDIT.md
 ```
 
-No runtime, curriculum, store, Recovery, Evidence, voice, Premium, PWA or public-version file belongs in this slice.
-
-## Build41 closure — accepted predecessor
-
-Build41 completed one full productive-family lifecycle:
+Accepted PR:
 
 ```text
-41.1 audit seven candidate families
-→ exactly one deterministic family passes
-→ 41.2 pure recent-past core
-→ separate learner-placement audit
-→ 41.3 learner-facing integration
-→ milestone closure
+PR             #228 — Docs · Build 42.1 F16 source + placement audit
+candidate head 910db22d252f28ee325635499f3e0084451ccb67
+base           e04fc556f2c17d3254d862ba03cf60a3437d7aeb
+merge          1481e4de07b01a0e644138f062685a800e342b12
+scope          MASTER-ROADMAP.md / PROJECT-STATE.md / Build42.1 audit only
 ```
 
-Accepted family:
+Exact-head workflow review returned **no new failure**: only the five known inherited reds remained. Relevant predecessor/product guards were green, including Foundations 37.1→37.8, Build41.2, Build41.3, Runtime metadata and Release v2.5.0.
 
-```text
-present-je-regular-action
-→ recent-past-je-venir-de
-```
+No review submissions or unresolved review threads existed on #228 at acceptance.
 
-Certified catalog:
+## F16 decision — ACCEPTED
 
-```text
-Je travaille.          → Je viens de travailler.
-Je mange.              → Je viens de manger.
-Je rentre à la maison. → Je viens de rentrer à la maison.
-```
-
-Build41 closure did not authorize A2 or a second productive family. It explicitly left F16 as the next structural audit dependency.
-
-## F16 registry state
-
-The certified Foundations core still records:
+The certified Foundations registry remains conceptually accurate before implementation:
 
 ```text
 F16
@@ -113,9 +86,7 @@ strategy teach-core
 priority later-core
 ```
 
-Build42.1 confirms that this classification remains accurate.
-
-## Build42.1 source audit — candidate findings
+Build42.1 established that F16 is sufficiently sourced for **coherent teaching**, but not yet for productive Transfer.
 
 ### Strong learner-facing anchors
 
@@ -136,42 +107,25 @@ lesson 38  au restaurant  ↔ à la maison
 lesson 45  au ventre      ↔ à la tête
 ```
 
-### Important anti-confusion evidence
+### Anti-confusion boundary — LOCKED
 
-Lesson 22 explicitly teaches:
+Lesson22 explicitly teaches `Du pain. / Du lait. / Des œufs.` as **partitives**. Lesson42 quantity constructions (`une bouteille d'eau`, `un paquet de riz`, `un peu de…`) are also not F16 ownership.
 
-```text
-Du pain.
-Du lait.
-Des œufs.
-```
+Therefore identical surface forms must never be used to pretend that `de + le / de + les` contraction has already been mastered.
 
-as **partitive articles / unspecified quantity**. These strings must not be treated as proof that Trân already understands `de + le → du` or `de + les → des` contraction.
-
-Likewise quantity constructions such as lesson42 `une bouteille d'eau`, `un paquet de riz`, `un peu de…` are not F16 ownership.
-
-### Missing / weak learner-facing anchors
+### Missing source ownership
 
 - no clean learner-facing `aux` contraction item was found across the 52 lessons;
-- no clean learner-facing contraction-`des` source pair equivalent to the `au ↔ à la` evidence was found;
-- `de la` / `de l’` surface forms exist in idiomatic, partitive or quantity contexts, so spelling alone is not safe F16 evidence.
+- no clean learner-facing contraction-`des` source pair equivalent to `au ↔ à la` was found;
+- `de la / de l’` examples often belong to idiomatic, partitive or quantity contexts.
 
-Therefore F16 remains **partial-distributed**, not already taught.
+This is why productive F16 Transfer remains blocked.
 
-## Build42.1 placement verdict — CANDIDATE
+## Build42.1 placement — ACCEPTED
 
-### Earliest pedagogically valid placement: lesson 38
+**Earliest pedagogically valid placement: lesson 38.**
 
-Reasoning:
-
-- F01–F04 article/gender/number Foundations are already established long before lesson38;
-- `à` and `de` have already appeared repeatedly in real learner phrases;
-- lesson22 partitives have already been taught, so F16 can explicitly distinguish contraction from partitive lookalikes;
-- lesson38 is the first clean same-lesson `au` versus `à la` contrast in actual learner items;
-- lesson38 currently has no competing Foundation capsule owner;
-- lesson45 provides a strong later reinforcement pair but is not the earliest valid teaching point.
-
-Proposed future flow if implementation is later authorized:
+Accepted learner flow for the next implementation slice:
 
 ```text
 lesson 38 normal content
@@ -179,11 +133,18 @@ lesson 38 normal content
 → return to lesson
 ```
 
-## Existing Foundation infrastructure verdict
+Why lesson38:
 
-A parallel teaching UI is unnecessary.
+- article/gender/number Foundations already exist;
+- `à` and `de` have appeared repeatedly;
+- partitives have already been introduced, allowing explicit contrast rather than confusion;
+- lesson38 is the first clean same-lesson `au` versus `à la` learner-item contrast;
+- lesson38 has no competing Foundation capsule owner;
+- lesson45 remains a later reinforcement anchor.
 
-Existing owners are suitable:
+## Existing infrastructure — REUSE REQUIRED
+
+Build42.2 must reuse:
 
 ```text
 src/pedagogy/foundations-capsule-engine.js
@@ -191,21 +152,11 @@ src/pedagogy/foundations-capsules.js
 src/pedagogy/foundations-pilot.js
 ```
 
-The capsule engine already provides localized VI/FR, deterministic checks, ephemeral-only state, `masteryClaim=false` and the sequence:
+The shared Foundations flow already provides VI/FR, deterministic checks, ephemeral-only session state, focus return and `masteryClaim=false`. No parallel grammar UI is justified.
 
-```text
-observe → explain → construct → contrast → transfer
-```
+## Build42.2 — AUTHORIZED NEXT
 
-The existing learner adapter already mounts optional Foundations capsules and returns focus to the lesson.
-
-## Candidate decision
-
-### Teach-core
-
-**JUSTIFIED, pending review of PR #228.**
-
-If #228 is accepted, the proposed next implementation slice is:
+Exact authorized implementation scope:
 
 ```text
 Build42.2 — F16 learner-facing teach-core capsule
@@ -213,7 +164,7 @@ placement: lesson 38 only
 owner: existing Foundations engine/overlay
 ```
 
-The teaching content may explain the complete mechanical system:
+The capsule may teach the complete mechanical system:
 
 ```text
 à + le   → au
@@ -224,19 +175,23 @@ de + les → des
 à la / à l’ / de la / de l’ remain uncontracted
 ```
 
-but must distinguish actual existing anchors from examples constructed only to demonstrate the rule, and must explicitly separate partitive/quantity `du/des/de l’` from F16 contraction.
+Hard boundaries:
 
-### Productive Transfer
-
-**NOT AUTHORIZED.**
-
-The current curriculum does not yet provide equally clean learner-facing source ownership for all four contraction targets, especially `aux` and contraction-`des`. A deterministic F16 Transfer family must be re-audited only after coherent teaching exists.
-
-### A2
-
-**NOT AUTHORIZED.**
-
-This audit changes neither durable concept evidence nor the later A1-readiness gate.
+- reuse existing Foundations engine/overlay;
+- lesson38 only unless a later audit explicitly changes placement;
+- VI + DEBUG FR;
+- deterministic checks only;
+- distinguish real curriculum anchors from teaching-only recombinations;
+- explicitly distinguish contraction `du/des` from partitive/quantity `du/des/de l’`;
+- no curriculum item mutation;
+- no new top-level navigation;
+- no new store/schema/Recovery/Evidence owner;
+- no mastery claim;
+- no F16 Transfer implementation;
+- preserve 52 lessons / 313 item semantics;
+- preserve Build37/38/39/41 contracts and Premium V5.10 navigation;
+- public runtime metadata stays `v2.5.0 · Build 38` unless a separate release decision changes it;
+- dedicated predecessor + desktop/iPhone browser tribunal required before candidate acceptance.
 
 ## Evidence gate
 
@@ -256,7 +211,7 @@ foundation-capsule
 transfer-construction
 ```
 
-No new store or mastery claim is authorized by Build42.1.
+Build42.1 does not change this boundary.
 
 ## CI baseline
 
@@ -272,20 +227,17 @@ Build26.4 remains a classified runner/harness flake, not standing debt. Any othe
 
 ## NEXT
 
-Per `AGENTS.md`, stop at the audit candidate boundary:
-
 ```text
-review PR #228 exact-head / docs-only scope
-→ accept or reject the Build42.1 evidence
-→ only if accepted: authorize Build42.2 F16 teach-core capsule
-→ certify teaching before any productive F16 Transfer audit
-→ later re-run A1 readiness before any A2 decision
+Build42.2 — implement one narrow F16 teach-core capsule at lesson38
+→ existing Foundations infrastructure only
+→ dedicated unit/predecessor/browser parity evidence
+→ materialize candidate PR
+→ STOP for control review
 ```
 
-Until PR #228 is accepted:
+Until Build42.2 is separately implemented and certified:
 
-- do not implement F16;
-- do not create/start Build42.2;
-- do not implement F16 Transfer;
+- do not implement productive F16 Transfer;
+- do not claim durable Foundation mastery;
 - do not start A2;
-- do not add durable Foundation/Transfer mastery merely to make intelligence look smarter.
+- do not add a new durable store merely to make intelligence look smarter.
