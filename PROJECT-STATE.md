@@ -14,7 +14,11 @@ Last reconciled: 2026-08-19
 - Push-triggered GitHub Pages for the Build42.2 product/docs merges was **not independently proven through the available connector**; do not infer deployed/Pages-green from merge alone.
 - Public runtime metadata remains **v2.5.0 · Build 38**.
 - Pedagogy baseline remains **v2.3.0 · Build 34**.
-- Current active slice: **Build42 milestone closure audit — docs/read-only candidate** on branch `docs/build42-milestone-closure-audit`.
+- Current active slice: **Build42 milestone closure audit — docs/read-only candidate**.
+- Candidate PR: **#232 — `Docs · audit Build 42 milestone closure`**.
+- Candidate branch: `docs/build42-milestone-closure-audit`.
+- PR #232 base: **`79992e6acfce4d0913ae84838f93f47abc77c8c7`**.
+- PR #232 is **OPEN / NOT MERGED**. Live GitHub remains authoritative for its final exact head after this checkpoint commit.
 
 ## Accepted product state
 
@@ -51,7 +55,7 @@ Build40   CLOSED — A1 Productive Consolidation selected
 Build41   CLOSED / SUCCESSFUL NARROW CONSOLIDATION
 Build42.1 CLOSED / AUDITED — F16 teaching + lesson38 placement accepted
 Build42.2 CLOSED / MERGED / EXACT-HEAD CI-CERTIFIED
-Build42   ACTIVE — closure audit candidate recommends CLOSE
+Build42   ACTIVE — PR #232 closure audit candidate recommends CLOSE
 Build42.3 NOT AUTHORIZED
 F16 Transfer NOT AUTHORIZED
 P3 evidence-owner design NOT AUTHORIZED until Build42 closure acceptance
@@ -161,7 +165,7 @@ all other non-baseline checks  SUCCESS
 
 The only failures remaining were exactly the five inherited CI debts documented below.
 
-## Build42 milestone closure audit — ACTIVE CANDIDATE
+## Build42 milestone closure audit — PR #232 CANDIDATE
 
 Canonical candidate audit:
 
@@ -172,7 +176,7 @@ docs/BUILD-42-MILESTONE-CLOSURE-AUDIT.md
 The audit distinguishes two questions:
 
 ```text
-F16 teaching debt resolved?          YES
+F16 teaching debt resolved?           YES
 F16 durable mastery / Transfer ready? NO
 ```
 
@@ -192,7 +196,7 @@ Reason:
 
 The continuing lack of durable Foundation/Transfer evidence is **not** treated as unfinished F16 teaching. It belongs to the later evidence-owner/readiness problem already identified by Build40.
 
-Until this closure audit is accepted/merged, Build42 remains formally ACTIVE and no next implementation is authorized.
+Until PR #232 is accepted/merged, Build42 remains formally ACTIVE and no next implementation is authorized.
 
 ## Productive F16 Transfer gate — STILL CLOSED
 
@@ -249,7 +253,7 @@ P1 is now complete through Build41: learner-facing deterministic Transfer widene
 
 P2 is complete through Build42.1 + Build42.2.
 
-If the Build42 closure audit is accepted, the next canonical work becomes:
+If PR #232 is accepted, the next canonical work becomes:
 
 ```text
 P3 — evidence-owner design audit
@@ -278,10 +282,12 @@ Build26.4 remains a classified runner/harness flake, not standing debt. Any othe
 ## NEXT
 
 ```text
-Review Build42 milestone closure audit candidate
-→ verify docs-only exact head / reviews / CI
-→ if accepted, merge with expected-head protection
-→ reconcile main as Build42 CLOSED
+Review PR #232 exact head
+→ confirm changed files remain exactly the three Markdown docs
+→ inspect review threads and exact-head CI
+→ classify any reds only against the known five inherited failures
+→ if clean, merge with expected-head protection
+→ verify main and reconcile Build42 = CLOSED
 → only then authorize P3 evidence-owner design audit
 ```
 
