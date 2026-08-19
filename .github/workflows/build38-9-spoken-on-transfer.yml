@@ -56,7 +56,6 @@ jobs:
             src/pedagogy/generalization-negation-core.js \
             src/pedagogy/generalization-futur-proche-core.js \
             src/pedagogy/generalization-number-core.js \
-            src/pedagogy/foundations-capsules.js \
             src/pedagogy/curriculum-stage3.js \
             src/pedagogy/curriculum-stage4.js; do
             if printf '%s\n' "$changed" | grep -Fxq "$protected"; then

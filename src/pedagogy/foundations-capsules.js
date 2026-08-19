@@ -120,6 +120,27 @@
     optional:true,persistence:'ephemeral-only',masteryClaim:false
   };
 
+  const CONTRACTIONS_RAW = {
+    id:'a-de-contractions-core',concepts:['F16'],
+    title:{vi:'Co rút à / de với le • les',fr:'Contractions de à / de avec le • les'},
+    intro:[
+      {vi:'Ở bài 38, bạn đã gặp « au restaurant » và « à la maison ». Cả hai dùng à + mạo từ xác định: à + le co lại thành au, còn à + la giữ nguyên.',fr:'À la leçon 38, tu as déjà vu « au restaurant » et « à la maison ». Les deux utilisent à + article défini : à + le se contracte en au, tandis que à + la reste séparé.'},
+      {vi:'Mẫu cơ học: à + le → au • à + les → aux • de + le → du • de + les → des. Với la hoặc l’, không co rút: à la, à l’, de la, de l’.',fr:'Le mécanisme est simple : à + le → au • à + les → aux • de + le → du • de + les → des. Avec la ou l’, pas de contraction : à la, à l’, de la, de l’.'},
+      {vi:'Quan trọng: phần này chỉ giải thích sự co rút khi câu đã cần à hoặc de + mạo từ xác định; nó không chọn giới từ thay bạn. Và « du / des » ở bài 22 có thể là mạo từ bộ phận — Du pain. / Des œufs. — cùng cách viết nhưng chức năng khác. « aux » và de + les → des dưới đây là mẫu giảng dạy, không phải bằng chứng bạn đã học chúng trước đó.',fr:'Important : cette base explique seulement la contraction quand la phrase demande déjà à ou de + article défini ; elle ne choisit pas la préposition à ta place. Et « du / des » à la leçon 22 peuvent être des partitifs — Du pain. / Des œufs. — même écriture, autre fonction. « aux » et de + les → des ci-dessous sont des recombinaisons d’enseignement, pas la preuve que tu les maîtrisais déjà.'}
+    ],
+    examples:['✓ au restaurant','✓ à la maison','✓ du Vietnam','→ à + les = aux','→ de + les = des'],
+    checks:[
+      {id:'f16-l38-au',prompt:{vi:'Bài 38: Je suis allée ___ restaurant.',fr:'Leçon 38 : Je suis allée ___ restaurant.'},choices:['au','à la','aux'],answer:'au',feedback:{vi:'restaurant đi với le; à + le → au: Je suis allée au restaurant.',fr:'restaurant est avec le ; à + le → au : Je suis allée au restaurant.'}},
+      {id:'f16-l38-a-la',prompt:{vi:'Bài 38: Je suis rentrée ___ maison.',fr:'Leçon 38 : Je suis rentrée ___ maison.'},choices:['à la','au','aux'],answer:'à la',feedback:{vi:'maison đi với la; à + la không co rút: à la maison.',fr:'maison est avec la ; à + la ne se contracte pas : à la maison.'}},
+      {id:'f16-a-les',prompt:{vi:'Mẫu cơ học: à + les → ?',fr:'Mécanique : à + les → ?'},choices:['aux','au','à les'],answer:'aux',feedback:{vi:'à + les luôn co lại thành aux. Đây là mẫu giảng dạy, không phải một câu đã được coi là thành thạo.',fr:'à + les se contracte en aux. Ici, c’est une recombinaison d’enseignement, pas une phrase prétendue déjà maîtrisée.'}},
+      {id:'f16-de-le',prompt:{vi:'Mẫu cơ học: de + le → ?',fr:'Mécanique : de + le → ?'},choices:['du','des','de le'],answer:'du',feedback:{vi:'de + le → du. Bạn đã gặp dạng thật trong « Je viens du Vietnam. »',fr:'de + le → du. Tu as déjà rencontré une vraie forme dans « Je viens du Vietnam. »'}},
+      {id:'f16-de-les',prompt:{vi:'Mẫu cơ học: de + les → ?',fr:'Mécanique : de + les → ?'},choices:['des','du','de les'],answer:'des',feedback:{vi:'de + les → des. Đây là mẫu giảng dạy; nó không biến « Des œufs. » của bài 22 thành bằng chứng về sự co rút.',fr:'de + les → des. C’est une recombinaison d’enseignement ; elle ne transforme pas « Des œufs. » de la leçon 22 en preuve de contraction.'}},
+      {id:'f16-partitive-contrast',prompt:{vi:'Trong « Du pain. » ở bài 22, « du » có vai trò gì?',fr:'Dans « Du pain. » à la leçon 22, quel est le rôle de « du » ?'},choices:['article partitif','contraction de + le','les deux'],answer:'article partitif',feedback:{vi:'Ở đây « du » là mạo từ bộ phận cho một lượng không xác định. Cùng cách viết không có nghĩa là cùng quy tắc.',fr:'Ici, « du » est un article partitif pour une quantité non précisée. Même écriture ne veut pas dire même règle.'}}
+    ],
+    conclusion:{vi:'Phản xạ cần giữ: khi cấu trúc đã cần à/de + mạo từ xác định, nhìn mạo từ. le/les co rút: au/aux, du/des. la/l’ giữ tách: à la/à l’, de la/de l’. Đừng dùng quy tắc này để tự chọn à hay de, và đừng nhầm du/des co rút với mạo từ bộ phận của bài 22. Một mini-check đúng chưa có nghĩa là đã “thành thạo”.',fr:'Le réflexe : quand la structure demande déjà à/de + article défini, regarde l’article. le/les se contractent : au/aux, du/des. la/l’ restent séparés : à la/à l’, de la/de l’. N’utilise pas cette règle pour choisir à ou de, et ne confonds pas le du/des de contraction avec les partitifs de la leçon 22. Un mini-check réussi ne signifie pas que la règle est « maîtrisée ».'},
+    optional:true,persistence:'ephemeral-only',masteryClaim:false
+  };
+
   const engine = typeof module === 'object' && module.exports
     ? require('./foundations-capsule-engine.js')
     : window.FrenchTranquilleFoundationsCapsuleEngine;
@@ -131,7 +152,8 @@
     F05:engine.compile(SUBJECT_PRONOUNS_RAW),
     F08:engine.compile(REGULAR_ER_RAW),
     F12:engine.compile(QUESTIONS_RAW),
-    F13:engine.compile(ADJECTIVE_AGREEMENT_RAW)
+    F13:engine.compile(ADJECTIVE_AGREEMENT_RAW),
+    F16:engine.compile(CONTRACTIONS_RAW)
   });
 
   if (typeof module === 'object' && module.exports) module.exports = CAPSULES;
