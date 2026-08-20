@@ -12,6 +12,7 @@ Build42 closure merge            8c2787d203d6089850856652f288f10a4fd53b32
 Build40 P3 audit merge           cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac
 Build40 P3 closeout merge        5cde5d3c4d91d63aa50b98ff6b6c6d904f12f29c
 Build40 P3 final alignment       653aa3a3fe358c7036cca661d339b82b7073cc38
+P3a pure contract merge          ef720b760db1108d98ee0090cc87f929d75676a1
 public runtime metadata          v2.5.0 · Build 38
 pedagogy baseline                v2.3.0 · Build 34
 curriculum                       52 lessons / 313 items
@@ -26,7 +27,8 @@ Build40 A1 audit                 CLOSED / PRODUCTIVE CONSOLIDATION SELECTED
 Build41                          CLOSED / SUCCESSFUL NARROW CONSOLIDATION
 Build42                          CLOSED / SUCCESSFUL FOUNDATIONS DEBT RESOLUTION
 Build40 P3                       CLOSED / ACCEPTED
-P3a                              ACTIVE CANDIDATE / PURE CONTRACT PROOF
+P3a                              CLOSED / ACCEPTED PURE CONTRACT PROOF
+P3b                              NEXT / NOT STARTED
 Build42.3                        NOT AUTHORIZED
 productive F16 Transfer          NOT AUTHORIZED
 Build43                          NOT AUTHORIZED
@@ -50,7 +52,7 @@ l8 progress = 4
 - Evidence v2 remains derived shadow until explicit future cutover;
 - no durable store/schema merely to make intelligence look smarter;
 - preserve 52 lesson IDs / 313 item semantics;
-- Build27 App Shell, Premium V5.10, Build37 Foundations, Build38 Transfer, Build39 LI3, Build41 recent-past and Build42.2 F16 contracts remain protected;
+- Build27 App Shell, Premium V5.10, Build37 Foundations, Build38 Transfer, Build39 LI3, Build41 recent-past, Build42.2 F16 and accepted P3a observation contract remain protected;
 - `app.js`, `voice-ios.js`, `free-voice.js`, `assets/LOGO.png`, `assets/Favicon.png`, Build30 runtime bridge/contracts remain sanctuaries unless explicitly justified.
 
 # Milestone summary
@@ -81,7 +83,7 @@ foundation-capsule
 transfer-construction
 ```
 
-P3/P3a design work alone does not change that because no source-time owner is wired or durable yet.
+P3/P3a design and contract work alone do not change that because no source-time owner is wired or durable yet.
 
 ## Build40 — A1 Consolidation Audit — CLOSED
 
@@ -97,7 +99,7 @@ P3c durability decision if justified
 P4 fresh A1 readiness audit
 ```
 
-P1 completed through Build41. P2 completed through Build42. P3 is accepted/closed. P3a is active.
+P1 completed through Build41. P2 completed through Build42. P3 is accepted/closed. P3a is accepted/closed. **P3b is next.**
 
 ## Build41 — A1 Productive Consolidation — CLOSED
 
@@ -170,20 +172,32 @@ modelShownAfterMiss = true
 
 not `assisted-success`, because there is no certified assisted retry.
 
-# ACTIVE — P3a pure pedagogical-observation contract proof
+# P3a — pure pedagogical-observation contract proof — CLOSED / ACCEPTED
 
-Canonical candidate document:
+Canonical contract document:
 
 ```text
 docs/BUILD-40-P3A-PEDAGOGICAL-OBSERVATION-CONTRACT.md
 ```
 
-Candidate owners:
+Accepted owners:
 
 ```text
 src/pedagogy/pedagogical-observation-core.js
 tests/unit/p3a-pedagogical-observation-core.test.cjs
 .github/workflows/p3a-pedagogical-observation-contract.yml
+```
+
+Acceptance chain:
+
+```text
+PR #237 base             653aa3a3fe358c7036cca661d339b82b7073cc38
+PR #237 accepted head    fd5c4643c3701dfb37d42789a0409c849cb97324
+PR #237 squash merge     ef720b760db1108d98ee0090cc87f929d75676a1
+P3a workflow run         32399825235 SUCCESS
+scope                    exactly 6 authorized paths
+review                   1×P1 + 2×P2 addressed; 3/3 threads resolved
+exact-head CI            only five inherited baseline failures; no new red
 ```
 
 Contract identity:
@@ -205,7 +219,7 @@ The normalized observation is intentionally narrow:
 
 ```text
 at                 caller-supplied source-time ISO timestamp
-lessonId           real lesson placement
+lessonId           strict current lesson placement 1..52
 activityKind       foundation-check | transfer-check
 
 target.kind        foundation-concept | transfer-family
@@ -223,9 +237,11 @@ sourceOwner        foundations | transfer
 sourceSlice        provenance only
 ```
 
-P3a fail-closed rules include:
+Accepted P3a fail-closed rules include:
 
 - full timestamp with time + timezone; no hidden `Date.now()` chronology;
+- calendar-impossible timestamps are rejected before `Date.parse`;
+- `lessonId` is not coerced and is bounded to the current 1..52 lesson namespace;
 - current Foundation namespace is F01–F18;
 - one Transfer family per Transfer observation;
 - Transfer `activityId` must equal the target family;
@@ -247,11 +263,11 @@ Build43      NOT AUTHORIZED
 A2           NOT AUTHORIZED
 ```
 
-# NEXT — only if P3a is accepted
+# NEXT — P3b source instrumentation / ephemeral collector decision
 
 ```text
-P3b — source instrumentation / ephemeral collector decision
-→ map actual Foundations + Transfer source-time session results into the P3a contract
+P3b
+→ map actual Foundations + Transfer source-time session results into the accepted P3a contract
 → decide a bounded ephemeral runtime collector/sink
 → zero durable write
 → zero Recovery/Evidence mutation
@@ -266,6 +282,6 @@ P4 — fresh A1 readiness audit
 → reconsider A2 only from the re-audited evidence reality
 ```
 
-Until a certified source-time owner is actually wired and producing trustworthy observations, Build39.2 abstention for `concept-review`, `foundation-capsule` and `transfer-construction` remains correct.
+Until P3b actually wires a certified source-time owner and trustworthy observations are produced, Build39.2 abstention for `concept-review`, `foundation-capsule` and `transfer-construction` remains correct.
 
 Not authorized: Build42.3, productive F16 Transfer, durable Foundation/Transfer mastery claims, Build43 implementation numbering, A2, Evidence read cutover, direct Evidence event writes, or a new durable store merely to manufacture evidence.
