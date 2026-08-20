@@ -18,7 +18,9 @@
     'foundation-check': Object.freeze({ targetKind: 'foundation-concept', sourceOwner: 'foundations' }),
     'transfer-check': Object.freeze({ targetKind: 'transfer-family', sourceOwner: 'transfer' })
   });
+  const MAX_LESSON_ID = 52;
   const LIMITS = Object.freeze({
+    maxLessonId: MAX_LESSON_ID,
     maxTargetIds: 8,
     maxSemanticIdLength: 120,
     maxActivityIdLength: 120,
@@ -26,7 +28,7 @@
     maxChoiceLength: 280,
     maxSourceSliceLength: 48
   });
-  const SOURCE_TIME_ISO = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?(?:Z|[+-]\d{2}:\d{2})$/;
+  const SOURCE_TIME_ISO = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.(\d{1,3}))?(Z|([+-])(\d{2}):(\d{2}))$/;
   const FORBIDDEN_INPUT_KEYS = Object.freeze([
     'itemId', 'mastery', 'masteryClaim', 'score', 'confidence', 'strength',
     'cefr', 'CEFR', 'state', 'assistedSuccess', 'assisted-success'
@@ -63,16 +65,49 @@
     return text;
   }
 
+  function isLeapYear(year) {
+    return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+  }
+
+  function daysInMonth(year, month) {
+    return [31, isLeapYear(year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month - 1] || 0;
+  }
+
   function normalizedIso(value, issues) {
     if (typeof value !== 'string' || !value.trim()) {
       issue(issues, 'at:required-iso');
       return null;
     }
     const text = value.trim();
-    if (!SOURCE_TIME_ISO.test(text)) {
+    const match = SOURCE_TIME_ISO.exec(text);
+    if (!match) {
       issue(issues, 'at:source-time-iso-required');
       return null;
     }
+
+    const year = Number(match[1]);
+    const month = Number(match[2]);
+    const day = Number(match[3]);
+    const hour = Number(match[4]);
+    const minute = Number(match[5]);
+    const second = Number(match[6]);
+    const offsetHour = match[8] === 'Z' ? 0 : Number(match[10]);
+    const offsetMinute = match[8] === 'Z' ? 0 : Number(match[11]);
+
+    if (
+      year < 1
+      || month < 1 || month > 12
+      || day < 1 || day > daysInMonth(year, month)
+      || hour < 0 || hour > 23
+      || minute < 0 || minute > 59
+      || second < 0 || second > 59
+      || offsetHour < 0 || offsetHour > 23
+      || offsetMinute < 0 || offsetMinute > 59
+    ) {
+      issue(issues, 'at:invalid-calendar');
+      return null;
+    }
+
     const parsed = Date.parse(text);
     if (!Number.isFinite(parsed)) {
       issue(issues, 'at:invalid-iso');
@@ -82,12 +117,15 @@
   }
 
   function normalizedLessonId(value, issues) {
-    const number = Number(value);
-    if (!Number.isInteger(number) || number <= 0) {
-      issue(issues, 'lessonId:positive-integer-required');
+    if (typeof value !== 'number' || !Number.isInteger(value)) {
+      issue(issues, 'lessonId:integer-required');
       return null;
     }
-    return number;
+    if (value < 1 || value > MAX_LESSON_ID) {
+      issue(issues, 'lessonId:outside-current-curriculum');
+      return null;
+    }
+    return value;
   }
 
   function normalizedTarget(rawTarget, activityKind, issues) {
