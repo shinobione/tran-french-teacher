@@ -11,6 +11,7 @@ Build42.2 product merge          8b462fae236c00b902a9312fe8e1b103412b8694
 Build42 closure merge            8c2787d203d6089850856652f288f10a4fd53b32
 Build40 P3 audit merge           cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac
 Build40 P3 closeout merge        5cde5d3c4d91d63aa50b98ff6b6c6d904f12f29c
+Build40 P3 final alignment       653aa3a3fe358c7036cca661d339b82b7073cc38
 public runtime metadata          v2.5.0 · Build 38
 pedagogy baseline                v2.3.0 · Build 34
 curriculum                       52 lessons / 313 items
@@ -25,6 +26,7 @@ Build40 A1 audit                 CLOSED / PRODUCTIVE CONSOLIDATION SELECTED
 Build41                          CLOSED / SUCCESSFUL NARROW CONSOLIDATION
 Build42                          CLOSED / SUCCESSFUL FOUNDATIONS DEBT RESOLUTION
 Build40 P3                       CLOSED / ACCEPTED
+P3a                              ACTIVE CANDIDATE / PURE CONTRACT PROOF
 Build42.3                        NOT AUTHORIZED
 productive F16 Transfer          NOT AUTHORIZED
 Build43                          NOT AUTHORIZED
@@ -59,7 +61,7 @@ Accepted learner-facing Foundation ownership includes F01–F04 lessons8–13, F
 
 ## Build38 — Generalization & Transfer — CLOSED / RELEASED
 
-Certified learner-facing deterministic families remain subject substitution, affirmation→negation, present→futur proche, singular→plural nominal and nous→spoken on. Public runtime remains `v2.5.0 · Build 38`.
+Certified learner-facing deterministic families remain subject substitution, affirmation→negation, present→futur proche, singular→plural nominal and nous→spoken on. Build41 later added recent past, making six learner-facing Transfer families total. Public runtime remains `v2.5.0 · Build 38`.
 
 ## Build39 — Learner Intelligence 3 — CLOSED / CERTIFIED
 
@@ -79,7 +81,7 @@ foundation-capsule
 transfer-construction
 ```
 
-P3 acceptance does not change that yet because no source-time owner is wired or durable.
+P3/P3a design work alone does not change that because no source-time owner is wired or durable yet.
 
 ## Build40 — A1 Consolidation Audit — CLOSED
 
@@ -95,7 +97,7 @@ P3c durability decision if justified
 P4 fresh A1 readiness audit
 ```
 
-P1 completed through Build41. P2 completed through Build42. P3 is accepted/closed. P3a is next.
+P1 completed through Build41. P2 completed through Build42. P3 is accepted/closed. P3a is active.
 
 ## Build41 — A1 Productive Consolidation — CLOSED
 
@@ -106,8 +108,6 @@ Je travaille.          → Je viens de travailler.
 Je mange.              → Je viens de manger.
 Je rentre à la maison. → Je viens de rentrer à la maison.
 ```
-
-This widened learner-facing deterministic Transfer to six families total.
 
 ## Build42 — Foundations debt resolution — CLOSED
 
@@ -135,61 +135,15 @@ Canonical audit:
 docs/BUILD-40-P3-EVIDENCE-OWNER-DESIGN-AUDIT.md
 ```
 
-Acceptance:
+Closure/control chain:
 
 ```text
-PR #234 accepted head  980a0afd3eaaf5ee15e07bcbf0403ba675691817
-PR #234 squash merge   cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac
-PR #235 closeout head  0db28ba63f93d38f2fc6f823c4b9e98a6e392c35
-PR #235 closeout merge 5cde5d3c4d91d63aa50b98ff6b6c6d904f12f29c
-scope                  docs-only
-exact-head CI          only five inherited baseline failures after unchanged Build26.1 rerun
-Build26.1              Chrome timeout → unchanged rerun job 96423901394 SUCCESS
-```
-
-## Accepted design decision
-
-Current Foundations and Transfer UIs already compute real source-time deterministic observations:
-
-```text
-Foundations
-→ capsule/concept/check provenance
-→ selected choice
-→ success | miss
-
-Transfer
-→ lesson/family/exercise provenance
-→ selected transformation choice
-→ success | miss
-```
-
-These observations are trustworthy only as **what happened in that deterministic check**. They are not proof of free production, novel sentence construction, durable mastery, pronunciation quality or CEFR attainment.
-
-A miss followed by corrective reveal supports:
-
-```text
-outcome = miss
-modelShownAfterMiss = true
-```
-
-not `assisted-success`, because there is no certified assisted retry.
-
-Current durable owners remain intentionally bounded:
-
-```text
-Learning Memory
-→ curriculum-item owner only
-
-Error Intelligence
-→ curriculum-item/listening/scenario observed-need owner only
-
-Evidence v2
-→ seventh Recovery store
-→ derived shadow of six canonical source stores
-→ direct source-event writes NOT AUTHORIZED
-
-new eighth durable store
-→ NOT JUSTIFIED
+PR #234 audit head       980a0afd3eaaf5ee15e07bcbf0403ba675691817
+PR #234 squash merge     cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac
+PR #235 closeout head    0db28ba63f93d38f2fc6f823c4b9e98a6e392c35
+PR #235 closeout merge   5cde5d3c4d91d63aa50b98ff6b6c6d904f12f29c
+PR #236 alignment head   f76e7d92d4cd88c8ad802dbedcc50821f894b135
+PR #236 alignment merge  653aa3a3fe358c7036cca661d339b82b7073cc38
 ```
 
 Accepted P3 verdict:
@@ -205,26 +159,104 @@ Build43 implementation number         NOT AUTHORIZED
 A2                                    NOT AUTHORIZED
 ```
 
-# NEXT — P3a pure pedagogical-observation contract proof
+Current Foundations and Transfer UIs already compute real source-time deterministic observations. They are trustworthy only as **what happened in that deterministic check**. They are not proof of free production, novel sentence construction, durable mastery, pronunciation quality or CEFR attainment.
+
+A miss followed by corrective reveal supports:
 
 ```text
-P3a
-→ pure schema / normalizer only
-→ unit fixtures for Foundations + Transfer
-→ target.kind = foundation-concept | transfer-family
-→ activityKind = foundation-check | transfer-check
-→ outcome = success | miss
-→ honest modelShownAfterMiss flag
-→ bounded + detached + immutable output
-→ no curriculum item proxy required
-→ no mastery/score/CEFR field
-→ zero localStorage/sessionStorage/IndexedDB write
-→ zero Recovery/Evidence change
-→ zero learner-facing behaviour change
-→ do NOT number Build43 yet
+outcome = miss
+modelShownAfterMiss = true
+```
 
-then
+not `assisted-success`, because there is no certified assisted retry.
+
+# ACTIVE — P3a pure pedagogical-observation contract proof
+
+Canonical candidate document:
+
+```text
+docs/BUILD-40-P3A-PEDAGOGICAL-OBSERVATION-CONTRACT.md
+```
+
+Candidate owners:
+
+```text
+src/pedagogy/pedagogical-observation-core.js
+tests/unit/p3a-pedagogical-observation-core.test.cjs
+.github/workflows/p3a-pedagogical-observation-contract.yml
+```
+
+Contract identity:
+
+```text
+schema       french-tranquille-pedagogical-observation/v1
+roadmapSlice P3a
+version      1.0.0-contract
+```
+
+Only these semantic source pairs are accepted:
+
+```text
+foundation-check → foundation-concept → foundations
+transfer-check   → transfer-family     → transfer
+```
+
+The normalized observation is intentionally narrow:
+
+```text
+at                 caller-supplied source-time ISO timestamp
+lessonId           real lesson placement
+activityKind       foundation-check | transfer-check
+
+target.kind        foundation-concept | transfer-family
+target.ids         stable semantic IDs
+
+activityId         capsule ID or Transfer family ID
+exerciseId         stable check/exercise identity
+outcome            success | miss
+
+response.mode      multiple-choice
+response.choice    selected choice
+
+assistance.modelShownAfterMiss
+sourceOwner        foundations | transfer
+sourceSlice        provenance only
+```
+
+P3a fail-closed rules include:
+
+- full timestamp with time + timezone; no hidden `Date.now()` chronology;
+- current Foundation namespace is F01–F18;
+- one Transfer family per Transfer observation;
+- Transfer `activityId` must equal the target family;
+- target arrays/IDs/text are bounded;
+- output is reconstructed, detached and recursively frozen;
+- unsupported activity/target/source-owner combinations are rejected;
+- a `success` cannot claim `modelShownAfterMiss=true`;
+- item/mastery/scoring/CEFR state fields are rejected at the input boundary;
+- no storage or network write exists in this core.
+
+P3a does not modify or wire Foundations, Transfer, Learning Memory, Error Intelligence, Evidence v2, Recovery, loaders, UI, PWA or public version metadata.
+
+Therefore:
+
+```text
+Recovery     7 stores / backup v3
+Evidence v2  derived shadow only
+Build43      NOT AUTHORIZED
+A2           NOT AUTHORIZED
+```
+
+# NEXT — only if P3a is accepted
+
+```text
 P3b — source instrumentation / ephemeral collector decision
+→ map actual Foundations + Transfer source-time session results into the P3a contract
+→ decide a bounded ephemeral runtime collector/sink
+→ zero durable write
+→ zero Recovery/Evidence mutation
+→ zero mastery claim
+→ do NOT number Build43 yet
 
 then
 P3c — durability decision only after actual source observations prove useful
