@@ -1,0 +1,83 @@
+name: P3a Pedagogical observation contract
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  pedagogical-observation-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax + pure observation contract
+        run: |
+          set -euo pipefail
+          node --check src/pedagogy/pedagogical-observation-core.js
+          node --check tests/unit/p3a-pedagogical-observation-core.test.cjs
+          node tests/unit/p3a-pedagogical-observation-core.test.cjs
+          ! grep -Eq 'localStorage|sessionStorage|indexedDB|fetch\(|XMLHttpRequest|sendBeacon|\.setItem\(|\.getItem\(' src/pedagogy/pedagogical-observation-core.js
+          ! grep -Eq 'FrenchTranquilleMemoryEvidence|FrenchTranquilleLearningMemory|FrenchTranquilleErrorIntelligence' src/pedagogy/pedagogical-observation-core.js
+          grep -Fq "'foundation-check'" src/pedagogy/pedagogical-observation-core.js
+          grep -Fq "'transfer-check'" src/pedagogy/pedagogical-observation-core.js
+          grep -Fq "'foundation-concept'" src/pedagogy/pedagogical-observation-core.js
+          grep -Fq "'transfer-family'" src/pedagogy/pedagogical-observation-core.js
+          grep -Fq "'success'" src/pedagogy/pedagogical-observation-core.js
+          grep -Fq "'miss'" src/pedagogy/pedagogical-observation-core.js
+          grep -Fq 'modelShownAfterMiss' src/pedagogy/pedagogical-observation-core.js
+
+      - name: Accepted source contracts remain certified
+        run: |
+          set -euo pipefail
+          node tests/unit/build39-1-learner-action-core.test.cjs
+          node tools/test-build41-3-recent-past-integration.cjs
+          node tools/test-build42-2-foundations-f16-contractions.cjs
+
+      - name: P3a scope guard — pure contract only
+        if: github.event_name == 'pull_request' && github.head_ref == 'p3a/pedagogical-observation-contract'
+        run: |
+          set -euo pipefail
+          git fetch origin "${{ github.base_ref }}" --depth=1
+          changed="$(git diff --name-only "origin/${{ github.base_ref }}"...HEAD)"
+          printf '%s\n' "$changed"
+          allowed='^(src/pedagogy/pedagogical-observation-core\.js|tests/unit/p3a-pedagogical-observation-core\.test\.cjs|\.github/workflows/p3a-pedagogical-observation-contract\.yml|docs/BUILD-40-P3A-PEDAGOGICAL-OBSERVATION-CONTRACT\.md|PROJECT-STATE\.md|MASTER-ROADMAP\.md)$'
+          unexpected="$(printf '%s\n' "$changed" | grep -Ev "$allowed" || true)"
+          if [ -n "$unexpected" ]; then
+            echo "Unexpected path(s) in P3a pure-contract slice:"
+            printf '%s\n' "$unexpected"
+            exit 1
+          fi
+          git diff --exit-code "origin/${{ github.base_ref }}"...HEAD -- \
+            app.js voice-ios.js free-voice.js assets/LOGO.png assets/Favicon.png \
+            index.html sw.js manifest.webmanifest \
+            src/core src/ui src/premium \
+            src/pedagogy/learning-memory.js \
+            src/pedagogy/error-intelligence.js \
+            src/pedagogy/memory-evidence-v2-core.js \
+            src/pedagogy/learner-evidence-adapter.js \
+            src/pedagogy/foundations-core.js \
+            src/pedagogy/foundations-capsule-engine.js \
+            src/pedagogy/foundations-capsules.js \
+            src/pedagogy/foundations-pilot.js \
+            src/pedagogy/generalization-transfer-core.js \
+            src/pedagogy/generalization-transfer-lesson.js
+
+      - name: Frozen sanctuaries stay byte-identical
+        run: |
+          set -euo pipefail
+          test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
+          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
+          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+          test "$(git hash-object assets/LOGO.png)" = "64eaa6ad9781c6a9075d4f68615fc44344c4e21c"
+          test "$(git hash-object assets/Favicon.png)" = "c358672368a960bf7617e5532aff3e3319cddb3e"
