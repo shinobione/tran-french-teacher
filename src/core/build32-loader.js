@@ -2,6 +2,8 @@
   'use strict';
   const VERSION = '2.2.0-b32';
   const FOUNDATIONS = '2.4.0-b37.3';
+  const PEDAGOGICAL_OBSERVATION_CONTRACT='p3a-1.0.0';
+  const PEDAGOGICAL_OBSERVATION_RUNTIME='p3b-1.0.0';
   const TRANSFER='2.4.0-b38.2';
   const TRANSFER_NEGATION='2.4.0-b38.8';
   const TRANSFER_FUTURE='2.4.0-b38.5';
@@ -97,6 +99,8 @@
 
     const historical = params.has('b31Audit') || params.has('b30Audit') || params.has('v2Audit');
     if (!historical) {
+      await loadScript(`./src/pedagogy/pedagogical-observation-core.js?v=${PEDAGOGICAL_OBSERVATION_CONTRACT}`, 'p3aPedagogicalObservationCore');
+      await loadScript(`./src/pedagogy/pedagogical-observation-runtime.js?v=${PEDAGOGICAL_OBSERVATION_RUNTIME}`, 'p3bPedagogicalObservationRuntime');
       await loadScript(`./src/pedagogy/foundations-capsule-engine.js?v=${FOUNDATIONS}`, 'foundationsCapsuleEngine');
       await loadScript(`./src/pedagogy/foundations-capsules.js?v=${FOUNDATIONS}`, 'foundationsCapsules');
       await loadScript(`./src/pedagogy/foundations-pilot.js?v=${FOUNDATIONS}`, 'foundationsPilot');
