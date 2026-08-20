@@ -12,7 +12,7 @@ Last reconciled: 2026-08-20
 - P3 final alignment PR **#236** was accepted from exact head **`f76e7d92d4cd88c8ad802dbedcc50821f894b135`** and squash-merged as verified **`653aa3a3fe358c7036cca661d339b82b7073cc38`**.
 - Public runtime metadata remains **v2.5.0 · Build 38**; pedagogy baseline remains **v2.3.0 · Build 34**.
 - Build40 P3 is **CLOSED / ACCEPTED**.
-- Active candidate: **P3a — pure pedagogical-observation contract proof**, branch `p3a/pedagogical-observation-contract`.
+- Active candidate: **PR #237 — `P3a · prove pure pedagogical observation contract`**, branch `p3a/pedagogical-observation-contract`.
 - P3a is contract/test-only. It is **not Build43** and has no learner-facing runtime wiring.
 
 ## Accepted product state
@@ -157,7 +157,7 @@ P3a does **not** wire Foundations or Transfer to emit these observations. It pro
 
 Recovery remains **7 stores / backup v3**. Evidence v2 remains **derived shadow only**.
 
-## NEXT — only if P3a is accepted
+## NEXT — only if PR #237 is accepted
 
 ```text
 P3b — source instrumentation / ephemeral collector decision
