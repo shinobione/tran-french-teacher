@@ -26,6 +26,7 @@
     maxChoiceLength: 280,
     maxSourceSliceLength: 48
   });
+  const SOURCE_TIME_ISO = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?(?:Z|[+-]\d{2}:\d{2})$/;
   const FORBIDDEN_INPUT_KEYS = Object.freeze([
     'itemId', 'mastery', 'masteryClaim', 'score', 'confidence', 'strength',
     'cefr', 'CEFR', 'state', 'assistedSuccess', 'assisted-success'
@@ -67,7 +68,12 @@
       issue(issues, 'at:required-iso');
       return null;
     }
-    const parsed = Date.parse(value);
+    const text = value.trim();
+    if (!SOURCE_TIME_ISO.test(text)) {
+      issue(issues, 'at:source-time-iso-required');
+      return null;
+    }
+    const parsed = Date.parse(text);
     if (!Number.isFinite(parsed)) {
       issue(issues, 'at:invalid-iso');
       return null;
