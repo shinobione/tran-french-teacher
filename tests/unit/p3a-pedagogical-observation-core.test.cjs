@@ -44,6 +44,7 @@ assert.equal(core.schema, 'french-tranquille-pedagogical-observation/v1');
 assert.deepEqual(core.activityKinds, ['foundation-check', 'transfer-check']);
 assert.deepEqual(core.targetKinds, ['foundation-concept', 'transfer-family']);
 assert.deepEqual(core.outcomes, ['success', 'miss']);
+assert.equal(core.limits.maxLessonId, 52);
 
 {
   const result = core.normalizeObservation(foundation());
@@ -137,7 +138,36 @@ assert.deepEqual(core.outcomes, ['success', 'miss']);
 {
   const result = core.normalizeObservation(foundation({ at: 'not-a-date' }));
   assert.equal(result.ok, false);
-  assert(result.issues.includes('at:invalid-iso'));
+  assert(result.issues.includes('at:source-time-iso-required'));
+}
+
+for (const impossible of [
+  '2026-02-30T12:00:00Z',
+  '2025-02-29T12:00:00Z',
+  '2026-13-01T12:00:00Z',
+  '2026-08-20T24:00:00Z',
+  '2026-08-20T12:60:00Z'
+]) {
+  const result = core.normalizeObservation(foundation({ at: impossible }));
+  assert.equal(result.ok, false, `${impossible} must be rejected`);
+  assert(result.issues.includes('at:invalid-calendar'));
+}
+
+{
+  const result = core.normalizeObservation(foundation({ at: '2024-02-29T12:00:00Z' }));
+  assert.equal(result.ok, true, 'real leap-day timestamp must remain valid');
+}
+
+for (const malformedLesson of [true, '38', 38.5, null]) {
+  const result = core.normalizeObservation(foundation({ lessonId: malformedLesson }));
+  assert.equal(result.ok, false, `${String(malformedLesson)} must not be coerced into a lesson id`);
+  assert(result.issues.includes('lessonId:integer-required'));
+}
+
+for (const outsideLesson of [0, 53, 999]) {
+  const result = core.normalizeObservation(foundation({ lessonId: outsideLesson }));
+  assert.equal(result.ok, false, `${outsideLesson} is outside the current 52-lesson namespace`);
+  assert(result.issues.includes('lessonId:outside-current-curriculum'));
 }
 
 {
