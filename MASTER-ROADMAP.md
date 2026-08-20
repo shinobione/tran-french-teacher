@@ -10,6 +10,7 @@
 Build42.2 product merge          8b462fae236c00b902a9312fe8e1b103412b8694
 Build42 closure merge            8c2787d203d6089850856652f288f10a4fd53b32
 Build40 P3 audit merge           cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac
+Build40 P3 closeout merge        5cde5d3c4d91d63aa50b98ff6b6c6d904f12f29c
 public runtime metadata          v2.5.0 · Build 38
 pedagogy baseline                v2.3.0 · Build 34
 curriculum                       52 lessons / 313 items
@@ -94,7 +95,7 @@ P3c durability decision if justified
 P4 fresh A1 readiness audit
 ```
 
-P1 completed through Build41. P2 completed through Build42. P3 is now accepted/closed.
+P1 completed through Build41. P2 completed through Build42. P3 is accepted/closed. P3a is next.
 
 ## Build41 — A1 Productive Consolidation — CLOSED
 
@@ -138,10 +139,12 @@ Acceptance:
 
 ```text
 PR #234 accepted head  980a0afd3eaaf5ee15e07bcbf0403ba675691817
-squash merge           cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac
-scope                  3 Markdown files only
-exact-head CI          only five inherited baseline failures; no new red
-review                 Codex P2 addressed/resolved without head mutation
+PR #234 squash merge   cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac
+PR #235 closeout head  0db28ba63f93d38f2fc6f823c4b9e98a6e392c35
+PR #235 closeout merge 5cde5d3c4d91d63aa50b98ff6b6c6d904f12f29c
+scope                  docs-only
+exact-head CI          only five inherited baseline failures after unchanged Build26.1 rerun
+Build26.1              Chrome timeout → unchanged rerun job 96423901394 SUCCESS
 ```
 
 ## Accepted design decision

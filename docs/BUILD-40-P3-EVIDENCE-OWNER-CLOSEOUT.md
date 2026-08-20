@@ -8,23 +8,26 @@ Date: 2026-08-20
 
 ```text
 audit document         docs/BUILD-40-P3-EVIDENCE-OWNER-DESIGN-AUDIT.md
-PR                     #234 — Docs · audit P3 evidence-owner design
+PR #234                Docs · audit P3 evidence-owner design
 accepted head          980a0afd3eaaf5ee15e07bcbf0403ba675691817
-squash merge           cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac
-scope                  3 Markdown files only
+audit squash merge     cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac
+PR #235                Docs · close accepted P3 evidence-owner audit
+closeout head          0db28ba63f93d38f2fc6f823c4b9e98a6e392c35
+closeout squash merge  5cde5d3c4d91d63aa50b98ff6b6c6d904f12f29c
+scope                  docs-only
 ```
 
-The exact-head PR workflow matrix completed with exactly the known five inherited failures and no new red:
+For PR #234, the exact-head workflow matrix completed with exactly the known five inherited failures and no new red. Codex left one P2 handoff comment; it was addressed and resolved without moving the candidate head.
+
+For PR #235, exact-head control again returned to exactly the same five inherited baseline failures. `Build 26.1 Voice replay + Details dashboard smoke` first failed only in its Chrome dashboard step after three bounded headless-Chrome timeouts. The PR touched Markdown only, all static/sanctuary checks passed, and the unchanged failed job was rerun. Rerun job **`96423901394`** completed **SUCCESS**, including all three Chrome checks. No product patch was made.
+
+Known inherited failures remain:
 
 1. `French Trân'quille quality`
 2. `Build 36.2 Evidence shadow adoption`
 3. `V2.0.0 Freeze tribunal`
 4. `Build 36.3 Recovery v3 durability tribunal`
 5. `Build 28 Data recovery smoke`
-
-Every other returned workflow was `SUCCESS`.
-
-Codex left one P2 handoff comment asking for an exact candidate checkpoint. It was addressed without changing the candidate head: `PROJECT-STATE.md` names PR #234 and its branch, while the PR body carries the immutable exact head/base/CI control checkpoint. The review thread was resolved before merge. This deliberately avoids the self-referential SHA loop where writing a branch's own head SHA into that branch necessarily changes the head again.
 
 ## Accepted P3 decision
 
@@ -77,7 +80,7 @@ No new durable store is justified before a pure event contract and source instru
 
 ## Accepted next gate
 
-P3 acceptance authorizes only:
+P3 is closed. The next authorized proof boundary is:
 
 ```text
 P3a — pure pedagogical-observation contract proof
@@ -104,4 +107,4 @@ P4 fresh A1 readiness remains after that evidence work. A2 remains NOT AUTHORIZE
 
 None.
 
-P3 changed no runtime, curriculum, learner data, Recovery, Evidence schema, voice, Premium, PWA or public runtime metadata.
+P3 and its closeout changed no runtime, curriculum, learner data, Recovery, Evidence schema, voice, Premium, PWA or public runtime metadata.
