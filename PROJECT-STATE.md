@@ -7,11 +7,10 @@ Last reconciled: 2026-08-20
 - Repository: `shinobione/tran-french-teacher`.
 - Accepted product state remains Build42.2 product merge **`8b462fae236c00b902a9312fe8e1b103412b8694`**.
 - Build42 closure merge: **`8c2787d203d6089850856652f288f10a4fd53b32`**.
-- Accepted final Build42 docs checkpoint / audited P3 base: **`22f4d5d5e3c111c14255b4e8a80a320cfa2c9469`**.
+- Build40 P3 evidence-owner audit PR **#234** was accepted from exact head **`980a0afd3eaaf5ee15e07bcbf0403ba675691817`** and squash-merged as **`cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac`**.
 - Public runtime metadata remains **v2.5.0 · Build 38**; pedagogy baseline remains **v2.3.0 · Build 34**.
 - Build42 is **CLOSED / SUCCESSFUL FOUNDATIONS DEBT RESOLUTION**.
-- Current candidate: **PR #234 — `Docs · audit P3 evidence-owner design`**, branch `docs/p3-evidence-owner-audit`.
-- P3 remains read-only/docs-only; live PR/GitHub is authoritative for the exact candidate head.
+- Build40 P3 is **CLOSED / ACCEPTED READ-ONLY EVIDENCE-OWNER DESIGN AUDIT**.
 
 ## Accepted product state
 
@@ -44,107 +43,84 @@ Build39   CLOSED / CERTIFIED
 Build40   CLOSED — A1 Productive Consolidation selected
 Build41   CLOSED / SUCCESSFUL NARROW CONSOLIDATION
 Build42   CLOSED / SUCCESSFUL FOUNDATIONS DEBT RESOLUTION
+Build40 P3 CLOSED / ACCEPTED
 Build42.3 NOT AUTHORIZED
 F16 Transfer NOT AUTHORIZED
+Build43   NOT AUTHORIZED
 A2        NOT AUTHORIZED
 ```
 
-## P3 evidence-owner audit — candidate verdict
+## Build40 P3 accepted decision
 
-Canonical candidate audit:
+Canonical audit:
 
 ```text
 docs/BUILD-40-P3-EVIDENCE-OWNER-DESIGN-AUDIT.md
 ```
 
-### What is now genuinely observable
-
-Foundations and learner-facing Transfer already compute real source-time deterministic outcomes.
-
-Foundations ephemeral session:
+Accepted conclusion:
 
 ```text
-capsuleId
-concept ids
-checkId
-choice
-correct
-correctAnswer
-```
-
-Transfer ephemeral session/route:
-
-```text
-lesson
-family id
-exercise identity
-choice
-correct
-source/target transformation provenance
-```
-
-These are honest **success/miss observations for deterministic choice/check activities**. They are not proof of free production, novel construction, long-term mastery or CEFR level.
-
-A miss that reveals corrective feedback supports `miss + modelShownAfterMiss`; it does not support `assisted-success` because there is no certified assisted retry.
-
-### Current durable owners are not semantically suitable
-
-```text
-Learning Memory
-→ curriculum-item IDs only
-→ trustworthy phrase/item owner
-→ NOT a Foundation concept or Transfer family owner
-
-Error Intelligence
-→ curriculum-item IDs only
-→ trustworthy item/listening/scenario observed-need owner
-→ NOT a Foundation concept or Transfer family owner
-
-Evidence v2
-→ seventh Recovery store
-→ derived shadow of the original six canonical stores
-→ construction / transfer / concept-understanding not reconstructable from current sources
-→ direct source-event writes would violate the accepted shadow contract
-```
-
-### Candidate P3 decision
-
-```text
-source-time semantic event owner     JUSTIFIED
-durable persistence now              NOT JUSTIFIED
-direct Memory/Error reuse            REJECTED
-direct Evidence v2 event writes       REJECTED under current shadow contract
-new eighth store now                  REJECTED
+source-time semantic event owner      JUSTIFIED
+durable persistence now               NOT JUSTIFIED
+Memory/Error semantic hijack          REJECTED
+Evidence v2 direct source-event write REJECTED under current shadow contract
+new durable store now                 REJECTED
 mastery claim                         NOT AUTHORIZED
 Build43 implementation number         NOT AUTHORIZED
-A2                                     NOT AUTHORIZED
+A2                                    NOT AUTHORIZED
 ```
 
-The missing abstraction is a bounded **pedagogical observation contract** with non-item semantic targets such as `foundation-concept` and `transfer-family`.
+Foundations and learner-facing Transfer already compute honest deterministic success/miss observations with stable concept/family provenance. Those observations are currently ephemeral. A correct multiple-choice/check result is evidence only of that deterministic check; it is not free-production, novel-construction, long-term mastery or CEFR evidence.
 
-## NEXT if PR #234 is accepted
+A miss followed by corrective reveal may be represented as:
+
+```text
+outcome = miss
+modelShownAfterMiss = true
+```
+
+It must not be promoted to `assisted-success` without a real certified retry.
+
+Learning Memory and Error Intelligence remain curriculum-item owners and must not be repurposed for Foundation concept IDs or Transfer family IDs. Evidence v2 remains a derived shadow of the six canonical source stores; direct source-event writes would be a separate contract/cutover change.
+
+## #234 acceptance evidence
+
+```text
+accepted head  980a0afd3eaaf5ee15e07bcbf0403ba675691817
+merge          cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac
+scope          3 Markdown files only
+review         Codex P2 addressed/resolved without moving candidate head
+CI             exact-head matrix complete; only the five inherited baseline failures remained
+```
+
+No runtime, curriculum, learner data, Recovery, Evidence schema, voice, Premium, PWA or public runtime metadata changed in P3.
+
+## NEXT
 
 ```text
 P3a — pure pedagogical-observation contract proof
-→ schema/normalizer + fixtures/tests only
-→ stable Foundation concept / Transfer family target namespaces
-→ success | miss + honest model-shown-after-miss semantics
-→ immutable/bounded output
-→ zero durable write
+→ schema/normalizer + unit fixtures only
+→ stable target namespaces: foundation-concept | transfer-family
+→ activity kinds: foundation-check | transfer-check
+→ outcome = success | miss
+→ honest modelShownAfterMiss semantics
+→ bounded + detached + immutable output
+→ no mastery/score/CEFR field
+→ zero localStorage/sessionStorage/IndexedDB write
 → zero Recovery/Evidence change
 → zero learner-facing behaviour change
 → still no Build43 number
 
-then, only after P3a proof
+then
 P3b — source instrumentation / ephemeral collector decision
 
-then, only after actual source observations are proven
-P3c — durability decision
-→ explicit Evidence contract/cutover redesign OR separately justified durable owner
-→ neither authorized yet
+then
+P3c — durability decision only after real source observations are proven useful
 
+then
 P4 — fresh A1 readiness audit
-→ only after trustworthy concept/Transfer evidence actually exists
+→ reconsider A2 only from the re-audited evidence reality
 ```
 
 ## Locked boundaries
