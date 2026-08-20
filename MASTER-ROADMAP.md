@@ -282,6 +282,6 @@ P4 — fresh A1 readiness audit
 → reconsider A2 only from the re-audited evidence reality
 ```
 
-Until P3b actually wires a certified source-time owner and trustworthy observations are produced, Build39.2 abstention for `concept-review`, `foundation-capsule` and `transfer-construction` remains correct.
+Build39.2 abstention for `concept-review`, `foundation-capsule` and `transfer-construction` remains correct **through P3b**. P3b is ephemeral-only and does not authorize any LI3 availability change; any such change requires a later, explicit durability/adapter decision in P3c or beyond.
 
 Not authorized: Build42.3, productive F16 Transfer, durable Foundation/Transfer mastery claims, Build43 implementation numbering, A2, Evidence read cutover, direct Evidence event writes, or a new durable store merely to manufacture evidence.
