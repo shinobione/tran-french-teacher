@@ -204,7 +204,7 @@ P4 — fresh A1 readiness audit
 → reconsider A2 only from the re-audited evidence reality
 ```
 
-Build39.2 abstention for `concept-review`, `foundation-capsule` and `transfer-construction` remains correct until P3b actually wires trustworthy source-time observations.
+Build39.2 abstention for `concept-review`, `foundation-capsule` and `transfer-construction` remains correct **through P3b**. P3b is ephemeral-only and does not authorize any LI3 availability change; any such change requires a later, explicit durability/adapter decision in P3c or beyond.
 
 ## Locked boundaries
 
