@@ -5,18 +5,19 @@ Last reconciled: 2026-08-20
 ## Canonical checkpoint
 
 - Repository: `shinobione/tran-french-teacher`.
-- Current `main`: **`ef720b760db1108d98ee0090cc87f929d75676a1`** — verified GitHub squash merge of P3a PR #237.
+- Last accepted P3a closeout merge: **`ba2225cfb5e8864bd757620d22cfed333c757d82`** from PR **#238**.
 - Accepted product state remains Build42.2 product merge **`8b462fae236c00b902a9312fe8e1b103412b8694`**.
 - Build42 closure merge: **`8c2787d203d6089850856652f288f10a4fd53b32`**.
 - Build40 P3 evidence-owner audit PR **#234** squash merge: **`cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac`**.
 - P3 closeout PR **#235** squash merge: **`5cde5d3c4d91d63aa50b98ff6b6c6d904f12f29c`**.
 - P3 final alignment PR **#236** accepted exact head **`f76e7d92d4cd88c8ad802dbedcc50821f894b135`**, squash merge **`653aa3a3fe358c7036cca661d339b82b7073cc38`**.
 - P3a PR **#237** accepted exact head **`fd5c4643c3701dfb37d42789a0409c849cb97324`**, squash merge **`ef720b760db1108d98ee0090cc87f929d75676a1`**.
-- Active docs-only closeout candidate: **PR #238 — `Docs · close P3a and hand off P3b`**, branch `docs/p3a-closeout`.
+- P3a closeout PR **#238** accepted exact head **`a3814d5560c25d7cedaceaa57ff508db05a52de0`**, squash merge **`ba2225cfb5e8864bd757620d22cfed333c757d82`**.
+- Live GitHub is authoritative for the current branch tip and any temporary control/alignment PR metadata.
 - Public runtime metadata remains **v2.5.0 · Build 38**; pedagogy baseline remains **v2.3.0 · Build 34**.
 - Build40 P3 is **CLOSED / ACCEPTED**.
 - P3a is **CLOSED / ACCEPTED PURE CONTRACT PROOF**.
-- **NEXT after closeout acceptance = P3b — source instrumentation / ephemeral collector decision.**
+- **NEXT = P3b — source instrumentation / ephemeral collector decision.**
 
 ## Accepted product state
 
@@ -161,27 +162,32 @@ no storage/network write
 
 P3a does **not** wire Foundations or Transfer to emit observations. It proves only the pure normalization boundary.
 
-### P3a acceptance evidence
+### P3a acceptance and closeout evidence
 
 ```text
 PR #237 base             653aa3a3fe358c7036cca661d339b82b7073cc38
 PR #237 accepted head    fd5c4643c3701dfb37d42789a0409c849cb97324
 PR #237 squash merge     ef720b760db1108d98ee0090cc87f929d75676a1
 P3a workflow run         32399825235 SUCCESS
-scope                    exactly 6 authorized paths
-review                   1×P1 + 2×P2 on original candidate, all addressed
-review threads           3/3 resolved
-exact-head CI            only five inherited baseline failures; no new red
-Build26.1                SUCCESS
-Premium V5 Coherence     SUCCESS
-Real Life French III     SUCCESS
+PR #237 scope            exactly 6 authorized paths
+PR #237 review           1×P1 + 2×P2 on original candidate, all addressed
+PR #237 threads          3/3 resolved
+PR #238 accepted head    a3814d5560c25d7cedaceaa57ff508db05a52de0
+PR #238 squash merge     ba2225cfb5e8864bd757620d22cfed333c757d82
+PR #238 scope            exactly 2 Markdown files
+PR #238 review           1×P2 resolved: LI3 abstention stays locked through P3b
+PR #238 exact-head CI    only five inherited baseline failures after two unchanged flake reruns
+V5.3 Pedagogical Islands rerun SUCCESS
+Build26.4 Progress/Tyffany rerun  SUCCESS
 ```
 
-The three review fixes strengthened provenance without widening scope:
+The P3a review fixes strengthened provenance without widening scope:
 
 - malformed timestamp test aligned with fail-closed shape semantics;
 - nonexistent calendar dates are rejected rather than normalized by V8;
 - `lessonId` is no longer coerced and is bounded to the current 52-lesson namespace.
+
+The P3a closeout additionally locks Build39.2 abstention through P3b because P3b remains ephemeral-only.
 
 Recovery remains **7 stores / backup v3**. Evidence v2 remains **derived shadow only**. No learner-facing runtime behavior or public version metadata changed.
 
