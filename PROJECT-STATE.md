@@ -8,11 +8,11 @@ Last reconciled: 2026-08-20
 - Accepted product state remains Build42.2 product merge **`8b462fae236c00b902a9312fe8e1b103412b8694`**.
 - Build42 closure merge: **`8c2787d203d6089850856652f288f10a4fd53b32`**.
 - Build40 P3 evidence-owner audit PR **#234** was accepted from exact head **`980a0afd3eaaf5ee15e07bcbf0403ba675691817`** and squash-merged as **`cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac`**.
+- P3 closeout PR **#235** was accepted from exact head **`0db28ba63f93d38f2fc6f823c4b9e98a6e392c35`** and squash-merged as **`5cde5d3c4d91d63aa50b98ff6b6c6d904f12f29c`**.
 - Public runtime metadata remains **v2.5.0 · Build 38**; pedagogy baseline remains **v2.3.0 · Build 34**.
 - Build42 is **CLOSED / SUCCESSFUL FOUNDATIONS DEBT RESOLUTION**.
 - Build40 P3 is **CLOSED / ACCEPTED READ-ONLY EVIDENCE-OWNER DESIGN AUDIT**.
-- Current docs-only closeout candidate: **PR #235 — `Docs · close accepted P3 evidence-owner audit`**, branch `docs/p3-evidence-owner-closeout`.
-- **Do not start P3a until PR #235 is accepted.** Live PR/GitHub is authoritative for its exact candidate head and CI/review status.
+- **NEXT = P3a pure pedagogical-observation contract proof.**
 
 ## Accepted product state
 
@@ -86,19 +86,22 @@ It must not be promoted to `assisted-success` without a real certified retry.
 
 Learning Memory and Error Intelligence remain curriculum-item owners and must not be repurposed for Foundation concept IDs or Transfer family IDs. Evidence v2 remains a derived shadow of the six canonical source stores; direct source-event writes would be a separate contract/cutover change.
 
-## #234 acceptance evidence
+## P3 acceptance evidence
 
 ```text
-accepted head  980a0afd3eaaf5ee15e07bcbf0403ba675691817
-merge          cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac
-scope          3 Markdown files only
-review         Codex P2 addressed/resolved without moving candidate head
-CI             exact-head matrix complete; only the five inherited baseline failures remained
+PR #234 audit head     980a0afd3eaaf5ee15e07bcbf0403ba675691817
+PR #234 audit merge    cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac
+PR #235 closeout head  0db28ba63f93d38f2fc6f823c4b9e98a6e392c35
+PR #235 closeout merge 5cde5d3c4d91d63aa50b98ff6b6c6d904f12f29c
+scope                  docs-only
+review threads         none on #235
+CI                     exact-head matrix returned to only the five inherited baseline failures
+Build26.1              Chrome timeout on first run → unchanged rerun job 96423901394 SUCCESS
 ```
 
-No runtime, curriculum, learner data, Recovery, Evidence schema, voice, Premium, PWA or public runtime metadata changed in P3.
+No runtime, curriculum, learner data, Recovery, Evidence schema, voice, Premium, PWA or public runtime metadata changed in P3 or its closeout.
 
-## NEXT — after PR #235 acceptance
+## NEXT — P3a pure pedagogical-observation contract proof
 
 ```text
 P3a — pure pedagogical-observation contract proof
