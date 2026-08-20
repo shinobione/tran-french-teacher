@@ -41,7 +41,7 @@ jobs:
         run: |
           set -euo pipefail
           node tests/unit/build39-1-learner-action-core.test.cjs
-          node tools/test-build41-3-recent-past-integration.cjs
+          node tests/unit/build41-3-recent-past-adapter.test.cjs
           node tools/test-build42-2-foundations-f16-contractions.cjs
 
       - name: P3a scope guard — pure contract only
