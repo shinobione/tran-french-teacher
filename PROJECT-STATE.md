@@ -5,7 +5,8 @@ Last reconciled: 2026-08-20
 ## Canonical checkpoint
 
 - Repository: `shinobione/tran-french-teacher`.
-- Last accepted P3a closeout merge: **`ba2225cfb5e8864bd757620d22cfed333c757d82`** from PR **#238**.
+- Verified `main` at publication of this alignment candidate: **`ba2225cfb5e8864bd757620d22cfed333c757d82`** — accepted P3a closeout merge from PR **#238**.
+- Alignment control target at publication: **PR #239 — `Docs · finalize accepted P3a checkpoint`**, branch **`docs/p3a-final-alignment`**. Its exact moving candidate head is intentionally kept in live PR metadata to avoid a self-referential SHA loop.
 - Accepted product state remains Build42.2 product merge **`8b462fae236c00b902a9312fe8e1b103412b8694`**.
 - Build42 closure merge: **`8c2787d203d6089850856652f288f10a4fd53b32`**.
 - Build40 P3 evidence-owner audit PR **#234** squash merge: **`cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac`**.
@@ -13,7 +14,7 @@ Last reconciled: 2026-08-20
 - P3 final alignment PR **#236** accepted exact head **`f76e7d92d4cd88c8ad802dbedcc50821f894b135`**, squash merge **`653aa3a3fe358c7036cca661d339b82b7073cc38`**.
 - P3a PR **#237** accepted exact head **`fd5c4643c3701dfb37d42789a0409c849cb97324`**, squash merge **`ef720b760db1108d98ee0090cc87f929d75676a1`**.
 - P3a closeout PR **#238** accepted exact head **`a3814d5560c25d7cedaceaa57ff508db05a52de0`**, squash merge **`ba2225cfb5e8864bd757620d22cfed333c757d82`**.
-- Live GitHub is authoritative for the current branch tip and any temporary control/alignment PR metadata.
+- Live GitHub remains authoritative for branch tips and the current open/merged state of temporary control PRs.
 - Public runtime metadata remains **v2.5.0 · Build 38**; pedagogy baseline remains **v2.3.0 · Build 34**.
 - Build40 P3 is **CLOSED / ACCEPTED**.
 - P3a is **CLOSED / ACCEPTED PURE CONTRACT PROOF**.
