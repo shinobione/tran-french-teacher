@@ -10,8 +10,8 @@ Last reconciled: 2026-08-20
 - Accepted final Build42 docs checkpoint / audited P3 base: **`22f4d5d5e3c111c14255b4e8a80a320cfa2c9469`**.
 - Public runtime metadata remains **v2.5.0 · Build 38**; pedagogy baseline remains **v2.3.0 · Build 34**.
 - Build42 is **CLOSED / SUCCESSFUL FOUNDATIONS DEBT RESOLUTION**.
-- Current work: **Build40 P3 evidence-owner design audit**, branch `docs/p3-evidence-owner-audit`, read-only/docs-only.
-- Live GitHub is authoritative for the exact candidate PR/head.
+- Current candidate: **PR #234 — `Docs · audit P3 evidence-owner design`**, branch `docs/p3-evidence-owner-audit`.
+- P3 remains read-only/docs-only; live PR/GitHub is authoritative for the exact candidate head.
 
 ## Accepted product state
 
@@ -122,7 +122,7 @@ A2                                     NOT AUTHORIZED
 
 The missing abstraction is a bounded **pedagogical observation contract** with non-item semantic targets such as `foundation-concept` and `transfer-family`.
 
-## NEXT if P3 audit is accepted
+## NEXT if PR #234 is accepted
 
 ```text
 P3a — pure pedagogical-observation contract proof
