@@ -41,6 +41,16 @@ jobs:
           grep -q "const CAPACITY = 64" src/pedagogy/pedagogical-observation-runtime.js
           grep -q "source.correct !== 'boolean'" src/pedagogy/pedagogical-observation-runtime.js
 
+      - name: Installed-PWA offline boot precache guard
+        run: |
+          set -euo pipefail
+          grep -Fq "const P3AOBS='p3a-1.0.0';" sw.js
+          grep -Fq "const P3BOBS='p3b-1.0.0';" sw.js
+          grep -Fq './src/pedagogy/pedagogical-observation-core.js?v=${P3AOBS}' sw.js
+          grep -Fq './src/pedagogy/pedagogical-observation-runtime.js?v=${P3BOBS}' sw.js
+          grep -Fq "const PEDAGOGICAL_OBSERVATION_CONTRACT='p3a-1.0.0';" src/core/build32-loader.js
+          grep -Fq "const PEDAGOGICAL_OBSERVATION_RUNTIME='p3b-1.0.0';" src/core/build32-loader.js
+
       - name: Source owners and accepted P3a core remain byte-identical
         run: |
           set -euo pipefail
@@ -61,7 +71,7 @@ jobs:
         run: |
           set -euo pipefail
           git fetch origin "${{ github.base_ref }}" --depth=1
-          allowed='^(\.github/workflows/p3b-pedagogical-observation-runtime\.yml|PROJECT-STATE\.md|docs/BUILD-40-P3B-SOURCE-OBSERVATION-EPHEMERAL\.md|src/core/build32-loader\.js|src/pedagogy/pedagogical-observation-runtime\.js|tests/unit/p3b-pedagogical-observation-runtime\.test\.cjs)$'
+          allowed='^(\.github/workflows/p3b-pedagogical-observation-runtime\.yml|PROJECT-STATE\.md|docs/BUILD-40-P3B-SOURCE-OBSERVATION-EPHEMERAL\.md|src/core/build32-loader\.js|src/pedagogy/pedagogical-observation-runtime\.js|sw\.js|tests/unit/p3b-pedagogical-observation-runtime\.test\.cjs)$'
           changed="$(git diff --name-only "origin/${{ github.base_ref }}"...HEAD)"
           printf '%s\n' "$changed"
           unexpected="$(printf '%s\n' "$changed" | grep -Ev "$allowed" || true)"
