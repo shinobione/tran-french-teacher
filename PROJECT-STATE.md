@@ -1,13 +1,13 @@
 # PROJECT-STATE — French Trân’quille
 
-Last reconciled: 2026-08-20
+Last reconciled: 2026-08-21
 
 ## Canonical checkpoint
 
 - Repository: `shinobione/tran-french-teacher`.
-- Current verified `main`: **`7bb9d4ab52d6402121d75c63a8c1042030c1c856`** — accepted P3a final-alignment squash merge from PR **#239**.
-- Active implementation candidate: **PR #240 — `P3b · observe source checks in bounded ephemeral memory`**, branch **`p3b/source-observation-ephemeral`**.
-- The exact moving P3b candidate head is intentionally kept in live PR metadata to avoid a self-referential checkpoint SHA loop.
+- Current verified `main`: **`5a658f8ac288e5d5cd091dc0a16fa3683f6064fe`** — accepted P3b squash merge from PR **#240**.
+- Active documentation closeout candidate: **PR #241 — `Docs · close accepted P3b observation proof`**, branch **`docs/p3b-closeout`**.
+- The exact moving #241 candidate head is intentionally kept in live PR metadata to avoid a self-referential checkpoint SHA loop.
 - Accepted product state remains Build42.2 product merge **`8b462fae236c00b902a9312fe8e1b103412b8694`**.
 - Build42 closure merge: **`8c2787d203d6089850856652f288f10a4fd53b32`**.
 - Build40 P3 evidence-owner audit PR **#234** squash merge: **`cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac`**.
@@ -16,12 +16,13 @@ Last reconciled: 2026-08-20
 - P3a PR **#237** accepted exact head **`fd5c4643c3701dfb37d42789a0409c849cb97324`**, squash merge **`ef720b760db1108d98ee0090cc87f929d75676a1`**.
 - P3a closeout PR **#238** accepted exact head **`a3814d5560c25d7cedaceaa57ff508db05a52de0`**, squash merge **`ba2225cfb5e8864bd757620d22cfed333c757d82`**.
 - P3a final-alignment PR **#239** accepted exact head **`659b820e0ba06691a93f463f8061855b182a87ed`**, squash merge **`7bb9d4ab52d6402121d75c63a8c1042030c1c856`**.
+- P3b PR **#240** accepted exact head **`a641481d647510c41855c144149c2adccfde333c`**, squash merge **`5a658f8ac288e5d5cd091dc0a16fa3683f6064fe`**.
 - Live GitHub remains authoritative for branch tips and the current open/merged state of temporary candidate/control PRs.
 - Public runtime metadata remains **v2.5.0 · Build 38**; pedagogy baseline remains **v2.3.0 · Build 34**.
 - Build40 P3 is **CLOSED / ACCEPTED**.
 - P3a is **CLOSED / ACCEPTED PURE CONTRACT PROOF**.
-- P3b is **ACTIVE CANDIDATE / EPHEMERAL SOURCE-OBSERVATION PROOF**.
-- **NEXT only after PR #240 acceptance = P3c — durability decision.**
+- P3b is **CLOSED / ACCEPTED EPHEMERAL SOURCE-OBSERVATION PROOF**.
+- **NEXT after #241 closeout acceptance = P3c — durability decision.**
 
 ## Accepted product state
 
@@ -56,8 +57,8 @@ Build41    CLOSED / SUCCESSFUL NARROW CONSOLIDATION
 Build42    CLOSED / SUCCESSFUL FOUNDATIONS DEBT RESOLUTION
 Build40 P3 CLOSED / ACCEPTED
 P3a        CLOSED / ACCEPTED PURE CONTRACT PROOF
-P3b        ACTIVE CANDIDATE / EPHEMERAL SOURCE-OBSERVATION PROOF
-P3c        NOT STARTED / NOT AUTHORIZED BEFORE P3b ACCEPTANCE
+P3b        CLOSED / ACCEPTED EPHEMERAL SOURCE-OBSERVATION PROOF
+P3c        NEXT / NOT STARTED
 Build42.3  NOT AUTHORIZED
 F16 Transfer NOT AUTHORIZED
 Build43    NOT AUTHORIZED
@@ -85,7 +86,7 @@ Build43 implementation number         NOT AUTHORIZED
 A2                                    NOT AUTHORIZED
 ```
 
-Foundations and learner-facing Transfer already compute honest deterministic success/miss observations with stable concept/family provenance. Those observations remain trustworthy only as the result of that deterministic check; they are not free-production, novel-construction, long-term mastery or CEFR evidence.
+Foundations and learner-facing Transfer compute honest deterministic success/miss observations with stable concept/family provenance. They are trustworthy only as the result of that deterministic check; they are not free-production, novel-construction, long-term mastery or CEFR evidence.
 
 ## P3 closure evidence
 
@@ -188,23 +189,23 @@ PR #239 review           1×P2 resolved; resumable volatile checkpoint retained 
 PR #239 exact-head CI    only five inherited baseline failures after unchanged Build26.1 Chrome rerun
 ```
 
-Recovery remains **7 stores / backup v3**. Evidence v2 remains **derived shadow only**. No learner-facing public version metadata changed.
+Recovery remains **7 stores / backup v3**. Evidence v2 remains **derived shadow only**.
 
-## P3b — ACTIVE CANDIDATE / EPHEMERAL SOURCE-OBSERVATION PROOF
+## P3b — CLOSED / ACCEPTED EPHEMERAL SOURCE-OBSERVATION PROOF
 
-Canonical candidate document:
+Canonical document:
 
 ```text
 docs/BUILD-40-P3B-SOURCE-OBSERVATION-EPHEMERAL.md
 ```
 
-Candidate runtime owner:
+Accepted runtime owner:
 
 ```text
 src/pedagogy/pedagogical-observation-runtime.js
 ```
 
-Candidate behavior:
+Accepted behavior:
 
 ```text
 source-time timestamp captured at learner choice
@@ -220,9 +221,9 @@ durableWrite=false
 masteryClaim=false
 ```
 
-The collector normalizes through the accepted P3a core. Invalid source shape is rejected and not collected. When the existing source renderer does not confirm a result, P3b abstains and records nothing.
+The collector normalizes through the accepted P3a core. Invalid source shape is rejected and not collected. If the existing source renderer does not confirm a result, P3b abstains and records nothing. No second correctness calculation is introduced.
 
-The candidate deliberately leaves these accepted source owners byte-identical:
+Accepted source owners remain byte-identical:
 
 ```text
 src/pedagogy/pedagogical-observation-core.js
@@ -231,7 +232,32 @@ src/pedagogy/foundations-pilot.js
 src/pedagogy/generalization-transfer-lesson.js
 ```
 
-`src/core/build32-loader.js` is the only existing runtime file changed: it loads P3a contract → P3b runtime before the existing Foundation/Transfer sources. Public runtime metadata remains v2.5.0 · Build 38.
+Accepted runtime-support wiring:
+
+```text
+src/core/build32-loader.js
+→ loads P3a contract → P3b runtime before Foundation/Transfer sources
+
+sw.js
+→ precaches the exact versioned P3a/P3b boot-time scripts for installed-PWA offline startup
+```
+
+Public runtime metadata remains **v2.5.0 · Build 38**.
+
+### P3b acceptance evidence
+
+```text
+PR #240 base                    7bb9d4ab52d6402121d75c63a8c1042030c1c856
+PR #240 original candidate head 39710405b19c801feb30a451be513c26b66a3d55
+PR #240 accepted exact head     a641481d647510c41855c144149c2adccfde333c
+PR #240 squash merge            5a658f8ac288e5d5cd091dc0a16fa3683f6064fe
+PR #240 accepted scope          exactly 7 paths after justified sw.js review fix
+PR #240 review                  1×P1 installed-PWA precache; fixed + resolved
+P3b workflow run                32429870917 SUCCESS
+PR #240 exact-head CI           exactly five inherited baseline failures; no new red
+```
+
+The P1 fix did not widen P3b evidence semantics: it only ensured the newly required boot-time scripts are available during installed-PWA offline startup.
 
 Explicit P3b non-ownership remains locked:
 
@@ -246,7 +272,7 @@ ZERO mastery/score/CEFR claim
 ZERO Build39.2 availability promotion
 ```
 
-Build39.2 abstention therefore remains correct **through P3b**:
+Build39.2 abstention remains correct after P3b because observations are still ephemeral only:
 
 ```text
 concept-review        unavailable
@@ -254,17 +280,24 @@ foundation-capsule    unavailable
 transfer-construction unavailable
 ```
 
-### P3b candidate control boundary
+## NEXT — P3c durability decision
 
-PR **#240** is the active candidate. This implementation session publishes the candidate and stops. Full exact-head CI/review arbitration, any flake classification/rerun, merge, and canonical closeout belong to the next control session.
+Only after PR **#241** closes the accepted P3b documentation state may implementation/audit work proceed to P3c.
 
-Only if PR #240 is accepted:
+P3c must decide from the real P3b observation semantics whether any durable architecture is justified. P3b itself provides **no** persistence authorization.
 
 ```text
-NEXT = P3c — durability decision
-```
+P3c
+→ audit usefulness and independence of actual Foundation/Transfer observations
+→ decide whether durability is justified at all
+→ if durability is proposed, reconcile ownership with Recovery / backup / Evidence boundaries before any write
+→ do not manufacture mastery, CEFR, score, confidence or assisted-success
+→ do not number Build43 without explicit later authorization
 
-P3c must decide from actual observation usefulness whether any durable architecture is justified. P3b itself does not authorize persistence.
+then
+P4 — fresh A1 readiness audit
+→ reconsider A2 only from the re-audited evidence reality
+```
 
 ## Locked boundaries
 
