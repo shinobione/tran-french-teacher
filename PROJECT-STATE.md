@@ -5,15 +5,17 @@ Last reconciled: 2026-08-20
 ## Canonical checkpoint
 
 - Repository: `shinobione/tran-french-teacher`.
+- Current `main`: **`ef720b760db1108d98ee0090cc87f929d75676a1`** — verified GitHub squash merge of P3a PR #237.
 - Accepted product state remains Build42.2 product merge **`8b462fae236c00b902a9312fe8e1b103412b8694`**.
 - Build42 closure merge: **`8c2787d203d6089850856652f288f10a4fd53b32`**.
 - Build40 P3 evidence-owner audit PR **#234** squash merge: **`cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac`**.
 - P3 closeout PR **#235** squash merge: **`5cde5d3c4d91d63aa50b98ff6b6c6d904f12f29c`**.
-- P3 final alignment PR **#236** was accepted from exact head **`f76e7d92d4cd88c8ad802dbedcc50821f894b135`** and squash-merged as verified **`653aa3a3fe358c7036cca661d339b82b7073cc38`**.
+- P3 final alignment PR **#236** accepted exact head **`f76e7d92d4cd88c8ad802dbedcc50821f894b135`**, squash merge **`653aa3a3fe358c7036cca661d339b82b7073cc38`**.
+- P3a PR **#237** accepted exact head **`fd5c4643c3701dfb37d42789a0409c849cb97324`**, squash merge **`ef720b760db1108d98ee0090cc87f929d75676a1`**.
 - Public runtime metadata remains **v2.5.0 · Build 38**; pedagogy baseline remains **v2.3.0 · Build 34**.
 - Build40 P3 is **CLOSED / ACCEPTED**.
-- Active candidate: **PR #237 — `P3a · prove pure pedagogical observation contract`**, branch `p3a/pedagogical-observation-contract`.
-- P3a is contract/test-only. It is **not Build43** and has no learner-facing runtime wiring.
+- P3a is **CLOSED / ACCEPTED PURE CONTRACT PROOF**.
+- **NEXT = P3b — source instrumentation / ephemeral collector decision.**
 
 ## Accepted product state
 
@@ -47,7 +49,8 @@ Build40    CLOSED — A1 Productive Consolidation selected
 Build41    CLOSED / SUCCESSFUL NARROW CONSOLIDATION
 Build42    CLOSED / SUCCESSFUL FOUNDATIONS DEBT RESOLUTION
 Build40 P3 CLOSED / ACCEPTED
-P3a        ACTIVE CANDIDATE / PURE CONTRACT PROOF
+P3a        CLOSED / ACCEPTED PURE CONTRACT PROOF
+P3b        NEXT / NOT STARTED
 Build42.3  NOT AUTHORIZED
 F16 Transfer NOT AUTHORIZED
 Build43    NOT AUTHORIZED
@@ -75,7 +78,7 @@ Build43 implementation number         NOT AUTHORIZED
 A2                                    NOT AUTHORIZED
 ```
 
-Foundations and learner-facing Transfer already compute honest deterministic success/miss observations with stable concept/family provenance. Those observations are currently ephemeral. A correct multiple-choice/check result is evidence only of that deterministic check; it is not free-production, novel-construction, long-term mastery or CEFR evidence.
+Foundations and learner-facing Transfer already compute honest deterministic success/miss observations with stable concept/family provenance. Those observations remain trustworthy only as the result of that deterministic check; they are not free-production, novel-construction, long-term mastery or CEFR evidence.
 
 ## P3 closure evidence
 
@@ -92,15 +95,15 @@ PR #236 alignment merge  653aa3a3fe358c7036cca661d339b82b7073cc38
 
 No runtime, curriculum, learner data, Recovery, Evidence schema, voice, Premium, PWA or public runtime metadata changed in P3 or its closeout/alignment.
 
-## ACTIVE — P3a pure pedagogical-observation contract proof
+## P3a — CLOSED / ACCEPTED PURE CONTRACT PROOF
 
-Canonical candidate document:
+Canonical contract document:
 
 ```text
 docs/BUILD-40-P3A-PEDAGOGICAL-OBSERVATION-CONTRACT.md
 ```
 
-Candidate code/test owners:
+Accepted owners:
 
 ```text
 src/pedagogy/pedagogical-observation-core.js
@@ -123,7 +126,7 @@ foundation-check → foundation-concept → foundations
 transfer-check   → transfer-family     → transfer
 ```
 
-Normalized source-time evidence is limited to:
+Accepted normalized source-time observation is limited to:
 
 ```text
 at + lessonId
@@ -137,10 +140,12 @@ assistance.modelShownAfterMiss
 sourceOwner + sourceSlice
 ```
 
-Safety properties:
+Accepted fail-closed properties:
 
 ```text
-full source-time ISO timestamp required; core never manufactures time
+caller supplies a full timestamp with time + timezone
+calendar-impossible timestamps are rejected before Date.parse
+lessonId is a strict numeric integer in current 1..52 namespace
 F01…F18 current Foundation namespace only
 one stable Transfer family per Transfer observation
 transfer activityId must equal target family
@@ -153,20 +158,42 @@ no assisted-success
 no storage/network write
 ```
 
-P3a does **not** wire Foundations or Transfer to emit these observations. It proves only the pure normalization boundary.
+P3a does **not** wire Foundations or Transfer to emit observations. It proves only the pure normalization boundary.
 
-Recovery remains **7 stores / backup v3**. Evidence v2 remains **derived shadow only**.
-
-## NEXT — only if PR #237 is accepted
+### P3a acceptance evidence
 
 ```text
-P3b — source instrumentation / ephemeral collector decision
-→ map existing Foundations + Transfer source-time results into the P3a contract
+PR #237 base             653aa3a3fe358c7036cca661d339b82b7073cc38
+PR #237 accepted head    fd5c4643c3701dfb37d42789a0409c849cb97324
+PR #237 squash merge     ef720b760db1108d98ee0090cc87f929d75676a1
+P3a workflow run         32399825235 SUCCESS
+scope                    exactly 6 authorized paths
+review                   1×P1 + 2×P2 on original candidate, all addressed
+review threads           3/3 resolved
+exact-head CI            only five inherited baseline failures; no new red
+Build26.1                SUCCESS
+Premium V5 Coherence     SUCCESS
+Real Life French III     SUCCESS
+```
+
+The three review fixes strengthened provenance without widening scope:
+
+- malformed timestamp test aligned with fail-closed shape semantics;
+- nonexistent calendar dates are rejected rather than normalized by V8;
+- `lessonId` is no longer coerced and is bounded to the current 52-lesson namespace.
+
+Recovery remains **7 stores / backup v3**. Evidence v2 remains **derived shadow only**. No learner-facing runtime behavior or public version metadata changed.
+
+## NEXT — P3b source instrumentation / ephemeral collector decision
+
+```text
+P3b
+→ map existing Foundations + Transfer source-time results into the accepted P3a contract
 → decide a bounded ephemeral runtime sink/collector
-→ zero durable write
-→ zero Recovery/Evidence mutation
-→ zero mastery claim
-→ still no Build43 number
+→ ZERO durable write
+→ ZERO Recovery/Evidence mutation
+→ ZERO mastery claim
+→ still NO Build43 number
 
 then
 P3c — durability decision only after actual source observations are certified useful
@@ -175,6 +202,8 @@ then
 P4 — fresh A1 readiness audit
 → reconsider A2 only from the re-audited evidence reality
 ```
+
+Build39.2 abstention for `concept-review`, `foundation-capsule` and `transfer-construction` remains correct until P3b actually wires trustworthy source-time observations.
 
 ## Locked boundaries
 
