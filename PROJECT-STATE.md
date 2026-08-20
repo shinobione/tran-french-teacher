@@ -5,8 +5,9 @@ Last reconciled: 2026-08-20
 ## Canonical checkpoint
 
 - Repository: `shinobione/tran-french-teacher`.
-- Verified `main` at publication of this alignment candidate: **`ba2225cfb5e8864bd757620d22cfed333c757d82`** — accepted P3a closeout merge from PR **#238**.
-- Alignment control target at publication: **PR #239 — `Docs · finalize accepted P3a checkpoint`**, branch **`docs/p3a-final-alignment`**. Its exact moving candidate head is intentionally kept in live PR metadata to avoid a self-referential SHA loop.
+- Current verified `main`: **`7bb9d4ab52d6402121d75c63a8c1042030c1c856`** — accepted P3a final-alignment squash merge from PR **#239**.
+- Active implementation candidate: **PR #240 — `P3b · observe source checks in bounded ephemeral memory`**, branch **`p3b/source-observation-ephemeral`**.
+- The exact moving P3b candidate head is intentionally kept in live PR metadata to avoid a self-referential checkpoint SHA loop.
 - Accepted product state remains Build42.2 product merge **`8b462fae236c00b902a9312fe8e1b103412b8694`**.
 - Build42 closure merge: **`8c2787d203d6089850856652f288f10a4fd53b32`**.
 - Build40 P3 evidence-owner audit PR **#234** squash merge: **`cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac`**.
@@ -14,11 +15,13 @@ Last reconciled: 2026-08-20
 - P3 final alignment PR **#236** accepted exact head **`f76e7d92d4cd88c8ad802dbedcc50821f894b135`**, squash merge **`653aa3a3fe358c7036cca661d339b82b7073cc38`**.
 - P3a PR **#237** accepted exact head **`fd5c4643c3701dfb37d42789a0409c849cb97324`**, squash merge **`ef720b760db1108d98ee0090cc87f929d75676a1`**.
 - P3a closeout PR **#238** accepted exact head **`a3814d5560c25d7cedaceaa57ff508db05a52de0`**, squash merge **`ba2225cfb5e8864bd757620d22cfed333c757d82`**.
-- Live GitHub remains authoritative for branch tips and the current open/merged state of temporary control PRs.
+- P3a final-alignment PR **#239** accepted exact head **`659b820e0ba06691a93f463f8061855b182a87ed`**, squash merge **`7bb9d4ab52d6402121d75c63a8c1042030c1c856`**.
+- Live GitHub remains authoritative for branch tips and the current open/merged state of temporary candidate/control PRs.
 - Public runtime metadata remains **v2.5.0 · Build 38**; pedagogy baseline remains **v2.3.0 · Build 34**.
 - Build40 P3 is **CLOSED / ACCEPTED**.
 - P3a is **CLOSED / ACCEPTED PURE CONTRACT PROOF**.
-- **NEXT = P3b — source instrumentation / ephemeral collector decision.**
+- P3b is **ACTIVE CANDIDATE / EPHEMERAL SOURCE-OBSERVATION PROOF**.
+- **NEXT only after PR #240 acceptance = P3c — durability decision.**
 
 ## Accepted product state
 
@@ -53,7 +56,8 @@ Build41    CLOSED / SUCCESSFUL NARROW CONSOLIDATION
 Build42    CLOSED / SUCCESSFUL FOUNDATIONS DEBT RESOLUTION
 Build40 P3 CLOSED / ACCEPTED
 P3a        CLOSED / ACCEPTED PURE CONTRACT PROOF
-P3b        NEXT / NOT STARTED
+P3b        ACTIVE CANDIDATE / EPHEMERAL SOURCE-OBSERVATION PROOF
+P3c        NOT STARTED / NOT AUTHORIZED BEFORE P3b ACCEPTANCE
 Build42.3  NOT AUTHORIZED
 F16 Transfer NOT AUTHORIZED
 Build43    NOT AUTHORIZED
@@ -161,7 +165,7 @@ no assisted-success
 no storage/network write
 ```
 
-P3a does **not** wire Foundations or Transfer to emit observations. It proves only the pure normalization boundary.
+P3a does **not** itself wire Foundations or Transfer to emit observations. It proves the pure normalization boundary consumed by P3b.
 
 ### P3a acceptance and closeout evidence
 
@@ -178,40 +182,89 @@ PR #238 squash merge     ba2225cfb5e8864bd757620d22cfed333c757d82
 PR #238 scope            exactly 2 Markdown files
 PR #238 review           1×P2 resolved: LI3 abstention stays locked through P3b
 PR #238 exact-head CI    only five inherited baseline failures after two unchanged flake reruns
-V5.3 Pedagogical Islands rerun SUCCESS
-Build26.4 Progress/Tyffany rerun  SUCCESS
+PR #239 accepted head    659b820e0ba06691a93f463f8061855b182a87ed
+PR #239 squash merge     7bb9d4ab52d6402121d75c63a8c1042030c1c856
+PR #239 review           1×P2 resolved; resumable volatile checkpoint retained without self-SHA loop
+PR #239 exact-head CI    only five inherited baseline failures after unchanged Build26.1 Chrome rerun
 ```
 
-The P3a review fixes strengthened provenance without widening scope:
+Recovery remains **7 stores / backup v3**. Evidence v2 remains **derived shadow only**. No learner-facing public version metadata changed.
 
-- malformed timestamp test aligned with fail-closed shape semantics;
-- nonexistent calendar dates are rejected rather than normalized by V8;
-- `lessonId` is no longer coerced and is bounded to the current 52-lesson namespace.
+## P3b — ACTIVE CANDIDATE / EPHEMERAL SOURCE-OBSERVATION PROOF
 
-The P3a closeout additionally locks Build39.2 abstention through P3b because P3b remains ephemeral-only.
-
-Recovery remains **7 stores / backup v3**. Evidence v2 remains **derived shadow only**. No learner-facing runtime behavior or public version metadata changed.
-
-## NEXT — P3b source instrumentation / ephemeral collector decision
+Canonical candidate document:
 
 ```text
-P3b
-→ map existing Foundations + Transfer source-time results into the accepted P3a contract
-→ decide a bounded ephemeral runtime sink/collector
-→ ZERO durable write
-→ ZERO Recovery/Evidence mutation
-→ ZERO mastery claim
-→ still NO Build43 number
-
-then
-P3c — durability decision only after actual source observations are certified useful
-
-then
-P4 — fresh A1 readiness audit
-→ reconsider A2 only from the re-audited evidence reality
+docs/BUILD-40-P3B-SOURCE-OBSERVATION-EPHEMERAL.md
 ```
 
-Build39.2 abstention for `concept-review`, `foundation-capsule` and `transfer-construction` remains correct **through P3b**. P3b is ephemeral-only and does not authorize any LI3 availability change; any such change requires a later, explicit durability/adapter decision in P3c or beyond.
+Candidate runtime owner:
+
+```text
+src/pedagogy/pedagogical-observation-runtime.js
+```
+
+Candidate behavior:
+
+```text
+source-time timestamp captured at learner choice
+wait for existing synchronous source renderer
+record only when selected source result is rendered ok | bad
+Foundation → foundation-check / foundation-concept / foundations
+Transfer   → transfer-check / transfer-family / transfer
+miss       → modelShownAfterMiss=true
+success    → modelShownAfterMiss=false
+capacity   → 64 accepted normalized observations FIFO
+persistence=false
+durableWrite=false
+masteryClaim=false
+```
+
+The collector normalizes through the accepted P3a core. Invalid source shape is rejected and not collected. When the existing source renderer does not confirm a result, P3b abstains and records nothing.
+
+The candidate deliberately leaves these accepted source owners byte-identical:
+
+```text
+src/pedagogy/pedagogical-observation-core.js
+src/pedagogy/foundations-capsule-engine.js
+src/pedagogy/foundations-pilot.js
+src/pedagogy/generalization-transfer-lesson.js
+```
+
+`src/core/build32-loader.js` is the only existing runtime file changed: it loads P3a contract → P3b runtime before the existing Foundation/Transfer sources. Public runtime metadata remains v2.5.0 · Build 38.
+
+Explicit P3b non-ownership remains locked:
+
+```text
+ZERO Learning Memory write
+ZERO Error Intelligence write
+ZERO Evidence v2 write
+ZERO Recovery/backup mutation
+ZERO localStorage/sessionStorage/IndexedDB persistence
+ZERO network persistence
+ZERO mastery/score/CEFR claim
+ZERO Build39.2 availability promotion
+```
+
+Build39.2 abstention therefore remains correct **through P3b**:
+
+```text
+concept-review        unavailable
+foundation-capsule    unavailable
+transfer-construction unavailable
+```
+
+### P3b candidate control boundary
+
+PR **#240** is the active candidate. This implementation session publishes the candidate and stops. Full exact-head CI/review arbitration, any flake classification/rerun, merge, and canonical closeout belong to the next control session.
+
+Only if PR #240 is accepted:
+
+```text
+NEXT = P3c — durability decision
+```
+
+P3c must decide from actual observation usefulness whether any durable architecture is justified. P3b itself does not authorize persistence.
 
 ## Locked boundaries
 
