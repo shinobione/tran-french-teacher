@@ -138,4 +138,121 @@ assert.ok(runtimeAt > contractAt, 'P3b runtime must load after P3a contract');
 assert.ok(foundationsAt > runtimeAt, 'P3b observer must be installed before Foundations learner-facing source');
 assert.ok(transferLessonAt > runtimeAt, 'P3b observer must be installed before Transfer learner-facing source');
 
-console.log('P3b pedagogical observation runtime: PASS');
+(async () => {
+  runtime.clear();
+
+  let clickHandler = null;
+  let foundationRenderedClass = null;
+  let transferRenderedClass = null;
+
+  const foundationRenderedButton = {
+    dataset: { foundationChoice: 'des' },
+    classList: { contains: value => value === foundationRenderedClass }
+  };
+  const transferRenderedButton = {
+    dataset: { transferChoice: 'Je vais travailler.' },
+    classList: { contains: value => value === transferRenderedClass }
+  };
+  const foundationDialog = {
+    dataset: { foundationActiveCapsule: 'F16' },
+    querySelector: selector => selector === '.ft-foundation-q .muted' ? { textContent: '1/6' } : null,
+    querySelectorAll: selector => selector === '[data-foundation-choice]' ? [foundationRenderedButton] : []
+  };
+  const transferDialog = {
+    dataset: {
+      transferActiveFamily: 'present-je-regular-action-to-recent-past-je-venir-de',
+      transferActiveLesson: '36'
+    },
+    querySelector: selector => selector === '.ft-transfer-q .muted' ? { textContent: '1/3' } : null,
+    querySelectorAll: selector => selector === '[data-transfer-choice]' ? [transferRenderedButton] : []
+  };
+
+  global.document = {
+    addEventListener(type, handler, capture) {
+      if (type === 'click' && capture === true) clickHandler = handler;
+    },
+    querySelector(selector) {
+      if (selector === '.screen-lesson .topbar h1') return { textContent: 'Leçon 38' };
+      return null;
+    },
+    querySelectorAll(selector) {
+      if (selector === '[data-foundation-active-capsule]') return [foundationDialog];
+      if (selector === '[data-transfer-active-family]') return [transferDialog];
+      return [];
+    }
+  };
+  global.FrenchTranquilleFoundationsCapsules = {
+    F16: {
+      id: 'a-de-contractions-core',
+      concepts: ['F16'],
+      checks: [{ id: 'f16-l38-au' }]
+    }
+  };
+  global.FrenchTranquilleTransferLesson = {
+    routes: [{
+      family: 'present-je-regular-action-to-recent-past-je-venir-de',
+      lesson: 36,
+      slice: '41.3',
+      exerciseIndexes: [0, 1, 2]
+    }]
+  };
+
+  assert.equal(runtime.installSourceObservers(), true);
+  assert.equal(typeof clickHandler, 'function');
+  assert.equal(runtime.installSourceObservers(), false, 'observer installation must be idempotent');
+
+  const foundationChoiceButton = {
+    dataset: { foundationChoice: 'des' },
+    closest(selector) {
+      if (selector === '[data-foundation-choice]') return this;
+      if (selector === '[data-foundation-active-capsule]') return foundationDialog;
+      return null;
+    }
+  };
+  clickHandler({ target: foundationChoiceButton });
+  foundationRenderedClass = 'bad';
+  await Promise.resolve();
+  assert.equal(runtime.size(), 1);
+  let observed = runtime.snapshot()[0];
+  assert.equal(observed.activityKind, 'foundation-check');
+  assert.equal(observed.lessonId, 38);
+  assert.equal(observed.exerciseId, 'f16-l38-au');
+  assert.equal(observed.outcome, 'miss');
+  assert.equal(observed.assistance.modelShownAfterMiss, true);
+
+  global.document.querySelector = selector => selector === '.screen-lesson .topbar h1' ? { textContent: 'Leçon 36' } : null;
+  const transferChoiceButton = {
+    dataset: { transferChoice: 'Je vais travailler.' },
+    closest(selector) {
+      if (selector === '[data-transfer-choice]') return this;
+      if (selector === '[data-transfer-active-family]') return transferDialog;
+      return null;
+    }
+  };
+  clickHandler({ target: transferChoiceButton });
+  transferRenderedClass = 'bad';
+  await Promise.resolve();
+  assert.equal(runtime.size(), 2);
+  observed = runtime.snapshot()[1];
+  assert.equal(observed.activityKind, 'transfer-check');
+  assert.equal(observed.lessonId, 36);
+  assert.equal(observed.exerciseId, 'present-je-regular-action-to-recent-past-je-venir-de:1');
+  assert.equal(observed.outcome, 'miss');
+  assert.equal(observed.sourceSlice, 'transfer:41.3');
+  assert.equal(observed.assistance.modelShownAfterMiss, true);
+
+  const beforeAbstention = runtime.size();
+  transferRenderedClass = null;
+  clickHandler({ target: transferChoiceButton });
+  await Promise.resolve();
+  assert.equal(runtime.size(), beforeAbstention);
+
+  delete global.document;
+  delete global.FrenchTranquilleFoundationsCapsules;
+  delete global.FrenchTranquilleTransferLesson;
+
+  console.log('P3b pedagogical observation runtime: PASS');
+})().catch(error => {
+  console.error(error);
+  process.exitCode = 1;
+});
