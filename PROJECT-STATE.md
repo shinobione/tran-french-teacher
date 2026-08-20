@@ -12,10 +12,11 @@ Last reconciled: 2026-08-20
 - P3 closeout PR **#235** squash merge: **`5cde5d3c4d91d63aa50b98ff6b6c6d904f12f29c`**.
 - P3 final alignment PR **#236** accepted exact head **`f76e7d92d4cd88c8ad802dbedcc50821f894b135`**, squash merge **`653aa3a3fe358c7036cca661d339b82b7073cc38`**.
 - P3a PR **#237** accepted exact head **`fd5c4643c3701dfb37d42789a0409c849cb97324`**, squash merge **`ef720b760db1108d98ee0090cc87f929d75676a1`**.
+- Active docs-only closeout candidate: **PR #238 — `Docs · close P3a and hand off P3b`**, branch `docs/p3a-closeout`.
 - Public runtime metadata remains **v2.5.0 · Build 38**; pedagogy baseline remains **v2.3.0 · Build 34**.
 - Build40 P3 is **CLOSED / ACCEPTED**.
 - P3a is **CLOSED / ACCEPTED PURE CONTRACT PROOF**.
-- **NEXT = P3b — source instrumentation / ephemeral collector decision.**
+- **NEXT after closeout acceptance = P3b — source instrumentation / ephemeral collector decision.**
 
 ## Accepted product state
 
