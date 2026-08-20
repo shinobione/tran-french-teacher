@@ -5,12 +5,13 @@ Last reconciled: 2026-08-20
 ## Canonical checkpoint
 
 - Repository: `shinobione/tran-french-teacher`.
-- Accepted Build42.2 product state remains **`8b462fae236c00b902a9312fe8e1b103412b8694`**.
-- Build42 milestone closure PR **#232** was accepted from exact head **`5fd9a19cc2f601186decd7fe9e100ab4b62cc89a`** and squash-merged as **`8c2787d203d6089850856652f288f10a4fd53b32`**.
-- `main` was verified on that merge SHA immediately after acceptance; live GitHub remains authoritative for the latest exact HEAD.
+- Accepted product state remains Build42.2 product merge **`8b462fae236c00b902a9312fe8e1b103412b8694`**.
+- Build42 closure merge: **`8c2787d203d6089850856652f288f10a4fd53b32`**.
+- Accepted final Build42 docs checkpoint / audited P3 base: **`22f4d5d5e3c111c14255b4e8a80a320cfa2c9469`**.
 - Public runtime metadata remains **v2.5.0 · Build 38**; pedagogy baseline remains **v2.3.0 · Build 34**.
-- Build42 is now **CLOSED / SUCCESSFUL FOUNDATIONS DEBT RESOLUTION**.
-- Build42.3, productive F16 Transfer and A2 remain **NOT AUTHORIZED**.
+- Build42 is **CLOSED / SUCCESSFUL FOUNDATIONS DEBT RESOLUTION**.
+- Current candidate: **PR #234 — `Docs · audit P3 evidence-owner design`**, branch `docs/p3-evidence-owner-audit`.
+- P3 remains read-only/docs-only; live PR/GitHub is authoritative for the exact candidate head.
 
 ## Accepted product state
 
@@ -42,58 +43,122 @@ Build38   CLOSED / RELEASED
 Build39   CLOSED / CERTIFIED
 Build40   CLOSED — A1 Productive Consolidation selected
 Build41   CLOSED / SUCCESSFUL NARROW CONSOLIDATION
-Build42.1 CLOSED / AUDITED
-Build42.2 CLOSED / MERGED / EXACT-HEAD CI-CERTIFIED
 Build42   CLOSED / SUCCESSFUL FOUNDATIONS DEBT RESOLUTION
 Build42.3 NOT AUTHORIZED
 F16 Transfer NOT AUTHORIZED
 A2        NOT AUTHORIZED
 ```
 
-## Build42 closure rationale
+## P3 evidence-owner audit — candidate verdict
 
-Build42 resolved the explicit F16 structural teaching debt:
-
-```text
-à + le   → au
-à + les  → aux
-de + le  → du
-de + les → des
-
-vs
-à la / à l’ / de la / de l’
-```
-
-Build42.1 mapped real anchors and established lesson38 placement plus the partitive/quantity anti-confusion boundary. Build42.2 implemented one optional deterministic lesson38 Foundation capsule through the existing engine, with ephemeral-only state and `masteryClaim=false`.
-
-The remaining absence of clean learner-owned `aux`, contraction-`des`, durable Foundation mastery and productive F16 Transfer is an evidence/source-ownership boundary — not unfinished Build42 teaching.
-
-Therefore no Build42.3 implementation is independently justified.
-
-## #232 acceptance evidence
+Canonical candidate audit:
 
 ```text
-PR                    #232 — Docs · audit Build 42 milestone closure
-accepted head         5fd9a19cc2f601186decd7fe9e100ab4b62cc89a
-merge                 8c2787d203d6089850856652f288f10a4fd53b32
-Build42.2 workflow    run 32298213215 — SUCCESS
-Premium V5 Coherence  first Chrome failure → unchanged rerun job 96347081676 — SUCCESS
+docs/BUILD-40-P3-EVIDENCE-OWNER-DESIGN-AUDIT.md
 ```
 
-Build26.1 had also produced a Chrome timeout on an earlier #232 head and passed on an exact unchanged rerun. No product patch was made for either Chrome flake.
+### What is now genuinely observable
 
-The final exact-head matrix returned to exactly the known five-failure inherited baseline with no new failure.
+Foundations and learner-facing Transfer already compute real source-time deterministic outcomes.
 
-## Locked boundary
+Foundations ephemeral session:
 
 ```text
-productive F16 Transfer    NOT AUTHORIZED
-durable Foundation mastery NOT CLAIMED
-Build42.3                   NOT AUTHORIZED
-A2                          NOT AUTHORIZED
+capsuleId
+concept ids
+checkId
+choice
+correct
+correctAnswer
 ```
 
-Reliable LI3 families remain `phrase-retrieval`, `listening`, `scenario`. `concept-review`, `foundation-capsule`, `transfer-construction` remain unavailable as trustworthy durable evidence.
+Transfer ephemeral session/route:
+
+```text
+lesson
+family id
+exercise identity
+choice
+correct
+source/target transformation provenance
+```
+
+These are honest **success/miss observations for deterministic choice/check activities**. They are not proof of free production, novel construction, long-term mastery or CEFR level.
+
+A miss that reveals corrective feedback supports `miss + modelShownAfterMiss`; it does not support `assisted-success` because there is no certified assisted retry.
+
+### Current durable owners are not semantically suitable
+
+```text
+Learning Memory
+→ curriculum-item IDs only
+→ trustworthy phrase/item owner
+→ NOT a Foundation concept or Transfer family owner
+
+Error Intelligence
+→ curriculum-item IDs only
+→ trustworthy item/listening/scenario observed-need owner
+→ NOT a Foundation concept or Transfer family owner
+
+Evidence v2
+→ seventh Recovery store
+→ derived shadow of the original six canonical stores
+→ construction / transfer / concept-understanding not reconstructable from current sources
+→ direct source-event writes would violate the accepted shadow contract
+```
+
+### Candidate P3 decision
+
+```text
+source-time semantic event owner     JUSTIFIED
+durable persistence now              NOT JUSTIFIED
+direct Memory/Error reuse            REJECTED
+direct Evidence v2 event writes       REJECTED under current shadow contract
+new eighth store now                  REJECTED
+mastery claim                         NOT AUTHORIZED
+Build43 implementation number         NOT AUTHORIZED
+A2                                     NOT AUTHORIZED
+```
+
+The missing abstraction is a bounded **pedagogical observation contract** with non-item semantic targets such as `foundation-concept` and `transfer-family`.
+
+## NEXT if PR #234 is accepted
+
+```text
+P3a — pure pedagogical-observation contract proof
+→ schema/normalizer + fixtures/tests only
+→ stable Foundation concept / Transfer family target namespaces
+→ success | miss + honest model-shown-after-miss semantics
+→ immutable/bounded output
+→ zero durable write
+→ zero Recovery/Evidence change
+→ zero learner-facing behaviour change
+→ still no Build43 number
+
+then, only after P3a proof
+P3b — source instrumentation / ephemeral collector decision
+
+then, only after actual source observations are proven
+P3c — durability decision
+→ explicit Evidence contract/cutover redesign OR separately justified durable owner
+→ neither authorized yet
+
+P4 — fresh A1 readiness audit
+→ only after trustworthy concept/Transfer evidence actually exists
+```
+
+## Locked boundaries
+
+- no fake pronunciation score;
+- recognition failure is not mastery evidence;
+- no learner-data reset/renumber/reinterpretation;
+- Recovery remains 7 stores / backup v3;
+- Evidence v2 remains derived shadow until explicit future cutover;
+- no durable store/schema merely to manufacture intelligence;
+- preserve 52 lesson IDs / 313 item semantics;
+- productive F16 Transfer remains NOT AUTHORIZED;
+- durable Foundation/Transfer mastery remains NOT CLAIMED;
+- Build43 and A2 remain NOT AUTHORIZED.
 
 ## CI baseline
 
@@ -106,19 +171,3 @@ Known persistent inherited failures:
 5. `Build 28 Data recovery smoke`
 
 Any other failure is NEW until classified.
-
-## NEXT
-
-```text
-P3 — evidence-owner design audit — READ-ONLY
-→ inventory actual observable success / miss / assistance events from Foundation and Transfer/productive activities
-→ decide whether a trustworthy owner/event model is justified
-→ no persistence-first architecture
-→ no Build43 implementation number until audit proof exists
-
-then
-P4 — fresh A1 readiness audit
-→ reconsider A2 only from the re-audited productive/evidence reality
-```
-
-Do not implement F16 Transfer, claim durable Foundation mastery, create a new store merely to manufacture evidence, or start A2 before the P3/P4 gates justify it.
