@@ -9,7 +9,7 @@
 ```text
 Build42.2 product merge          8b462fae236c00b902a9312fe8e1b103412b8694
 Build42 closure merge            8c2787d203d6089850856652f288f10a4fd53b32
-accepted Build42 docs checkpoint 22f4d5d5e3c111c14255b4e8a80a320cfa2c9469
+Build40 P3 audit merge           cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac
 public runtime metadata          v2.5.0 · Build 38
 pedagogy baseline                v2.3.0 · Build 34
 curriculum                       52 lessons / 313 items
@@ -23,8 +23,10 @@ Build39 LI3                      CLOSED / CERTIFIED
 Build40 A1 audit                 CLOSED / PRODUCTIVE CONSOLIDATION SELECTED
 Build41                          CLOSED / SUCCESSFUL NARROW CONSOLIDATION
 Build42                          CLOSED / SUCCESSFUL FOUNDATIONS DEBT RESOLUTION
+Build40 P3                       CLOSED / ACCEPTED
 Build42.3                        NOT AUTHORIZED
 productive F16 Transfer          NOT AUTHORIZED
+Build43                          NOT AUTHORIZED
 A2                               NOT AUTHORIZED
 ```
 
@@ -52,11 +54,11 @@ l8 progress = 4
 
 ## Build37 — Foundations — CLOSED
 
-Accepted learner-facing Foundation ownership includes F01–F04 lessons8–13, F11 lessons17–20, F08 lessons32–33, F05 lessons34–36, F16 lesson38, F13 lesson40, F12 lessons41–43. All are optional/ephemeral with no mastery claim.
+Accepted learner-facing Foundation ownership includes F01–F04 lessons8–13, F11 lessons17–20, F08 lessons32–33, F05 lessons34–36, F16 lesson38, F13 lesson40, F12 lessons41–43. All remain optional/ephemeral with no mastery claim.
 
 ## Build38 — Generalization & Transfer — CLOSED / RELEASED
 
-Certified learner-facing deterministic families remain subject substitution, affirmation→negation, present→futur proche, singular→plural nominal, and nous→spoken on. Public runtime remains `v2.5.0 · Build 38`.
+Certified learner-facing deterministic families remain subject substitution, affirmation→negation, present→futur proche, singular→plural nominal and nous→spoken on. Public runtime remains `v2.5.0 · Build 38`.
 
 ## Build39 — Learner Intelligence 3 — CLOSED / CERTIFIED
 
@@ -68,7 +70,7 @@ listening
 scenario
 ```
 
-Still unavailable without a trustworthy semantic source owner:
+Still unavailable as trustworthy durable evidence:
 
 ```text
 concept-review
@@ -76,18 +78,23 @@ foundation-capsule
 transfer-construction
 ```
 
+P3 acceptance does not change that yet because no source-time owner is wired or durable.
+
 ## Build40 — A1 Consolidation Audit — CLOSED
 
-Canonical order:
+Canonical sequence:
 
 ```text
 P1 productive-family audit
 P2 dedicated F16 contractions audit
-P3 evidence-owner design after meaningful productive events exist
-P4 re-run A1 readiness before A2
+P3 evidence-owner design
+P3a pure event-contract proof
+P3b source instrumentation / ephemeral collector decision
+P3c durability decision if justified
+P4 fresh A1 readiness audit
 ```
 
-P1 completed through Build41. P2 completed through Build42. P3 is the active audit candidate.
+P1 completed through Build41. P2 completed through Build42. P3 is now accepted/closed.
 
 ## Build41 — A1 Productive Consolidation — CLOSED
 
@@ -99,7 +106,7 @@ Je mange.              → Je viens de manger.
 Je rentre à la maison. → Je viens de rentrer à la maison.
 ```
 
-This widened learner-facing deterministic Transfer from five Build38 families to six total.
+This widened learner-facing deterministic Transfer to six families total.
 
 ## Build42 — Foundations debt resolution — CLOSED
 
@@ -119,74 +126,70 @@ The capsule remains optional, deterministic, ephemeral-only and `masteryClaim=fa
 
 No Build42.3 is justified. Productive F16 Transfer remains NOT AUTHORIZED.
 
-# ACTIVE — Build40 P3 evidence-owner design audit
+# Build40 P3 — evidence-owner design — CLOSED / ACCEPTED
 
-Canonical candidate document:
+Canonical audit:
 
 ```text
 docs/BUILD-40-P3-EVIDENCE-OWNER-DESIGN-AUDIT.md
 ```
 
-## Source audit result
-
-Current Foundations and Transfer UIs already compute real source-time deterministic observations.
-
-Foundations:
+Acceptance:
 
 ```text
-capsule id + Fxx concept ids
-check id
-choice
-correct / correct answer
+PR #234 accepted head  980a0afd3eaaf5ee15e07bcbf0403ba675691817
+squash merge           cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac
+scope                  3 Markdown files only
+exact-head CI          only five inherited baseline failures; no new red
+review                 Codex P2 addressed/resolved without head mutation
 ```
 
-Transfer:
+## Accepted design decision
+
+Current Foundations and Transfer UIs already compute real source-time deterministic observations:
 
 ```text
-lesson
-stable Transfer family id
-exercise identity
-choice
-correct
-source/target transformation provenance
+Foundations
+→ capsule/concept/check provenance
+→ selected choice
+→ success | miss
+
+Transfer
+→ lesson/family/exercise provenance
+→ selected transformation choice
+→ success | miss
 ```
 
-These events are currently ephemeral.
+These observations are trustworthy only as **what happened in that deterministic check**. They are not proof of free production, novel sentence construction, durable mastery, pronunciation quality or CEFR attainment.
 
-They are trustworthy as **what happened in that deterministic check**. They are not, by themselves, free-production evidence, durable mastery, novel unseen-context construction or CEFR proof.
-
-A miss followed by corrective reveal means:
+A miss followed by corrective reveal supports:
 
 ```text
-miss + modelShownAfterMiss
+outcome = miss
+modelShownAfterMiss = true
 ```
 
-not `assisted-success`, because the current flow does not certify a second assisted attempt.
+not `assisted-success`, because there is no certified assisted retry.
 
-## Ownership audit result
+Current durable owners remain intentionally bounded:
 
 ```text
 Learning Memory
-→ correct owner for curriculum-item review/practice evidence
-→ item IDs only
-→ cannot honestly own Fxx concepts or Transfer families
+→ curriculum-item owner only
 
 Error Intelligence
-→ correct owner for item/listening/scenario observed need
-→ item IDs only
-→ cannot honestly own Fxx concepts or Transfer families
+→ curriculum-item/listening/scenario observed-need owner only
 
 Evidence v2
 → seventh Recovery store
-→ accepted role = deterministic derived shadow of six canonical sources
-→ current projection cannot reconstruct construction/transfer/concept-understanding
-→ direct event writes would be a contract/cutover change
+→ derived shadow of six canonical source stores
+→ direct source-event writes NOT AUTHORIZED
 
 new eighth durable store
-→ NOT justified before event contract/source instrumentation proof
+→ NOT JUSTIFIED
 ```
 
-## P3 candidate verdict
+Accepted P3 verdict:
 
 ```text
 semantic source-time event owner      JUSTIFIED
@@ -199,40 +202,35 @@ Build43 implementation number         NOT AUTHORIZED
 A2                                    NOT AUTHORIZED
 ```
 
-The minimal missing abstraction is a bounded **pedagogical observation contract** whose target namespace supports `foundation-concept` and `transfer-family` without pretending either is one of the 313 curriculum items.
-
-# NEXT if P3 audit is accepted
+# NEXT — P3a pure pedagogical-observation contract proof
 
 ```text
-P3a — pure pedagogical-observation contract proof
-→ schema/normalizer only
+P3a
+→ pure schema / normalizer only
 → unit fixtures for Foundations + Transfer
-→ stable semantic target IDs
+→ target.kind = foundation-concept | transfer-family
+→ activityKind = foundation-check | transfer-check
 → outcome = success | miss
 → honest modelShownAfterMiss flag
 → bounded + detached + immutable output
+→ no curriculum item proxy required
 → no mastery/score/CEFR field
-→ zero durable write
+→ zero localStorage/sessionStorage/IndexedDB write
 → zero Recovery/Evidence change
 → zero learner-facing behaviour change
 → do NOT number Build43 yet
 
 then
 P3b — source instrumentation / ephemeral collector decision
-→ only after P3a contract proof
 
 then
-P3c — durability decision
-→ only after actual source instrumentation proves useful trustworthy observations
-→ explicit Evidence contract/cutover redesign OR separately justified durable event owner
-→ neither route authorized yet
+P3c — durability decision only after actual source observations prove useful
 
 then
 P4 — fresh A1 readiness audit
-→ only after trustworthy concept/Transfer evidence actually exists
-→ reconsider A2 from that new evidence reality
+→ reconsider A2 only from the re-audited evidence reality
 ```
 
-P3 audit acceptance alone does not make `concept-review`, `foundation-capsule` or `transfer-construction` reliable LI3 families. Until a certified owner is actually wired and producing source-time observations, Build39.2's abstention remains correct.
+Until a certified source-time owner is actually wired and producing trustworthy observations, Build39.2 abstention for `concept-review`, `foundation-capsule` and `transfer-construction` remains correct.
 
-Not authorized: Build42.3, productive F16 Transfer, durable Foundation/Transfer mastery claims, Build43 implementation numbering, A2, Evidence read cutover, or a new durable store merely to manufacture evidence.
+Not authorized: Build42.3, productive F16 Transfer, durable Foundation/Transfer mastery claims, Build43 implementation numbering, A2, Evidence read cutover, direct Evidence event writes, or a new durable store merely to manufacture evidence.
