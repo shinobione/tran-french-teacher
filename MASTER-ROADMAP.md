@@ -13,6 +13,7 @@ Build40 P3 audit merge           cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac
 Build40 P3 closeout merge        5cde5d3c4d91d63aa50b98ff6b6c6d904f12f29c
 Build40 P3 final alignment       653aa3a3fe358c7036cca661d339b82b7073cc38
 P3a pure contract merge          ef720b760db1108d98ee0090cc87f929d75676a1
+P3a closeout merge               ba2225cfb5e8864bd757620d22cfed333c757d82
 public runtime metadata          v2.5.0 · Build 38
 pedagogy baseline                v2.3.0 · Build 34
 curriculum                       52 lessons / 313 items
@@ -188,16 +189,22 @@ tests/unit/p3a-pedagogical-observation-core.test.cjs
 .github/workflows/p3a-pedagogical-observation-contract.yml
 ```
 
-Acceptance chain:
+Acceptance and closeout chain:
 
 ```text
 PR #237 base             653aa3a3fe358c7036cca661d339b82b7073cc38
 PR #237 accepted head    fd5c4643c3701dfb37d42789a0409c849cb97324
 PR #237 squash merge     ef720b760db1108d98ee0090cc87f929d75676a1
 P3a workflow run         32399825235 SUCCESS
-scope                    exactly 6 authorized paths
-review                   1×P1 + 2×P2 addressed; 3/3 threads resolved
-exact-head CI            only five inherited baseline failures; no new red
+PR #237 scope            exactly 6 authorized paths
+PR #237 review           1×P1 + 2×P2 addressed; 3/3 threads resolved
+PR #238 accepted head    a3814d5560c25d7cedaceaa57ff508db05a52de0
+PR #238 squash merge     ba2225cfb5e8864bd757620d22cfed333c757d82
+PR #238 scope            exactly 2 Markdown files
+PR #238 review           1×P2 resolved; LI3 abstention locked through P3b
+PR #238 exact-head CI    only five inherited baseline failures after two unchanged flake reruns
+V5.3 Pedagogical Islands rerun SUCCESS
+Build26.4 Progress/Tyffany rerun  SUCCESS
 ```
 
 Contract identity:
