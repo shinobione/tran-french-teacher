@@ -6,20 +6,25 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
   p3b-observation-runtime:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: '22'
 
       - name: Syntax and unit contracts
         run: |
+          set -euo pipefail
           node --check src/pedagogy/pedagogical-observation-core.js
           node --check src/pedagogy/pedagogical-observation-runtime.js
           node --check tests/unit/p3a-pedagogical-observation-core.test.cjs
@@ -29,6 +34,7 @@ jobs:
 
       - name: Ephemeral-only guard
         run: |
+          set -euo pipefail
           ! grep -Eq 'localStorage|sessionStorage|indexedDB|fetch\(|XMLHttpRequest|sendBeacon|\.setItem\(|\.getItem\(' src/pedagogy/pedagogical-observation-runtime.js
           ! grep -Eq 'FrenchTranquilleMemoryEvidence|FrenchTranquilleLearningMemory|FrenchTranquilleErrorIntelligence' src/pedagogy/pedagogical-observation-runtime.js
           ! grep -Eq 'mastery[[:space:]]*:[[:space:]]*true|masteryClaim[[:space:]]*:[[:space:]]*true|durableWrite[[:space:]]*:[[:space:]]*true|persistent[[:space:]]*:[[:space:]]*true' src/pedagogy/pedagogical-observation-runtime.js
@@ -37,6 +43,7 @@ jobs:
 
       - name: Source owners and accepted P3a core remain byte-identical
         run: |
+          set -euo pipefail
           test "$(git hash-object src/pedagogy/pedagogical-observation-core.js)" = "b1203ee599eb0ab78c0ef32f66781309bac092bb"
           test "$(git hash-object src/pedagogy/foundations-capsule-engine.js)" = "eeab33b0c3c5bcfca6bb679015998433b0571158"
           test "$(git hash-object src/pedagogy/foundations-pilot.js)" = "b57d1803f64f143971f6054610d8f4a48d7c73be"
@@ -44,24 +51,29 @@ jobs:
 
       - name: Accepted predecessor certification
         run: |
+          set -euo pipefail
           node tests/unit/build39-1-learner-action-core.test.cjs
           node tests/unit/build41-3-recent-past-adapter.test.cjs
           node tools/test-build42-2-foundations-f16-contractions.cjs
 
       - name: P3b candidate scope guard
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && github.head_ref == 'p3b/source-observation-ephemeral'
         run: |
+          set -euo pipefail
           git fetch origin "${{ github.base_ref }}" --depth=1
           allowed='^(\.github/workflows/p3b-pedagogical-observation-runtime\.yml|PROJECT-STATE\.md|docs/BUILD-40-P3B-SOURCE-OBSERVATION-EPHEMERAL\.md|src/core/build32-loader\.js|src/pedagogy/pedagogical-observation-runtime\.js|tests/unit/p3b-pedagogical-observation-runtime\.test\.cjs)$'
-          changed="$(git diff --name-only "origin/${{ github.base_ref }}...HEAD")"
+          changed="$(git diff --name-only "origin/${{ github.base_ref }}"...HEAD)"
           printf '%s\n' "$changed"
-          if printf '%s\n' "$changed" | grep -Ev "$allowed" | grep -q .; then
-            echo 'Unexpected path outside P3b candidate scope' >&2
+          unexpected="$(printf '%s\n' "$changed" | grep -Ev "$allowed" || true)"
+          if [ -n "$unexpected" ]; then
+            echo 'Unexpected path(s) outside P3b candidate scope:' >&2
+            printf '%s\n' "$unexpected" >&2
             exit 1
           fi
 
       - name: Permanent sanctuaries remain byte-identical
         run: |
+          set -euo pipefail
           test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
           test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
           test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
