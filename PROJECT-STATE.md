@@ -11,6 +11,8 @@ Last reconciled: 2026-08-20
 - Public runtime metadata remains **v2.5.0 · Build 38**; pedagogy baseline remains **v2.3.0 · Build 34**.
 - Build42 is **CLOSED / SUCCESSFUL FOUNDATIONS DEBT RESOLUTION**.
 - Build40 P3 is **CLOSED / ACCEPTED READ-ONLY EVIDENCE-OWNER DESIGN AUDIT**.
+- Current docs-only closeout candidate: **PR #235 — `Docs · close accepted P3 evidence-owner audit`**, branch `docs/p3-evidence-owner-closeout`.
+- **Do not start P3a until PR #235 is accepted.** Live PR/GitHub is authoritative for its exact candidate head and CI/review status.
 
 ## Accepted product state
 
@@ -96,7 +98,7 @@ CI             exact-head matrix complete; only the five inherited baseline fail
 
 No runtime, curriculum, learner data, Recovery, Evidence schema, voice, Premium, PWA or public runtime metadata changed in P3.
 
-## NEXT
+## NEXT — after PR #235 acceptance
 
 ```text
 P3a — pure pedagogical-observation contract proof
