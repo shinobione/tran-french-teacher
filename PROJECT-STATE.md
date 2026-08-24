@@ -1,17 +1,18 @@
 # PROJECT-STATE — French Trân’quille
 
-Last reconciled: 2026-08-24
+Last reconciled: 2026-08-25
 
 ## Canonical checkpoint
 
 - Repository: `shinobione/tran-french-teacher`.
-- Last verified `main` before publication of the A2-R1 pure-proof candidate: **`6e78789f6f63b87a2b0c0d4acd62de4701b5083d`**.
-- That commit is PR **#250 — `Docs · close accepted A2 bridge design audit`**, GitHub **verified=true / reason=valid**.
-- PR #250 accepted exact head: **`23ce352b42a123adf276cc7ea379b5c309142542`**.
-- Published implementation candidate: PR **#251 — `A2-R1 · prove pure multi-fact reception contract`**, branch **`a2/r1-multi-fact-contract-proof`**.
-- **GitHub live metadata owns #251's moving head/open-or-merged state and the current `main` tip.** This file records the last verified pre-publication `main` rather than predicting a future merge SHA.
-- Canonical accepted bridge design: `docs/A2-BRIDGE-DESIGN-AUDIT.md` plus `docs/A2-BRIDGE-DESIGN-AUDIT-P2-FACT-IDENTITY-AMENDMENT.md`.
-- Candidate pure-proof document: `docs/A2-R1-MULTI-FACT-RECEPTION-CONTRACT-PROOF.md`.
+- Current verified `main`: **`a4cdc146267a88ccef9c7cde928bc2f1010ef10b`**.
+- That commit is the accepted squash merge of PR **#251 — `A2-R1 · prove pure multi-fact reception contract`**.
+- PR #251 accepted exact head: **`766fe4c0f9d92074b2c1bb034a0acbcfe3d0b7b2`**.
+- Exact-head #251 CI returned **only the five inherited baseline failures**; the dedicated A2-R1 contract workflow was SUCCESS.
+- Both valid Codex P2 review threads were fixed and resolved before merge: authoritative dialogue/lesson binding and duplicate displayed-option rejection.
+- Active candidate branch: **`docs/a2-r1-integration-decision-audit`**.
+- Candidate document: `docs/A2-R1-INTEGRATION-DECISION-AUDIT.md`.
+- GitHub live metadata owns the branch/PR moving head and current `main` tip. Do not infer a future merge SHA from this file.
 
 ## Accepted product state
 
@@ -28,6 +29,8 @@ Evidence v2             derived shadow only
 Premium V5.10           CLOSED / physical field pass
 ```
 
+No runtime-bearing file changed in the active integration-decision audit candidate.
+
 ## Historical learner continuity — LOCKED
 
 ```text
@@ -36,214 +39,122 @@ l8 progress = 4
 40 known historical items
 ```
 
-This is not proof of A1 completion, A2 readiness, mastery or CEFR attainment.
+This continuity is not proof of A1 completion, A2 readiness, mastery or CEFR attainment.
 
 ## Current milestone state
 
 ```text
 Build38                    CLOSED / RELEASED
 Build39                    CLOSED / CERTIFIED
-Build40                    CLOSED — A1 Productive Consolidation selected
+Build40                    CLOSED
 Build41                    CLOSED / SUCCESSFUL NARROW CONSOLIDATION
 Build42                    CLOSED / SUCCESSFUL FOUNDATIONS DEBT RESOLUTION
 Build40 P3                 CLOSED / ACCEPTED
-P3a                        CLOSED / ACCEPTED PURE CONTRACT PROOF
-P3b                        CLOSED / ACCEPTED EPHEMERAL SOURCE-OBSERVATION PROOF
-P3c                        CLOSED / ACCEPTED DURABILITY DECISION — NO DURABILITY YET
+P3a / P3b / P3c            CLOSED / ACCEPTED boundaries preserved
 P4                         CLOSED / ACCEPTED FRESH A1 READINESS GATE
 A2 Entry Scope Audit       CLOSED / ACCEPTED
-A2 Entry closeout          CLOSED / ACCEPTED via PR #248
-A2 Bridge Design Audit     CLOSED / ACCEPTED via PR #249
-A2 Bridge Design closeout  CLOSED / ACCEPTED via PR #250
-A2-R1 pure contract proof  PUBLISHED AS PR #251 / IMPLEMENTATION CANDIDATE
-A2-R1 integration decision NEXT ONLY AFTER PURE-PROOF ACCEPTANCE / NOT STARTED / DOCS-READ-ONLY
+A2 Bridge Design Audit     CLOSED / ACCEPTED
+A2-R1 pure contract proof  CLOSED / ACCEPTED via PR #251
+A2-R1 integration decision ACTIVE CANDIDATE / DOCS-READ-ONLY
+A2-R1 learner integration  NOT AUTHORIZED until audit acceptance
 Build42.3                  NOT AUTHORIZED
 productive F16 Transfer    NOT AUTHORIZED
 Build43                    NOT AUTHORIZED
-A2 learner-facing delivery NOT AUTHORIZED
+full A2 curriculum         NOT AUTHORIZED
 ```
 
-## Accepted evidence/storage boundary
+## Accepted A2-R1 pure contract
 
-```text
-P3a normalization contract            ACCEPTED
-P3b source observation                ACCEPTED / EPHEMERAL ONLY
-raw P3b event truth                   TRUSTWORTHY AT EVENT LEVEL
-cross-session durability              NOT JUSTIFIED
-Learning Memory semantic reuse        REJECTED
-Error Intelligence semantic reuse     REJECTED
-Evidence v2 direct source-event write REJECTED under current shadow contract
-Evidence v2 read cutover              NOT AUTHORIZED
-new eighth durable store              NOT JUSTIFIED
-aggregation / independence inference  NOT AUTHORIZED
-mastery / CEFR / score / confidence   NOT AUTHORIZED
-Build39.2 availability promotion      NOT AUTHORIZED
-```
-
-Build39 reliable durable action families remain `phrase-retrieval`, `listening`, `scenario`. `concept-review`, `foundation-capsule`, and `transfer-construction` remain unavailable as trustworthy durable evidence.
-
-## Accepted A1 boundary
-
-Learner-facing deterministic Transfer families remain exactly **6**:
-
-```text
-subject substitution
-affirmation → negation
-present → futur proche
-singular → plural nominal phrase
-nous → spoken on
-present action → recent past with venir de
-```
-
-Build42 F16 remains Foundation-only:
-
-```text
-à + le   → au
-à + les  → aux
-de + le  → du
-de + les → des
-F16 teaching debt       RESOLVED
-F16 productive Transfer NOT AUTHORIZED
-F16 mastery             NOT CLAIMED
-```
-
-P4 accepted the A1 product as a rational roadmap stopping boundary; it did not certify learner A1 completion.
-
-## Accepted A2 Entry / Bridge Design boundary
-
-Accepted chains:
-
-```text
-PR #247 accepted head    898798f15cfeb2d046913c7110ee137c96b4c7eb
-PR #247 squash merge     c1bded1a08113753c719adeed2cfa05e6aa165af
-PR #248 accepted head    9f6dd71c06e13eeb6080c5f391f47ffe4abbf706
-PR #248 squash merge     37d3250205759f7b4127a57024d2d4575b191dfe
-PR #249 accepted head    52ba8e8b94e94493f143d8430aee83dff829efb1
-PR #249 squash merge     448d5e5876aecda67e4b75f987f058751cc7ca2e
-PR #250 accepted head    23ce352b42a123adf276cc7ea379b5c309142542
-PR #250 squash merge     6e78789f6f63b87a2b0c0d4acd62de4701b5083d
-```
-
-Accepted A2 lanes:
-
-```text
-A2-P1 short-series oral production          DEFER
-A2-I1 stateful routine information exchange DEFER
-A2-R1 multi-fact short reception            SELECTED FIRST
-A2-W1 short functional writing              DEFER
-```
-
-Canonical R1 pilot:
+Canonical pilot:
 
 ```text
 dialogue                  doctor-appointment
 prerequisite lesson       l45 — Santé & rendez-vous médical
-accepted fact/source IDs  jai-mal-ventre / depuis-hier / rendez-vous-medecin
-new vocabulary            NOT REQUIRED
-new grammar               NOT REQUIRED
-new curriculum item       NOT REQUIRED
-new lesson ID             NOT REQUIRED
+facts                     jai-mal-ventre / depuis-hier / rendez-vous-medecin
 ```
 
-Accepted Codex P2 fact-identity rule:
+Accepted pure contract guarantees:
 
 ```text
-2–4 deterministic questions per activity
-question.id stable + unique
-question.factId mandatory + stable
-factId unique across activity
-factId must belong to accepted source/prerequisite authority
-first proof evidenceItems MUST equal [factId]
-duplicate fact targets MUST be rejected
-duplicate normalized prompts MUST be rejected
+2–4 deterministic questions
+stable unique question IDs
+stable distinct factId per question
+external authority binds dialogueId + prerequisiteLessonId + allowedFactIds
+fact IDs must belong to authoritative source/prerequisite set
+first proof evidenceItems == [factId]
+duplicate normalized prompts rejected
+duplicate displayed (vi, fr) option pairs rejected
 one deterministic answer index per question
-explicit source facts only
+detached / deeply frozen normalized output
+question result = success | miss only
 ```
 
-## PR #251 — A2-R1 Pure Multi-Fact Reception Contract Proof
+The pure core is `src/pedagogy/a2-reception-bridge-core.js`. It is not loaded into the learner runtime on accepted main.
 
-Candidate base:
+## Active A2-R1 Integration Decision Audit
+
+The docs/read-only audit candidate concludes, subject to PR acceptance:
 
 ```text
-6e78789f6f63b87a2b0c0d4acd62de4701b5083d
+integrate R1 into Listening later            YES
+integration style                             additive / backward-compatible
+historical listening-data-2 dialogue mutation NO
+separate bridge data owner                    YES
+reuse accepted pure core                      YES
+new global route                              NO
+new lesson/item                               NO
+new durable store                             NO
+existing single-question doctor exercise      PRESERVE
+3-question pilot over same full dialogue      YES
+full transcript before sequence complete      NO
+normal/slow replay                            YES
+per-question Memory/Error reuse               YES, source listening-r1 only
+one question writes only its own factId        REQUIRED
+aggregate R1/A2 mastery                       FORBIDDEN
+Evidence v2 direct write                      FORBIDDEN
+P3b durability                                FORBIDDEN
+real iPhone/PWA field gate                    REQUIRED for field close
 ```
 
-Candidate scope is intentionally narrow:
+Recommended future runtime shape **only if this audit is accepted**:
 
 ```text
-src/pedagogy/a2-reception-bridge-core.js
-  pure validation/normalization owner
-  browser/CommonJS API FrenchTranquilleA2ReceptionBridgeCore
-  no runtime loading/integration
-
-tests/unit/a2-r1-reception-bridge-core.test.cjs
-  canonical doctor fixture
-  invalid-shape / duplicate-fact / immutability / evaluation tests
-
-.github/workflows/a2-r1-reception-contract.yml
-  dedicated deterministic contract + purity/scope/sanctuary guards
-
-docs/A2-R1-MULTI-FACT-RECEPTION-CONTRACT-PROOF.md
-  candidate proof record
-
-PROJECT-STATE.md
-  merge-stable handoff
+src/pedagogy/a2-reception-bridge-data.js       new static pilot mapping
+src/pedagogy/a2-reception-bridge-runtime.js    thin adapter/controller if needed
+src/pedagogy/a2-reception-bridge-core.js       reuse accepted pure owner
+src/pedagogy/listening-engine.js               minimal integration hook
+loader + sw.js                                 only if required for runtime/offline loading
 ```
 
-Pure contract metadata:
+The default decision is to leave `src/pedagogy/listening-data-2.js` unchanged.
+
+## Evidence / storage boundary — LOCKED
 
 ```text
-roadmapSlice  A2-R1-pure-contract-proof
-version       1.0.0-contract
-schema        french-tranquille-a2-r1-reception/v1
-lane          A2-R1
+reliable durable action families: phrase-retrieval / listening / scenario
+P3b source observation: ephemeral only
+cross-session P3b durability: not justified
+Evidence v2: derived shadow only
+Evidence v2 direct source-event write: not authorized
+Evidence v2 read cutover: not authorized
+new eighth durable store: not justified
+mastery / CEFR / score / confidence inference: not authorized
 ```
 
-The core accepts explicit contract authority separately from the activity. An activity cannot self-authorize arbitrary fact IDs by inserting them into its own prerequisite list.
-
-Deterministic evaluator output is limited to:
-
-```text
-questionId
-factId
-choiceIndex
-answerIndex
-outcome = success | miss
-```
-
-It makes no mastery, CEFR, confidence, score, unseen-transfer or learner-readiness claim.
-
-### Explicit candidate exclusions
-
-```text
-NO learner-facing UI
-NO Listening engine integration
-NO listening-data mutation
-NO curriculum mutation
-NO new lessons / renumbering
-NO route/navigation change
-NO localStorage / IndexedDB / network
-NO Memory / Error Intelligence / Evidence writes
-NO P3b durability
-NO new durable store
-NO Build43
-NO learner A2 unlock/readiness/mastery
-NO CEFR certification
-```
+For a later R1 pilot, an individual deterministic Listening question may reuse current Memory/Error item truth for **that one fact only**. No bridge-level capability record is authorized.
 
 ## Permanent safety boundaries
 
 - no fake pronunciation score;
 - recognition failure is not mastery evidence;
 - no learner-data reset, renumbering or reinterpretation;
-- preserve current 52 lesson IDs / 313 item semantics until explicit later authorization;
+- preserve current 52 lesson IDs / 313 item semantics;
 - Recovery remains 7 durable stores / backup v3;
-- Evidence v2 remains derived shadow until explicit future cutover;
-- Foundations remain optional/ephemeral with no mastery claim;
-- productive F16 Transfer remains NOT AUTHORIZED;
-- A2 learner-facing implementation remains NOT AUTHORIZED;
-- Build43 remains NOT AUTHORIZED;
-- `app.js`, `voice-ios.js`, `free-voice.js`, `assets/LOGO.png`, `assets/Favicon.png` and Build30 runtime bridge/contracts remain sanctuaries unless explicitly justified.
+- Evidence v2 remains derived shadow;
+- productive F16 Transfer remains not authorized;
+- no A2 level badge/unlock/readiness claim;
+- Build43 remains not authorized;
+- `app.js`, `voice-ios.js`, `free-voice.js`, `assets/LOGO.png`, `assets/Favicon.png` and Build30 runtime bridge/contracts remain sanctuaries unless an explicit later slice justifies otherwise.
 
 ## CI baseline
 
@@ -257,25 +168,14 @@ Known persistent inherited failures:
 
 Any other failure is NEW until classified from exact logs.
 
-## Merge-stable next control action
+## Next control action
 
 ```text
-Read live GitHub state for PR #251 and main first.
-
-IF #251 is OPEN:
-→ verify exact final head/base and candidate scope
-→ require dedicated `A2-R1 Pure multi-fact reception contract` SUCCESS
-→ inspect full exact-head CI/reviews/threads/comments
-→ classify every non-baseline red from exact logs
-→ rerun only proven Chrome/harness flakes unchanged
-→ fix legitimate contract/review blockers on the same candidate branch
-→ merge only if exact final head is clean apart from the five inherited failures
-→ verify actual main SHA/signature after merge
-→ STOP before any learner-facing R1 integration
-
-IF #251 is MERGED:
-→ verify actual main SHA/signature from live GitHub
-→ pure A2-R1 contract proof = ACCEPTED
-→ A2-R1 Integration Decision Audit = NEXT / NOT STARTED / DOCS-READ-ONLY
-→ do not implement learner-facing R1 without that later explicit decision
+1. Publish/review the docs-only A2-R1 Integration Decision Audit candidate.
+2. Verify candidate scope is docs/checkpoint only.
+3. Inspect exact-head CI/reviews/threads/comments.
+4. Accept only if no new non-baseline failure or unresolved review blocker exists.
+5. If accepted, merge and verify actual main SHA.
+6. Only then authorize one narrow A2-R1 Learner Integration Pilot over doctor-appointment.
+7. Do not start a second R1 dialogue, another A2 lane, Build43 or full A2 curriculum in that same pilot slice.
 ```
