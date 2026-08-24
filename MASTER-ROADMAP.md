@@ -7,31 +7,20 @@
 ## Canonical checkpoint — 2026-08-24
 
 ```text
-current verified main before closeout candidate  c1bded1a08113753c719adeed2cfa05e6aa165af
-Build42.2 product merge                           8b462fae236c00b902a9312fe8e1b103412b8694
-Build42 closure merge                             8c2787d203d6089850856652f288f10a4fd53b32
-P3 audit merge                                    cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac
-P3 final alignment                                653aa3a3fe358c7036cca661d339b82b7073cc38
-P3a pure contract merge                           ef720b760db1108d98ee0090cc87f929d75676a1
-P3a final alignment                               7bb9d4ab52d6402121d75c63a8c1042030c1c856
-P3b source-observation merge                      5a658f8ac288e5d5cd091dc0a16fa3683f6064fe
-P3b final alignment                               b72d9c2cd84783c03ae73b627773b896d2378702
-P3c durability audit merge                        8296b2ffdfae07dc8e9b9d84b12e2c0ba279e8e1
-P3c docs closeout                                 83cf5ed5f859f3f07e6b5037a94794bf0cdb3be3
-P4 readiness audit merge                          5f8fffd6b13ed30750446d2ffc02b5cb9d8b524f
-P4 final alignment                                e1bfcea1e2e3a51c8a0efb97aa8791bcde31117d
-A2 Entry Scope Audit merge                        c1bded1a08113753c719adeed2cfa05e6aa165af
-A2 Entry Scope Audit accepted head                898798f15cfeb2d046913c7110ee137c96b4c7eb
-A2 Entry Scope closeout candidate                 PR #248 · docs/a2-entry-closeout
+last verified main before closeout publication  c1bded1a08113753c719adeed2cfa05e6aa165af
+A2 Entry Scope Audit accepted head              898798f15cfeb2d046913c7110ee137c96b4c7eb
+A2 Entry Scope Audit merge                      c1bded1a08113753c719adeed2cfa05e6aa165af
+A2 Entry Scope closeout publication             PR #248 · docs/a2-entry-closeout
+#248 moving head / open-or-merged state          DELEGATED TO LIVE GITHUB METADATA
 
-public runtime metadata                           v2.5.0 · Build 38
-pedagogy baseline                                 v2.3.0 · Build 34
-curriculum                                        52 lessons / 313 items
-scenario                                          44 situations / 132 turns
-listening                                         17 contrast families / 18 contextual dialogues
-speaking loop                                     52/52 · max 2 moments / lesson
-Recovery                                          7 durable stores / backup v3
-Evidence v2                                       derived shadow only
+public runtime metadata                         v2.5.0 · Build 38
+pedagogy baseline                               v2.3.0 · Build 34
+curriculum                                      52 lessons / 313 items
+scenario                                        44 situations / 132 turns
+listening                                       17 contrast families / 18 contextual dialogues
+speaking loop                                   52/52 · max 2 moments / lesson
+Recovery                                        7 durable stores / backup v3
+Evidence v2                                     derived shadow only
 ```
 
 Milestone state:
@@ -48,7 +37,8 @@ P3b                        CLOSED / ACCEPTED EPHEMERAL SOURCE-OBSERVATION PROOF
 P3c                        CLOSED / ACCEPTED DURABILITY DECISION — NO DURABILITY YET
 P4                         CLOSED / ACCEPTED FRESH A1 READINESS GATE
 A2 Entry Scope Audit       CLOSED / ACCEPTED
-A2 Bridge Design Audit     NEXT / NOT STARTED / docs-read-only
+A2 Entry closeout          PUBLISHED AS PR #248; LIVE STATE DELEGATED TO GITHUB
+A2 Bridge Design Audit     NEXT AFTER CLOSEOUT ACCEPTANCE / NOT STARTED / DOCS-READ-ONLY
 Build42.3                  NOT AUTHORIZED
 productive F16 Transfer    NOT AUTHORIZED
 Build43                    NOT AUTHORIZED
@@ -71,7 +61,7 @@ That continuity is not A1 completion proof and does not authorize learner A2 rou
 - recognition failure is not mastery evidence;
 - no learner-data reset/renumber/reinterpretation;
 - preserve current 52 lesson IDs / 313 item semantics until explicit later implementation authorization;
-- Recovery remains 7 stores / backup v3;
+- Recovery remains 7 durable stores / backup v3;
 - Evidence v2 remains derived shadow until explicit future cutover;
 - no durable store/schema merely to make intelligence look smarter;
 - Foundations stay optional/ephemeral with no mastery claim;
@@ -222,9 +212,12 @@ PR #247 review           0 reviews / 0 threads / 0 comments
 PR #247 exact-head CI    exactly five inherited baseline failures; all other workflows SUCCESS
 ```
 
-## Accepted overlap finding
+Accepted overlap finding:
 
-The current upper A1 curriculum is already strongly A2-adjacent by theme. Therefore **more theme-only “A2” lessons are not justified**.
+```text
+late-A1 thematic A2 adjacency       STRONG / ALREADY COVERED
+more theme-only A2 lessons          NOT JUSTIFIED
+```
 
 Accepted genuinely new capability lanes:
 
@@ -257,7 +250,7 @@ No lesson number is assigned and no current item semantics change.
 
 # NEXT — A2 Bridge Design Audit
 
-The next authorized slice is **docs/read-only**. It remains unnumbered as a Build implementation and has not started.
+After acceptance of the #248 documentation closeout, the next authorized slice is **docs/read-only**. It remains unnumbered as a Build implementation and is **NOT STARTED** until an explicit later user command.
 
 It must decide:
 
@@ -287,8 +280,20 @@ Evidence v2 cutover
 new durable store
 ```
 
-# Current stop boundary
+# Merge-stable closeout handoff
 
-PR #248 on branch `docs/a2-entry-closeout` is the only active work. Its exact-head CI/review arbitration and merge belong to the next control session.
+PR #248 on branch `docs/a2-entry-closeout` is the published closeout control candidate. **Do not infer its current open/merged state from this file; read live GitHub metadata.**
 
-The A2 Bridge Design Audit is **NOT STARTED** until a later explicit user command after #248 acceptance.
+```text
+IF #248 is OPEN:
+→ control exact head / diff / CI / reviews
+→ merge only if clean except the five inherited baseline failures
+→ verify actual main SHA/signature
+→ STOP; do not start A2 Bridge Design Audit in the same control session
+
+IF #248 is MERGED:
+→ verify actual main SHA/signature from live GitHub
+→ closeout is accepted
+→ A2 Bridge Design Audit = NEXT / NOT STARTED
+→ start it only on an explicit new user command
+```
