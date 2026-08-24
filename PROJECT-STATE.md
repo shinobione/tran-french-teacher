@@ -11,7 +11,7 @@ Last reconciled: 2026-08-25
 - #251 exact-head CI: dedicated A2-R1 contract SUCCESS; full matrix returned only the five inherited baseline failures.
 - #251 Codex P2s were fixed/resolved before merge: authoritative dialogue/lesson binding + rejection of duplicate displayed option pairs.
 - Active candidate: PR **#252 — `Docs · decide A2-R1 learner integration boundary`** on branch `docs/a2-r1-integration-decision-audit`.
-- #252 started docs/read-only. Exact logs exposed one legitimate **successor-safety CI debt** in `.github/workflows/a2-r1-reception-contract.yml`; the branch now repairs that guard without changing learner runtime.
+- #252 includes only documentation/checkpoint + the successor-safety repair of `.github/workflows/a2-r1-reception-contract.yml`; no learner runtime-bearing file is changed.
 - GitHub live metadata owns #252's moving head/state and the current `main` tip. Never predict a future merge SHA from this file.
 
 ## Accepted product state
@@ -28,8 +28,6 @@ Recovery                7 durable stores / backup v3
 Evidence v2             derived shadow only
 Premium V5.10           CLOSED / physical field pass
 ```
-
-No runtime-bearing file is changed by #252.
 
 ## Historical learner continuity — LOCKED
 
@@ -89,18 +87,19 @@ question result = success | miss only
 
 Pure owner: `src/pedagogy/a2-reception-bridge-core.js`. It is not learner-runtime-loaded on accepted main.
 
-## #252 candidate decision — docs/read-only
+## #252 candidate decision
 
 Canonical document: `docs/A2-R1-INTEGRATION-DECISION-AUDIT.md`.
 
-Subject to acceptance, the decision is:
+Subject to acceptance:
 
 ```text
 integrate R1 into Listening later             YES
 integration style                              additive / backward-compatible
 historical doctor single-question source       PRESERVE
 mutate listening-data-2.js for first pilot     NO by default
-separate static bridge-data owner              YES
+trusted authority                              SEPARATE from activity definition
+activity source                                COMPLETE / independently validated
 reuse accepted pure core                       YES
 new global route                               NO
 new lesson/item                                NO
@@ -116,21 +115,48 @@ P3b durability                                 FORBIDDEN
 real iPhone/PWA field gate                     REQUIRED for field close
 ```
 
-Recommended later pilot architecture, only after #252 acceptance:
+The bridge-data owner may be one file, but must expose independent records conceptually equivalent to:
 
 ```text
-src/pedagogy/a2-reception-bridge-data.js       NEW static pilot mapping
-src/pedagogy/a2-reception-bridge-runtime.js    thin adapter/controller if needed
-src/pedagogy/a2-reception-bridge-core.js       reuse accepted pure owner
-src/pedagogy/listening-engine.js               minimal integration hook only
-loader + sw.js                                 only if required for offline loading
+R1_AUTHORITIES[id]  → dialogueId / prerequisiteLessonId / allowedFactIds
+R1_ACTIVITIES[id]   → id / lane / complete source / questions
 ```
+
+Runtime must call:
+
+```text
+normalizeActivity(R1_ACTIVITIES[id], R1_AUTHORITIES[id])
+```
+
+The activity must never self-authorize.
+
+## Pre-answer persistence boundary
+
+Existing Listening already persists playback telemetry when audio is played. Therefore #252 does **not** promise total byte identity after play-and-abandon.
+
+Required truth:
+
+```text
+open + close without playback/answer
+→ no R1-attributable durable mutation
+
+play/replay/slow + close before answer
+→ only existing Listening playback telemetry may change:
+   totals.plays / totals.replays / totals.slowPlays / updatedAt
+→ Memory unchanged
+→ Error Intelligence unchanged
+→ Evidence v2 unchanged
+→ learner/curriculum stores unchanged
+→ no new R1 store or sequence record
+```
+
+Pedagogical success/miss/attempt truth begins only after an answer selection.
 
 ## #252 successor-safety CI repair
 
-The accepted #251 workflow originally enforced its five-file candidate scope, Listening-source immutability and “no runtime integration ever” on every future PR. On #252 that produced a new failure at `Narrow candidate scope guard` solely because `docs/A2-R1-INTEGRATION-DECISION-AUDIT.md` existed.
+The accepted #251 workflow originally enforced its original five-file scope and “no integration” restriction on every future PR. Exact #252 logs proved that this would permanently forbid authorized successors.
 
-The candidate repair keeps these checks **always active**:
+Candidate repair keeps always active:
 
 ```text
 pure-core syntax/unit contract
@@ -138,9 +164,9 @@ pure-core forbidden API guard
 permanent sanctuary guard
 ```
 
-The original pure-proof-only restrictions now activate only when the pure core, its unit test or its proof document is modified. Therefore a future explicitly authorized successor may integrate the already accepted core without weakening the core itself.
+Original pure-proof-only source/scope/no-runtime restrictions activate only when the pure core, its unit test or its proof document changes.
 
-This is CI maintenance, not a learner-runtime change.
+This is CI maintenance, not learner-runtime change.
 
 ## Evidence/storage boundary — LOCKED
 
@@ -186,11 +212,12 @@ Any other failure is NEW until exact logs classify it.
 
 ```text
 1. Read live #252 head/state first.
-2. Require successor-safe A2-R1 contract workflow SUCCESS on the exact final head.
-3. Inspect full exact-head CI + reviews/threads/comments.
-4. Accept only if no new non-baseline failure or unresolved blocker remains.
-5. If accepted, merge #252 and verify actual main SHA.
-6. Reconcile durable roadmap only if the accepted decision changes its execution gate.
-7. Then authorize exactly one A2-R1 Learner Integration Pilot over doctor-appointment.
-8. Do not start a second R1 dialogue, another A2 lane, Build43 or full A2 curriculum before the first pilot's CI + iPhone/PWA field gate.
+2. Require successor-safe A2-R1 contract workflow SUCCESS on exact final head.
+3. Require Codex P1/P2 authority + abandonment review threads resolved.
+4. Inspect full exact-head CI; only the five baseline failures are acceptable.
+5. Merge #252 only if exact head/reviews/CI are clean by that contract.
+6. Verify actual main SHA.
+7. Reconcile MASTER-ROADMAP durably after acceptance.
+8. Then authorize exactly one A2-R1 Learner Integration Pilot over doctor-appointment.
+9. Do not start a second R1 dialogue, another A2 lane, Build43 or full A2 curriculum before the first pilot's CI + real iPhone/PWA field gate.
 ```
