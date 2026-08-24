@@ -4,7 +4,11 @@ const assert = require('node:assert/strict');
 const core = require('../../src/pedagogy/a2-reception-bridge-core.js');
 
 const ALLOWED_FACTS = ['jai-mal-ventre', 'depuis-hier', 'rendez-vous-medecin'];
-const authority = () => ({ allowedFactIds: [...ALLOWED_FACTS] });
+const authority = (extraFacts = []) => ({
+  dialogueId: 'doctor-appointment',
+  prerequisiteLessonId: 'l45',
+  allowedFactIds: [...ALLOWED_FACTS, ...extraFacts]
+});
 
 function fixture() {
   return {
@@ -116,8 +120,18 @@ function clone(value) {
   for (const size of [0, 1, 5]) {
     const row = fixture();
     row.questions = row.questions.slice(0, size);
-    if (size === 5) row.questions = [...fixture().questions, ...fixture().questions.slice(0, 2).map((question, index) => ({ ...clone(question), id: `extra-${index}`, factId: `extra-fact-${index}`, evidenceItems: [`extra-fact-${index}`] }))];
-    expectCode('invalid-question-count', () => core.normalizeActivity(row, { allowedFactIds: [...ALLOWED_FACTS, 'extra-fact-0', 'extra-fact-1'] }));
+    if (size === 5) {
+      row.questions = [
+        ...fixture().questions,
+        ...fixture().questions.slice(0, 2).map((question, index) => ({
+          ...clone(question),
+          id: `extra-${index}`,
+          factId: `extra-fact-${index}`,
+          evidenceItems: [`extra-fact-${index}`]
+        }))
+      ];
+    }
+    expectCode('invalid-question-count', () => core.normalizeActivity(row, authority(['extra-fact-0', 'extra-fact-1'])));
   }
 
   {
@@ -149,6 +163,15 @@ function clone(value) {
     const row = fixture();
     row.questions[1].questionVi = `  ${row.questions[0].questionVi.toUpperCase()}  `;
     expectCode('duplicate-prompt', () => core.normalizeActivity(row, authority()));
+  }
+
+  {
+    const row = fixture();
+    row.questions[0].options[1] = {
+      vi: `  ${row.questions[0].options[0].vi.toUpperCase()}  `,
+      fr: `  ${row.questions[0].options[0].fr.toUpperCase()}  `
+    };
+    expectCode('duplicate-option', () => core.normalizeActivity(row, authority()));
   }
 
   for (const badAnswer of [-1, 3, 1.5, null]) {
@@ -192,6 +215,30 @@ function clone(value) {
     const row = fixture();
     row.questions[0].evidenceItems = ['depuis-hier'];
     expectCode('fact-evidence-mismatch', () => core.normalizeActivity(row, authority()));
+  }
+
+  {
+    const row = fixture();
+    row.source.dialogueId = 'invite-refuse';
+    expectCode('source-dialogue-mismatch', () => core.normalizeActivity(row, authority()));
+  }
+
+  {
+    const row = fixture();
+    row.source.prerequisiteLessonId = 'l1';
+    expectCode('source-lesson-mismatch', () => core.normalizeActivity(row, authority()));
+  }
+
+  {
+    const wrongAuthority = authority();
+    wrongAuthority.dialogueId = 'invite-refuse';
+    expectCode('source-dialogue-mismatch', () => core.normalizeActivity(fixture(), wrongAuthority));
+  }
+
+  {
+    const wrongAuthority = authority();
+    wrongAuthority.prerequisiteLessonId = 'l1';
+    expectCode('source-lesson-mismatch', () => core.normalizeActivity(fixture(), wrongAuthority));
   }
 
   expectCode('missing-authority', () => core.normalizeActivity(fixture()));
