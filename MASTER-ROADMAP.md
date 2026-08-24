@@ -2,49 +2,55 @@
 
 > Canonical current roadmap. Future sessions must read `AGENTS.md` → `PROJECT-STATE.md` → this file → live GitHub.
 >
-> Historical long-form roadmap state remains preserved under `docs/archive/` and dedicated build/release documents.
+> Historical long-form decisions remain preserved in dedicated `docs/BUILD-*` and audit documents. This file keeps the durable milestone order, accepted gates and current next slice.
 
 ## Canonical checkpoint — 2026-08-24
 
 ```text
-Build42.2 product merge          8b462fae236c00b902a9312fe8e1b103412b8694
-Build42 closure merge            8c2787d203d6089850856652f288f10a4fd53b32
-Build40 P3 audit merge           cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac
-Build40 P3 closeout merge        5cde5d3c4d91d63aa50b98ff6b6c6d904f12f29c
-Build40 P3 final alignment       653aa3a3fe358c7036cca661d339b82b7073cc38
-P3a pure contract merge          ef720b760db1108d98ee0090cc87f929d75676a1
-P3a closeout merge               ba2225cfb5e8864bd757620d22cfed333c757d82
-P3a final alignment merge        7bb9d4ab52d6402121d75c63a8c1042030c1c856
-P3b source-observation merge     5a658f8ac288e5d5cd091dc0a16fa3683f6064fe
-P3b docs closeout merge          5c643814a4796eb30cc96b1c31cf5b84ea3f5844
-P3b final alignment merge        b72d9c2cd84783c03ae73b627773b896d2378702
-P3c durability audit merge       8296b2ffdfae07dc8e9b9d84b12e2c0ba279e8e1
-P3c docs closeout merge          83cf5ed5f859f3f07e6b5037a94794bf0cdb3be3
-P4 readiness audit merge         5f8fffd6b13ed30750446d2ffc02b5cb9d8b524f
-P4 final alignment candidate     PR #246 · docs/p4-final-alignment
-public runtime metadata          v2.5.0 · Build 38
-pedagogy baseline                v2.3.0 · Build 34
-curriculum                       52 lessons / 313 items
-scenario                         44 situations / 132 turns
-listening                        17 contrast families / 18 contextual dialogues
-speaking loop                    52/52 · max 2 moments / lesson
-recovery                         7 durable stores / backup v3
-evidence v2                      derived shadow only; original six stores product truth
-Build38                          CLOSED / RELEASED
-Build39 LI3                      CLOSED / CERTIFIED
-Build40 A1 audit                 CLOSED / PRODUCTIVE CONSOLIDATION SELECTED
-Build41                          CLOSED / SUCCESSFUL NARROW CONSOLIDATION
-Build42                          CLOSED / SUCCESSFUL FOUNDATIONS DEBT RESOLUTION
-Build40 P3                       CLOSED / ACCEPTED
-P3a                              CLOSED / ACCEPTED PURE CONTRACT PROOF
-P3b                              CLOSED / ACCEPTED EPHEMERAL SOURCE-OBSERVATION PROOF
-P3c                              CLOSED / ACCEPTED DURABILITY DECISION — NO DURABILITY YET
-P4                               CLOSED / ACCEPTED FRESH A1 READINESS GATE
-A2 Entry Scope Audit             NEXT / NOT STARTED
-Build42.3                        NOT AUTHORIZED
-productive F16 Transfer          NOT AUTHORIZED
-Build43                          NOT AUTHORIZED
-A2 learner-facing implementation NOT AUTHORIZED
+current verified main before candidate  e1bfcea1e2e3a51c8a0efb97aa8791bcde31117d
+Build42.2 product merge                  8b462fae236c00b902a9312fe8e1b103412b8694
+Build42 closure merge                    8c2787d203d6089850856652f288f10a4fd53b32
+P3 audit merge                           cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac
+P3 final alignment                       653aa3a3fe358c7036cca661d339b82b7073cc38
+P3a pure contract merge                  ef720b760db1108d98ee0090cc87f929d75676a1
+P3a final alignment                      7bb9d4ab52d6402121d75c63a8c1042030c1c856
+P3b source-observation merge             5a658f8ac288e5d5cd091dc0a16fa3683f6064fe
+P3b final alignment                      b72d9c2cd84783c03ae73b627773b896d2378702
+P3c durability audit merge               8296b2ffdfae07dc8e9b9d84b12e2c0ba279e8e1
+P3c docs closeout                        83cf5ed5f859f3f07e6b5037a94794bf0cdb3be3
+P4 readiness audit merge                 5f8fffd6b13ed30750446d2ffc02b5cb9d8b524f
+P4 final alignment                       e1bfcea1e2e3a51c8a0efb97aa8791bcde31117d
+A2 Entry Scope Audit candidate           PR #247 · docs/a2-entry-scope-audit
+
+public runtime metadata                  v2.5.0 · Build 38
+pedagogy baseline                        v2.3.0 · Build 34
+curriculum                               52 lessons / 313 items
+scenario                                 44 situations / 132 turns
+listening                                17 contrast families / 18 contextual dialogues
+speaking loop                            52/52 · max 2 moments / lesson
+Recovery                                 7 durable stores / backup v3
+Evidence v2                              derived shadow only
+```
+
+Milestone state:
+
+```text
+Build38                    CLOSED / RELEASED
+Build39                    CLOSED / CERTIFIED
+Build40                    CLOSED / PRODUCTIVE CONSOLIDATION SELECTED
+Build41                    CLOSED / SUCCESSFUL NARROW CONSOLIDATION
+Build42                    CLOSED / SUCCESSFUL FOUNDATIONS DEBT RESOLUTION
+Build40 P3                 CLOSED / ACCEPTED
+P3a                        CLOSED / ACCEPTED PURE CONTRACT PROOF
+P3b                        CLOSED / ACCEPTED EPHEMERAL SOURCE-OBSERVATION PROOF
+P3c                        CLOSED / ACCEPTED DURABILITY DECISION — NO DURABILITY YET
+P4                         CLOSED / ACCEPTED FRESH A1 READINESS GATE
+A2 Entry Scope Audit       ACTIVE CANDIDATE / PR #247
+A2 Bridge Design Audit     NOT STARTED / candidate next only after #247 acceptance
+Build42.3                  NOT AUTHORIZED
+productive F16 Transfer    NOT AUTHORIZED
+Build43                    NOT AUTHORIZED
+A2 learner-facing delivery NOT AUTHORIZED
 ```
 
 Historical learner continuity remains LOCKED:
@@ -55,35 +61,49 @@ l8 progress = 4
 40 known historical items
 ```
 
-This continuity is not proof of A1 completion or learner A2 readiness.
+That continuity is not A1 completion proof and does not authorize learner A2 routing.
 
 ## Permanent safety boundaries
 
 - no fake pronunciation score;
 - recognition failure is not mastery evidence;
 - no learner-data reset/renumber/reinterpretation;
+- preserve current 52 lesson IDs / 313 item semantics until explicit later implementation authorization;
 - Recovery remains 7 stores / backup v3;
 - Evidence v2 remains derived shadow until explicit future cutover;
 - no durable store/schema merely to make intelligence look smarter;
-- preserve 52 lesson IDs / 313 item semantics;
-- Build27 App Shell, Premium V5.10, Build37 Foundations, Build38 Transfer, Build39 LI3, Build41 recent-past, Build42.2 F16, accepted P3a contract and accepted P3b ephemeral observation runtime remain protected;
+- Foundations stay optional/ephemeral with no mastery claim;
+- accepted P3a contract and P3b source-observation runtime remain protected;
 - productive F16 Transfer remains NOT AUTHORIZED;
-- Build43 and A2 learner-facing implementation remain NOT AUTHORIZED;
+- Build43 remains NOT AUTHORIZED;
+- A2 learner-facing implementation remains NOT AUTHORIZED;
+- learner A2 readiness/mastery and CEFR certification remain NOT CLAIMED;
 - `app.js`, `voice-ios.js`, `free-voice.js`, `assets/LOGO.png`, `assets/Favicon.png`, Build30 runtime bridge/contracts remain sanctuaries unless explicitly justified.
 
 # Milestone summary
 
 ## Build37 — Foundations — CLOSED
 
-Accepted learner-facing Foundation ownership includes F01–F04 lessons8–13, F11 lessons17–20, F08 lessons32–33, F05 lessons34–36, F16 lesson38, F13 lesson40, F12 lessons41–43. All remain optional/ephemeral with no mastery claim.
+Accepted learner-facing Foundation ownership includes F01–F04, F11, F08, F05, F16, F13 and F12 placements. Capsules remain optional/ephemeral and do not claim mastery.
 
 ## Build38 — Generalization & Transfer — CLOSED / RELEASED
 
-Certified learner-facing deterministic families remain subject substitution, affirmation→negation, present→futur proche, singular→plural nominal and nous→spoken on. Build41 later added recent past, making six learner-facing Transfer families total. Public runtime remains `v2.5.0 · Build 38`.
+Learner-facing deterministic families now total six after Build41:
+
+```text
+subject substitution
+affirmation → negation
+present → futur proche
+singular → plural nominal phrase
+nous → spoken on
+present action → recent past with venir de
+```
+
+Public runtime remains `v2.5.0 · Build 38`.
 
 ## Build39 — Learner Intelligence 3 — CLOSED / CERTIFIED
 
-Reliable durable families remain:
+Reliable durable action families remain:
 
 ```text
 phrase-retrieval
@@ -99,35 +119,15 @@ foundation-capsule
 transfer-construction
 ```
 
-P3b wires honest source-time Foundation/Transfer observations into a bounded **ephemeral-only** collector, but that does not promote them into Build39.2 durable evidence. The accepted P3c durability decision keeps those three action families unavailable because no certified cross-session independence/aggregation contract exists and no durable owner is currently justified.
+P3b source observations remain ephemeral and do not promote these families.
 
-## Build40 — A1 Consolidation Audit — CLOSED
+## Build40 / Build41 / Build42 — A1 Productive Consolidation — CLOSED
 
-Canonical sequence:
+Build40 selected an audit-first A1 consolidation path instead of opening A2 immediately.
 
-```text
-P1 productive-family audit
-P2 dedicated F16 contractions audit
-P3 evidence-owner design
-P3a pure event-contract proof
-P3b source instrumentation / ephemeral collector decision
-P3c durability decision if justified
-P4 fresh A1 readiness audit
-```
+Build41 audited the prioritized productive-family backlog. Exactly one additional family passed the strict deterministic/source-safe contract: recent past with `venir de`.
 
-P1 completed through Build41. P2 completed through Build42. P3, P3a, P3b, P3c and P4 are accepted/closed. **NEXT = docs/read-only A2 Entry Scope Audit / NOT STARTED.**
-
-## Build41 — A1 Productive Consolidation — CLOSED
-
-Accepted recent-past family:
-
-```text
-Je travaille.          → Je viens de travailler.
-Je mange.              → Je viens de manger.
-Je rentre à la maison. → Je viens de rentrer à la maison.
-```
-
-Build41.1 audited the seven prioritized candidate areas. Exactly one passed the strict deterministic/vocabulary-safe contract. The other accepted classifications remain binding from the same source facts:
+The remaining classifications stay binding absent new source evidence:
 
 ```text
 questions              REJECT — TOO SEMANTIC / AMBIGUOUS
@@ -138,386 +138,210 @@ short narration        REJECT — TOO SEMANTIC / AMBIGUOUS
 opinion clauses        REJECT — TOO SEMANTIC / AMBIGUOUS
 ```
 
-Build41.4 remains NOT AUTHORIZED absent new source evidence that changes those premises.
-
-## Build42 — Foundations debt resolution — CLOSED
-
-Build42.1 mapped real F16 sources, protected partitive/quantity lookalikes and selected lesson38. Build42.2 teaches the complete mechanical system:
+Build42 resolved F16 as a Foundation teach-core:
 
 ```text
 à + le   → au
 à + les  → aux
 de + le  → du
 de + les → des
-
-vs
-à la / à l’ / de la / de l’
 ```
 
-The capsule remains optional, deterministic, ephemeral-only and `masteryClaim=false`.
+with partitive/quantity lookalikes protected.
 
 No Build42.3 is justified. Productive F16 Transfer remains NOT AUTHORIZED.
 
-# Build40 P3 — evidence-owner design — CLOSED / ACCEPTED
+## P3 — evidence-owner design — CLOSED / ACCEPTED
 
-Canonical audit:
+Canonical documents:
 
 ```text
 docs/BUILD-40-P3-EVIDENCE-OWNER-DESIGN-AUDIT.md
-```
-
-Closure/control chain:
-
-```text
-PR #234 audit head       980a0afd3eaaf5ee15e07bcbf0403ba675691817
-PR #234 squash merge     cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac
-PR #235 closeout head    0db28ba63f93d38f2fc6f823c4b9e98a6e392c35
-PR #235 closeout merge   5cde5d3c4d91d63aa50b98ff6b6c6d904f12f29c
-PR #236 alignment head   f76e7d92d4cd88c8ad802dbedcc50821f894b135
-PR #236 alignment merge  653aa3a3fe358c7036cca661d339b82b7073cc38
-```
-
-Accepted P3 verdict:
-
-```text
-semantic source-time event owner      JUSTIFIED
-durable persistence now               NOT JUSTIFIED
-Memory/Error semantic hijack          REJECTED
-Evidence v2 direct source-event write REJECTED under current shadow contract
-new durable store now                 REJECTED
-mastery claim                         NOT AUTHORIZED
-Build43 implementation number         NOT AUTHORIZED
-A2 learner-facing implementation      NOT AUTHORIZED
-```
-
-Current Foundations and Transfer UIs compute real source-time deterministic observations. They are trustworthy only as **what happened in that deterministic check**. They are not proof of free production, novel sentence construction, durable mastery, pronunciation quality or CEFR attainment.
-
-A miss followed by corrective reveal supports:
-
-```text
-outcome = miss
-modelShownAfterMiss = true
-```
-
-not `assisted-success`, because there is no certified assisted retry.
-
-# P3a — pure pedagogical-observation contract proof — CLOSED / ACCEPTED
-
-Canonical contract document:
-
-```text
 docs/BUILD-40-P3A-PEDAGOGICAL-OBSERVATION-CONTRACT.md
-```
-
-Accepted owners:
-
-```text
-src/pedagogy/pedagogical-observation-core.js
-tests/unit/p3a-pedagogical-observation-core.test.cjs
-.github/workflows/p3a-pedagogical-observation-contract.yml
-```
-
-Acceptance and closeout chain:
-
-```text
-PR #237 base             653aa3a3fe358c7036cca661d339b82b7073cc38
-PR #237 accepted head    fd5c4643c3701dfb37d42789a0409c849cb97324
-PR #237 squash merge     ef720b760db1108d98ee0090cc87f929d75676a1
-P3a workflow run         32399825235 SUCCESS
-PR #237 scope            exactly 6 authorized paths
-PR #237 review           1×P1 + 2×P2 addressed; 3/3 threads resolved
-PR #238 accepted head    a3814d5560c25d7cedaceaa57ff508db05a52de0
-PR #238 squash merge     ba2225cfb5e8864bd757620d22cfed333c757d82
-PR #238 scope            exactly 2 Markdown files
-PR #238 review           1×P2 resolved; LI3 abstention locked through P3b
-PR #238 exact-head CI    only five inherited baseline failures after two unchanged flake reruns
-PR #239 accepted head    659b820e0ba06691a93f463f8061855b182a87ed
-PR #239 squash merge     7bb9d4ab52d6402121d75c63a8c1042030c1c856
-PR #239 review           1×P2 resolved; resumable volatile checkpoint retained
-PR #239 exact-head CI    only five inherited baseline failures after unchanged Build26.1 Chrome rerun
-```
-
-Contract identity:
-
-```text
-schema       french-tranquille-pedagogical-observation/v1
-roadmapSlice P3a
-version      1.0.0-contract
-```
-
-Only these semantic source pairs are accepted:
-
-```text
-foundation-check → foundation-concept → foundations
-transfer-check   → transfer-family     → transfer
-```
-
-The normalized observation is intentionally narrow:
-
-```text
-at                 caller-supplied source-time ISO timestamp
-lessonId           strict current lesson placement 1..52
-activityKind       foundation-check | transfer-check
-
-target.kind        foundation-concept | transfer-family
-target.ids         stable semantic IDs
-
-activityId         capsule ID or Transfer family ID
-exerciseId         stable check/exercise identity
-outcome            success | miss
-
-response.mode      multiple-choice
-response.choice    selected choice
-
-assistance.modelShownAfterMiss
-sourceOwner        foundations | transfer
-sourceSlice        provenance only
-```
-
-Accepted P3a fail-closed rules include:
-
-- full timestamp with time + timezone; no hidden `Date.now()` chronology;
-- calendar-impossible timestamps are rejected before `Date.parse`;
-- `lessonId` is not coerced and is bounded to current 1..52 lesson namespace;
-- current Foundation namespace is F01–F18;
-- one Transfer family per Transfer observation;
-- Transfer `activityId` must equal target family;
-- target arrays/IDs/text are bounded;
-- output is reconstructed, detached and recursively frozen;
-- unsupported activity/target/source-owner combinations are rejected;
-- a `success` cannot claim `modelShownAfterMiss=true`;
-- item/mastery/scoring/CEFR state fields are rejected at input boundary;
-- no storage or network write exists in this core.
-
-P3a itself does not modify or wire Foundations, Transfer, Learning Memory, Error Intelligence, Evidence v2, Recovery, loaders, UI, PWA or public version metadata.
-
-# P3b — source observation + ephemeral collector — CLOSED / ACCEPTED
-
-Canonical closeout document:
-
-```text
 docs/BUILD-40-P3B-SOURCE-OBSERVATION-EPHEMERAL.md
-```
-
-Accepted chain:
-
-```text
-PR #240 base                    7bb9d4ab52d6402121d75c63a8c1042030c1c856
-PR #240 original candidate head 39710405b19c801feb30a451be513c26b66a3d55
-PR #240 accepted exact head     a641481d647510c41855c144149c2adccfde333c
-PR #240 squash merge            5a658f8ac288e5d5cd091dc0a16fa3683f6064fe
-PR #240 accepted scope          exactly 7 paths after justified sw.js review fix
-PR #240 review                  1×P1 installed-PWA precache, fixed + resolved
-P3b workflow run                32429870917 SUCCESS
-PR #240 exact-head CI           exactly five inherited baseline failures; no new red
-PR #241 accepted head           c1591bee16bea91531d930908c7e81dadc27cde1
-PR #241 squash merge            5c643814a4796eb30cc96b1c31cf5b84ea3f5844
-PR #241 scope                   exactly 3 Markdown files
-PR #241 exact-head CI           only five inherited baseline failures after unchanged V5.3 capture rerun
-PR #242 accepted head           8bb762b32e836c741a03874bbc899e2744b6bb37
-PR #242 squash merge            b72d9c2cd84783c03ae73b627773b896d2378702
-PR #242 scope                   exactly 2 Markdown files
-PR #242 review                  1×P2 resolved; merge-stable resumable publication checkpoint
-PR #242 exact-head CI           only five inherited baseline failures after unchanged V5.3 capture rerun
-```
-
-Accepted runtime owner:
-
-```text
-src/pedagogy/pedagogical-observation-runtime.js
-```
-
-Accepted runtime behavior:
-
-```text
-capture source-time timestamp on learner choice
-wait for existing synchronous source renderer
-record only renderer-confirmed selected result: ok | bad
-Foundation → foundation-check / foundation-concept / foundations
-Transfer   → transfer-check / transfer-family / transfer
-miss       → modelShownAfterMiss=true
-success    → modelShownAfterMiss=false
-FIFO       → maximum 64 normalized observations in memory
-persistent=false
-durableWrite=false
-masteryClaim=false
-```
-
-P3b does **not** calculate correctness independently. If the existing learner-facing renderer does not confirm the selected result, it abstains and records nothing. All accepted observations are normalized through the P3a contract.
-
-Accepted source owners remain byte-identical:
-
-```text
-src/pedagogy/pedagogical-observation-core.js
-src/pedagogy/foundations-capsule-engine.js
-src/pedagogy/foundations-pilot.js
-src/pedagogy/generalization-transfer-lesson.js
-```
-
-Runtime support added by P3b:
-
-```text
-src/core/build32-loader.js
-→ loads P3a contract and P3b runtime before Foundation/Transfer sources
-
-sw.js
-→ precaches exact versioned P3a/P3b boot scripts for installed-PWA offline startup
-```
-
-The `sw.js` change was a valid Codex P1 fix raised during #240 control. It does not widen evidence semantics or durability; it preserves the installed-PWA boot contract.
-
-P3b ownership remains explicitly bounded:
-
-```text
-ZERO Learning Memory write
-ZERO Error Intelligence write
-ZERO Evidence v2 write
-ZERO Recovery / backup mutation
-ZERO localStorage / sessionStorage / IndexedDB persistence
-ZERO network persistence
-ZERO mastery / score / confidence / CEFR claim
-ZERO assisted-success invention
-ZERO Build39.2 availability promotion
-```
-
-Therefore after P3b:
-
-```text
-Recovery     7 stores / backup v3
-Evidence v2  derived shadow only
-Build39.2    concept-review / foundation-capsule / transfer-construction unavailable
-Build43      NOT AUTHORIZED
-A2 learner-facing implementation NOT AUTHORIZED
-```
-
-# P3c — durability decision audit — CLOSED / ACCEPTED
-
-Canonical audit:
-
-```text
 docs/BUILD-40-P3C-DURABILITY-DECISION-AUDIT.md
+```
+
+Accepted chain established:
+
+```text
+source-time semantic event owner      JUSTIFIED
+P3a pure normalization contract       ACCEPTED
+P3b source observation                ACCEPTED / EPHEMERAL ONLY
+raw event truth                       TRUSTWORTHY AT EVENT LEVEL
+cross-session durability              NOT JUSTIFIED
+Memory/Error semantic hijack          REJECTED
+Evidence v2 direct source write       REJECTED under shadow contract
+new eighth store                      NOT JUSTIFIED
+aggregation/mastery inference         NOT AUTHORIZED
+Build39.2 Foundation/Transfer promote NOT AUTHORIZED
+```
+
+Recovery remains **7 durable stores / backup v3**. Evidence v2 remains **derived shadow only**.
+
+## P4 — fresh A1 readiness audit — CLOSED / ACCEPTED
+
+Canonical document:
+
+```text
+docs/BUILD-40-P4-A1-READINESS-AUDIT.md
 ```
 
 Acceptance chain:
 
 ```text
-PR #243 base                 b72d9c2cd84783c03ae73b627773b896d2378702
-PR #243 accepted exact head  c820f8239e02f02e2ee84cbf715bd83877e45535
-PR #243 squash merge         8296b2ffdfae07dc8e9b9d84b12e2c0ba279e8e1
-PR #243 scope                exactly 3 Markdown files
-PR #243 review               no published review/thread blockers at control time
-PR #243 exact-head CI        only five inherited baseline failures after unchanged Build26.4 Chrome timeout rerun
-Build26.4 rerun              SUCCESS
-PR #244 accepted exact head  1f78a69ec9c66b8372dc35a0536b59b569491acc
-PR #244 squash merge         83cf5ed5f859f3f07e6b5037a94794bf0cdb3be3
-PR #244 scope                exactly 2 Markdown files
-PR #244 exact-head CI        only five inherited baseline failures after unchanged Build37.3 and V5.9C Chrome reruns
+PR #245 accepted head   dbdd7df1290f32873e04b0ebb85abae62230d918
+PR #245 squash merge    5f8fffd6b13ed30750446d2ffc02b5cb9d8b524f
+PR #246 accepted head   e626940e8baee4d2f64d7d3cf2ca845297327b75
+PR #246 squash merge    e1bfcea1e2e3a51c8a0efb97aa8791bcde31117d
 ```
-
-Accepted findings:
-
-- P3b observations are trustworthy as event-level statements of what happened in one deterministic check;
-- Foundation and Transfer enforce one answer per displayed question, but reopening the activity starts a fresh ephemeral session and replays fixed checks/exercises;
-- repeated events are real attempts, but there is no accepted durable session/attempt-group identity or independence rule;
-- timestamps exist, but no recency/spacing threshold is certified and P3c does not invent one;
-- multi-concept Foundation capsules can target several concept IDs without a per-check concept-coverage map, so equal per-concept credit/debit is not justified;
-- Build39.2 already distinguishes evidence count from independent evidence count;
-- Learning Memory and Error Intelligence remain curriculum-item-centric and cannot own concept/family events honestly;
-- Evidence v2 remains the seventh Recovery store but is contractually a derived projection of the six canonical source stores;
-- direct P3b writes into Evidence v2 would change it into a mixed source/projection store and therefore require an explicit role redesign/cutover;
-- a dedicated eighth store would require Recovery/backup migration and is not justified before a certified consumer/use-case and independence semantics exist.
 
 Accepted verdict:
-
-```text
-raw P3b event truth                    TRUSTWORTHY AT EVENT LEVEL
-cross-session durability now           NOT JUSTIFIED
-Learning Memory reuse                   REJECTED
-Error Intelligence reuse                REJECTED
-direct Evidence-v2 source writes        REJECTED under current shadow contract
-Evidence-v2 read cutover                NOT AUTHORIZED
-new eighth durable store now            NOT JUSTIFIED
-aggregation / independence inference    NOT AUTHORIZED
-mastery / CEFR / score / confidence     NOT AUTHORIZED
-Build39.2 availability promotion        NOT AUTHORIZED
-Build43                                 NOT AUTHORIZED
-A2 learner-facing implementation       NOT AUTHORIZED
-```
-
-A future durability proposal must start with a concrete consumer/use-case and then define attempt/session identity, independence rules, Foundation concept attribution, recency/spacing, dedupe/retention, storage ownership and Recovery migration proof. P3c does not authorize that implementation work.
-
-Recovery remains **7 durable stores / backup v3**. Evidence v2 remains **derived shadow only**. The accepted P3a contract and P3b ephemeral runtime remain unchanged. P3c changed documentation only.
-
-# P4 — fresh A1 readiness audit — CLOSED / ACCEPTED
-
-Canonical accepted audit:
-
-```text
-docs/BUILD-40-P4-A1-READINESS-AUDIT.md
-PR #245 accepted exact head dbdd7df1290f32873e04b0ebb85abae62230d918
-PR #245 squash merge        5f8fffd6b13ed30750446d2ffc02b5cb9d8b524f
-PR #245 scope               exactly 3 Markdown files
-PR #245 review              no published review/thread/comment blockers
-PR #245 exact-head CI       exactly five inherited baseline failures; all other workflows SUCCESS
-```
-
-P4 re-runs the Build40 gate from the actual accepted post-Build41/Build42/P3c reality.
-
-Accepted findings:
 
 ```text
 A1 thematic breadth                    SUFFICIENT FOR CURRENT ROADMAP GATE
 A1 Productive Consolidation            SUFFICIENT / RATIONAL STOP BOUNDARY
 Transfer families                      6 learner-facing deterministic families
-F16 explicit teaching debt             RESOLVED
-rejected/deferred A1 candidates        REMAIN BLOCKED FROM CURRENT SOURCES
-phrase/listening/scenario evidence     RELIABLE AS BEFORE
-Foundation/Transfer event truth        TRUSTWORTHY EPHEMERAL OBSERVATION
+F16 teaching debt                      RESOLVED
 Foundation/Transfer durable evidence   UNAVAILABLE
 cross-session observation durability   NOT JUSTIFIED
-```
-
-P4 does not certify every possible A1 capability. It finds that no additional A1 implementation is automatically justified from the already-audited source set: Build41 exhausted the prioritized deterministic candidates, Build42 resolved the explicit F16 teach-core debt, and P3c bounded the evidence question without persistence-first architecture.
-
-P4 also separates **product roadmap permission** from **learner readiness**. The locked `7 completed / l8=4 / 40 known` continuity is not an A1-completion claim and cannot trigger learner A2 unlock.
-
-Accepted decision:
-
-```text
-A2 scope / entry audit                 AUTHORIZED NEXT
+A2 Entry Scope Audit                   AUTHORIZED NEXT
 A2 learner-facing implementation       NOT AUTHORIZED
 Build43                                NOT AUTHORIZED
-A2 learner readiness/mastery           NOT CLAIMED
+learner A2 readiness/mastery           NOT CLAIMED
 CEFR A1 certification                  NOT CLAIMED
 ```
 
-# NEXT — A2 Entry Scope Audit
+P4 opened only curriculum/design study. It did not claim that the current learner has completed A1.
 
-The next authorized slice is **docs/read-only**, remains unnumbered as a Build implementation, and is **NEXT / NOT STARTED**.
+# A2 Entry Scope Audit — ACTIVE CANDIDATE
 
-It must:
+Canonical candidate:
 
-- identify what is genuinely A2 rather than missing A1 repair;
-- map prerequisites already present in the current 52/313 curriculum;
-- prevent duplication of existing late-A1 content;
-- decide whether a curriculum extension is justified at all;
-- preserve current lesson IDs and item semantics until a later explicit implementation authorization;
-- keep product-roadmap scope separate from learner A2 unlock/readiness.
+```text
+docs/A2-ENTRY-SCOPE-AUDIT.md
+PR #247 — docs/a2-entry-scope-audit
+```
+
+The audit uses official Council of Europe A2 descriptors as a scope reference only.
+
+## Candidate overlap finding
+
+The current upper A1 curriculum is already strongly A2-adjacent by theme:
+
+```text
+L41 clarification/reformulation
+L42 quantities/packaging
+L43 comparison/choice
+L44 invitations/accept/refuse
+L45 health/medical appointment
+L46 medicine/pharmacy
+L47 work/instructions
+L48 housing failure/repair
+L49 transport disruption/alternatives
+L50 narration ordering
+L51 simple opinion
+L52 spoken on/shared plans
+```
+
+Earlier lessons already cover personal/family information, social exchange, shopping, food, directions, transport, time, administration, routine, futur proche, recent past and starter passé composé.
+
+Therefore **more theme-only “A2” lessons are not justified**.
+
+## Candidate genuine-newness test
+
+Current task shapes:
+
+```text
+Scenario      44 situations / 132 turns; strong context, mostly bounded answer turns
+Listening     17 contrasts / 18 dialogues; reliable, mostly one bounded target per dialogue
+Speaking Loop 52/52; phrase rehearsal/self-listening, not short-series production
+Writing       no distinct short-functional-writing owner found
+```
+
+The smallest genuinely new candidate bridge is:
+
+```text
+A2-P1 short-series oral production
+A2-I1 stateful routine information exchange
+A2-R1 multi-fact short reception
+A2-W1 short functional writing
+```
+
+This is capability progression, not theme accumulation.
+
+## Candidate A2 boundary
+
+The candidate explicitly avoids pulling B1 expectations downward.
+
+A2 here means structured/routine exchanges and short series of simple phrases/sentences. It does **not** require:
+
+```text
+long connected discourse
+sustained argument
+detailed free narration
+broad reasons/explanations as an independent capability
+free debate
+CEFR certification
+```
+
+Simple mediation is a possible future audit track but is **not** a first-bridge blocker.
+
+## Candidate extension decision
+
+```text
+late-A1 thematic A2 adjacency              STRONG / ALREADY COVERED
+more theme-only A2 lessons                  NOT JUSTIFIED
+short-series oral production                GENUINELY NEW CANDIDATE
+stateful routine information exchange       PARTIAL TODAY / NEW FORM JUSTIFIED
+multi-fact short reception                  PARTIAL TODAY / NEW FORM JUSTIFIED
+short functional writing                    GENUINELY NEW MODALITY
+simple mediation                            OPTIONAL FUTURE AUDIT / NOT ENTRY BLOCKER
+bounded A2 Bridge                           JUSTIFIED IN PRINCIPLE
+full A2 curriculum                          NOT JUSTIFIED NOW
+A2 Bridge Design Audit                      candidate NEXT only after #247 acceptance
+A2 learner-facing implementation            NOT AUTHORIZED
+Build43                                     NOT AUTHORIZED
+learner A2 readiness/mastery                NOT CLAIMED
+CEFR certification                          NOT CLAIMED
+```
+
+No lesson numbers are assigned and no existing item semantics are changed by this audit.
+
+# Candidate NEXT only after #247 acceptance — A2 Bridge Design Audit
+
+The next slice, if #247 is accepted, is **docs/read-only**.
+
+It must decide:
+
+1. which A2-P1 / A2-I1 / A2-R1 / A2-W1 lane is first;
+2. exact current lesson/item prerequisites;
+3. whether any new language source is really required;
+4. activity/data ownership;
+5. deterministic versus semantic evaluation boundary;
+6. assistance/correction semantics;
+7. honest evidence semantics;
+8. learner-route gating;
+9. whether any new lesson IDs are needed at all;
+10. tests/sanctuaries for a later implementation candidate.
 
 It does **not** authorize:
 
 ```text
-new lessons or lesson renumbering
+new learner-facing A2
+Build43
+new lesson IDs / renumbering
 reinterpretation of existing 313 items
 learner A2 unlock
-CEFR A1 completion or A2 readiness claim
-P3b observation durability
+CEFR A1/A2 certification
+P3b durability
 Foundation/Transfer LI3 promotion
-Evidence v2 cutover or direct source-event writes
+Evidence v2 cutover
 new durable store
-Build43 implementation numbering
 ```
 
-P4 may reopen a rejected/deferred A1 family later only if new real source or field evidence changes that family’s accepted audit premise. No arbitrary numeric progress/time/score threshold is invented.
+# Current stop boundary
 
-Not authorized: Build42.3, productive F16 Transfer, durable Foundation/Transfer mastery claims, Build43 implementation numbering, A2 learner-facing implementation, Evidence read cutover, direct Evidence event writes, or a new durable store merely to manufacture evidence.
+PR #247 is the A2 Entry Scope Audit candidate. Its exact-head CI/review arbitration and merge belong to the next control session.
+
+The A2 Bridge Design Audit is **not started** until a later explicit user command after #247 acceptance.
