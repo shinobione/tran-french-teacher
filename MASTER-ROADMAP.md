@@ -4,7 +4,7 @@
 >
 > Historical long-form roadmap state remains preserved under `docs/archive/` and dedicated build/release documents.
 
-## Canonical checkpoint — 2026-08-21
+## Canonical checkpoint — 2026-08-24
 
 ```text
 Build42.2 product merge          8b462fae236c00b902a9312fe8e1b103412b8694
@@ -16,6 +16,7 @@ P3a pure contract merge          ef720b760db1108d98ee0090cc87f929d75676a1
 P3a closeout merge               ba2225cfb5e8864bd757620d22cfed333c757d82
 P3a final alignment merge        7bb9d4ab52d6402121d75c63a8c1042030c1c856
 P3b source-observation merge     5a658f8ac288e5d5cd091dc0a16fa3683f6064fe
+P3b docs closeout merge          5c643814a4796eb30cc96b1c31cf5b84ea3f5844
 public runtime metadata          v2.5.0 · Build 38
 pedagogy baseline                v2.3.0 · Build 34
 curriculum                       52 lessons / 313 items
@@ -103,7 +104,7 @@ P3c durability decision if justified
 P4 fresh A1 readiness audit
 ```
 
-P1 completed through Build41. P2 completed through Build42. P3, P3a and P3b are accepted/closed. **P3c is next, after the P3b docs closeout is accepted.**
+P1 completed through Build41. P2 completed through Build42. P3, P3a and P3b are accepted/closed. **P3c is next.**
 
 ## Build41 — A1 Productive Consolidation — CLOSED
 
@@ -285,6 +286,10 @@ PR #240 accepted scope          exactly 7 paths after justified sw.js review fix
 PR #240 review                  1×P1 installed-PWA precache, fixed + resolved
 P3b workflow run                32429870917 SUCCESS
 PR #240 exact-head CI           exactly five inherited baseline failures; no new red
+PR #241 accepted head           c1591bee16bea91531d930908c7e81dadc27cde1
+PR #241 squash merge            5c643814a4796eb30cc96b1c31cf5b84ea3f5844
+PR #241 scope                   exactly 3 Markdown files
+PR #241 exact-head CI           only five inherited baseline failures after unchanged V5.3 capture rerun
 ```
 
 Accepted runtime owner:
@@ -358,7 +363,7 @@ A2           NOT AUTHORIZED
 
 # NEXT — P3c durability decision
 
-P3c starts only after the accepted P3b docs closeout is canonical.
+The accepted P3b documentation closeout is canonical. **P3c is NEXT / NOT STARTED.**
 
 ```text
 P3c
