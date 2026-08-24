@@ -1,8 +1,12 @@
 # Build40 P3b — Source observation + ephemeral collector
 
-Status: **CANDIDATE / EPHEMERAL SOURCE-OBSERVATION PROOF**
+Status: **CLOSED / ACCEPTED EPHEMERAL SOURCE-OBSERVATION PROOF**
 
 Audited implementation base: `7bb9d4ab52d6402121d75c63a8c1042030c1c856`
+
+Accepted exact head: `a641481d647510c41855c144149c2adccfde333c`
+
+Accepted squash merge: `5a658f8ac288e5d5cd091dc0a16fa3683f6064fe`
 
 ## Mission
 
@@ -30,6 +34,8 @@ schema = french-tranquille-pedagogical-observation/v1
 ```
 
 `src/core/build32-loader.js` loads the accepted P3a contract and then the P3b ephemeral runtime before the existing learner-facing Foundation and Transfer sources.
+
+The accepted P3b control also changed `sw.js` so those exact versioned P3a/P3b boot-time scripts are precached for installed-PWA offline startup.
 
 The existing source owners themselves remain byte-identical:
 
@@ -119,6 +125,23 @@ Properties:
 
 The 64-entry bound is a runtime inspection window, **not learner history** and not a proposed durable retention policy.
 
+## Installed-PWA review fix
+
+The original candidate head `39710405b19c801feb30a451be513c26b66a3d55` received one Codex **P1**: the two new boot-time observation scripts were not yet in the service-worker `CORE` precache.
+
+That review was correct. The accepted control fixed it before merge:
+
+```text
+sw.js
+→ precache exact versioned P3a contract URL
+→ precache exact versioned P3b runtime URL
+→ keep loader/service-worker observation versions aligned
+```
+
+The dedicated P3b workflow now guards those entries explicitly. This preserves installed-PWA first-offline-launch bootability without changing the P3b persistence or evidence semantics.
+
+The P1 thread was resolved after evidence was posted on PR #240.
+
 ## Explicit non-ownership
 
 P3b writes to none of the following:
@@ -158,14 +181,14 @@ foundation-capsule    unavailable
 transfer-construction unavailable
 ```
 
-## Candidate tests
+## Accepted tests and control evidence
 
 ```text
 tests/unit/p3b-pedagogical-observation-runtime.test.cjs
 .github/workflows/p3b-pedagogical-observation-runtime.yml
 ```
 
-The candidate proves:
+The accepted candidate proves:
 
 - accepted P3a normalization is still the only observation schema boundary;
 - Foundation success/miss maps honestly;
@@ -174,16 +197,47 @@ The candidate proves:
 - invalid source shape is not collected;
 - the FIFO is bounded to 64 and drops oldest first;
 - loader order is P3a contract → P3b runtime → existing source activities;
+- installed-PWA offline precache includes both observation boot scripts;
 - accepted P3a core and learner-facing Foundation/Transfer source owners remain byte-identical;
 - no durable/network APIs are introduced;
 - permanent sanctuaries remain byte-identical.
 
-## Gate after candidate acceptance
+Control record:
 
-Only after exact-head CI/review/control accepts this P3b candidate may the roadmap proceed to:
+```text
+PR #240 original candidate head   39710405b19c801feb30a451be513c26b66a3d55
+PR #240 accepted exact head       a641481d647510c41855c144149c2adccfde333c
+PR #240 accepted scope            exactly 7 paths after justified sw.js review fix
+PR #240 review                    1×P1, fixed and resolved before merge
+P3b workflow run                  32429870917 SUCCESS
+PR #240 exact-head CI             exactly five inherited baseline failures; no new red
+PR #240 squash merge              5a658f8ac288e5d5cd091dc0a16fa3683f6064fe
+```
+
+The five inherited failures remain:
+
+1. `French Trân'quille quality`
+2. `Build 36.2 Evidence shadow adoption`
+3. `V2.0.0 Freeze tribunal`
+4. `Build 36.3 Recovery v3 durability tribunal`
+5. `Build 28 Data recovery smoke`
+
+## Next gate
+
+P3b is now accepted. The roadmap may proceed only to:
 
 ```text
 P3c — durability decision
 ```
 
 P3c must decide whether these real observations are useful enough to justify any durable architecture. P3b itself provides **no** such authorization.
+
+Until P3c explicitly decides otherwise:
+
+```text
+Recovery     7 stores / backup v3
+Evidence v2  derived shadow only
+Build39.2    concept-review / foundation-capsule / transfer-construction unavailable
+Build43      NOT AUTHORIZED
+A2           NOT AUTHORIZED
+```
