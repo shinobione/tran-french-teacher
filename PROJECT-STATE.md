@@ -8,9 +8,9 @@ Last reconciled: 2026-08-24
 - Accepted P3b product merge: **`5a658f8ac288e5d5cd091dc0a16fa3683f6064fe`** from PR **#240**.
 - Accepted P3b documentation closeout: PR **#241 — `Docs · close accepted P3b observation proof`**, accepted exact head **`c1591bee16bea91531d930908c7e81dadc27cde1`**, squash merge **`5c643814a4796eb30cc96b1c31cf5b84ea3f5844`**.
 - Accepted P3b final alignment: PR **#242 — `Docs · finalize merge-stable P3b checkpoint`**, accepted exact head **`8bb762b32e836c741a03874bbc899e2744b6bb37`**, squash merge **`b72d9c2cd84783c03ae73b627773b896d2378702`**.
-- Last verified `main` before publishing this P3c audit candidate: **`b72d9c2cd84783c03ae73b627773b896d2378702`**.
-- Published P3c audit candidate: PR **#243 — `P3c · decide pedagogical observation durability`**, branch **`docs/p3c-durability-decision-audit`**.
-- The moving #243 candidate head and its live open/merged state are intentionally delegated to GitHub metadata. These lines are a publication checkpoint, not a claim that #243 remains active after a later merge.
+- Accepted P3c durability decision: PR **#243 — `P3c · decide pedagogical observation durability`**, accepted exact head **`c820f8239e02f02e2ee84cbf715bd83877e45535`**, squash merge **`8296b2ffdfae07dc8e9b9d84b12e2c0ba279e8e1`**.
+- Last verified `main` before publishing this P3c documentation closeout candidate: **`8296b2ffdfae07dc8e9b9d84b12e2c0ba279e8e1`**.
+- Published P3c documentation closeout candidate branch: **`docs/p3c-closeout`**. Its moving head and live PR state are intentionally delegated to GitHub metadata.
 - Accepted product state remains Build42.2 product merge **`8b462fae236c00b902a9312fe8e1b103412b8694`**.
 - Build42 closure merge: **`8c2787d203d6089850856652f288f10a4fd53b32`**.
 - Build40 P3 evidence-owner audit PR **#234** squash merge: **`cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac`**.
@@ -22,12 +22,13 @@ Last reconciled: 2026-08-24
 - P3b PR **#240** accepted exact head **`a641481d647510c41855c144149c2adccfde333c`**, squash merge **`5a658f8ac288e5d5cd091dc0a16fa3683f6064fe`**.
 - P3b docs closeout PR **#241** accepted exact head **`c1591bee16bea91531d930908c7e81dadc27cde1`**, squash merge **`5c643814a4796eb30cc96b1c31cf5b84ea3f5844`**.
 - P3b final-alignment PR **#242** accepted exact head **`8bb762b32e836c741a03874bbc899e2744b6bb37`**, squash merge **`b72d9c2cd84783c03ae73b627773b896d2378702`**.
+- P3c PR **#243** accepted exact head **`c820f8239e02f02e2ee84cbf715bd83877e45535`**, squash merge **`8296b2ffdfae07dc8e9b9d84b12e2c0ba279e8e1`**.
 - Public runtime metadata remains **v2.5.0 · Build 38**; pedagogy baseline remains **v2.3.0 · Build 34**.
 - Build40 P3 is **CLOSED / ACCEPTED**.
 - P3a is **CLOSED / ACCEPTED PURE CONTRACT PROOF**.
 - P3b is **CLOSED / ACCEPTED EPHEMERAL SOURCE-OBSERVATION PROOF**.
-- P3c is **ACTIVE CANDIDATE / DURABILITY DECISION AUDIT** in PR **#243**.
-- **NEXT only if #243 is accepted = P4 — fresh A1 readiness audit.**
+- P3c is **CLOSED / ACCEPTED DURABILITY DECISION — NO DURABILITY YET**.
+- **NEXT = P4 — fresh A1 readiness audit.**
 
 ## Accepted product state
 
@@ -63,8 +64,8 @@ Build42    CLOSED / SUCCESSFUL FOUNDATIONS DEBT RESOLUTION
 Build40 P3 CLOSED / ACCEPTED
 P3a        CLOSED / ACCEPTED PURE CONTRACT PROOF
 P3b        CLOSED / ACCEPTED EPHEMERAL SOURCE-OBSERVATION PROOF
-P3c        ACTIVE CANDIDATE / DURABILITY DECISION AUDIT
-P4         NOT STARTED — blocked on P3c acceptance
+P3c        CLOSED / ACCEPTED DURABILITY DECISION — NO DURABILITY YET
+P4         NEXT / NOT STARTED
 Build42.3  NOT AUTHORIZED
 F16 Transfer NOT AUTHORIZED
 Build43    NOT AUTHORIZED
@@ -295,16 +296,27 @@ foundation-capsule    unavailable
 transfer-construction unavailable
 ```
 
-## P3c — ACTIVE CANDIDATE / DURABILITY DECISION AUDIT
+## P3c — CLOSED / ACCEPTED DURABILITY DECISION — NO DURABILITY YET
 
-Canonical candidate audit:
+Canonical audit:
 
 ```text
 docs/BUILD-40-P3C-DURABILITY-DECISION-AUDIT.md
-PR #243 — docs/p3c-durability-decision-audit
 ```
 
-Candidate verdict:
+Acceptance evidence:
+
+```text
+PR #243 base                 b72d9c2cd84783c03ae73b627773b896d2378702
+PR #243 accepted exact head  c820f8239e02f02e2ee84cbf715bd83877e45535
+PR #243 squash merge         8296b2ffdfae07dc8e9b9d84b12e2c0ba279e8e1
+PR #243 scope                exactly 3 Markdown files
+PR #243 review               no published review/thread blockers at control time
+PR #243 exact-head CI        only five inherited baseline failures after unchanged Build26.4 Chrome rerun
+Build26.4 rerun              SUCCESS
+```
+
+Accepted verdict:
 
 ```text
 raw P3b event truth                    TRUSTWORTHY AT EVENT LEVEL
@@ -321,7 +333,7 @@ Build43                                 NOT AUTHORIZED
 A2                                      NOT AUTHORIZED
 ```
 
-Why durability remains unjustified in this candidate:
+Why durability remains unjustified:
 
 - one answer per displayed question is enforced, but reopening Foundation/Transfer replays the same fixed checks/exercises;
 - P3b has timestamps and stable exercise IDs but no certified durable session/attempt-group identity or independence policy;
@@ -333,13 +345,13 @@ Why durability remains unjustified in this candidate:
 
 Before durability can be reopened, a future explicit design must first define the consumer/use-case, attempt/session grouping, independence rules, concept attribution, recency/spacing, dedupe/retention, storage ownership and Recovery migration proof.
 
-Recovery remains **7 stores / backup v3**. Evidence v2 remains **derived shadow only**. P3a/P3b runtime semantics remain unchanged.
+Recovery remains **7 stores / backup v3**. Evidence v2 remains **derived shadow only**. P3a/P3b runtime semantics remain unchanged. No runtime, storage, curriculum, learner-data or public metadata changed in P3c.
 
-## NEXT only after P3c acceptance — P4 fresh A1 readiness audit
+## NEXT — P4 fresh A1 readiness audit
 
-P4 must reassess A1 from the actual post-P3b evidence reality. It must distinguish honest ephemeral event observations from reliable durable evidence and reconsider A2 only from that fresh audit.
+P4 must reassess A1 from the actual post-P3b/P3c evidence reality. It must distinguish honest ephemeral event observations from reliable durable evidence and reconsider A2 only from that fresh audit.
 
-P4 is **NOT STARTED** while #243 is a candidate. P4 does not automatically authorize A2, Build43, durable observation storage, Evidence read cutover or a new store.
+P4 is **NEXT / NOT STARTED**. It does not automatically authorize A2, Build43, durable observation storage, Evidence read cutover or a new store.
 
 ## Locked boundaries
 
