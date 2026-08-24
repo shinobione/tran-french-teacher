@@ -15,7 +15,7 @@ Last reconciled: 2026-08-24
 - PR #247 exact-head CI: **exactly the five standing inherited failures; every other workflow SUCCESS**.
 - PR #247 published reviews/threads/comments at control time: **0 / 0 / 0**.
 - Canonical accepted audit: `docs/A2-ENTRY-SCOPE-AUDIT.md`.
-- Published documentation closeout branch: **`docs/a2-entry-closeout`**. Its moving head and PR metadata are delegated to live GitHub.
+- Published documentation closeout candidate: PR **#248 — `Docs · close accepted A2 entry scope audit`**, branch **`docs/a2-entry-closeout`**. Its moving head and live state are intentionally delegated to GitHub metadata.
 
 ## Accepted product state
 
@@ -300,8 +300,8 @@ Any other failure is NEW until classified from exact logs.
 ## Exact next control action
 
 ```text
-Control the docs-only A2 Entry Scope closeout candidate on its exact published head
-→ verify main/base/head and exact docs-only scope
+Control PR #248 on its exact published head
+→ verify main/base/head and exact 2-file docs-only scope
 → inspect CI/reviews/threads/comments
 → classify every non-baseline red from exact logs
 → rerun only proven Chrome/harness flakes unchanged
