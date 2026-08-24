@@ -1,0 +1,102 @@
+name: A2-R1 Pure multi-fact reception contract
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Node syntax + deterministic unit contract
+        run: |
+          node --check src/pedagogy/a2-reception-bridge-core.js
+          node --check tests/unit/a2-r1-reception-bridge-core.test.cjs
+          node tests/unit/a2-r1-reception-bridge-core.test.cjs
+
+      - name: Pure-core forbidden API guard
+        shell: bash
+        run: |
+          set -euo pipefail
+          core='src/pedagogy/a2-reception-bridge-core.js'
+          forbidden='document|localStorage|indexedDB|XMLHttpRequest|navigator|FrenchTranquilleMemory|FrenchTranquilleErrors|FrenchTranquilleEvidence|fetch[[:space:]]*\('
+          if grep -En "$forbidden" "$core"; then
+            echo 'A2-R1 pure core contains a forbidden runtime/storage/network owner reference.' >&2
+            exit 1
+          fi
+
+      - name: Existing Listening/curriculum source immutability guard
+        shell: bash
+        run: |
+          set -euo pipefail
+          base="${{ github.event.pull_request.base.sha || github.event.before }}"
+          if [[ -z "$base" || "$base" == '0000000000000000000000000000000000000000' ]]; then
+            base="$(git rev-parse HEAD^)"
+          fi
+          protected=(
+            'src/pedagogy/listening-data.js'
+            'src/pedagogy/listening-data-2.js'
+            'src/pedagogy/listening-engine.js'
+            'src/pedagogy/curriculum-stage4.js'
+          )
+          for path in "${protected[@]}"; do
+            if ! git diff --quiet "$base"...HEAD -- "$path"; then
+              echo "Protected source changed in pure proof: $path" >&2
+              exit 1
+            fi
+          done
+
+      - name: Narrow candidate scope guard
+        shell: bash
+        run: |
+          set -euo pipefail
+          base="${{ github.event.pull_request.base.sha || github.event.before }}"
+          if [[ -z "$base" || "$base" == '0000000000000000000000000000000000000000' ]]; then
+            base="$(git rev-parse HEAD^)"
+          fi
+          allowed='^(\.github/workflows/a2-r1-reception-contract\.yml|src/pedagogy/a2-reception-bridge-core\.js|tests/unit/a2-r1-reception-bridge-core\.test\.cjs|docs/A2-R1-MULTI-FACT-RECEPTION-CONTRACT-PROOF\.md|PROJECT-STATE\.md|MASTER-ROADMAP\.md)$'
+          changed="$(git diff --name-only "$base"...HEAD)"
+          printf '%s\n' "$changed"
+          bad="$(printf '%s\n' "$changed" | grep -Ev "$allowed" || true)"
+          if [[ -n "$bad" ]]; then
+            echo 'Unexpected path(s) in A2-R1 pure proof:' >&2
+            printf '%s\n' "$bad" >&2
+            exit 1
+          fi
+
+      - name: Permanent sanctuary guard
+        shell: bash
+        run: |
+          set -euo pipefail
+          base="${{ github.event.pull_request.base.sha || github.event.before }}"
+          if [[ -z "$base" || "$base" == '0000000000000000000000000000000000000000' ]]; then
+            base="$(git rev-parse HEAD^)"
+          fi
+          sanctuaries=(
+            'app.js'
+            'voice-ios.js'
+            'free-voice.js'
+            'assets/LOGO.png'
+            'assets/Favicon.png'
+          )
+          for path in "${sanctuaries[@]}"; do
+            if ! git diff --quiet "$base"...HEAD -- "$path"; then
+              echo "Sanctuary changed in A2-R1 pure proof: $path" >&2
+              exit 1
+            fi
+          done
+
+      - name: No learner-facing/runtime integration guard
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e src/pedagogy/a2-reception-bridge-renderer.js
+          if git grep -n 'a2-reception-bridge-core' -- '*.js' ':!src/pedagogy/a2-reception-bridge-core.js'; then
+            echo 'Pure proof core is unexpectedly referenced by a runtime JavaScript source.' >&2
+            exit 1
+          fi
