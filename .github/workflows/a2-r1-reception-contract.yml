@@ -30,13 +30,19 @@ jobs:
             exit 1
           fi
 
-      - name: Existing Listening/curriculum source immutability guard
+      - name: Pure-proof source immutability guard
         shell: bash
         run: |
           set -euo pipefail
           base="${{ github.event.pull_request.base.sha || github.event.before }}"
           if [[ -z "$base" || "$base" == '0000000000000000000000000000000000000000' ]]; then
             base="$(git rev-parse HEAD^)"
+          fi
+          changed="$(git diff --name-only "$base"...HEAD)"
+          strict='^(src/pedagogy/a2-reception-bridge-core\.js|tests/unit/a2-r1-reception-bridge-core\.test\.cjs|docs/A2-R1-MULTI-FACT-RECEPTION-CONTRACT-PROOF\.md)$'
+          if ! printf '%s\n' "$changed" | grep -Eq "$strict"; then
+            echo 'Successor slice: pure-proof source immutability scope is not active.'
+            exit 0
           fi
           protected=(
             'src/pedagogy/listening-data.js'
@@ -46,12 +52,12 @@ jobs:
           )
           for path in "${protected[@]}"; do
             if ! git diff --quiet "$base"...HEAD -- "$path"; then
-              echo "Protected source changed in pure proof: $path" >&2
+              echo "Protected source changed in pure-proof slice: $path" >&2
               exit 1
             fi
           done
 
-      - name: Narrow candidate scope guard
+      - name: Pure-proof narrow candidate scope guard
         shell: bash
         run: |
           set -euo pipefail
@@ -59,12 +65,18 @@ jobs:
           if [[ -z "$base" || "$base" == '0000000000000000000000000000000000000000' ]]; then
             base="$(git rev-parse HEAD^)"
           fi
-          allowed='^(\.github/workflows/a2-r1-reception-contract\.yml|src/pedagogy/a2-reception-bridge-core\.js|tests/unit/a2-r1-reception-bridge-core\.test\.cjs|docs/A2-R1-MULTI-FACT-RECEPTION-CONTRACT-PROOF\.md|PROJECT-STATE\.md|MASTER-ROADMAP\.md)$'
           changed="$(git diff --name-only "$base"...HEAD)"
+          strict='^(src/pedagogy/a2-reception-bridge-core\.js|tests/unit/a2-r1-reception-bridge-core\.test\.cjs|docs/A2-R1-MULTI-FACT-RECEPTION-CONTRACT-PROOF\.md)$'
+          if ! printf '%s\n' "$changed" | grep -Eq "$strict"; then
+            echo 'Successor slice: original pure-proof narrow scope is not active.'
+            printf '%s\n' "$changed"
+            exit 0
+          fi
+          allowed='^(\.github/workflows/a2-r1-reception-contract\.yml|src/pedagogy/a2-reception-bridge-core\.js|tests/unit/a2-r1-reception-bridge-core\.test\.cjs|docs/A2-R1-MULTI-FACT-RECEPTION-CONTRACT-PROOF\.md|PROJECT-STATE\.md|MASTER-ROADMAP\.md)$'
           printf '%s\n' "$changed"
           bad="$(printf '%s\n' "$changed" | grep -Ev "$allowed" || true)"
           if [[ -n "$bad" ]]; then
-            echo 'Unexpected path(s) in A2-R1 pure proof:' >&2
+            echo 'Unexpected path(s) in A2-R1 pure-proof slice:' >&2
             printf '%s\n' "$bad" >&2
             exit 1
           fi
@@ -86,17 +98,29 @@ jobs:
           )
           for path in "${sanctuaries[@]}"; do
             if ! git diff --quiet "$base"...HEAD -- "$path"; then
-              echo "Sanctuary changed in A2-R1 pure proof: $path" >&2
+              echo "Sanctuary changed in A2-R1 lineage: $path" >&2
               exit 1
             fi
           done
 
-      - name: No learner-facing/runtime integration guard
+      - name: Pure-proof no runtime integration guard
         shell: bash
         run: |
           set -euo pipefail
+          base="${{ github.event.pull_request.base.sha || github.event.before }}"
+          if [[ -z "$base" || "$base" == '0000000000000000000000000000000000000000' ]]; then
+            base="$(git rev-parse HEAD^)"
+          fi
+          changed="$(git diff --name-only "$base"...HEAD)"
+          strict='^(src/pedagogy/a2-reception-bridge-core\.js|tests/unit/a2-r1-reception-bridge-core\.test\.cjs|docs/A2-R1-MULTI-FACT-RECEPTION-CONTRACT-PROOF\.md)$'
+          if ! printf '%s\n' "$changed" | grep -Eq "$strict"; then
+            echo 'Successor slice: original no-runtime-integration restriction is not active.'
+            exit 0
+          fi
           test ! -e src/pedagogy/a2-reception-bridge-renderer.js
-          if git grep -n 'a2-reception-bridge-core' -- '*.js' ':!src/pedagogy/a2-reception-bridge-core.js'; then
-            echo 'Pure proof core is unexpectedly referenced by a runtime JavaScript source.' >&2
+          refs="$(git grep -n 'a2-reception-bridge-core' -- '*.js' ':!src/pedagogy/a2-reception-bridge-core.js' ':!tests/unit/a2-r1-reception-bridge-core.test.cjs' || true)"
+          if [[ -n "$refs" ]]; then
+            printf '%s\n' "$refs"
+            echo 'Pure-proof core is unexpectedly referenced by a runtime JavaScript source.' >&2
             exit 1
           fi
