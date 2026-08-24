@@ -205,14 +205,6 @@ For the canonical `doctor-appointment` pilot, the three distinct fact IDs are ex
 
 ```text
 jai-mal-ventre
-Depuis source item: depuis-hier
-rendez-vous-medecin
-```
-
-Canonical IDs remain:
-
-```text
-jai-mal-ventre
 depuis-hier
 rendez-vous-medecin
 ```
