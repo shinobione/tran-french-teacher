@@ -19,6 +19,8 @@ P3b source-observation merge     5a658f8ac288e5d5cd091dc0a16fa3683f6064fe
 P3b docs closeout merge          5c643814a4796eb30cc96b1c31cf5b84ea3f5844
 P3b final alignment merge        b72d9c2cd84783c03ae73b627773b896d2378702
 P3c durability audit merge       8296b2ffdfae07dc8e9b9d84b12e2c0ba279e8e1
+P3c docs closeout merge          83cf5ed5f859f3f07e6b5037a94794bf0cdb3be3
+P4 candidate                     PR #245 · docs/p4-a1-readiness-audit
 public runtime metadata          v2.5.0 · Build 38
 pedagogy baseline                v2.3.0 · Build 34
 curriculum                       52 lessons / 313 items
@@ -36,11 +38,11 @@ Build40 P3                       CLOSED / ACCEPTED
 P3a                              CLOSED / ACCEPTED PURE CONTRACT PROOF
 P3b                              CLOSED / ACCEPTED EPHEMERAL SOURCE-OBSERVATION PROOF
 P3c                              CLOSED / ACCEPTED DURABILITY DECISION — NO DURABILITY YET
-P4                               NEXT / NOT STARTED
+P4                               ACTIVE CANDIDATE / FRESH A1 READINESS AUDIT
 Build42.3                        NOT AUTHORIZED
 productive F16 Transfer          NOT AUTHORIZED
 Build43                          NOT AUTHORIZED
-A2                               NOT AUTHORIZED
+A2 learner-facing implementation NOT AUTHORIZED
 ```
 
 Historical learner continuity remains LOCKED:
@@ -50,6 +52,8 @@ Historical learner continuity remains LOCKED:
 l8 progress = 4
 40 known historical items
 ```
+
+This continuity is not proof of A1 completion or learner A2 readiness.
 
 ## Permanent safety boundaries
 
@@ -61,6 +65,8 @@ l8 progress = 4
 - no durable store/schema merely to make intelligence look smarter;
 - preserve 52 lesson IDs / 313 item semantics;
 - Build27 App Shell, Premium V5.10, Build37 Foundations, Build38 Transfer, Build39 LI3, Build41 recent-past, Build42.2 F16, accepted P3a contract and accepted P3b ephemeral observation runtime remain protected;
+- productive F16 Transfer remains NOT AUTHORIZED;
+- Build43 and A2 learner-facing implementation remain NOT AUTHORIZED;
 - `app.js`, `voice-ios.js`, `free-voice.js`, `assets/LOGO.png`, `assets/Favicon.png`, Build30 runtime bridge/contracts remain sanctuaries unless explicitly justified.
 
 # Milestone summary
@@ -107,7 +113,7 @@ P3c durability decision if justified
 P4 fresh A1 readiness audit
 ```
 
-P1 completed through Build41. P2 completed through Build42. P3, P3a, P3b and P3c are accepted/closed. **P4 is next.**
+P1 completed through Build41. P2 completed through Build42. P3, P3a, P3b and P3c are accepted/closed. **P4 is the active candidate in PR #245.**
 
 ## Build41 — A1 Productive Consolidation — CLOSED
 
@@ -118,6 +124,19 @@ Je travaille.          → Je viens de travailler.
 Je mange.              → Je viens de manger.
 Je rentre à la maison. → Je viens de rentrer à la maison.
 ```
+
+Build41.1 audited the seven prioritized candidate areas. Exactly one passed the strict deterministic/vocabulary-safe contract. The other accepted classifications remain binding from the same source facts:
+
+```text
+questions              REJECT — TOO SEMANTIC / AMBIGUOUS
+articles/quantities/F16 DEFER — NEEDS BETTER SOURCES
+possessives            ALREADY COVERED / DUPLICATE
+adjective agreement    DEFER — NEEDS BETTER SOURCES
+short narration        REJECT — TOO SEMANTIC / AMBIGUOUS
+opinion clauses        REJECT — TOO SEMANTIC / AMBIGUOUS
+```
+
+Build41.4 remains NOT AUTHORIZED absent new source evidence that changes those premises.
 
 ## Build42 — Foundations debt resolution — CLOSED
 
@@ -166,7 +185,7 @@ Evidence v2 direct source-event write REJECTED under current shadow contract
 new durable store now                 REJECTED
 mastery claim                         NOT AUTHORIZED
 Build43 implementation number         NOT AUTHORIZED
-A2                                    NOT AUTHORIZED
+A2 learner-facing implementation      NOT AUTHORIZED
 ```
 
 Current Foundations and Transfer UIs compute real source-time deterministic observations. They are trustworthy only as **what happened in that deterministic check**. They are not proof of free production, novel sentence construction, durable mastery, pronunciation quality or CEFR attainment.
@@ -366,7 +385,7 @@ Recovery     7 stores / backup v3
 Evidence v2  derived shadow only
 Build39.2    concept-review / foundation-capsule / transfer-construction unavailable
 Build43      NOT AUTHORIZED
-A2           NOT AUTHORIZED
+A2 learner-facing implementation NOT AUTHORIZED
 ```
 
 # P3c — durability decision audit — CLOSED / ACCEPTED
@@ -387,6 +406,10 @@ PR #243 scope                exactly 3 Markdown files
 PR #243 review               no published review/thread blockers at control time
 PR #243 exact-head CI        only five inherited baseline failures after unchanged Build26.4 Chrome timeout rerun
 Build26.4 rerun              SUCCESS
+PR #244 accepted exact head  1f78a69ec9c66b8372dc35a0536b59b569491acc
+PR #244 squash merge         83cf5ed5f859f3f07e6b5037a94794bf0cdb3be3
+PR #244 scope                exactly 2 Markdown files
+PR #244 exact-head CI        only five inherited baseline failures after unchanged Build37.3 and V5.9C Chrome reruns
 ```
 
 Accepted findings:
@@ -416,23 +439,79 @@ aggregation / independence inference    NOT AUTHORIZED
 mastery / CEFR / score / confidence     NOT AUTHORIZED
 Build39.2 availability promotion        NOT AUTHORIZED
 Build43                                 NOT AUTHORIZED
-A2                                      NOT AUTHORIZED
+A2 learner-facing implementation       NOT AUTHORIZED
 ```
 
 A future durability proposal must start with a concrete consumer/use-case and then define attempt/session identity, independence rules, Foundation concept attribution, recency/spacing, dedupe/retention, storage ownership and Recovery migration proof. P3c does not authorize that implementation work.
 
 Recovery remains **7 durable stores / backup v3**. Evidence v2 remains **derived shadow only**. The accepted P3a contract and P3b ephemeral runtime remain unchanged. P3c changed documentation only.
 
-# NEXT — P4 fresh A1 readiness audit
+# P4 — fresh A1 readiness audit — ACTIVE CANDIDATE
+
+Canonical candidate:
 
 ```text
-P4
-→ reassess A1 from the actual post-P3b/P3c evidence reality
-→ distinguish event-level ephemeral observation from reliable durable evidence
-→ decide whether current A1/productive consolidation is sufficient
-→ reconsider A2 only from the fresh audit
+docs/BUILD-40-P4-A1-READINESS-AUDIT.md
+PR #245 — docs/p4-a1-readiness-audit
 ```
 
-P4 is **NEXT / NOT STARTED** and remains an audit gate. It does not automatically authorize A2, Build43, durable observation storage, Evidence read cutover, direct Evidence writes or a new store.
+P4 re-runs the Build40 gate from the actual accepted post-Build41/Build42/P3c reality.
 
-Not authorized: Build42.3, productive F16 Transfer, durable Foundation/Transfer mastery claims, Build43 implementation numbering, A2, Evidence read cutover, direct Evidence event writes, or a new durable store merely to manufacture evidence.
+Candidate findings:
+
+```text
+A1 thematic breadth                    SUFFICIENT FOR CURRENT ROADMAP GATE
+A1 Productive Consolidation            SUFFICIENT / RATIONAL STOP BOUNDARY
+Transfer families                      6 learner-facing deterministic families
+F16 explicit teaching debt             RESOLVED
+rejected/deferred A1 candidates        REMAIN BLOCKED FROM CURRENT SOURCES
+phrase/listening/scenario evidence     RELIABLE AS BEFORE
+Foundation/Transfer event truth        TRUSTWORTHY EPHEMERAL OBSERVATION
+Foundation/Transfer durable evidence   UNAVAILABLE
+cross-session observation durability   NOT JUSTIFIED
+```
+
+P4 does not certify every possible A1 capability. It finds that no additional A1 implementation is automatically justified from the already-audited source set: Build41 exhausted the prioritized deterministic candidates, Build42 resolved the explicit F16 teach-core debt, and P3c bounded the evidence question without persistence-first architecture.
+
+P4 also separates **product roadmap permission** from **learner readiness**. The locked `7 completed / l8=4 / 40 known` continuity is not an A1-completion claim and cannot trigger learner A2 unlock.
+
+Candidate decision:
+
+```text
+A2 scope / entry audit                 AUTHORIZED NEXT only if PR #245 is accepted
+A2 learner-facing implementation       NOT AUTHORIZED
+Build43                                NOT AUTHORIZED
+A2 learner readiness/mastery           NOT CLAIMED
+CEFR A1 certification                  NOT CLAIMED
+```
+
+# NEXT only if P4 is accepted — A2 Entry Scope Audit
+
+The next authorized slice after accepted P4 is **docs/read-only** and remains unnumbered as a Build implementation.
+
+It must:
+
+- identify what is genuinely A2 rather than missing A1 repair;
+- map prerequisites already present in the current 52/313 curriculum;
+- prevent duplication of existing late-A1 content;
+- decide whether a curriculum extension is justified at all;
+- preserve current lesson IDs and item semantics until a later explicit implementation authorization;
+- keep product-roadmap scope separate from learner A2 unlock/readiness.
+
+It does **not** authorize:
+
+```text
+new lessons or lesson renumbering
+reinterpretation of existing 313 items
+learner A2 unlock
+CEFR A1 completion or A2 readiness claim
+P3b observation durability
+Foundation/Transfer LI3 promotion
+Evidence v2 cutover or direct source-event writes
+new durable store
+Build43 implementation numbering
+```
+
+P4 may reopen a rejected/deferred A1 family later only if new real source or field evidence changes that family’s accepted audit premise. No arbitrary numeric progress/time/score threshold is invented.
+
+Not authorized: Build42.3, productive F16 Transfer, durable Foundation/Transfer mastery claims, Build43 implementation numbering, A2 learner-facing implementation, Evidence read cutover, direct Evidence event writes, or a new durable store merely to manufacture evidence.

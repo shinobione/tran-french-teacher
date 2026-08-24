@@ -9,8 +9,9 @@ Last reconciled: 2026-08-24
 - Accepted P3b documentation closeout: PR **#241 — `Docs · close accepted P3b observation proof`**, accepted exact head **`c1591bee16bea91531d930908c7e81dadc27cde1`**, squash merge **`5c643814a4796eb30cc96b1c31cf5b84ea3f5844`**.
 - Accepted P3b final alignment: PR **#242 — `Docs · finalize merge-stable P3b checkpoint`**, accepted exact head **`8bb762b32e836c741a03874bbc899e2744b6bb37`**, squash merge **`b72d9c2cd84783c03ae73b627773b896d2378702`**.
 - Accepted P3c durability decision: PR **#243 — `P3c · decide pedagogical observation durability`**, accepted exact head **`c820f8239e02f02e2ee84cbf715bd83877e45535`**, squash merge **`8296b2ffdfae07dc8e9b9d84b12e2c0ba279e8e1`**.
-- Last verified `main` before publishing this P3c documentation closeout candidate: **`8296b2ffdfae07dc8e9b9d84b12e2c0ba279e8e1`**.
-- Published P3c documentation closeout candidate branch: **`docs/p3c-closeout`**. Its moving head and live PR state are intentionally delegated to GitHub metadata.
+- Accepted P3c documentation closeout: PR **#244 — `Docs · close accepted P3c durability decision`**, accepted exact head **`1f78a69ec9c66b8372dc35a0536b59b569491acc`**, squash merge **`83cf5ed5f859f3f07e6b5037a94794bf0cdb3be3`**.
+- Last verified `main` before publishing this P4 candidate: **`83cf5ed5f859f3f07e6b5037a94794bf0cdb3be3`**.
+- Published P4 candidate: PR **#245 — `P4 · fresh A1 readiness audit`**, branch **`docs/p4-a1-readiness-audit`**. Its moving head and live PR state are intentionally delegated to GitHub metadata.
 - Accepted product state remains Build42.2 product merge **`8b462fae236c00b902a9312fe8e1b103412b8694`**.
 - Build42 closure merge: **`8c2787d203d6089850856652f288f10a4fd53b32`**.
 - Build40 P3 evidence-owner audit PR **#234** squash merge: **`cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac`**.
@@ -23,12 +24,14 @@ Last reconciled: 2026-08-24
 - P3b docs closeout PR **#241** accepted exact head **`c1591bee16bea91531d930908c7e81dadc27cde1`**, squash merge **`5c643814a4796eb30cc96b1c31cf5b84ea3f5844`**.
 - P3b final-alignment PR **#242** accepted exact head **`8bb762b32e836c741a03874bbc899e2744b6bb37`**, squash merge **`b72d9c2cd84783c03ae73b627773b896d2378702`**.
 - P3c PR **#243** accepted exact head **`c820f8239e02f02e2ee84cbf715bd83877e45535`**, squash merge **`8296b2ffdfae07dc8e9b9d84b12e2c0ba279e8e1`**.
+- P3c docs closeout PR **#244** accepted exact head **`1f78a69ec9c66b8372dc35a0536b59b569491acc`**, squash merge **`83cf5ed5f859f3f07e6b5037a94794bf0cdb3be3`**.
 - Public runtime metadata remains **v2.5.0 · Build 38**; pedagogy baseline remains **v2.3.0 · Build 34**.
 - Build40 P3 is **CLOSED / ACCEPTED**.
 - P3a is **CLOSED / ACCEPTED PURE CONTRACT PROOF**.
 - P3b is **CLOSED / ACCEPTED EPHEMERAL SOURCE-OBSERVATION PROOF**.
 - P3c is **CLOSED / ACCEPTED DURABILITY DECISION — NO DURABILITY YET**.
-- **NEXT = P4 — fresh A1 readiness audit.**
+- P4 is **ACTIVE CANDIDATE / FRESH A1 READINESS AUDIT** in PR **#245**.
+- Candidate next only if #245 is accepted: **docs/read-only A2 Entry Scope Audit**.
 
 ## Accepted product state
 
@@ -53,6 +56,8 @@ l8 progress = 4
 40 known historical items
 ```
 
+This continuity is not proof of A1 completion or learner A2 readiness.
+
 ## Milestone state
 
 ```text
@@ -65,11 +70,11 @@ Build40 P3 CLOSED / ACCEPTED
 P3a        CLOSED / ACCEPTED PURE CONTRACT PROOF
 P3b        CLOSED / ACCEPTED EPHEMERAL SOURCE-OBSERVATION PROOF
 P3c        CLOSED / ACCEPTED DURABILITY DECISION — NO DURABILITY YET
-P4         NEXT / NOT STARTED
+P4         ACTIVE CANDIDATE — PR #245
 Build42.3  NOT AUTHORIZED
 F16 Transfer NOT AUTHORIZED
 Build43    NOT AUTHORIZED
-A2         NOT AUTHORIZED
+A2 learner-facing implementation NOT AUTHORIZED
 ```
 
 ## Build40 P3 accepted decision
@@ -90,7 +95,7 @@ Evidence v2 direct source-event write REJECTED under current shadow contract
 new durable store now                 REJECTED
 mastery claim                         NOT AUTHORIZED
 Build43 implementation number         NOT AUTHORIZED
-A2                                    NOT AUTHORIZED
+A2 learner-facing implementation      NOT AUTHORIZED
 ```
 
 Foundations and learner-facing Transfer compute honest deterministic success/miss observations with stable concept/family provenance. They are trustworthy only as the result of that deterministic check; they are not free-production, novel-construction, long-term mastery or CEFR evidence.
@@ -314,6 +319,10 @@ PR #243 scope                exactly 3 Markdown files
 PR #243 review               no published review/thread blockers at control time
 PR #243 exact-head CI        only five inherited baseline failures after unchanged Build26.4 Chrome rerun
 Build26.4 rerun              SUCCESS
+PR #244 accepted exact head  1f78a69ec9c66b8372dc35a0536b59b569491acc
+PR #244 squash merge         83cf5ed5f859f3f07e6b5037a94794bf0cdb3be3
+PR #244 scope                exactly 2 Markdown files
+PR #244 exact-head CI        only five inherited baseline failures after unchanged Build37.3 + V5.9C Chrome reruns
 ```
 
 Accepted verdict:
@@ -330,7 +339,7 @@ aggregation / independence inference    NOT AUTHORIZED
 mastery / CEFR / score / confidence     NOT AUTHORIZED
 Build39.2 availability promotion        NOT AUTHORIZED
 Build43                                 NOT AUTHORIZED
-A2                                      NOT AUTHORIZED
+A2 learner-facing implementation       NOT AUTHORIZED
 ```
 
 Why durability remains unjustified:
@@ -347,11 +356,62 @@ Before durability can be reopened, a future explicit design must first define th
 
 Recovery remains **7 stores / backup v3**. Evidence v2 remains **derived shadow only**. P3a/P3b runtime semantics remain unchanged. No runtime, storage, curriculum, learner-data or public metadata changed in P3c.
 
-## NEXT — P4 fresh A1 readiness audit
+## P4 — ACTIVE CANDIDATE / FRESH A1 READINESS AUDIT
 
-P4 must reassess A1 from the actual post-P3b/P3c evidence reality. It must distinguish honest ephemeral event observations from reliable durable evidence and reconsider A2 only from that fresh audit.
+Canonical candidate audit:
 
-P4 is **NEXT / NOT STARTED**. It does not automatically authorize A2, Build43, durable observation storage, Evidence read cutover or a new store.
+```text
+docs/BUILD-40-P4-A1-READINESS-AUDIT.md
+PR #245 — docs/p4-a1-readiness-audit
+```
+
+Candidate findings:
+
+```text
+A1 thematic breadth                    SUFFICIENT FOR CURRENT ROADMAP GATE
+A1 Productive Consolidation            SUFFICIENT / RATIONAL STOP BOUNDARY
+Transfer families                      6 learner-facing deterministic families
+F16 explicit teaching debt             RESOLVED
+rejected/deferred A1 candidates        REMAIN BLOCKED FROM CURRENT SOURCES
+phrase/listening/scenario evidence     RELIABLE AS BEFORE
+Foundation/Transfer event truth        TRUSTWORTHY EPHEMERAL OBSERVATION
+Foundation/Transfer durable evidence   UNAVAILABLE
+cross-session observation durability   NOT JUSTIFIED
+```
+
+P4 deliberately separates product-roadmap permission from learner readiness. The locked `7 completed / l8=4 / 40 known` continuity does not prove A1 completion and does not authorize an A2 learner unlock.
+
+Candidate decision:
+
+```text
+A2 scope / entry audit                 AUTHORIZED NEXT only if PR #245 is accepted
+A2 learner-facing implementation       NOT AUTHORIZED
+Build43                                NOT AUTHORIZED
+A2 learner readiness/mastery           NOT CLAIMED
+CEFR A1 certification                  NOT CLAIMED
+```
+
+P4 does not say every possible A1 refinement is complete. It says no further A1 implementation is automatically justified from the source set already audited by Build41/42, and that forcing more mechanical transforms would be less honest than moving to a bounded A2 scope audit.
+
+## NEXT only after P4 acceptance — A2 Entry Scope Audit
+
+If PR #245 is controlled and accepted, the next authorized slice is a **docs/read-only A2 Entry Scope Audit**.
+
+It must identify what is genuinely A2 rather than missing A1 repair, avoid duplicating late-A1 content, and decide whether a curriculum extension is justified at all.
+
+It does **not** authorize:
+
+```text
+new lessons or lesson renumbering
+reinterpretation of the existing 313 items
+learner A2 unlock
+CEFR A1 completion or A2 readiness claim
+P3b durability
+Foundation/Transfer LI3 promotion
+Evidence v2 cutover
+new durable store
+Build43 implementation numbering
+```
 
 ## Locked boundaries
 
@@ -364,7 +424,7 @@ P4 is **NEXT / NOT STARTED**. It does not automatically authorize A2, Build43, d
 - preserve 52 lesson IDs / 313 item semantics;
 - productive F16 Transfer remains NOT AUTHORIZED;
 - durable Foundation/Transfer mastery remains NOT CLAIMED;
-- Build43 and A2 remain NOT AUTHORIZED.
+- Build43 and A2 learner-facing implementation remain NOT AUTHORIZED.
 
 ## CI baseline
 
@@ -377,3 +437,17 @@ Known persistent inherited failures:
 5. `Build 28 Data recovery smoke`
 
 Any other failure is NEW until classified.
+
+## Exact next control action
+
+```text
+Control PR #245 on its exact published head
+→ verify main/base/head and exact 3-file docs-only scope
+→ inspect CI/reviews/threads
+→ classify any non-baseline red from exact logs
+→ rerun only proven Chrome/harness flakes unchanged
+→ fix only legitimate review blockers inside P4 scope
+→ merge only if exact final head is clean apart from the five inherited failures
+→ verify main after merge
+→ do NOT begin the A2 Entry Scope Audit until a later explicit user command starts it
+```
