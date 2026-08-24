@@ -40,17 +40,22 @@ prerequisite lesson     l45 — Santé & rendez-vous médical
 fact/source item IDs    jai-mal-ventre / depuis-hier / rendez-vous-medecin
 ```
 
-Codex review on #249 established the normative fact-identity rule:
+The accepted fact-identity boundary is:
 
 ```text
 question.factId mandatory
 factId unique across activity
-factId must belong to accepted prerequisite/source set
+factId must belong to accepted prerequisite/source authority
 first proof evidenceItems MUST equal [factId] exactly
 duplicate normalized prompts rejected
 ```
 
-This proof implements exactly that boundary and nothing learner-facing beyond it.
+The PR #251 Codex review tightened two additional correctness requirements that are now part of the candidate contract:
+
+```text
+external authority MUST bind the accepted dialogueId and prerequisiteLessonId, not only fact IDs
+duplicate displayed option pairs MUST be rejected so two indistinguishable choices cannot yield different outcomes
+```
 
 ---
 
@@ -82,7 +87,21 @@ normalizeActivity(activity, authority)
 evaluateQuestion(plan, questionId, choiceIndex)
 ```
 
-The `authority.allowedFactIds` input is deliberately separate from the candidate activity. An activity therefore cannot self-authorize an arbitrary fact ID merely by placing it in its own prerequisite list.
+The external authority shape is deliberately separate from the candidate activity:
+
+```text
+{
+  dialogueId,
+  prerequisiteLessonId,
+  allowedFactIds
+}
+```
+
+A candidate activity therefore cannot self-authorize:
+
+- an arbitrary fact ID by inserting it in its own prerequisite list;
+- accepted medical fact IDs while claiming an unrelated dialogue;
+- accepted medical fact IDs while claiming an unrelated prerequisite lesson.
 
 ---
 
@@ -115,23 +134,16 @@ A valid normalized plan has this conceptual shape:
 }
 ```
 
-Question count:
+Bounds:
 
 ```text
-minimum 2
-maximum 4
-```
-
-Option count per question:
-
-```text
-minimum 2
-maximum 4
+questions  2–4
+options    2–4 per question
 ```
 
 ---
 
-## 5. Multi-fact invariants
+## 5. Multi-fact and source-authority invariants
 
 The pure owner rejects:
 
@@ -140,9 +152,12 @@ duplicate question IDs
 duplicate factId values
 duplicate normalized French prompts
 duplicate normalized Vietnamese prompts
+duplicate normalized displayed (vi, fr) option pairs
 fact IDs outside explicit contract authority
 fact IDs outside the activity prerequisite source set
 prerequisite IDs outside explicit contract authority
+activity dialogueId different from authoritative dialogueId
+activity prerequisiteLessonId different from authoritative prerequisiteLessonId
 missing / multiple evidence IDs for the first proof
 evidenceItems not exactly equal to [factId]
 invalid answer indexes
@@ -151,11 +166,17 @@ invalid stable IDs
 fewer than 2 or more than 4 questions
 ```
 
-This is the critical distinction:
+Critical distinction:
 
 ```text
 3 differently named questions → NOT ENOUGH
 3 distinct authorized factId values → REQUIRED
+```
+
+And source identity is now equally explicit:
+
+```text
+accepted fact IDs + wrong dialogue/lesson → REJECTED
 ```
 
 ---
@@ -173,6 +194,14 @@ factId: depuis-hier
 
 factId: rendez-vous-medecin
 → requested next action
+```
+
+External authority binds that fixture to:
+
+```text
+dialogueId            doctor-appointment
+prerequisiteLessonId  l45
+allowedFactIds        jai-mal-ventre / depuis-hier / rendez-vous-medecin
 ```
 
 No new vocabulary or grammar is introduced.
@@ -206,7 +235,7 @@ unseen transfer
 independent durable evidence
 ```
 
-A correct question answer means only that the selected option matched the canonical answer for that deterministic question.
+A correct question answer means only that the selected option matched the canonical deterministic answer.
 
 ---
 
@@ -214,7 +243,7 @@ A correct question answer means only that the selected option matched the canoni
 
 `normalizeActivity(...)` builds detached objects and deeply freezes the normalized output.
 
-The proof explicitly checks that mutating the original fixture after normalization does not mutate the returned plan.
+The proof checks that mutating the original fixture after normalization does not mutate the returned plan.
 
 The core has no ownership of:
 
@@ -247,22 +276,23 @@ tests/unit/a2-r1-reception-bridge-core.test.cjs
 
 It covers:
 
-1. accepts the valid three-fact doctor fixture;
-2. preserves source input and returns detached/deeply frozen output;
-3. evaluates deterministic `success` and `miss` only;
-4. rejects fewer than 2 / more than 4 questions;
-5. rejects duplicate question IDs;
-6. rejects duplicate fact IDs;
-7. rejects repeated/mismatched fact evidence targets;
-8. rejects duplicate normalized FR/VI prompts;
-9. rejects invalid answer indexes;
-10. rejects invalid/empty options;
-11. rejects empty evidence shape;
-12. rejects facts outside contract authority;
-13. rejects prerequisites outside contract authority;
-14. rejects missing contract authority;
-15. rejects unknown question / invalid choice / invalid plan evaluation;
-16. proves a representative existing single-question source-field object remains unchanged.
+1. valid three-fact doctor fixture;
+2. detached/deeply frozen output and source immutability;
+3. deterministic `success` / `miss` evaluation only;
+4. 2–4 question bounds;
+5. duplicate question IDs;
+6. duplicate fact IDs;
+7. mismatched fact/evidence targets;
+8. duplicate normalized FR/VI prompts;
+9. duplicate displayed option pairs;
+10. invalid answer indexes/options;
+11. fact/prerequisite IDs outside authority;
+12. forged activity dialogue identity;
+13. forged activity prerequisite lesson identity;
+14. mismatched external dialogue/lesson authority;
+15. missing authority;
+16. unknown question / invalid choice / invalid plan evaluation;
+17. representative existing single-question source fields remain unchanged.
 
 ---
 
@@ -331,7 +361,7 @@ Recovery remains **7 durable stores / backup v3**. Evidence v2 remains **derived
 
 If this candidate is accepted, the only proven statement is:
 
-> French Trân’quille has a pure deterministic contract capable of validating a bounded A2-R1 multi-fact reception activity with distinct authorized fact identities.
+> French Trân’quille has a pure deterministic contract capable of validating a bounded A2-R1 multi-fact reception activity with distinct authorized fact identities bound to an authoritative source dialogue and prerequisite lesson.
 
 It would **not** mean that any learner can see or use A2-R1 yet.
 
@@ -373,9 +403,10 @@ CEFR certification
 ```text
 pure A2-R1 contract owner            IMPLEMENTED AS CANDIDATE
 distinct fact identity               ENFORCED
+source dialogue/lesson identity      EXTERNAL / ENFORCED
 2–4 deterministic questions          ENFORCED
+duplicate displayed option pairs     REJECTED
 canonical doctor fixture             COVERED
-source/prerequisite authority        EXTERNAL / ENFORCED
 evidenceItems == [factId]            ENFORCED FOR FIRST PROOF
 detached/deeply frozen output        ENFORCED
 deterministic success|miss only      ENFORCED
