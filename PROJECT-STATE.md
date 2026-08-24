@@ -7,7 +7,9 @@ Last reconciled: 2026-08-24
 - Repository: `shinobione/tran-french-teacher`.
 - Accepted P3b product merge: **`5a658f8ac288e5d5cd091dc0a16fa3683f6064fe`** from PR **#240**.
 - Accepted P3b documentation closeout: PR **#241 — `Docs · close accepted P3b observation proof`**, accepted exact head **`c1591bee16bea91531d930908c7e81dadc27cde1`**, squash merge **`5c643814a4796eb30cc96b1c31cf5b84ea3f5844`**.
-- This checkpoint intentionally does not claim a self-updating `main` SHA or embed an active final-alignment candidate. Live GitHub remains authoritative for the current branch tip and any temporary control PR.
+- Last verified `main` before publishing this final-alignment candidate: **`5c643814a4796eb30cc96b1c31cf5b84ea3f5844`**.
+- Published control candidate: PR **#242 — `Docs · finalize merge-stable P3b checkpoint`**, branch **`docs/p3b-final-alignment`**.
+- The moving #242 candidate head and its live open/merged state are intentionally delegated to GitHub metadata. These lines are a publication checkpoint, not a claim that #242 remains active after a later merge.
 - Accepted product state remains Build42.2 product merge **`8b462fae236c00b902a9312fe8e1b103412b8694`**.
 - Build42 closure merge: **`8c2787d203d6089850856652f288f10a4fd53b32`**.
 - Build40 P3 evidence-owner audit PR **#234** squash merge: **`cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac`**.
