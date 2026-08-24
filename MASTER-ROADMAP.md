@@ -18,7 +18,7 @@ P3a final alignment merge        7bb9d4ab52d6402121d75c63a8c1042030c1c856
 P3b source-observation merge     5a658f8ac288e5d5cd091dc0a16fa3683f6064fe
 P3b docs closeout merge          5c643814a4796eb30cc96b1c31cf5b84ea3f5844
 P3b final alignment merge        b72d9c2cd84783c03ae73b627773b896d2378702
-P3c audit candidate              PR #243 · docs/p3c-durability-decision-audit
+P3c durability audit merge       8296b2ffdfae07dc8e9b9d84b12e2c0ba279e8e1
 public runtime metadata          v2.5.0 · Build 38
 pedagogy baseline                v2.3.0 · Build 34
 curriculum                       52 lessons / 313 items
@@ -35,8 +35,8 @@ Build42                          CLOSED / SUCCESSFUL FOUNDATIONS DEBT RESOLUTION
 Build40 P3                       CLOSED / ACCEPTED
 P3a                              CLOSED / ACCEPTED PURE CONTRACT PROOF
 P3b                              CLOSED / ACCEPTED EPHEMERAL SOURCE-OBSERVATION PROOF
-P3c                              ACTIVE CANDIDATE / DURABILITY DECISION AUDIT
-P4                               NOT STARTED — blocked on P3c acceptance
+P3c                              CLOSED / ACCEPTED DURABILITY DECISION — NO DURABILITY YET
+P4                               NEXT / NOT STARTED
 Build42.3                        NOT AUTHORIZED
 productive F16 Transfer          NOT AUTHORIZED
 Build43                          NOT AUTHORIZED
@@ -91,7 +91,7 @@ foundation-capsule
 transfer-construction
 ```
 
-P3b wires honest source-time Foundation/Transfer observations into a bounded **ephemeral-only** collector, but that does not promote them into Build39.2 durable evidence. P3c candidate #243 explicitly keeps those three action families unavailable because no certified cross-session independence/aggregation contract exists and no durable owner is currently justified.
+P3b wires honest source-time Foundation/Transfer observations into a bounded **ephemeral-only** collector, but that does not promote them into Build39.2 durable evidence. The accepted P3c durability decision keeps those three action families unavailable because no certified cross-session independence/aggregation contract exists and no durable owner is currently justified.
 
 ## Build40 — A1 Consolidation Audit — CLOSED
 
@@ -107,7 +107,7 @@ P3c durability decision if justified
 P4 fresh A1 readiness audit
 ```
 
-P1 completed through Build41. P2 completed through Build42. P3, P3a and P3b are accepted/closed. **P3c is the active audit candidate in PR #243. P4 remains blocked until P3c acceptance.**
+P1 completed through Build41. P2 completed through Build42. P3, P3a, P3b and P3c are accepted/closed. **P4 is next.**
 
 ## Build41 — A1 Productive Consolidation — CLOSED
 
@@ -369,23 +369,32 @@ Build43      NOT AUTHORIZED
 A2           NOT AUTHORIZED
 ```
 
-# P3c — durability decision audit — ACTIVE CANDIDATE
+# P3c — durability decision audit — CLOSED / ACCEPTED
 
-Canonical candidate audit:
+Canonical audit:
 
 ```text
 docs/BUILD-40-P3C-DURABILITY-DECISION-AUDIT.md
-PR #243 — docs/p3c-durability-decision-audit
 ```
 
-P3c inspects the **actual accepted P3b runtime**, not the pre-P3b design assumption.
+Acceptance chain:
 
-Candidate findings:
+```text
+PR #243 base                 b72d9c2cd84783c03ae73b627773b896d2378702
+PR #243 accepted exact head  c820f8239e02f02e2ee84cbf715bd83877e45535
+PR #243 squash merge         8296b2ffdfae07dc8e9b9d84b12e2c0ba279e8e1
+PR #243 scope                exactly 3 Markdown files
+PR #243 review               no published review/thread blockers at control time
+PR #243 exact-head CI        only five inherited baseline failures after unchanged Build26.4 Chrome timeout rerun
+Build26.4 rerun              SUCCESS
+```
+
+Accepted findings:
 
 - P3b observations are trustworthy as event-level statements of what happened in one deterministic check;
 - Foundation and Transfer enforce one answer per displayed question, but reopening the activity starts a fresh ephemeral session and replays fixed checks/exercises;
 - repeated events are real attempts, but there is no accepted durable session/attempt-group identity or independence rule;
-- timestamps exist, but no recency/spacing threshold is certified and P3c must not invent one;
+- timestamps exist, but no recency/spacing threshold is certified and P3c does not invent one;
 - multi-concept Foundation capsules can target several concept IDs without a per-check concept-coverage map, so equal per-concept credit/debit is not justified;
 - Build39.2 already distinguishes evidence count from independent evidence count;
 - Learning Memory and Error Intelligence remain curriculum-item-centric and cannot own concept/family events honestly;
@@ -393,7 +402,7 @@ Candidate findings:
 - direct P3b writes into Evidence v2 would change it into a mixed source/projection store and therefore require an explicit role redesign/cutover;
 - a dedicated eighth store would require Recovery/backup migration and is not justified before a certified consumer/use-case and independence semantics exist.
 
-Candidate verdict:
+Accepted verdict:
 
 ```text
 raw P3b event truth                    TRUSTWORTHY AT EVENT LEVEL
@@ -412,18 +421,18 @@ A2                                      NOT AUTHORIZED
 
 A future durability proposal must start with a concrete consumer/use-case and then define attempt/session identity, independence rules, Foundation concept attribution, recency/spacing, dedupe/retention, storage ownership and Recovery migration proof. P3c does not authorize that implementation work.
 
-Recovery remains **7 durable stores / backup v3**. Evidence v2 remains **derived shadow only**. The accepted P3a contract and P3b ephemeral runtime remain unchanged.
+Recovery remains **7 durable stores / backup v3**. Evidence v2 remains **derived shadow only**. The accepted P3a contract and P3b ephemeral runtime remain unchanged. P3c changed documentation only.
 
-# NEXT only if P3c is accepted — P4 fresh A1 readiness audit
+# NEXT — P4 fresh A1 readiness audit
 
 ```text
 P4
-→ reassess A1 from the actual post-P3b evidence reality
+→ reassess A1 from the actual post-P3b/P3c evidence reality
 → distinguish event-level ephemeral observation from reliable durable evidence
 → decide whether current A1/productive consolidation is sufficient
 → reconsider A2 only from the fresh audit
 ```
 
-P4 is an audit gate. It does not automatically authorize A2, Build43, durable observation storage, Evidence read cutover, direct Evidence writes or a new store.
+P4 is **NEXT / NOT STARTED** and remains an audit gate. It does not automatically authorize A2, Build43, durable observation storage, Evidence read cutover, direct Evidence writes or a new store.
 
 Not authorized: Build42.3, productive F16 Transfer, durable Foundation/Transfer mastery claims, Build43 implementation numbering, A2, Evidence read cutover, direct Evidence event writes, or a new durable store merely to manufacture evidence.
