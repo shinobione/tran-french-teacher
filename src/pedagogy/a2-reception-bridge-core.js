@@ -52,6 +52,14 @@
       .trim();
   }
 
+  function normalizeDisplayedOptionText(value, locale) {
+    return value
+      .normalize('NFKC')
+      .toLocaleLowerCase(locale)
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
   function uniqueStableIds(values, field, { min = 1, max = 32 } = {}) {
     if (!Array.isArray(values) || values.length < min || values.length > max) {
       fail('invalid-id-list', `${field} must contain ${min}-${max} ids`);
@@ -61,16 +69,22 @@
     return ids;
   }
 
-  function normalizeAllowedFactIds(contract) {
-    if (!contract || typeof contract !== 'object') fail('missing-authority', 'contract authority is required');
-    return uniqueStableIds(contract.allowedFactIds, 'contract.allowedFactIds', { min: 2, max: 32 });
+  function normalizeAuthority(contract) {
+    if (!contract || typeof contract !== 'object' || Array.isArray(contract)) {
+      fail('missing-authority', 'contract authority is required');
+    }
+    return {
+      dialogueId: stableId(contract.dialogueId, 'contract.dialogueId'),
+      prerequisiteLessonId: stableId(contract.prerequisiteLessonId, 'contract.prerequisiteLessonId'),
+      allowedFactIds: uniqueStableIds(contract.allowedFactIds, 'contract.allowedFactIds', { min: 2, max: 32 })
+    };
   }
 
   function normalizeOptions(options, questionIndex) {
     if (!Array.isArray(options) || options.length < MIN_OPTIONS || options.length > MAX_OPTIONS) {
       fail('invalid-options', `questions[${questionIndex}].options must contain ${MIN_OPTIONS}-${MAX_OPTIONS} options`);
     }
-    return options.map((option, optionIndex) => {
+    const normalized = options.map((option, optionIndex) => {
       if (!option || typeof option !== 'object' || Array.isArray(option)) {
         fail('invalid-option', `questions[${questionIndex}].options[${optionIndex}] must be an object`);
       }
@@ -79,6 +93,17 @@
         fr: boundedText(option.fr, `questions[${questionIndex}].options[${optionIndex}].fr`, 160)
       };
     });
+
+    const optionKeys = new Set();
+    normalized.forEach(option => {
+      const key = `${normalizeDisplayedOptionText(option.vi, 'vi-VN')}\u0000${normalizeDisplayedOptionText(option.fr, 'fr-FR')}`;
+      if (optionKeys.has(key)) {
+        fail('duplicate-option', `questions[${questionIndex}].options must be visually distinguishable`);
+      }
+      optionKeys.add(key);
+    });
+
+    return normalized;
   }
 
   function deepFreeze(value) {
@@ -92,8 +117,8 @@
       fail('invalid-activity', 'activity must be an object');
     }
 
-    const allowedFactIds = normalizeAllowedFactIds(contract);
-    const allowedFacts = new Set(allowedFactIds);
+    const authority = normalizeAuthority(contract);
+    const allowedFacts = new Set(authority.allowedFactIds);
     const id = stableId(input.id, 'activity.id');
     const lane = boundedText(input.lane, 'activity.lane', 16);
     if (lane !== LANE) fail('invalid-lane', `activity.lane must be ${LANE}`);
@@ -106,6 +131,12 @@
     if (kind !== 'listening-dialogue') fail('invalid-source-kind', 'activity.source.kind must be listening-dialogue');
     const dialogueId = stableId(source.dialogueId, 'activity.source.dialogueId');
     const prerequisiteLessonId = stableId(source.prerequisiteLessonId, 'activity.source.prerequisiteLessonId');
+    if (dialogueId !== authority.dialogueId) {
+      fail('source-dialogue-mismatch', `activity.source.dialogueId must equal authoritative dialogue ${authority.dialogueId}`);
+    }
+    if (prerequisiteLessonId !== authority.prerequisiteLessonId) {
+      fail('source-lesson-mismatch', `activity.source.prerequisiteLessonId must equal authoritative lesson ${authority.prerequisiteLessonId}`);
+    }
     const prerequisiteItemIds = uniqueStableIds(source.prerequisiteItemIds, 'activity.source.prerequisiteItemIds', { min: 2, max: 32 });
     prerequisiteItemIds.forEach(factId => {
       if (!allowedFacts.has(factId)) fail('unauthorized-prerequisite', `prerequisite item ${factId} is outside contract authority`);
