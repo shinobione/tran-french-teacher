@@ -22,7 +22,7 @@ P4 readiness audit merge                          5f8fffd6b13ed30750446d2ffc02b5
 P4 final alignment                                e1bfcea1e2e3a51c8a0efb97aa8791bcde31117d
 A2 Entry Scope Audit merge                        c1bded1a08113753c719adeed2cfa05e6aa165af
 A2 Entry Scope Audit accepted head                898798f15cfeb2d046913c7110ee137c96b4c7eb
-A2 Entry Scope closeout branch                    docs/a2-entry-closeout
+A2 Entry Scope closeout candidate                 PR #248 · docs/a2-entry-closeout
 
 public runtime metadata                           v2.5.0 · Build 38
 pedagogy baseline                                 v2.3.0 · Build 34
@@ -289,6 +289,6 @@ new durable store
 
 # Current stop boundary
 
-The documentation closeout candidate on branch `docs/a2-entry-closeout` is the only active work. Its exact-head CI/review arbitration and merge belong to the next control session.
+PR #248 on branch `docs/a2-entry-closeout` is the only active work. Its exact-head CI/review arbitration and merge belong to the next control session.
 
-The A2 Bridge Design Audit is **NOT STARTED** until a later explicit user command after this closeout is accepted.
+The A2 Bridge Design Audit is **NOT STARTED** until a later explicit user command after #248 acceptance.
