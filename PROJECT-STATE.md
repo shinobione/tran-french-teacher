@@ -5,15 +5,19 @@ Last reconciled: 2026-08-24
 ## Canonical checkpoint
 
 - Repository: `shinobione/tran-french-teacher`.
-- Current verified `main` before this candidate: **`e1bfcea1e2e3a51c8a0efb97aa8791bcde31117d`**.
-- `main` commit message: **`Docs · finalize accepted P4 checkpoint (#246)`**.
+- Current verified `main` before publishing this closeout candidate: **`c1bded1a08113753c719adeed2cfa05e6aa165af`**.
+- `main` commit message: **`A2 · audit entry scope and bridge boundary (#247)`**.
 - GitHub verification on that commit: **verified=true / reason=valid**.
-- Accepted P4 readiness audit: PR **#245 — `P4 · fresh A1 readiness audit`**, accepted exact head **`dbdd7df1290f32873e04b0ebb85abae62230d918`**, squash merge **`5f8fffd6b13ed30750446d2ffc02b5cb9d8b524f`**.
-- Accepted P4 final alignment: PR **#246 — `Docs · finalize accepted P4 checkpoint`**, accepted exact head **`e626940e8baee4d2f64d7d3cf2ca845297327b75`**, squash merge **`e1bfcea1e2e3a51c8a0efb97aa8791bcde31117d`**.
-- Published A2 Entry Scope Audit candidate: PR **#247 — `A2 · audit entry scope and bridge boundary`**, branch **`docs/a2-entry-scope-audit`**. Its moving head and live PR state are intentionally delegated to GitHub metadata.
-- Canonical candidate audit: `docs/A2-ENTRY-SCOPE-AUDIT.md`.
+- Accepted A2 Entry Scope Audit: PR **#247 — `A2 · audit entry scope and bridge boundary`**.
+- PR #247 accepted exact head: **`898798f15cfeb2d046913c7110ee137c96b4c7eb`**.
+- PR #247 squash merge: **`c1bded1a08113753c719adeed2cfa05e6aa165af`**.
+- PR #247 exact scope: **3 Markdown files only**.
+- PR #247 exact-head CI: **exactly the five standing inherited failures; every other workflow SUCCESS**.
+- PR #247 published reviews/threads/comments at control time: **0 / 0 / 0**.
+- Canonical accepted audit: `docs/A2-ENTRY-SCOPE-AUDIT.md`.
+- Published documentation closeout branch: **`docs/a2-entry-closeout`**. Its moving head and PR metadata are delegated to live GitHub.
 
-Public/runtime facts remain:
+## Accepted product state
 
 ```text
 Public runtime metadata v2.5.0 · Build 38
@@ -36,7 +40,7 @@ l8 progress = 4
 40 known historical items
 ```
 
-This continuity is not proof of A1 completion, A2 readiness or CEFR attainment.
+This continuity is not proof of A1 completion, A2 readiness, mastery or CEFR attainment.
 
 ## Current milestone state
 
@@ -51,8 +55,8 @@ P3a                        CLOSED / ACCEPTED PURE CONTRACT PROOF
 P3b                        CLOSED / ACCEPTED EPHEMERAL SOURCE-OBSERVATION PROOF
 P3c                        CLOSED / ACCEPTED DURABILITY DECISION — NO DURABILITY YET
 P4                         CLOSED / ACCEPTED FRESH A1 READINESS GATE
-A2 Entry Scope Audit       ACTIVE CANDIDATE — PR #247
-A2 Bridge Design Audit     NOT STARTED / candidate next only if #247 accepted
+A2 Entry Scope Audit       CLOSED / ACCEPTED
+A2 Bridge Design Audit     NEXT / NOT STARTED / docs-read-only
 Build42.3                  NOT AUTHORIZED
 productive F16 Transfer    NOT AUTHORIZED
 Build43                    NOT AUTHORIZED
@@ -101,7 +105,7 @@ foundation-check → foundation-concept → foundations
 transfer-check   → transfer-family     → transfer
 ```
 
-P3b runtime remains bounded to an in-memory FIFO of 64 normalized observations with:
+P3b runtime remains a bounded in-memory FIFO of 64 normalized observations with:
 
 ```text
 persistent=false
@@ -138,7 +142,7 @@ nous → spoken on
 present action → recent past with venir de
 ```
 
-Build41 audited the prioritized next-family set. Existing classifications remain binding unless new real source evidence changes their premise:
+Build41 classifications remain binding unless new real source evidence changes their premise:
 
 ```text
 questions              REJECT — TOO SEMANTIC / AMBIGUOUS
@@ -149,7 +153,7 @@ short narration        REJECT — TOO SEMANTIC / AMBIGUOUS
 opinion clauses        REJECT — TOO SEMANTIC / AMBIGUOUS
 ```
 
-Build42 resolved F16 as a Foundation teach-core:
+Build42 F16 teach-core remains:
 
 ```text
 à + le   → au
@@ -168,28 +172,7 @@ F16 mastery             NOT CLAIMED
 
 ## Accepted P4 verdict
 
-Canonical document:
-
-```text
-docs/BUILD-40-P4-A1-READINESS-AUDIT.md
-```
-
-Accepted chain:
-
-```text
-PR #245 accepted head   dbdd7df1290f32873e04b0ebb85abae62230d918
-PR #245 squash merge    5f8fffd6b13ed30750446d2ffc02b5cb9d8b524f
-PR #245 scope           exactly 3 Markdown files
-PR #245 review          no published review/thread/comment blockers
-PR #245 exact-head CI   exactly five inherited baseline failures; all other workflows SUCCESS
-PR #246 accepted head   e626940e8baee4d2f64d7d3cf2ca845297327b75
-PR #246 squash merge    e1bfcea1e2e3a51c8a0efb97aa8791bcde31117d
-PR #246 scope           exactly 2 Markdown files
-PR #246 review          0 reviews / 0 threads / 0 comments
-PR #246 exact-head CI   exactly five inherited baseline failures; all other workflows SUCCESS
-```
-
-Accepted P4 decision:
+Canonical document: `docs/BUILD-40-P4-A1-READINESS-AUDIT.md`.
 
 ```text
 A1 thematic breadth                    SUFFICIENT FOR CURRENT ROADMAP GATE
@@ -197,48 +180,42 @@ A1 Productive Consolidation            SUFFICIENT / RATIONAL STOP BOUNDARY
 F16 explicit teaching debt             RESOLVED
 Foundation/Transfer durable evidence   UNAVAILABLE
 cross-session observation durability   NOT JUSTIFIED
-A2 scope / entry audit                 AUTHORIZED NEXT
+A2 scope / entry audit                 AUTHORIZED
 A2 learner-facing implementation       NOT AUTHORIZED
 Build43                                NOT AUTHORIZED
 A2 learner readiness/mastery           NOT CLAIMED
 CEFR A1 certification                  NOT CLAIMED
 ```
 
-## A2 Entry Scope Audit — ACTIVE CANDIDATE
+## A2 Entry Scope Audit — CLOSED / ACCEPTED
 
-Canonical candidate:
+Canonical document:
 
 ```text
 docs/A2-ENTRY-SCOPE-AUDIT.md
-PR #247 — docs/a2-entry-scope-audit
 ```
 
-The candidate uses the Council of Europe A2 reference as a **scope boundary**, not as a certification engine.
-
-### Candidate overlap finding
-
-Late-A1 stage4 already covers large A2-adjacent thematic territory:
+Accepted chain:
 
 ```text
-L41 clarification / reformulation
-L42 quantities / packaging
-L43 comparison / choosing
-L44 invitations / accept / refuse
-L45 health / medical appointment
-L46 medicine / pharmacy
-L47 work / instructions
-L48 housing problem / repair request
-L49 transport disruption / alternatives
-L50 narration ordering connectors
-L51 simple opinion
-L52 spoken on for shared plans
+PR #247 base             e1bfcea1e2e3a51c8a0efb97aa8791bcde31117d
+PR #247 accepted head    898798f15cfeb2d046913c7110ee137c96b4c7eb
+PR #247 squash merge     c1bded1a08113753c719adeed2cfa05e6aa165af
+PR #247 scope            exactly 3 Markdown files
+PR #247 review           0 reviews / 0 threads / 0 comments
+PR #247 exact-head CI    exactly five inherited baseline failures; all other workflows SUCCESS
 ```
 
-Therefore theme-only “A2” duplication is **NOT JUSTIFIED**.
+Accepted overlap finding:
 
-### Candidate capability-gap finding
+```text
+late-A1 thematic A2 adjacency       STRONG / ALREADY COVERED
+more theme-only A2 lessons          NOT JUSTIFIED
+```
 
-The smallest genuinely new A2 bridge is framed as task demand, not topic count:
+The late-A1 curriculum already covers clarification, quantities, comparison, invitation/refusal, health/pharmacy, work instructions, housing/transport problems, narration ordering, simple opinion and spoken `on`. Earlier lessons already cover the core familiar/routine themes. A2 must therefore add **capability demand**, not merely relabel familiar themes.
+
+Accepted genuinely new A2 Bridge lanes:
 
 ```text
 A2-P1  short-series oral production
@@ -247,47 +224,36 @@ A2-R1  multi-fact short reception
 A2-W1  short functional writing
 ```
 
-Current evidence behind that classification:
+Accepted boundary:
 
 ```text
-Scenario 44/132                     strong context, mostly bounded prompt→answer turns
-Listening 17/18                     contextual, mostly one bounded target per dialogue
-Speaking Loop 52/52                 phrase rehearsal/self-listening, not short-series production
-Dedicated short functional writing  no distinct current owner found
-```
-
-### Candidate decision
-
-```text
-late-A1 thematic A2 adjacency       STRONG / ALREADY COVERED
-more theme-only A2 lessons          NOT JUSTIFIED
 bounded A2 Bridge                   JUSTIFIED IN PRINCIPLE
 full A2 curriculum                  NOT JUSTIFIED NOW
-A2 Bridge Design Audit              candidate NEXT only if #247 accepted
 A2 learner-facing implementation    NOT AUTHORIZED
 Build43                             NOT AUTHORIZED
 learner A2 readiness/mastery        NOT CLAIMED
 CEFR certification                  NOT CLAIMED
+simple mediation                    OPTIONAL FUTURE AUDIT / NOT ENTRY BLOCKER
 ```
 
-No lesson numbers are assigned. No current item semantics change.
+No lesson number or new item is authorized by the accepted audit.
 
-## Candidate next only after #247 acceptance
+## NEXT — A2 Bridge Design Audit
 
-If PR #247 is controlled and accepted, authorize only a **docs/read-only A2 Bridge Design Audit**.
+The next authorized slice is **docs/read-only** and remains unnumbered as a Build implementation.
 
 It must decide:
 
 1. which of A2-P1 / A2-I1 / A2-R1 / A2-W1 is the first concrete slice;
-2. exact existing lesson/item prerequisites;
-3. whether any genuinely new language source is required;
-4. the activity/data owner;
+2. exact current lesson/item prerequisites;
+3. whether genuinely new language source material is required;
+4. activity/data ownership;
 5. deterministic versus semantic evaluation boundary;
 6. assistance/correction semantics;
 7. honest evidence semantics;
-8. route/learner gating;
+8. learner-route gating;
 9. whether any new lesson IDs are needed at all;
-10. acceptance tests and sanctuary checks for any later implementation candidate.
+10. tests/sanctuaries required before any later implementation candidate.
 
 It does **not** authorize:
 
@@ -295,7 +261,7 @@ It does **not** authorize:
 learner-facing A2
 Build43
 new lessons / renumbering
-reinterpretation of the 313 existing items
+reinterpretation of existing 313 items
 learner A2 unlock
 CEFR certification
 P3b durability
@@ -334,14 +300,13 @@ Any other failure is NEW until classified from exact logs.
 ## Exact next control action
 
 ```text
-Control PR #247 on its exact published head
+Control the docs-only A2 Entry Scope closeout candidate on its exact published head
 → verify main/base/head and exact docs-only scope
 → inspect CI/reviews/threads/comments
 → classify every non-baseline red from exact logs
 → rerun only proven Chrome/harness flakes unchanged
-→ fix only legitimate review blockers inside A2 Entry Scope Audit boundaries
+→ fix only legitimate documentation blockers inside closeout scope
 → merge only if exact final head is clean apart from the five inherited failures
 → verify main after merge
-→ create docs-only closeout/alignment only if canonical state is stale
 → do NOT begin the A2 Bridge Design Audit until a later explicit user command starts it
 ```
