@@ -20,7 +20,8 @@ P3b docs closeout merge          5c643814a4796eb30cc96b1c31cf5b84ea3f5844
 P3b final alignment merge        b72d9c2cd84783c03ae73b627773b896d2378702
 P3c durability audit merge       8296b2ffdfae07dc8e9b9d84b12e2c0ba279e8e1
 P3c docs closeout merge          83cf5ed5f859f3f07e6b5037a94794bf0cdb3be3
-P4 candidate                     PR #245 · docs/p4-a1-readiness-audit
+P4 readiness audit merge         5f8fffd6b13ed30750446d2ffc02b5cb9d8b524f
+P4 final alignment candidate     PR #246 · docs/p4-final-alignment
 public runtime metadata          v2.5.0 · Build 38
 pedagogy baseline                v2.3.0 · Build 34
 curriculum                       52 lessons / 313 items
@@ -38,7 +39,8 @@ Build40 P3                       CLOSED / ACCEPTED
 P3a                              CLOSED / ACCEPTED PURE CONTRACT PROOF
 P3b                              CLOSED / ACCEPTED EPHEMERAL SOURCE-OBSERVATION PROOF
 P3c                              CLOSED / ACCEPTED DURABILITY DECISION — NO DURABILITY YET
-P4                               ACTIVE CANDIDATE / FRESH A1 READINESS AUDIT
+P4                               CLOSED / ACCEPTED FRESH A1 READINESS GATE
+A2 Entry Scope Audit             NEXT / NOT STARTED
 Build42.3                        NOT AUTHORIZED
 productive F16 Transfer          NOT AUTHORIZED
 Build43                          NOT AUTHORIZED
@@ -113,7 +115,7 @@ P3c durability decision if justified
 P4 fresh A1 readiness audit
 ```
 
-P1 completed through Build41. P2 completed through Build42. P3, P3a, P3b and P3c are accepted/closed. **P4 is the active candidate in PR #245.**
+P1 completed through Build41. P2 completed through Build42. P3, P3a, P3b, P3c and P4 are accepted/closed. **NEXT = docs/read-only A2 Entry Scope Audit / NOT STARTED.**
 
 ## Build41 — A1 Productive Consolidation — CLOSED
 
@@ -446,18 +448,22 @@ A future durability proposal must start with a concrete consumer/use-case and th
 
 Recovery remains **7 durable stores / backup v3**. Evidence v2 remains **derived shadow only**. The accepted P3a contract and P3b ephemeral runtime remain unchanged. P3c changed documentation only.
 
-# P4 — fresh A1 readiness audit — ACTIVE CANDIDATE
+# P4 — fresh A1 readiness audit — CLOSED / ACCEPTED
 
-Canonical candidate:
+Canonical accepted audit:
 
 ```text
 docs/BUILD-40-P4-A1-READINESS-AUDIT.md
-PR #245 — docs/p4-a1-readiness-audit
+PR #245 accepted exact head dbdd7df1290f32873e04b0ebb85abae62230d918
+PR #245 squash merge        5f8fffd6b13ed30750446d2ffc02b5cb9d8b524f
+PR #245 scope               exactly 3 Markdown files
+PR #245 review              no published review/thread/comment blockers
+PR #245 exact-head CI       exactly five inherited baseline failures; all other workflows SUCCESS
 ```
 
 P4 re-runs the Build40 gate from the actual accepted post-Build41/Build42/P3c reality.
 
-Candidate findings:
+Accepted findings:
 
 ```text
 A1 thematic breadth                    SUFFICIENT FOR CURRENT ROADMAP GATE
@@ -475,19 +481,19 @@ P4 does not certify every possible A1 capability. It finds that no additional A1
 
 P4 also separates **product roadmap permission** from **learner readiness**. The locked `7 completed / l8=4 / 40 known` continuity is not an A1-completion claim and cannot trigger learner A2 unlock.
 
-Candidate decision:
+Accepted decision:
 
 ```text
-A2 scope / entry audit                 AUTHORIZED NEXT only if PR #245 is accepted
+A2 scope / entry audit                 AUTHORIZED NEXT
 A2 learner-facing implementation       NOT AUTHORIZED
 Build43                                NOT AUTHORIZED
 A2 learner readiness/mastery           NOT CLAIMED
 CEFR A1 certification                  NOT CLAIMED
 ```
 
-# NEXT only if P4 is accepted — A2 Entry Scope Audit
+# NEXT — A2 Entry Scope Audit
 
-The next authorized slice after accepted P4 is **docs/read-only** and remains unnumbered as a Build implementation.
+The next authorized slice is **docs/read-only**, remains unnumbered as a Build implementation, and is **NEXT / NOT STARTED**.
 
 It must:
 
