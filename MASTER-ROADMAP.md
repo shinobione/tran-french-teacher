@@ -2,34 +2,36 @@
 
 > Canonical current roadmap. Future sessions must read `AGENTS.md` → `PROJECT-STATE.md` → this file → live GitHub.
 >
-> Historical long-form decisions remain preserved in dedicated `docs/BUILD-*` and audit documents. This file keeps the durable milestone order, accepted gates and current next slice.
+> Historical long-form decisions remain preserved in dedicated `docs/BUILD-*` and audit documents. This file keeps durable milestone order, accepted gates and the current next slice.
 
 ## Canonical checkpoint — 2026-08-24
 
 ```text
-current verified main before candidate  e1bfcea1e2e3a51c8a0efb97aa8791bcde31117d
-Build42.2 product merge                  8b462fae236c00b902a9312fe8e1b103412b8694
-Build42 closure merge                    8c2787d203d6089850856652f288f10a4fd53b32
-P3 audit merge                           cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac
-P3 final alignment                       653aa3a3fe358c7036cca661d339b82b7073cc38
-P3a pure contract merge                  ef720b760db1108d98ee0090cc87f929d75676a1
-P3a final alignment                      7bb9d4ab52d6402121d75c63a8c1042030c1c856
-P3b source-observation merge             5a658f8ac288e5d5cd091dc0a16fa3683f6064fe
-P3b final alignment                      b72d9c2cd84783c03ae73b627773b896d2378702
-P3c durability audit merge               8296b2ffdfae07dc8e9b9d84b12e2c0ba279e8e1
-P3c docs closeout                        83cf5ed5f859f3f07e6b5037a94794bf0cdb3be3
-P4 readiness audit merge                 5f8fffd6b13ed30750446d2ffc02b5cb9d8b524f
-P4 final alignment                       e1bfcea1e2e3a51c8a0efb97aa8791bcde31117d
-A2 Entry Scope Audit candidate           PR #247 · docs/a2-entry-scope-audit
+current verified main before closeout candidate  c1bded1a08113753c719adeed2cfa05e6aa165af
+Build42.2 product merge                           8b462fae236c00b902a9312fe8e1b103412b8694
+Build42 closure merge                             8c2787d203d6089850856652f288f10a4fd53b32
+P3 audit merge                                    cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac
+P3 final alignment                                653aa3a3fe358c7036cca661d339b82b7073cc38
+P3a pure contract merge                           ef720b760db1108d98ee0090cc87f929d75676a1
+P3a final alignment                               7bb9d4ab52d6402121d75c63a8c1042030c1c856
+P3b source-observation merge                      5a658f8ac288e5d5cd091dc0a16fa3683f6064fe
+P3b final alignment                               b72d9c2cd84783c03ae73b627773b896d2378702
+P3c durability audit merge                        8296b2ffdfae07dc8e9b9d84b12e2c0ba279e8e1
+P3c docs closeout                                 83cf5ed5f859f3f07e6b5037a94794bf0cdb3be3
+P4 readiness audit merge                          5f8fffd6b13ed30750446d2ffc02b5cb9d8b524f
+P4 final alignment                                e1bfcea1e2e3a51c8a0efb97aa8791bcde31117d
+A2 Entry Scope Audit merge                        c1bded1a08113753c719adeed2cfa05e6aa165af
+A2 Entry Scope Audit accepted head                898798f15cfeb2d046913c7110ee137c96b4c7eb
+A2 Entry Scope closeout branch                    docs/a2-entry-closeout
 
-public runtime metadata                  v2.5.0 · Build 38
-pedagogy baseline                        v2.3.0 · Build 34
-curriculum                               52 lessons / 313 items
-scenario                                 44 situations / 132 turns
-listening                                17 contrast families / 18 contextual dialogues
-speaking loop                            52/52 · max 2 moments / lesson
-Recovery                                 7 durable stores / backup v3
-Evidence v2                              derived shadow only
+public runtime metadata                           v2.5.0 · Build 38
+pedagogy baseline                                 v2.3.0 · Build 34
+curriculum                                        52 lessons / 313 items
+scenario                                          44 situations / 132 turns
+listening                                         17 contrast families / 18 contextual dialogues
+speaking loop                                     52/52 · max 2 moments / lesson
+Recovery                                          7 durable stores / backup v3
+Evidence v2                                       derived shadow only
 ```
 
 Milestone state:
@@ -45,8 +47,8 @@ P3a                        CLOSED / ACCEPTED PURE CONTRACT PROOF
 P3b                        CLOSED / ACCEPTED EPHEMERAL SOURCE-OBSERVATION PROOF
 P3c                        CLOSED / ACCEPTED DURABILITY DECISION — NO DURABILITY YET
 P4                         CLOSED / ACCEPTED FRESH A1 READINESS GATE
-A2 Entry Scope Audit       ACTIVE CANDIDATE / PR #247
-A2 Bridge Design Audit     NOT STARTED / candidate next only after #247 acceptance
+A2 Entry Scope Audit       CLOSED / ACCEPTED
+A2 Bridge Design Audit     NEXT / NOT STARTED / docs-read-only
 Build42.3                  NOT AUTHORIZED
 productive F16 Transfer    NOT AUTHORIZED
 Build43                    NOT AUTHORIZED
@@ -88,7 +90,7 @@ Accepted learner-facing Foundation ownership includes F01–F04, F11, F08, F05, 
 
 ## Build38 — Generalization & Transfer — CLOSED / RELEASED
 
-Learner-facing deterministic families now total six after Build41:
+Learner-facing deterministic families total six after Build41:
 
 ```text
 subject substitution
@@ -181,20 +183,7 @@ Recovery remains **7 durable stores / backup v3**. Evidence v2 remains **derived
 
 ## P4 — fresh A1 readiness audit — CLOSED / ACCEPTED
 
-Canonical document:
-
-```text
-docs/BUILD-40-P4-A1-READINESS-AUDIT.md
-```
-
-Acceptance chain:
-
-```text
-PR #245 accepted head   dbdd7df1290f32873e04b0ebb85abae62230d918
-PR #245 squash merge    5f8fffd6b13ed30750446d2ffc02b5cb9d8b524f
-PR #246 accepted head   e626940e8baee4d2f64d7d3cf2ca845297327b75
-PR #246 squash merge    e1bfcea1e2e3a51c8a0efb97aa8791bcde31117d
-```
+Canonical document: `docs/BUILD-40-P4-A1-READINESS-AUDIT.md`.
 
 Accepted verdict:
 
@@ -205,7 +194,7 @@ Transfer families                      6 learner-facing deterministic families
 F16 teaching debt                      RESOLVED
 Foundation/Transfer durable evidence   UNAVAILABLE
 cross-session observation durability   NOT JUSTIFIED
-A2 Entry Scope Audit                   AUTHORIZED NEXT
+A2 Entry Scope Audit                   AUTHORIZED
 A2 learner-facing implementation       NOT AUTHORIZED
 Build43                                NOT AUTHORIZED
 learner A2 readiness/mastery           NOT CLAIMED
@@ -214,52 +203,30 @@ CEFR A1 certification                  NOT CLAIMED
 
 P4 opened only curriculum/design study. It did not claim that the current learner has completed A1.
 
-# A2 Entry Scope Audit — ACTIVE CANDIDATE
+# A2 Entry Scope Audit — CLOSED / ACCEPTED
 
-Canonical candidate:
+Canonical document:
 
 ```text
 docs/A2-ENTRY-SCOPE-AUDIT.md
-PR #247 — docs/a2-entry-scope-audit
 ```
 
-The audit uses official Council of Europe A2 descriptors as a scope reference only.
-
-## Candidate overlap finding
-
-The current upper A1 curriculum is already strongly A2-adjacent by theme:
+Acceptance chain:
 
 ```text
-L41 clarification/reformulation
-L42 quantities/packaging
-L43 comparison/choice
-L44 invitations/accept/refuse
-L45 health/medical appointment
-L46 medicine/pharmacy
-L47 work/instructions
-L48 housing failure/repair
-L49 transport disruption/alternatives
-L50 narration ordering
-L51 simple opinion
-L52 spoken on/shared plans
+PR #247 base             e1bfcea1e2e3a51c8a0efb97aa8791bcde31117d
+PR #247 accepted head    898798f15cfeb2d046913c7110ee137c96b4c7eb
+PR #247 squash merge     c1bded1a08113753c719adeed2cfa05e6aa165af
+PR #247 scope            exactly 3 Markdown files
+PR #247 review           0 reviews / 0 threads / 0 comments
+PR #247 exact-head CI    exactly five inherited baseline failures; all other workflows SUCCESS
 ```
 
-Earlier lessons already cover personal/family information, social exchange, shopping, food, directions, transport, time, administration, routine, futur proche, recent past and starter passé composé.
+## Accepted overlap finding
 
-Therefore **more theme-only “A2” lessons are not justified**.
+The current upper A1 curriculum is already strongly A2-adjacent by theme. Therefore **more theme-only “A2” lessons are not justified**.
 
-## Candidate genuine-newness test
-
-Current task shapes:
-
-```text
-Scenario      44 situations / 132 turns; strong context, mostly bounded answer turns
-Listening     17 contrasts / 18 dialogues; reliable, mostly one bounded target per dialogue
-Speaking Loop 52/52; phrase rehearsal/self-listening, not short-series production
-Writing       no distinct short-functional-writing owner found
-```
-
-The smallest genuinely new candidate bridge is:
+Accepted genuinely new capability lanes:
 
 ```text
 A2-P1 short-series oral production
@@ -268,26 +235,7 @@ A2-R1 multi-fact short reception
 A2-W1 short functional writing
 ```
 
-This is capability progression, not theme accumulation.
-
-## Candidate A2 boundary
-
-The candidate explicitly avoids pulling B1 expectations downward.
-
-A2 here means structured/routine exchanges and short series of simple phrases/sentences. It does **not** require:
-
-```text
-long connected discourse
-sustained argument
-detailed free narration
-broad reasons/explanations as an independent capability
-free debate
-CEFR certification
-```
-
-Simple mediation is a possible future audit track but is **not** a first-bridge blocker.
-
-## Candidate extension decision
+Accepted boundary:
 
 ```text
 late-A1 thematic A2 adjacency              STRONG / ALREADY COVERED
@@ -299,24 +247,23 @@ short functional writing                    GENUINELY NEW MODALITY
 simple mediation                            OPTIONAL FUTURE AUDIT / NOT ENTRY BLOCKER
 bounded A2 Bridge                           JUSTIFIED IN PRINCIPLE
 full A2 curriculum                          NOT JUSTIFIED NOW
-A2 Bridge Design Audit                      candidate NEXT only after #247 acceptance
 A2 learner-facing implementation            NOT AUTHORIZED
 Build43                                     NOT AUTHORIZED
 learner A2 readiness/mastery                NOT CLAIMED
 CEFR certification                          NOT CLAIMED
 ```
 
-No lesson numbers are assigned and no existing item semantics are changed by this audit.
+No lesson number is assigned and no current item semantics change.
 
-# Candidate NEXT only after #247 acceptance — A2 Bridge Design Audit
+# NEXT — A2 Bridge Design Audit
 
-The next slice, if #247 is accepted, is **docs/read-only**.
+The next authorized slice is **docs/read-only**. It remains unnumbered as a Build implementation and has not started.
 
 It must decide:
 
 1. which A2-P1 / A2-I1 / A2-R1 / A2-W1 lane is first;
 2. exact current lesson/item prerequisites;
-3. whether any new language source is really required;
+3. whether any genuinely new language source is required;
 4. activity/data ownership;
 5. deterministic versus semantic evaluation boundary;
 6. assistance/correction semantics;
@@ -342,6 +289,6 @@ new durable store
 
 # Current stop boundary
 
-PR #247 is the A2 Entry Scope Audit candidate. Its exact-head CI/review arbitration and merge belong to the next control session.
+The documentation closeout candidate on branch `docs/a2-entry-closeout` is the only active work. Its exact-head CI/review arbitration and merge belong to the next control session.
 
-The A2 Bridge Design Audit is **not started** until a later explicit user command after #247 acceptance.
+The A2 Bridge Design Audit is **NOT STARTED** until a later explicit user command after this closeout is accepted.
