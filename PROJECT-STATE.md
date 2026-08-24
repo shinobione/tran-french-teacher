@@ -59,21 +59,10 @@ Build43                    NOT AUTHORIZED
 A2 learner-facing delivery NOT AUTHORIZED
 ```
 
-## Accepted evidence boundary
-
-Canonical documents:
+## Accepted P3 evidence boundary
 
 ```text
-docs/BUILD-40-P3-EVIDENCE-OWNER-DESIGN-AUDIT.md
-docs/BUILD-40-P3A-PEDAGOGICAL-OBSERVATION-CONTRACT.md
-docs/BUILD-40-P3B-SOURCE-OBSERVATION-EPHEMERAL.md
-docs/BUILD-40-P3C-DURABILITY-DECISION-AUDIT.md
-```
-
-Accepted state remains:
-
-```text
-P3a semantic normalization contract   ACCEPTED
+P3a normalization contract            ACCEPTED
 P3b source observation                ACCEPTED / EPHEMERAL ONLY
 raw P3b event truth                   TRUSTWORTHY AT EVENT LEVEL
 cross-session durability              NOT JUSTIFIED
@@ -87,21 +76,7 @@ mastery / CEFR / score / confidence   NOT AUTHORIZED
 Build39.2 availability promotion      NOT AUTHORIZED
 ```
 
-Build39.2 reliable durable action families remain:
-
-```text
-phrase-retrieval
-listening
-scenario
-```
-
-Still unavailable as trustworthy durable evidence:
-
-```text
-concept-review
-foundation-capsule
-transfer-construction
-```
+Build39.2 reliable durable families remain `phrase-retrieval`, `listening`, `scenario`. `concept-review`, `foundation-capsule`, and `transfer-construction` remain unavailable as trustworthy durable evidence.
 
 ## Accepted A1 consolidation boundary
 
@@ -116,7 +91,7 @@ nous → spoken on
 present action → recent past with venir de
 ```
 
-Build41 classifications remain binding absent new real source evidence:
+Build41 classifications remain binding absent new source evidence:
 
 ```text
 questions              REJECT — TOO SEMANTIC / AMBIGUOUS
@@ -127,16 +102,7 @@ short narration        REJECT — TOO SEMANTIC / AMBIGUOUS
 opinion clauses        REJECT — TOO SEMANTIC / AMBIGUOUS
 ```
 
-Build42 F16 teach-core remains:
-
-```text
-à + le   → au
-à + les  → aux
-de + le  → du
-de + les → des
-```
-
-with `à la / à l’ / de la / de l’` uncontracted and the partitive distinction protected.
+Build42 F16 remains a Foundation teach-core: `à + le → au`, `à + les → aux`, `de + le → du`, `de + les → des`, with uncontracted `à la / à l’ / de la / de l’` and protected partitive distinction.
 
 ```text
 F16 teaching debt       RESOLVED
@@ -159,67 +125,32 @@ PR #247 review           0 reviews / 0 threads / 0 comments
 PR #247 exact-head CI    exactly five inherited baseline failures; all other workflows SUCCESS
 ```
 
-Accepted overlap finding:
+Accepted result:
 
 ```text
 late-A1 thematic A2 adjacency       STRONG / ALREADY COVERED
 more theme-only A2 lessons          NOT JUSTIFIED
-```
-
-Accepted genuinely new A2 Bridge design lanes:
-
-```text
-A2-P1  short-series oral production
-A2-I1  stateful routine information exchange
-A2-R1  multi-fact short reception
-A2-W1  short functional writing
-```
-
-Accepted boundary:
-
-```text
+A2-P1 short-series oral production  GENUINELY NEW CANDIDATE
+A2-I1 stateful routine exchange     PARTIAL TODAY / NEW FORM JUSTIFIED
+A2-R1 multi-fact short reception    PARTIAL TODAY / NEW FORM JUSTIFIED
+A2-W1 short functional writing      GENUINELY NEW MODALITY
 bounded A2 Bridge                   JUSTIFIED IN PRINCIPLE
 full A2 curriculum                  NOT JUSTIFIED NOW
 A2 learner-facing implementation    NOT AUTHORIZED
 Build43                             NOT AUTHORIZED
 learner A2 readiness/mastery        NOT CLAIMED
 CEFR certification                  NOT CLAIMED
-simple mediation                    OPTIONAL FUTURE AUDIT / NOT ENTRY BLOCKER
 ```
 
 No new lesson number or item is authorized by this audit.
 
 ## NEXT — A2 Bridge Design Audit
 
-Only after the #248 closeout is accepted, the next authorized implementation-session topic is a **docs/read-only A2 Bridge Design Audit**. It remains **NOT STARTED** until an explicit later user command starts it.
+Only after #248 closeout acceptance, the next authorized slice is a **docs/read-only A2 Bridge Design Audit**, still **NOT STARTED** until an explicit later user command.
 
-It must decide:
+It must choose the first A2-P1 / A2-I1 / A2-R1 / A2-W1 lane; map exact existing prerequisites; decide whether new language material is needed; define activity/data ownership, evaluation, assistance, evidence and learner-route semantics; decide whether any new lesson IDs are needed; and define tests/sanctuaries before any later implementation candidate.
 
-1. which A2-P1 / A2-I1 / A2-R1 / A2-W1 lane is first;
-2. exact current lesson/item prerequisites;
-3. whether genuinely new language source material is required;
-4. activity/data ownership;
-5. deterministic versus semantic evaluation boundary;
-6. assistance/correction semantics;
-7. honest evidence semantics;
-8. learner-route gating;
-9. whether any new lesson IDs are needed at all;
-10. tests/sanctuaries required before any later implementation candidate.
-
-It does **not** authorize:
-
-```text
-learner-facing A2
-Build43
-new lessons / renumbering
-reinterpretation of existing 313 items
-learner A2 unlock
-CEFR certification
-P3b durability
-Foundation/Transfer LI3 promotion
-Evidence v2 cutover
-new durable store
-```
+It does **not** authorize learner-facing A2, Build43, new lessons/renumbering, reinterpretation of the existing 313 items, learner A2 unlock, CEFR certification, P3b durability, Foundation/Transfer LI3 promotion, Evidence v2 cutover or a new durable store.
 
 ## Permanent safety boundaries
 
@@ -265,7 +196,7 @@ IF #248 is still OPEN:
 
 IF #248 is already MERGED:
 → verify the actual main SHA/signature from GitHub live state
-→ treat A2 Entry Scope Audit as CLOSED / ACCEPTED and its closeout as accepted
+→ treat A2 Entry Scope Audit and its closeout as accepted
 → A2 Bridge Design Audit is NEXT / NOT STARTED
 → start that audit only on an explicit new user command
 ```
