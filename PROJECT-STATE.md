@@ -10,8 +10,9 @@ Last reconciled: 2026-08-24
 - Accepted P3b final alignment: PR **#242 — `Docs · finalize merge-stable P3b checkpoint`**, accepted exact head **`8bb762b32e836c741a03874bbc899e2744b6bb37`**, squash merge **`b72d9c2cd84783c03ae73b627773b896d2378702`**.
 - Accepted P3c durability decision: PR **#243 — `P3c · decide pedagogical observation durability`**, accepted exact head **`c820f8239e02f02e2ee84cbf715bd83877e45535`**, squash merge **`8296b2ffdfae07dc8e9b9d84b12e2c0ba279e8e1`**.
 - Accepted P3c documentation closeout: PR **#244 — `Docs · close accepted P3c durability decision`**, accepted exact head **`1f78a69ec9c66b8372dc35a0536b59b569491acc`**, squash merge **`83cf5ed5f859f3f07e6b5037a94794bf0cdb3be3`**.
-- Last verified `main` before publishing this P4 candidate: **`83cf5ed5f859f3f07e6b5037a94794bf0cdb3be3`**.
-- Published P4 candidate: PR **#245 — `P4 · fresh A1 readiness audit`**, branch **`docs/p4-a1-readiness-audit`**. Its moving head and live PR state are intentionally delegated to GitHub metadata.
+- Accepted P4 fresh A1 readiness audit: PR **#245 — `P4 · fresh A1 readiness audit`**, accepted exact head **`dbdd7df1290f32873e04b0ebb85abae62230d918`**, squash merge **`5f8fffd6b13ed30750446d2ffc02b5cb9d8b524f`**.
+- Last verified `main` before publishing this P4 final-alignment candidate: **`5f8fffd6b13ed30750446d2ffc02b5cb9d8b524f`**.
+- Published P4 final-alignment candidate: PR **#246 — `Docs · finalize accepted P4 checkpoint`**, branch **`docs/p4-final-alignment`**. Its moving head and live PR state are intentionally delegated to GitHub metadata.
 - Accepted product state remains Build42.2 product merge **`8b462fae236c00b902a9312fe8e1b103412b8694`**.
 - Build42 closure merge: **`8c2787d203d6089850856652f288f10a4fd53b32`**.
 - Build40 P3 evidence-owner audit PR **#234** squash merge: **`cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac`**.
@@ -25,13 +26,14 @@ Last reconciled: 2026-08-24
 - P3b final-alignment PR **#242** accepted exact head **`8bb762b32e836c741a03874bbc899e2744b6bb37`**, squash merge **`b72d9c2cd84783c03ae73b627773b896d2378702`**.
 - P3c PR **#243** accepted exact head **`c820f8239e02f02e2ee84cbf715bd83877e45535`**, squash merge **`8296b2ffdfae07dc8e9b9d84b12e2c0ba279e8e1`**.
 - P3c docs closeout PR **#244** accepted exact head **`1f78a69ec9c66b8372dc35a0536b59b569491acc`**, squash merge **`83cf5ed5f859f3f07e6b5037a94794bf0cdb3be3`**.
+- P4 PR **#245** accepted exact head **`dbdd7df1290f32873e04b0ebb85abae62230d918`**, squash merge **`5f8fffd6b13ed30750446d2ffc02b5cb9d8b524f`**.
 - Public runtime metadata remains **v2.5.0 · Build 38**; pedagogy baseline remains **v2.3.0 · Build 34**.
 - Build40 P3 is **CLOSED / ACCEPTED**.
 - P3a is **CLOSED / ACCEPTED PURE CONTRACT PROOF**.
 - P3b is **CLOSED / ACCEPTED EPHEMERAL SOURCE-OBSERVATION PROOF**.
 - P3c is **CLOSED / ACCEPTED DURABILITY DECISION — NO DURABILITY YET**.
-- P4 is **ACTIVE CANDIDATE / FRESH A1 READINESS AUDIT** in PR **#245**.
-- Candidate next only if #245 is accepted: **docs/read-only A2 Entry Scope Audit**.
+- P4 is **CLOSED / ACCEPTED FRESH A1 READINESS GATE**.
+- **NEXT = docs/read-only A2 Entry Scope Audit / NOT STARTED.**
 
 ## Accepted product state
 
@@ -70,7 +72,8 @@ Build40 P3 CLOSED / ACCEPTED
 P3a        CLOSED / ACCEPTED PURE CONTRACT PROOF
 P3b        CLOSED / ACCEPTED EPHEMERAL SOURCE-OBSERVATION PROOF
 P3c        CLOSED / ACCEPTED DURABILITY DECISION — NO DURABILITY YET
-P4         ACTIVE CANDIDATE — PR #245
+P4         CLOSED / ACCEPTED FRESH A1 READINESS GATE
+A2 Entry Scope Audit NEXT / NOT STARTED
 Build42.3  NOT AUTHORIZED
 F16 Transfer NOT AUTHORIZED
 Build43    NOT AUTHORIZED
@@ -356,16 +359,17 @@ Before durability can be reopened, a future explicit design must first define th
 
 Recovery remains **7 stores / backup v3**. Evidence v2 remains **derived shadow only**. P3a/P3b runtime semantics remain unchanged. No runtime, storage, curriculum, learner-data or public metadata changed in P3c.
 
-## P4 — ACTIVE CANDIDATE / FRESH A1 READINESS AUDIT
+## P4 — CLOSED / ACCEPTED FRESH A1 READINESS GATE
 
-Canonical candidate audit:
+Canonical accepted audit:
 
 ```text
 docs/BUILD-40-P4-A1-READINESS-AUDIT.md
-PR #245 — docs/p4-a1-readiness-audit
+PR #245 — accepted exact head dbdd7df1290f32873e04b0ebb85abae62230d918
+squash merge 5f8fffd6b13ed30750446d2ffc02b5cb9d8b524f
 ```
 
-Candidate findings:
+Accepted findings:
 
 ```text
 A1 thematic breadth                    SUFFICIENT FOR CURRENT ROADMAP GATE
@@ -381,10 +385,10 @@ cross-session observation durability   NOT JUSTIFIED
 
 P4 deliberately separates product-roadmap permission from learner readiness. The locked `7 completed / l8=4 / 40 known` continuity does not prove A1 completion and does not authorize an A2 learner unlock.
 
-Candidate decision:
+Accepted decision:
 
 ```text
-A2 scope / entry audit                 AUTHORIZED NEXT only if PR #245 is accepted
+A2 scope / entry audit                 AUTHORIZED NEXT
 A2 learner-facing implementation       NOT AUTHORIZED
 Build43                                NOT AUTHORIZED
 A2 learner readiness/mastery           NOT CLAIMED
@@ -393,9 +397,9 @@ CEFR A1 certification                  NOT CLAIMED
 
 P4 does not say every possible A1 refinement is complete. It says no further A1 implementation is automatically justified from the source set already audited by Build41/42, and that forcing more mechanical transforms would be less honest than moving to a bounded A2 scope audit.
 
-## NEXT only after P4 acceptance — A2 Entry Scope Audit
+## NEXT — A2 Entry Scope Audit
 
-If PR #245 is controlled and accepted, the next authorized slice is a **docs/read-only A2 Entry Scope Audit**.
+The next authorized slice is a **docs/read-only A2 Entry Scope Audit**. It is **NEXT / NOT STARTED**.
 
 It must identify what is genuinely A2 rather than missing A1 repair, avoid duplicating late-A1 content, and decide whether a curriculum extension is justified at all.
 
@@ -441,12 +445,12 @@ Any other failure is NEW until classified.
 ## Exact next control action
 
 ```text
-Control PR #245 on its exact published head
-→ verify main/base/head and exact 3-file docs-only scope
+Control PR #246 on its exact published head
+→ verify main/base/head and exact 2-file docs-only scope
 → inspect CI/reviews/threads
 → classify any non-baseline red from exact logs
 → rerun only proven Chrome/harness flakes unchanged
-→ fix only legitimate review blockers inside P4 scope
+→ fix only legitimate review blockers inside P4 final-alignment scope
 → merge only if exact final head is clean apart from the five inherited failures
 → verify main after merge
 → do NOT begin the A2 Entry Scope Audit until a later explicit user command starts it
