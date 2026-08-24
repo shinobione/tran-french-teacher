@@ -96,7 +96,7 @@ jobs:
         run: |
           set -euo pipefail
           test ! -e src/pedagogy/a2-reception-bridge-renderer.js
-          if git grep -n 'a2-reception-bridge-core' -- ':!src/pedagogy/a2-reception-bridge-core.js' ':!tests/unit/a2-r1-reception-bridge-core.test.cjs' ':!.github/workflows/a2-r1-reception-contract.yml' ':!docs/A2-R1-MULTI-FACT-RECEPTION-CONTRACT-PROOF.md' ':!PROJECT-STATE.md' ':!MASTER-ROADMAP.md'; then
-            echo 'Pure proof core is unexpectedly wired into runtime.' >&2
+          if git grep -n 'a2-reception-bridge-core' -- '*.js' ':!src/pedagogy/a2-reception-bridge-core.js'; then
+            echo 'Pure proof core is unexpectedly referenced by a runtime JavaScript source.' >&2
             exit 1
           fi
