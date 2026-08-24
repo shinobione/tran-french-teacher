@@ -5,17 +5,12 @@ Last reconciled: 2026-08-24
 ## Canonical checkpoint
 
 - Repository: `shinobione/tran-french-teacher`.
-- Current verified `main` before publishing this closeout candidate: **`c1bded1a08113753c719adeed2cfa05e6aa165af`**.
-- `main` commit message: **`A2 · audit entry scope and bridge boundary (#247)`**.
-- GitHub verification on that commit: **verified=true / reason=valid**.
-- Accepted A2 Entry Scope Audit: PR **#247 — `A2 · audit entry scope and bridge boundary`**.
+- Last verified `main` before publication of the A2 Entry closeout: **`c1bded1a08113753c719adeed2cfa05e6aa165af`**.
+- That commit is PR **#247 — `A2 · audit entry scope and bridge boundary`**, GitHub **verified=true / reason=valid**.
 - PR #247 accepted exact head: **`898798f15cfeb2d046913c7110ee137c96b4c7eb`**.
-- PR #247 squash merge: **`c1bded1a08113753c719adeed2cfa05e6aa165af`**.
-- PR #247 exact scope: **3 Markdown files only**.
-- PR #247 exact-head CI: **exactly the five standing inherited failures; every other workflow SUCCESS**.
-- PR #247 published reviews/threads/comments at control time: **0 / 0 / 0**.
-- Canonical accepted audit: `docs/A2-ENTRY-SCOPE-AUDIT.md`.
-- Published documentation closeout candidate: PR **#248 — `Docs · close accepted A2 entry scope audit`**, branch **`docs/a2-entry-closeout`**. Its moving head and live state are intentionally delegated to GitHub metadata.
+- Published closeout control candidate: PR **#248 — `Docs · close accepted A2 entry scope audit`**, branch **`docs/a2-entry-closeout`**.
+- **GitHub live metadata owns #248's current head, open/merged state and the current `main` tip.** This file intentionally records the last verified pre-publication `main` rather than pretending to know a future merge SHA.
+- Canonical accepted scope audit: `docs/A2-ENTRY-SCOPE-AUDIT.md`.
 
 ## Accepted product state
 
@@ -56,16 +51,17 @@ P3b                        CLOSED / ACCEPTED EPHEMERAL SOURCE-OBSERVATION PROOF
 P3c                        CLOSED / ACCEPTED DURABILITY DECISION — NO DURABILITY YET
 P4                         CLOSED / ACCEPTED FRESH A1 READINESS GATE
 A2 Entry Scope Audit       CLOSED / ACCEPTED
-A2 Bridge Design Audit     NEXT / NOT STARTED / docs-read-only
+A2 Entry closeout          PUBLISHED AS PR #248; LIVE STATE DELEGATED TO GITHUB
+A2 Bridge Design Audit     NEXT AFTER CLOSEOUT ACCEPTANCE / NOT STARTED / DOCS-READ-ONLY
 Build42.3                  NOT AUTHORIZED
 productive F16 Transfer    NOT AUTHORIZED
 Build43                    NOT AUTHORIZED
 A2 learner-facing delivery NOT AUTHORIZED
 ```
 
-## Accepted P3 evidence boundary
+## Accepted evidence boundary
 
-Canonical source documents:
+Canonical documents:
 
 ```text
 docs/BUILD-40-P3-EVIDENCE-OWNER-DESIGN-AUDIT.md
@@ -74,13 +70,12 @@ docs/BUILD-40-P3B-SOURCE-OBSERVATION-EPHEMERAL.md
 docs/BUILD-40-P3C-DURABILITY-DECISION-AUDIT.md
 ```
 
-Accepted result:
+Accepted state remains:
 
 ```text
-semantic source-time event owner      JUSTIFIED
-P3a normalization contract            ACCEPTED
+P3a semantic normalization contract   ACCEPTED
 P3b source observation                ACCEPTED / EPHEMERAL ONLY
-raw P3b event truth                    TRUSTWORTHY AT EVENT LEVEL
+raw P3b event truth                   TRUSTWORTHY AT EVENT LEVEL
 cross-session durability              NOT JUSTIFIED
 Learning Memory semantic reuse        REJECTED
 Error Intelligence semantic reuse     REJECTED
@@ -92,28 +87,7 @@ mastery / CEFR / score / confidence   NOT AUTHORIZED
 Build39.2 availability promotion      NOT AUTHORIZED
 ```
 
-P3a schema remains:
-
-```text
-french-tranquille-pedagogical-observation/v1
-```
-
-Authorized semantic pairs remain:
-
-```text
-foundation-check → foundation-concept → foundations
-transfer-check   → transfer-family     → transfer
-```
-
-P3b runtime remains a bounded in-memory FIFO of 64 normalized observations with:
-
-```text
-persistent=false
-durableWrite=false
-masteryClaim=false
-```
-
-Build39.2 reliable durable families remain:
+Build39.2 reliable durable action families remain:
 
 ```text
 phrase-retrieval
@@ -129,9 +103,9 @@ foundation-capsule
 transfer-construction
 ```
 
-## Accepted Build41 / Build42 boundary
+## Accepted A1 consolidation boundary
 
-Current learner-facing deterministic Transfer families total **6**:
+Learner-facing deterministic Transfer families total **6**:
 
 ```text
 subject substitution
@@ -142,7 +116,7 @@ nous → spoken on
 present action → recent past with venir de
 ```
 
-Build41 classifications remain binding unless new real source evidence changes their premise:
+Build41 classifications remain binding absent new real source evidence:
 
 ```text
 questions              REJECT — TOO SEMANTIC / AMBIGUOUS
@@ -162,7 +136,7 @@ de + le  → du
 de + les → des
 ```
 
-with `à la / à l’ / de la / de l’` uncontracted and partitive distinction protected.
+with `à la / à l’ / de la / de l’` uncontracted and the partitive distinction protected.
 
 ```text
 F16 teaching debt       RESOLVED
@@ -170,30 +144,9 @@ F16 productive Transfer NOT AUTHORIZED
 F16 mastery             NOT CLAIMED
 ```
 
-## Accepted P4 verdict
-
-Canonical document: `docs/BUILD-40-P4-A1-READINESS-AUDIT.md`.
-
-```text
-A1 thematic breadth                    SUFFICIENT FOR CURRENT ROADMAP GATE
-A1 Productive Consolidation            SUFFICIENT / RATIONAL STOP BOUNDARY
-F16 explicit teaching debt             RESOLVED
-Foundation/Transfer durable evidence   UNAVAILABLE
-cross-session observation durability   NOT JUSTIFIED
-A2 scope / entry audit                 AUTHORIZED
-A2 learner-facing implementation       NOT AUTHORIZED
-Build43                                NOT AUTHORIZED
-A2 learner readiness/mastery           NOT CLAIMED
-CEFR A1 certification                  NOT CLAIMED
-```
+P4 accepted the current A1 product as a rational roadmap stopping boundary. It did **not** certify learner A1 completion.
 
 ## A2 Entry Scope Audit — CLOSED / ACCEPTED
-
-Canonical document:
-
-```text
-docs/A2-ENTRY-SCOPE-AUDIT.md
-```
 
 Accepted chain:
 
@@ -213,9 +166,7 @@ late-A1 thematic A2 adjacency       STRONG / ALREADY COVERED
 more theme-only A2 lessons          NOT JUSTIFIED
 ```
 
-The late-A1 curriculum already covers clarification, quantities, comparison, invitation/refusal, health/pharmacy, work instructions, housing/transport problems, narration ordering, simple opinion and spoken `on`. Earlier lessons already cover the core familiar/routine themes. A2 must therefore add **capability demand**, not merely relabel familiar themes.
-
-Accepted genuinely new A2 Bridge lanes:
+Accepted genuinely new A2 Bridge design lanes:
 
 ```text
 A2-P1  short-series oral production
@@ -236,15 +187,15 @@ CEFR certification                  NOT CLAIMED
 simple mediation                    OPTIONAL FUTURE AUDIT / NOT ENTRY BLOCKER
 ```
 
-No lesson number or new item is authorized by the accepted audit.
+No new lesson number or item is authorized by this audit.
 
 ## NEXT — A2 Bridge Design Audit
 
-The next authorized slice is **docs/read-only** and remains unnumbered as a Build implementation.
+Only after the #248 closeout is accepted, the next authorized implementation-session topic is a **docs/read-only A2 Bridge Design Audit**. It remains **NOT STARTED** until an explicit later user command starts it.
 
 It must decide:
 
-1. which of A2-P1 / A2-I1 / A2-R1 / A2-W1 is the first concrete slice;
+1. which A2-P1 / A2-I1 / A2-R1 / A2-W1 lane is first;
 2. exact current lesson/item prerequisites;
 3. whether genuinely new language source material is required;
 4. activity/data ownership;
@@ -297,16 +248,24 @@ Known persistent inherited failures:
 
 Any other failure is NEW until classified from exact logs.
 
-## Exact next control action
+## Merge-stable next control action
 
 ```text
-Control PR #248 on its exact published head
-→ verify main/base/head and exact 2-file docs-only scope
-→ inspect CI/reviews/threads/comments
+Read live GitHub state for PR #248 and main first.
+
+IF #248 is still OPEN:
+→ verify base/head and exact 2-file Markdown scope
+→ inspect exact-head CI/reviews/threads/comments
 → classify every non-baseline red from exact logs
 → rerun only proven Chrome/harness flakes unchanged
 → fix only legitimate documentation blockers inside closeout scope
 → merge only if exact final head is clean apart from the five inherited failures
-→ verify main after merge
-→ do NOT begin the A2 Bridge Design Audit until a later explicit user command starts it
+→ verify the actual main SHA/signature after merge
+→ STOP; do not start the A2 Bridge Design Audit in that same control session
+
+IF #248 is already MERGED:
+→ verify the actual main SHA/signature from GitHub live state
+→ treat A2 Entry Scope Audit as CLOSED / ACCEPTED and its closeout as accepted
+→ A2 Bridge Design Audit is NEXT / NOT STARTED
+→ start that audit only on an explicit new user command
 ```
