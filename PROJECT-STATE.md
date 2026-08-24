@@ -1,13 +1,15 @@
 # PROJECT-STATE — French Trân’quille
 
-Last reconciled: 2026-08-21
+Last reconciled: 2026-08-24
 
 ## Canonical checkpoint
 
 - Repository: `shinobione/tran-french-teacher`.
-- Current verified `main`: **`5a658f8ac288e5d5cd091dc0a16fa3683f6064fe`** — accepted P3b squash merge from PR **#240**.
-- Active documentation closeout candidate: **PR #241 — `Docs · close accepted P3b observation proof`**, branch **`docs/p3b-closeout`**.
-- The exact moving #241 candidate head is intentionally kept in live PR metadata to avoid a self-referential checkpoint SHA loop.
+- Accepted P3b product merge: **`5a658f8ac288e5d5cd091dc0a16fa3683f6064fe`** from PR **#240**.
+- Accepted P3b documentation closeout: PR **#241 — `Docs · close accepted P3b observation proof`**, accepted exact head **`c1591bee16bea91531d930908c7e81dadc27cde1`**, squash merge **`5c643814a4796eb30cc96b1c31cf5b84ea3f5844`**.
+- Last verified `main` before publishing this final-alignment candidate: **`5c643814a4796eb30cc96b1c31cf5b84ea3f5844`**.
+- Published control candidate: PR **#242 — `Docs · finalize merge-stable P3b checkpoint`**, branch **`docs/p3b-final-alignment`**.
+- The moving #242 candidate head and its live open/merged state are intentionally delegated to GitHub metadata. These lines are a publication checkpoint, not a claim that #242 remains active after a later merge.
 - Accepted product state remains Build42.2 product merge **`8b462fae236c00b902a9312fe8e1b103412b8694`**.
 - Build42 closure merge: **`8c2787d203d6089850856652f288f10a4fd53b32`**.
 - Build40 P3 evidence-owner audit PR **#234** squash merge: **`cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac`**.
@@ -17,12 +19,12 @@ Last reconciled: 2026-08-21
 - P3a closeout PR **#238** accepted exact head **`a3814d5560c25d7cedaceaa57ff508db05a52de0`**, squash merge **`ba2225cfb5e8864bd757620d22cfed333c757d82`**.
 - P3a final-alignment PR **#239** accepted exact head **`659b820e0ba06691a93f463f8061855b182a87ed`**, squash merge **`7bb9d4ab52d6402121d75c63a8c1042030c1c856`**.
 - P3b PR **#240** accepted exact head **`a641481d647510c41855c144149c2adccfde333c`**, squash merge **`5a658f8ac288e5d5cd091dc0a16fa3683f6064fe`**.
-- Live GitHub remains authoritative for branch tips and the current open/merged state of temporary candidate/control PRs.
+- P3b docs closeout PR **#241** accepted exact head **`c1591bee16bea91531d930908c7e81dadc27cde1`**, squash merge **`5c643814a4796eb30cc96b1c31cf5b84ea3f5844`**.
 - Public runtime metadata remains **v2.5.0 · Build 38**; pedagogy baseline remains **v2.3.0 · Build 34**.
 - Build40 P3 is **CLOSED / ACCEPTED**.
 - P3a is **CLOSED / ACCEPTED PURE CONTRACT PROOF**.
 - P3b is **CLOSED / ACCEPTED EPHEMERAL SOURCE-OBSERVATION PROOF**.
-- **NEXT after #241 closeout acceptance = P3c — durability decision.**
+- **NEXT = P3c — durability decision / audit.**
 
 ## Accepted product state
 
@@ -255,9 +257,13 @@ PR #240 accepted scope          exactly 7 paths after justified sw.js review fix
 PR #240 review                  1×P1 installed-PWA precache; fixed + resolved
 P3b workflow run                32429870917 SUCCESS
 PR #240 exact-head CI           exactly five inherited baseline failures; no new red
+PR #241 accepted head           c1591bee16bea91531d930908c7e81dadc27cde1
+PR #241 squash merge            5c643814a4796eb30cc96b1c31cf5b84ea3f5844
+PR #241 scope                   exactly 3 Markdown files
+PR #241 exact-head CI           only five inherited baseline failures after unchanged V5.3 capture rerun
 ```
 
-The P1 fix did not widen P3b evidence semantics: it only ensured the newly required boot-time scripts are available during installed-PWA offline startup.
+The #240 P1 fix did not widen P3b evidence semantics: it only ensured the newly required boot-time scripts are available during installed-PWA offline startup. The #241 closeout changed documentation only.
 
 Explicit P3b non-ownership remains locked:
 
@@ -282,7 +288,7 @@ transfer-construction unavailable
 
 ## NEXT — P3c durability decision
 
-Only after PR **#241** closes the accepted P3b documentation state may implementation/audit work proceed to P3c.
+P3c is **NEXT / NOT STARTED**. It is a decision/audit gate, not automatic permission to persist.
 
 P3c must decide from the real P3b observation semantics whether any durable architecture is justified. P3b itself provides **no** persistence authorization.
 
