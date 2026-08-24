@@ -1,6 +1,6 @@
 # A2-R1 Integration Decision Audit — French Trân’quille
 
-Status: **AUDIT CANDIDATE / DOCS-READ-ONLY**
+Status: **AUDIT CANDIDATE / DOCS + SUCCESSOR-SAFE CI ONLY**
 
 Date: 2026-08-25
 
@@ -12,17 +12,19 @@ a4cdc146267a88ccef9c7cde928bc2f1010ef10b
 
 That base is the accepted squash merge of PR #251, **A2-R1 Pure Multi-Fact Reception Contract Proof**.
 
-Public runtime remains **v2.5.0 · Build 38**. Pedagogy baseline remains **v2.3.0 · Build 34**. Curriculum remains **52 lessons / 313 items**. This audit changes no runtime, learner route, curriculum, storage, Recovery, Evidence, voice, Premium or PWA behaviour.
+Public runtime remains **v2.5.0 · Build 38**. Pedagogy baseline remains **v2.3.0 · Build 34**. Curriculum remains **52 lessons / 313 items**.
+
+This audit changes no learner runtime, route, curriculum, storage schema, Recovery, Evidence, voice, Premium or PWA behavior.
 
 ---
 
 ## 1. Mission
 
-The pure A2-R1 contract now proves that French Trân’quille can validate a bounded deterministic 2–4 question reception activity over several distinct explicit facts from one source.
+The accepted pure A2-R1 contract proves that French Trân’quille can validate a bounded deterministic 2–4 question reception activity over several distinct explicit facts from one source.
 
-This audit decides whether that proof should become a later learner-facing Listening capability and, if yes, defines the **smallest safe integration contract** before any runtime code is authorized.
+This audit decides whether that proof should become a later learner-facing Listening capability and, if yes, defines the smallest safe integration contract before runtime code is authorized.
 
-The decision criterion is:
+Decision criterion:
 
 > Can the new multi-fact reception demand be added as a backward-compatible Listening activity, with honest item-level outcomes, no new durable owner and no claim that the learner has reached A2?
 
@@ -48,9 +50,10 @@ src/pedagogy/listening-data-2.js
 src/pedagogy/listening-engine.js
 src/pedagogy/learner-evidence-adapter.js
 src/pedagogy/a2-reception-bridge-core.js
+src/core/build32-loader.js
 ```
 
-Canonical pilot remains:
+Canonical pilot:
 
 ```text
 dialogue                  doctor-appointment
@@ -62,7 +65,7 @@ facts                     jai-mal-ventre / depuis-hier / rendez-vous-medecin
 
 ## 3. Current Listening reality
 
-`doctor-appointment` already exists in `listening-data-2.js` and already owns the exact source audio/text facts required by R1:
+`doctor-appointment` already owns the exact source facts required by R1:
 
 ```text
 A: Qu’est-ce qui vous arrive ?
@@ -71,7 +74,7 @@ A: Depuis quand ?
 B: Depuis hier. Je voudrais un rendez-vous avec un médecin.
 ```
 
-Its current learner-facing contract remains intentionally simple:
+Its current learner-facing contract is deliberately simple:
 
 ```text
 one dialogue
@@ -82,104 +85,154 @@ one dialogue
 → next exercise
 ```
 
-The current question tests only:
+The current question tests only `depuis-hier`.
+
+Existing Listening also persists playback telemetry immediately when the learner listens:
 
 ```text
-depuis-hier
+plays
+replays
+slowPlays
 ```
 
-The current dialogue must stay backward-compatible. Existing single-question fields are **not** to be reinterpreted as an R1 sequence.
+That telemetry is historical Listening behavior and must be distinguished from pedagogical Memory/Error/Evidence truth.
+
+The historical dialogue and single-question flow must stay backward-compatible.
 
 ---
 
 ## 4. Integration decision
 
-**YES — A2-R1 should be integrated into Listening as a later narrow learner-facing capability.**
+**YES — A2-R1 should be integrated into Listening later as one narrow pilot.**
 
-But the integration must be **additive**, not a rewrite of the current dialogue schema or Listening state machine.
-
-Decision:
+But integration must be additive, not a rewrite of the current dialogue schema or state machine.
 
 ```text
-existing dialogue source                 KEEP UNCHANGED
-existing single-question Listening       KEEP UNCHANGED
-pure A2-R1 core                          REUSE
-R1 question definitions                  ADD AS SEPARATE BRIDGE DATA/MAPPING
-learner-facing surface                   REUSE LISTENING OVERLAY
-new route/tab                            NO
-new lesson/item                          NO
+existing dialogue source                  KEEP UNCHANGED
+existing single-question Listening        KEEP UNCHANGED
+accepted pure A2-R1 core                  REUSE
+trusted R1 authority                      SEPARATE OWNER/RECORD
+R1 activity/questions                     SEPARATE OWNER/RECORD
+learner-facing surface                    REUSE LISTENING OVERLAY
+new route/tab                             NO
+new lesson/item                           NO
 new durable store                        NO
-Build43                                  NOT AUTHORIZED BY THIS AUDIT
+Build43                                  NOT AUTHORIZED
 ```
 
-The purpose is to add a new task shape over accepted language, not to create a parallel A2 application.
+The purpose is to add a harder task shape over already accepted language, not to create a parallel A2 app.
 
 ---
 
-## 5. Data ownership decision
+## 5. Data ownership — authority MUST remain external
 
-Do **not** add `bridgeQuestions` directly to the historical dialogue object in `listening-data-2.js` for the first integration.
+The first integration must **not** put trusted authority inside the activity record itself.
 
-Instead, a later implementation candidate should add one narrow static bridge owner, for example:
+The accepted pure core contract is:
 
 ```text
-src/pedagogy/a2-reception-bridge-data.js
+normalizeActivity(activity, authority)
 ```
 
-Conceptual shape:
+Therefore the later static bridge owner must expose **two independently addressed records**.
+
+### Trusted authority record
 
 ```text
-{
-  'doctor-appointment': {
+R1_AUTHORITIES = {
+  'doctor-appointment-multi-fact': {
+    dialogueId: 'doctor-appointment',
+    prerequisiteLessonId: 'l45',
+    allowedFactIds: [
+      'jai-mal-ventre',
+      'depuis-hier',
+      'rendez-vous-medecin'
+    ]
+  }
+}
+```
+
+### Candidate activity record
+
+```text
+R1_ACTIVITIES = {
+  'doctor-appointment-multi-fact': {
     id: 'doctor-appointment-multi-fact',
     lane: 'A2-R1',
-    authority: {
+    source: {
+      kind: 'listening-dialogue',
       dialogueId: 'doctor-appointment',
       prerequisiteLessonId: 'l45',
-      allowedFactIds: [
+      prerequisiteItemIds: [
         'jai-mal-ventre',
         'depuis-hier',
         'rendez-vous-medecin'
       ]
     },
-    questions: [...]
+    questions: [/* exactly 3 canonical questions */]
   }
 }
 ```
 
-The existing dialogue remains the audio/text source of truth. The bridge data only describes the extra reception questions and external authority required by the accepted pure core.
+Runtime validation must obtain them separately:
 
-Why separate ownership is preferred:
+```text
+authority = R1_AUTHORITIES[id]
+activity  = R1_ACTIVITIES[id]
+plan      = FrenchTranquilleA2ReceptionBridgeCore.normalizeActivity(activity, authority)
+```
 
-1. zero reinterpretation of historical dialogue fields;
-2. old Listening behavior remains available and testable unchanged;
-3. bridge data can be validated through the pure core before rendering;
-4. future R1 pilots can be added without expanding the base Listening schema prematurely;
-5. rollback is simple: remove bridge wiring/data, not migrate dialogue records.
+The activity must never derive or manufacture its own trusted authority.
+
+Why this separation is mandatory:
+
+1. preserves the #251 anti-self-authorization guarantee;
+2. prevents valid fact IDs from being rebound to an unrelated dialogue/lesson;
+3. lets tests forge the activity independently and prove rejection;
+4. keeps trust ownership explicit and reviewable.
+
+The recommended owner may still be one physical file such as `src/pedagogy/a2-reception-bridge-data.js`, but exported authority and activity records must remain logically separate.
 
 ---
 
-## 6. Unlock / availability semantics
+## 6. Existing dialogue ownership
 
-R1 availability must reuse the current Listening prerequisite logic and add **no A2 readiness claim**.
+Do **not** add R1 question arrays directly into `src/pedagogy/listening-data-2.js` for the first pilot.
 
-For the first pilot, the bridge is available only when:
+The historical dialogue remains audio/text source-of-truth. The separate R1 data owner only describes the extra multi-fact task.
+
+Benefits:
+
+- zero reinterpretation of historical dialogue fields;
+- current single-question exercise remains testable unchanged;
+- pure core validates the R1 activity before rendering;
+- rollback removes bridge wiring/data rather than migrating old records;
+- future R1 pilots, if ever authorized, do not prematurely enlarge the base Listening schema.
+
+---
+
+## 7. Availability semantics
+
+R1 availability must reuse current Listening prerequisites and add **no A2 readiness claim**.
+
+First pilot is available only when:
 
 ```text
 existing doctor-appointment dialogue is available
-AND prerequisite lesson identity is l45
-AND all authoritative fact IDs are currently valid curriculum items
-AND the pure core accepts the bridge activity
+AND authoritative dialogueId == doctor-appointment
+AND authoritative prerequisiteLessonId == l45
+AND authoritative fact IDs still exist as valid curriculum items
+AND the pure core accepts activity + external authority
 ```
 
-The learner-facing wording must be capability-neutral, e.g.:
+Learner wording should be capability-neutral, e.g.:
 
 ```text
 VI: Nghe và nhớ nhiều thông tin
 FR DEBUG: Écouter et retenir plusieurs informations
 ```
 
-Do not display:
+Forbidden wording:
 
 ```text
 A2 débloqué
@@ -188,19 +241,19 @@ Tu es prête pour A2
 Compétence A2 maîtrisée
 ```
 
-Availability means only: **the accepted source language is present and this activity can be attempted**.
+Availability means only that this bounded activity can honestly be attempted.
 
 ---
 
-## 7. Sequence interaction contract
+## 8. Sequence interaction contract
 
-The first learner-facing R1 pilot should be a **single bounded sequence of 3 questions** over one short dialogue.
+First learner-facing pilot = **one bounded sequence of exactly 3 questions** over the same full short dialogue.
 
 Recommended flow:
 
 ```text
 open R1 activity
-→ play / replay full dialogue
+→ play/replay full dialogue
 → question 1
 → local success/miss feedback
 → question 2
@@ -208,17 +261,17 @@ open R1 activity
 → question 3
 → local success/miss feedback
 → full transcript reveal
-→ bounded sequence summary
-→ return to Listening / next activity
+→ bounded descriptive summary
+→ return to Listening
 ```
 
-Important: the full transcript stays hidden until all R1 questions have been answered.
+The full transcript stays hidden until all three questions are answered.
 
-Reason: revealing the transcript after question 1 would expose facts needed for questions 2 and 3 and destroy the multi-fact reception demand.
+Reason: revealing it after question 1 would expose facts required by questions 2 and 3 and destroy the multi-fact retention demand.
 
 ---
 
-## 8. Correction semantics
+## 9. Question/correction semantics
 
 For each question:
 
@@ -229,13 +282,13 @@ wrong first selection   → miss
 
 After a miss:
 
-- the correct option may be identified immediately;
-- the miss remains a miss;
-- moving to the next question is allowed;
-- replay before the next question is allowed;
-- no later correction rewrites the first outcome as success.
+- identify the correct option if helpful;
+- keep the first outcome as `miss`;
+- allow moving to the next question;
+- allow replay before the next question;
+- never rewrite the first miss into success because correction was shown.
 
-The sequence summary may say, descriptively:
+Descriptive summary may say:
 
 ```text
 3 informations écoutées
@@ -253,88 +306,107 @@ niveau validé
 
 ---
 
-## 9. Replay / slow playback semantics
+## 10. Replay / slow playback semantics
 
-Reuse existing Listening audio behavior:
+Reuse existing Listening audio behavior and accepted product boundaries:
 
 ```text
 normal 0.88
-slow   0.65 effective floor/current accepted runtime behavior
+slow   accepted effective current slow behavior 0.65
 ```
 
-Replay may be used:
+Replay may be used before question 1, between questions, after a miss and before final transcript reveal.
 
-- before question 1;
-- between questions;
-- after a miss;
-- before transcript reveal if desired.
+Replay/slow use is **support telemetry**, not failure evidence.
 
-Replay/slow use is support metadata, not failure evidence.
-
-The same full dialogue is replayed; do not play isolated answer-bearing lines for the first R1 pilot because that would reduce the retention demand.
+The same full dialogue is replayed. The first pilot must not play isolated answer-bearing lines because that would reduce the retention demand.
 
 ---
 
-## 10. Memory / Error Intelligence decision
+## 11. Durable-data truth and abandonment semantics
 
-A new evidence owner is **NOT required** for the first learner-facing R1 integration.
+A new evidence owner or durable store is **NOT required**.
 
-Question-level outcomes can honestly reuse the existing reliable Listening family because every accepted R1 question targets exactly one authoritative existing curriculum fact.
+### Pedagogical truth
 
-Later runtime semantics should be:
+Each answered R1 question targets exactly one authoritative existing curriculum fact.
+
+Later semantics may reuse current Memory/Error item truth:
 
 ```text
-question factId → existing Memory.recordPractice(factId, ok, 'listening-r1')
-question factId → existing Errors.recordAttempt(... source: 'listening-r1')
+question factId → Memory.recordPractice(factId, ok, 'listening-r1')
+question factId → Errors.recordAttempt(... source: 'listening-r1')
 ```
 
 One question writes only its own `factId`.
 
-Do **not** write all three facts for every question.
-
-Do **not** manufacture a durable bridge-level capability record.
-
-Do **not** write directly to Evidence v2 or P3b durability.
-
-Allowed durable meaning remains only:
-
-> this existing curriculum item was answered correctly or missed in a deterministic listening question.
-
-Not allowed:
+Forbidden:
 
 ```text
-multi-fact mastery
+write all 3 facts for every question
+bridge-level mastery record
 A2 reception mastery
-independent listening competence
-A2 readiness
+Evidence v2 direct write
+P3b durability
+new store/schema
 ```
 
-This keeps the existing evidence boundary intact.
+### Opening/abandoning before answers
+
+The correct guarantee is **not** “all durable bytes are identical after any playback”. Existing Listening already persists playback telemetry immediately.
+
+Required guarantee:
+
+```text
+open then close without playback/answer
+→ no durable mutation attributable to R1
+
+play/replay/slow then close before answer
+→ ONLY pre-existing Listening playback telemetry may change
+→ Memory unchanged
+→ Error Intelligence unchanged
+→ Evidence v2 unchanged
+→ P3b durability unchanged
+→ learner/curriculum stores unchanged
+→ no new R1 store or sequence record
+```
+
+Allowed Listening telemetry mutations before any answer are limited to the existing fields already owned by Listening playback behavior:
+
+```text
+totals.plays
+totals.replays
+totals.slowPlays
+updatedAt
+```
+
+No pedagogical success/miss/attempt truth is written until an answer is actually selected.
+
+This distinction must be tested explicitly.
 
 ---
 
-## 11. Session/history state decision
+## 12. Listening history/session state
 
-The first R1 integration does **not** justify a new durable store or schema migration.
+The first R1 integration does not justify a schema migration.
 
-Existing Listening totals/recent may record the activity at a coarse session level if that can be done backward-compatibly, but this is optional for the first candidate.
-
-Preferred first-candidate rule:
+Preferred first-pilot rule:
 
 ```text
 no Listening schema migration
-no new persistent R1 sequence object
-item-level Memory/Error writes only after answers
-all sequence cursor/UI state ephemeral
+no persistent R1 sequence object
+question cursor/UI state ephemeral
+existing playback telemetry preserved
+item-level Memory/Error truth only on answered questions
 ```
 
-Opening or abandoning an R1 activity before answering must not mutate learner durable data.
+If later implementation chooses to record coarse sequence completion in existing Listening history, that would require separate review and must remain backward-compatible. It is not required for the first pilot.
 
 ---
 
-## 12. Backward compatibility decision
+## 13. Backward compatibility
 
-The later implementation must preserve all existing Listening behavior:
+Later implementation must preserve:
 
 ```text
 meaning exercises unchanged
@@ -343,36 +415,36 @@ contrast exercises unchanged
 single-question doctor-appointment unchanged
 normal/slow playback unchanged
 current close/settings/navigation unchanged
-current Listening state schema remains readable
+current Listening schema readable without migration
 ```
 
-R1 is an optional additive activity over `doctor-appointment`, not a replacement for the current dialogue exercise.
-
-No migration is required for the first pilot.
+R1 is an optional additive activity over `doctor-appointment`, not a replacement.
 
 ---
 
-## 13. UI placement decision
+## 14. UI placement
 
 Do not create a new global A2 route or bottom-navigation destination.
 
-The first pilot should live inside the existing Listening surface as a **small optional activity affordance** when the source is available.
+First pilot lives inside existing Listening as a compact optional activity affordance when prerequisites are available.
 
-Recommended learner-facing placement:
+Conceptually:
 
 ```text
 Listening / Luyện nghe
-→ contextual dialogue doctor-appointment
+→ doctor-appointment context
 → optional “Nghe 3 thông tin” / “3 informations” activity
 ```
 
-The exact visual component may be a compact mode/pill/card within Listening, but must not expose architecture terms such as `A2-R1`, `bridge`, `factId` or `evidence` to Trân.
+Do not expose `A2-R1`, `bridge`, `factId` or `evidence` to Trân.
+
+Existing Listening CSS/layout should be reused rather than creating a parallel screen system.
 
 ---
 
-## 14. Mobile / iPhone interaction contract
+## 15. Mobile / iPhone contract
 
-The first R1 learner-facing candidate must be tested at least on:
+Candidate must be tested at least on:
 
 ```text
 390 × 844
@@ -382,43 +454,39 @@ DEBUG FR
 
 Requirements:
 
-- touch targets >= 44 px;
+- targets >=44 px;
 - no horizontal overflow;
-- question progress always visible (`1/3`, `2/3`, `3/3`);
+- progress visible: `1/3`, `2/3`, `3/3`;
 - one primary action at a time;
-- no full transcript before sequence completion;
+- transcript hidden until sequence completion;
 - normal and slow playback reachable without layout jump;
-- close/back behavior returns to Listening reliably;
+- close/back reliably returns to Listening;
 - Settings remains usable;
-- no route/page crossfade that exposes competing app facades;
+- no route/page crossfade exposing competing facades;
 - `prefers-reduced-motion` respected;
-- screen-reader labels distinguish playback, choices, next question and close actions.
+- accessible labels distinguish playback, choices, next question and close.
 
 ---
 
-## 15. Later integration architecture
+## 16. Later runtime architecture
 
-A later runtime candidate should remain narrow and reuse existing owners.
+A later candidate should remain narrow and reuse existing owners.
 
-Expected files, subject to exact implementation audit:
+Expected files, subject to exact implementation review:
 
 ```text
-src/pedagogy/a2-reception-bridge-data.js       NEW static pilot mapping
-src/pedagogy/a2-reception-bridge-runtime.js    NEW thin adapter/controller if needed
-src/pedagogy/listening-engine.js               MINIMAL integration hook only
-src/pedagogy/build32-loader.js                 loader wiring only if required
+src/pedagogy/a2-reception-bridge-data.js       NEW / separate authority + activity exports
+src/pedagogy/a2-reception-bridge-runtime.js    NEW / thin controller if needed
+src/pedagogy/a2-reception-bridge-core.js       REUSE / do not weaken
+src/pedagogy/listening-engine.js               MINIMAL hook only if required
+src/pedagogy/listening-engine.css              minimal R1 states if required
+src/core/build32-loader.js                     loader wiring only if required
 sw.js                                          precache only if new runtime files load offline
 ```
 
-Existing pure owner remains:
+Default decision: **do not modify `listening-data-2.js`**.
 
-```text
-src/pedagogy/a2-reception-bridge-core.js
-```
-
-The candidate should avoid modifying `listening-data-2.js` unless a later exact implementation review proves separate mapping impossible. The default decision is **do not modify it**.
-
-No changes are expected in:
+No expected changes in:
 
 ```text
 app.js
@@ -432,56 +500,59 @@ learner route definitions
 
 ---
 
-## 16. Required runtime tests for a later candidate
+## 17. Required runtime tests for later pilot
 
-A future learner-facing R1 candidate must not be merged without a dedicated browser tribunal covering:
+### Static / authority
 
-### Static / ownership
+1. trusted authority and activity are separate exports/records;
+2. bridge activity validates only when passed the external accepted authority;
+3. forged activity dialogueId is rejected;
+4. forged prerequisiteLessonId is rejected;
+5. unauthorized fact is rejected;
+6. historical `listening-data-2.js` doctor source remains unchanged;
+7. no new durable store/schema;
+8. sanctuaries unchanged.
 
-1. bridge data validates through the accepted pure core;
-2. authority binds `doctor-appointment` + `l45` + the three fact IDs;
-3. historical `listening-data-2.js` doctor source remains unchanged;
-4. no new durable store/schema;
-5. sanctuaries unchanged.
+### Browser VI + DEBUG FR
 
-### Real browser — VI + DEBUG FR
+9. existing doctor single-question exercise still works;
+10. R1 affordance hidden when prerequisites unavailable;
+11. R1 affordance visible when prerequisites available;
+12. full dialogue plays at normal speed;
+13. slow replay remains effectively slower;
+14. 3 questions appear in deterministic order;
+15. progress moves 1/3 → 2/3 → 3/3;
+16. miss stays miss after correction;
+17. transcript absent before q3 completion;
+18. transcript appears only after sequence completion;
+19. close/back returns to Listening;
+20. no horizontal overflow at 390×844;
+21. targets >=44 px.
 
-6. existing doctor single-question exercise still works;
-7. R1 affordance is hidden when prerequisites are unavailable;
-8. R1 affordance appears when prerequisites are available;
-9. full dialogue plays at normal speed;
-10. slow replay remains audibly/effectively slower;
-11. three questions appear in deterministic order;
-12. progress indicator moves 1/3 → 2/3 → 3/3;
-13. miss stays miss after correction;
-14. transcript is absent before question 3 completion;
-15. transcript appears after sequence completion;
-16. close/back returns to Listening;
-17. no horizontal overflow at 390×844;
-18. targets >=44 px.
+### Durable-data truth
 
-### Data truth
-
-19. opening/closing without answer leaves durable learner stores byte-identical;
-20. answering question 1 writes only `jai-mal-ventre` Listening practice/error truth;
-21. answering question 2 writes only `depuis-hier` truth;
-22. answering question 3 writes only `rendez-vous-medecin` truth;
-23. no Evidence v2 direct write;
-24. no P3b durability;
-25. no aggregate R1/A2 mastery record.
+22. open + close without playback/answer → learner pedagogical stores unchanged;
+23. play then close → only existing Listening playback telemetry fields may differ;
+24. slow replay then close → same allowed telemetry-only mutation rule;
+25. question 1 answer writes only `jai-mal-ventre` Memory/Error truth;
+26. question 2 answer writes only `depuis-hier` truth;
+27. question 3 answer writes only `rendez-vous-medecin` truth;
+28. no direct Evidence v2 write;
+29. no P3b durability;
+30. no aggregate R1/A2 mastery record.
 
 ### Regression
 
-26. current Listening meaning/contrast/dialogue tests remain green;
-27. field navigation remains green;
-28. iPhone/PWA/offline guard remains green;
-29. baseline five historical CI failures remain the only accepted inherited failures.
+31. current meaning/contrast/dialogue tests remain green;
+32. field navigation remains green;
+33. iPhone/PWA/offline guard remains green;
+34. baseline five historical CI failures remain the only accepted inherited failures.
 
 ---
 
-## 17. Field gate
+## 18. Field gate
 
-A later learner-facing integration may be CI-certified on desktop/iPhone viewport, but the capability should not be called **field closed** until a real iPhone/PWA check confirms:
+A later learner-facing candidate may be CI-certified, but is not **field closed** until real installed iPhone/PWA confirms:
 
 ```text
 open Listening
@@ -495,23 +566,20 @@ open Listening
 → return to Listening
 ```
 
-Field pass must verify no blank screen, no stuck overlay, no duplicate audio/control, and no loss of existing learner data.
+Field pass checks no blank screen, stuck overlay, duplicate audio/control or learner-data loss.
 
-This field gate does not certify A2 level; it certifies only the interaction/runtime integration.
+This gate certifies interaction/runtime integration only — never A2 level.
 
 ---
 
-## 18. Explicit exclusions that remain locked
-
-This audit does **not** authorize:
+## 19. Explicit exclusions still locked
 
 ```text
 Build43
 new lesson IDs
 new curriculum items
 full A2 curriculum
-A2 learner level badge/unlock
-A2 readiness/mastery claim
+A2 level badge/unlock/readiness/mastery
 CEFR certification
 new eighth durable store
 Evidence v2 cutover
@@ -519,6 +587,7 @@ P3b durability
 semantic/free-text grading
 AI evaluator
 productive F16 Transfer
+second R1 dialogue in same slice
 ```
 
 Other A2 lanes remain deferred:
@@ -531,32 +600,58 @@ A2-W1 short functional writing              DEFER
 
 ---
 
-## 19. Candidate verdict
+## 20. Successor-safety CI repair discovered by this audit
+
+The accepted #251 workflow originally enforced the original five-file pure-proof scope and “no runtime integration” restriction on every future PR.
+
+That made any authorized successor impossible by construction.
+
+The candidate repair keeps these always active:
 
 ```text
-integrate A2-R1 into Listening later        YES
-integration style                           ADDITIVE / BACKWARD-COMPATIBLE
-historical dialogue source mutation         NO
-separate bridge data owner                  YES
-pure core reuse                             YES
-new global route                            NO
-new lesson/item                             NO
-new durable store                           NO
-per-question Memory/Error reuse             YES / listening-r1 only
-aggregate A2/R1 mastery                     NO
-transcript before sequence completion       NO
-normal/slow replay                          YES
-real iPhone field gate                      REQUIRED FOR FIELD CLOSE
-Build43                                     NOT AUTHORIZED
+pure-core syntax/unit contract
+pure-core forbidden API guard
+permanent sanctuary guard
+```
+
+The original pure-proof-only scope/source/no-integration restrictions now activate only when the pure core, its unit test or its proof document is modified.
+
+This preserves the accepted core while allowing a future separately authorized integration to consume it.
+
+No learner runtime is changed by this repair.
+
+---
+
+## 21. Candidate verdict
+
+```text
+integrate A2-R1 into Listening later         YES
+integration style                            ADDITIVE / BACKWARD-COMPATIBLE
+trusted authority external to activity       REQUIRED
+historical dialogue mutation                 NO
+separate bridge-data owner                   YES
+pure core reuse                              YES
+new global route                             NO
+new lesson/item                              NO
+new durable store                            NO
+3-question same-dialogue sequence            YES
+transcript before sequence completion        NO
+existing playback telemetry                  PRESERVE
+pre-answer pedagogical writes                NO
+per-question Memory/Error reuse              YES / listening-r1 only
+aggregate A2/R1 mastery                      NO
+Evidence/P3b durability                      NO
+real iPhone field gate                       REQUIRED FOR FIELD CLOSE
+Build43                                      NOT AUTHORIZED
 ```
 
 ---
 
-## 20. Next authorized candidate if this audit is accepted
+## 22. Next authorized candidate if this audit is accepted
 
-Authorize only a narrow **A2-R1 Learner Integration Pilot** candidate implementing the single `doctor-appointment` bridge sequence defined above.
+Authorize only one narrow **A2-R1 Learner Integration Pilot** implementing the single `doctor-appointment` sequence above.
 
-It must remain one pilot, one existing dialogue, three existing facts, one existing Listening surface.
+One pilot. One existing dialogue. Three existing facts. One existing Listening surface.
 
 Expected STOP boundary:
 
@@ -564,10 +659,11 @@ Expected STOP boundary:
 implementation
 → deterministic/unit/browser tests
 → PR candidate
-→ CI review
+→ exact-head CI/review
 → merge only if no new failures
-→ Pages / real iPhone field gate
-→ only then decide whether a second R1 dialogue or another A2 lane is justified
+→ Pages deployment
+→ real iPhone/PWA field gate
+→ only then decide whether any expansion is justified
 ```
 
-No second R1 dialogue and no other A2 lane should be started in the same integration slice.
+Do not start a second R1 dialogue or another A2 lane in the same integration slice.
