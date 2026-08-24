@@ -7,9 +7,10 @@ Last reconciled: 2026-08-24
 - Repository: `shinobione/tran-french-teacher`.
 - Accepted P3b product merge: **`5a658f8ac288e5d5cd091dc0a16fa3683f6064fe`** from PR **#240**.
 - Accepted P3b documentation closeout: PR **#241 — `Docs · close accepted P3b observation proof`**, accepted exact head **`c1591bee16bea91531d930908c7e81dadc27cde1`**, squash merge **`5c643814a4796eb30cc96b1c31cf5b84ea3f5844`**.
-- Last verified `main` before publishing this final-alignment candidate: **`5c643814a4796eb30cc96b1c31cf5b84ea3f5844`**.
-- Published control candidate: PR **#242 — `Docs · finalize merge-stable P3b checkpoint`**, branch **`docs/p3b-final-alignment`**.
-- The moving #242 candidate head and its live open/merged state are intentionally delegated to GitHub metadata. These lines are a publication checkpoint, not a claim that #242 remains active after a later merge.
+- Accepted P3b final alignment: PR **#242 — `Docs · finalize merge-stable P3b checkpoint`**, accepted exact head **`8bb762b32e836c741a03874bbc899e2744b6bb37`**, squash merge **`b72d9c2cd84783c03ae73b627773b896d2378702`**.
+- Last verified `main` before publishing this P3c audit candidate: **`b72d9c2cd84783c03ae73b627773b896d2378702`**.
+- Published P3c audit candidate: PR **#243 — `P3c · decide pedagogical observation durability`**, branch **`docs/p3c-durability-decision-audit`**.
+- The moving #243 candidate head and its live open/merged state are intentionally delegated to GitHub metadata. These lines are a publication checkpoint, not a claim that #243 remains active after a later merge.
 - Accepted product state remains Build42.2 product merge **`8b462fae236c00b902a9312fe8e1b103412b8694`**.
 - Build42 closure merge: **`8c2787d203d6089850856652f288f10a4fd53b32`**.
 - Build40 P3 evidence-owner audit PR **#234** squash merge: **`cb4bb8fc1ddbdf8c6694dd5597ada86b202e2eac`**.
@@ -20,11 +21,13 @@ Last reconciled: 2026-08-24
 - P3a final-alignment PR **#239** accepted exact head **`659b820e0ba06691a93f463f8061855b182a87ed`**, squash merge **`7bb9d4ab52d6402121d75c63a8c1042030c1c856`**.
 - P3b PR **#240** accepted exact head **`a641481d647510c41855c144149c2adccfde333c`**, squash merge **`5a658f8ac288e5d5cd091dc0a16fa3683f6064fe`**.
 - P3b docs closeout PR **#241** accepted exact head **`c1591bee16bea91531d930908c7e81dadc27cde1`**, squash merge **`5c643814a4796eb30cc96b1c31cf5b84ea3f5844`**.
+- P3b final-alignment PR **#242** accepted exact head **`8bb762b32e836c741a03874bbc899e2744b6bb37`**, squash merge **`b72d9c2cd84783c03ae73b627773b896d2378702`**.
 - Public runtime metadata remains **v2.5.0 · Build 38**; pedagogy baseline remains **v2.3.0 · Build 34**.
 - Build40 P3 is **CLOSED / ACCEPTED**.
 - P3a is **CLOSED / ACCEPTED PURE CONTRACT PROOF**.
 - P3b is **CLOSED / ACCEPTED EPHEMERAL SOURCE-OBSERVATION PROOF**.
-- **NEXT = P3c — durability decision / audit.**
+- P3c is **ACTIVE CANDIDATE / DURABILITY DECISION AUDIT** in PR **#243**.
+- **NEXT only if #243 is accepted = P4 — fresh A1 readiness audit.**
 
 ## Accepted product state
 
@@ -60,7 +63,8 @@ Build42    CLOSED / SUCCESSFUL FOUNDATIONS DEBT RESOLUTION
 Build40 P3 CLOSED / ACCEPTED
 P3a        CLOSED / ACCEPTED PURE CONTRACT PROOF
 P3b        CLOSED / ACCEPTED EPHEMERAL SOURCE-OBSERVATION PROOF
-P3c        NEXT / NOT STARTED
+P3c        ACTIVE CANDIDATE / DURABILITY DECISION AUDIT
+P4         NOT STARTED — blocked on P3c acceptance
 Build42.3  NOT AUTHORIZED
 F16 Transfer NOT AUTHORIZED
 Build43    NOT AUTHORIZED
@@ -261,9 +265,14 @@ PR #241 accepted head           c1591bee16bea91531d930908c7e81dadc27cde1
 PR #241 squash merge            5c643814a4796eb30cc96b1c31cf5b84ea3f5844
 PR #241 scope                   exactly 3 Markdown files
 PR #241 exact-head CI           only five inherited baseline failures after unchanged V5.3 capture rerun
+PR #242 accepted head           8bb762b32e836c741a03874bbc899e2744b6bb37
+PR #242 squash merge            b72d9c2cd84783c03ae73b627773b896d2378702
+PR #242 scope                   exactly 2 Markdown files
+PR #242 review                  1×P2 resolved; resumable merge-stable checkpoint retained
+PR #242 exact-head CI           only five inherited baseline failures after unchanged V5.3 capture rerun
 ```
 
-The #240 P1 fix did not widen P3b evidence semantics: it only ensured the newly required boot-time scripts are available during installed-PWA offline startup. The #241 closeout changed documentation only.
+The #240 P1 fix did not widen P3b evidence semantics: it only ensured the newly required boot-time scripts are available during installed-PWA offline startup. The #241/#242 closeout and final alignment changed documentation only.
 
 Explicit P3b non-ownership remains locked:
 
@@ -286,24 +295,51 @@ foundation-capsule    unavailable
 transfer-construction unavailable
 ```
 
-## NEXT — P3c durability decision
+## P3c — ACTIVE CANDIDATE / DURABILITY DECISION AUDIT
 
-P3c is **NEXT / NOT STARTED**. It is a decision/audit gate, not automatic permission to persist.
-
-P3c must decide from the real P3b observation semantics whether any durable architecture is justified. P3b itself provides **no** persistence authorization.
+Canonical candidate audit:
 
 ```text
-P3c
-→ audit usefulness and independence of actual Foundation/Transfer observations
-→ decide whether durability is justified at all
-→ if durability is proposed, reconcile ownership with Recovery / backup / Evidence boundaries before any write
-→ do not manufacture mastery, CEFR, score, confidence or assisted-success
-→ do not number Build43 without explicit later authorization
-
-then
-P4 — fresh A1 readiness audit
-→ reconsider A2 only from the re-audited evidence reality
+docs/BUILD-40-P3C-DURABILITY-DECISION-AUDIT.md
+PR #243 — docs/p3c-durability-decision-audit
 ```
+
+Candidate verdict:
+
+```text
+raw P3b event truth                    TRUSTWORTHY AT EVENT LEVEL
+cross-session durability now           NOT JUSTIFIED
+Learning Memory reuse                   REJECTED
+Error Intelligence reuse                REJECTED
+direct Evidence-v2 source writes        REJECTED under current shadow contract
+Evidence-v2 read cutover                NOT AUTHORIZED
+new eighth durable store now            NOT JUSTIFIED
+aggregation / independence inference    NOT AUTHORIZED
+mastery / CEFR / score / confidence     NOT AUTHORIZED
+Build39.2 availability promotion        NOT AUTHORIZED
+Build43                                 NOT AUTHORIZED
+A2                                      NOT AUTHORIZED
+```
+
+Why durability remains unjustified in this candidate:
+
+- one answer per displayed question is enforced, but reopening Foundation/Transfer replays the same fixed checks/exercises;
+- P3b has timestamps and stable exercise IDs but no certified durable session/attempt-group identity or independence policy;
+- no accepted recency/spacing threshold exists and P3c must not invent one;
+- multi-concept Foundation capsules do not yet have a per-check concept-coverage attribution contract;
+- Learning Memory/Error Intelligence remain item-centric;
+- Evidence v2 remains Recovery's seventh **derived shadow** of the six canonical source stores, so direct source-event writes would change its role;
+- an eighth store would require a real Recovery/backup migration before any certified consumer has justified that cost.
+
+Before durability can be reopened, a future explicit design must first define the consumer/use-case, attempt/session grouping, independence rules, concept attribution, recency/spacing, dedupe/retention, storage ownership and Recovery migration proof.
+
+Recovery remains **7 stores / backup v3**. Evidence v2 remains **derived shadow only**. P3a/P3b runtime semantics remain unchanged.
+
+## NEXT only after P3c acceptance — P4 fresh A1 readiness audit
+
+P4 must reassess A1 from the actual post-P3b evidence reality. It must distinguish honest ephemeral event observations from reliable durable evidence and reconsider A2 only from that fresh audit.
+
+P4 is **NOT STARTED** while #243 is a candidate. P4 does not automatically authorize A2, Build43, durable observation storage, Evidence read cutover or a new store.
 
 ## Locked boundaries
 
