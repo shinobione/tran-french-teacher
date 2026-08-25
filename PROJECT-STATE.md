@@ -5,14 +5,14 @@ Last reconciled: 2026-08-25
 ## Canonical checkpoint
 
 - Repository: `shinobione/tran-french-teacher`.
-- Verified accepted `main`: **`a4cdc146267a88ccef9c7cde928bc2f1010ef10b`**.
-- That commit is the squash merge of PR **#251 — `A2-R1 · prove pure multi-fact reception contract`**.
-- PR #251 accepted exact head: **`766fe4c0f9d92074b2c1bb034a0acbcfe3d0b7b2`**.
-- #251 exact-head CI: dedicated A2-R1 contract SUCCESS; full matrix returned only the five inherited baseline failures.
-- #251 Codex P2s were fixed/resolved before merge: authoritative dialogue/lesson binding + rejection of duplicate displayed option pairs.
-- Active candidate: PR **#252 — `Docs · decide A2-R1 learner integration boundary`** on branch `docs/a2-r1-integration-decision-audit`.
-- #252 includes only documentation/checkpoint + the successor-safety repair of `.github/workflows/a2-r1-reception-contract.yml`; no learner runtime-bearing file is changed.
-- GitHub live metadata owns #252's moving head/state and the current `main` tip. Never predict a future merge SHA from this file.
+- Verified accepted `main`: **`bb4cd1317936594820a9458ddbfe0e367a8386ac`**.
+- That commit is the squash merge of PR **#252 — `Docs · decide A2-R1 learner integration boundary`**.
+- PR #252 accepted exact head: **`9efa564fac991091d7422b66d0864215fe43dd3b`**.
+- #252 exact-head CI completed with exactly the five inherited baseline failures; the successor-safe `A2-R1 Pure multi-fact reception contract` workflow was SUCCESS.
+- Two valid Codex findings on #252 were corrected/resolved before merge: trusted authority remains external to activity data; pre-answer abandonment permits only existing Listening playback telemetry, not pedagogical writes.
+- Active closeout candidate branch: **`docs/a2-r1-integration-decision-closeout`**.
+- Closeout document: `docs/A2-R1-INTEGRATION-DECISION-CLOSEOUT.md`.
+- GitHub live metadata owns the moving closeout head/PR state and current `main` tip.
 
 ## Accepted product state
 
@@ -28,6 +28,8 @@ Recovery                7 durable stores / backup v3
 Evidence v2             derived shadow only
 Premium V5.10           CLOSED / physical field pass
 ```
+
+No learner-runtime-bearing file changed in #252 or this closeout candidate.
 
 ## Historical learner continuity — LOCKED
 
@@ -52,25 +54,33 @@ P4                         CLOSED / ACCEPTED FRESH A1 READINESS GATE
 A2 Entry Scope Audit       CLOSED / ACCEPTED
 A2 Bridge Design Audit     CLOSED / ACCEPTED
 A2-R1 pure contract proof  CLOSED / ACCEPTED via #251
-A2-R1 integration decision ACTIVE CANDIDATE via #252
-A2-R1 learner integration  NOT AUTHORIZED until #252 acceptance
+A2-R1 integration decision CLOSED / ACCEPTED via #252
+A2-R1 learner pilot        AUTHORIZED NEXT / NOT STARTED
 Build42.3                  NOT AUTHORIZED
 productive F16 Transfer    NOT AUTHORIZED
 Build43                    NOT AUTHORIZED
 full A2 curriculum         NOT AUTHORIZED
 ```
 
-## Accepted A2-R1 pure contract
+## Accepted A2-R1 chain
 
-Canonical pilot:
+```text
+PR #251 accepted head  766fe4c0f9d92074b2c1bb034a0acbcfe3d0b7b2
+PR #251 squash merge   a4cdc146267a88ccef9c7cde928bc2f1010ef10b
+PR #252 accepted head  9efa564fac991091d7422b66d0864215fe43dd3b
+PR #252 squash merge   bb4cd1317936594820a9458ddbfe0e367a8386ac
+```
+
+Canonical first pilot:
 
 ```text
 dialogue                  doctor-appointment
 prerequisite lesson       l45 — Santé & rendez-vous médical
 facts                     jai-mal-ventre / depuis-hier / rendez-vous-medecin
+questions                 exactly 3
 ```
 
-Accepted guarantees:
+Accepted pure contract guarantees:
 
 ```text
 2–4 deterministic questions
@@ -85,54 +95,58 @@ detached / deeply frozen normalized output
 question result = success | miss only
 ```
 
-Pure owner: `src/pedagogy/a2-reception-bridge-core.js`. It is not learner-runtime-loaded on accepted main.
+Pure owner: `src/pedagogy/a2-reception-bridge-core.js`.
 
-## #252 candidate decision
-
-Canonical document: `docs/A2-R1-INTEGRATION-DECISION-AUDIT.md`.
-
-Subject to acceptance:
+## Accepted integration decision — LOCKED
 
 ```text
-integrate R1 into Listening later             YES
-integration style                              additive / backward-compatible
-historical doctor single-question source       PRESERVE
-mutate listening-data-2.js for first pilot     NO by default
-trusted authority                              SEPARATE from activity definition
-activity source                                COMPLETE / independently validated
-reuse accepted pure core                       YES
-new global route                               NO
-new lesson/item                                NO
-new durable store                              NO
-pilot sequence                                 3 questions / same full dialogue
-transcript before sequence completion          NO
-normal/slow replay                             YES
-per-question Memory/Error reuse                YES, source listening-r1 only
+integration target                              existing Listening surface
+integration style                               additive / backward-compatible
+historical doctor single-question source        PRESERVE
+mutate listening-data-2.js for first pilot      NO by default
+trusted authority                               SEPARATE from activity definition
+activity source                                 COMPLETE / independently validated
+new global route                                NO
+new lesson/item                                 NO
+new durable store                               NO
+schema migration                                NO
+pilot sequence                                  3 questions / same full dialogue
+transcript before sequence completion           NO
+normal/slow replay                              YES
+per-question Memory/Error reuse                 YES, source listening-r1 only
 one question writes only its own factId         REQUIRED
-aggregate R1/A2 mastery                        FORBIDDEN
-Evidence v2 direct write                       FORBIDDEN
-P3b durability                                 FORBIDDEN
-real iPhone/PWA field gate                     REQUIRED for field close
+aggregate R1/A2 mastery                         FORBIDDEN
+Evidence v2 direct write                        FORBIDDEN
+P3b durability                                  FORBIDDEN
+real iPhone/PWA field gate                      REQUIRED for field close
 ```
 
-The bridge-data owner may be one file, but must expose independent records conceptually equivalent to:
+Bridge data must preserve the accepted anti-self-authorization split:
 
 ```text
-R1_AUTHORITIES[id]  → dialogueId / prerequisiteLessonId / allowedFactIds
-R1_ACTIVITIES[id]   → id / lane / complete source / questions
+R1_AUTHORITIES[id]
+→ dialogueId / prerequisiteLessonId / allowedFactIds
+
+R1_ACTIVITIES[id]
+→ id / lane / complete source / questions
 ```
 
-Runtime must call:
+Runtime must pass them separately:
 
 ```text
 normalizeActivity(R1_ACTIVITIES[id], R1_AUTHORITIES[id])
 ```
 
-The activity must never self-authorize.
+## Pre-answer persistence boundary — LOCKED
 
-## Pre-answer persistence boundary
+Existing Listening playback telemetry may persist before an answer:
 
-Existing Listening already persists playback telemetry when audio is played. Therefore #252 does **not** promise total byte identity after play-and-abandon.
+```text
+totals.plays
+totals.replays
+totals.slowPlays
+updatedAt
+```
 
 Required truth:
 
@@ -141,8 +155,7 @@ open + close without playback/answer
 → no R1-attributable durable mutation
 
 play/replay/slow + close before answer
-→ only existing Listening playback telemetry may change:
-   totals.plays / totals.replays / totals.slowPlays / updatedAt
+→ only existing Listening playback telemetry may change
 → Memory unchanged
 → Error Intelligence unchanged
 → Evidence v2 unchanged
@@ -152,21 +165,70 @@ play/replay/slow + close before answer
 
 Pedagogical success/miss/attempt truth begins only after an answer selection.
 
-## #252 successor-safety CI repair
+## Authorized NEXT — exactly one learner-facing pilot
 
-The accepted #251 workflow originally enforced its original five-file scope and “no integration” restriction on every future PR. Exact #252 logs proved that this would permanently forbid authorized successors.
+After closeout acceptance, authorize only:
 
-Candidate repair keeps always active:
+**A2-R1 Learner Integration Pilot — `doctor-appointment` only**
+
+Expected narrow architecture:
 
 ```text
-pure-core syntax/unit contract
-pure-core forbidden API guard
-permanent sanctuary guard
+src/pedagogy/a2-reception-bridge-data.js       NEW / separate authority + activity exports
+src/pedagogy/a2-reception-bridge-core.js       REUSE accepted pure owner
+src/pedagogy/listening-engine.js               MINIMAL owned integration
+src/pedagogy/listening-engine.css              minimal R1 states if required
+src/core/build32-loader.js                     loader wiring
+sw.js                                          offline precache/version bump
+unit/browser tests + dedicated CI + docs
 ```
 
-Original pure-proof-only source/scope/no-runtime restrictions activate only when the pure core, its unit test or its proof document changes.
+A thin controller/runtime file is allowed only if it clearly simplifies ownership without creating a second Listening engine or a DOM monkeypatch layer.
 
-This is CI maintenance, not learner-runtime change.
+Default protected paths for the pilot:
+
+```text
+src/pedagogy/listening-data-2.js  unchanged
+curriculum files                  unchanged
+app.js                            unchanged
+voice-ios.js                      unchanged
+free-voice.js                     unchanged
+Recovery/Evidence schemas         unchanged
+routes                            unchanged
+```
+
+## Field gate after pilot merge/deploy
+
+Real installed iPhone/PWA must execute:
+
+```text
+Listening
+→ launch R1 pilot
+→ normal play
+→ answer q1
+→ slow replay
+→ answer q2
+→ answer q3
+→ transcript reveal
+→ return to Listening
+```
+
+Pass means no blank screen, stuck overlay, duplicate audio/control, horizontal overflow or learner-data loss.
+
+This gate certifies runtime integration only — not A2 level.
+
+## Expansion boundary
+
+Until the first pilot passes exact-head CI, merge/deployment and real iPhone field validation:
+
+```text
+second R1 dialogue  NOT AUTHORIZED
+A2-P1               DEFER
+A2-I1               DEFER
+A2-W1               DEFER
+Build43             NOT AUTHORIZED
+full A2 curriculum  NOT AUTHORIZED
+```
 
 ## Evidence/storage boundary — LOCKED
 
@@ -180,8 +242,6 @@ Evidence v2 read cutover: not authorized
 new eighth durable store: not justified
 mastery / CEFR / score / confidence inference: not authorized
 ```
-
-A later R1 pilot may write deterministic Listening truth for **the one fact tested by that question only**. No bridge-level capability record is authorized.
 
 ## Permanent safety boundaries
 
@@ -211,13 +271,13 @@ Any other failure is NEW until exact logs classify it.
 ## Next control action
 
 ```text
-1. Read live #252 head/state first.
-2. Require successor-safe A2-R1 contract workflow SUCCESS on exact final head.
-3. Require Codex P1/P2 authority + abandonment review threads resolved.
-4. Inspect full exact-head CI; only the five baseline failures are acceptable.
-5. Merge #252 only if exact head/reviews/CI are clean by that contract.
-6. Verify actual main SHA.
-7. Reconcile MASTER-ROADMAP durably after acceptance.
-8. Then authorize exactly one A2-R1 Learner Integration Pilot over doctor-appointment.
-9. Do not start a second R1 dialogue, another A2 lane, Build43 or full A2 curriculum before the first pilot's CI + real iPhone/PWA field gate.
+1. Review/merge the docs-only A2-R1 integration closeout candidate.
+2. Verify actual main SHA after merge.
+3. Create exactly one A2-R1 learner-integration pilot branch from accepted main.
+4. Implement only doctor-appointment / l45 / the three accepted facts.
+5. Add deterministic unit/browser/offline/data-truth gates.
+6. Stop at a PR candidate for exact-head CI/review.
+7. Merge only if only the five inherited failures remain.
+8. Verify main + Pages/deployment.
+9. Require real iPhone/PWA field pass before any second R1 dialogue or other A2 lane.
 ```
