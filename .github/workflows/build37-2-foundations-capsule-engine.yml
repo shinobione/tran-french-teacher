@@ -101,11 +101,11 @@ jobs:
             git diff --exit-code origin/main...HEAD -- "$pilot"
           fi
 
-      - name: Product, durability and voice owners stay untouched
+      - name: Product, durability and voice owners stay untouched except authorized Listening successors
         run: |
           set -euo pipefail
           changed="$(git diff --name-only origin/main...HEAD)"
-          forbidden='^(app\.js|voice-ios\.js|free-voice\.js|index\.html|src/core/data-recovery|src/core/memory-evidence-v2-runtime\.js|src/pedagogy/learning-memory\.js|src/pedagogy/error-intelligence\.js|src/pedagogy/listening-engine\.js|src/pedagogy/scenario-engine\.js|src/pedagogy/mastery-engine\.js|src/pedagogy/learner-intelligence.*\.js)$'
+          forbidden='^(app\.js|voice-ios\.js|free-voice\.js|index\.html|src/core/data-recovery|src/core/memory-evidence-v2-runtime\.js|src/pedagogy/learning-memory\.js|src/pedagogy/error-intelligence\.js|src/pedagogy/scenario-engine\.js|src/pedagogy/mastery-engine\.js|src/pedagogy/learner-intelligence.*\.js)$'
           if printf '%s\n' "$changed" | grep -E "$forbidden"; then
             echo 'Build 37 Foundations work must not change product/storage/voice owners' >&2
             exit 1

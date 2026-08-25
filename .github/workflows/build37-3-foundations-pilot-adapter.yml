@@ -49,7 +49,7 @@ jobs:
               assert f'./src/pedagogy/{name}' in sw
           PY
 
-      - name: Protected owners stay untouched
+      - name: Protected owners stay untouched except authorized Listening successors
         run: |
           set -euo pipefail
           git fetch origin main --quiet
@@ -64,7 +64,6 @@ jobs:
             src/pedagogy/foundations-core.js \
             src/pedagogy/learning-memory.js \
             src/pedagogy/error-intelligence.js \
-            src/pedagogy/listening-engine.js \
             src/pedagogy/scenario-engine.js \
             src/pedagogy/mastery-engine.js \
             src/pedagogy/learner-intelligence.js \
