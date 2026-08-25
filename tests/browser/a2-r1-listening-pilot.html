@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>A2-R1 Listening pilot tribunal</title>
+  <style>
+    html,body{margin:0;width:100%;min-height:100%;background:#08111d;color:#fff;font-family:system-ui,sans-serif}
+    iframe{display:block;width:390px;max-width:100%;height:844px;border:0;margin:0 auto;background:#08111d}
+  </style>
+</head>
+<body>
+  <iframe id="app-frame" src="../../?debug=fr" title="French Trân’quille"></iframe>
+  <script>
+  (()=>{
+    'use strict';
+    const root=document.documentElement;
+    const frame=document.getElementById('app-frame');
+    const mark=(name,value)=>{root.dataset[name]=String(value)};
+    const wait=(label,test,limit=160,delay=100)=>new Promise((resolve,reject)=>{
+      mark('a2R1SmokeStep',label);
+      let n=0;
+      const tick=()=>{
+        try{if(test())return resolve(true)}catch{}
+        if(++n>=limit)return reject(new Error(`wait-timeout:${label}`));
+        setTimeout(tick,delay);
+      };
+      tick();
+    });
+    const parse=value=>{try{return JSON.parse(value||'{}')||{}}catch{return{}}};
+    const click=(doc,selector)=>{
+      const el=doc.querySelector(selector);
+      if(!el)throw new Error(`missing:${selector}`);
+      el.click();
+      return el;
+    };
+
+    frame.addEventListener('load',async()=>{
+      try{
+        const w=frame.contentWindow;
+        const d=frame.contentDocument;
+        await wait('boot',()=>d.documentElement.dataset.build32Ready==='1'&&w.FrenchTranquilleListening&&w.FrenchTranquilleA2ReceptionBridgeCore&&w.FrenchTranquilleA2ReceptionBridgeData&&w.FrenchTranquilleCurriculum&&w.FrenchTranquilleListeningData);
+
+        const seed=['jai-mal-ventre','depuis-hier','rendez-vous-medecin'];
+        const curriculum=w.FrenchTranquilleCurriculum;
+        const available=new Set((curriculum.items||[]).map(item=>item.id));
+        if(!seed.every(id=>available.has(id)))throw new Error('availability:stage4-facts-missing');
+
+        const learnerKey=curriculum.key;
+        const storedLearner=parse(w.localStorage.getItem(learnerKey));
+        const learner=storedLearner.schemaVersion===2
+          ? storedLearner
+          : {schemaVersion:2,lessonProgress:{},completedLessons:[],knownItems:[]};
+        learner.lessonProgress=learner.lessonProgress&&typeof learner.lessonProgress==='object'&&!Array.isArray(learner.lessonProgress)?learner.lessonProgress:{};
+        learner.completedLessons=Array.isArray(learner.completedLessons)?learner.completedLessons:[];
+        learner.knownItems=[...new Set([...(Array.isArray(learner.knownItems)?learner.knownItems:[]),...seed])];
+        w.localStorage.setItem(learnerKey,JSON.stringify(learner));
+        const reread=parse(w.localStorage.getItem(learnerKey));
+        if(!seed.every(id=>(reread.knownItems||[]).includes(id)))throw new Error('availability:seed-not-durable');
+
+        const data=w.FrenchTranquilleA2ReceptionBridgeData;
+        const core=w.FrenchTranquilleA2ReceptionBridgeCore;
+        const id=data.pilotId;
+        const plan=core.normalizeActivity(data.activities[id],data.authorities[id]);
+        if(plan.questions.length!==3)throw new Error('question-count');
+        const prereqs=plan.source.prerequisiteItemIds||[];
+        if(prereqs.join('|')!==seed.join('|'))throw new Error(`availability:plan-prereqs:${prereqs.join(',')}`);
+        const dialogue=(w.FrenchTranquilleListeningData.dialogues||[]).find(entry=>entry.id===plan.source.dialogueId);
+        if(!dialogue)throw new Error('availability:dialogue-missing');
+        if(!seed.every(id=>(dialogue.requiredItems||[]).includes(id)))throw new Error(`availability:dialogue-prereqs:${(dialogue.requiredItems||[]).join(',')}`);
+        if(!seed.every(id=>available.has(id)))throw new Error('availability:item-map-missing');
+        if(w.FrenchTranquilleListening.r1Availability()!==true)throw new Error('availability:runtime-false');
+        mark('a2R1SmokeAvailability','1');
+
+        w.FrenchTranquilleListening.open();
+        await wait('overlay-open',()=>d.querySelector('#listening-overlay'));
+        const listeningKey=w.FrenchTranquilleListening.key;
+        const baseline=w.localStorage.getItem(listeningKey)||'';
+        mark('a2R1SmokeEntry',d.querySelector('[data-listening-r1-open]')?'1':'0');
+
+        click(d,'[data-listening-r1-open]');
+        await wait('r1-open-1',()=>d.querySelector('#listening-overlay')?.dataset.listeningR1==='1');
+        mark('a2R1SmokeActive','1');
+        mark('a2R1SmokeOpenStable',(w.localStorage.getItem(listeningKey)||'')===baseline?'1':'0');
+
+        click(d,'[data-listening-r1-back]');
+        await wait('r1-back',()=>d.querySelector('#listening-overlay')?.dataset.listeningR1==='0');
+        mark('a2R1SmokeCloseStable',(w.localStorage.getItem(listeningKey)||'')===baseline?'1':'0');
+
+        click(d,'[data-listening-r1-open]');
+        await wait('r1-open-2',()=>d.querySelector('#listening-overlay')?.dataset.listeningR1==='1');
+
+        const q1=plan.questions[0];
+        click(d,`[data-listening-answer="${(q1.answer+1)%q1.options.length}"]`);
+        await wait('q1-feedback',()=>d.querySelector('[data-listening-next]'));
+        mark('a2R1SmokeHiddenQ1',d.querySelector('.listening-transcript')?'0':'1');
+        click(d,'[data-listening-next]');
+
+        const q2=plan.questions[1];
+        await wait('q2-ready',()=>d.querySelector(`[data-listening-answer="${q2.answer}"]`));
+        click(d,`[data-listening-answer="${q2.answer}"]`);
+        await wait('q2-feedback',()=>d.querySelector('[data-listening-next]'));
+        mark('a2R1SmokeHiddenQ2',d.querySelector('.listening-transcript')?'0':'1');
+        click(d,'[data-listening-next]');
+
+        const q3=plan.questions[2];
+        await wait('q3-ready',()=>d.querySelector(`[data-listening-answer="${q3.answer}"]`));
+        click(d,`[data-listening-answer="${q3.answer}"]`);
+        await wait('q3-reveal',()=>d.querySelector('#listening-overlay')?.dataset.listeningRevealed==='1');
+        mark('a2R1SmokeRevealedQ3',d.querySelector('.listening-transcript')?'1':'0');
+        const footer=[...d.querySelectorAll('.listening-footer span')].map(el=>el.textContent||'').join(' ');
+        mark('a2R1SmokeResults',/3\s*\/\s*3/.test(footer)?'3':'0');
+        mark('a2R1SmokeListeningStateStable',(w.localStorage.getItem(listeningKey)||'')===baseline?'1':'0');
+
+        click(d,'[data-listening-next]');
+        await wait('return-listening',()=>d.querySelector('#listening-overlay')?.dataset.listeningR1==='0');
+        mark('a2R1SmokeReturned','1');
+        mark('a2R1SmokeDone','1');
+      }catch(error){
+        mark('a2R1SmokeError',error?.message||String(error));
+        mark('a2R1SmokeDone','1');
+      }
+    },{once:true});
+  })();
+  </script>
+</body>
+</html>

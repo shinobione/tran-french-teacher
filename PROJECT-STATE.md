@@ -5,17 +5,15 @@ Last reconciled: 2026-08-25
 ## Canonical checkpoint
 
 - Repository: `shinobione/tran-french-teacher`.
-- Verified accepted `main`: **`b3cf1f3f3fbb6891ffd6f8b8be1f7957f356d903`**.
-- That commit is the squash merge of PR **#253 — `Docs · close accepted A2-R1 integration decision`**.
-- PR #253 durably closed the accepted #252 integration decision and authorized exactly one learner-facing A2-R1 pilot.
+- Verified accepted `main`: **`acae4dac142404dda394501e952e44e6dc846129`**.
+- That commit is the squash merge of PR **#255 — `CI · make historical Listening ownership successor-safe`**.
+- PR #255 is **CLOSED / MERGED** and removed only obsolete permanent Listening-owner locks from certified predecessor workflows while preserving their functional tribunals.
 - Active learner-runtime candidate: PR **#254 — `A2-R1 · integrate doctor multi-fact Listening pilot`**.
-- Current verified #254 head at this reconciliation: **`0440b9eb674cf215b495e5a7cd9758643cd8b0ec`**.
-- #254 is **OPEN / MERGEABLE / NOT ACCEPTED**. Its syntax, deterministic contract and sanctuary guards pass, but its dedicated Chrome learner-flow tribunal is still failing on the current head and must be fixed before merge.
-- Exact #254 CI also exposed stale historical predecessor guards that treated `src/pedagogy/listening-engine.js` as permanently immutable even for an explicitly authorized successor.
-- Active CI-remediation candidate: PR **#255 — `CI · make historical Listening ownership successor-safe`**.
-- #255 started from exact accepted main and changes historical CI guards only, plus this canonical checkpoint reconciliation required by review.
-- Before this checkpoint commit, #255 exact-head CI completed with **only the five inherited baseline failures**; Build35 closeout, Recovery36.1, Foundations37.1–37.8 and Transfer38.2/38.5/38.7/38.8 all passed after the successor-safety repair.
-- GitHub live metadata owns moving PR heads, current CI state and current `main` tip.
+- #254 was rebased exactly onto accepted main `acae4dac142404dda394501e952e44e6dc846129`; the rebase candidate commit was **`73d56bafc148f705e472e6c01c8ffa9f81f46a5e`**.
+- On that exact rebased candidate, dedicated workflow **`A2-R1 Learner Listening pilot`** run **`32829801561`** passed syntax, deterministic contract, sanctuary/scope, and the real 390×844 Chrome learner-flow tribunal.
+- The Chrome tribunal uses a Recovery-valid schema-v2 clean learner seed; the earlier false failures were caused by a test harness writing an invalid `{ knownItems }`-only learner object that Recovery correctly rejected.
+- #254 remains **OPEN / NOT ACCEPTED** until the final exact-head full matrix and review arbitration are complete.
+- This checkpoint commit advances the PR head beyond `73d56baf...`; GitHub live metadata owns the moving exact head after this reconciliation.
 
 ## Accepted product state
 
@@ -32,7 +30,7 @@ Evidence v2             derived shadow only
 Premium V5.10           CLOSED / physical field pass
 ```
 
-No learner-runtime-bearing file is changed by PR #255.
+PR #255 changed CI/governance only. PR #254 is the only active learner-runtime candidate.
 
 ## Historical learner continuity — LOCKED
 
@@ -58,8 +56,8 @@ A2 Entry Scope Audit       CLOSED / ACCEPTED
 A2 Bridge Design Audit     CLOSED / ACCEPTED
 A2-R1 pure contract proof  CLOSED / ACCEPTED via #251
 A2-R1 integration decision CLOSED / ACCEPTED via #252/#253 closeout
-A2-R1 learner pilot        ACTIVE CANDIDATE via #254 / NOT MERGED
-A2-R1 CI remediation       ACTIVE CANDIDATE via #255 / NOT MERGED
+A2-R1 CI remediation       CLOSED / MERGED via #255
+A2-R1 learner pilot        ACTIVE FINAL CANDIDATE via #254 / NOT MERGED
 Build42.3                  NOT AUTHORIZED
 productive F16 Transfer    NOT AUTHORIZED
 Build43                    NOT AUTHORIZED
@@ -74,6 +72,7 @@ PR #251 squash merge   a4cdc146267a88ccef9c7cde928bc2f1010ef10b
 PR #252 accepted head  9efa564fac991091d7422b66d0864215fe43dd3b
 PR #252 squash merge   bb4cd1317936594820a9458ddbfe0e367a8386ac
 PR #253 squash merge   b3cf1f3f3fbb6891ffd6f8b8be1f7957f356d903
+PR #255 squash merge   acae4dac142404dda394501e952e44e6dc846129
 ```
 
 Canonical first pilot:
@@ -104,7 +103,7 @@ Pure owner: `src/pedagogy/a2-reception-bridge-core.js`.
 
 ## Active learner pilot candidate — PR #254
 
-The authorized implementation candidate is intentionally narrow:
+The authorized implementation candidate remains intentionally narrow:
 
 ```text
 existing Listening surface only
@@ -123,29 +122,38 @@ no aggregate R1/A2 mastery/readiness/CEFR claim
 no direct Evidence v2 write
 ```
 
-Current #254 status at reconciliation:
+Verified dedicated proof on rebased candidate `73d56bafc148f705e472e6c01c8ffa9f81f46a5e`:
 
 ```text
-OPEN / MERGEABLE / NOT ACCEPTED
-head 0440b9eb674cf215b495e5a7cd9758643cd8b0ec
-syntax + deterministic contract PASS
-pilot sanctuary/scope guard PASS
-dedicated Chrome learner-flow tribunal FAIL
-merge FORBIDDEN until exact-head dedicated tribunal passes
+syntax + deterministic contract          PASS
+pilot sanctuary/scope guard              PASS
+A2-R1 pure multi-fact contract           PASS
+Chrome 390×844 bounded learner flow      PASS
+entry + R1 activation                    PASS
+open/close no Listening-state mutation   PASS
+q1/q2 transcript hidden                  PASS
+q3 transcript reveal                     PASS
+3/3 results recorded                     PASS
+return to Listening                      PASS
 ```
 
-The current browser failure is a candidate/harness/runtime issue still under diagnosis. Do not reclassify it as inherited debt.
+The previous browser-smoke failures are classified as **test harness defects**, not product regressions:
 
-## CI successor-safety remediation — PR #255
+1. `?a2R1Smoke=1` was incorrectly classified by Build31 as a historical smoke and bypassed Build32.
+2. `?a2R1Smoke=1&b32Audit=1` triggered an unrelated Build32 audit and was removed.
+3. The dedicated iframe tribunal initially seeded only `knownItems` into an otherwise empty learner object; Recovery correctly blocked that invalid schema.
+4. The final tribunal seeds a minimal valid schema-v2 learner object and exercises the normal application path.
 
-PR #254 proved that multiple certified predecessor workflows still mixed two concerns:
+No Recovery guard was weakened or bypassed.
+
+## CI successor-safety remediation — PR #255 — MERGED
+
+PR #254 exposed certified predecessor workflows that mixed two concerns:
 
 1. replaying their historical functional contract; and
 2. permanently forbidding any future change to `src/pedagogy/listening-engine.js`.
 
-The second rule is obsolete for an explicitly authorized additive Listening successor.
-
-PR #255 therefore removes only that obsolete permanent Listening-owner prohibition from:
+PR #255 removed only the obsolete permanent Listening-owner prohibition from:
 
 ```text
 Build35 closeout
@@ -156,7 +164,7 @@ Build38.2 / 38.5 / 38.7 / 38.8
 
 All historical syntax, unit, browser and predecessor-behavior tribunals remain active. All other protected owners remain protected.
 
-Before this checkpoint reconciliation commit, #255 exact-head CI showed only the five inherited baseline failures and all repaired predecessor workflows were SUCCESS.
+Accepted #255 exact-head CI had only the five inherited baseline failures. One Build26.1 Chrome failure was rerun unchanged and passed, classifying it as a runner/browser flake rather than a product regression.
 
 ## Accepted integration decision — LOCKED
 
@@ -224,7 +232,7 @@ Pedagogical success/miss/attempt truth begins only after an answer selection.
 
 ## Field gate after pilot merge/deploy
 
-If and only if #254 later passes exact-head CI/review, merges and deploys, the real installed iPhone/PWA must execute:
+If and only if #254 passes its final exact-head CI/review, merges and deploys, the real installed iPhone/PWA must execute:
 
 ```text
 Listening
@@ -244,7 +252,7 @@ This gate certifies runtime integration only — not A2 level.
 
 ## Expansion boundary
 
-Until the first pilot passes exact-head CI, merge/deployment and real iPhone field validation:
+Until the first pilot passes final exact-head CI, merge/deployment and real iPhone field validation:
 
 ```text
 second R1 dialogue  NOT AUTHORIZED
@@ -296,13 +304,12 @@ Any other failure is NEW until exact logs classify it.
 ## Next control action
 
 ```text
-1. Re-run/review PR #255 on its new exact head after this checkpoint reconciliation.
-2. Merge #255 only if exact-head CI contains only the five inherited failures and no unresolved valid review blocker.
-3. Verify the actual new main SHA.
-4. Rebase/update PR #254 onto that accepted main without changing its authorized product scope.
-5. Fix the dedicated A2-R1 Chrome learner-flow failure on #254; do not bypass or reclassify it.
-6. Require a fresh exact-head #254 matrix with the dedicated A2-R1 workflow SUCCESS and only the five inherited failures globally.
-7. Merge/deploy #254 only after review is clear.
-8. Stop at the real installed iPhone/PWA field sequence.
-9. Do not start a second R1 dialogue, another A2 lane, Build43 or full A2 curriculum before the physical field gate passes.
+1. Treat this checkpoint commit as the final #254 candidate unless a real defect is found.
+2. Require the dedicated A2-R1 workflow to remain SUCCESS on the new exact head.
+3. Require the full exact-head matrix to contain only the five inherited baseline failures; classify any additional red from exact logs.
+4. Re-check reviews/threads and resolve any valid new blocker.
+5. Squash-merge #254 only from its verified exact head.
+6. Verify actual new main SHA and GitHub Pages deployment on that same runtime-bearing merge.
+7. Stop at the real installed iPhone/PWA field sequence.
+8. Do not start a second R1 dialogue, another A2 lane, Build43 or full A2 curriculum before the physical field gate passes.
 ```
