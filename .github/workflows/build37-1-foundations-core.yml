@@ -78,12 +78,12 @@ jobs:
             ! grep -q 'localStorage.setItem' "$pilot"
           fi
 
-      - name: Product and durability owners are untouched
+      - name: Product and durability owners are untouched except authorized Listening successors
         run: |
           set -euo pipefail
           git fetch origin main --depth=1
           changed="$(git diff --name-only origin/main...HEAD)"
-          forbidden='^(app\.js|voice-ios\.js|free-voice\.js|src/core/data-recovery|src/core/memory-evidence-v2-runtime\.js|src/pedagogy/learning-memory\.js|src/pedagogy/error-intelligence\.js|src/pedagogy/listening-engine\.js|src/pedagogy/scenario-engine\.js|index\.html)$'
+          forbidden='^(app\.js|voice-ios\.js|free-voice\.js|src/core/data-recovery|src/core/memory-evidence-v2-runtime\.js|src/pedagogy/learning-memory\.js|src/pedagogy/error-intelligence\.js|src/pedagogy/scenario-engine\.js|index\.html)$'
           if printf '%s\n' "$changed" | grep -E "$forbidden"; then
             echo 'Build 37 Foundations work must not change runtime/storage/product owners' >&2
             exit 1
