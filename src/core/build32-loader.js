@@ -1,6 +1,7 @@
 (() => {
   'use strict';
   const VERSION = '2.2.0-b32';
+  const A2_R1 = '1.0.0-pilot';
   const FOUNDATIONS = '2.4.0-b37.3';
   const PEDAGOGICAL_OBSERVATION_CONTRACT='p3a-1.0.0';
   const PEDAGOGICAL_OBSERVATION_RUNTIME='p3b-1.0.0';
@@ -77,10 +78,13 @@
     if (root.dataset.build32Ready === '1') return;
     root.dataset.build32Loading = '1';
     loadStyle(`./src/pedagogy/curriculum-stage4.css?v=${VERSION}`, 'build32Stage4Style');
+    loadStyle(`./src/pedagogy/a2-reception-bridge.css?v=${A2_R1}`, 'a2R1ReceptionBridgeStyle');
     await loadScript(`./src/pedagogy/curriculum-stage4.js?v=${VERSION}`, 'build32Stage4');
     await loadScript(`./src/core/build32-shell-extension.js?v=${VERSION}`, 'build32Shell');
     await loadScript(`./src/pedagogy/real-life-data-4.js?v=${VERSION}`, 'build32RealLife4');
     await loadScript(`./src/pedagogy/listening-data-2.js?v=${VERSION}`, 'build32Listening2');
+    await loadScript(`./src/pedagogy/a2-reception-bridge-core.js?v=${A2_R1}`, 'a2R1ReceptionBridgeCore');
+    await loadScript(`./src/pedagogy/a2-reception-bridge-data.js?v=${A2_R1}`, 'a2R1ReceptionBridgeData');
     await loadScript(`./src/pedagogy/learner-intelligence-v2.js?v=${VERSION}`, 'build32Intelligence');
 
     window.FrenchTranquilleBuild27Shell?.refresh?.();

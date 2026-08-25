@@ -1,0 +1,133 @@
+name: A2-R1 Learner Listening pilot
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pilot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax and deterministic pilot contract
+        run: |
+          node --check src/pedagogy/a2-reception-bridge-core.js
+          node --check src/pedagogy/a2-reception-bridge-data.js
+          node --check src/pedagogy/listening-engine.js
+          node --check src/core/build32-loader.js
+          node --check sw.js
+          node --check tests/unit/a2-r1-listening-pilot.test.cjs
+          node tests/unit/a2-r1-listening-pilot.test.cjs
+
+      - name: Pilot sanctuary and scope guard
+        shell: bash
+        run: |
+          set -euo pipefail
+          base="${{ github.event.pull_request.base.sha || github.event.before }}"
+          if [[ -z "$base" || "$base" == '0000000000000000000000000000000000000000' ]]; then
+            base="$(git rev-parse HEAD^)"
+          fi
+          protected=(
+            'app.js'
+            'voice-ios.js'
+            'free-voice.js'
+            'src/pedagogy/listening-data-2.js'
+            'src/pedagogy/curriculum-stage4.js'
+            'src/core/data-recovery.js'
+            'src/core/data-recovery-v3-contract.js'
+            'src/core/data-recovery-v3-runtime-core.js'
+            'src/pedagogy/memory-evidence-v2-core.js'
+          )
+          for path in "${protected[@]}"; do
+            if ! git diff --quiet "$base"...HEAD -- "$path"; then
+              echo "Protected path changed in A2-R1 pilot: $path" >&2
+              exit 1
+            fi
+          done
+          test ! -e src/pedagogy/a2-reception-bridge-renderer.js
+          test ! -e src/pedagogy/a2-reception-bridge-store.js
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/ft-a2-r1.log 2>&1 &
+          echo $! >/tmp/ft-a2-r1.pid
+          sleep 1
+
+      - name: Chrome proves bounded three-fact learner flow
+        shell: bash
+        run: |
+          set -euo pipefail
+          passed=0
+          for attempt in 1 2 3; do
+            profile="/tmp/ft-a2-r1-profile-$attempt"
+            file="/tmp/ft-a2-r1-$attempt.html"
+            rm -rf "$profile" "$file"
+            echo "A2-R1 browser smoke attempt $attempt"
+            if ! timeout --signal=TERM --kill-after=5s 45s \
+              google-chrome --headless=new --no-sandbox --disable-gpu \
+              --user-data-dir="$profile" --window-size=390,844 \
+              --virtual-time-budget=26000 --dump-dom \
+              'http://127.0.0.1:4173/tests/browser/a2-r1-listening-pilot.html' >"$file"; then
+              echo "Chrome attempt $attempt timed out or exited non-zero"
+              continue
+            fi
+            required=(
+              'data-a2-r1-smoke-entry="1"'
+              'data-a2-r1-smoke-active="1"'
+              'data-a2-r1-smoke-open-stable="1"'
+              'data-a2-r1-smoke-close-stable="1"'
+              'data-a2-r1-smoke-hidden-q1="1"'
+              'data-a2-r1-smoke-hidden-q2="1"'
+              'data-a2-r1-smoke-revealed-q3="1"'
+              'data-a2-r1-smoke-results="3"'
+              'data-a2-r1-smoke-listening-state-stable="1"'
+              'data-a2-r1-smoke-returned="1"'
+              'data-a2-r1-smoke-done="1"'
+            )
+            ok=1
+            for marker in "${required[@]}"; do
+              if ! grep -q "$marker" "$file"; then
+                echo "Missing $marker"
+                ok=0
+              fi
+            done
+            if grep -q 'data-a2-r1-smoke-error=' "$file"; then
+              echo 'A2-R1 browser tribunal reported an error'
+              ok=0
+            fi
+            if [[ "$ok" -eq 1 ]]; then
+              passed=1
+              break
+            fi
+            grep -o 'data-a2-r1-smoke-[^ >]*' "$file" | head -30 || true
+          done
+          if [[ "$passed" -ne 1 ]]; then
+            echo 'A2-R1 learner flow failed after 3 bounded isolated attempts' >&2
+            exit 1
+          fi
+
+      - name: Preserve failed A2-R1 DOM diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a2-r1-dom-diagnostics
+          path: |
+            /tmp/ft-a2-r1-*.html
+            /tmp/ft-a2-r1.log
+          if-no-files-found: warn
+          retention-days: 1
+
+      - name: Stop static server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-a2-r1.pid ]; then kill "$(cat /tmp/ft-a2-r1.pid)" || true; fi
