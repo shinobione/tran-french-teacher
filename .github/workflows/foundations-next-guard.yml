@@ -1,0 +1,26 @@
+name: Foundations premature NEXT guard
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax and regression guard
+        run: |
+          set -euo pipefail
+          node --check src/pedagogy/foundations-pilot.js
+          node --check src/pedagogy/foundations-capsule-engine.js
+          node --check tests/unit/foundations-next-guard.test.cjs
+          node tests/unit/foundations-next-guard.test.cjs
