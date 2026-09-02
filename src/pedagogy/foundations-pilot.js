@@ -3,7 +3,7 @@
   const VERSION='2.3.0',BUILD='34',DEBUG='tran-french-teacher:debug-fr:v1';
   const T=(vi,fr)=>localStorage.getItem(DEBUG)==='1'?fr:vi;
   const locale=()=>localStorage.getItem(DEBUG)==='1'?'fr':'vi';
-  const esc=(v='')=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const esc=(v='')=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]));
   const root=document.documentElement;
   const engine=window.FrenchTranquilleFoundationsCapsuleEngine;
   const primaryCapsule=window.FrenchTranquilleFoundationsCapsules?.F01_F04;
@@ -135,8 +135,8 @@
     overlay.querySelectorAll('[data-foundation-choice]').forEach(button=>button.addEventListener('click',()=>answer(button)));
   }
 
-  function next(){session=engine.reduce(activeCapsule,session,{type:'NEXT'});renderOverlay()}
-  function answer(button){if(session?.answered)return;session=engine.reduce(activeCapsule,session,{type:'ANSWER',choice:button.dataset.foundationChoice});renderOverlay()}
+  function next(){if(session?.phase==='question'&&!session?.answered)return;session=engine.reduce(activeCapsule,session,{type:'NEXT'});renderOverlay()}
+  function answer(button){if(session?.answered||button.dataset.foundationBusy==='1')return;button.dataset.foundationBusy='1';session=engine.reduce(activeCapsule,session,{type:'ANSWER',choice:button.dataset.foundationChoice});renderOverlay();button.dataset.foundationBusy='0';}
   function decorate(){updateMeta();mountEntry()}
   function schedule(){if(scheduled)return;scheduled=true;queueMicrotask(()=>{scheduled=false;decorate()})}
   installStyle();const app=document.getElementById('app');if(app)new MutationObserver(schedule).observe(app,{childList:true,subtree:true});window.addEventListener('pagehide',close);decorate();
