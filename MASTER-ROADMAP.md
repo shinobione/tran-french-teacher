@@ -4,7 +4,23 @@
 >
 > Historical long-form decisions remain preserved in dedicated `docs/BUILD-*`, release and audit documents. This file keeps durable milestone order, accepted gates and the current next slice.
 
-## Canonical checkpoint — 2026-08-25
+## V6.1 design track — authorized 2026-10-10 / review candidate
+
+User-approved goal: reproduce the *high-fidelity* Stitch-derived Aurora/Sunset/Jade/Original visual mockups **as closely as the actual iPhone PWA allows**, not merely borrow a vague mood. This design track is additive and does not authorize Build43, A2 mastery claims, new learner schemas or altered voice.
+
+Execution order (one independent candidate PR per slice):
+1. **V6.1 Home + Practice (current PR):** rebuild spatial hierarchy, gradients, glow, illustrated cards, 4-module grid and clear CTA using existing real data/actions, locked background artwork and approved Premium 3D assets. No dummy streak/XP/pronunciation scores or fictitious personalized claims.
+2. **V6.2 Focused quiz:** translate the demonstrated bilingual question/answer/explanation scene onto the actual question state-machine without weakening NEXT, Memory, or audio semantics.
+3. **V6.3 Journey/Profile polish:** true progression and native-feeling polish, 390×844/430×932, offline and Voice continuity.
+4. Each PR: render before/after across all four themes; check text bounds + actions; preserve the protected engines; physical iPhone/PWA PASS only after human reports it.
+
+Visual direction: dark cinematic Paris, source-locked city art, rounded sapphire/indigo glass, bright but accessible theme-native cyan/rose or corresponding sunset/jade/original accents, real illustrated practice icons, strong typographic scale, restrained animations, functional iPhone touch targets. The generated visual mockups are reference artwork, **not a shippable flattened UI**.
+
+Previous A2 state below is a preserved 2026-08-25 historical milestone snapshot and may be superseded by live GitHub.
+
+---
+
+## Archived canonical checkpoint — 2026-08-25
 
 ```text
 accepted main before closeout publication       bb4cd1317936594820a9458ddbfe0e367a8386ac

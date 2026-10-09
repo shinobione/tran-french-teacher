@@ -1,8 +1,22 @@
 # PROJECT-STATE — French Trân’quille
 
-Last reconciled: 2026-08-25
+Last reconciled (live): 2026-10-10
 
-## Canonical checkpoint
+## Live checkpoint — 2026-10-10 (supersedes the archived August 25 checkpoint)
+
+- **Verified main:** `6b08edda98bd09520ed83c49682ebd2443202a23` (PR #257, Foundations premature NEXT fix, merged 2026-09-02). This PR's branch is **not merged**, main/public app are unchanged by V6.1.
+- **PR #254 A2-R1 Listening pilot:** MERGED 2026-08-25 (not open); first doctor multi-fact learner flow deployed. Real iPhone/PWA pilot field certification remains **unverified**, not PASS.
+- **PR #255:** MERGED. **PR #256:** outdated OPEN/DRAFT; **PR #257:** MERGED.
+- **Pages:** deployment #324 SUCCESS on `6b08edda98bd09520ed83c49682ebd2443202a23` (historical deployment, unrelated to this V6.1 proposal).
+- **CI on accepted main:** 45 checks, 38 success / 7 failure (five inherited: data-recovery, v2-freeze, recovery-v3-tribunal, evidence-shadow-adoption, quality; two need investigation: p3b-observation-runtime and build26-1-ux). Do not conflate this with the V6.1 PR's checks.
+- **Active proposal:** `design/v61-stitch-high-fidelity-home-practice` — V6.1 high-fidelity Stitch-inspired **Home + Practice** visual candidate, under human/Chrome/iPhone QA gate. Uses true lesson and scenario content. No merge, no release, no physical-field PASS.
+- **Preserved:** four LOCKED theme backgrounds and lesson Eiffel art, canonical 3D Practice assets, real Vietnamese first / DEBUG FR, 52-lesson curriculum, voice, Memory, Recovery and learner data.
+- **Next exact action:** inspect V6.1 PR diff and 390×844/430×932 Chrome screenshots across four themes; validate clickable lesson/Practice navigation, no visual collisions/overflow, accessibility, slow/offline cache behavior; fix only evidence-backed findings. After PR acceptance/merge/deployment, request physical installed-iPhone field PASS. Then design a separate learner quiz slice.
+
+---
+
+
+## Archived checkpoint — 2026-08-25 (superseded)
 
 - Repository: `shinobione/tran-french-teacher`.
 - Verified accepted `main`: **`acae4dac142404dda394501e952e44e6dc846129`**.

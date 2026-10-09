@@ -122,6 +122,9 @@
       await loadScript(`./src/pedagogy/learner-action-runtime-snapshot.js?v=${LEARNER_ACTION_RUNTIME_SNAPSHOT}`, 'build394RuntimeSnapshot');
       await loadScript(`./src/pedagogy/learner-action-practice-advisory.js?v=${LEARNER_ACTION_PRACTICE_ADVISORY}`, 'build395PracticeAdvisory');
       installRuntimeMeta();
+      // V6.1 visual review candidate: late owner, existing pedagogical surfaces intact.
+      loadStyle('./src/premium/v61-stitch-high-fidelity.css?v=6.1.0-review1', 'v61StitchStyle');
+      await loadScript('./src/premium/v61-stitch-high-fidelity.js?v=6.1.0-review1', 'v61StitchRuntime');
       window.FrenchTranquilleBuild27Shell?.refresh?.();
       window.FrenchTranquilleBuild32Shell?.refresh?.();
     }
