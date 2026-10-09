@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>V6.1 live visual capture</title><style>html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#070d20}iframe{border:0;width:100%;height:100%;display:block}</style></head>
+<body><iframe id="ft" title="French Trân’quille V6.1" src="../../index.html?v61VisualReview=1"></iframe>
+<script>
+(()=>{'use strict';
+const q=new URLSearchParams(location.search),theme=q.get('theme')||'aurora',screen=q.get('screen')||'home',f=document.getElementById('ft');
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+const until=async(fn,max=19000)=>{const start=Date.now();while(Date.now()-start<max){if(fn())return;await wait(130)}throw Error('timeout '+screen)};
+f.addEventListener('load',async()=>{try{
+ const w=f.contentWindow,d=f.contentDocument;
+ await until(()=>w.FrenchTranquilleV61 && d.querySelector('.b27-home .b27-primary-card'));
+ if(!w.FrenchTranquilleThemes?.apply)throw Error('theme API missing');
+ w.FrenchTranquilleThemes.apply(theme);
+ await wait(300);
+ if(screen==='practice'){
+   const nav=d.querySelector('.ux-bottom-nav [data-ux-nav="practice"]');
+   if(nav)nav.click();else w.FrenchTranquilleBuild27Shell?.openPractice?.();
+   await until(()=>d.querySelectorAll('body > .b27-practice-page [data-b27-practice-action]').length>=4,6000);
+ }else if(screen!=='home')throw Error('unsupported surface');
+ w.FrenchTranquilleV61.refresh();
+ await wait(450);
+ const target=screen==='home'?d.querySelector('.b27-home .b27-primary-card'):d.querySelector('.b27-practice-page .b27-practice-list');
+ if(!target)throw Error('target missing');
+ if(screen==='home'&&!w.getComputedStyle(target).backgroundImage.includes('gradient'))throw Error('hero style missing');
+ if(screen==='practice'){
+   const actions=[...target.querySelectorAll('[data-b27-practice-action]')];
+   if(actions.length!==4)throw Error('expected 4 activities, got '+actions.length);
+   if(actions.filter(a=>a.querySelector('img.ft-v510-practice-art')).length!==4)throw Error('missing approved 3D assets');
+ }
+ if(d.documentElement.scrollWidth>d.documentElement.clientWidth+3)throw Error('horizontal overflow '+d.documentElement.scrollWidth);
+ for(const img of d.querySelectorAll('img.ft-v510-practice-art')){
+   if(img.complete&&!img.naturalWidth)throw Error('asset failed '+img.src);
+ }
+ d.scrollingElement.scrollTop=0;
+ document.body.dataset.v61CaptureReady='1';
+ document.body.dataset.v61CaptureTheme=theme;
+ document.body.dataset.v61CaptureScreen=screen;
+ document.body.dataset.v61CaptureOwner=w.FrenchTranquilleV61.version;
+}catch(e){document.body.dataset.v61CaptureReady='0';document.body.dataset.v61CaptureError=String(e?.message||e)}},{once:true});
+})();
+</script></body></html>

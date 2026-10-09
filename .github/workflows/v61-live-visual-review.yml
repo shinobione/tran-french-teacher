@@ -1,0 +1,91 @@
+name: V6.1 live visual review (Home + Practice)
+on:
+  pull_request:
+    paths:
+      - 'src/premium/v61-stitch-high-fidelity.*'
+      - 'tests/browser/v61-live-visual-capture.html'
+      - '.github/workflows/v61-live-visual-review.yml'
+      - 'src/core/build32-loader.js'
+      - 'sw.js'
+      - 'index.html'
+permissions:
+  contents: read
+jobs:
+  v61-live-visual:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - name: Syntax and candidate wiring
+        run: |
+          node --check src/premium/v61-stitch-high-fidelity.js
+          node --check src/core/build32-loader.js
+          node --check sw.js
+          grep -q 'v61-stitch-high-fidelity.css' src/core/build32-loader.js
+          grep -q 'v61-stitch-high-fidelity.js' src/core/build32-loader.js
+          grep -q 'v61-stitch-high-fidelity.css' sw.js
+          grep -q 'v61-stitch-high-fidelity.js' sw.js
+      - name: Serve actual PR runtime
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/v61-server.log 2>&1 &
+          echo $! >/tmp/v61-server.pid
+          sleep 2
+          google-chrome --version
+      - name: Capture four themes at 390x844, Aurora also at 430x932
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/v61-live
+          for theme in original aurora sunset jade; do
+            for screen in home practice; do
+              label="390-${theme}-${screen}"
+              profile="/tmp/v61-${label}"
+              file="artifacts/v61-live/${label}.png"
+              dom="/tmp/v61-${label}.html"
+              rm -rf "$profile"
+              timeout --signal=TERM --kill-after=5s 50s \
+                google-chrome --headless=new --no-sandbox --disable-gpu --hide-scrollbars \
+                --disable-background-timer-throttling --disable-renderer-backgrounding \
+                --user-data-dir="$profile" --window-size="390,844" \
+                --virtual-time-budget=26000 --screenshot="$file" --dump-dom \
+                "http://127.0.0.1:4173/tests/browser/v61-live-visual-capture.html?theme=${theme}&screen=${screen}" >"$dom"
+              test -s "$file"
+              if ! grep -q 'data-v61-capture-ready="1"' "$dom"; then
+                echo "$label: visual runtime FAILED"
+                grep -o 'data-v61-capture-error="[^"]*"' "$dom" || true
+                exit 1
+              fi
+              echo "$label PASS"
+            done
+          done
+          for screen in home practice; do
+            label="430-aurora-${screen}"
+            profile="/tmp/v61-${label}"
+            file="artifacts/v61-live/${label}.png"
+            dom="/tmp/v61-${label}.html"
+            rm -rf "$profile"
+            timeout --signal=TERM --kill-after=5s 50s \
+              google-chrome --headless=new --no-sandbox --disable-gpu --hide-scrollbars \
+              --disable-background-timer-throttling --disable-renderer-backgrounding \
+              --user-data-dir="$profile" --window-size="430,932" \
+              --virtual-time-budget=26000 --screenshot="$file" --dump-dom \
+              "http://127.0.0.1:4173/tests/browser/v61-live-visual-capture.html?theme=aurora&screen=${screen}" >"$dom"
+            test -s "$file"
+            if ! grep -q 'data-v61-capture-ready="1"' "$dom"; then
+              grep -o 'data-v61-capture-error="[^"]*"' "$dom" || true
+              exit 1
+            fi
+            echo "$label PASS"
+          done
+      - name: Upload actual Chrome screens for human comparison
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v61-live-visual-review
+          path: artifacts/v61-live/*.png
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Stop server
+        if: always()
+        run: |
+          if [ -f /tmp/v61-server.pid ]; then kill "$(cat /tmp/v61-server.pid)" || true; fi
