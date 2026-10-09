@@ -474,3 +474,28 @@ html.ux-debug-mode .v61-vi{display:none!important}
   html[data-theme].b27-app-shell .b27-quick-card,
   html[data-theme].b27-app-shell .b27-practice-action{animation:none!important;transition:none!important}
 }
+
+/* Keep the visual header compact like the V6.1 mockup; the prior 350px centered
+   HomeLogo monopolized the first physical iPhone viewport. Retain the real
+   existing goat identity + product name instead of displaying two brand logos. */
+@media(max-width:759px){
+  html[data-theme].b27-app-shell .b27-home .b27-brandline{
+    visibility:visible!important;
+    opacity:1!important;
+    max-width:calc(100% - 70px);
+    gap:9px!important;
+  }
+  html[data-theme].b27-app-shell .b27-home .b27-brandline img{
+    width:42px!important;height:42px!important;min-width:42px!important;
+    border-radius:14px!important;
+  }
+  html[data-theme].b27-app-shell .b27-home .b27-brandline strong{
+    font-size:.89rem!important;line-height:1.12!important;
+  }
+  html[data-theme].b27-app-shell .b27-home .b27-brandline span{
+    max-width:185px!important;
+    font-size:.64rem!important;
+  }
+  html[data-theme].b27-app-shell .ft-modern-home-logo{display:none!important}
+  html[data-theme].b27-app-shell .b27-home>.b27-header{min-height:52px!important;margin-bottom:16px!important}
+}
