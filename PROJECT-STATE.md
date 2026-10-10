@@ -2,6 +2,15 @@
 
 Last reconciled (live): 2026-10-10
 
+## V6.1 Foundations F11 protected-owner successor — 2026-10-10 (PR #258)
+
+- **Verified before this commit:** accepted main `6b08edda98bd09520ed83c49682ebd2443202a23`, exact PR head `aeaa6edb695631db952fb877d41182f71b92ffc7`, **68 PASS / 18 FAIL / 86 complete**. `iphone-pwa-a11y` passed every step, including Chrome accessibility at 320/390/430/reduced-motion **and same-browser CDP offline PWA boot**. This is CI, not physical installed-iPhone PASS.
+- **Next narrow slice:** `.github/workflows/build37-4-foundations-negation.yml` protected-owner guard. Logs showed only `index.html` in the forbidden diff; allow it **only if** the existing independently green `tools/test-v61-pwa-successor.cjs` proves the exact successor. Fail closed for any other forbidden path or any additional forbidden path combined with `index.html`.
+- **Preserved:** F11 syntax/pure engine, Foundations predecessor parity, storage side-effect restrictions, real app Chrome routing, F01–F04 Chrome, F11 VI/FR desktop and 390×844 Chrome tests. No teaching, app, Recovery, Memory, voice, asset or learner-data edits.
+- **NEXT exact action:** review the new exact-head `foundations-f11-negation` job through its real Chrome F11 parity step; if red, diagnose rather than waiving assertions. Other Foundations workflows and inherited main failures remain out of scope. PR #258 stays DRAFT, no merge, release or real-iPhone PASS.
+
+---
+
 ## V6.1 Build29 iPhone PWA CI successor — 2026-10-10 (active)
 
 - **Accepted `main`:** `6b08edda98bd09520ed83c49682ebd2443202a23`. Last fully verified candidate `a4fc2eea1705209d8550255b7d48559fef2c6280`: **67/86 PASS, 19 FAIL**; the strict V6.1 PWA proof, three Premium predecessor workflows, live Chrome V6.1 and Practice advisory passed.
