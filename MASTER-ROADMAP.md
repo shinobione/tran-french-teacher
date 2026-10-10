@@ -11,8 +11,8 @@ Locked rollout order, independent of the active V6.1 visual slice:
 1. Allow cancellation only of obsolete runs belonging to the **same PR and same workflow**, never of unrelated jobs or push/deployment runs.
 2. Preserve existing workflow and job/check names, release and Pages policies, and all learner-data, Recovery, Voice, offline and pedagogy protection tests.
 3. A documentation-only PR may avoid **optional visual capture/upload artifacts** while retaining its functional Chrome smoke and check status; unknown scopes always execute captures.
-4. Do not introduce workflow-level `pull_request.paths` filtering into legacy checks until the actual `main` branch protection / required checks list has been inspected; otherwise a required check can stay indefinitely `Pending`.
-5. Verify a dedicated CI governance gate, compare status/check inventories before/after, and only then authorize a separate rollout of safe trigger-level fan-out reductions. Merging is a human decision.
+4. The owner verified in GitHub Settings that `main` has **no classic protection rules and no repository Rulesets**, so none of their checks are currently required. Authorize a first scoped pilot for exactly 21 specialized Build37/38/41/42 PR workflows; preserve full regression behavior for their pre-existing push triggers and all general safety suites. Never apply PR paths to an actually required check without an always-present equivalent.
+5. Establish minimal `main` protection with always-present required integrity/PWA gate(s), verify the dedicated governance test, and compare before/after counts on a later actual visual PR. Broader fan-out pruning requires a separate measured rollout; merging is a human decision.
 
 ---
 ## Canonical checkpoint — 2026-08-25

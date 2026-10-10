@@ -8,7 +8,7 @@ Source: accepted `main` at `6b08edda98bd09520ed83c49682ebd2443202a23`. This chan
 - None of those 84 had a workflow-level concurrency policy. Pages alone already had a concurrency policy.
 - Four consecutive commits to PR #258 produced 86 checks each (344 checks total), although they included small targeted CI edits.
 - The latest verified #258 commit `724a52d1` finished 69 PASS / 17 FAIL; the F08 Chrome tests passed.
-- GitHub's branch protection API returned 403 to this integration. Empty ruleset-list output does NOT prove there are zero required checks.
+- GitHub's branch-protection API returned 403 to this integration. The owner subsequently supplied screenshots from **Settings > Branches** and **Settings > Rulesets** explicitly showing **no classic protection rules and no rulesets**. Thus no check is currently mandatory via those mechanisms. This also means `main` lacks their merge safeguards; minimal protections should be created after validating the always-running safety gate.
 
 ## Phase 1 — PR supersession (implemented in candidate)
 
@@ -30,15 +30,28 @@ The two Premium workflows `premium-v5-fidelity-reset.yml` and `premium-v5-theme-
 
 This pilot reduces **execution work**, not the initial number of triggered workflows. It does not skip a single functional or security test.
 
-## Phase 2 — trigger fan-out reduction remains gated
+## Phase 2 — safe first reduction of workflow triggers (21 specialized suites)
 
-Do not add workflow-level `on.pull_request.paths` to old workflows until the required-check inventory from GitHub Settings > Branches / Rules is known. GitHub may leave skipped REQUIRED checks permanently Pending. A return of 403 from GitHub API prevents safe automatic classification of required versus optional checks.
+The owner confirmed that there are no currently configured classic branch protections or repository Rulesets. This removes the possibility of stranding a check required by either mechanism on an untriggered `paths` filter. Because **no merge protection exists**, this is a targeted trial, **not permission to bypass safety or auto-merge**.
 
-Next controlled slice: user or repository administrator supplies the exact required check names; retain always-present mandatory coverage (PWA/offline, Recovery, Voice, learner data, curriculum integrity, integration), classify specialized suites by owned paths, add stable required gate(s) where needed, and measure actual start count/runner minutes before merging.
+Exactly 21 legacy specialized workflows in **Build37 (8), Build38 (10), Build41 (2) and Build42 (1)** now use `pull_request.paths`, while keeping their existing non-PR `push` triggers, all historical steps and original check names. The workflow file itself is included so edits to its policy always run its tribunal.
 
+Permitted PR triggers are changes in `src/pedagogy/**`, relevant `tests/browser/buildNN*`, `tests/unit/buildNN*`, `tools/test-buildNN*`, `src/core/data-recovery*`, `src/core/memory-evidence*`, and the exact `.github/workflows/{name}`. Build38 and later regression suites also include predecessor test families as appropriate.
+
+Crucially, `index.html`, `sw.js` and `src/premium/**` **alone no longer trigger all 21 historical pedagogy workflows**. Changes to common app boot/UI/Voice are still assessed by the existing always-triggered cross-cutting workflows, including iPhone PWA/offline, quality/runtime and Recovery. For any high-risk integration PR, reviewers should additionally invoke the relevant full specialized regressions if there is a cross-layer semantic effect.
+
+**Projected rather than measured:** on a future purely visual PR with no selected specialist paths, up to **21 fewer specialized jobs** should be launched, from the prior ~86 to around ~65 check runs. A PR such as this governance PR, which edits those 21 workflow YAMLs, deliberately launches them all: its count is NOT a valid before/after comparison.
+
+The scope is enforceable in `tools/test-ci-governance.cjs`, which reconstructs each of the 21 expected workflow texts from accepted `main` plus precisely the concurrency and PR path policy inserts, proving historical tests and push triggers were not rewritten.
+
+### Remaining launch-count work
+
+- Keep all core PWA/offline, Recovery, learner integrity, Voice, visual integration and release/deployment checks running until a stable required merge gate and independent risk-based test routing are reviewed.
+- Configure protection of `main` with at least one always-triggered meaningful safety check; do **not** make the path-scoped `ci-governance` workflow a blanket required check without making it always appear.
+- Measure actual post-merge fresh PR check count, run duration, canceled obsolete jobs and test coverage, then authorize further narrowing of specialized workflows as a separate change.
 ## Rollback and acceptance
 
-- Governance contract CI PASS on its exact PR head; all historic workflow job/status names remain available.
+- Governance contract CI PASS on its exact PR head, including byte-equivalent preservation of all 21 specialists' original tests/steps and non-PR triggers; all historic workflow job/status names remain available.
 - Pages and four push-only workflow SHA1 Git blob identities must be unchanged versus accepted main.
 - Premium Chrome functional tribunals still run; optional screenshot artifact work skips ONLY for docs-only PRs.
 - No merge/deployment or physical iPhone PASS is inferred from check completion.

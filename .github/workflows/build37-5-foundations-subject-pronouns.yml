@@ -3,6 +3,14 @@ name: Build 37.5 Foundations F05 subject pronouns
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'src/pedagogy/**'
+      - 'src/core/data-recovery*'
+      - 'src/core/memory-evidence*'
+      - 'tests/browser/build37*'
+      - 'tests/unit/build37*'
+      - 'tools/test-build37*'
+      - '.github/workflows/build37-5-foundations-subject-pronouns.yml'
   push:
     branches: [build37/f05-subject-pronouns]
 

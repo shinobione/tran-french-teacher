@@ -3,6 +3,14 @@ name: Build 37.7 Foundations F12 practical questions
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'src/pedagogy/**'
+      - 'src/core/data-recovery*'
+      - 'src/core/memory-evidence*'
+      - 'tests/browser/build37*'
+      - 'tests/unit/build37*'
+      - 'tools/test-build37*'
+      - '.github/workflows/build37-7-foundations-questions.yml'
   push:
     branches: [build37/f12-questions-core-v2]
 

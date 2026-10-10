@@ -47,4 +47,34 @@ for(const set of [[],['index.html'],['sw.js'],['src/ui/main.js'],['voice-ios.js'
  ['tests/browser/test.html','docs/text.md']]){
   assert.equal(documentationOnly(set),false,'unsafe visual skip '+JSON.stringify(set));
 }
-console.log('CI governance PASS: '+prFiles.length+' PR workflows; Pages and push-only workflows intact; safe screenshot scope');
+// The scoped 21 historical pedagogical workflows must have unchanged tests,
+// names, jobs and push-event blocks. Only Phase 1 concurrency and Phase 2
+// PR path selection are permitted relative to accepted main.
+const scoped=list.filter(f=>/^build(?:37-[1-8]|38-(?:[1-9]|10)|41-[23]|42-2)-/.test(f));
+assert.equal(scoped.length,21,'expected 21 path-scoped historical suites');
+function specializedPaths(file){
+  const common=['src/pedagogy/**','src/core/data-recovery*','src/core/memory-evidence*'];
+  const tests=n=>['tests/browser/build'+n+'*','tests/unit/build'+n+'*','tools/test-build'+n+'*'];
+  if(file.startsWith('build37-'))return [...common,...tests('37'),'.github/workflows/'+file];
+  if(file.startsWith('build38-'))return [...common,...tests('37'),...tests('38'),'.github/workflows/'+file];
+  if(file.startsWith('build41-'))return [...common,...tests('38'),...tests('41'),'.github/workflows/'+file];
+  if(file.startsWith('build42-'))return [...common,...tests('37'),...tests('42'),'.github/workflows/'+file];
+  throw new Error('unexpected scoped workflow '+file);
+}
+for(const file of scoped){
+  const current=fs.readFileSync(path.join(W,file),'utf8');
+  const p='.github/workflows/'+file;
+  const baseline=cp.execFileSync('git',['show',BASE+':'+p],{encoding:'utf8'});
+  const event="  pull_request:\n    branches: [main]\n";
+  assert.equal(baseline.split(event).length,2,'historical trigger differs: '+file);
+  const patterns=specializedPaths(file);
+  assert.ok(!patterns.some(p=>p.startsWith('src/premium/')||p==='index.html'||p==='sw.js'),
+    'an unrelated UI-only change must not trigger '+file);
+  const enhanced=baseline.replace(event,event+"    paths:\n"+
+    patterns.map(x=>"      - '"+x+"'").join("\n")+"\n");
+  const expected=enhanced.replace(/^jobs:/m,BLOCK+"\n\njobs:");
+  assert.equal(current,expected,'workflows must retain exact original tests and event contracts: '+file);
+}
+console.log('CI governance PASS: '+prFiles.length+' PR workflows; '+scoped.length+
+  ' narrowly scoped pedagogy workflows; unchanged tests, Pages, push-only and visual safety');
+

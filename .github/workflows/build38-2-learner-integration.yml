@@ -3,6 +3,17 @@ name: Build 38.2 Learner-facing subject substitution
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'src/pedagogy/**'
+      - 'src/core/data-recovery*'
+      - 'src/core/memory-evidence*'
+      - 'tests/browser/build37*'
+      - 'tests/unit/build37*'
+      - 'tools/test-build37*'
+      - 'tests/browser/build38*'
+      - 'tests/unit/build38*'
+      - 'tools/test-build38*'
+      - '.github/workflows/build38-2-learner-integration.yml'
   push:
     branches: [build38/learner-facing-substitution]
 

@@ -3,6 +3,14 @@ name: Build 37.2 Foundations capsule engine
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'src/pedagogy/**'
+      - 'src/core/data-recovery*'
+      - 'src/core/memory-evidence*'
+      - 'tests/browser/build37*'
+      - 'tests/unit/build37*'
+      - 'tools/test-build37*'
+      - '.github/workflows/build37-2-foundations-capsule-engine.yml'
   push:
     branches: [build37/foundations-capsule-engine]
 

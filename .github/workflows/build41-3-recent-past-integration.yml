@@ -3,6 +3,17 @@ name: Build 41.3 Learner-facing recent-past transfer
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'src/pedagogy/**'
+      - 'src/core/data-recovery*'
+      - 'src/core/memory-evidence*'
+      - 'tests/browser/build38*'
+      - 'tests/unit/build38*'
+      - 'tools/test-build38*'
+      - 'tests/browser/build41*'
+      - 'tests/unit/build41*'
+      - 'tools/test-build41*'
+      - '.github/workflows/build41-3-recent-past-integration.yml'
   push:
     branches: [build41/recent-past-learner-integration]
 
