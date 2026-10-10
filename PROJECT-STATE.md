@@ -2,6 +2,14 @@
 
 Last reconciled (live): 2026-10-10 — V6.1 rebased against CI governance merge `d0b57a96779c643643c77974cab8086f7f4c311a` (Draft, no product acceptance).
 
+## V6.1 new governance CI follow-up — 2026-10-10
+
+- Merge baseline after #260: `d0b57a96779c643643c77974cab8086f7f4c311a`. Branch integration commit `d4716ee3731894781a5fe08378e8e462357ed5d7` passed strict `v61-pwa-successor-ownership`, but the `ci-governance` check initially failed because the **two V6.1-added workflows** were not included in the original 84-workflow concurrency migration.
+- **Single scoped fix:** add the exact adopted PR-only concurrency block to `v61-live-visual-review.yml` and `v61-pwa-successor-ownership.yml`; preserve their triggers, all Chrome visual capture steps, and exact PWA attestation. No runtime, pedagogy, voice, data or app modifications.
+- **NEXT:** confirm new exact-head `ci-governance` PASS, plus original V6.1 visual/iPhone PWA checks. Other red tests require separate adjudication. No V6.1 merge or physical iPhone PASS.
+
+---
+
 ## V6.1 review resumed after CI governance #260 — 2026-10-10
 
 - **Merged** governance PR #260 at `d0b57a96779c643643c77974cab8086f7f4c311a` (infrastructure-only; no app/product change). PR #258 remains DRAFT. This branch adopts the new `concurrency` and PR path-routing policy and retains the exact successor-safe V6.1 Chrome/PWA workflow changes.
