@@ -3,11 +3,26 @@ name: Build 38.1 Generalization subject substitution
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'src/pedagogy/**'
+      - 'src/core/data-recovery*'
+      - 'src/core/memory-evidence*'
+      - 'tests/browser/build37*'
+      - 'tests/unit/build37*'
+      - 'tools/test-build37*'
+      - 'tests/browser/build38*'
+      - 'tests/unit/build38*'
+      - 'tools/test-build38*'
+      - '.github/workflows/build38-1-subject-substitution.yml'
   push:
     branches: [build38/subject-substitution]
 
 permissions:
   contents: read
+
+concurrency:
+  group: ${{ github.workflow_ref }}-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   subject-substitution:

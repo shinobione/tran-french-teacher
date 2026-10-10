@@ -7,6 +7,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow_ref }}-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   theme-art-integration:
     runs-on: ubuntu-latest
@@ -18,6 +22,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Scope optional visual captures (fail open)
+        id: visual_capture_scope
+        run: |
+          git fetch origin main --quiet || true
+          echo "capture=$(node tools/ci-pr-visual-scope.cjs)" >> "$GITHUB_OUTPUT"
 
       - name: Static V5.7 contracts and sanctuaries
         run: |
@@ -72,6 +81,7 @@ jobs:
           grep -q 'data-premium-v57="ok"' /tmp/v57.html || { grep -o 'data-premium-v57-detail="[^"]*"' /tmp/v57.html || true; exit 1; }
 
       - name: Capture V5.7 five-viewport by four-theme matrix
+        if: steps.visual_capture_scope.outputs.capture == 'true'
         run: |
           mkdir -p artifacts/premium-v57-theme-art
           capture() {
@@ -102,6 +112,7 @@ jobs:
           test "$(find artifacts/premium-v57-theme-art -name '*.png' | wc -l)" -eq 20
 
       - name: Upload V5.7 visual matrix
+        if: steps.visual_capture_scope.outputs.capture == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: premium-v57-theme-art-visual-review

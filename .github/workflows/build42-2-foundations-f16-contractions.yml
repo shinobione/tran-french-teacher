@@ -3,11 +3,26 @@ name: Build 42.2 Foundations F16 contractions
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'src/pedagogy/**'
+      - 'src/core/data-recovery*'
+      - 'src/core/memory-evidence*'
+      - 'tests/browser/build37*'
+      - 'tests/unit/build37*'
+      - 'tools/test-build37*'
+      - 'tests/browser/build42*'
+      - 'tests/unit/build42*'
+      - 'tools/test-build42*'
+      - '.github/workflows/build42-2-foundations-f16-contractions.yml'
   push:
     branches: [build42/f16-teach-core]
 
 permissions:
   contents: read
+
+concurrency:
+  group: ${{ github.workflow_ref }}-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   foundations-f16-contractions:

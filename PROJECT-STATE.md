@@ -1,6 +1,25 @@
 # PROJECT-STATE — French Trân’quille
 
-Last reconciled (live): 2026-10-10
+Last reconciled (live): 2026-10-10 — V6.1 rebased against CI governance merge `d0b57a96779c643643c77974cab8086f7f4c311a` (Draft, no product acceptance).
+
+## V6.1 review resumed after CI governance #260 — 2026-10-10
+
+- **Merged** governance PR #260 at `d0b57a96779c643643c77974cab8086f7f4c311a` (infrastructure-only; no app/product change). PR #258 remains DRAFT. This branch adopts the new `concurrency` and PR path-routing policy and retains the exact successor-safe V6.1 Chrome/PWA workflow changes.
+- **Candidate only:** No V6.1 merge, deployment or physical installed-iPhone PASS. Latest verified pre-rebase #258 CI: 69/86 PASS; 17 FAIL including six inherited classes. New merged-head CI verdict is PENDING.
+- **NEXT:** audit exact-head browser, PWA/offline and 21 scoped workflow expectations; reconcile V6.1 governance test if needed without waiving owner protections, then handle remaining substantive blockers in independent slices. Physical iPhone validation must be performed by the human owner.
+
+---
+
+## CI governance — Issue #259 / 2026-10-10 (candidate only)
+
+- **Accepted main:** `6b08edda98bd09520ed83c49682ebd2443202a23`; the public runtime remains unchanged by this candidate.
+- **Active visual PR #258:** DRAFT, last confirmed commit `724a52d18aef01952ee822178db8a4255ebcac1c`, 86 completed checks (69 PASS / 17 FAIL). F08, iPhone PWA/offline, V6.1 visual and strict successor proof PASS. Not merged, not field-certified.
+- **Separate governance proposal:** issue #259. Phase 1 adds per-workflow/per-PR `concurrency` to all 84 PR-triggered workflows. Distinct non-PR `run_id` groups avoid canceling push, release, manual or Pages runs. All four legacy push-only workflows and the existing Pages deployment policy remain byte-identical.
+- **Phase 2 safe pilot:** two Premium workflows omit only expensive screenshot capture/upload on docs-only PRs (all functional Chrome tests remain); **21 additional specialized Build37/38/41/42 workflows** now have a narrow PR path selector for pedagogy, relevant unit/browser tests, Recovery/Evidence cores and each workflow's own YAML. All existing job names, steps and non-PR triggers stay intact. A pure UI/Premium edit no longer fans out to these 21 specialists.
+- **Required checks resolved by owner's GitHub Settings screenshots (2026-10-10):** no classic branch protection rules and no repository Rulesets exist; therefore neither mechanism currently requires any CI job for merging. The GitHub admin API is still 403 to this integration. This removes the pending-required-check concern for the scoped 21, but **also means `main` is not protected by those mechanisms**: configure an always-running minimal safety gate before relying on automatic merges.
+- **NEXT:** validate exact-head governance CI for 21 path-scoped specialists, check that core PWA/Recovery/Voice/safety always trigger, measure the check-count reduction on the NEXT purely visual PR (expect up to 21 fewer, not on this governance PR which touches those workflow YAMLs), then establish minimum GitHub `main` protection/always-present required gates before any merge. Both #258 and #260 remain DRAFT. No deployment.
+
+---
 
 ## V6.1 Foundations F08 strict index successor — 2026-10-10 (PR #258)
 
