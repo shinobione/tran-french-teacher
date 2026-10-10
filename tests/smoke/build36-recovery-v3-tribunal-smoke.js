@@ -94,7 +94,7 @@
     mark('Stage','final-restore'); const finalRestore=recovery.restoreObject(baselineBackup,{reload:false});await Promise.resolve();const finalSources=sourceObjects(core);
     const finalBaseline=core.SOURCE_STORE_SPECS.every(spec=>semanticEqual(finalSources[spec.id],baselineSources[spec.id]))&&coherent(core);
 
-    mark('Stage','complete');mark('Mode','restore');mark('Done',1);mark('V3RoundTrip',v3Exact?1:0);mark('V2Rebuild',v2Rebuilt?1:0);mark('V1PreserveRebuild',v1Rebuilt?1:0);mark('FaultRollback',faultRollback?1:0);mark('ResetSeven',resetRoundTrip?1:0);mark('FinalBaseline',finalBaseline?1:0);mark('Coherent',coherent(core)?1:0);
+    mark('Stage','complete');mark('Mode','restore');mark('V3RoundTrip',v3Exact?1:0);mark('V2Rebuild',v2Rebuilt?1:0);mark('V1PreserveRebuild',v1Rebuilt?1:0);mark('FaultRollback',faultRollback?1:0);mark('ResetSeven',resetRoundTrip?1:0);mark('FinalBaseline',finalBaseline?1:0);mark('Coherent',coherent(core)?1:0);mark('Done',1);
   }
 
   async function pwa(){
