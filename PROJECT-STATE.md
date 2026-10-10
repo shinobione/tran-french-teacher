@@ -1,6 +1,39 @@
 # PROJECT-STATE — French Trân’quille
 
-Last reconciled: 2026-10-10 (new CI governance checkpoint; historical checkpoint preserved below)
+Last reconciled: 2026-10-10 (Issue #261 evidence fault-injection candidate; historical checkpoints below)
+
+## Recovery v3 tribunal timeout stage diagnostics — 2026-10-10
+
+- Exact PR #262 head `27341a94950ba39eed68ff191c3b5783fe9df44b` returns Chrome host `data-b36-host-done="0"` and `data-b36-host-error="tribunal-timeout"` during the v1/v2/v3 restore tribunal. No browser child `data-b36t-done` marker was observed; earlier Chrome adoption/reopen/corrupt Evidence cases succeeded and the Node fault/rollback chain passed. This is an **unfinished browser scenario**, not yet proof of a specific data corruption.
+- **Current one-slice diagnostic:** add non-sensitive `data-b36t-stage` progress labels only to `tests/smoke/build36-recovery-v3-tribunal-smoke.js` (baseline, v3/v2/v1, fault, reset and final). Host mirrors these attributes and the existing workflow prints only `data-b36*` metadata if an original required marker fails. No test assertion, timeout, storage payload, product runtime or PWA behavior altered; fail-closed.
+- **NEXT:** inspect exact stage and determine whether a synchronous CPU stall, Chrome virtual-time exhaustion or a specific restore step blocks progress. Do not increase timeout without evidence or infer iPhone PASS. PR #262 DRAFT, main protected and V6.1 #258 untouched.
+
+---
+
+## Recovery v3 Chrome host marker follow-up — 2026-10-10
+
+- Head `9667892eadfcb1b6dea8d3ef96cd9200a176ff05` correctly failed closed on the first required condition `data-b36-host-done="1"`. The diagnostic filter accidentally omitted hyphenated `data-b36-host-*` attributes, so it produced no host exception/timeout details.
+- **Single diagnostic regex correction:** print any `data-b36-*` and `data-b36t-*` HTML metadata attributes when the original Chrome verification fails; keep all ten original required assertions and all real browser steps unchanged. No data payload/DOM dump, no application/Recovery source edits. Next inspect the recorded `data-b36-host-error` or `data-b36t-error` and decide if the failure is a harness timeout or actual restore error.
+
+---
+
+## Recovery v3 Chrome restore marker diagnosis — Issue #261 (2026-10-10)
+
+- Exact head before candidate: `b839f2ed864893c4b3d98ec27cbd1778bb43d569` on Draft PR #262. The repaired Evidence Node fault-injection fixture **PASS** through the first step of both `recovery-v3-tribunal` and `evidence-shadow-adoption`. The first later **real Chrome** failure occurs at `Chrome — v1/v2/v3 restore, reset and injected-failure rollback tribunal`; the log only gave exit code 1, no failing marker.
+- **One bounded diagnostic change:** in `.github/workflows/build36-3-recovery-v3-tribunal.yml`, preserve every original required browser marker **verbatim**, but log the *first missing marker* and limited `data-b36t-*` / host diagnostic metadata on failure. No raw learner data, localStorage, backup payload, DOM dump, runtime, JS test, PWA or pedagogical change. The job still fails closed on any missing assertion.
+- Next: read exact-head CI browser log to name the first missing restore condition (v3, v2, v1, rollback, reset or final coherence); only then authorize a distinct narrow runtime or test-case fix. Build28 and Evidence owner-hash failures remain unresolved. Main protected and unchanged; #258 V6.1 untouched; #262 DRAFT, not merged.
+
+---
+
+## Recovery / Evidence inherited baseline — Issue #261 (2026-10-10)
+
+- **Live accepted main:** `d0b57a96779c643643c77974cab8086f7f4c311a`; governance PR #260 merged and GitHub ruleset `main-protection` is **ACTIVE** with required `iphone-pwa-a11y` and `practice-advisory` checks. PR #258 V6.1 remains DRAFT at `8cfde07a2c4d9ed5436301d4d2942d1fc0fb7927`, latest exact-head CI **62 PASS / 6 inherited FAIL** across 68 checks. Do not merge V6.1 or claim field iPhone PASS.
+- **Focused issue #261 slice:** two jobs (`recovery-v3-tribunal`, `evidence-shadow-adoption`) share `tests/smoke/build36-shadow-runtime-core-smoke.js:96` assertion `true !== false`. After a v2 backup restore, derived Evidence is already coherent; the test tries to inject corruption without first changing a source, so the runtime correctly avoids writing. Its old writer also corrupts the rollback attempt.
+- **Candidate fix is test-only:** deliberately make the learner source stale relative to Evidence, inject a **single** corrupted Evidence write, insist on failure and byte-exact rollback, then retry successfully and prove derived Evidence coherence. No production Recovery/Evidence logic, schema, learner-data, Voice, PWA or product source is modified. GitHub CI result remains **PENDING** for this slice; do not mark either failed safety job PASS in advance.
+- **Distinct unresolved problem:** `data-recovery` Build28 Chrome reports `data-b28-restore-ok="0"`; must be diagnosed independently, not hidden by this test correction. Other historical failures remain issue #261.
+- **Next:** verify exact-head `recovery-v3-tribunal` and `evidence-shadow-adoption`, their following real Chrome/same-profile PWA stages, and required GitHub checks. If any is red, inspect its actual step/log and preserve hold. One slice only, separate PR; no merge or deployment.
+
+---
 
 ## CI governance — Issue #259 / 2026-10-10 (candidate only)
 
