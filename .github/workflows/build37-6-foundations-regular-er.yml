@@ -57,9 +57,17 @@ jobs:
           git fetch origin main --quiet
           changed="$(git diff --name-only origin/main...HEAD)"
           forbidden='^(app\.js|voice-ios\.js|free-voice\.js|index\.html|manifest\.webmanifest|src/core/data-recovery|src/core/memory-evidence-v2-runtime\.js|src/pedagogy/memory-evidence-v2-core\.js|src/pedagogy/foundations-core\.js|src/pedagogy/curriculum-stage[234]\.js|src/pedagogy/learning-memory\.js|src/pedagogy/error-intelligence\.js|src/pedagogy/scenario-engine\.js|src/pedagogy/mastery-engine\.js|src/pedagogy/learner-intelligence.*\.js|assets/LOGO\.png|assets/Favicon\.png)$'
-          if printf '%s\n' "$changed" | grep -E "$forbidden"; then
-            echo 'Build 37.6 successors must preserve certified product/storage/voice/curriculum ownership' >&2
-            exit 1
+          blocked="$(printf '%s\n' "$changed" | grep -E "$forbidden" || true)"
+          if [ -n "$blocked" ]; then
+            # Only the V6.1 exact-attested visual index successor is eligible.
+            # Any other forbidden path, even alongside index.html, still fails.
+            if [ "$blocked" = "index.html" ]; then
+              node tools/test-v61-pwa-successor.cjs
+            else
+              printf '%s\n' "$blocked" >&2
+              echo 'Build 37.6 successors must preserve certified product/storage/voice/curriculum ownership' >&2
+              exit 1
+            fi
           fi
 
       - name: Start static server

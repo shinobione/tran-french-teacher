@@ -2,6 +2,15 @@
 
 Last reconciled (live): 2026-10-10
 
+## V6.1 Foundations F08 strict index successor — 2026-10-10 (PR #258)
+
+- **Last verified exact head:** `f45a57c0ea5c1a048ff6a57d0079d7a26dfa1858` (commit F11). **69/86 PASS, 17 FAIL**; `foundations-f11-negation`, `iphone-pwa-a11y`, `v61-pwa-successor-ownership`, `v61-live-visual` and `practice-advisory` all PASS on GitHub CI. iPhone result is Chrome/PWA simulation only, **not physical field PASS**.
+- **Observed F08 failure:** `foundations-f08-regular-er` on job `114206663660`, failure at **Product, storage, voice and curriculum owners stay untouched** because the only forbidden path output is `index.html`; F08 unit/contract and static steps **PASS**, the four Chrome parity stages were skipped.
+- **One bounded change:** adapt only `.github/workflows/build37-6-foundations-regular-er.yml` to accept exactly the `index.html` successor when `tools/test-v61-pwa-successor.cjs` passes. The original forbidden regex, incl. `manifest.webmanifest`, remains; any other forbidden path still fails, alone or together.
+- **Next action:** inspect new exact-head `foundations-f08-regular-er` job through F01–F04, F11, F05 and F08 browser parity (VI/FR desktop and 390×844). If a real Chrome failure occurs, diagnose rather than waive. PR stays DRAFT, no merge/deploy, main `6b08edda98bd09520ed83c49682ebd2443202a23` unchanged.
+
+---
+
 ## V6.1 Foundations F11 protected-owner successor — 2026-10-10 (PR #258)
 
 - **Verified before this commit:** accepted main `6b08edda98bd09520ed83c49682ebd2443202a23`, exact PR head `aeaa6edb695631db952fb877d41182f71b92ffc7`, **68 PASS / 18 FAIL / 86 complete**. `iphone-pwa-a11y` passed every step, including Chrome accessibility at 320/390/430/reduced-motion **and same-browser CDP offline PWA boot**. This is CI, not physical installed-iPhone PASS.
