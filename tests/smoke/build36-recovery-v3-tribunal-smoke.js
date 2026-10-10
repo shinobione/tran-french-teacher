@@ -5,7 +5,7 @@
   const root=document.documentElement;
   const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
   const clone=value=>JSON.parse(JSON.stringify(value));
-  const mark=(name,value)=>{root.dataset[`b36t${name}`]=String(value)};
+  const mark=(name,value)=>{root.dataset[`b36t${name}`]=String(value);if(window.parent!==window){try{window.parent.__b36TribunalMirror?.()}catch{}}};
   const waitFor=async(predicate,timeout=12000)=>{const start=performance.now();while(performance.now()-start<timeout){try{if(predicate())return true}catch{}await wait(50)}return false};
 
   async function api(){
