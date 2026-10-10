@@ -1,6 +1,16 @@
 # PROJECT-STATE — French Trân’quille
 
-Last reconciled: 2026-10-10 (new CI governance checkpoint; historical checkpoint preserved below)
+Last reconciled: 2026-10-10 (Issue #261 evidence fault-injection candidate; historical checkpoints below)
+
+## Recovery / Evidence inherited baseline — Issue #261 (2026-10-10)
+
+- **Live accepted main:** `d0b57a96779c643643c77974cab8086f7f4c311a`; governance PR #260 merged and GitHub ruleset `main-protection` is **ACTIVE** with required `iphone-pwa-a11y` and `practice-advisory` checks. PR #258 V6.1 remains DRAFT at `8cfde07a2c4d9ed5436301d4d2942d1fc0fb7927`, latest exact-head CI **62 PASS / 6 inherited FAIL** across 68 checks. Do not merge V6.1 or claim field iPhone PASS.
+- **Focused issue #261 slice:** two jobs (`recovery-v3-tribunal`, `evidence-shadow-adoption`) share `tests/smoke/build36-shadow-runtime-core-smoke.js:96` assertion `true !== false`. After a v2 backup restore, derived Evidence is already coherent; the test tries to inject corruption without first changing a source, so the runtime correctly avoids writing. Its old writer also corrupts the rollback attempt.
+- **Candidate fix is test-only:** deliberately make the learner source stale relative to Evidence, inject a **single** corrupted Evidence write, insist on failure and byte-exact rollback, then retry successfully and prove derived Evidence coherence. No production Recovery/Evidence logic, schema, learner-data, Voice, PWA or product source is modified. GitHub CI result remains **PENDING** for this slice; do not mark either failed safety job PASS in advance.
+- **Distinct unresolved problem:** `data-recovery` Build28 Chrome reports `data-b28-restore-ok="0"`; must be diagnosed independently, not hidden by this test correction. Other historical failures remain issue #261.
+- **Next:** verify exact-head `recovery-v3-tribunal` and `evidence-shadow-adoption`, their following real Chrome/same-profile PWA stages, and required GitHub checks. If any is red, inspect its actual step/log and preserve hold. One slice only, separate PR; no merge or deployment.
+
+---
 
 ## CI governance — Issue #259 / 2026-10-10 (candidate only)
 
