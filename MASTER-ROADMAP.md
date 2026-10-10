@@ -4,6 +4,17 @@
 >
 > Historical long-form decisions remain preserved in dedicated `docs/BUILD-*`, release and audit documents. This file keeps durable milestone order, accepted gates and the current next slice.
 
+## GitHub Actions CI efficiency — governance gate (#259, 2026-10-10)
+
+Locked rollout order, independent of the active V6.1 visual slice:
+
+1. Allow cancellation only of obsolete runs belonging to the **same PR and same workflow**, never of unrelated jobs or push/deployment runs.
+2. Preserve existing workflow and job/check names, release and Pages policies, and all learner-data, Recovery, Voice, offline and pedagogy protection tests.
+3. A documentation-only PR may avoid **optional visual capture/upload artifacts** while retaining its functional Chrome smoke and check status; unknown scopes always execute captures.
+4. Do not introduce workflow-level `pull_request.paths` filtering into legacy checks until the actual `main` branch protection / required checks list has been inspected; otherwise a required check can stay indefinitely `Pending`.
+5. Verify a dedicated CI governance gate, compare status/check inventories before/after, and only then authorize a separate rollout of safe trigger-level fan-out reductions. Merging is a human decision.
+
+---
 ## Canonical checkpoint — 2026-08-25
 
 ```text

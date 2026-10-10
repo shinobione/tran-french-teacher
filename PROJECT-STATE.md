@@ -1,8 +1,18 @@
 # PROJECT-STATE — French Trân’quille
 
-Last reconciled: 2026-08-25
+Last reconciled: 2026-10-10 (new CI governance checkpoint; historical checkpoint preserved below)
 
-## Canonical checkpoint
+## CI governance — Issue #259 / 2026-10-10 (candidate only)
+
+- **Accepted main:** `6b08edda98bd09520ed83c49682ebd2443202a23`; the public runtime remains unchanged by this candidate.
+- **Active visual PR #258:** DRAFT, last confirmed commit `724a52d18aef01952ee822178db8a4255ebcac1c`, 86 completed checks (69 PASS / 17 FAIL). F08, iPhone PWA/offline, V6.1 visual and strict successor proof PASS. Not merged, not field-certified.
+- **Separate governance proposal:** issue #259. Phase 1 adds per-workflow/per-PR `concurrency` to all 84 PR-triggered workflows. Distinct non-PR `run_id` groups avoid canceling push, release, manual or Pages runs. All four legacy push-only workflows and the existing Pages deployment policy remain byte-identical.
+- **Phase 2 safe pilot:** in only two Premium workflows, optional screenshot capture/upload stages may skip when *all* PR changes are documentation. Their original static and Chrome functional validations, check/job names and PR triggers remain. For code, assets, workflows, tests, PWA or ambiguous diff, captures still run.
+- **Blocker for true reduction in initially triggered workflows:** required status checks for `main` could not be read (GitHub branch-protection API 403). Do not apply `pull_request.paths` to legacy required workflows without confirming that configuration; avoided phantom `Pending` checks.
+- **NEXT:** review the new CI governance check and verify no existing job/check names disappear, then obtain required-check configuration, pilot broader path filtering with an always-present required gate, and measure cancellations vs. unnecessary initial jobs. Do not merge #258 or this governance proposal automatically.
+
+---
+## Archived canonical checkpoint — 2026-08-25
 
 - Repository: `shinobione/tran-french-teacher`.
 - Verified accepted `main`: **`acae4dac142404dda394501e952e44e6dc846129`**.

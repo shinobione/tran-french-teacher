@@ -1,0 +1,33 @@
+name: CI PR fan-out governance audit
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/**'
+      - 'tools/ci-pr-visual-scope.cjs'
+      - 'tools/test-ci-governance.cjs'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow_ref }}-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  ci-governance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate unchanged safety gates and PR cancellation policy
+        run: |
+          node --check tools/ci-pr-visual-scope.cjs
+          node --check tools/test-ci-governance.cjs
+          node tools/test-ci-governance.cjs
