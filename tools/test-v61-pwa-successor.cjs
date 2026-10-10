@@ -26,7 +26,7 @@ const swAfterCache=replaceOne(originalSW,
 const wantedSW=replaceOne(swAfterCache,'const CORE=[',
   "const V61='"+NEXT+"';\nconst CORE=[\n"
   +"  "+bt+"./src/premium/v61-stitch-high-fidelity.css?v=${V61}"+bt+",\n"
-  +"  "+bt+"./src/premium/v61-stitch-high-fidelity.js?v=${V61}"+bt+",\n",
+  +"  "+bt+"./src/premium/v61-stitch-high-fidelity.js?v=${V61}"+bt+",",
   'exactly two additive precache entries');
 const wantedLoader=replaceOne(originalLoader,'      installRuntimeMeta();',
   "      installRuntimeMeta();\n"
