@@ -117,7 +117,7 @@ jobs:
             if ! grep -q "$marker" "$file"; then
               echo "::error::Recovery v3 restore Chrome tribunal missing marker: $marker" >&2
               # Diagnostic metadata only. Never print learner storage, backups or DOM.
-              grep -oE 'data-b36(t|Host|host)[a-zA-Z0-9-]*="[^"]*"' "$file" | sort -u | head -55 || true
+              grep -oE 'data-b36[a-zA-Z0-9-]*="[^"]*"' "$file" | sort -u | head -55 || true
               exit 1
             fi
           done

@@ -2,6 +2,13 @@
 
 Last reconciled: 2026-10-10 (Issue #261 evidence fault-injection candidate; historical checkpoints below)
 
+## Recovery v3 Chrome host marker follow-up — 2026-10-10
+
+- Head `9667892eadfcb1b6dea8d3ef96cd9200a176ff05` correctly failed closed on the first required condition `data-b36-host-done="1"`. The diagnostic filter accidentally omitted hyphenated `data-b36-host-*` attributes, so it produced no host exception/timeout details.
+- **Single diagnostic regex correction:** print any `data-b36-*` and `data-b36t-*` HTML metadata attributes when the original Chrome verification fails; keep all ten original required assertions and all real browser steps unchanged. No data payload/DOM dump, no application/Recovery source edits. Next inspect the recorded `data-b36-host-error` or `data-b36t-error` and decide if the failure is a harness timeout or actual restore error.
+
+---
+
 ## Recovery v3 Chrome restore marker diagnosis — Issue #261 (2026-10-10)
 
 - Exact head before candidate: `b839f2ed864893c4b3d98ec27cbd1778bb43d569` on Draft PR #262. The repaired Evidence Node fault-injection fixture **PASS** through the first step of both `recovery-v3-tribunal` and `evidence-shadow-adoption`. The first later **real Chrome** failure occurs at `Chrome — v1/v2/v3 restore, reset and injected-failure rollback tribunal`; the log only gave exit code 1, no failing marker.
