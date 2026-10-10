@@ -28,3 +28,9 @@ Visual mockups include a composited goat-in-cafe hero scene. Shipping screenshot
 Dedicated .github/workflows/v61-live-visual-review.yml launches the real PR runtime (no legacy uxSmoke bypass), captures live Home + Practice for four themes at 390×844 and Aurora at 430×932, asserts four real activity buttons with existing Premium 3D images and checks horizontal overflow. It uploads a ten-PNG artifact for human visual comparison.
 
 This is an automated browser review gate. It is NOT physical iPhone validation and not proof of mockup fidelity until images are inspected. Legacy baseline CI is reviewed separately.
+
+## Visual review 2 — target correction
+
+Against Chrome 430×932 captured artifacts, the first draft lacked a café scene in its home hero, exposed too little logo identity and had sparse Practice cards with small arrow-only targets. Review 2 renders a *decorative* existing approved café 3D image and branded goat thumbnail in the hero while retaining the locked Eiffel artwork, shows the approved goat icon in the Home header, makes all four Practice action cards richer with native bilingual kicker / full-width CTA treatment **inside the existing buttons**, and keeps disabled modules readable while still disabled.
+
+The new labels are purely descriptive and the existing button owns every action. No score, streak, XP, time estimates or CEFR state is fabricated. Assets used are existing runtime-approved files; no theme background replacement. Review 2 must pass the dedicated visual workflow and human capture comparison; screenshot-only pass does not permit merging.

@@ -1,4 +1,4 @@
-const CACHE='tran-french-teacher-v6.1.0-review1';
+const CACHE='tran-french-teacher-v6.1.0-review2';
 const CACHE_PREFIX='tran-french-teacher-';
 const V='1.17.0-b24';
 const UX='1.17.5-b24.5';
@@ -57,7 +57,7 @@ const V59B='2.3.24-v59b1';
 const V59C='2.3.25-v59c1';
 const V510ICONS='2.3.35-v510lessonidentity1';
 const B362='2.4.0-b36.2';
-const V61='6.1.0-review1';
+const V61='6.1.0-review2';
 const CORE=[
   `./src/premium/v61-stitch-high-fidelity.css?v=${V61}`,
   `./src/premium/v61-stitch-high-fidelity.js?v=${V61}`,

@@ -26,6 +26,33 @@
     const card = home.querySelector('.b27-primary-card');
     if (!main || !side || !card) return;
     root.dataset.v61Surface = 'home';
+
+    // A real, decorative café illustration assembled from accepted runtime assets.
+    // No text baked into the art, no fake learning values and no click interception.
+    if (!card.querySelector('.v61-cafe-scene')) {
+      const scene = document.createElement('div');
+      scene.className = 'v61-cafe-scene';
+      scene.setAttribute('aria-hidden','true');
+      const cafe = document.createElement('img');
+      cafe.className = 'v61-cafe-art';
+      cafe.src = './assets/premium/practice/real-life-premium.webp';
+      cafe.alt = '';
+      cafe.decoding = 'async';
+      const goat = document.createElement('img');
+      goat.className = 'v61-goat-sticker';
+      goat.src = './assets/premium/brand/goat-app-icon-180.png';
+      goat.alt = '';
+      goat.decoding = 'async';
+      scene.append(cafe,goat);
+      card.appendChild(scene);
+    }
+    if (!main.querySelector('.v61-home-section-label')) {
+      const title = heading('Hôm nay bạn sẽ học gì?','Aperçu du jour');
+      title.classList.add('v61-home-section-label');
+      const loop = main.querySelector('.v61-loop');
+      if (loop) main.insertBefore(title,loop);
+    }
+
     if (!main.querySelector('.v61-loop')) {
       const loop = document.createElement('section');
       loop.className = 'v61-loop';
@@ -80,6 +107,34 @@
     const real = main?.querySelector('.b27-practice-action[data-b27-practice-action="real-life"]');
     if (!main || !real) return;
     root.dataset.v61Surface = 'practice';
+
+    // Visual-only accents inside the existing routed button.
+    // Every module still has one and only one real click target.
+    const labels = {
+      conversation:['NÓI','PARLER','Bắt đầu','Commencer'],
+      listening:['NGHE','ÉCOUTER','Bắt đầu','Commencer'],
+      review:['ÔN TẬP','RÉVISER','Xem thẻ','Voir les cartes'],
+      'real-life':['THỰC TẾ','VRAIE VIE','Khám phá','Explorer']
+    };
+    main.querySelectorAll('.b27-practice-list > [data-b27-practice-action]').forEach(action => {
+      const values = labels[action.dataset.b27PracticeAction];
+      if (!values) return;
+      if (!action.querySelector(':scope > .v61-card-kicker')) {
+        const kicker = document.createElement('span');
+        kicker.className = 'v61-card-kicker';
+        kicker.appendChild(bilingual(values[0],values[1]));
+        action.prepend(kicker);
+      }
+      if (!action.querySelector(':scope > .v61-card-cta')) {
+        const cta = document.createElement('span');
+        cta.className = 'v61-card-cta';
+        cta.appendChild(action.disabled
+          ? bilingual('Chưa mở','À débloquer')
+          : bilingual(values[2],values[3]));
+        action.appendChild(cta);
+      }
+    });
+
     const old = main.querySelector('.v61-practice-recommendation');
     if (real.disabled) { old?.remove(); return; }
     if (old) return;
@@ -125,5 +180,5 @@
   new MutationObserver(schedule).observe(root,{attributes:true,attributeFilter:['class']});
   window.addEventListener('focus',schedule);
   schedule();
-  window.FrenchTranquilleV61 = Object.freeze({version:'6.1.0-review1',refresh:schedule});
+  window.FrenchTranquilleV61 = Object.freeze({version:'6.1.0-review2',refresh:schedule});
 })();

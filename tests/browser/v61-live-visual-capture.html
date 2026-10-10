@@ -22,6 +22,14 @@ f.addEventListener('load',async()=>{try{
  await wait(450);
  const target=screen==='home'?d.querySelector('.b27-home .b27-primary-card'):d.querySelector('.b27-practice-page .b27-practice-list');
  if(!target)throw Error('target missing');
+ if(screen==='home'){
+   const cafe=d.querySelector('.b27-home .v61-cafe-scene');
+   if(!cafe||cafe.querySelectorAll('img').length!==2)throw Error('hero cafe illustration missing');
+ }
+ if(screen==='practice'){
+   const buttons=[...d.querySelectorAll('.b27-practice-list > [data-b27-practice-action]')];
+   if(buttons.some(b=>!b.querySelector('.v61-card-kicker')||!b.querySelector('.v61-card-cta')))throw Error('V6.1 action composition missing');
+ }
  if(screen==='home'&&!w.getComputedStyle(target).backgroundImage.includes('gradient'))throw Error('hero style missing');
  if(screen==='practice'){
    const actions=[...target.querySelectorAll('[data-b27-practice-action]')];
