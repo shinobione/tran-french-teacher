@@ -167,7 +167,7 @@
     const cta = document.createElement('button');
     cta.type = 'button';
     cta.dataset.b27PracticeAction = 'real-life';
-    cta.className = 'b27-practice-action';
+    cta.className = 'v61-recommendation-action';
     cta.appendChild(bilingual('Khám phá →','Explorer →'));
     copy.append(tag,title,explanation,cta);
     const image = document.createElement('img');

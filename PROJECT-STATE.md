@@ -2,6 +2,17 @@
 
 Last reconciled (live): 2026-10-10
 
+## V6.1 CI triage checkpoint — 2026-10-10 (current moving PR #258)
+
+- Accepted main: `6b08edda98bd09520ed83c49682ebd2443202a23`; **no V6.1 merge, release, Pages deployment or physical iPhone PASS**.
+- Candidate analyzed: `6d8a1d93b3b4eb47b6ed5237f246c61a57aefb13` — `85` PR checks: `62` PASS / `23` FAIL. Comparison main: `45` checked: `38` PASS / `7` FAIL; `6` red checks overlap exactly, while `build26-1-ux` passed in candidate.
+- Classified 23 failures: `6` inherited, `9` protected-owner guard blocks, `7` old cache/version/predecessor wiring blocks, and `1` real newly observed Practice DOM geometry problem. See `docs/V61_CI_ARBITRATION_2026-10-10.md` for complete per-job evidence.
+- Narrow repair: V6.1 real-life recommendation CTA receives its own CSS class; it retains the existing `data-b27-practice-action="real-life"` route, and the Practice live test now checks exactly four canonical buttons.
+- **Current PR:** `#258` DRAFT; exact moving head delegated to GitHub. This is a source candidate, **not** an accepted CI verdict yet.
+- **NEXT:** review exact-head `practice-advisory` browser run to validate repair; review new V6.1 live visual/12 captures; then design a separately reviewed successor-safe PWA/CI gate for historical `index.html` / `sw.js` protections. Do not bulk-edit predecessor tests, do not merge without CI adjudication, and do not claim iPhone field PASS.
+
+---
+
 ## Live checkpoint — 2026-10-10 (supersedes the archived August 25 checkpoint)
 
 - **Verified main:** `6b08edda98bd09520ed83c49682ebd2443202a23` (PR #257, Foundations premature NEXT fix, merged 2026-09-02). This PR's branch is **not merged**, main/public app are unchanged by V6.1.

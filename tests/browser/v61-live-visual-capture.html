@@ -38,6 +38,8 @@ f.addEventListener('load',async()=>{try{
  if(screen==='practice'){
    const actions=[...target.querySelectorAll('[data-b27-practice-action]')];
    if(actions.length!==4)throw Error('expected 4 activities, got '+actions.length);
+   const topLevel=[...d.querySelectorAll('.b27-practice-page .b27-practice-action')];
+   if(topLevel.length!==4)throw Error('expected exactly four primary Practice button owners, got '+topLevel.length);
    if(actions.filter(a=>a.querySelector('img.ft-v510-practice-art')).length!==4)throw Error('missing approved 3D assets');
  }
  if(d.documentElement.scrollWidth>d.documentElement.clientWidth+3)throw Error('horizontal overflow '+d.documentElement.scrollWidth);

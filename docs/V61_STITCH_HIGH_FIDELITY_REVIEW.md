@@ -41,3 +41,7 @@ Live visual screenshots revealed `BÀI 1 / 40` although the canonical curriculum
 
 ## Review4 — Lower Practice scroll gate
 The existing two-column Practice layout needs scrolling on 390×844. A new live-browser capture enters the real Practice overlay, scrolls to its bottom, and confirms the lower Review and Real-Life CTA labels are within the unobstructed viewport and point to their original button via elementFromPoint. This is a visual/interaction check, not a learner-state change. The decorative goat also moves slightly inboard on small viewports. No merge or iPhone field PASS is claimed.
+
+## CI review — 2026-10-10
+
+A 23-job exact-head failure audit and one narrowly reproduced Practice card-owner fix are documented in [`V61_CI_ARBITRATION_2026-10-10.md`](./V61_CI_ARBITRATION_2026-10-10.md). The old `main` 7-failure baseline is not V6.1 QA certification. The separate UI/PWA successor governance gate and real iPhone verification remain mandatory before merge.
