@@ -66,3 +66,7 @@ These failures have an identifiable historical version-contract cause. Neverthel
 4. Preserve V6.1 visual captures, Chrome themes, accessibility, offline and real installed-iPhone gate; move to high-fidelity Quiz only after Home/Practice acceptance.
 
 **Protected:** `app.js`, `voice-ios.js`, `free-voice.js`, curriculum IDs/items, 7 Recovery stores, Memory/Evidence, base Premium art and theme backgrounds. No direct mutations were made here.
+
+## CI successor pilot — 2026-10-10
+
+A new fail-closed Node attestation `tools/test-v61-pwa-successor.cjs` compares candidate `index.html`, `sw.js` and `src/core/build32-loader.js` to exact expected transformations of accepted main `6b08edda98bd09520ed83c49682ebd2443202a23`. All historical SW CORE entries stay byte-identical; only V6.1 CSS and JS are appended, and the PWA cache/boot version advances together. Selected protected owners remain byte-identical; three negative mutation examples are asserted. The independently running workflow `v61-pwa-successor-ownership` and three old Premium jobs retain their original functional and hash checks, replacing only the frozen cache-name literal with an either-legacy-or-positive-successor assertion. This is a **three-job pilot**; it does not waive or solve the other 13 additional governance blockers. Exact-head CI results and real offline/iPhone evidence are still pending.

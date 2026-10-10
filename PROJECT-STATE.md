@@ -2,6 +2,15 @@
 
 Last reconciled (live): 2026-10-10
 
+## V6.1 successor-safe PWA pilot — 2026-10-10
+
+- **Confirmed:** `practice-advisory` and `v61-live-visual` PASSED on commit `c49c045cc75eb7044333e43a35bc55f6fa331f09`. No physical iPhone PASS.
+- **Current pilot:** new strict attestation of *exact* successor deltas in `index.html`, `sw.js`, and Build32 loader, pinned against main `6b08edda98bd09520ed83c49682ebd2443202a23`. The original SW offline CORE is preserved and new CSS/JS are precached; storage, voice, curriculum, Recovery, Evidence and Premium art are protected.
+- Three predecessor workflows receive a **conditional positive successor proof**, not a skip: `v59d-brand`, `mockup-fidelity-reset`, `theme-art-integration`.
+- **NEXT:** inspect exact-head PWA successor proof and all three unchanged downstream Chrome tribunals. If green, adjudicate the 13 remaining non-inherited governance failures in another bounded slice. PR #258 remains Draft, no merge/deployment.
+
+---
+
 ## V6.1 CI triage checkpoint — 2026-10-10 (current moving PR #258)
 
 - Accepted main: `6b08edda98bd09520ed83c49682ebd2443202a23`; **no V6.1 merge, release, Pages deployment or physical iPhone PASS**.

@@ -1,0 +1,34 @@
+name: V6.1 successor-safe PWA ownership
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'sw.js'
+      - 'src/core/build32-loader.js'
+      - 'src/premium/v61-stitch-high-fidelity.*'
+      - 'tools/test-v61-pwa-successor.cjs'
+      - '.github/workflows/v61-pwa-successor-ownership.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  v61-pwa-successor-ownership:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Strict successor proof
+        run: |
+          node --check tools/test-v61-pwa-successor.cjs
+          node tools/test-v61-pwa-successor.cjs
+          node --check src/core/build32-loader.js
+          node --check src/premium/v61-stitch-high-fidelity.js
+          node --check sw.js
