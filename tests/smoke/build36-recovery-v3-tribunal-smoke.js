@@ -34,22 +34,22 @@
   }
 
   async function restoreSuite(){
-    const {recovery,core,contract,shadow}=await api(); await wait(120); if(!coherent(core))throw new Error('baseline-not-coherent');
-    const baselineBackup=recovery.backupObject();
+    const {recovery,core,contract,shadow}=await api(); mark('Stage','baseline-check'); await wait(120); if(!coherent(core))throw new Error('baseline-not-coherent');
+    mark('Stage','baseline-backup'); const baselineBackup=recovery.backupObject();
     const baselinePlan=core.planRestore(baselineBackup,core.collectRaw(localStorage));
     const baselineSources=clone(baselineBackup.stores); delete baselineSources.evidence;
     const learnerKey=core.SOURCE_STORE_SPECS.find(spec=>spec.id==='learner').key;
 
     // v3 exact round-trip.
     const learnerMutated=JSON.parse(localStorage.getItem(learnerKey)); learnerMutated.conversationWins=999; localStorage.setItem(learnerKey,JSON.stringify(learnerMutated)); await wait(120);
-    const v3Result=recovery.restoreObject(baselineBackup,{reload:false}); await wait(80);
+    mark('Stage','v3-restore'); const v3Result=recovery.restoreObject(baselineBackup,{reload:false}); await wait(80);
     const v3Exact=v3Result.ok&&core.rawMapsEqual(core.collectRaw(localStorage),baselinePlan.targetRaw)&&coherent(core);
 
     // v2 owns the historical six and rebuilds Evidence.
     const v2Payload=v2Backup(recovery,baselineSources);
     const foreignLearner=JSON.parse(localStorage.getItem(learnerKey)); foreignLearner.conversationWins=321; localStorage.setItem(learnerKey,JSON.stringify(foreignLearner)); await wait(100);
     const foreignEvidence=localStorage.getItem(core.EVIDENCE_STORE_KEY);
-    const v2Result=recovery.restoreObject(v2Payload,{reload:false}); await wait(80);
+    mark('Stage','v2-restore'); const v2Result=recovery.restoreObject(v2Payload,{reload:false}); await wait(80);
     const afterV2=sourceObjects(core);
     const v2SourcesExact=core.SOURCE_STORE_SPECS.every(spec=>semanticEqual(afterV2[spec.id],baselineSources[spec.id]));
     const v2Rebuilt=v2Result.ok&&v2Result.migratedFrom===2&&(v2Result.rebuildDerivedIds||[]).includes('evidence')&&localStorage.getItem(core.EVIDENCE_STORE_KEY)!==foreignEvidence&&v2SourcesExact&&coherent(core);
@@ -67,7 +67,7 @@
     const preserved=Object.fromEntries(['errors','scenarios','listening','milestones'].map(id=>[id,clone(current[id])]));
     const evidenceBeforeV1=localStorage.getItem(core.EVIDENCE_STORE_KEY);
     const v1Payload={format:'french-tranquille-backup',version:1,exportedAt:'2026-08-12T00:00:00.000Z',learner:clone(baselineSources.learner),memory:clone(baselineSources.memory)};
-    const v1Result=recovery.restoreObject(v1Payload,{reload:false}); await wait(80);
+    mark('Stage','v1-restore'); const v1Result=recovery.restoreObject(v1Payload,{reload:false}); await wait(80);
     const afterV1=sourceObjects(core);
     const v1Preserved=['errors','scenarios','listening','milestones'].every(id=>semanticEqual(afterV1[id],preserved[id]));
     const v1Owned=semanticEqual(afterV1.learner,baselineSources.learner)&&semanticEqual(afterV1.memory,baselineSources.memory);
@@ -75,26 +75,26 @@
     const v1Rebuilt=v1Result.ok&&v1Result.migratedFrom===1&&preserveOk&&(v1Result.rebuildDerivedIds||[]).includes('evidence')&&localStorage.getItem(core.EVIDENCE_STORE_KEY)!==evidenceBeforeV1&&v1Preserved&&v1Owned&&coherent(core);
 
     // Return to canonical baseline before fault/reset tests.
-    const back=recovery.restoreObject(baselineBackup,{reload:false});await wait(80);if(!back.ok||!coherent(core))throw new Error('baseline-restore-failed');
+    mark('Stage','back-to-baseline'); const back=recovery.restoreObject(baselineBackup,{reload:false});await wait(80);if(!back.ok||!coherent(core))throw new Error('baseline-restore-failed');
 
     // One-shot mid-restore fault: partial writes happen, rollback writer then becomes healthy.
     const targetSources=clone(baselineSources);targetSources.learner.conversationWins=777;
-    const targetBackup=contract.buildBackupV3(targetSources,{version:'2.4.0',build:36},{exportedAt:'2026-08-16T02:00:00.000Z'});
+    mark('Stage','fault-build-target'); const targetBackup=contract.buildBackupV3(targetSources,{version:'2.4.0',build:36},{exportedAt:'2026-08-16T02:00:00.000Z'});
     const beforeFault=core.collectRaw(localStorage);let writes=0,injected=false;
     const faultWriter={set(key,value){writes+=1;if(!injected&&writes===3){injected=true;throw new Error('b36-injected-write-failure')}localStorage.setItem(key,value)},remove(key){localStorage.removeItem(key)}};
-    const faultResult=core.restore(localStorage,targetBackup,faultWriter);await wait(140);shadow.refresh('b36-tribunal-post-fault');await wait(80);
+    mark('Stage','fault-restore'); const faultResult=core.restore(localStorage,targetBackup,faultWriter);await wait(140);shadow.refresh('b36-tribunal-post-fault');await wait(80);
     const faultRollback=faultResult.ok===false&&faultResult.rolledBack===true&&core.rawMapsEqual(core.collectRaw(localStorage),beforeFault)&&coherent(core);
 
     // Generic learner reset must clear all seven and own a pre-reset snapshot.
-    const beforeResetBackup=recovery.backupObject();localStorage.removeItem(learnerKey);await wait(80);
+    mark('Stage','reset-backup'); const beforeResetBackup=recovery.backupObject();localStorage.removeItem(learnerKey);await wait(80);
     const allSevenCleared=core.STORE_SPECS.every(spec=>localStorage.getItem(spec.key)===null);const preReset=recovery.preReset();const resetSnapshotHasEvidence=Boolean(preReset?.values?.[core.EVIDENCE_STORE_KEY]);
-    const resetRestore=recovery.restoreObject(beforeResetBackup,{reload:false});await wait(100);
+    mark('Stage','reset-restore'); const resetRestore=recovery.restoreObject(beforeResetBackup,{reload:false});await wait(100);
     const resetRoundTrip=allSevenCleared&&resetSnapshotHasEvidence&&resetRestore.ok&&coherent(core);
 
-    const finalRestore=recovery.restoreObject(baselineBackup,{reload:false});await wait(80);const finalSources=sourceObjects(core);
+    mark('Stage','final-restore'); const finalRestore=recovery.restoreObject(baselineBackup,{reload:false});await wait(80);const finalSources=sourceObjects(core);
     const finalBaseline=core.SOURCE_STORE_SPECS.every(spec=>semanticEqual(finalSources[spec.id],baselineSources[spec.id]))&&coherent(core);
 
-    mark('Mode','restore');mark('Done',1);mark('V3RoundTrip',v3Exact?1:0);mark('V2Rebuild',v2Rebuilt?1:0);mark('V1PreserveRebuild',v1Rebuilt?1:0);mark('FaultRollback',faultRollback?1:0);mark('ResetSeven',resetRoundTrip?1:0);mark('FinalBaseline',finalBaseline?1:0);mark('Coherent',coherent(core)?1:0);
+    mark('Stage','complete');mark('Mode','restore');mark('Done',1);mark('V3RoundTrip',v3Exact?1:0);mark('V2Rebuild',v2Rebuilt?1:0);mark('V1PreserveRebuild',v1Rebuilt?1:0);mark('FaultRollback',faultRollback?1:0);mark('ResetSeven',resetRoundTrip?1:0);mark('FinalBaseline',finalBaseline?1:0);mark('Coherent',coherent(core)?1:0);
   }
 
   async function pwa(){

@@ -2,6 +2,14 @@
 
 Last reconciled: 2026-10-10 (Issue #261 evidence fault-injection candidate; historical checkpoints below)
 
+## Recovery v3 tribunal timeout stage diagnostics — 2026-10-10
+
+- Exact PR #262 head `27341a94950ba39eed68ff191c3b5783fe9df44b` returns Chrome host `data-b36-host-done="0"` and `data-b36-host-error="tribunal-timeout"` during the v1/v2/v3 restore tribunal. No browser child `data-b36t-done` marker was observed; earlier Chrome adoption/reopen/corrupt Evidence cases succeeded and the Node fault/rollback chain passed. This is an **unfinished browser scenario**, not yet proof of a specific data corruption.
+- **Current one-slice diagnostic:** add non-sensitive `data-b36t-stage` progress labels only to `tests/smoke/build36-recovery-v3-tribunal-smoke.js` (baseline, v3/v2/v1, fault, reset and final). Host mirrors these attributes and the existing workflow prints only `data-b36*` metadata if an original required marker fails. No test assertion, timeout, storage payload, product runtime or PWA behavior altered; fail-closed.
+- **NEXT:** inspect exact stage and determine whether a synchronous CPU stall, Chrome virtual-time exhaustion or a specific restore step blocks progress. Do not increase timeout without evidence or infer iPhone PASS. PR #262 DRAFT, main protected and V6.1 #258 untouched.
+
+---
+
 ## Recovery v3 Chrome host marker follow-up — 2026-10-10
 
 - Head `9667892eadfcb1b6dea8d3ef96cd9200a176ff05` correctly failed closed on the first required condition `data-b36-host-done="1"`. The diagnostic filter accidentally omitted hyphenated `data-b36-host-*` attributes, so it produced no host exception/timeout details.
