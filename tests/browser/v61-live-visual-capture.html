@@ -26,7 +26,7 @@ f.addEventListener('load',async()=>{try{
    const lessonTotal=w.FrenchTranquilleCurriculum?.lessons?.length;
    const badge=d.querySelector('.b27-home .b27-primary-card .b27-card-topline > span');
    if(lessonTotal!==52)throw Error('curriculum not fully extended: '+lessonTotal);
-   if(!badge?.textContent?.match(new RegExp('/\\s*'+lessonTotal+'\\s*
+   if(!badge || !badge.textContent.trim().endsWith('/ '+lessonTotal))throw Error('home badge is stale: '+(badge?.textContent||'missing'));
    const cafe=d.querySelector('.b27-home .v61-cafe-scene');
    if(!cafe||cafe.querySelectorAll('img').length!==2)throw Error('hero cafe illustration missing');
  }
