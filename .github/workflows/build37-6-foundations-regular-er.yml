@@ -3,11 +3,23 @@ name: Build 37.6 Foundations F08 regular -er
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'src/pedagogy/**'
+      - 'src/core/data-recovery*'
+      - 'src/core/memory-evidence*'
+      - 'tests/browser/build37*'
+      - 'tests/unit/build37*'
+      - 'tools/test-build37*'
+      - '.github/workflows/build37-6-foundations-regular-er.yml'
   push:
     branches: [build37/f08-regular-er]
 
 permissions:
   contents: read
+
+concurrency:
+  group: ${{ github.workflow_ref }}-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   foundations-f08-regular-er:

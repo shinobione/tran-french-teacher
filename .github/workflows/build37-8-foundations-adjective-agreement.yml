@@ -3,11 +3,23 @@ name: Build 37.8 Foundations F13 adjective agreement
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'src/pedagogy/**'
+      - 'src/core/data-recovery*'
+      - 'src/core/memory-evidence*'
+      - 'tests/browser/build37*'
+      - 'tests/unit/build37*'
+      - 'tools/test-build37*'
+      - '.github/workflows/build37-8-foundations-adjective-agreement.yml'
   push:
     branches: [build37/f13-adjective-agreement]
 
 permissions:
   contents: read
+
+concurrency:
+  group: ${{ github.workflow_ref }}-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   foundations-f13-adjective-agreement:

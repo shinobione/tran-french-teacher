@@ -3,11 +3,23 @@ name: Build 37.4 Foundations F11 negation
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'src/pedagogy/**'
+      - 'src/core/data-recovery*'
+      - 'src/core/memory-evidence*'
+      - 'tests/browser/build37*'
+      - 'tests/unit/build37*'
+      - 'tools/test-build37*'
+      - '.github/workflows/build37-4-foundations-negation.yml'
   push:
     branches: [build37/f11-negation-capsule]
 
 permissions:
   contents: read
+
+concurrency:
+  group: ${{ github.workflow_ref }}-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   foundations-f11-negation:

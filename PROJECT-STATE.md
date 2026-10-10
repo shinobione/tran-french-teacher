@@ -1,8 +1,18 @@
 # PROJECT-STATE — French Trân’quille
 
-Last reconciled: 2026-08-25
+Last reconciled: 2026-10-10 (new CI governance checkpoint; historical checkpoint preserved below)
 
-## Canonical checkpoint
+## CI governance — Issue #259 / 2026-10-10 (candidate only)
+
+- **Accepted main:** `6b08edda98bd09520ed83c49682ebd2443202a23`; the public runtime remains unchanged by this candidate.
+- **Active visual PR #258:** DRAFT, last confirmed commit `724a52d18aef01952ee822178db8a4255ebcac1c`, 86 completed checks (69 PASS / 17 FAIL). F08, iPhone PWA/offline, V6.1 visual and strict successor proof PASS. Not merged, not field-certified.
+- **Separate governance proposal:** issue #259. Phase 1 adds per-workflow/per-PR `concurrency` to all 84 PR-triggered workflows. Distinct non-PR `run_id` groups avoid canceling push, release, manual or Pages runs. All four legacy push-only workflows and the existing Pages deployment policy remain byte-identical.
+- **Phase 2 safe pilot:** two Premium workflows omit only expensive screenshot capture/upload on docs-only PRs (all functional Chrome tests remain); **21 additional specialized Build37/38/41/42 workflows** now have a narrow PR path selector for pedagogy, relevant unit/browser tests, Recovery/Evidence cores and each workflow's own YAML. All existing job names, steps and non-PR triggers stay intact. A pure UI/Premium edit no longer fans out to these 21 specialists.
+- **Required checks resolved by owner's GitHub Settings screenshots (2026-10-10):** no classic branch protection rules and no repository Rulesets exist; therefore neither mechanism currently requires any CI job for merging. The GitHub admin API is still 403 to this integration. This removes the pending-required-check concern for the scoped 21, but **also means `main` is not protected by those mechanisms**: configure an always-running minimal safety gate before relying on automatic merges.
+- **NEXT:** validate exact-head governance CI for 21 path-scoped specialists, check that core PWA/Recovery/Voice/safety always trigger, measure the check-count reduction on the NEXT purely visual PR (expect up to 21 fewer, not on this governance PR which touches those workflow YAMLs), then establish minimum GitHub `main` protection/always-present required gates before any merge. Both #258 and #260 remain DRAFT. No deployment.
+
+---
+## Archived canonical checkpoint — 2026-08-25
 
 - Repository: `shinobione/tran-french-teacher`.
 - Verified accepted `main`: **`acae4dac142404dda394501e952e44e6dc846129`**.
