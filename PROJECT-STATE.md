@@ -2,6 +2,14 @@
 
 Last reconciled: 2026-10-10 (Issue #261 evidence fault-injection candidate; historical checkpoints below)
 
+## Recovery v3 Chrome restore marker diagnosis — Issue #261 (2026-10-10)
+
+- Exact head before candidate: `b839f2ed864893c4b3d98ec27cbd1778bb43d569` on Draft PR #262. The repaired Evidence Node fault-injection fixture **PASS** through the first step of both `recovery-v3-tribunal` and `evidence-shadow-adoption`. The first later **real Chrome** failure occurs at `Chrome — v1/v2/v3 restore, reset and injected-failure rollback tribunal`; the log only gave exit code 1, no failing marker.
+- **One bounded diagnostic change:** in `.github/workflows/build36-3-recovery-v3-tribunal.yml`, preserve every original required browser marker **verbatim**, but log the *first missing marker* and limited `data-b36t-*` / host diagnostic metadata on failure. No raw learner data, localStorage, backup payload, DOM dump, runtime, JS test, PWA or pedagogical change. The job still fails closed on any missing assertion.
+- Next: read exact-head CI browser log to name the first missing restore condition (v3, v2, v1, rollback, reset or final coherence); only then authorize a distinct narrow runtime or test-case fix. Build28 and Evidence owner-hash failures remain unresolved. Main protected and unchanged; #258 V6.1 untouched; #262 DRAFT, not merged.
+
+---
+
 ## Recovery / Evidence inherited baseline — Issue #261 (2026-10-10)
 
 - **Live accepted main:** `d0b57a96779c643643c77974cab8086f7f4c311a`; governance PR #260 merged and GitHub ruleset `main-protection` is **ACTIVE** with required `iphone-pwa-a11y` and `practice-advisory` checks. PR #258 V6.1 remains DRAFT at `8cfde07a2c4d9ed5436301d4d2942d1fc0fb7927`, latest exact-head CI **62 PASS / 6 inherited FAIL** across 68 checks. Do not merge V6.1 or claim field iPhone PASS.
