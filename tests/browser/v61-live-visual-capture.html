@@ -23,6 +23,37 @@ f.addEventListener('load',async()=>{try{
  const target=screen==='home'?d.querySelector('.b27-home .b27-primary-card'):d.querySelector('.b27-practice-page .b27-practice-list');
  if(!target)throw Error('target missing');
  if(screen==='home'){
+   const lessonTotal=w.FrenchTranquilleCurriculum?.lessons?.length;
+   const badge=d.querySelector('.b27-home .b27-primary-card .b27-card-topline > span');
+   if(lessonTotal!==52)throw Error('curriculum not fully extended: '+lessonTotal);
+   if(!badge?.textContent?.match(new RegExp('/\\s*'+lessonTotal+'\\s*
+   const cafe=d.querySelector('.b27-home .v61-cafe-scene');
+   if(!cafe||cafe.querySelectorAll('img').length!==2)throw Error('hero cafe illustration missing');
+ }
+ if(screen==='practice'){
+   const buttons=[...d.querySelectorAll('.b27-practice-list > [data-b27-practice-action]')];
+   if(buttons.some(b=>!b.querySelector('.v61-card-kicker')||!b.querySelector('.v61-card-cta')))throw Error('V6.1 action composition missing');
+ }
+ if(screen==='home'&&!w.getComputedStyle(target).backgroundImage.includes('gradient'))throw Error('hero style missing');
+ if(screen==='practice'){
+   const actions=[...target.querySelectorAll('[data-b27-practice-action]')];
+   if(actions.length!==4)throw Error('expected 4 activities, got '+actions.length);
+   if(actions.filter(a=>a.querySelector('img.ft-v510-practice-art')).length!==4)throw Error('missing approved 3D assets');
+ }
+ if(d.documentElement.scrollWidth>d.documentElement.clientWidth+3)throw Error('horizontal overflow '+d.documentElement.scrollWidth);
+ for(const img of d.querySelectorAll('img.ft-v510-practice-art')){
+   if(img.complete&&!img.naturalWidth)throw Error('asset failed '+img.src);
+ }
+ d.scrollingElement.scrollTop=0;
+ document.body.dataset.v61CaptureReady='1';
+ document.body.dataset.v61CaptureTheme=theme;
+ document.body.dataset.v61CaptureScreen=screen;
+ document.body.dataset.v61CaptureOwner=w.FrenchTranquilleV61.version;
+}catch(e){document.body.dataset.v61CaptureReady='0';document.body.dataset.v61CaptureError=String(e?.message||e)}},{once:true});
+})();
+</script></body></html>)))throw Error('home badge is stale: '+(badge?.textContent||'missing'));
+  }
+
    const cafe=d.querySelector('.b27-home .v61-cafe-scene');
    if(!cafe||cafe.querySelectorAll('img').length!==2)throw Error('hero cafe illustration missing');
  }

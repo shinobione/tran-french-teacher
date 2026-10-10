@@ -26,6 +26,20 @@
     const card = home.querySelector('.b27-primary-card');
     if (!main || !side || !card) return;
     root.dataset.v61Surface = 'home';
+    // Build 32 appends lessons 41–52 after the historical Home originally renders.
+    // Build 27's render signature does not include the curriculum length, so its
+    // badge can remain 1/40 despite the real 52-item curriculum already loaded.
+    // Correct ONLY the visual badge from the live curriculum, without altering
+    // progress, curriculum data, event routes, or learner storage.
+    const badge = card.querySelector(':scope > .b27-card-topline > span');
+    const actualTotal = window.FrenchTranquilleCurriculum?.lessons?.length;
+    if (badge && Number.isInteger(actualTotal) && actualTotal > 0) {
+      const current = badge.textContent || '';
+      if (/\s*\/\s*\d+\s*$/.test(current)) {
+        const corrected = current.replace(/\s*\/\s*\d+\s*$/, ' / ' + actualTotal);
+        if (corrected !== current) badge.textContent = corrected;
+      }
+    }
 
     // A real, decorative café illustration assembled from accepted runtime assets.
     // No text baked into the art, no fake learning values and no click interception.
@@ -180,5 +194,5 @@
   new MutationObserver(schedule).observe(root,{attributes:true,attributeFilter:['class']});
   window.addEventListener('focus',schedule);
   schedule();
-  window.FrenchTranquilleV61 = Object.freeze({version:'6.1.0-review2',refresh:schedule});
+  window.FrenchTranquilleV61 = Object.freeze({version:'6.1.0-review3',refresh:schedule});
 })();
