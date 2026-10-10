@@ -82,7 +82,7 @@
     mark('Stage','fault-build-target'); const targetBackup=contract.buildBackupV3(targetSources,{version:'2.4.0',build:36},{exportedAt:'2026-08-16T02:00:00.000Z'});
     const beforeFault=core.collectRaw(localStorage);let writes=0,injected=false;
     const faultWriter={set(key,value){writes+=1;if(!injected&&writes===3){injected=true;throw new Error('b36-injected-write-failure')}localStorage.setItem(key,value)},remove(key){localStorage.removeItem(key)}};
-    mark('Stage','fault-restore'); const faultResult=core.restore(localStorage,targetBackup,faultWriter);await wait(140);shadow.refresh('b36-tribunal-post-fault');await wait(80);
+    mark('Stage','fault-core-restore'); const faultResult=core.restore(localStorage,targetBackup,faultWriter);mark('Stage','fault-core-return');await wait(140);mark('Stage','fault-shadow-refresh');shadow.refresh('b36-tribunal-post-fault');mark('Stage','fault-shadow-return');await wait(80);mark('Stage','fault-verify');
     const faultRollback=faultResult.ok===false&&faultResult.rolledBack===true&&core.rawMapsEqual(core.collectRaw(localStorage),beforeFault)&&coherent(core);
 
     // Generic learner reset must clear all seven and own a pre-reset snapshot.
