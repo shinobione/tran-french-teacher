@@ -78,3 +78,7 @@ The run for commit `06f9a4e0409cce7c31b74db1b10bb7c653a15ec3` showed `AssertionE
 ## Binary sanctuary follow-up
 
 The first retest passed the byte-for-byte JS/SW/HTML expected-source comparisons; the attestation then stopped at `assets/LOGO.png` with `spawnSync git ENOBUFS` because `git show` exceeded Node's default output buffer. The binary sanctuary now compares Git object hashes (`git rev-parse BASE:path` versus `git hash-object path`), which proves byte identity without materializing multi-megabyte blobs in stdout. This does not change the acceptance standard. Exact-head rerun required.
+
+## Build29 iPhone PWA successor compatibility — narrow CI candidate (2026-10-10)
+
+At exact head `a4fc2eea1705209d8550255b7d48559fef2c6280`, the V6.1 strict proof and three Premium predecessor jobs were all PASS. The separate Build29 iPhone job failed at **Syntax, manifest and wiring** before its Chrome or offline tests because of the V5.8 cache literal required by a single `grep` against `index.html sw.js`. The changed V6.1 cache has already been independently proved to be an exact successor with all historical CORE entries preserved. In this one-step candidate, the literal check is replaced with **old literal still present OR strict successor attestation must pass**; full Git history is supplied for hash verification. Every other static requirement, Chrome 320/390/430/reduced-motion accessibility check and same-browser offline boot is retained untouched. This is not a field acceptance or a CI PASS assertion. The 12+ other current failures remain out of scope.

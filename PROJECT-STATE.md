@@ -2,6 +2,15 @@
 
 Last reconciled (live): 2026-10-10
 
+## V6.1 Build29 iPhone PWA CI successor — 2026-10-10 (active)
+
+- **Accepted `main`:** `6b08edda98bd09520ed83c49682ebd2443202a23`. Last fully verified candidate `a4fc2eea1705209d8550255b7d48559fef2c6280`: **67/86 PASS, 19 FAIL**; the strict V6.1 PWA proof, three Premium predecessor workflows, live Chrome V6.1 and Practice advisory passed.
+- **One bounded CI change:** allow Build29's old cache check to accept the unchanged V5.8 literal **or** demand a positive `tools/test-v61-pwa-successor.cjs` proof. Full checkout history is required to attest Git-object hashes against accepted main.
+- **Preserved unchanged:** original iPhone PWA HTML/manifest tests, data/voice/asset sanctuaries, Chrome matrix (320×568 / 390×844 / 430×932 and reduced motion), and Chrome DevTools protocol offline boot.
+- **NEXT:** inspect the new exact-head `iphone-pwa-a11y` verdict, including its real mobile Chrome and offline steps. If it fails, diagnose the precise runtime assertion; do not waive it. No further CI phase in this slice. PR #258 stays Draft, no merge, no deployment, no real-iPhone PASS.
+
+---
+
 ## V6.1 successor-safe PWA pilot — 2026-10-10
 
 - **Confirmed:** `practice-advisory` and `v61-live-visual` PASSED on commit `c49c045cc75eb7044333e43a35bc55f6fa331f09`. No physical iPhone PASS.
