@@ -5,6 +5,7 @@ Last reconciled (live): 2026-10-10
 ## V6.1 successor-safe PWA pilot — 2026-10-10
 
 - **Confirmed:** `practice-advisory` and `v61-live-visual` PASSED on commit `c49c045cc75eb7044333e43a35bc55f6fa331f09`. No physical iPhone PASS.
+- **Pilot Git binary-check correction:** positive exact source comparison now passes, but `git show` of the original large `assets/LOGO.png` overflowed Node child_process default maxBuffer (`ENOBUFS`). Hash-based verification with `git hash-object` / `git rev-parse BASE:path` replaces only this binary comparison. No app, asset, or test expectation relaxations. Exact-head CI pending.
 - **Pilot attestation correction:** the exact-source proof on `06f9a4e0` rejected `sw.js` because its expected-string constructor introduced one duplicate newline after the two added V6.1 entries. Three Premium jobs inherited the same negative gate. Narrow repair removes only the spurious expected newline; **not a product-code or frozen-workflow rule change**. Exact-head result pending.
 - **Current pilot:** new strict attestation of *exact* successor deltas in `index.html`, `sw.js`, and Build32 loader, pinned against main `6b08edda98bd09520ed83c49682ebd2443202a23`. The original SW offline CORE is preserved and new CSS/JS are precached; storage, voice, curriculum, Recovery, Evidence and Premium art are protected.
 - Three predecessor workflows receive a **conditional positive successor proof**, not a skip: `v59d-brand`, `mockup-fidelity-reset`, `theme-art-integration`.

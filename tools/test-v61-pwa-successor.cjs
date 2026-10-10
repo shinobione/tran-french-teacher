@@ -51,8 +51,9 @@ const protectedFiles=[
   'src/premium/premium-v5-fidelity-reset.css','src/core/theme-controller.js'
 ];
 for(const p of protectedFiles){
-  assert.ok(fs.readFileSync(p).equals(cp.execFileSync('git',['show',BASE+':'+p])),
-    'frozen file changed: '+p);
+  const baselineHash=cp.execFileSync('git',['rev-parse',BASE+':'+p],{encoding:'utf8'}).trim();
+  const candidateHash=cp.execFileSync('git',['hash-object',p],{encoding:'utf8'}).trim();
+  assert.equal(candidateHash,baselineHash,'frozen file changed: '+p);
 }
 assert.throws(()=>check(wantedSW.replace("'./','./index.html'","'./index.html'"),wantedSW,'deleted historical CORE'));
 assert.throws(()=>check(wantedIndex.replace('const learnerKey=','const alteredLearnerKey='),wantedIndex,'learner key'));

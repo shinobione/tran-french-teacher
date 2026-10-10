@@ -74,3 +74,7 @@ A new fail-closed Node attestation `tools/test-v61-pwa-successor.cjs` compares c
 ## Strict proof follow-up — expected newline repair
 
 The run for commit `06f9a4e0409cce7c31b74db1b10bb7c653a15ec3` showed `AssertionError: sw.js: unapproved source change` in `v61-pwa-successor-ownership` and each of the three pilot predecessor jobs. GitHub's actual/expected diff identifies **a single surplus blank line in the proof-generated expectation** between the new V6.1 CORE entries and the historical first CORE item. Candidate `sw.js` is not modified here. The expected-string constructor now lets the original newline from `const CORE=[` supply the separator. Re-run the full positive and negative proof; do not infer green ahead of CI.
+
+## Binary sanctuary follow-up
+
+The first retest passed the byte-for-byte JS/SW/HTML expected-source comparisons; the attestation then stopped at `assets/LOGO.png` with `spawnSync git ENOBUFS` because `git show` exceeded Node's default output buffer. The binary sanctuary now compares Git object hashes (`git rev-parse BASE:path` versus `git hash-object path`), which proves byte identity without materializing multi-megabyte blobs in stdout. This does not change the acceptance standard. Exact-head rerun required.
