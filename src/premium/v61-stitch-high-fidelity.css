@@ -764,3 +764,15 @@ html[data-theme].b27-app-shell .b27-practice-page .b27-practice-action:disabled>
   html[data-theme].b27-app-shell .b27-home .b27-primary-card>p{max-width:71%!important}
   html[data-theme].b27-app-shell .b27-home .b27-primary-card>.v61-cafe-scene{opacity:.7}
 }
+
+/* V6.1 review4: integrate the decorative café mascot more cleanly. */
+@media(max-width:759px){
+  html[data-theme].b27-app-shell .b27-home .b27-primary-card>.v61-cafe-scene{
+    top:22%!important;right:2%!important;bottom:82px!important;width:40%!important;
+  }
+  html[data-theme].b27-app-shell .v61-cafe-scene .v61-goat-sticker{
+    width:clamp(43px,31%,61px)!important;right:13%!important;bottom:13%!important;
+    padding:2px!important;border-width:1px!important;
+    box-shadow:0 7px 17px rgba(0,0,0,.35),0 0 14px color-mix(in srgb,var(--v61-cyan) 21%,transparent)!important;
+  }
+}

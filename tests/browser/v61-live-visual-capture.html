@@ -13,7 +13,7 @@ f.addEventListener('load',async()=>{try{
  if(!w.FrenchTranquilleThemes?.apply)throw Error('theme API missing');
  w.FrenchTranquilleThemes.apply(theme);
  await wait(300);
- if(screen==='practice'){
+ if(screen==='practice'||screen==='practice-bottom'){
    const nav=d.querySelector('.ux-bottom-nav [data-ux-nav="practice"]');
    if(nav)nav.click();else w.FrenchTranquilleBuild27Shell?.openPractice?.();
    await until(()=>d.querySelectorAll('body > .b27-practice-page [data-b27-practice-action]').length>=4,6000);
@@ -30,7 +30,7 @@ f.addEventListener('load',async()=>{try{
    const cafe=d.querySelector('.b27-home .v61-cafe-scene');
    if(!cafe||cafe.querySelectorAll('img').length!==2)throw Error('hero cafe illustration missing');
  }
- if(screen==='practice'){
+ if(screen==='practice'||screen==='practice-bottom'){
    const buttons=[...d.querySelectorAll('.b27-practice-list > [data-b27-practice-action]')];
    if(buttons.some(b=>!b.querySelector('.v61-card-kicker')||!b.querySelector('.v61-card-cta')))throw Error('V6.1 action composition missing');
  }
@@ -44,7 +44,25 @@ f.addEventListener('load',async()=>{try{
  for(const img of d.querySelectorAll('img.ft-v510-practice-art')){
    if(img.complete&&!img.naturalWidth)throw Error('asset failed '+img.src);
  }
- d.scrollingElement.scrollTop=0;
+
+ if(screen==='practice-bottom'){
+   const scroller=d.querySelector('.b27-practice-page');
+   if(!scroller)throw Error('Practice scroller missing');
+   scroller.scrollTop=scroller.scrollHeight;
+   await wait(200);
+   const actions=[...d.querySelectorAll('.b27-practice-list > [data-b27-practice-action]')];
+   for(const id of ['review','real-life']){
+     const action=actions.find(a=>a.dataset.b27PracticeAction===id);
+     const cta=action?.querySelector('.v61-card-cta');
+     if(!cta)throw Error('lower action missing '+id);
+     const rect=cta.getBoundingClientRect();
+     if(rect.top<0||rect.bottom>d.documentElement.clientHeight-55)throw Error('lower CTA covered '+id+' '+rect.bottom);
+     const target=d.elementFromPoint(rect.left+rect.width/2,rect.top+rect.height/2);
+     if(!action.contains(target))throw Error('lower CTA untappable '+id);
+   }
+ }else{
+   d.scrollingElement.scrollTop=0;
+ }
  document.body.dataset.v61CaptureReady='1';
  document.body.dataset.v61CaptureTheme=theme;
  document.body.dataset.v61CaptureScreen=screen;

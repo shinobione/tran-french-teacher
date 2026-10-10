@@ -77,6 +77,29 @@ jobs:
             fi
             echo "$label PASS"
           done
+      - name: Capture bottom-row Practice and prove real hit targets
+        shell: bash
+        run: |
+          set -euo pipefail
+          for theme in aurora jade; do
+            label="390-${theme}-practice-bottom"
+            profile="/tmp/v61-${label}"
+            file="artifacts/v61-live/${label}.png"
+            dom="/tmp/v61-${label}.html"
+            rm -rf "$profile"
+            timeout --signal=TERM --kill-after=5s 50s \
+              google-chrome --headless=new --no-sandbox --disable-gpu --hide-scrollbars \
+              --disable-background-timer-throttling --disable-renderer-backgrounding \
+              --user-data-dir="$profile" --window-size="390,844" \
+              --virtual-time-budget=26000 --screenshot="$file" --dump-dom \
+              "http://127.0.0.1:4173/tests/browser/v61-live-visual-capture.html?theme=${theme}&screen=practice-bottom" >"$dom"
+            test -s "$file"
+            if ! grep -q 'data-v61-capture-ready="1"' "$dom"; then
+              grep -o 'data-v61-capture-error="[^"]*"' "$dom" || true
+              exit 1
+            fi
+            echo "$label PASS"
+          done
       - name: Upload actual Chrome screens for human comparison
         if: always()
         uses: actions/upload-artifact@v4

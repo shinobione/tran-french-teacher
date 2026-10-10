@@ -38,3 +38,6 @@ The new labels are purely descriptive and the existing button owns every action.
 ## Visual review 3 — exact lesson denominator
 
 Live visual screenshots revealed `BÀI 1 / 40` although the canonical curriculum has 52 lessons. Root cause: historical Build 27 initially paints the 40-lesson catalog, then Build 32 appends 12 lessons asynchronously; the Build 27 home render signature does not include lesson count and can cache an obsolete denominator. V6.1 now reconciles **only the displayed badge** to the actual live `FrenchTranquilleCurriculum.lessons.length` during its decoration. No curriculum, learner progress or storage is touched. Dedicated live Chrome capture requires 52 loaded lessons and a matching badge before accepting Home captures.
+
+## Review4 — Lower Practice scroll gate
+The existing two-column Practice layout needs scrolling on 390×844. A new live-browser capture enters the real Practice overlay, scrolls to its bottom, and confirms the lower Review and Real-Life CTA labels are within the unobstructed viewport and point to their original button via elementFromPoint. This is a visual/interaction check, not a learner-state change. The decorative goat also moves slightly inboard on small viewports. No merge or iPhone field PASS is claimed.

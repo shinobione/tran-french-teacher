@@ -194,5 +194,5 @@
   new MutationObserver(schedule).observe(root,{attributes:true,attributeFilter:['class']});
   window.addEventListener('focus',schedule);
   schedule();
-  window.FrenchTranquilleV61 = Object.freeze({version:'6.1.0-review3',refresh:schedule});
+  window.FrenchTranquilleV61 = Object.freeze({version:'6.1.0-review4',refresh:schedule});
 })();
