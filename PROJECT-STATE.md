@@ -1,5 +1,15 @@
 # PROJECT-STATE — French Trân’quille
 
+## V6.1 mobile Review8 — 2026-10-11 (23 real Chrome screenshots PASS; no release)
+
+- **Accepted main unchanged:** `d0b57a96779c643643c77974cab8086f7f4c311a`; this work remains solely in **Draft PR #258**. No runtime release, merge, learner migration, voice or data-store change.
+- **Last tested source head:** `8b281a4a623b07b8128a829572672a2a7bad1fcc`. Exact-head [V6.1 live visual workflow `38098536760`](https://github.com/shinobione/tran-french-teacher/actions/runs/38098536760) **SUCCESS** (13 successful steps), 23 screenshots downloaded and visually inspected; archived artifact `v61-live-visual-review`.
+- **Visual probes:** 4 themes Home/Practice at 390×844; Aurora 430×932; scrolled Practice (Aurora/Jade), scrolled Home quick Conversation (all themes at 390 + Aurora 430), Aurora Home/Practice at 320×568, Aurora Home-bottom/Practice at simulated 125% root font sizing, **primary lesson CTA after scroll** at 320×568 Aurora and 375×667 Original. Home quick and lesson CTAs satisfy measured hit target / navigation clearance; 320 first-viewport hero CTA requires scrolling, but is reachable/tappable once scrolled. This is not a physical iOS Dynamic Type test.
+- **Product/PWA verification on tested source:** Build29 iPhone Chrome/PWA `38098536522`, strict V6.1 successor ownership `38098536708`, practice advisory `38098536763`, and F11 `38098536718` PASS. Complete CI `60 PASS / 8 FAIL` (68 checks); older Recovery/Evidence/Build28 red on this independent visual branch are already **jointly green** in separate Draft integration PR #265 (59/62); others V2 Freeze, Quality, P3b plus Premium V5.3 and V5 Coherence captures remain unadjudicated. Do not portray the visual PR as fully CI-green.
+- **NEXT:** preserve current screenshot source and review approved Stitch references; examine original 320 Home first-viewport CTA below fixed nav as a visual/scroll affordance issue, not a lost-action bug. Obtain human mockup acceptance and **real installed iPhone Safari/PWA** on four themes, Voice/Listening/Review and offline backup. No release until merge decision and minimum `main` check protection.
+
+---
+
 ## V6.1 mobile review6 — 2026-10-11 (candidate; Chrome verdict pending)
 
 - Accepted main stays `d0b57a96779c643643c77974cab8086f7f4c311a`; V6.1 PR #258 is DRAFT, not merged, not deployed. Canonical current plan lives in `MASTER-ROADMAP.md` on Draft integration #265; that branch's all-three Recovery/Evidence/Build28 tests PASS together (59/62 CI; V2 Freeze, Quality, P3b remain red).
