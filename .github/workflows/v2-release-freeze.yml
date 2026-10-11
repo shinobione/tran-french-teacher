@@ -66,7 +66,8 @@ jobs:
           grep -q 'EXPECTED_ITEMS = 241' tests/smoke/v2-release-smoke.js
           grep -q 'EXPECTED_SCENARIOS = 36' tests/smoke/v2-release-smoke.js
           grep -q 'EXPECTED_SCENARIO_TURNS = 108' tests/smoke/v2-release-smoke.js
-          grep -q '40 lessons / 241 items' docs/V2-RELEASE.md
+          # Archived V2 release is written in French; preserve its exact figures.
+          grep -Fq '40 leçons / 241 éléments' docs/V2-RELEASE.md
           grep -q '"version": "2.0.0"' release-v2.json
           grep -q '"curriculumLessons": 40' release-v2.json
           grep -q '"curriculumItems": 241' release-v2.json
