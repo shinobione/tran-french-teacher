@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Isolated iPhone preview Chrome smoke</title>
+<style>html,body{margin:0;background:#10182a;color:white;font:14px sans-serif}iframe{width:390px;height:844px;border:0}</style></head>
+<body data-ft-preview-smoke="pending">
+<iframe id="ft" title="Isolated French Trân’quille app" src="../../index.html?ftIsolatedChrome=1"></iframe>
+<script>
+(()=>{'use strict';const q=sel=>document.querySelector(sel),frame=q('#ft'),wait=ms=>new Promise(r=>setTimeout(r,ms));
+const check=(condition,label)=>{if(!condition)throw Error(label)};
+const until=async(fn)=>{for(let i=0;i<100;i++){const r=fn();if(r)return r;await wait(180)}throw Error('boot-timeout')};
+frame.addEventListener('load',async()=>{try{
+  const w=frame.contentWindow,d=frame.contentDocument;
+  const meta=await fetch('/preview-build.json').then(r=>r.json());
+  check(meta.realLearnerDataIncluded===false,'bundle real-data flag');
+  check(meta.expectedOrigin!=='https://shinobione.github.io','production origin used');
+  check(d.documentElement.dataset.ftIsolatedPreview==='1','origin firewall not active');
+  check(d.title.includes('TEST isolé'),'iPhone preview badge not visible');
+  await until(()=>w.FrenchTranquilleV61&&w.FrenchTranquilleCurriculum?.lessons?.length===52
+    && d.querySelector('.b27-home .b27-primary-card'));
+  check(d.querySelectorAll('.ux-bottom-nav [data-ux-nav]').length===3,'three native tabs');
+  const button=d.querySelector('.b27-home .b27-primary-card>.b27-primary-action');
+  check(!!button&&!button.disabled,'real lesson CTA');
+  check(d.querySelector('.b27-home .b27-card-topline')?.textContent?.includes('52'),'real 52-lesson badge');
+  const nav=d.querySelector('.ux-bottom-nav [data-ux-nav="practice"]');
+  check(!!nav,'practice tab absent');
+  nav.click();
+  await until(()=>d.querySelectorAll('.b27-practice-list > [data-b27-practice-action]').length===4);
+  const actions=[...d.querySelectorAll('.b27-practice-list > [data-b27-practice-action]')];
+  check(actions.every(a=>a.tagName==='BUTTON'),'non-native Practice actions');
+  check(actions.every(a=>!!a.querySelector('img.ft-v510-practice-art')),'3D Practice artwork missing');
+  for(const a of actions)if(a.disabled)
+    check(a.querySelector('.v61-card-cta')?.textContent?.includes('Chưa mở'),'disabled state lost');
+  const manifest=await fetch('/manifest.webmanifest').then(r=>r.json());
+  check(manifest.scope==='/'&&manifest.start_url==='/'&&manifest.short_name.includes('TEST'),'manifest scope');
+  // Browser verifies real app + manifest + delivered SW source. Installing
+  // the 192-request offline cache is tested separately in the deterministic
+  // Service Worker lifecycle simulation; an installed iPhone is still required.
+  check('serviceWorker'in w.navigator,'Service Worker unsupported');
+  const swBody=await fetch('/sw.js').then(r=>r.text());
+  check(swBody.includes(meta.previewCache),'wrong delivered SW cache');
+  check(swBody.includes("const CACHE_PREFIX='ft-isolated-preview-';"),'wrong SW cleanup namespace');
+  check(swBody.includes('self.addEventListener(\'install\''),'SW install handler absent');
+  document.body.dataset.ftPreviewSmoke='ok';
+  document.body.dataset.ftPreviewResult='3-tabs 52-lessons native-Practice isolated-manifest root-SW precache';
+}catch(e){document.body.dataset.ftPreviewSmoke='fail';document.body.dataset.ftPreviewError=String(e.message||e)}},{once:true});
+setTimeout(()=>{if(document.body.dataset.ftPreviewSmoke==='pending'){document.body.dataset.ftPreviewSmoke='fail';document.body.dataset.ftPreviewError='fixture-timeout'}},28000);
+})();
+</script>
+</body></html>

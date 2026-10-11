@@ -1,0 +1,69 @@
+name: V6.1 isolated iPhone preview package (artifact only)
+
+on:
+  pull_request:
+    paths:
+      - 'tools/build-isolated-preview.cjs'
+      - 'tests/smoke/isolated-preview-smoke.cjs'
+      - 'tests/browser/isolated-preview-smoke.html'
+      - '.github/workflows/v61-isolated-preview-package.yml'
+      - 'src/premium/v61-stitch-high-fidelity.css'
+      - 'index.html'
+      - 'sw.js'
+      - 'manifest.webmanifest'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  isolated-preview-package:
+    name: Isolated preview — origin firewall + SW lifecycle + real Chrome
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Assert production deployment is NEVER invoked by preview
+        run: |
+          test "${{ github.event_name }}" != "push"
+          test ! -f preview-deploy-token.txt
+          test ! -f .env.production
+          echo "No deploy, no branch update, no credentials, artifact only."
+      - name: Create a synthetic-origin root preview bundle
+        run: |
+          node --check tools/build-isolated-preview.cjs
+          node --check tests/smoke/isolated-preview-smoke.cjs
+          node tools/build-isolated-preview.cjs \
+            --origin https://ft-v61-preview.invalid \
+            --out "$RUNNER_TEMP/ft-isolated-preview"
+          node tests/smoke/isolated-preview-smoke.cjs \
+            --out "$RUNNER_TEMP/ft-isolated-preview"
+      - name: Launch isolated localhost HTTP server
+        run: |
+          cd "$RUNNER_TEMP/ft-isolated-preview"
+          python3 -m http.server 4177 --bind 127.0.0.1 >/tmp/ft-preview-http.log 2>&1 &
+          echo $! >/tmp/ft-preview-server.pid
+          sleep 1
+          google-chrome --version
+      - name: Chrome — actual lesson, Practice and delivered isolated SW source
+        run: |
+          timeout 95s google-chrome --headless=new --no-sandbox --disable-gpu \
+            --user-data-dir="$RUNNER_TEMP/ft-preview-chrome" \
+            --virtual-time-budget=32000 --dump-dom \
+            'http://127.0.0.1:4177/tests/browser/isolated-preview-smoke.html' \
+            > /tmp/ft-isolated-preview-chrome.html
+          grep -q 'data-ft-preview-smoke="ok"' /tmp/ft-isolated-preview-chrome.html ||
+            { grep -o 'data-ft-preview-error="[^"]*"' /tmp/ft-isolated-preview-chrome.html || true; exit 1; }
+      - name: Archive unsigned/unpublished TEST-origin artifact only
+        uses: actions/upload-artifact@v4
+        with:
+          name: ft-v61-isolated-iphone-preview-NOT-DEPLOYED
+          path: ${{ runner.temp }}/ft-isolated-preview/
+          retention-days: 7
+          if-no-files-found: error
+      - name: Stop preview-local HTTP server
+        if: always()
+        run: |
+          if [ -f /tmp/ft-preview-server.pid ]; then kill "$(cat /tmp/ft-preview-server.pid)" || true; fi
