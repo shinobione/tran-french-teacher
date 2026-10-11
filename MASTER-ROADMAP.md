@@ -4,6 +4,35 @@
 >
 > Historical long-form decisions remain preserved in dedicated `docs/BUILD-*`, release and audit documents. This file keeps durable milestone order, accepted gates and the current next slice.
 
+## CURRENT EXECUTION ROADMAP — 2026-10-11 (live GitHub verified)
+
+**Accepted `main`:** `d0b57a96779c643643c77974cab8086f7f4c311a` (CI governance #260 merged). The A2-R1 Listening doctor pilot and Foundations crash fix are already on accepted main. Older "NEXT" checkpoints below are **historical records**, not instructions to restart those completed phases.
+
+**Locked product priority:** finish the existing **V6.1 high-fidelity Home + Practice visual redesign** instead of opening new lesson/Build43 or V6.2 work. Candidate [PR #258](https://github.com/shinobione/tran-french-teacher/pull/258), head `8cfde07a2c4d9ed5436301d4d2942d1fc0fb7927`, is DRAFT / **not merged or deployed**; exact-head CI **62 PASS / 6 inherited FAIL (68 total)**. The dedicated live-visual, strict PWA successor-ownership and Build29 iPhone browser/PWA workflows are PASS, but no real installed-iPhone field approval or human mockup-fidelity signoff exists.
+
+### Gate A — consolidate already proven Recovery/Evidence CI corrections (test-only)
+
+- Draft [#262](https://github.com/shinobione/tran-french-teacher/pull/262): Recovery v3 full Chrome tribunal PASS in run `38095199887` (18 steps: v1/v2/v3 restores, rollback, reset seven stores, online/offline PWA).
+- Draft [#263](https://github.com/shinobione/tran-french-teacher/pull/263): Evidence Shadow adoption PASS in run `38097047757` (contract, transient-write rollback fixture, nine-owner preservation, Chrome adoption/reopen).
+- Draft [#264](https://github.com/shinobione/tran-french-teacher/pull/264): Build28 restore Chrome PASS in run `38097369002` (14 steps, semantic learner equality plus all-store V3 canonical-plan raw equality).
+- **NOW:** make and review **one integrated test-only candidate** from the same accepted main; deduplicate the identical shared fixture from #262/#263; run all three exact-head tribunals **together**. All prior individual PASS verdicts are insufficient to certify an integrated head. No source/runtime/learner schema edits, no data reset, no automatic merge.
+- Continue to protect all checks. Three separate inherited CI debts remain: `V2.0.0 Freeze tribunal`, `French Trân'quille quality`, and `P3b Ephemeral pedagogical observation runtime`. Diagnose their exact failures in narrow follow-up slices; never silence or bulk-update assertions.
+
+### Gate B — V6.1 visual acceptance (primary feature work after Gate A candidate)
+
+1. Inspect **real Chrome screenshot artifact** `v61-live-visual-review` from run `38055549514`: Home + Practice on Original/Aurora/Sunset/Jade at 390×844, Aurora at 430×932, and lower Practice CTA hit targets. Compare side-by-side to the three approved V6.1 Stitch references; do not confuse automated capture PASS with aesthetic fidelity.
+2. Produce a scoped punch list (hero/logo/café illustration, hierarchy, bilingual typography, lesson count 52, illustrated Practice cards, disabled states, scroll/safe-area, contrast, animation). Implement only review-approved differences **on PR #258** using shared components and the four existing themes. Do not replace locked backgrounds or fake XP, streaks, CEFR level, lesson mastery or pronunciation scoring.
+3. Re-run exact-head live visual / iPhone-sized Chrome interaction / successor-safe service-worker cache+offline / accessibility+reduced-motion / full safety jobs. Confirm the four original Practice button owners and separate recommendation action; keep native routing and all existing learner stores.
+4. Get human screenshots signoff and **physical installed-iPhone Safari/PWA** PASS for Home→Practice→lesson→back, Voice/Listening/Review/Real Life, offline reopen and seven-store backup continuity. Only then consider ready-for-review, merge and deployment as separate deliberate decisions.
+
+**After Home + Practice acceptance:** scope the high-fidelity **Quiz** as the next visual slice, not an implicit part of current V6.1 acceptance. No more feature drift while safety and field gates remain open.
+
+### Governance and release constraints
+
+Owner-reported Settings audit on 2026-10-10 found **no classic branch protection or Rulesets on `main`**. A green GitHub check is not a hard required gate until protection is configured. Set always-present integrity/PWA required checks before contemplating merges. Keep PR #258 and CI candidates separate; preserve 52 lessons / 313 items, seven durable stores, backup v3, derived-only Evidence, fixed Voice owner and physical-iPhone safety. Do not declare shipped, CI-certified, or iPhone-certified interchangeably.
+
+---
+
 ## GitHub Actions CI efficiency — governance gate (#259, 2026-10-10)
 
 Locked rollout order, independent of the active V6.1 visual slice:
@@ -432,7 +461,7 @@ new eighth durable store
 
 The pure-contract workflow now keeps core syntax/purity and sanctuary guards always active, while original pure-proof-only scope/source/no-integration restrictions activate only when the pure core/test/proof slice itself changes. This prevents accepted lineage guards from permanently forbidding an explicitly authorized successor.
 
-# NEXT — A2-R1 Learner Integration Pilot — doctor-appointment ONLY
+# HISTORICAL NEXT (2026-08) — A2-R1 Learner Integration Pilot — doctor-appointment ONLY
 
 After acceptance of the current closeout candidate, authorize exactly one learner-facing runtime slice.
 

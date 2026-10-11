@@ -18,6 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -73,15 +75,24 @@ jobs:
 
       - name: Evidence is shadow-only — product read owners remain untouched
         run: |
-          test "$(git hash-object src/core/data-recovery-core.js)" = "10dc84bb71b82c62b5f169f52c6bd95c88b308f9"
-          test "$(git hash-object src/pedagogy/memory-evidence-v2-core.js)" = "b85bea27be07289902df76079a9ace76451c720d"
-          test "$(git hash-object src/pedagogy/learning-memory.js)" = "be19abde268a78b8bfd140a0d94e99a4990dda65"
-          test "$(git hash-object src/pedagogy/error-intelligence.js)" = "060a7db49b72a58c8a6a6c0055efa484f9d9f604"
-          test "$(git hash-object src/pedagogy/listening-engine.js)" = "3d4b63212498d5a49cc5e6c48a0795c44555f06d"
-          test "$(git hash-object src/pedagogy/scenario-engine.js)" = "8bd6d67fa87cb2fd41fa44d0e48dbd342c137a53"
-          test "$(git hash-object app.js)" = "600f094266c9f0c4c7b57efdbf61129909ebd9cb"
-          test "$(git hash-object voice-ios.js)" = "38e97aa3ef62dd6dcda224901b435f0973618679"
-          test "$(git hash-object free-voice.js)" = "b4c19b1936c788ee017eac9ba14e5a62c159e8d5"
+          # Compare against the exact accepted base of this PR, not historical
+          # Git blobs. Legitimate Listening successors already merged on main
+          # must not fail this historical Evidence tribunal.
+          # For main pushes, the accepted main tree is the reference; the
+          # shadow-only product-read boundary below still executes.
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            base="${{ github.event.pull_request.base.sha }}"
+            test -n "$base"
+            git cat-file -e "$base^{commit}"
+            git diff --exit-code "$base" HEAD -- \
+              src/core/data-recovery-core.js \
+              src/pedagogy/memory-evidence-v2-core.js \
+              src/pedagogy/learning-memory.js \
+              src/pedagogy/error-intelligence.js \
+              src/pedagogy/listening-engine.js \
+              src/pedagogy/scenario-engine.js \
+              app.js voice-ios.js free-voice.js
+          fi
           ! grep -R -q 'FrenchTranquilleEvidenceShadow\|french-tranquille:memory-evidence:v2' \
             app.js \
             src/pedagogy/learning-memory.js \

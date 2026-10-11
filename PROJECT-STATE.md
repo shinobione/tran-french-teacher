@@ -1,6 +1,28 @@
 # PROJECT-STATE — French Trân’quille
 
-Last reconciled: 2026-10-10 (new CI governance checkpoint; historical checkpoint preserved below)
+Last verified: 2026-10-11 — accepted main `d0b57a96779c643643c77974cab8086f7f4c311a`; test-only integration candidate for issue #261.
+
+## ACTIVE CHECKPOINT — CI integrity consolidation → V6.1 visual acceptance
+
+**What is live:** accepted `main` remains `d0b57a96779c643643c77974cab8086f7f4c311a`; no changes from the four Draft candidates are merged/deployed. Existing public app remains on accepted Build38/v2.5.0 metadata; 52 lessons / 313 items, seven durable Recovery stores, derived Evidence Shadow.
+
+**Current integration work (this branch):** `integration/261-recovery-evidence-build28-ci`, branched directly from accepted main. Exactly six test/workflow changes selected from #262/#263/#264 with their duplicate Evidence fixture deduplicated. The candidate must demonstrate all three specialized Chrome/Node tribunals **simultaneously on the same head**; do not infer integration acceptance from individual runs. No PWA runtime code or learner data altered.
+
+**Individually proved (but not merged):**
+- #262 Recovery v3 Chrome 18-step tribunal SUCCESS, run `38095199887`, head `134bfaf0358411d19ee2d065e4d5e8b3acb3e7a7`.
+- #263 Evidence Shadow Chrome/Node 13-step tribunal SUCCESS, run `38097047757`, head `d645bbc98c624aaec43666023d99be506f2f9b30`.
+- #264 Build28 restore Chrome 14-step tribunal SUCCESS, run `38097369002`, head `2ba923fd84094043177a64ed1c929c5144919757`.
+All three still Draft; inherited V2 Freeze, Quality, P3b failures remain real separate review debt.
+
+**Priority visual PR #258:** head `8cfde07a2c4d9ed5436301d4d2942d1fc0fb7927`, Draft, **62 PASS / 6 FAIL** exact-head CI. V6.1 live visual `38055549514`, Build29 iPhone-browser PWA `38055548960` and strict successor ownership `38055549035` passed. Ten Home/Practice captures plus two Practice-bottom captures in the unexpired `v61-live-visual-review` artifact. No human mockup signoff; no installed physical iPhone PASS; **not ready to publish**. Home + Practice only; high-fidelity Quiz later.
+
+**Mandatory NEXT:** (1) run integrated exact-head Recovery, Evidence and Build28 tribunals, preserve failed checks; (2) inspect V6.1 screenshot artifact and issue specific visual-fidelity punch list; (3) apply only scoped V6.1 changes on #258, validate four themes, 390/430 widths, navigation, PWA cache/offline/Voice; (4) request physical installed-iPhone field verdict and configure minimal required `main` protection before any merge. The roadmap under the current-execution section is authoritative over archived handoffs.
+
+**No merge / no Pages deployment / no learner reset.**
+
+---
+
+Archived 2026-10-10 CI governance checkpoint (historical; #260 already merged):
 
 ## CI governance — Issue #259 / 2026-10-10 (candidate only)
 

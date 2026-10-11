@@ -26,12 +26,21 @@
     const backup = recovery.backupObject();
     const backupIds = Object.keys(backup.stores || {}).sort().join(',');
     const expectedIds = recovery.core.STORE_SPECS.map(spec => spec.id).sort().join(',');
+    const restorePlan = recovery.core.planRestore(backup, recovery.core.collectRaw(localStorage));
 
     const mutated = JSON.parse(originalLearner || '{}');
     mutated.conversationWins = 999;
     localStorage.setItem(LEARNER_KEY, JSON.stringify(mutated));
     const restoreResult = recovery.restoreObject(backup, { reload: false });
     const restoredLearner = localStorage.getItem(LEARNER_KEY);
+    // Recovery v3 intentionally canonicalizes JSON keys; original bytes are not
+    // the restore contract. Require both equivalent learner data AND exact
+    // bytes for every store in the validated restore plan, including Evidence.
+    const canonical = window.FrenchTranquilleMemoryEvidenceV2?.canonicalStringify || JSON.stringify;
+    const sameLearnerData = originalLearner !== null && restoredLearner !== null &&
+      canonical(JSON.parse(restoredLearner)) === canonical(JSON.parse(originalLearner));
+    const planRestoredExactly = recovery.core.rawMapsEqual(recovery.core.collectRaw(localStorage), restorePlan.targetRaw);
+    const v2ByteCompatible = recovery.core.BACKUP_VERSION >= 3 || restoredLearner === originalLearner;
 
     const legacyPayload = {
       format: 'french-tranquille-backup',
@@ -57,7 +66,7 @@
     root.dataset.b28GuardPreserved = guardPreserved ? '1' : '0';
     root.dataset.b28BlockedWrite = blockedDelta >= 1 ? '1' : '0';
     root.dataset.b28BackupComplete = backupIds === expectedIds ? '1' : '0';
-    root.dataset.b28RestoreOk = restoreResult.ok && restoredLearner === originalLearner ? '1' : '0';
+    root.dataset.b28RestoreOk = restoreResult.ok && sameLearnerData && planRestoredExactly && v2ByteCompatible ? '1' : '0';
     root.dataset.b28LegacyMigration = legacyVersionOk && successorDerivedOk ? '1' : '0';
     root.dataset.b28ResetAtomic = allCleared && resetSnapshotPresent ? '1' : '0';
     root.dataset.b28ResetRestore = resetRestore.ok && lesson8Preserved ? '1' : '0';
