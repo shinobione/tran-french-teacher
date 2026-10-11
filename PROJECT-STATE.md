@@ -1,5 +1,16 @@
 # PROJECT-STATE — French Trân’quille
 
+## ACTIVE — Stitch Export4 visual convergence, CSS-only Draft candidate (2026-10-11)
+
+- **Source of truth:** accepted `main` still `d0b57a96779c643643c77974cab8086f7f4c311a` / public Build38 v2.5.0; independent joint safety+V6.1 parent Draft #266 at `de6f576ced2be8e3b218351b5b03cc8c09a6bda4`. No main merge or Pages deployment.
+- **User-provided design source:** Stitch export #4 (SHA-256 `3e18f9714c146bb24c6c56256a154bd91be21c2675d6ab03bbc1ad7422a2da0c`), eight canonical Home/Practice screens across Original/Aurora/Sunset/Jade. See `docs/V61_STITCH_EXPORT4_CONVERGENCE.md` for exact folders and eight PNG hashes. Stitch is reference-only (mockup sizes do not match 390×844, remote image hotlinks and demo metrics).
+- **Visual slice under review:** branch `design/v61-stitch-export4-home-practice-convergence`, isolated from previously certified #266. CSS local/system font fallbacks, refined 376–759px welcome surface, per-theme accents, existing Practice 3D art lighting and native-button enabled/disabled styles; one Chrome fixture gains three-tabs/theme/serif assertions. No production JS, index/SW/PWA cache, assets, state, curriculum, voice, XP/score or learner data edits.
+- **CURRENT CI GATE:** run full exact-head 68 GitHub workflows after opening Draft PR, plus regenerate all 23 Home/Practice Chrome captures and review the artifact against the eight Stitch reference images. Any failed safeguard remains a blocker; no speculative green claim.
+- **Release gates still OPEN:** human Stitch reference fidelity, a **real installed iPhone** Home/Practice/Voice/offline review with non-destructive backup v3 for seven stores, minimum required `main` protections, and explicit merge/deploy approval. High-fidelity Quiz separate later.
+- **NEXT:** inspect current PR head + Chrome PNG artifact; fix measured layout/readability/touch failures in CSS only, then request human visual signoff; do not merge or deploy automatically.
+
+---
+
 ## Live resumption — review10: same-head 68/68 + visual-reference gap (2026-10-11)
 
 - **Accepted main / public site unchanged:** `d0b57a96779c643643c77974cab8086f7f4c311a`, public v2.5.0 Build38. No merge, no Pages deploy or learner-data modification.

@@ -6,6 +6,12 @@
 
 ## CURRENT EXECUTION ROADMAP — 2026-10-11 (live GitHub verified)
 
+### CURRENT P0 — Stitch Export #4 visual convergence, CSS-only (2026-10-11)
+
+The user has now supplied complete canonical **four-theme Home + Practice mockup references** in Stitch archive #4; they are visually usable despite non-runnable HTML/remote assets/dummy numbers. Exact screen IDs, SHA-256 and viewport differences are pinned in `docs/V61_STITCH_EXPORT4_CONVERGENCE.md`. Keep the previously certified joint V6.1+safety Draft #266 untouched while reviewing a **separate CSS-only visual slice** in `design/v61-stitch-export4-home-practice-convergence`. The existing 52-lesson learner state, native three-tab navigation, 3D icons, voice, cache, Recovery and Evidence stay authoritative.
+
+**NEXT hard gates:** new source 23 Chrome screenshots in four themes at 320/375/390/430 and simulated large text; full exact-head 68 Actions including V2/Quality/P3b/Recovery/PWA; human reference comparison and physical installed-iPhone safe validation. Quiz remains a later design phase. Keep Draft; no merge/Pages deployment or learner-data mutation.
+
 ### ✅ Joint integration CI gate — PASS on source, field acceptance still OPEN (2026-10-11)
 
 Draft [#266](https://github.com/shinobione/tran-french-teacher/pull/266) candidate **source `b1e25fc1dfb645fe445f1a98de3a31b4063af62d`** received **68/68 GitHub Actions SUCCESS** on 2026-10-11: V6.1 Home/Practice visual, iPhone-browser PWA, Recovery v3 seven-store rollback, Evidence Shadow, Build28, V2 old-user freeze, Quality, P3b, global navigation and Premium V5 visual checks all pass together. One transient global navigation first-attempt error passed on an exact same-code job rerun; no CI waiver or learner-runtime modification.
