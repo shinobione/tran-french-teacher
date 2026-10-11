@@ -157,6 +157,30 @@ jobs:
             if [ "$screen" = home-bottom ]; then grep -q 'data-v61-capture-home-bottom="1"' "$dom"; fi
             echo "$label PASS"
           done
+      - name: Verify primary lesson CTA on compact iPhones after real scroll
+        shell: bash
+        run: |
+          set -euo pipefail
+          for spec in '320 568 aurora' '375 667 original'; do
+            read -r width height theme <<< "$spec"
+            label="${width}-${theme}-home-cta"
+            profile="/tmp/v61-${label}"
+            file="artifacts/v61-live/${label}.png"
+            dom="/tmp/v61-${label}.html"
+            rm -rf "$profile"
+            timeout --signal=TERM --kill-after=5s 50s \
+              google-chrome --headless=new --no-sandbox --disable-gpu --hide-scrollbars \
+              --user-data-dir="$profile" --window-size="${width},${height}" \
+              --virtual-time-budget=26000 --screenshot="$file" --dump-dom \
+              "http://127.0.0.1:4173/tests/browser/v61-live-visual-capture.html?theme=${theme}&screen=home-cta" >"$dom"
+            test -s "$file"
+            if ! grep -q 'data-v61-capture-ready="1"' "$dom" || ! grep -q 'data-v61-capture-home-cta="1"' "$dom"; then
+              echo "$label: primary lesson CTA inaccessible"
+              grep -o 'data-v61-capture-error="[^"]*"' "$dom" || true
+              exit 1
+            fi
+            echo "$label primary lesson CTA PASS"
+          done
       - name: Upload actual Chrome screens for human comparison
         if: always()
         uses: actions/upload-artifact@v4
