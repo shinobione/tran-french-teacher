@@ -4,6 +4,35 @@
 >
 > Historical long-form decisions remain preserved in dedicated `docs/BUILD-*`, release and audit documents. This file keeps durable milestone order, accepted gates and the current next slice.
 
+## CURRENT EXECUTION ROADMAP — 2026-10-11 (live GitHub verified)
+
+**Accepted `main`:** `d0b57a96779c643643c77974cab8086f7f4c311a` (CI governance #260 merged). The A2-R1 Listening doctor pilot and Foundations crash fix are already on accepted main. Older "NEXT" checkpoints below are **historical records**, not instructions to restart those completed phases.
+
+**Locked product priority:** finish the existing **V6.1 high-fidelity Home + Practice visual redesign** instead of opening new lesson/Build43 or V6.2 work. Candidate [PR #258](https://github.com/shinobione/tran-french-teacher/pull/258), last evaluated source head `8b281a4a623b07b8128a829572672a2a7bad1fcc`, is DRAFT / **not merged or deployed**; source matrix **60 PASS / 8 FAIL (68 total)**, while the dedicated Chrome visual, iPhone PWA, Practice and strict successor tests PASS. The dedicated live-visual, strict PWA successor-ownership and Build29 iPhone browser/PWA workflows are PASS, but no real installed-iPhone field approval or human mockup-fidelity signoff exists.
+
+### Gate A — consolidate already proven Recovery/Evidence CI corrections (test-only)
+
+- Draft [#262](https://github.com/shinobione/tran-french-teacher/pull/262): Recovery v3 full Chrome tribunal PASS in run `38095199887` (18 steps: v1/v2/v3 restores, rollback, reset seven stores, online/offline PWA).
+- Draft [#263](https://github.com/shinobione/tran-french-teacher/pull/263): Evidence Shadow adoption PASS in run `38097047757` (contract, transient-write rollback fixture, nine-owner preservation, Chrome adoption/reopen).
+- Draft [#264](https://github.com/shinobione/tran-french-teacher/pull/264): Build28 restore Chrome PASS in run `38097369002` (14 steps, semantic learner equality plus all-store V3 canonical-plan raw equality).
+- **DONE (candidate, not merged):** Draft [#265](https://github.com/shinobione/tran-french-teacher/pull/265) integrates the six test/workflow files (shared Evidence fixture deduplicated) from #262/#263/#264 directly on accepted main. **All three specialist tribunals passed together** on test-only source head `55b2e73965fc32434745f85ab7ee5eb7dd49aa50`: Recovery v3 `38097662282`, Evidence Shadow `38097662338`, Build28 `38097662246`. Full matrix **59 PASS / 3 FAIL** (V2 Freeze/Quality/P3b). Next: human review of diff, separate narrow triage of those checks and minimum main protection before any merge. This checkpoint edit does not change the tested source.
+- Continue to protect all checks. Three separate inherited CI debts remain: `V2.0.0 Freeze tribunal`, `French Trân'quille quality`, and `P3b Ephemeral pedagogical observation runtime`. Diagnose their exact failures in narrow follow-up slices; never silence or bulk-update assertions.
+
+### Gate B — V6.1 visual acceptance (primary feature work after Gate A candidate)
+
+1. **DONE candidate-side artifact inspection:** 23 real Chrome screenshots from [V6.1 run `38098536760`](https://github.com/shinobione/tran-french-teacher/actions/runs/38098536760) cover 4 themes, iPhone 320/375/390/430 widths, scrolled Home and Practice CTA hit targets, and simulated 125% text sizing. No overflow or inaccessible CTA detected in the tested cases. At 320px the first-lesson CTA is below the initial tabbar viewport **but passes verified scroll-to-action hit testing**. **NEXT:** compare these captures side by side with three approved Stitch references before aesthetic signoff; automated PASS is not reference fidelity.
+2. Produce a scoped punch list (hero/logo/café illustration, hierarchy, bilingual typography, lesson count 52, illustrated Practice cards, disabled states, scroll/safe-area, contrast, animation). Implement only review-approved differences **on PR #258** using shared components and the four existing themes. Do not replace locked backgrounds or fake XP, streaks, CEFR level, lesson mastery or pronunciation scoring.
+3. Re-run exact-head live visual / iPhone-sized Chrome interaction / successor-safe service-worker cache+offline / accessibility+reduced-motion / full safety jobs. Confirm the four original Practice button owners and separate recommendation action; keep native routing and all existing learner stores.
+4. Get human screenshots signoff and **physical installed-iPhone Safari/PWA** PASS for Home→Practice→lesson→back, Voice/Listening/Review/Real Life, offline reopen and seven-store backup continuity. Only then consider ready-for-review, merge and deployment as separate deliberate decisions.
+
+**After Home + Practice acceptance:** scope the high-fidelity **Quiz** as the next visual slice, not an implicit part of current V6.1 acceptance. No more feature drift while safety and field gates remain open.
+
+### Governance and release constraints
+
+Owner-reported Settings audit on 2026-10-10 found **no classic branch protection or Rulesets on `main`**. A green GitHub check is not a hard required gate until protection is configured. Set always-present integrity/PWA required checks before contemplating merges. Keep PR #258 and CI candidates separate; preserve 52 lessons / 313 items, seven durable stores, backup v3, derived-only Evidence, fixed Voice owner and physical-iPhone safety. Do not declare shipped, CI-certified, or iPhone-certified interchangeably.
+
+---
+
 ## GitHub Actions CI efficiency — governance gate (#259, 2026-10-10)
 
 Locked rollout order, independent of the active V6.1 visual slice:
@@ -432,7 +461,7 @@ new eighth durable store
 
 The pure-contract workflow now keeps core syntax/purity and sanctuary guards always active, while original pure-proof-only scope/source/no-integration restrictions activate only when the pure core/test/proof slice itself changes. This prevents accepted lineage guards from permanently forbidding an explicitly authorized successor.
 
-# NEXT — A2-R1 Learner Integration Pilot — doctor-appointment ONLY
+# HISTORICAL NEXT (2026-08) — A2-R1 Learner Integration Pilot — doctor-appointment ONLY
 
 After acceptance of the current closeout candidate, authorize exactly one learner-facing runtime slice.
 

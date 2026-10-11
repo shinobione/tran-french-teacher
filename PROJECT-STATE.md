@@ -1,6 +1,28 @@
 # PROJECT-STATE — French Trân’quille
 
-Last reconciled: 2026-10-10 (new CI governance checkpoint; historical checkpoint preserved below)
+Last verified: 2026-10-11 — accepted main `d0b57a96779c643643c77974cab8086f7f4c311a`; test-only integration candidate for issue #261.
+
+## ACTIVE CHECKPOINT — CI integrity consolidation → V6.1 visual acceptance
+
+**What is live:** accepted `main` remains `d0b57a96779c643643c77974cab8086f7f4c311a`; no changes from the four Draft candidates are merged/deployed. Existing public app remains on accepted Build38/v2.5.0 metadata; 52 lessons / 313 items, seven durable Recovery stores, derived Evidence Shadow.
+
+**Current integration work (this branch):** `integration/261-recovery-evidence-build28-ci`, branched directly from accepted main. Exactly six test/workflow changes selected from #262/#263/#264 with their duplicate Evidence fixture deduplicated. **All three Chrome/Node tribunals passed together** on exact tested integration source `55b2e73965fc32434745f85ab7ee5eb7dd49aa50`: Build36.3 `38097662282`, Build36.2 `38097662338`, Build28 `38097662246`, and 59/62 total checks succeeded. Three inherited static governance checks remain FAIL (V2 Freeze/Quality/P3b). Integrated source is not merged; this docs-only update will produce a later PR head requiring new status review. No PWA runtime code or learner data altered.
+
+**Individually proved (but not merged):**
+- #262 Recovery v3 Chrome 18-step tribunal SUCCESS, run `38095199887`, head `134bfaf0358411d19ee2d065e4d5e8b3acb3e7a7`.
+- #263 Evidence Shadow Chrome/Node 13-step tribunal SUCCESS, run `38097047757`, head `d645bbc98c624aaec43666023d99be506f2f9b30`.
+- #264 Build28 restore Chrome 14-step tribunal SUCCESS, run `38097369002`, head `2ba923fd84094043177a64ed1c929c5144919757`.
+All three still Draft; inherited V2 Freeze, Quality, P3b failures remain real separate review debt.
+
+**Priority visual PR #258:** tested source head `8b281a4a623b07b8128a829572672a2a7bad1fcc`, Draft, **60 PASS / 8 FAIL** full source matrix. Dedicated live visual `38098536760` produced **23 PASS Chrome screenshots** (including actual 320/375 primary CTA and Conversation scroll/hit proofs plus simulated +25% font). Build29 PWA `38098536522` and strict successor ownership `38098536708` PASS. The newest branch head may be documentation-only; verify live metadata. No human mockup signoff; no installed physical iPhone PASS; **not ready to publish**. Home + Practice only; high-fidelity Quiz later.
+
+**Mandatory NEXT:** (1) review #265's integrated positive proofs and resolve V2 Freeze/Quality/P3b separately without test weakening; (2) compare the **23** actual V6.1 captures with approved Stitch references and address measured mismatch only; (3) verify final candidate on physical installed iPhone (Home/Practice/Voice/Listening/Review/offline + backup continuity), including 320px CTA discoverability and text settings; (4) configure minimum `main` protection and obtain explicit merge decision. No production deployment yet. The roadmap under the current-execution section is authoritative over archived handoffs.
+
+**No merge / no Pages deployment / no learner reset.**
+
+---
+
+Archived 2026-10-10 CI governance checkpoint (historical; #260 already merged):
 
 ## CI governance — Issue #259 / 2026-10-10 (candidate only)
 
