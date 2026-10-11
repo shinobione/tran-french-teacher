@@ -54,7 +54,13 @@ jobs:
             src/pedagogy/mastery-engine.js \
             src/pedagogy/learner-intelligence.js \
             src/pedagogy/learner-intelligence-v2.js \
-            app.js voice-ios.js free-voice.js index.html sw.js
+            app.js voice-ios.js free-voice.js
+          # An approved V6.1 visual successor edits only index + SW via an
+          # EXACT pinned transformation. Non-UI product owners stay frozen.
+          # Fail closed for every other index/SW mutation.
+          if ! git diff --quiet origin/main...HEAD -- index.html sw.js; then
+            node tools/test-v61-pwa-successor.cjs
+          fi
           grep -q 'b36RecoveryTribunal' tests/smoke/build36-recovery-v3-tribunal-smoke.js
           grep -q 'b36-injected-write-failure' tests/smoke/build36-recovery-v3-tribunal-smoke.js
           grep -q "mode==='pwa'" tests/smoke/build36-recovery-v3-tribunal-smoke.js

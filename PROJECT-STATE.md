@@ -1,5 +1,14 @@
 # PROJECT-STATE — French Trân’quille
 
+## Joint V6.1 + safety CI blocker and strictly attested successor bridge — 2026-10-11
+
+- Initial joint PR #266 tested source `17f551cd2f4ced2cb333d9a39d41b1100506f93f`. Build28 was **PASS**, while Build36.3 stopped at the **unchanged-runtime-owner diff** due solely to reviewed V6.1 `index.html` / `sw.js` successor. Build36.2 stopped at its **old exact Service Worker cache-name literal**. In both, independent Recovery/Evidence Node contract chains already PASS; **not joint Chrome PASS yet**.
+- **This slice:** only the two Build36 CI workflows change. Recovery freezes its complete original product/storage/voice owner list and permits a nonempty index/SW PR diff **only when** `node tools/test-v61-pwa-successor.cjs` proves the exact pinned V6.1 index+SW+loader changes, all protected owner hashes and three negative tamper tests. Evidence accepts its old frozen cache literal OR the **same strict V6.1 successor attestation**. All existing boot-order, offline, full Chrome tribunals and Evidence shadow-only owner gate remain.
+- The pinned attestation is a real invariant, not a permissive bypass. Changes to the Service Worker CORE, learner key, loader sequence, protected product sources or unreviewed cache generation must fail. Separate pure `v61-pwa-successor-ownership` job remains independent.
+- **Next:** inspect exact-head joint CI for Build36.3, Build36.2, Build28 and V6.1 Chrome/PWA. Any red is an unapproved regression to diagnose. Still Draft, no main merge, no field iPhone PASS or production deployment.
+
+---
+
 ## ACTIVE: joint V6.1 + safety pre-release rehearsal — 2026-10-11
 
 - **Accepted main:** `d0b57a96779c643643c77974cab8086f7f4c311a`, unchanged; deployed PWA still Build38/v2.5.0, no release or data migration.

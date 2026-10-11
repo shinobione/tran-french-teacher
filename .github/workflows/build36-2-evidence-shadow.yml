@@ -69,7 +69,11 @@ jobs:
             grep -q "$token" sw.js
           done
           grep -q "const B362='2.4.0-b36.2'" sw.js
-          grep -q "const CACHE='tran-french-teacher-v2.3.22-b34.14-v58debug1'" sw.js
+          # Accept historical cache OR the exact attested V6.1 visual cache;
+          # all existing Recovery boot-order and offline asset checks still run.
+          if ! grep -Fq "const CACHE='tran-french-teacher-v2.3.22-b34.14-v58debug1'" sw.js; then
+            node tools/test-v61-pwa-successor.cjs
+          fi
           ! grep -q 'memory-evidence-v2-migration-sim.js' index.html
           ! grep -q 'memory-evidence-v2-migration-sim.js' sw.js
 
