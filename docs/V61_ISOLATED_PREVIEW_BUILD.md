@@ -27,8 +27,9 @@ It performs these gates before uploading any file:
 1. `node --check` both builder and validator.
 2. Build into an isolated temporary folder.
 3. Static assertions: production host forbidden, origin-root manifest, unchanged real learning/Voice/Recovery sources, SW cache namespace, all SW CORE precache URLs actually present as files inside bundle, no unexpected SW mutations, origin-guard presence and no imported learner records.
-4. Real headless Chrome visit on `127.0.0.1`: actual 52-lesson startup, three native tabs, four 3D Practice buttons and genuinely disabled module states, **root-scoped installed SW** and expected isolated offline cache.
-5. Upload a **7-day GitHub Actions artifact only** named `ft-v61-isolated-iphone-preview-NOT-DEPLOYED`.
+4. Execute the **original Service Worker install/activate/offline fetch** handlers with a deterministic Node VM: all 192 precache entries, isolated cache namespace, deletion of stale preview caches and offline fallback. This is a **simulated lifecycle**, not proof of actual installed iPhone/browser SW activation.
+5. Real headless Chrome visit on `127.0.0.1`: actual 52-lesson startup, three native tabs, four 3D Practice buttons, true disabled states, isolated preview manifest and the served SW source. Live browser/offline activation remains a physical-device gate.
+6. Upload a **7-day GitHub Actions artifact only** named `ft-v61-isolated-iphone-preview-NOT-DEPLOYED`.
 
 No GitHub Pages deployment, domain, provider, account integration, hosting permissions or production website update is attempted. **This is not yet a usable public iPhone URL.**
 
