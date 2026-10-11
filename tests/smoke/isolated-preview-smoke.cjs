@@ -55,7 +55,7 @@ for(const raw of core) {
   assert(raw.startsWith('./'), 'external/absolute SW precache URL forbidden: '+raw);
   const url=new URL(raw,'https://test.invalid/');
   assert.equal(url.origin,'https://test.invalid');
-  const file=decodeURIComponent(url.pathname).replace(/^\\//,'')||'index.html';
+  const file=decodeURIComponent(url.pathname).slice(1)||'index.html';
   const dest=path.resolve(output,file);
   assert(dest.startsWith(output+path.sep),'precache escapes build root: '+raw);
   assert(fs.existsSync(dest)&&fs.statSync(dest).isFile(), 'missing offline asset: '+raw);
