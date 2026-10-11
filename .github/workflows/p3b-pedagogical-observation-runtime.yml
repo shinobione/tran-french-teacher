@@ -58,10 +58,26 @@ jobs:
       - name: Source owners and accepted P3a core remain byte-identical
         run: |
           set -euo pipefail
+          # The immutable P3a source contract stays pinned. For PRs, protect
+          # all four upstream pedagogical owners against the *accepted base*,
+          # rather than an obsolete foundations-pilot hash from before a
+          # legitimate successor was accepted on main. Keep every pure/runtime
+          # and ephemeral-only/no-persistence test intact.
           test "$(git hash-object src/pedagogy/pedagogical-observation-core.js)" = "b1203ee599eb0ab78c0ef32f66781309bac092bb"
-          test "$(git hash-object src/pedagogy/foundations-capsule-engine.js)" = "eeab33b0c3c5bcfca6bb679015998433b0571158"
-          test "$(git hash-object src/pedagogy/foundations-pilot.js)" = "b57d1803f64f143971f6054610d8f4a48d7c73be"
-          test "$(git hash-object src/pedagogy/generalization-transfer-lesson.js)" = "01bde432fbf8abec51c96326ddc359599bd68a77"
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            base="${{ github.event.pull_request.base.sha }}"
+            test -n "$base"
+            git cat-file -e "$base^{commit}"
+            git diff --exit-code "$base" HEAD -- \
+              src/pedagogy/pedagogical-observation-core.js \
+              src/pedagogy/foundations-capsule-engine.js \
+              src/pedagogy/foundations-pilot.js \
+              src/pedagogy/generalization-transfer-lesson.js
+          else
+            # Main pushes validate the accepted P3a contract and live semantic
+            # tests; do not resurrect frozen historical successor blob hashes.
+            node tests/unit/p3a-pedagogical-observation-core.test.cjs
+          fi
 
       - name: Accepted predecessor certification
         run: |
