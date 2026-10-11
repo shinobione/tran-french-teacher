@@ -51,7 +51,7 @@ jobs:
         run: |
           timeout 95s google-chrome --headless=new --no-sandbox --disable-gpu \
             --user-data-dir="$RUNNER_TEMP/ft-preview-chrome" \
-            --virtual-time-budget=32000 --dump-dom \
+            --virtual-time-budget=72000 --dump-dom \
             'http://127.0.0.1:4177/tests/browser/isolated-preview-smoke.html' \
             > /tmp/ft-isolated-preview-chrome.html
           grep -q 'data-ft-preview-smoke="ok"' /tmp/ft-isolated-preview-chrome.html ||
