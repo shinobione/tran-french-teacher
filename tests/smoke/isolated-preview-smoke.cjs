@@ -73,7 +73,65 @@ const forbidden=cp.spawnSync(process.execPath,
   {encoding:'utf8'});
 assert.notEqual(forbidden.status,0,'PRODUCTION_ORIGIN_SHOULD_BE_REJECTED');
 assert(!fs.existsSync(path.join(output,'uncreated')),'rejected origin created output');
-console.log('ISOLATED_PREVIEW_SMOKE_PASS '+JSON.stringify({
-  source:git,precacheAssets:count,manifestScope:manifest.scope,
-  expectedOrigin:meta.expectedOrigin,productionOriginRefused:true,learnerSourcesUnmodified:true
-}));
+// Exercise original Service Worker event handlers against deterministic cache
+// and fetch facades. This proves install/activate/offline behaviour without
+// claiming physical device SW activation in headless Chrome.
+async function exercisePreviewServiceWorker(){
+  const listeners={},installed=new Set(),removed=[],precache=[],stale=meta.previewCache+'-old';
+  installed.add(stale);
+  const cacheApi={
+    open:async name=>{
+      assert.equal(name,meta.previewCache,'SW caches incorrect namespace');
+      installed.add(name);
+      return {
+        addAll:async urls=>{
+          assert.equal(urls.length,core.length,'SW install lost precache entries');
+          for(let i=0;i<core.length;i++)assert.equal(urls[i],core[i],'SW changed precache resource');
+          precache.push(...urls);
+        },
+        put:async()=>{}
+      };
+    },
+    keys:async()=>Array.from(installed),
+    delete:async name=>{removed.push(name);return installed.delete(name)},
+    match:async url=>{
+      const value=typeof url==='string'?url:url.url;
+      return precache.includes(value)||value==='./index.html'?{ok:true,from:'offline-test-cache'}:undefined;
+    }
+  };
+  const previewSelf={
+    clients:{claim:async()=>{}},
+    skipWaiting:async()=>{},
+    addEventListener(event,handler){listeners[event]=handler}
+  };
+  const context={self:previewSelf,caches:cacheApi,
+    fetch:async()=>{throw Error('simulated offline')},console};
+  vm.runInNewContext(sw,context,{timeout:3000});
+  for(const event of ['install','activate','fetch'])assert.equal(typeof listeners[event],'function','missing SW '+event);
+  let installPromise;
+  listeners.install({waitUntil:p=>{installPromise=p}});
+  assert(installPromise,'SW install did not call waitUntil');
+  await installPromise;
+  assert.equal(precache.length,core.length,'precache incomplete');
+  assert(installed.has(meta.previewCache),'preview cache never created');
+  let activation;
+  listeners.activate({waitUntil:p=>{activation=p}});
+  await activation;
+  assert(removed.includes(stale),'stale preview namespace never cleaned');
+  assert(installed.has(meta.previewCache),'current preview cache unexpectedly deleted');
+  let response;
+  listeners.fetch({
+    request:{method:'GET',url:'https://ft-v61-preview.invalid/src/premium/v61-stitch-high-fidelity.css'},
+    respondWith:p=>{response=p},waitUntil:()=>{}
+  });
+  assert(response,'SW missing offline fetch fallback');
+  const offline=await response;
+  assert.equal(offline.from,'offline-test-cache','offline fetch not resolved from cache');
+}
+exercisePreviewServiceWorker().then(()=>{
+  console.log('ISOLATED_PREVIEW_SMOKE_PASS '+JSON.stringify({
+    source:git,precacheAssets:count,manifestScope:manifest.scope,
+    expectedOrigin:meta.expectedOrigin,productionOriginRefused:true,
+    learnerSourcesUnmodified:true,swLifecycleInstallActivateOffline:true
+  }));
+}).catch(err=>{console.error(err);process.exitCode=1});
