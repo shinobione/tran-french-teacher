@@ -795,3 +795,34 @@ html[data-theme].b27-app-shell .b27-practice-page .b27-practice-action:disabled>
     color:color-mix(in srgb,var(--v61-ink) 68%,var(--v61-muted))!important;
   }
 }
+
+/* Review9: keep the first lesson closer to the first viewport on compact phones.
+   Layout-only density adjustment: real lesson data, art, routes and tap ownership stay. */
+@media (max-width:375px) and (max-height:700px){
+  html[data-theme].b27-app-shell .b27-home>.b27-header{
+    margin-bottom:14px!important;
+  }
+  html[data-theme].b27-app-shell .b27-home .b27-welcome{
+    padding:3px 2px 8px!important;
+  }
+  html[data-theme].b27-app-shell .b27-home .b27-welcome h1{
+    margin:5px 0 7px!important;
+    font-size:clamp(1.95rem,8vw,2.3rem)!important;
+    line-height:1.02!important;
+  }
+  html[data-theme].b27-app-shell .b27-home .b27-welcome p{
+    font-size:.85rem!important;
+    line-height:1.4!important;
+  }
+  html[data-theme].b27-app-shell .b27-home-grid{
+    gap:14px!important;
+  }
+  html[data-theme].b27-app-shell .b27-home .b27-primary-card{
+    min-height:284px!important;
+    padding:17px!important;
+    gap:7px!important;
+  }
+  html[data-theme].b27-app-shell .b27-home .b27-primary-card>.b27-progress{
+    margin:7px 0 3px!important;
+  }
+}
