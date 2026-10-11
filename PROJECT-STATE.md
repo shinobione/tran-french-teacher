@@ -1,5 +1,16 @@
 # PROJECT-STATE — French Trân’quille
 
+## CI debt isolated candidate — Quality Build24 archive successor — 2026-10-11
+
+- **Accepted `main`:** `d0b57a96779c643643c77974cab8086f7f4c311a`. Public app Build38/v2.5.0 unchanged; no Pages deployment, learner reset or iPhone field approval.
+- **Unified graphical + safety Draft #266:** tested head `b5a69d245f709eeffcda13f796b641abdae8135a`, **65 PASS / 3 FAIL (68 workflows)**. The six dedicated V6.1 + Recovery/Evidence/Build28 + iPhone Chrome/PWA checks all PASS on the same head. V2 Freeze, Quality, P3b are historical remaining CI debt.
+- **Isolated branch:** `ci/268-quality-build24-archive-successor`. Quality verifies current README Build38 product identity (52/313, 44/132, 7-store backup v3) while checking the original Build24 version 1.17.0, 28/84 and Real Life II records in the immutable historical CHANGELOG and docs/BUILD-24-REAL-LIFE-FRENCH-II.md. All existing functional/Chrome tests stay enabled. No README/ROADMAP rewrite or runtime change.
+- **Separate Draft #267 V2 freeze:** tested head `f7015524a4625be52d70163fcecadf85d1d386f2`, Chrome V2 tribunal **SUCCESS** (13 steps, run `38130100148`), but not yet integrated into #266.
+- **NEXT:** obtain exact-head dedicated CI PASS/failure diagnostic for this slice; do not claim #266 fully green before independent corrections are integrated and all CI rerun. Preserve real physical iPhone/manual Stitch image validation and `main` required checks before release.
+- **State:** isolated CI-only candidate, no runtime edits, no merge/deploy.
+
+---
+
 Last reconciled: 2026-10-10 (new CI governance checkpoint; historical checkpoint preserved below)
 
 ## CI governance — Issue #259 / 2026-10-10 (candidate only)
