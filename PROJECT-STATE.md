@@ -1,5 +1,16 @@
 # PROJECT-STATE — French Trân’quille
 
+## V6.1 Stitch Export4 — actual Chrome/CI integration source PASS (2026-10-11)
+
+- **App source certified:** [Draft PR #270](https://github.com/shinobione/tran-french-teacher/pull/270) at `4fca99630c3e5624403f19242b04b90ce91c202e`, **68/68 exact-head GitHub Actions SUCCESS**, zero failed/pending, *after targeted unchanged-code rerun* of historical Build26.4 Chrome desktop Progress (initial 3 Chrome timeout attempts; rerun job `114473561679` PASS). No fake data, runtime JS, Voice, learner stores, SW/index/cache, external assets, route owner or Production changes.
+- **Specialized validated results:** Stitch-derived 23 live browser captures `38140372412` (all 23 PNGs generated; four themes, Home and Practice; compact CTA and 125% root text), Recovery v3 `38140372495`, Evidence Shadow `38140372337`, V2 freeze `38140372606`, Quality `38140372626`, P3b `38140373748`, Progress `38140372284` — all SUCCESS.
+- **Visual change provenance:** only `src/premium/v61-stitch-high-fidelity.css` and the existing browser capture fixture updated beyond integrated Draft #266; three docs added/updated. Original/Sunset/Jade use local serif headline treatment; Aurora retains sans; Home gains a mobile welcome surface at 376–759px; Practice keeps four real 3D owner buttons with coherent per-theme lighting and legible native `disabled` state. Source art mappings/hashes in `docs/V61_STITCH_EXPORT4_CONVERGENCE.md`.
+- **Reviewed artifact:** `V61_Stitch_Export4_Visual_23.zip` (23 actual Chrome PNGs) and `French_Tran_quille_Stitch4_Chrome_avant_apres.jpg` (eight Home/Practice before/after pairs). All 23 screenshots changed, and the new code passed computed-style assertions and native three-tab owner checks.
+- **Unresolved release gates:** reference fidelity still needs human judgment, **actual installed-iPhone Safari/PWA** review must test Home/Practice/voice/reopen/offline and nondestructive Backup v3 of seven stores, and minimum required `main` branch protection plus explicit merge/Pages release authorization. High-fidelity Quiz is later. PR stays Draft. Accepted `main` stays `d0b57a96779c643643c77974cab8086f7f4c311a` and public Build38/v2.5.0, no deploy or learner-state mutation.
+- **NEXT:** owner reviews 8 new Chrome screenshots against eight canonical Stitch #4 reference images (source PNG dimensions differ); check exact compact text/contrast on physical iPhone and decide further CSS-only refinements. This **documentation-only** checkpoint advances PR HEAD and triggers a new CI run; keep the tested source SHA above distinct from the new HEAD's pending verdict.
+
+---
+
 ## ACTIVE — Stitch Export4 visual convergence, CSS-only Draft candidate (2026-10-11)
 
 - **Source of truth:** accepted `main` still `d0b57a96779c643643c77974cab8086f7f4c311a` / public Build38 v2.5.0; independent joint safety+V6.1 parent Draft #266 at `de6f576ced2be8e3b218351b5b03cc8c09a6bda4`. No main merge or Pages deployment.
