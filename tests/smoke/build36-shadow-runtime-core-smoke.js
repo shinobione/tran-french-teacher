@@ -84,17 +84,42 @@ assert.deepEqual(restoreResult.rebuildDerivedIds, ['evidence']);
 assert.equal(Core.validateRawMap(Core.collectRaw(storage), { allowMissing:true, requireEvidenceCoherence:true }).ok, true);
 assert.notDeepEqual(storage.dump(), beforeRestore, 'v2 restore should replace current target timeline');
 
+// A refresh only writes if the source timeline differs from its coherent shadow.
+// Create a *real* stale-derived case; otherwise the fault injection is never called.
 const corruptBefore = storage.getItem(Evidence.PROPOSED_STORE_KEY);
+const learnerForFault = JSON.parse(storage.getItem(learnerKey));
+learnerForFault.conversationWins = 9;
+storage.setItem(learnerKey, JSON.stringify(learnerForFault));
+const expectedRefresh = Core.deriveEvidenceFromStorage(storage);
+assert.equal(expectedRefresh.ok, true);
+assert.notEqual(expectedRefresh.evidenceRaw, corruptBefore, 'source mutation must require a shadow refresh');
+
+// Corrupt the first Evidence write, but allow the rollback write to succeed.
+// A permanently corrupting writer cannot demonstrate atomic restoration.
+let corruptAttempts = 0;
 const corruptWriter = {
   set(key, value) {
-    if (key === Evidence.PROPOSED_STORE_KEY) storage.setItem(key, '{broken-json');
-    else storage.setItem(key, value);
+    if (key === Evidence.PROPOSED_STORE_KEY && ++corruptAttempts === 1) {
+      storage.setItem(key, '{broken-json');
+    } else {
+      storage.setItem(key, value);
+    }
   },
   remove(key) { storage.removeItem(key); }
 };
 const failedRefresh = Core.ensureEvidenceFresh(storage, corruptWriter, { createIfMissing:true });
+assert.equal(corruptAttempts, 2, 'fault and rollback must each write Evidence once');
 assert.equal(failedRefresh.ok, false);
+assert.equal(failedRefresh.stage, 'write');
+assert.equal(failedRefresh.error?.message, 'evidence-write-mismatch');
 assert.equal(failedRefresh.rolledBack, true);
 assert.equal(storage.getItem(Evidence.PROPOSED_STORE_KEY), corruptBefore, 'failed refresh restores previous shadow bytes');
+
+// Recovery after a transient write fault must derive the latest timeline again.
+const repairedRefresh = Core.ensureEvidenceFresh(storage, undefined, { createIfMissing:true });
+assert.equal(repairedRefresh.ok, true);
+assert.equal(repairedRefresh.changed, true);
+assert.equal(storage.getItem(Evidence.PROPOSED_STORE_KEY), expectedRefresh.evidenceRaw);
+assert.equal(Core.validateRawMap(Core.collectRaw(storage), { allowMissing:true, requireEvidenceCoherence:true }).ok, true);
 
 console.log('Build 36.2 Recovery v3 runtime core smoke: PASS');

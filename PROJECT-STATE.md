@@ -1,5 +1,16 @@
 # PROJECT-STATE — French Trân’quille
 
+## ACTIVE: joint V6.1 + safety pre-release rehearsal — 2026-10-11
+
+- **Accepted main:** `d0b57a96779c643643c77974cab8086f7f4c311a`, unchanged; deployed PWA still Build38/v2.5.0, no release or data migration.
+- **Candidate branch:** `integration/266-v61-home-practice-recovery-evidence`, starting from graphical PR #258 tested head `bc5ad3ee7e3324481f9588feeb9ff5b21403955f`; overlay exactly six CI-only blobs from Draft #265 (Recovery v3, Evidence Shadow, Build28), plus governance checkpoint and field checklist. No production source changes beyond already-isolated Draft V6.1 itself.
+- **Prior separate proof:** V6.1 Chrome visual run `38098947579` **PASS** (23 PNG captures; compact 320/375 Home, 4 themes, bottom hit targets, simulated 125% text), Build29 PWA and successor ownership PASS; full visual matrix 61 PASS / 6 FAIL / 1 other. Draft #265's safety trio PASS together on tested source `55b2e73965fc32434745f85ab7ee5eb7dd49aa50`, full 59 PASS / 3 FAIL. These are NOT the joint results.
+- **Now:** run the combined exact-head visual, Build29 offline/browser, Recovery v3/Evidence Shadow/Build28, Practice/Voice and safety checks **together**. Any new red is a blocking regression requiring specific diagnosis; V2 Freeze, Quality, P3b historical debt remain separately classified, not waived.
+- **Field gate:** `docs/V61_IPHONE_FIELD_ACCEPTANCE.md` is manual: screenshots against approved Stitch, physical installed iPhone Safari/PWA, offline reopen, Voice/Listening/Review/Real-Life navigation, local backup continuity and no lost learner progress. No test automation equals a physical-device PASS.
+- **NEXT:** inspect joint exact-head CI, document marker logs/screenshots and regressions; only then consider field trial and release review. Keep integration candidate Draft, no merge/no Pages deployment.
+
+---
+
 ## V6.1 Review9 — compact 320/375px Home density candidate, 2026-10-11
 
 - **Current visual candidate:** PR #258 HEAD `51d029895dc22a599b109f8c6fcb608e16a9811c` (CSS-only follow-up; not merged/deployed). Reduced header/welcome gaps and lesson-card min-height to 284px **only when width <=375px and height <=700px**; primary lesson CTA remains the same real button, no data changes, no route crossfade or art replacement. Purpose: increase first-viewport discoverability of the primary lesson at compact viewport size, after Review8 showed it below the fixed tabbar but available after scroll.

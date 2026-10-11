@@ -113,7 +113,14 @@ jobs:
           timeout --signal=TERM --kill-after=5s 90s google-chrome --headless=new --no-sandbox --disable-gpu \
             --user-data-dir="$profile" --window-size=1280,900 --virtual-time-budget=32000 --dump-dom \
             'http://127.0.0.1:4173/tests/browser/build36-recovery-v3-tribunal.html?mode=restore' >"$file"
-          for marker in 'data-b36-host-done="1"' 'data-b36t-done="1"' 'data-b36t-mode="restore"' 'data-b36t-v3-round-trip="1"' 'data-b36t-v2-rebuild="1"' 'data-b36t-v1-preserve-rebuild="1"' 'data-b36t-fault-rollback="1"' 'data-b36t-reset-seven="1"' 'data-b36t-final-baseline="1"' 'data-b36t-coherent="1"'; do grep -q "$marker" "$file"; done
+          for marker in 'data-b36-host-done="1"' 'data-b36t-done="1"' 'data-b36t-mode="restore"' 'data-b36t-v3-round-trip="1"' 'data-b36t-v2-rebuild="1"' 'data-b36t-v1-preserve-rebuild="1"' 'data-b36t-fault-rollback="1"' 'data-b36t-reset-seven="1"' 'data-b36t-final-baseline="1"' 'data-b36t-coherent="1"'; do
+            if ! grep -q "$marker" "$file"; then
+              echo "::error::Recovery v3 restore Chrome tribunal missing marker: $marker" >&2
+              # Diagnostic metadata only. Never print learner storage, backups or DOM.
+              grep -oE 'data-b36[a-zA-Z0-9-]*="[^"]*"' "$file" | sort -u | head -55 || true
+              exit 1
+            fi
+          done
 
       - name: Chrome/PWA — online profile is controlled and cached
         run: |
