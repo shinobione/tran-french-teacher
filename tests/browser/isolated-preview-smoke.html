@@ -32,15 +32,26 @@ frame.addEventListener('load',async()=>{try{
   const manifest=await fetch('/manifest.webmanifest').then(r=>r.json());
   check(manifest.scope==='/'&&manifest.start_url==='/'&&manifest.short_name.includes('TEST'),'manifest scope');
   check('serviceWorker'in w.navigator,'Service Worker unsupported');
-  const registration=await Promise.race([w.navigator.serviceWorker.ready,new Promise((_,rej)=>setTimeout(()=>rej(Error('SW timeout')),17000))]);
+  // Do not assume Chrome's virtual-time clock equals real Service Worker
+  // install time. Observe actual activation + precache and print the state
+  // rather than silently treating slow installation as functionality PASS.
+  let registration=null,keys=[],diagnostic='';
+  for(let attempt=0;attempt<90;attempt++){
+    registration=await w.navigator.serviceWorker.getRegistration('/');
+    keys=await w.caches.keys();
+    if(registration?.active&&keys.includes(meta.previewCache))break;
+    diagnostic='state='+(registration?.installing?.state||registration?.waiting?.state
+      ||registration?.active?.state||'no-registration')+',caches='+keys.join(',');
+    await wait(450);
+  }
+  check(!!registration?.active&&keys.includes(meta.previewCache),
+    'SW not active/precache missing: '+diagnostic);
   check(registration.scope===location.origin+'/','wrong SW scope: '+registration.scope);
-  const keys=await w.caches.keys();
-  check(keys.includes(meta.previewCache),'preview offline cache not installed');
   check(!keys.some(k=>k.startsWith('tran-french-teacher-')),'production cache created by preview');
   document.body.dataset.ftPreviewSmoke='ok';
   document.body.dataset.ftPreviewResult='3-tabs 52-lessons native-Practice isolated-manifest root-SW precache';
 }catch(e){document.body.dataset.ftPreviewSmoke='fail';document.body.dataset.ftPreviewError=String(e.message||e)}},{once:true});
-setTimeout(()=>{if(document.body.dataset.ftPreviewSmoke==='pending'){document.body.dataset.ftPreviewSmoke='fail';document.body.dataset.ftPreviewError='fixture-timeout'}},28000);
+setTimeout(()=>{if(document.body.dataset.ftPreviewSmoke==='pending'){document.body.dataset.ftPreviewSmoke='fail';document.body.dataset.ftPreviewError='fixture-timeout'}},64000);
 })();
 </script>
 </body></html>
