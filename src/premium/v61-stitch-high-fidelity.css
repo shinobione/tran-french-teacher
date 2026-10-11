@@ -826,3 +826,181 @@ html[data-theme].b27-app-shell .b27-practice-page .b27-practice-action:disabled>
     margin:7px 0 3px!important;
   }
 }
+
+
+/* ========================================================================
+   V6.1 Stitch Export 4 — Home + Practice convergence candidate (2026-10-11)
+   Artwork direction: canonical Home/Practice Original, Aurora, Sunset, Jade.
+   Styling ONLY: no CDN, imported HTML, invented XP, fake learner data,
+   navigation, button replacement, JS behaviour or mutable learner storage.
+   The real three-tab owner and native action/disabled states remain intact.
+   ======================================================================== */
+
+/* Editorial typography from Stitch's four palettes, with locally available
+   system faces and no dependency on Google Fonts or network resources. */
+html[data-theme="original"].b27-app-shell :is(
+  .b27-home .b27-welcome h1,
+  .b27-home .b27-primary-card>h2,
+  .b27-practice-page .b27-practice-intro h2
+){
+  font-family:Georgia,"Times New Roman",serif!important;
+  letter-spacing:-.045em!important;
+}
+html[data-theme="sunset"].b27-app-shell :is(
+  .b27-home .b27-welcome h1,
+  .b27-home .b27-primary-card>h2,
+  .b27-practice-page .b27-practice-intro h2
+),
+html[data-theme="jade"].b27-app-shell :is(
+  .b27-home .b27-welcome h1,
+  .b27-home .b27-primary-card>h2,
+  .b27-practice-page .b27-practice-intro h2
+){
+  font-family:Georgia,"Times New Roman",serif!important;
+  letter-spacing:-.045em!important;
+}
+
+/* The stitched Home greeting has its own quiet, readable panel. Keep the
+   existing 320/375 compact variant untouched: the lesson CTA takes priority. */
+@media (min-width:376px) and (max-width:759px){
+  html[data-theme].b27-app-shell .b27-home .b27-welcome{
+    padding:14px 17px 15px!important;
+    margin:0 0 8px!important;
+    border:1px solid color-mix(in srgb,var(--v61-cyan) 23%,rgba(255,255,255,.10))!important;
+    border-radius:22px!important;
+    background:
+      radial-gradient(ellipse at 105% 0%,color-mix(in srgb,var(--v61-violet) 15%,transparent),transparent 72%),
+      linear-gradient(155deg,color-mix(in srgb,var(--ft-surface,#15203d) 79%,transparent),
+                          color-mix(in srgb,var(--ft-surface-2,#0b1530) 82%,transparent))!important;
+    box-shadow:0 12px 32px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.08)!important;
+  }
+  html[data-theme].b27-app-shell .b27-home>.b27-header{
+    margin-bottom:11px!important;
+  }
+  html[data-theme].b27-app-shell .b27-home .b27-welcome h1{
+    margin:7px 0 8px!important;
+    font-size:clamp(1.95rem,7vw,2.5rem)!important;
+    line-height:1.11!important;
+  }
+}
+
+/* Theme-specific Stitch card lighting: original blue porcelain, aurora
+   cyan/fuchsia, sunset coral/amethyst, jade emerald/gold. Keep original
+   gradients/background artworks underneath, never replace them. */
+html[data-theme="original"].b27-app-shell{
+  --v61-stitch-highlight:#8bd8ff;
+}
+html[data-theme="aurora"].b27-app-shell{
+  --v61-stitch-highlight:#e4a9ff;
+}
+html[data-theme="sunset"].b27-app-shell{
+  --v61-stitch-highlight:#ffb58c;
+}
+html[data-theme="jade"].b27-app-shell{
+  --v61-stitch-highlight:#e6c26b;
+}
+html[data-theme].b27-app-shell .b27-home .b27-primary-card{
+  background:
+    radial-gradient(ellipse at 85% 18%,color-mix(in srgb,var(--v61-stitch-highlight) 16%,transparent),transparent 57%),
+    radial-gradient(ellipse at -4% -20%,color-mix(in srgb,var(--v61-cyan) 20%,transparent),transparent 63%),
+    var(--v61-glass)!important;
+}
+html[data-theme].b27-app-shell .b27-home .b27-primary-card>.b27-card-topline>span{
+  border-color:color-mix(in srgb,var(--v61-stitch-highlight) 33%,rgba(255,255,255,.08))!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07);
+}
+html[data-theme].b27-app-shell .b27-home-side>.b27-quick-card:not(:disabled){
+  position:relative!important;
+  border-color:color-mix(in srgb,var(--v61-stitch-highlight) 33%,rgba(255,255,255,.10))!important;
+}
+html[data-theme].b27-app-shell .b27-home-side>.b27-quick-card:not(:disabled)::after{
+  content:"→";
+  position:absolute;
+  right:10px;
+  top:12px;
+  display:grid;
+  place-items:center;
+  width:23px;height:23px;
+  border:1px solid color-mix(in srgb,var(--v61-stitch-highlight) 30%,transparent);
+  border-radius:50%;
+  background:color-mix(in srgb,var(--v61-stitch-highlight) 12%,transparent);
+  color:var(--v61-stitch-highlight);
+  font-size:14px;
+  line-height:1;
+  pointer-events:none;
+}
+
+/* A coherent editorial introduction above the existing native Practice
+   buttons. No duplicate recommended training, lesson progress or new route. */
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-intro{
+  border-bottom:1px solid color-mix(in srgb,var(--v61-stitch-highlight) 22%,transparent);
+}
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-intro>span{
+  border-color:color-mix(in srgb,var(--v61-stitch-highlight) 34%,transparent)!important;
+  color:var(--v61-stitch-highlight)!important;
+}
+
+/* Distinct card color-coding matches the four Stitch references while
+   keeping the existing true disabled, owner, and source illustration. */
+html[data-theme="original"].b27-app-shell .b27-practice-page
+[data-b27-practice-action="conversation"]{--v61-card-accent:#cf8aff}
+html[data-theme="original"].b27-app-shell .b27-practice-page
+[data-b27-practice-action="real-life"]{--v61-card-accent:#f2a65a}
+html[data-theme="aurora"].b27-app-shell .b27-practice-page
+[data-b27-practice-action="conversation"]{--v61-card-accent:#fd64c2}
+html[data-theme="aurora"].b27-app-shell .b27-practice-page
+[data-b27-practice-action="real-life"]{--v61-card-accent:#bd88ff}
+html[data-theme="sunset"].b27-app-shell .b27-practice-page
+[data-b27-practice-action="conversation"]{--v61-card-accent:#ff9589}
+html[data-theme="sunset"].b27-app-shell .b27-practice-page
+[data-b27-practice-action="listening"]{--v61-card-accent:#ffa96d}
+html[data-theme="sunset"].b27-app-shell .b27-practice-page
+[data-b27-practice-action="review"]{--v61-card-accent:#d7a1ff}
+html[data-theme="jade"].b27-app-shell .b27-practice-page
+[data-b27-practice-action="conversation"]{--v61-card-accent:#e6c26b}
+html[data-theme="jade"].b27-app-shell .b27-practice-page
+[data-b27-practice-action="listening"]{--v61-card-accent:#58dab2}
+html[data-theme="jade"].b27-app-shell .b27-practice-page
+[data-b27-practice-action="review"]{--v61-card-accent:#f2c96c}
+html[data-theme="jade"].b27-app-shell .b27-practice-page
+[data-b27-practice-action="real-life"]{--v61-card-accent:#73caa6}
+
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-list>.b27-practice-action{
+  border-color:color-mix(in srgb,var(--v61-card-accent,var(--v61-cyan)) 46%,rgba(255,255,255,.10))!important;
+  background:
+    radial-gradient(ellipse at 50% 25%,color-mix(in srgb,var(--v61-card-accent,var(--v61-cyan)) 30%,transparent),transparent 53%),
+    linear-gradient(160deg,color-mix(in srgb,var(--ft-surface,#15203d) 91%,transparent),
+                          color-mix(in srgb,var(--ft-surface-2,#0b1530) 94%,transparent))!important;
+}
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-icon{
+  position:relative!important;
+  isolation:isolate;
+}
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-icon::before{
+  content:"";
+  position:absolute;
+  z-index:0;
+  inset:10% 9%;
+  border-radius:50%;
+  background:radial-gradient(ellipse,color-mix(in srgb,var(--v61-card-accent,var(--v61-cyan)) 21%,transparent),transparent 73%);
+  filter:blur(9px);
+  pointer-events:none;
+}
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-icon>.ft-v510-practice-art{
+  position:relative;
+  z-index:1;
+}
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-action:disabled{
+  opacity:.93!important;
+  filter:none!important;
+}
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-action:disabled .b27-practice-icon{
+  opacity:.66!important;
+}
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-action:disabled>.v61-card-cta{
+  box-shadow:none!important;
+  border-style:solid!important;
+  background:rgba(255,255,255,.055)!important;
+  color:var(--v61-muted)!important;
+}
+/* Reduced-motion support and minimum reachable target sizes are unchanged. */
