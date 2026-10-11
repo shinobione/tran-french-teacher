@@ -18,7 +18,7 @@ permissions:
 
 jobs:
   isolated-preview-package:
-    name: Isolated preview — origin firewall + offline real Chrome
+    name: Isolated preview — origin firewall + SW lifecycle + real Chrome
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
@@ -47,11 +47,11 @@ jobs:
           echo $! >/tmp/ft-preview-server.pid
           sleep 1
           google-chrome --version
-      - name: Chrome — actual lesson, Practice, preview Service Worker and precache
+      - name: Chrome — actual lesson, Practice and delivered isolated SW source
         run: |
           timeout 95s google-chrome --headless=new --no-sandbox --disable-gpu \
             --user-data-dir="$RUNNER_TEMP/ft-preview-chrome" \
-            --virtual-time-budget=72000 --dump-dom \
+            --virtual-time-budget=32000 --dump-dom \
             'http://127.0.0.1:4177/tests/browser/isolated-preview-smoke.html' \
             > /tmp/ft-isolated-preview-chrome.html
           grep -q 'data-ft-preview-smoke="ok"' /tmp/ft-isolated-preview-chrome.html ||
