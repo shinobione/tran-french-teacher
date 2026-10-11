@@ -1,5 +1,17 @@
 # PROJECT-STATE — French Trân’quille
 
+Last live CI verification: 2026-10-11 (GitHub accepted main still `d0b57a96779c643643c77974cab8086f7f4c311a`)
+
+## CI Recovery/Evidence follow-up — Issue #261
+
+- **Draft #262 Recovery v3:** exact-head Build 36.3 tribunal `38095199887` **SUCCESS**, including v1/v2/v3, fault rollback, seven stores, online/offline PWA; not merged.
+- **Draft #263 Evidence Shadow:** exact-head Build 36.2 adoption run `38097047757` **SUCCESS** (all workflow steps, including Node + protected owner diff + Chrome first adoption/reopen). The PR contains the exact shared fault-injection fixture from #262; not merged.
+- **Draft #264 Build 28 compatibility (this branch):** a separate, test-only correction for the repeatedly failing `data-b28-restore-ok=0` Chrome marker. Recovery v3 canonicalizes restored JSON; the historical marker compared raw bytes to their pre-canonical form. Candidate keeps learner semantic equality, exact full-store restore-plan equality (including Evidence), and legacy V2 byte-equality. **Exact-head CI pending / not certified**; no merge.
+- **Remaining independent CI debt:** V2 Freeze, Quality, P3b Observation; their red checks have not been waived or rewritten. Each Draft PR continues to show unrelated inherited failures until integration and separate CI adjudication.
+- **NEXT:** verify PR #264 Build28 Chrome evidence and guarantee the accepted-v3 plan/raw equality; then decide an explicitly reviewed dependency/merge order for #262, #263, #264. Main protection and field iPhone V6.1 (#258) remain separate gates; production has not changed.
+
+---
+
 Last reconciled: 2026-10-10 (new CI governance checkpoint; historical checkpoint preserved below)
 
 ## CI governance — Issue #259 / 2026-10-10 (candidate only)
