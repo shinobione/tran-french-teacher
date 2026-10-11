@@ -1,5 +1,15 @@
 # PROJECT-STATE — French Trân’quille
 
+## Active CI successor debt — V2 freeze tribunal historical contract (2026-10-11)
+
+- **Accepted main:** `d0b57a96779c643643c77974cab8086f7f4c311a` (no release or learner-data change).
+- **Unified pre-release rehearsal:** Draft [#266](https://github.com/shinobione/tran-french-teacher/pull/266), tested head `b5a69d245f709eeffcda13f796b641abdae8135a`, completed **65/68 PASS**, with Build36.3 Recovery v3, Build36.2 Evidence, Build28, V6.1 23-shot visual, Build29 and strict PWA all PASS on the **same head**. Outstanding red: V2 Freeze, Quality and P3b; no merge or physical-iPhone acceptance.
+- **This isolated branch:** `ci/267-v2-freeze-historical-contract`, one CI-only workflow change. Original immutable `release-v2.json` has **`status: "freeze"`**, no `architectureFrozen`. Historical runtime contracts use **`const VERSION = '2.0.0'`/`const BUILD = 30`**, and `README.md` is legitimately newer. This test now requires the exact certified manifest Git blob, original six unique durable stores, real runtime-contract literals, legacy V2 archive and historical roadmap note. No workflow skips, release-manifest rewrite, test weakening, storage, voice or product code changes.
+- **NEXT:** observe exact-head V2 Freeze CI including actual Chrome old-user continuity and clean successor. If PASS, review safe incorporation into combined Draft #266 only after explicit audit of the other independent Quality/P3b historical failures. Keep this separate from graphical V6.1 and real installed-iPhone field validation.
+- **Status:** candidate pushed, **new workflow result not yet certified**; Draft/not merged, no Pages deployment and no learner reset.
+
+---
+
 Last reconciled: 2026-10-10 (new CI governance checkpoint; historical checkpoint preserved below)
 
 ## CI governance — Issue #259 / 2026-10-10 (candidate only)
