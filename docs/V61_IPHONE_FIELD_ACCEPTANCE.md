@@ -36,3 +36,14 @@
 - [ ] Merge, Pages deployment, installed-PWA smoke and rollback remain **separate deliberate gates**.
 
 **No release signoff or physical-iPhone PASS recorded.** Next: complete joint CI proof, obtain approved Stitch reference renders for side-by-side review, and schedule the first **non-destructive** iPhone test after safe deployment planning.
+
+
+## Isolated-preview data firewall — before any real iPhone trial
+
+**Status: planned, NOT deployed or approved.** The Draft PR #266 is source evidence, **not a URL that an iPhone can install as the candidate PWA**. Do not use the production `https://shinobione.github.io/tran-french-teacher/` as a preview, and do not repoint its Pages workflow.
+
+- Provision an explicitly approved **separate HTTPS origin** for the candidate (not merely another path under the same GitHub Pages origin). The PWA currently declares an absolute `/tran-french-teacher/` manifest `id`, `start_url` and `scope`; verify these and the service-worker registration/scope are intentionally isolated for preview in an independently reviewed build. Otherwise a supposedly temporary preview may open the production installation or share storage/service-worker ownership.
+- Seed synthetic test data **only**; never import Trân's real backup or login into the preview, and do not clear Safari storage for the public PWA. Keep the production homescreen app untouched while testing a separately identifiable preview app.
+- Check offline cache identity, scope and asset loading on preview before installation; any adjustment to manifest/SW for preview is its **own reviewed test-only configuration**, not a modification silently promoted into the certified #266 source.
+- Physical-device PASS must capture actual iPhone/iOS version, preview URL/origin, installation method, normal/increased iOS text, screenshots and the checklist items above. Keep voice permission testing and synthetic backup continuity isolated from production.
+- Do not publish or switch any preview endpoint automatically. The owner must explicitly approve the hosting/origin and final release separately. `main` required-check branch protection needs admin review; current GitHub integration cannot read this protection endpoint (403).

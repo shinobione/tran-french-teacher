@@ -1,5 +1,16 @@
 # PROJECT-STATE — French Trân’quille
 
+## Live resumption — review10: same-head 68/68 + visual-reference gap (2026-10-11)
+
+- **Accepted main / public site unchanged:** `d0b57a96779c643643c77974cab8086f7f4c311a`, public v2.5.0 Build38. No merge, no Pages deploy or learner-data modification.
+- **PR #266 exact tested HEAD `0b2191342f3375bc16ba9514a896e25d1469a984`:** 68/68 GitHub Actions workflows `completed/success`, including V6.1 real 23-shot Chrome review `38131804020`, full Recovery/Evidence/Build28/V2/P3b/Quality/Voice and iPhone-sized browser/PWA checks. The global navigation check `38131804032` initially failed `practice-settings-return:practice-not-visible`; a targeted **unchanged-code** job rerun (job `114457477454`) PASS; no product, guard or test was altered. Previous certified combined source `b1e25fc1...` had the same transient and recovered on an unchanged rerun. This timing-sensitive recurrence warrants real iPhone attention, not an unverified production hotfix.
+- **Real screenshots:** latest visual workflow [`38131804020`](https://github.com/shinobione/tran-french-teacher/actions/runs/38131804020) SUCCESS (23 Chrome screenshots). Candidate-side review at 320px confirms that the initial Home lesson button `Bắt đầu` is partly behind the fixed tab bar in the first viewport but scrolls into a >=44px accessible hit target without replacing its route. Practice at simulated 125% root text size remains legible in captured screenshots, **not** actual iOS Dynamic Type certification. Four original themes retain their distinct palettes.
+- **P0 visual gate still OPEN:** exact approved Stitch Home/Practice/Quiz reference **image files or URLs were not found** in GitHub candidate, supplied project files or accessible matching Drive search. Screenshots allow candidate-side inspection only; no pixel/fidelity signoff, especially the goat-in-café hero composition. Do not invent missing references, change locked Paris backgrounds, artwork, fonts, or app UI to match guesses.
+- **P0 field gate still OPEN:** physical installed-iPhone Safari/PWA and human acceptance not reported. Draft #266 is NOT deployed; use `docs/V61_IPHONE_FIELD_ACCEPTANCE.md`. To test without exposing/deleting Trân's data, require an explicitly approved isolated HTTPS preview origin with separate manifest/SW scope and only synthetic learner state. GitHub connector returned 403 to branch-protection inspection, so required-check enforcement **cannot currently be verified here**.
+- **NEXT exact slice:** obtain the three approved Stitch originals (Home, Practice, Quiz) from the owner; compare the current 23 PNGs at matched widths. Agree on an isolated preview before real iPhone trial; confirm tabbar/CTA visibility, Voice/Listening/Review/Real Life, offline reopen and backup continuity; review required `main` protections with repository admin. No merge/deploy or user-data reset. This checkpoint is docs-only; re-evaluate any new exact-head CI separately.
+
+---
+
 ## CANDIDATE TECHNICALLY GREEN — joint V6.1 / Recovery / V2 / Quality / P3b — 2026-10-11
 
 - **Accepted `main` / production unchanged:** `d0b57a96779c643643c77974cab8086f7f4c311a`, public v2.5.0 Build38, 52 lessons / 313 items, 7 durable Recovery stores, no data migration, merge or deployment.
