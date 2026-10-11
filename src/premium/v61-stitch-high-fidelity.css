@@ -1,0 +1,828 @@
+/* French Trân’quille V6.1 — Stitch high-fidelity learner skin, review candidate.
+   One shared layout for the four LOCKED palettes and artworks. No pedagogical owner. */
+html[data-theme].b27-app-shell{
+  --v61-cyan:var(--ft-accent,#58dcff);
+  --v61-violet:var(--ft-accent2,#ff71c8);
+  --v61-deep:var(--ft-bg-1,#070d21);
+  --v61-ink:var(--ft-text,var(--b27-text,#f7faff));
+  --v61-muted:var(--b27-muted,#abb8d7);
+  --v61-line:color-mix(in srgb,var(--v61-cyan) 27%,rgba(255,255,255,.12));
+  --v61-glass:linear-gradient(145deg,color-mix(in srgb,var(--ft-surface,#15203d) 89%,transparent),color-mix(in srgb,var(--ft-surface-2,#0b1530) 94%,transparent));
+  --v61-cta:linear-gradient(105deg,var(--v61-cyan),color-mix(in srgb,var(--v61-violet) 68%,#7380ff),var(--v61-violet));
+}
+html[data-theme].b27-app-shell :is(.b27-home,.b27-practice-page){
+  color:var(--v61-ink);
+}
+html[data-theme].b27-app-shell .b27-home{
+  max-width:1080px;
+  margin-inline:auto;
+  padding-bottom:calc(104px + env(safe-area-inset-bottom,0px));
+}
+html[data-theme].b27-app-shell .b27-home>.b27-header{
+  position:relative;
+  isolation:isolate;
+  margin-bottom:clamp(20px,4vw,36px)!important;
+}
+html[data-theme].b27-app-shell .b27-home>.b27-header .b27-brandline strong{
+  color:var(--v61-ink);
+  font-weight:900;
+  letter-spacing:-.035em;
+}
+html[data-theme].b27-app-shell .b27-home .b27-welcome{
+  position:relative;
+  padding:12px 2px 18px!important;
+  border:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+html[data-theme].b27-app-shell .b27-home .b27-welcome>span{
+  display:inline-block;
+  color:var(--v61-cyan)!important;
+  font-size:.68rem!important;
+  font-weight:900;
+  letter-spacing:.14em!important;
+}
+html[data-theme].b27-app-shell .b27-home .b27-welcome h1{
+  margin:9px 0 12px!important;
+  color:var(--v61-ink);
+  font-size:clamp(2.25rem,8.5vw,4.25rem)!important;
+  line-height:1.05!important;
+  font-weight:900;
+  letter-spacing:-.06em;
+  text-wrap:balance;
+  text-shadow:0 4px 34px color-mix(in srgb,var(--v61-cyan) 20%,transparent);
+}
+html[data-theme].b27-app-shell .b27-home .b27-welcome p{
+  max-width:480px;
+  color:var(--v61-muted)!important;
+  font-size:clamp(.91rem,2.5vw,1.05rem)!important;
+  line-height:1.52!important;
+}
+html[data-theme].b27-app-shell .b27-home-grid{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  gap:20px!important;
+}
+html[data-theme].b27-app-shell .b27-home-main,
+html[data-theme].b27-app-shell .b27-home-side{gap:14px!important;min-width:0;}
+/* Hero: preserve the real lesson title, curriculum icon, progress and routed CTA. */
+html[data-theme].b27-app-shell .b27-home .b27-primary-card{
+  position:relative!important;
+  isolation:isolate;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:stretch!important;
+  justify-content:flex-start!important;
+  min-height:296px!important;
+  padding:clamp(22px,4.6vw,34px)!important;
+  gap:10px!important;
+  border:1px solid var(--v61-line)!important;
+  border-radius:30px!important;
+  background:
+    radial-gradient(ellipse at 78% 12%,color-mix(in srgb,var(--v61-violet) 19%,transparent),transparent 53%),
+    radial-gradient(ellipse at 20% -12%,color-mix(in srgb,var(--v61-cyan) 20%,transparent),transparent 55%),
+    var(--v61-glass)!important;
+  box-shadow:0 24px 70px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.12),0 0 32px color-mix(in srgb,var(--v61-cyan) 7%,transparent)!important;
+  overflow:hidden!important;
+}
+html[data-theme].b27-app-shell .b27-home .b27-primary-card::before{
+  content:''!important;
+  position:absolute;
+  z-index:0;
+  inset:0;
+  width:auto;height:auto;border:0;border-radius:inherit;
+  background:linear-gradient(105deg,rgba(3,8,27,.6),rgba(3,8,27,.05) 76%);
+  box-shadow:none;
+  pointer-events:none;
+}
+html[data-theme].b27-app-shell .b27-home .b27-primary-card::after{
+  right:1%!important;
+  bottom:49px!important;
+  top:auto!important;
+  width:clamp(100px,29%,210px)!important;
+  height:56%!important;
+  background:var(--pv55-lesson-art) right center/contain no-repeat!important;
+  opacity:.64!important;
+  pointer-events:none!important;
+  z-index:0!important;
+}
+html[data-theme].b27-app-shell .b27-home .b27-primary-card>*{
+  position:relative;
+  z-index:2;
+}
+html[data-theme].b27-app-shell .b27-home .b27-primary-card>.b27-card-topline{
+  width:100%;
+  display:flex!important;
+  align-items:center;
+  min-height:34px;
+  margin:0 0 4px!important;
+}
+html[data-theme].b27-app-shell .b27-home .b27-primary-card>.b27-card-topline>span{
+  display:inline-flex;
+  align-items:center;
+  min-height:32px;
+  padding:6px 11px;
+  border:1px solid var(--v61-line);
+  border-radius:99px;
+  background:color-mix(in srgb,var(--v61-deep) 67%,transparent);
+  color:var(--v61-ink)!important;
+  font-size:.68rem!important;
+  font-weight:850;
+  letter-spacing:.09em;
+}
+html[data-theme].b27-app-shell .b27-home .b27-primary-card>h2{
+  width:100%;
+  max-width:72%;
+  margin:6px 0 0!important;
+  padding:0!important;
+  font-size:clamp(1.7rem,5vw,2.7rem)!important;
+  font-weight:900;
+  line-height:1.08!important;
+  letter-spacing:-.045em;
+  text-wrap:balance;
+  overflow-wrap:anywhere;
+}
+html[data-theme].b27-app-shell .b27-home .b27-primary-card>p{
+  width:100%;
+  max-width:72%;
+  margin:0!important;
+  padding:0!important;
+  color:var(--v61-muted)!important;
+  font-size:clamp(.85rem,2.3vw,1rem)!important;
+  line-height:1.42!important;
+}
+html[data-theme].b27-app-shell .b27-home .b27-primary-card>.ft-v510-home-lesson-icon{
+  position:absolute!important;
+  z-index:2!important;
+  right:clamp(19px,3vw,30px)!important;
+  top:clamp(62px,12%,98px)!important;
+  grid-area:auto!important;
+  width:52px!important;height:52px!important;min-width:52px!important;
+  border-radius:17px!important;
+  color:var(--v61-cyan)!important;
+  box-shadow:0 0 26px color-mix(in srgb,var(--v61-cyan) 22%,transparent)!important;
+}
+html[data-theme].b27-app-shell .b27-home .b27-primary-card>.b27-progress{
+  width:min(100%,520px);
+  height:9px!important;
+  margin:14px 0 6px!important;
+  border-radius:999px!important;
+  background:rgba(0,0,0,.4)!important;
+  border:1px solid rgba(255,255,255,.09);
+}
+html[data-theme].b27-app-shell .b27-home .b27-primary-card>.b27-progress i{
+  background:var(--v61-cta)!important;
+  box-shadow:0 0 15px color-mix(in srgb,var(--v61-cyan) 55%,transparent);
+}
+html[data-theme].b27-app-shell .b27-home .b27-primary-card>.b27-primary-action{
+  width:100%;
+  min-height:56px!important;
+  margin-top:auto!important;
+  grid-area:auto!important;
+  border:1px solid rgba(255,255,255,.24)!important;
+  border-radius:19px!important;
+  background:var(--v61-cta)!important;
+  color:#101029!important;
+  font-weight:900!important;
+  box-shadow:0 12px 34px color-mix(in srgb,var(--v61-cyan) 18%,transparent),inset 0 1px 0 rgba(255,255,255,.36)!important;
+}
+html[data-theme="jade"].b27-app-shell .b27-home .b27-primary-card>.b27-primary-action,
+html[data-theme="sunset"].b27-app-shell .b27-home .b27-primary-card>.b27-primary-action{color:#1b1221!important}
+html[data-theme].b27-app-shell .b27-home .b27-primary-card>.b27-primary-action:focus-visible,
+html[data-theme].b27-app-shell .b27-quick-card:focus-visible,
+html[data-theme].b27-app-shell .b27-practice-action:focus-visible{
+  outline:3px solid var(--v61-cyan)!important;outline-offset:3px!important;
+}
+/* Useful, non-graded daily loop. */
+html[data-theme].b27-app-shell .v61-loop{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:0;
+  border:1px solid var(--v61-line);
+  border-radius:23px;
+  background:var(--v61-glass);
+  box-shadow:0 16px 46px rgba(0,0,0,.2);
+  overflow:hidden;
+}
+html[data-theme].b27-app-shell .v61-loop>div{
+  min-width:0;
+  padding:15px 11px;
+  text-align:center;
+}
+html[data-theme].b27-app-shell .v61-loop>div+div{border-left:1px solid var(--v61-line)}
+html[data-theme].b27-app-shell .v61-loop b{display:block;font-size:1.18rem;color:var(--v61-cyan);margin-bottom:5px}
+html[data-theme].b27-app-shell .v61-loop strong{display:block;font-size:.82rem;line-height:1.3}
+html[data-theme].b27-app-shell .v61-loop small{display:block;font-size:.69rem;line-height:1.35;margin-top:4px;color:var(--v61-muted)}
+html[data-theme].b27-app-shell .v61-heading{margin:4px 2px 0;font-size:1.12rem;letter-spacing:-.025em;color:var(--v61-ink)}
+html[data-theme].b27-app-shell .b27-home-side{
+  padding:0!important;
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px!important;
+}
+html[data-theme].b27-app-shell .b27-home-side::before{display:none!important;content:none!important}
+html[data-theme].b27-app-shell .b27-home-side>.v61-heading{grid-column:1/-1}
+html[data-theme].b27-app-shell .b27-home-side>.b27-quick-card{
+  display:flex!important;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:flex-start;
+  gap:8px;
+  min-width:0;
+  min-height:164px!important;
+  padding:15px!important;
+  border:1px solid var(--v61-line)!important;
+  border-radius:21px!important;
+  background:var(--v61-glass)!important;
+  box-shadow:0 15px 34px rgba(0,0,0,.2)!important;
+}
+html[data-theme].b27-app-shell .b27-home-side>.b27-quick-card>.b27-quick-icon{
+  width:55px!important;height:55px!important;min-width:55px!important;
+  flex:0 0 55px;
+}
+html[data-theme].b27-app-shell .b27-home-side>.b27-quick-card strong{
+  display:block;
+  font-size:clamp(.73rem,2vw,.96rem)!important;
+  line-height:1.22;
+}
+html[data-theme].b27-app-shell .b27-home-side>.b27-quick-card small{
+  font-size:.7rem!important;line-height:1.35!important;
+}
+html[data-theme].b27-app-shell .b27-home-side>.b27-quick-card>b{display:none}
+html[data-theme].b27-app-shell .b27-home-side>.b27-today-note{
+  grid-column:1/-1;
+  border:1px solid var(--v61-line);
+  border-radius:21px!important;
+  background:var(--v61-glass)!important;
+  padding:18px!important;
+}
+html[data-theme].b27-app-shell .v61-quick-conversation>.b27-quick-icon{
+  background:transparent url('../../assets/premium/practice/speak-premium.webp') center/contain no-repeat!important;
+  font-size:0!important;
+}
+html[data-theme].b27-app-shell .v61-quick-conversation>.b27-quick-icon>*{display:none}
+/* Practice: cinematic header + four full-height glossy illustration cards. */
+html[data-theme].b27-app-shell .b27-practice-page .b27-overlay-inner{
+  max-width:1030px;
+  padding-bottom:calc(120px + env(safe-area-inset-bottom,0px));
+}
+html[data-theme].b27-app-shell .b27-practice-page .b27-overlay-header{margin-bottom:8px!important}
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-main{max-width:980px!important}
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-intro{
+  position:relative;
+  isolation:isolate;
+  margin:14px 0 22px!important;
+  padding:18px 3px 22px!important;
+  text-align:left!important;
+}
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-intro h2{
+  max-width:700px;
+  margin:6px 0 9px!important;
+  font-size:clamp(2rem,8vw,3.5rem)!important;
+  line-height:1.05!important;
+  text-wrap:balance;
+}
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-intro p{
+  max-width:570px;
+  color:var(--v61-muted)!important;
+  font-size:clamp(.85rem,2.2vw,1rem);
+}
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-list{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  grid-auto-flow:row!important;
+  gap:13px!important;
+}
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-list>.b27-practice-action{
+  position:relative;
+  isolation:isolate;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:flex-start!important;
+  justify-content:flex-start!important;
+  min-width:0;
+  min-height:262px!important;
+  grid-column:auto!important;
+  padding:19px 16px 17px!important;
+  border:1px solid color-mix(in srgb,var(--v61-card-accent,var(--v61-cyan)) 56%,transparent)!important;
+  border-radius:26px!important;
+  background:
+    radial-gradient(ellipse at 50% 7%,color-mix(in srgb,var(--v61-card-accent,var(--v61-cyan)) 24%,transparent),transparent 68%),
+    var(--v61-glass)!important;
+  box-shadow:0 16px 44px rgba(0,0,0,.26),inset 0 1px 0 rgba(255,255,255,.13)!important;
+  color:var(--v61-ink)!important;
+  gap:8px!important;
+  text-align:left;
+}
+html[data-theme].b27-app-shell .b27-practice-page [data-b27-practice-action="conversation"]{--v61-card-accent:var(--v61-violet)}
+html[data-theme].b27-app-shell .b27-practice-page [data-b27-practice-action="listening"]{--v61-card-accent:var(--v61-cyan)}
+html[data-theme].b27-app-shell .b27-practice-page [data-b27-practice-action="review"]{--v61-card-accent:#f0ad5e}
+html[data-theme].b27-app-shell .b27-practice-page [data-b27-practice-action="real-life"]{--v61-card-accent:var(--v61-violet)}
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-action .b27-practice-icon{
+  display:grid!important;
+  place-items:center!important;
+  width:100%!important;height:116px!important;min-width:0!important;
+  flex:0 0 116px!important;
+  margin:0 auto 3px;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  font-size:0!important;
+}
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-icon>.ft-v510-practice-art{
+  width:min(100%,114px)!important;
+  height:114px!important;
+  flex:0 0 114px!important;
+  object-fit:contain;
+  filter:drop-shadow(0 8px 24px color-mix(in srgb,var(--v61-card-accent,var(--v61-cyan)) 25%,transparent))!important;
+}
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-action>span:nth-child(2){
+  display:block;
+  flex:1;
+  min-width:0;
+  width:100%;
+}
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-action strong{
+  color:var(--v61-ink);
+  font-size:clamp(1rem,2.9vw,1.3rem)!important;
+  line-height:1.18;
+  font-weight:850;
+}
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-action small{
+  margin-top:7px;
+  font-size:clamp(.73rem,1.6vw,.87rem)!important;
+  line-height:1.43;
+  color:var(--v61-muted)!important;
+}
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-action>b{
+  position:absolute;
+  right:15px;bottom:14px;
+  display:grid;place-items:center;
+  width:28px;height:28px;
+  border-radius:50%;
+  background:color-mix(in srgb,var(--v61-card-accent,var(--v61-cyan)) 16%,transparent);
+  color:var(--v61-card-accent,var(--v61-cyan))!important;
+}
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-action em{
+  max-width:100%;
+  white-space:normal;
+  margin-bottom:22px;
+  background:color-mix(in srgb,var(--v61-card-accent,var(--v61-cyan)) 15%,transparent);
+  color:var(--v61-card-accent,var(--v61-cyan));
+}
+html[data-theme].b27-app-shell .b27-practice-page .v61-practice-recommendation{
+  margin-top:18px;
+  padding:20px 23px;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 90px;
+  align-items:center;
+  gap:12px;
+  border:1px solid var(--v61-line);
+  border-radius:25px;
+  background:var(--v61-glass);
+  box-shadow:0 18px 46px rgba(0,0,0,.22);
+}
+html[data-theme].b27-app-shell .v61-practice-recommendation span{
+  color:var(--v61-cyan);
+  font-size:.71rem;
+  font-weight:850;
+  letter-spacing:.08em;
+}
+html[data-theme].b27-app-shell .v61-practice-recommendation h3{
+  margin:7px 0 5px;
+  font-size:clamp(1.08rem,2.8vw,1.6rem);
+  line-height:1.22;
+  text-wrap:balance;
+}
+html[data-theme].b27-app-shell .v61-practice-recommendation p{
+  margin:0;
+  color:var(--v61-muted);
+  line-height:1.4;
+  font-size:.82rem;
+}
+html[data-theme].b27-app-shell .v61-practice-recommendation button{
+  display:inline-flex;
+  justify-content:center;
+  align-items:center;
+  min-height:45px;
+  margin-top:12px;
+  padding:9px 16px;
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:15px;
+  background:var(--v61-cta);
+  color:#101126;
+  font:inherit;
+  font-weight:850;
+  cursor:pointer;
+}
+html[data-theme].b27-app-shell .v61-practice-recommendation img{
+  width:100%;
+  height:100px;
+  object-fit:contain;
+}
+html[data-theme].b27-app-shell .ux-bottom-nav{
+  border:1px solid var(--v61-line)!important;
+  border-radius:23px!important;
+  background:color-mix(in srgb,var(--ft-nav,#0d142c) 94%,transparent)!important;
+  box-shadow:0 -12px 40px rgba(0,0,0,.28),0 0 28px color-mix(in srgb,var(--v61-cyan) 7%,transparent)!important;
+  -webkit-backdrop-filter:blur(18px);
+  backdrop-filter:blur(18px);
+}
+html[data-theme].b27-app-shell .ux-bottom-nav button.active{
+  color:var(--v61-cyan)!important;
+  background:color-mix(in srgb,var(--v61-cyan) 12%,transparent)!important;
+}
+html[data-theme].b27-app-shell .ux-bottom-nav button.active>span{color:var(--v61-cyan)!important}
+.v61-fr{display:none!important}
+html.ux-debug-mode .v61-fr{display:inline!important}
+html.ux-debug-mode .v61-vi{display:none!important}
+@media (min-width:820px){
+  html[data-theme].b27-app-shell .b27-home-grid{
+    grid-template-columns:minmax(0,1.55fr) minmax(310px,.95fr)!important;
+    align-items:start;
+    gap:22px!important;
+  }
+  html[data-theme].b27-app-shell .b27-home-side{grid-template-columns:repeat(2,minmax(0,1fr))}
+  html[data-theme].b27-app-shell .b27-home-side .v61-quick-conversation{grid-column:1/-1;min-height:104px!important}
+  html[data-theme].b27-app-shell .b27-home-side>.b27-today-note{grid-column:1/-1}
+  html[data-theme].b27-app-shell .b27-practice-page .b27-practice-list{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+}
+@media (max-width:520px){
+  html[data-theme].b27-app-shell .b27-home{padding-top:calc(env(safe-area-inset-top,0px) + 12px)!important}
+  html[data-theme].b27-app-shell .b27-home .b27-welcome h1{font-size:clamp(2.05rem,8vw,2.65rem)!important}
+  html[data-theme].b27-app-shell .b27-home .b27-primary-card{min-height:296px!important;padding:20px!important}
+  html[data-theme].b27-app-shell .b27-home .b27-primary-card h2{max-width:78%;font-size:clamp(1.45rem,5vw,1.84rem)!important}
+  html[data-theme].b27-app-shell .b27-home .b27-primary-card p{max-width:74%!important}
+  html[data-theme].b27-app-shell .b27-home-side>.b27-quick-card{min-height:154px!important;padding:13px 10px!important}
+  html[data-theme].b27-app-shell .b27-home-side>.b27-quick-card strong{font-size:.76rem!important}
+  html[data-theme].b27-app-shell .b27-home-side>.b27-quick-card small{font-size:.65rem!important}
+  html[data-theme].b27-app-shell .b27-practice-page .b27-practice-list>.b27-practice-action{min-height:245px!important;padding:15px 13px!important}
+  html[data-theme].b27-app-shell .b27-practice-page .b27-practice-action .b27-practice-icon{height:97px!important;flex-basis:97px!important}
+  html[data-theme].b27-app-shell .b27-practice-page .b27-practice-icon>.ft-v510-practice-art{height:97px!important;width:97px!important;flex-basis:97px!important}
+}
+@media (max-width:350px){
+  html[data-theme].b27-app-shell .b27-home-side{grid-template-columns:repeat(2,minmax(0,1fr))}
+  html[data-theme].b27-app-shell .b27-home-side>.v61-quick-conversation{grid-column:1/-1;min-height:90px!important}
+  html[data-theme].b27-app-shell .b27-practice-page .b27-practice-list{grid-template-columns:1fr!important}
+  html[data-theme].b27-app-shell .b27-home .b27-primary-card h2,
+  html[data-theme].b27-app-shell .b27-home .b27-primary-card p{max-width:100%!important}
+  html[data-theme].b27-app-shell .b27-home .b27-primary-card::after{opacity:.18!important}
+}
+@media (prefers-reduced-motion:reduce){
+  html[data-theme].b27-app-shell .b27-primary-card,
+  html[data-theme].b27-app-shell .b27-quick-card,
+  html[data-theme].b27-app-shell .b27-practice-action{animation:none!important;transition:none!important}
+}
+
+/* Keep the visual header compact like the V6.1 mockup; the prior 350px centered
+   HomeLogo monopolized the first physical iPhone viewport. Retain the real
+   existing goat identity + product name instead of displaying two brand logos. */
+@media(max-width:759px){
+  html[data-theme].b27-app-shell .b27-home .b27-brandline{
+    visibility:visible!important;
+    opacity:1!important;
+    max-width:calc(100% - 70px);
+    gap:9px!important;
+  }
+  html[data-theme].b27-app-shell .b27-home .b27-brandline img{
+    width:42px!important;height:42px!important;min-width:42px!important;
+    border-radius:14px!important;
+  }
+  html[data-theme].b27-app-shell .b27-home .b27-brandline strong{
+    font-size:.89rem!important;line-height:1.12!important;
+  }
+  html[data-theme].b27-app-shell .b27-home .b27-brandline span{
+    max-width:185px!important;
+    font-size:.64rem!important;
+  }
+  html[data-theme].b27-app-shell .ft-modern-home-logo{display:none!important}
+  html[data-theme].b27-app-shell .b27-home>.b27-header{min-height:52px!important;margin-bottom:16px!important}
+}
+
+
+/* ========================================================================
+   V6.1 review 2 — high-fidelity illustration + legible action language.
+   Real assets only. Locked four-theme backgrounds stay untouched.
+   ======================================================================== */
+html[data-theme].b27-app-shell .b27-home .b27-brandline{
+  display:flex!important;
+  visibility:visible!important;
+  align-items:center!important;
+  gap:10px!important;
+  opacity:1!important;
+}
+html[data-theme].b27-app-shell .b27-home .b27-brandline img{
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+  width:45px!important;
+  height:45px!important;
+  min-width:45px!important;
+  padding:2px!important;
+  border-radius:15px!important;
+  border:1px solid var(--v61-line)!important;
+  background:var(--v61-glass)!important;
+  box-shadow:0 0 18px color-mix(in srgb,var(--v61-cyan) 18%,transparent)!important;
+}
+html[data-theme].b27-app-shell .b27-home .b27-brandline strong{
+  font-size:clamp(.91rem,2.9vw,1.05rem)!important;
+  letter-spacing:-.035em!important;
+}
+html[data-theme].b27-app-shell .b27-home .b27-primary-card{
+  min-height:330px!important;
+  padding-bottom:22px!important;
+  box-shadow:0 22px 70px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.17),0 0 40px color-mix(in srgb,var(--v61-violet) 10%,transparent)!important;
+}
+html[data-theme].b27-app-shell .b27-home .b27-primary-card::after{
+  right:0!important;
+  width:49%!important;
+  height:70%!important;
+  bottom:38px!important;
+  opacity:.39!important;
+}
+html[data-theme].b27-app-shell .b27-home .b27-primary-card>.v61-cafe-scene{
+  position:absolute!important;
+  z-index:1!important;
+  top:18%!important;
+  bottom:72px!important;
+  right:-2%!important;
+  width:43%!important;
+  min-width:0;
+  max-width:240px;
+  display:block!important;
+  grid-area:auto!important;
+  pointer-events:none!important;
+}
+html[data-theme].b27-app-shell .v61-cafe-scene .v61-cafe-art{
+  display:block;
+  position:absolute;
+  width:100%;
+  height:100%;
+  inset:0;
+  object-fit:contain;
+  object-position:center right;
+  opacity:.98;
+  filter:drop-shadow(0 12px 25px rgba(0,0,0,.4)) drop-shadow(0 0 17px color-mix(in srgb,var(--v61-violet) 23%,transparent));
+}
+html[data-theme].b27-app-shell .v61-cafe-scene .v61-goat-sticker{
+  position:absolute;
+  width:clamp(49px,34%,75px);
+  height:auto;
+  aspect-ratio:1;
+  object-fit:contain;
+  right:2%;
+  bottom:-4%;
+  border-radius:35%;
+  border:1px solid color-mix(in srgb,var(--v61-cyan) 45%,rgba(255,255,255,.12));
+  background:color-mix(in srgb,var(--v61-deep) 76%,transparent);
+  box-shadow:0 8px 25px rgba(0,0,0,.45),0 0 18px color-mix(in srgb,var(--v61-cyan) 23%,transparent);
+  padding:3px;
+}
+html[data-theme].b27-app-shell .b27-home .b27-primary-card>h2,
+html[data-theme].b27-app-shell .b27-home .b27-primary-card>p{
+  position:relative;
+  z-index:3!important;
+  max-width:68%!important;
+  text-shadow:0 2px 14px rgba(0,0,0,.35);
+}
+html[data-theme].b27-app-shell .b27-home .b27-primary-card>.b27-progress{
+  margin-top:20px!important;
+  position:relative;
+  z-index:3!important;
+}
+html[data-theme].b27-app-shell .b27-home .b27-primary-card>.b27-primary-action{
+  z-index:4!important;
+  min-height:57px!important;
+  border-radius:19px!important;
+  text-align:center;
+  font-size:clamp(.95rem,2.7vw,1.13rem);
+  justify-content:center!important;
+}
+html[data-theme].b27-app-shell .b27-home .b27-primary-card>.b27-primary-action b{
+  position:absolute;
+  right:14px;
+  display:grid;
+  place-items:center;
+  width:33px;
+  height:33px;
+  border-radius:50%;
+  background:rgba(255,255,255,.22);
+}
+html[data-theme].b27-app-shell .v61-home-section-label{
+  font-size:clamp(1rem,3vw,1.18rem)!important;
+  margin:12px 2px 0!important;
+  line-height:1.25;
+}
+html[data-theme].b27-app-shell .v61-loop{
+  border-color:color-mix(in srgb,var(--v61-cyan) 22%,rgba(255,255,255,.09))!important;
+  background:linear-gradient(140deg,color-mix(in srgb,var(--ft-surface) 84%,transparent),color-mix(in srgb,var(--ft-surface-2) 91%,transparent))!important;
+}
+html[data-theme].b27-app-shell .v61-loop>div{padding-block:17px!important}
+html[data-theme].b27-app-shell .v61-loop b{
+  font-size:1.4rem!important;
+  text-shadow:0 0 18px color-mix(in srgb,var(--v61-cyan) 31%,transparent);
+}
+html[data-theme].b27-app-shell .b27-home-side>.b27-quick-card{
+  background:
+    radial-gradient(ellipse at 82% 0%,color-mix(in srgb,var(--v61-cyan) 15%,transparent),transparent 75%),
+    var(--v61-glass)!important;
+  border-color:color-mix(in srgb,var(--v61-cyan) 28%,rgba(255,255,255,.09))!important;
+  box-shadow:0 13px 34px rgba(0,0,0,.27),inset 0 1px 0 rgba(255,255,255,.10)!important;
+}
+html[data-theme].b27-app-shell .b27-home-side>.b27-quick-card:disabled{
+  opacity:.78!important;
+  filter:none!important;
+}
+html[data-theme].b27-app-shell .b27-home-side>.b27-quick-card:disabled strong{color:var(--v61-muted)}
+/* Card headers and functional full-card CTA: one action owner, no nested buttons. */
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-intro>span{
+  color:var(--v61-cyan)!important;
+  background:color-mix(in srgb,var(--v61-cyan) 12%,transparent);
+  border:1px solid var(--v61-line);
+  padding:6px 10px!important;
+  border-radius:99px;
+  display:inline-flex;
+  font-weight:850!important;
+}
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-intro{
+  padding-bottom:12px!important;
+  margin-bottom:14px!important;
+}
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-intro h2{
+  margin-top:14px!important;
+}
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-list>.b27-practice-action{
+  min-height:300px!important;
+  padding:16px!important;
+  gap:7px!important;
+  background:
+    radial-gradient(ellipse at 52% 12%,color-mix(in srgb,var(--v61-card-accent,var(--v61-cyan)) 25%,transparent),transparent 56%),
+    linear-gradient(165deg,color-mix(in srgb,var(--ft-surface) 91%,transparent),color-mix(in srgb,var(--ft-surface-2) 94%,transparent))!important;
+  box-shadow:0 17px 48px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.16),0 0 22px color-mix(in srgb,var(--v61-card-accent,var(--v61-cyan)) 7%,transparent)!important;
+}
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-action>.v61-card-kicker{
+  width:100%;
+  display:block;
+  color:var(--v61-card-accent,var(--v61-cyan));
+  font-size:.67rem;
+  font-weight:900;
+  line-height:1.2;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+}
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-action .b27-practice-icon{
+  height:118px!important;
+  flex:0 0 118px!important;
+  margin:2px auto 0!important;
+}
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-icon>.ft-v510-practice-art{
+  height:118px!important;
+  width:min(100%,118px)!important;
+  flex-basis:118px!important;
+  filter:drop-shadow(0 10px 18px color-mix(in srgb,var(--v61-card-accent,var(--v61-cyan)) 28%,transparent))!important;
+}
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-action>.v61-card-cta{
+  width:100%;
+  min-height:37px;
+  flex:0 0 37px;
+  margin-top:auto;
+  padding:7px 26px 7px 11px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid color-mix(in srgb,var(--v61-card-accent,var(--v61-cyan)) 53%,rgba(255,255,255,.2));
+  border-radius:15px;
+  background:linear-gradient(110deg,
+    color-mix(in srgb,var(--v61-card-accent,var(--v61-cyan)) 92%,#fff 8%),
+    color-mix(in srgb,var(--v61-violet) 82%,#ffb8a2 18%));
+  color:#111329;
+  font-weight:900;
+  font-size:.76rem;
+  line-height:1.2;
+  letter-spacing:-.01em;
+  text-align:center;
+  box-shadow:0 7px 22px color-mix(in srgb,var(--v61-card-accent,var(--v61-cyan)) 15%,transparent);
+}
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-action>b{
+  right:16px!important;
+  bottom:20px!important;
+  width:23px!important;
+  height:23px!important;
+  z-index:3;
+  color:#12112a!important;
+  background:rgba(255,255,255,.27)!important;
+}
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-action:disabled{
+  opacity:.88!important;
+  filter:none!important;
+  cursor:not-allowed!important;
+}
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-action:disabled .b27-practice-icon{
+  opacity:.7!important;
+}
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-action:disabled strong{
+  color:var(--v61-muted)!important;
+}
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-action:disabled>.v61-card-cta{
+  background:rgba(255,255,255,.055)!important;
+  color:var(--v61-muted)!important;
+  border-color:var(--v61-line)!important;
+  box-shadow:none!important;
+}
+html[data-theme].b27-app-shell .b27-practice-page .b27-practice-action:disabled>b{color:var(--v61-muted)!important}
+@media(max-width:520px){
+  html[data-theme].b27-app-shell .b27-home .b27-primary-card{min-height:330px!important}
+  html[data-theme].b27-app-shell .b27-home .b27-primary-card>h2{font-size:clamp(1.35rem,5vw,1.65rem)!important}
+  html[data-theme].b27-app-shell .b27-home .b27-primary-card>p{font-size:.76rem!important}
+  html[data-theme].b27-app-shell .b27-home .b27-primary-card>.v61-cafe-scene{
+    top:25%!important;
+    right:-3%!important;
+    bottom:75px!important;
+    width:44%!important;
+  }
+  html[data-theme].b27-app-shell .b27-practice-page .b27-practice-list>.b27-practice-action{
+    min-height:292px!important;
+    padding:12px!important;
+  }
+  html[data-theme].b27-app-shell .b27-practice-page .b27-practice-icon>.ft-v510-practice-art{
+    height:102px!important;width:102px!important;flex-basis:102px!important;
+  }
+  html[data-theme].b27-app-shell .b27-practice-page .b27-practice-action .b27-practice-icon{
+    height:102px!important;flex-basis:102px!important;
+  }
+  html[data-theme].b27-app-shell .b27-practice-page .b27-practice-action strong{
+    font-size:clamp(.91rem,3.9vw,1.1rem)!important;
+  }
+  html[data-theme].b27-app-shell .b27-practice-page .b27-practice-action small{
+    font-size:.7rem!important;
+    line-height:1.32!important;
+  }
+}
+@media(max-width:350px){
+  html[data-theme].b27-app-shell .b27-home .b27-primary-card>h2,
+  html[data-theme].b27-app-shell .b27-home .b27-primary-card>p{max-width:71%!important}
+  html[data-theme].b27-app-shell .b27-home .b27-primary-card>.v61-cafe-scene{opacity:.7}
+}
+
+/* V6.1 review4: integrate the decorative café mascot more cleanly. */
+@media(max-width:759px){
+  html[data-theme].b27-app-shell .b27-home .b27-primary-card>.v61-cafe-scene{
+    top:22%!important;right:2%!important;bottom:82px!important;width:40%!important;
+  }
+  html[data-theme].b27-app-shell .v61-cafe-scene .v61-goat-sticker{
+    width:clamp(43px,31%,61px)!important;right:13%!important;bottom:13%!important;
+    padding:2px!important;border-width:1px!important;
+    box-shadow:0 7px 17px rgba(0,0,0,.35),0 0 14px color-mix(in srgb,var(--v61-cyan) 21%,transparent)!important;
+  }
+}
+
+/* V6.1 review5 — mobile readability without unlocking gated Practice actions.
+   Preserve each theme's approved palette and the disabled/locked visual language. */
+@media(max-width:520px){
+  html[data-theme].b27-app-shell .b27-home-side>.b27-quick-card small{
+    font-size:.76rem!important;
+    line-height:1.42!important;
+  }
+  html[data-theme].b27-app-shell .b27-practice-page .b27-practice-action small{
+    font-size:.76rem!important;
+    line-height:1.43!important;
+  }
+  html[data-theme].b27-app-shell .b27-practice-page .b27-practice-action:disabled{
+    opacity:.93!important;
+  }
+  html[data-theme].b27-app-shell .b27-practice-page .b27-practice-action:disabled strong{
+    color:color-mix(in srgb,var(--v61-ink) 68%,var(--v61-muted))!important;
+  }
+}
+
+/* Review9: keep the first lesson closer to the first viewport on compact phones.
+   Layout-only density adjustment: real lesson data, art, routes and tap ownership stay. */
+@media (max-width:375px) and (max-height:700px){
+  html[data-theme].b27-app-shell .b27-home>.b27-header{
+    margin-bottom:14px!important;
+  }
+  html[data-theme].b27-app-shell .b27-home .b27-welcome{
+    padding:3px 2px 8px!important;
+  }
+  html[data-theme].b27-app-shell .b27-home .b27-welcome h1{
+    margin:5px 0 7px!important;
+    font-size:clamp(1.95rem,8vw,2.3rem)!important;
+    line-height:1.02!important;
+  }
+  html[data-theme].b27-app-shell .b27-home .b27-welcome p{
+    font-size:.85rem!important;
+    line-height:1.4!important;
+  }
+  html[data-theme].b27-app-shell .b27-home-grid{
+    gap:14px!important;
+  }
+  html[data-theme].b27-app-shell .b27-home .b27-primary-card{
+    min-height:284px!important;
+    padding:17px!important;
+    gap:7px!important;
+  }
+  html[data-theme].b27-app-shell .b27-home .b27-primary-card>.b27-progress{
+    margin:7px 0 3px!important;
+  }
+}

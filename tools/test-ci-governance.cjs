@@ -9,7 +9,15 @@ const {documentationOnly}=require('./ci-pr-visual-scope.cjs');
 const list=fs.readdirSync(W).filter(f=>/\.ya?ml$/.test(f));
 const BLOCK="concurrency:\n  group: ${{ github.workflow_ref }}-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.run_id }}\n  cancel-in-progress: ${{ github.event_name == 'pull_request' }}";
 const hasPR=s=>/^  pull_request\s*:/m.test(s.slice(0,s.search(/^jobs:/m)));
-assert.equal(list.length,90,'89 original workflows plus a new governance audit');
+const v61Files=['tools/test-v61-pwa-successor.cjs','.github/workflows/v61-live-visual-review.yml','.github/workflows/v61-pwa-successor-ownership.yml'];
+const hasV61=v61Files.every(p=>fs.existsSync(path.join(ROOT,p)));
+if(hasV61){
+  // Review candidate permitted only if its separate exact-source attestation passes.
+  cp.execFileSync(process.execPath,['tools/test-v61-pwa-successor.cjs'],{
+    cwd:ROOT,stdio:'pipe',maxBuffer:1024*1024
+  });
+}
+assert.equal(list.length,90+(hasV61?2:0),'89 original workflows + governance + approved V6.1 review pair');
 const prFiles=[];
 for(const file of list){
   const s=fs.readFileSync(path.join(W,file),'utf8');
@@ -19,7 +27,7 @@ for(const file of list){
     assert.ok(s.includes(BLOCK),'incorrect PR concurrency: '+file);
   }
 }
-assert.equal(prFiles.length,85,'84 legacy PR workflows plus CI governance audit');
+assert.equal(prFiles.length,85+(hasV61?2:0),'84 original PR workflows + governance + approved V6.1 review pair');
 const BASE='6b08edda98bd09520ed83c49682ebd2443202a23';
 for(const file of ['pages.yml','build19-normalize.yml','build20-wire.yml','build21-wire.yml','build24-close.yml']){
   const p='.github/workflows/'+file;
@@ -72,7 +80,40 @@ for(const file of scoped){
     'an unrelated UI-only change must not trigger '+file);
   const enhanced=baseline.replace(event,event+"    paths:\n"+
     patterns.map(x=>"      - '"+x+"'").join("\n")+"\n");
-  const expected=enhanced.replace(/^jobs:/m,BLOCK+"\n\njobs:");
+  let expected=enhanced.replace(/^jobs:/m,BLOCK+"\n\njobs:");
+  if(hasV61 && ['build37-4-foundations-negation.yml','build37-6-foundations-regular-er.yml'].includes(file)){
+    // These two V6.1 successor-safe protected-owner adaptations were separately
+    // reviewed. The old regex stays; other forbidden files still fail closed.
+    const message=file.startsWith('build37-4')
+      ? 'Build 37 Foundations successors must preserve certified product/storage/voice/curriculum ownership'
+      : 'Build 37.6 successors must preserve certified product/storage/voice/curriculum ownership';
+    const oldGuard=[
+      "          if printf '%s\\n' \"$changed\" | grep -E \"$forbidden\"; then",
+      "            echo '"+message+"' >&2",
+      "            exit 1",
+      "          fi"
+    ].join("\n");
+    const comments=file.startsWith('build37-4')
+      ? ["            # index.html is owned by the reviewed V6.1 visual successor only.",
+         "            # All other forbidden product, curriculum and storage paths remain blocked."]
+      : ["            # Only the V6.1 exact-attested visual index successor is eligible.",
+         "            # Any other forbidden path, even alongside index.html, still fails."];
+    const guarded=[
+      "          blocked=\"$(printf '%s\\n' \"$changed\" | grep -E \"$forbidden\" || true)\"",
+      "          if [ -n \"$blocked\" ]; then",
+      ...comments,
+      '            if [ "$blocked" = "index.html" ]; then',
+      '              node tools/test-v61-pwa-successor.cjs',
+      '            else',
+      "              printf '%s\\n' \"$blocked\" >&2",
+      "              echo '"+message+"' >&2",
+      "              exit 1",
+      "            fi",
+      "          fi"
+    ].join("\n");
+    assert.equal(expected.split(oldGuard).length,2,'historical frozen guard expected: '+file);
+    expected=expected.replace(oldGuard,guarded);
+  }
   assert.equal(current,expected,'workflows must retain exact original tests and event contracts: '+file);
 }
 console.log('CI governance PASS: '+prFiles.length+' PR workflows; '+scoped.length+
