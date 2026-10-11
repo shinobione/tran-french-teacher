@@ -91,9 +91,18 @@ jobs:
           grep -q 'real-life-jerry-2' src/pedagogy/real-life-data-2.js
           grep -q 'MAX_OPEN = 6' src/pedagogy/real-life-ux.js
           grep -q 'real-life-open-hidden' src/pedagogy/real-life-ux.css
-          grep -q 'v1.17.0' README.md
-          grep -q 'Build 24 — Real Life French II' README.md ROADMAP.md CHANGELOG.md docs/BUILD-24-REAL-LIFE-FRENCH-II.md
-          grep -q '28 situations / 84 tours' README.md docs/BUILD-24-REAL-LIFE-FRENCH-II.md
+          # Current release documents describe the accepted successor; historic
+          # Build24 requirements are certified in its archived Build24 sources.
+          grep -Fq 'v2.5.0 · Build 38' README.md
+          grep -Fq '52 lessons / 313 curriculum items' README.md
+          grep -Fq '44 real-life situations / 132 turns' README.md
+          grep -Fq '7 durable stores / backup v3' README.md
+          grep -Fq 'Build 38 — Generalization & Transfer' ROADMAP.md
+          grep -Fq 'v1.17.0 — Build 24' docs/BUILD-24-REAL-LIFE-FRENCH-II.md
+          grep -Fq 'Build 24 — Real Life French II' CHANGELOG.md
+          grep -Fq 'Build 24 — Real Life French II' docs/BUILD-24-REAL-LIFE-FRENCH-II.md
+          grep -Fq '28 situations / 84 tours' CHANGELOG.md
+          grep -Fq '28 situations / 84 tours' docs/BUILD-24-REAL-LIFE-FRENCH-II.md
           grep -q 'src/pedagogy/real-life-data-2.js' docs/ARCHITECTURE.md
 
       - name: Start static test server

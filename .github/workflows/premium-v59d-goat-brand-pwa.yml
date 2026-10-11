@@ -18,6 +18,8 @@ jobs:
     timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Static brand, PWA and sanctuaries
         run: |
@@ -32,7 +34,11 @@ jobs:
           grep -q 'goat-app-icon-180.png' index.html
           grep -q 'goat-app-icon-192.webp' manifest.webmanifest
           grep -q 'goat-app-icon-maskable-512.webp' manifest.webmanifest
-          grep -q "const CACHE='tran-french-teacher-v2.3.22-b34.14-v58debug1'" sw.js
+          if grep -q "const CACHE='tran-french-teacher-v2.3.22-b34.14-v58debug1'" sw.js; then
+            : # Original V5.8 cache unchanged.
+          else
+            node tools/test-v61-pwa-successor.cjs
+          fi
           grep -q 'src/premium/premium-v59-interactions.js' sw.js
           grep -q 'src/premium/premium-v59-lesson-layout.js' sw.js
           grep -q 'src/premium/premium-v59-system.js' sw.js

@@ -1,4 +1,4 @@
-const CACHE='tran-french-teacher-v2.3.22-b34.14-v58debug1';
+const CACHE='tran-french-teacher-v6.1.0-review4';
 const CACHE_PREFIX='tran-french-teacher-';
 const V='1.17.0-b24';
 const UX='1.17.5-b24.5';
@@ -57,7 +57,10 @@ const V59B='2.3.24-v59b1';
 const V59C='2.3.25-v59c1';
 const V510ICONS='2.3.35-v510lessonidentity1';
 const B362='2.4.0-b36.2';
+const V61='6.1.0-review4';
 const CORE=[
+  `./src/premium/v61-stitch-high-fidelity.css?v=${V61}`,
+  `./src/premium/v61-stitch-high-fidelity.js?v=${V61}`,
   './','./index.html',
   `./styles.css?v=${V}`,`./src/ui/brand.css?v=${V}`,`./src/pedagogy/learning-memory.css?v=${V}`,`./src/ui/visual-pass.css?v=${V}`,`./src/ui/lucie-avatar.css?v=${V}`,
   `./src/pedagogy/curriculum-stage2.css?v=${V}`,`./src/pedagogy/curriculum-stage3.css?v=${V}`,`./src/pedagogy/curriculum-stage4.css?v=${B32}`,`./src/pedagogy/daily-coach.css?v=${V}`,`./src/pedagogy/mastery-engine.css?v=${V}`,`./src/pedagogy/mastery-stage3.css?v=${V}`,

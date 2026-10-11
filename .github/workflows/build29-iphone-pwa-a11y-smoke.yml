@@ -18,6 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -41,7 +43,12 @@ jobs:
           const match=text.match(/const META = \{ version: '[^']+', build: '([^']+)'/);
           if(!match || Number(match[1]) < 29) throw new Error('Build 29 contract cannot run on a pre-29 build');
           NODE
-          grep -q 'tran-french-teacher-v2.3.22-b34.14-v58debug1' index.html sw.js
+          if grep -q 'tran-french-teacher-v2.3.22-b34.14-v58debug1' index.html sw.js; then
+            : # Certified V5.8 cache: original predecessor expectation still accepted.
+          else
+            # Fail closed: exact V6.1 successor proof including frozen owners.
+            node tools/test-v61-pwa-successor.cjs
+          fi
           grep -q "const DEBUG='2.3.22-v58debug1'" sw.js
           grep -q "const NAV='2.3.7-b34.7'" sw.js
           grep -q "const COHERENCE='2.3.21-v57art1'" sw.js
