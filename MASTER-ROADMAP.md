@@ -6,6 +6,12 @@
 
 ## CURRENT EXECUTION ROADMAP — 2026-10-11 (live GitHub verified)
 
+### P0 NEXT — isolated HTTPS iPhone preview deployment, pending owner host access (2026-10-11)
+
+Nested test-only Draft [#271](https://github.com/shinobione/tran-french-teacher/pull/271) packages **actual Stitch Export4 V6.1 source** as a root-scoped TEST PWA independent of the public `shinobione.github.io` origin. Dedicated CI [38142034568](https://github.com/shinobione/tran-french-teacher/actions/runs/38142034568) PASS: strict origin firewall, immutable learning source/Voice/Recovery, 192 SW precache resources, deterministic installation/activation/offline simulation, Chrome actual Home+Practice/52 lessons/three native tabs and disabled owners. Artifact #`11702549507` created, **not hosted** and deliberately bound to `https://ft-v61-preview.invalid`; cannot be installed from that URL. Do not mislabel the test as physical-device/offline SW PASS.
+
+**NEXT after explicit owner connection:** select and approve an entirely separate HTTPS origin (a new Vercel Hobby/Cloudflare site rooted at `/`), rebuild from approved commit with `--origin=https://ACTUAL-APPROVED-HOST`, deploy only the test bundle there, verify `/preview-build.json`, manifest/SW/cache and that all links stay on the isolated domain, then perform physical Safari/Home Screen online→offline, voice, accessibility and synthetic-state continuity. NEVER deploy on another `shinobione.github.io` path; it shares origin/storage. Keep #270/#271 Draft, public Build38 untouched and the production SW/CSS cache upgrade/branch protections as separate release gates. Quiz remains future scope.
+
 ### CURRENT P0 — Stitch Export #4 visual convergence, CSS-only (2026-10-11)
 
 The user has now supplied complete canonical **four-theme Home + Practice mockup references** in Stitch archive #4; they are visually usable despite non-runnable HTML/remote assets/dummy numbers. Exact screen IDs, SHA-256 and viewport differences are pinned in `docs/V61_STITCH_EXPORT4_CONVERGENCE.md`. Keep the previously certified joint V6.1+safety Draft #266 untouched while reviewing a **separate CSS-only visual slice** in `design/v61-stitch-export4-home-practice-convergence`. The existing 52-lesson learner state, native three-tab navigation, 3D icons, voice, cache, Recovery and Evidence stay authoritative.
