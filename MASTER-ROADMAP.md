@@ -6,6 +6,12 @@
 
 ## CURRENT EXECUTION ROADMAP — 2026-10-11 (live GitHub verified)
 
+### ✅ Joint integration CI gate — PASS on source, field acceptance still OPEN (2026-10-11)
+
+Draft [#266](https://github.com/shinobione/tran-french-teacher/pull/266) candidate **source `b1e25fc1dfb645fe445f1a98de3a31b4063af62d`** received **68/68 GitHub Actions SUCCESS** on 2026-10-11: V6.1 Home/Practice visual, iPhone-browser PWA, Recovery v3 seven-store rollback, Evidence Shadow, Build28, V2 old-user freeze, Quality, P3b, global navigation and Premium V5 visual checks all pass together. One transient global navigation first-attempt error passed on an exact same-code job rerun; no CI waiver or learner-runtime modification.
+
+**NEXT canonical product decision is NOT another CI patch:** compare real screenshots against approved Stitch references, obtain human aesthetics/interaction acceptance; then test physical installed iPhone Safari/PWA non-destructively with verified seven-store backup and offline/Voice/lesson transitions, using `docs/V61_IPHONE_FIELD_ACCEPTANCE.md`. Obtain minimum `main` protection and explicit owner merge/release authorization separately. No automatic merge/Pages deployment; candidate remains Draft. This docs-only closeout commit will advance HEAD beyond the tested source; re-check any newly triggered CI separately.
+
 ### FINAL CI rehearsal candidate — Recovery + V6.1 + historical guardian successors (2026-10-11)
 
 After Draft #266 produced **65/68** successful checks on its exact visual+Recovery integrated source, the last three static/historical guardians were repaired independently **without touching production**:

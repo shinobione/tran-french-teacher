@@ -1,5 +1,16 @@
 # PROJECT-STATE — French Trân’quille
 
+## CANDIDATE TECHNICALLY GREEN — joint V6.1 / Recovery / V2 / Quality / P3b — 2026-10-11
+
+- **Accepted `main` / production unchanged:** `d0b57a96779c643643c77974cab8086f7f4c311a`, public v2.5.0 Build38, 52 lessons / 313 items, 7 durable Recovery stores, no data migration, merge or deployment.
+- **Draft PR [#266](https://github.com/shinobione/tran-french-teacher/pull/266) exact tested SOURCE `b1e25fc1dfb645fe445f1a98de3a31b4063af62d`: GitHub Actions **68 completed / 68 SUCCESS / 0 failed / 0 pending**. This unifies the V6.1 graphical Home+Practice candidate, all six Recovery/Evidence/Build28 corrections, exact V6.1 PWA successor safety, V2 history guard and Quality/P3b successor-safe checks.
+- **Specialized proof runs on exact source:** V6.1 visual 23 screenshots `38131575381`; Recovery v3 `38131574269`; Evidence `38131574195`; Build28 `38131574060`; iPhone-browser PWA `38131574466`; V2 freeze `38131574417`; Quality `38131574111`; P3b `38131574363`; Field navigation `38131574307`; V5 coherence `38131574395`: all **SUCCESS**. The navigation job had one resource/timing-sensitive first failure (`practice-settings-return:practice-not-visible`) then **PASS on targeted unchanged rerun**, prior identical product source also PASS. No runtime edit or missing test waiver.
+- **INTEGRATION GATE PASSED FOR SOURCE, NOT PUBLIC RELEASE:** no reference-matched, owner-approved high-fidelity Stitch verdict or **physical installed-iPhone Safari/PWA** verdict. `main` protection and always-present integrity/PWA required checks still need explicit configuration. No release-approved build, merge, Pages deployment or learner data reset.
+- **NEXT:** compare archived actual Home/Practice Chrome PNGs with the approved Stitch references for fidelity; use `docs/V61_IPHONE_FIELD_ACCEPTANCE.md` for a **non-destructive physical iPhone** walkthrough including voice, Practice, real lesson CTA, offline reboot, preserved learner backup v3. Obtain human signoff and configure main required-check protection before deliberate merge/release authorization. High-fidelity Quiz remains a later separate scope.
+- **This checkpoint is documentation-only** and will create a later HEAD; never falsely assign the 68/68 source verdict to an untested documentation descendant. Preserve the proven source SHA `b1e25fc1...`.
+
+---
+
 ## ACTIVE: joint V6.1 pre-release CI — three historical guardian successors applied (2026-10-11)
 
 - **Accepted main:** `d0b57a96779c643643c77974cab8086f7f4c311a`; public Build38/v2.5.0 unchanged, 52 lessons / 313 items, 7 durable stores / Backup v3. NO deploy, merge, data reset or physical iPhone pass.
