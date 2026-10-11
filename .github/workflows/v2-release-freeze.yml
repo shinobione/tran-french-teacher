@@ -85,7 +85,11 @@ jobs:
           assert m['name']=='French Trân’quille'
           assert m['short_name']=='Trân’quille'
           assert m['lang']=='vi'
-          assert m['start_url']=='./'
+          # Successor PWA is served from the actual GitHub Pages project path;
+          # historical relative './' was replaced with this explicit, scoped ID.
+          assert m['start_url']=='/tran-french-teacher/'
+          assert m['scope']==m['start_url'] and m['id']==m['start_url']
+          assert m['display']=='standalone'
           sw=open('sw.js').read()
           cache=re.search(r"const CACHE='([^']+)'",sw)
           assert cache and cache.group(1).startswith('tran-french-teacher-v')
@@ -93,8 +97,11 @@ jobs:
           PY
           grep -q 'manifest.webmanifest?v=' index.html
           grep -q 'tran-french-teacher-v' index.html sw.js
-          grep -q 'sw.js?v=' app.js
-          grep -q 'goat-favicon-32.png' index.html manifest.webmanifest sw.js
+          # The accepted app registers its existing relative SW directly.
+          grep -Fq "navigator.serviceWorker.register('./sw.js')" app.js
+          # Favicons live in HTML/SW. The manifest owns its separately-sized
+          # install icons (192/512/maskable) and need not list a favicon.
+          grep -q 'goat-favicon-32.png' index.html sw.js
           grep -q 'goat-app-icon-180.png' index.html sw.js
           grep -q 'goat-app-icon-192.webp' manifest.webmanifest sw.js
           grep -q 'goat-app-icon-512.webp' manifest.webmanifest sw.js
