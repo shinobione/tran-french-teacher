@@ -776,3 +776,22 @@ html[data-theme].b27-app-shell .b27-practice-page .b27-practice-action:disabled>
     box-shadow:0 7px 17px rgba(0,0,0,.35),0 0 14px color-mix(in srgb,var(--v61-cyan) 21%,transparent)!important;
   }
 }
+
+/* V6.1 review5 — mobile readability without unlocking gated Practice actions.
+   Preserve each theme's approved palette and the disabled/locked visual language. */
+@media(max-width:520px){
+  html[data-theme].b27-app-shell .b27-home-side>.b27-quick-card small{
+    font-size:.76rem!important;
+    line-height:1.42!important;
+  }
+  html[data-theme].b27-app-shell .b27-practice-page .b27-practice-action small{
+    font-size:.76rem!important;
+    line-height:1.43!important;
+  }
+  html[data-theme].b27-app-shell .b27-practice-page .b27-practice-action:disabled{
+    opacity:.93!important;
+  }
+  html[data-theme].b27-app-shell .b27-practice-page .b27-practice-action:disabled strong{
+    color:color-mix(in srgb,var(--v61-ink) 68%,var(--v61-muted))!important;
+  }
+}
