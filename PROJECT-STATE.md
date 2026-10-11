@@ -1,5 +1,14 @@
 # PROJECT-STATE — French Trân’quille
 
+## V6.1 mobile review6 — 2026-10-11 (candidate; Chrome verdict pending)
+
+- Accepted main stays `d0b57a96779c643643c77974cab8086f7f4c311a`; V6.1 PR #258 is DRAFT, not merged, not deployed. Canonical current plan lives in `MASTER-ROADMAP.md` on Draft integration #265; that branch's all-three Recovery/Evidence/Build28 tests PASS together (59/62 CI; V2 Freeze, Quality, P3b remain red).
+- **This slice:** V6.1-only shared CSS increases mobile Home quick-card captions and Practice descriptions from 0.65–0.70rem to 0.76rem; lifts muted locked-title contrast without enabling any locked action. No theme art, product JS, curriculum, data store or Service Worker touched.
+- **Actual Chrome proof added:** `home-bottom` screenshot mode checks scroll/reachability of the existing `v61-quick-conversation` native action and bottom Home tab hit target. Dedicated V6.1 workflow captures this for Original/Aurora/Sunset/Jade at 390×844 and Aurora at 430×932. Practice screenshots now enforce at least 12 CSS px caption text and retained locked CTA, in addition to existing four-owner and bottom-row hit tests. An accidentally duplicated HTML tail after the capture fixture's closing `</html>` was removed; no runtime changes.
+- **NEXT (strict):** inspect exact-head V6.1 live-visual Chrome result and all 17 screenshots, adjust only concrete regressions; compare against approved Stitch references, request real installed-iPhone Safari/PWA acceptance (including larger text), maintain all safety checks and keep PR Draft. Human/device approval still missing.
+
+---
+
 Last reconciled (live): 2026-10-10 — V6.1 rebased against CI governance merge `d0b57a96779c643643c77974cab8086f7f4c311a` (Draft, no product acceptance).
 
 ## V6.1 new governance CI follow-up — 2026-10-10
