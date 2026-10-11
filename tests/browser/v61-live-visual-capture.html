@@ -34,6 +34,15 @@ f.addEventListener('load',async()=>{try{
  if(screen==='practice'||screen==='practice-bottom'){
    const buttons=[...d.querySelectorAll('.b27-practice-list > [data-b27-practice-action]')];
    if(buttons.some(b=>!b.querySelector('.v61-card-kicker')||!b.querySelector('.v61-card-cta')))throw Error('V6.1 action composition missing');
+   // On iPhone-width captures, bilingual captions must not shrink below 12 CSS px.
+   // A disabled module must still be a disabled button with its lock CTA.
+   for(const b of buttons){
+     const caption=b.querySelector('small');
+     if(caption&&parseFloat(w.getComputedStyle(caption).fontSize)<12)
+       throw Error('Practice caption too small '+b.dataset.b27PracticeAction);
+     if(b.disabled&&!b.querySelector('.v61-card-cta')?.textContent?.includes('Chưa mở'))
+       throw Error('Practice locked state lost '+b.dataset.b27PracticeAction);
+   }
  }
  if(homeScreen&&!w.getComputedStyle(target).backgroundImage.includes('gradient'))throw Error('hero style missing');
  if(screen==='practice'){
