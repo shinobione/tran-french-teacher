@@ -1,5 +1,14 @@
 # PROJECT-STATE — French Trân’quille
 
+## V6.1 Review9 — compact 320/375px Home density candidate, 2026-10-11
+
+- **Current visual candidate:** PR #258 HEAD `51d029895dc22a599b109f8c6fcb608e16a9811c` (CSS-only follow-up; not merged/deployed). Reduced header/welcome gaps and lesson-card min-height to 284px **only when width <=375px and height <=700px**; primary lesson CTA remains the same real button, no data changes, no route crossfade or art replacement. Purpose: increase first-viewport discoverability of the primary lesson at compact viewport size, after Review8 showed it below the fixed tabbar but available after scroll.
+- **Evidence status:** previous source HEAD `8b281a4a623b07b8128a829572672a2a7bad1fcc` passed 23/23 real Chrome captures in run `38098536760`. The **new compact CSS head has NOT yet passed the dedicated visual capture** (run `38098855013` queued at checkpoint). Build29 iPhone Chrome/PWA and strict V6.1 successor tests already PASS on the CSS candidate; final visual screenshot review and full CI verdict are still required.
+- **Remaining gates:** compare actual compact screenshots before/after without falsifying acceptance, confirm 320/375 primary-CTA scroll/hit, keep locked Practice states and 52-lesson real progress, then collect installed iPhone Safari/PWA verdict and approved Stitch reference comparison. Independent Draft #265 has integrated Recovery/Evidence/Build28 Chrome tribunals PASS; no merge authorized.
+- **NEXT:** inspect exact-head run `38098855013`; if red, isolate the failing geometry, not broad style resets. No publication, no learner-data reset.
+
+---
+
 ## V6.1 mobile Review8 — 2026-10-11 (23 real Chrome screenshots PASS; no release)
 
 - **Accepted main unchanged:** `d0b57a96779c643643c77974cab8086f7f4c311a`; this work remains solely in **Draft PR #258**. No runtime release, merge, learner migration, voice or data-store change.
