@@ -31,10 +31,10 @@ function hostOrigin(raw) {
   assert.equal(url.username + url.password, '', 'no credentials in origin');
   assert.equal(url.pathname, '/', 'publish bundle at the ORIGIN ROOT only');
   assert.equal(url.search + url.hash, '', 'no origin path/query/fragment');
-  assert.equal(url.origin, raw.replace(/\\/$/, ''), 'pass only origin (scheme + hostname)');
+  assert.equal(url.origin, (raw.endsWith('/') ? raw.slice(0,-1) : raw), 'pass only origin (scheme + hostname)');
   assert.notEqual(url.origin, 'https://shinobione.github.io', 'production origin forbidden even at a different path');
-  assert(!/\\.github\\.io$/i.test(url.hostname), 'any GitHub Pages origin is forbidden until independent origin ownership is proved');
-  assert(!/^(localhost|127\\.0\\.0\\.1)$/i.test(url.hostname), 'use --origin for a real future HTTPS host, localhost only for CI simulation');
+  assert(!url.hostname.toLowerCase().endsWith('.github.io'), 'any GitHub Pages origin is forbidden until independent origin ownership is proved');
+  assert(!['localhost','127.0.0.1'].includes(url.hostname.toLowerCase()), 'use --origin for a real future HTTPS host, localhost only for CI simulation');
   return url.origin;
 }
 const origin = hostOrigin(option('--origin'));
