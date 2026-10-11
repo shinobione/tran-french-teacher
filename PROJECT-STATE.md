@@ -1,5 +1,16 @@
 # PROJECT-STATE — French Trân’quille
 
+## ACTIVE: joint V6.1 pre-release CI — three historical guardian successors applied (2026-10-11)
+
+- **Accepted main:** `d0b57a96779c643643c77974cab8086f7f4c311a`; public Build38/v2.5.0 unchanged, 52 lessons / 313 items, 7 durable stores / Backup v3. NO deploy, merge, data reset or physical iPhone pass.
+- **Integrated Draft [#266](https://github.com/shinobione/tran-french-teacher/pull/266):** last tested head `b5a69d245f709eeffcda13f796b641abdae8135a` **65/68 SUCCESS** (all V6.1 23-screen visuals, iPhone-browser PWA, strict cache successor, Recovery v3, Evidence Shadow, Build28 PASS on **same** source). The only three failures were old V2 Freeze, Quality, P3b guardians.
+- **Three independent guardian fixes certified:** Draft #267 immutable V2 release historical contract + Chrome old profile PASS (tested source `f7015524a4625be52d70163fcecadf85d1d386f2`, run `38130100148`, 13 steps); Draft #268 Build24 archive/current Build38 Quality PASS (tested source `73fe31e77bc421f5e8ea29b36a78ae05c6bcb3dd`, run `38131440461`, 21 steps); Draft #269 P3b immutable P3a and accepted-base owner protection PASS (tested source `29d7a3363110d29c4239dd4d16caf4c5fc9cc695`, run `38131443797`, 12 steps). Each still Draft, not merged.
+- **This work unit:** overlay EXACT approved workflow blobs from #267/#268/#269 onto #266; three CI-only workflows and canonical documents only. No product JavaScript, storage, Service Worker, CSS, lesson, Voice, image or migration edits.
+- **NEXT gate:** require the full 68-workflow CI on the **new integrated head**, especially V2 old learner continuity, Quality full Chrome, P3b ephemeral-only, Build36.2 Evidence, Build36.3 Recovery, Build28, V6.1 visual and Build29 PWA. Prior separate PASS ≠ this new combined PASS. Any failure is a real blocker to triage; do not waive.
+- **Field/release gate remains:** compare official Stitch art/renders with V6.1 Home+Practice captures; perform non-destructive physical installed-iPhone Safari/PWA UX, Voice, offline and seven-store backup continuity from `docs/V61_IPHONE_FIELD_ACCEPTANCE.md`; configure minimum always-present required `main` checks; obtain human release approval. High-fidelity Quiz is later. **No automatic merge or GitHub Pages deploy.**
+
+---
+
 ## Joint V6.1 + safety CI blocker and strictly attested successor bridge — 2026-10-11
 
 - Initial joint PR #266 tested source `17f551cd2f4ced2cb333d9a39d41b1100506f93f`. Build28 was **PASS**, while Build36.3 stopped at the **unchanged-runtime-owner diff** due solely to reviewed V6.1 `index.html` / `sw.js` successor. Build36.2 stopped at its **old exact Service Worker cache-name literal**. In both, independent Recovery/Evidence Node contract chains already PASS; **not joint Chrome PASS yet**.

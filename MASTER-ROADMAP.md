@@ -6,6 +6,15 @@
 
 ## CURRENT EXECUTION ROADMAP — 2026-10-11 (live GitHub verified)
 
+### FINAL CI rehearsal candidate — Recovery + V6.1 + historical guardian successors (2026-10-11)
+
+After Draft #266 produced **65/68** successful checks on its exact visual+Recovery integrated source, the last three static/historical guardians were repaired independently **without touching production**:
+- [#267](https://github.com/shinobione/tran-french-teacher/pull/267): V2 Freeze full historical manifest + legacy learner Chrome **13/13 PASS**, source `f7015524`, run `38130100148`.
+- [#268](https://github.com/shinobione/tran-french-teacher/pull/268): Quality Build38 current/Build24 archived documentation **21/21 PASS**, source `73fe31e7`, run `38131440461`.
+- [#269](https://github.com/shinobione/tran-french-teacher/pull/269): P3b ephemeral contract and accepted PR-base source owner isolation **12/12 PASS**, source `29d7a336`, run `38131443797`.
+
+**NOW:** overlay only their three proven CI workflow files onto existing joint Draft **#266**; require all 68 checks on that new exact head, including original visual/curriculum/Voice/offline/store guards. A green aggregate CI **does not** constitute human Stitch-fidelity approval, a real installed-iPhone field PASS, protected `main`, a merge or a deployment. Until field review and release authorization, keep all candidates Draft. Do not modify pedagogy or introduce new Quiz screens.
+
 **Accepted `main`:** `d0b57a96779c643643c77974cab8086f7f4c311a` (CI governance #260 merged). The A2-R1 Listening doctor pilot and Foundations crash fix are already on accepted main. Older "NEXT" checkpoints below are **historical records**, not instructions to restart those completed phases.
 
 **Locked product priority:** finish the existing **V6.1 high-fidelity Home + Practice visual redesign** instead of opening new lesson/Build43 or V6.2 work. Candidate [PR #258](https://github.com/shinobione/tran-french-teacher/pull/258), latest evaluated source head `bc5ad3ee7e3324481f9588feeb9ff5b21403955f`, is DRAFT / **not merged or deployed**; exact-head matrix **61 PASS / 6 FAIL / 1 other (68 total)**, while the dedicated Chrome visual, iPhone PWA, Practice and strict successor tests PASS. The dedicated live-visual, strict PWA successor-ownership and Build29 iPhone browser/PWA workflows are PASS, but no real installed-iPhone field approval or human mockup-fidelity signoff exists.
