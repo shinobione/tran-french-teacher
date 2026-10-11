@@ -17,12 +17,13 @@ f.addEventListener('load',async()=>{try{
    const nav=d.querySelector('.ux-bottom-nav [data-ux-nav="practice"]');
    if(nav)nav.click();else w.FrenchTranquilleBuild27Shell?.openPractice?.();
    await until(()=>d.querySelectorAll('body > .b27-practice-page [data-b27-practice-action]').length>=4,6000);
- }else if(screen!=='home')throw Error('unsupported surface');
+ }else if(screen!=='home'&&screen!=='home-bottom')throw Error('unsupported surface');
  w.FrenchTranquilleV61.refresh();
  await wait(450);
- const target=screen==='home'?d.querySelector('.b27-home .b27-primary-card'):d.querySelector('.b27-practice-page .b27-practice-list');
+ const homeScreen=screen==='home'||screen==='home-bottom';
+ const target=homeScreen?d.querySelector('.b27-home .b27-primary-card'):d.querySelector('.b27-practice-page .b27-practice-list');
  if(!target)throw Error('target missing');
- if(screen==='home'){
+ if(homeScreen){
    const lessonTotal=w.FrenchTranquilleCurriculum?.lessons?.length;
    const badge=d.querySelector('.b27-home .b27-primary-card .b27-card-topline > span');
    if(lessonTotal!==52)throw Error('curriculum not fully extended: '+lessonTotal);
@@ -34,7 +35,7 @@ f.addEventListener('load',async()=>{try{
    const buttons=[...d.querySelectorAll('.b27-practice-list > [data-b27-practice-action]')];
    if(buttons.some(b=>!b.querySelector('.v61-card-kicker')||!b.querySelector('.v61-card-cta')))throw Error('V6.1 action composition missing');
  }
- if(screen==='home'&&!w.getComputedStyle(target).backgroundImage.includes('gradient'))throw Error('hero style missing');
+ if(homeScreen&&!w.getComputedStyle(target).backgroundImage.includes('gradient'))throw Error('hero style missing');
  if(screen==='practice'){
    const actions=[...target.querySelectorAll('[data-b27-practice-action]')];
    if(actions.length!==4)throw Error('expected 4 activities, got '+actions.length);
@@ -62,36 +63,29 @@ f.addEventListener('load',async()=>{try{
      const target=d.elementFromPoint(rect.left+rect.width/2,rect.top+rect.height/2);
      if(!action.contains(target))throw Error('lower CTA untappable '+id);
    }
+ }else if(screen==='home-bottom'){
+   const side=d.querySelector('.b27-home .b27-home-side');
+   const action=side?.querySelector('.v61-quick-conversation');
+   const nav=d.querySelector('.ux-bottom-nav');
+   const navHome=nav?.querySelector('[data-ux-nav="home"]');
+   if(!action||action.disabled||!nav||!navHome)throw Error('Home quick action or bottom navigation missing');
+   // Scroll in the actual nested learner scroll container. This exercises the
+   // same touch-scroll geometry as installed PWA, rather than a static DOM check.
+   action.scrollIntoView({block:'center',inline:'nearest',behavior:'instant'});
+   await wait(250);
+   const rect=action.getBoundingClientRect(),navRect=nav.getBoundingClientRect();
+   const x=rect.left+rect.width/2,y=rect.top+rect.height/2;
+   if(rect.top<0||rect.bottom>navRect.top-8||rect.width<44||rect.height<44)
+     throw Error('Home quick CTA covered or too small: '+JSON.stringify({top:rect.top,bottom:rect.bottom,navTop:navRect.top}));
+   const hit=d.elementFromPoint(x,y);
+   if(!action.contains(hit)&&hit!==action)throw Error('Home quick CTA untappable');
+   const homeNavRect=navHome.getBoundingClientRect();
+   const navHit=d.elementFromPoint(homeNavRect.left+homeNavRect.width/2,homeNavRect.top+homeNavRect.height/2);
+   if(!navHome.contains(navHit)&&navHit!==navHome)throw Error('Home tab untappable after scroll');
+   document.body.dataset.v61CaptureHomeBottom='1';
  }else{
    d.scrollingElement.scrollTop=0;
  }
- document.body.dataset.v61CaptureReady='1';
- document.body.dataset.v61CaptureTheme=theme;
- document.body.dataset.v61CaptureScreen=screen;
- document.body.dataset.v61CaptureOwner=w.FrenchTranquilleV61.version;
-}catch(e){document.body.dataset.v61CaptureReady='0';document.body.dataset.v61CaptureError=String(e?.message||e)}},{once:true});
-})();
-</script></body></html>)))throw Error('home badge is stale: '+(badge?.textContent||'missing'));
-  }
-
-   const cafe=d.querySelector('.b27-home .v61-cafe-scene');
-   if(!cafe||cafe.querySelectorAll('img').length!==2)throw Error('hero cafe illustration missing');
- }
- if(screen==='practice'){
-   const buttons=[...d.querySelectorAll('.b27-practice-list > [data-b27-practice-action]')];
-   if(buttons.some(b=>!b.querySelector('.v61-card-kicker')||!b.querySelector('.v61-card-cta')))throw Error('V6.1 action composition missing');
- }
- if(screen==='home'&&!w.getComputedStyle(target).backgroundImage.includes('gradient'))throw Error('hero style missing');
- if(screen==='practice'){
-   const actions=[...target.querySelectorAll('[data-b27-practice-action]')];
-   if(actions.length!==4)throw Error('expected 4 activities, got '+actions.length);
-   if(actions.filter(a=>a.querySelector('img.ft-v510-practice-art')).length!==4)throw Error('missing approved 3D assets');
- }
- if(d.documentElement.scrollWidth>d.documentElement.clientWidth+3)throw Error('horizontal overflow '+d.documentElement.scrollWidth);
- for(const img of d.querySelectorAll('img.ft-v510-practice-art')){
-   if(img.complete&&!img.naturalWidth)throw Error('asset failed '+img.src);
- }
- d.scrollingElement.scrollTop=0;
  document.body.dataset.v61CaptureReady='1';
  document.body.dataset.v61CaptureTheme=theme;
  document.body.dataset.v61CaptureScreen=screen;
