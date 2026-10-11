@@ -35,7 +35,10 @@ jobs:
           assert d['format']=='french-tranquille-release-contract'
           assert d['version']=='2.0.0'
           assert d['architectureBuild']==30
-          assert d['architectureFrozen'] is True
+          # The original immutable V2 manifest encodes its freeze as status,
+          # not the later runtime-only architectureFrozen property.
+          assert d['status']=='freeze'
+          assert len(d['durableStores'])==6 and len(set(d['durableStores']))==6
           p=d['product']
           assert p['curriculumLessons']==40 and p['curriculumItems']==241
           assert p['scenarioSituations']==36 and p['scenarioTurns']==108
@@ -43,14 +46,19 @@ jobs:
           assert p['maxSpeakingMomentsPerLesson']==2
           print(json.dumps(d,indent=2,ensure_ascii=False))
           PY
-          grep -q "version: '2.0.0'" src/core/runtime-contracts.js
-          grep -q 'build: 30' src/core/runtime-contracts.js
+          grep -Fq "const VERSION = '2.0.0';" src/core/runtime-contracts.js
+          grep -Fq 'const BUILD = 30;' src/core/runtime-contracts.js
           grep -q 'maxSpeakingMomentsPerLesson: 2' src/core/runtime-contracts.js
-          grep -q "architectureFrozen: true" src/core/build-meta.js
-          grep -q '2.0.0' README.md CHANGELOG.md docs/V2-RELEASE.md
-          grep -q 'V2.0.0 — frozen official baseline' MASTER-ROADMAP.md
-          grep -q 'Build 30 — Architecture hardening / freeze — CLOSED' MASTER-ROADMAP.md
-          grep -q 'post-V2 hardening lane' MASTER-ROADMAP.md
+          # Build32 is the live compatibility metadata; freeze remains historical.
+          grep -Fq "const CURRENT_META = { version: '2.2.0', build: '32'" src/core/build-meta.js
+          # Keep the historical freeze archived without requiring newer README
+          # or canonical roadmap to claim that V2 is the current release.
+          grep -Fq '2.0.0' CHANGELOG.md
+          grep -Fq 'V2.0.0 — PROD / CLOS' docs/V2-RELEASE.md
+          grep -Fq 'Architecture           Build 30' docs/V2-RELEASE.md
+          grep -Fq 'V2 Freeze' ROADMAP.md
+          # Fail on any unreviewed mutation of the certified historical file.
+          test "$(git hash-object release-v2.json)" = '478560e8bfcf4de7f594d0b605439604eef3c0ce'
 
       - name: Historical V2.0.0 literals remain frozen while successor may grow
         run: |
