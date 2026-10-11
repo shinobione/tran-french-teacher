@@ -45,3 +45,23 @@ The existing two-column Practice layout needs scrolling on 390×844. A new live-
 ## CI review — 2026-10-10
 
 A 23-job exact-head failure audit and one narrowly reproduced Practice card-owner fix are documented in [`V61_CI_ARBITRATION_2026-10-10.md`](./V61_CI_ARBITRATION_2026-10-10.md). The old `main` 7-failure baseline is not V6.1 QA certification. The separate UI/PWA successor governance gate and real iPhone verification remain mandatory before merge.
+
+## Real-artifact visual inspection — 2026-10-11 (review5 punch list)
+
+**Reviewed evidence:** GitHub Actions [V6.1 live visual review run 38055549514](https://github.com/shinobione/tran-french-teacher/actions/runs/38055549514), artifact `v61-live-visual-review` (12 actual PNGs, captured 2026-10-10; artifact expires 2026-10-24). Images were actually downloaded and visually inspected, not merely inferred from green check names. Coverage: Original/Aurora/Sunset/Jade Home and Practice at 390×844; Aurora Home+Practice at 430×932; Aurora and Jade Practice after bottom scroll at 390×844. **Approved Stitch reference renders were not available as matched files in this checkpoint; this is a candidate-side QC pass, not reference-fidelity signoff.**
+
+### Directly visible
+- All four palettes are distinct and internally consistent. Header carries the French Trân’quille goat; Home hero shows Vietnamese greeting `Xin chào Trân`, real lesson `BÀI 1 / 52`, content and full-width `Bắt đầu` CTA. No fabricated score, streak or mastery badge is visible in captured states.
+- The hero café asset is a small decorative illustration beside the title; it is **not** yet the reference-style fully composed goat-in-café scene. Do not substitute a screenshot with baked-in typography or replace locked theme backgrounds. If a closer match is desired, scope an isolated transparent artwork review.
+- The Home quick-practice section begins near/below the sticky tab bar at 390/430 heights. This is not, by itself, proof that it cannot be scrolled; require a real last-card hit-target and safe-area proof, not a static viewport inference.
+- Practice has two illustrated activity columns and one action owner per card; visibly disabled Listening/Real-Life states retain lock + `Chưa mở`. At the 390×844 bottom-capture the Review/Real-Life row is reachable and not covered by the bottom tab bar.
+- Practice small captions and disabled headings are notably subdued; the Vietnamese long title `Tình huống thực tế` wraps over multiple lines on 390-wide cards. Readability should be reviewed on a physical iPhone at native text scaling before increasing density or reducing font size.
+
+### Next exact visual slice (separate from issue #261 CI consolidation)
+1. **P0 — actual Stitch comparison:** inspect approved Home/Practice references side-by-side with these twelve PNGs. Record measured mismatch locations and the permitted asset/layout treatment. No "pixel-perfect" declaration until a human has approved this.
+2. **P1 — Home lower reachability:** add/confirm a real 390×844 and 430×932 scrolling/hit-target check for the quick-practice row above the fixed tab bar, in all four themes. Keep the tabbar usable; no duplicate action router.
+3. **P1 — disabled/long-text legibility:** evaluate Practice description/disabled-heading contrast and `Tình huống thực tế` wrapping at 390px with normal and increased iOS text sizing. Only change shared CSS if a measured accessibility or visual-fidelity regression exists; preserve clear disabled states.
+4. **P2 — illustration fidelity:** revisit the café/goat hero and card visual hierarchy only after approved references are on hand. Reuse locked art by default; produce a separate asset-only change if genuinely needed.
+5. **P0 release:** rerun four-theme Home/Practice Chrome captures, exact-head successor-safe PWA/offline, Voice/Listening/Review navigation, and obtain physical installed-iPhone Safari/PWA verdict. Quiz high-fidelity is **not** covered by these captures and is a later slice.
+
+**Status:** visible candidate quality is promising but **NOT human-accepted, not real-iPhone-certified, not merged/deployed**. CI-only Draft integration [#265](https://github.com/shinobione/tran-french-teacher/pull/265) separately combines the three proven Recovery/Evidence/Build28 tests. No changes to learner runtime are authorized by this review note.
