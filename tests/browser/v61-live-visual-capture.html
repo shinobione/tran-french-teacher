@@ -25,6 +25,16 @@ f.addEventListener('load',async()=>{try{
  const homeScreen=screen==='home'||screen==='home-bottom'||screen==='home-cta';
  const target=homeScreen?d.querySelector('.b27-home .b27-primary-card'):d.querySelector('.b27-practice-page .b27-practice-list');
  if(!target)throw Error('target missing');
+ // Stitch Export 4 must remain a CSS skin of the actual three-tab owner.
+ const navButtons=[...d.querySelectorAll('.ux-bottom-nav [data-ux-nav]')];
+ if(navButtons.length!==3)throw Error('Stitch skin changed real three-tab navigation');
+ const visualAccent=w.getComputedStyle(d.documentElement).getPropertyValue('--v61-stitch-highlight').trim();
+ if(!visualAccent)throw Error('Export4 themed visual treatment is missing');
+ const title=homeScreen?d.querySelector('.b27-home .b27-welcome h1'):
+   d.querySelector('.b27-practice-page .b27-practice-intro h2');
+ if(!title)throw Error('original language headline missing');
+ if(theme!=='aurora'&&!w.getComputedStyle(title).fontFamily.toLowerCase().includes('georgia'))
+   throw Error('Export4 editorial local serif style missing: '+theme);
  if(homeScreen){
    const lessonTotal=w.FrenchTranquilleCurriculum?.lessons?.length;
    const badge=d.querySelector('.b27-home .b27-primary-card .b27-card-topline > span');
